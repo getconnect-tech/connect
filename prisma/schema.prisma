@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  display_name String
+  profile_url  String
+  workspace    Workspace @relation(fields: [workspace_id], references: [id])
+  workspace_id String
+  tickets      Ticket[]
+}
+
+model Workspace {
+  id      String   @id @default(uuid())
+  name    String
+  users   User[]
+  tickets Ticket[]
+}
+
+model Ticket {
+  id            String    @id @default(uuid())
+  workspace     Workspace @relation(fields: [workspace_id], references: [id])
+  workspace_id  String
+  title         String
+  messages      Message[]
+  contact       Contact   @relation(fields: [contact_id], references: [id])
+  contact_id    String
+  assigned_user User      @relation(fields: [assigned_to], references: [id])
+  assigned_to   String
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  subject    String
+  content    String
+  created_at DateTime @default(now())
+  ticket     Ticket   @relation(fields: [ticket_id], references: [id])
+  ticket_id  String
+}
+
+model Contact {
+  id         String   @id @default(uuid())
+  first_name String
+  last_name  String
+  company    Company  @relation(fields: [company_id], references: [id])
+  company_id String
+  tickets    Ticket[]
+}
+
+model Company {
+  id       String    @id @default(uuid())
+  name     String
+  contacts Contact[]
+}
