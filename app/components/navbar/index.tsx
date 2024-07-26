@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   CountText,
   ItemDiv,
@@ -17,9 +17,12 @@ import { colors } from "@/app/styles/colors";
 function Navbar() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const handleClick = (index: number) => {
-    setActiveIndex(index === activeIndex ? null : index); // Toggle active state
-  };
+  const handleClick = useCallback(
+    (index: number) => {
+      setActiveIndex(index === activeIndex ? null : index); // Toggle active state
+    },
+    [activeIndex]
+  );
 
   return (
     <MainDiv>
