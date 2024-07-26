@@ -1,0 +1,18 @@
+export const colors = {
+  border: "#0000000D",
+  border_hover: "#00000033",
+  border_selected: "#00000080",
+  bg_surface: "#F5F4F1",
+  bg_surface_hover: "#0000000D",
+  bg_surface_active: "#0000000D",
+  bg_white: "#FFFFFF",
+  bg_surface_secondary: "#0000000D",
+  bg_surface_secondary_hover: "#0000001A",
+  text: "#000000CC",
+  text_white: "#FFFFFF",
+  text_text_secondary: "#00000080",
+  text_text_secondary_hover: "#000000CC",
+  icon: "#00000080",
+  icon_hover: "#000000CC",
+  fill_danger: "#BC5749",
+};
