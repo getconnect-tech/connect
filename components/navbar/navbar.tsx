@@ -10,8 +10,8 @@ import {
   Title,
   TopDiv,
 } from "./style";
-import SVGIcon from "@/app/assets/svg/SVGIcon";
-import { colors } from "@/app/styles/colors";
+import SVGIcon from "@/assets/svg/SVGIcon";
+import { colors } from "@/styles/colors";
 import NavbarItem from "./navbarItem";
 
 function Navbar() {

@@ -1,5 +1,5 @@
-import { colors } from "@/app/styles/colors";
-import { Typography } from "@/app/styles/typography";
+import { colors } from "@/styles/colors";
+import { Typography } from "@/styles/typography";
 import styled from "styled-components";
 
 interface Props {

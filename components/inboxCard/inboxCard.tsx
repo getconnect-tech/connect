@@ -11,7 +11,7 @@ import {
   StatusTitle,
 } from "./style";
 import Avatar from "../avtar/Avtar";
-import SVGIcon from "@/app/assets/svg/SVGIcon";
+import SVGIcon from "@/assets/svg/SVGIcon";
 
 interface Props {
   name: string;

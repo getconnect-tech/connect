@@ -1,5 +1,5 @@
-import { isEmpty } from "@/app/helpers/common";
-import { colors } from "@/app/styles/colors";
+import { isEmpty } from "@/helpers/common";
+import { colors } from "@/styles/colors";
 import { Component } from "react";
 import styled, { css } from "styled-components";
 
