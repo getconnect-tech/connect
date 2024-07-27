@@ -11,7 +11,6 @@ const MainDiv = styled.div`
   height: 100vh;
   background-color: ${colors.bg_surface};
   width: 223px;
-  position: fixed;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
