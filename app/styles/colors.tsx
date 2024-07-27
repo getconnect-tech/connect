@@ -15,4 +15,5 @@ export const colors = {
   icon: "#00000080",
   icon_hover: "#000000CC",
   fill_danger: "#BC5749",
+  black: "#000000",
 };
