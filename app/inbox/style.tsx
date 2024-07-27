@@ -1,6 +1,6 @@
-import { colors } from "@/app/styles/colors";
+import { colors } from "@/styles/colors";
 import styled, { css } from "styled-components";
-import { Typography } from "../styles/typography";
+import { Typography } from "../../styles/typography";
 
 interface Props {
   active?: boolean;

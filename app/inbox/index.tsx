@@ -1,8 +1,8 @@
 "use client";
-import Navbar from "@/app/components/navbar";
+import Navbar from "@/components/navbar";
 import React, { useState } from "react";
 import { HeaderDiv, Main, MainDiv, Tab, TabDiv, Title } from "./style";
-import InboxCard from "../components/inboxCard/inboxCard";
+import InboxCard from "../../components/inboxCard/inboxCard";
 
 export default function Inbox() {
   const [activeTab, setActiveTab] = useState("Open");

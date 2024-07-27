@@ -1,4 +1,4 @@
-import { colors } from "@/app/styles/colors";
+import { colors } from "@/styles/colors";
 
 const getViewBox = (name: string) => {
   switch (name) {
