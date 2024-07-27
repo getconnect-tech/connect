@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { CountText, ItemDiv, LeftDiv, Title } from "./style";
-import SVGIcon from "@/assets/svg/SVGIcon";
+import SVGIcon from "@/assets/icons/SVGIcon";
 import { colors } from "@/styles/colors";
 
 interface Props {
