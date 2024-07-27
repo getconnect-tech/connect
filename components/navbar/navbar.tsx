@@ -10,7 +10,7 @@ import {
   Title,
   TopDiv,
 } from "./style";
-import SVGIcon from "@/assets/svg/SVGIcon";
+import SVGIcon from "@/assets/icons/SVGIcon";
 import { colors } from "@/styles/colors";
 import NavbarItem from "./navbarItem";
 
