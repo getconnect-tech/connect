@@ -57,11 +57,14 @@ const Tab = styled.p<Props>`
   padding: 4px 8px;
   ${Typography.body_sm_regular}
   cursor: pointer;
+  color: ${colors.text_text_secondary};
   ${(props) =>
     props.active &&
     css`
       background-color: ${colors.bg_white};
       border-radius: 30px;
+      box-shadow: 0px 1px 1px 0px ${colors.box_shadow};
+      color: ${colors.text};
     `}
 `;
 

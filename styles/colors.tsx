@@ -21,4 +21,5 @@ export const colors = {
   icon_active: "#313130",
   fill_danger: "#BC5749",
   black: "#000000",
+  box_shadow: "#0000001a",
 };
