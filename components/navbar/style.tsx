@@ -15,6 +15,7 @@ const MainDiv = styled.div`
   flex-direction: column;
   justify-content: space-between;
   border-right: 1px solid ${colors.border};
+  position: fixed;
 `;
 
 const TopDiv = styled.div`

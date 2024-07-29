@@ -1,17 +1,7 @@
 "use client";
 import React, { useCallback, useState } from "react";
-import {
-  ItemDiv,
-  ItemMainDiv,
-  Label,
-  LeftDiv,
-  LogoDiv,
-  MainDiv,
-  Title,
-  TopDiv,
-} from "./style";
+import { ItemMainDiv, Label, LogoDiv, MainDiv, TopDiv } from "./style";
 import SVGIcon from "@/assets/icons/SVGIcon";
-import { colors } from "@/styles/colors";
 import NavbarItem from "./navbarItem";
 
 function Navbar() {
@@ -58,13 +48,13 @@ function Navbar() {
           />
           <NavbarItem
             title="Unassigned"
-            icon="inbox-icon"
+            icon="unassign-icon"
             isActive={activeIndex === 2}
             onClickItem={() => handleClick(2)}
           />
           <NavbarItem
             title="All"
-            icon="inbox-icon"
+            icon="all-icon"
             isActive={activeIndex === 3}
             onClickItem={() => handleClick(3)}
           />
@@ -72,13 +62,13 @@ function Navbar() {
         <ItemMainDiv>
           <NavbarItem
             title="Contacts"
-            icon="inbox-icon"
+            icon="contact-icon"
             isActive={activeIndex === 4}
             onClickItem={() => handleClick(4)}
           />
           <NavbarItem
             title="Insights"
-            icon="inbox-icon"
+            icon="insight-icon"
             isActive={activeIndex === 5}
             onClickItem={() => handleClick(5)}
           />
@@ -87,19 +77,19 @@ function Navbar() {
           <Label>Label</Label>
           <NavbarItem
             title="Bug"
-            icon="inbox-icon"
+            icon="bug-icon"
             isActive={activeIndex === 6}
             onClickItem={() => handleClick(6)}
           />
           <NavbarItem
             title="Question"
-            icon="inbox-icon"
+            icon="question-icon"
             isActive={activeIndex === 7}
             onClickItem={() => handleClick(7)}
           />
           <NavbarItem
             title="Feedback"
-            icon="inbox-icon"
+            icon="feedback-icon"
             isActive={activeIndex === 8}
             onClickItem={() => handleClick(8)}
           />
@@ -107,7 +97,7 @@ function Navbar() {
       </TopDiv>
       <NavbarItem
         title="Support"
-        icon="started-icon"
+        icon="support-icon"
         isActive={activeIndex === 9}
         onClickItem={() => handleClick(9)}
       />
