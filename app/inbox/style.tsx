@@ -12,18 +12,32 @@ const Main = styled.div`
   height: 100vh;
 `;
 
-const MainDiv = styled.div`
+const TopDiv = styled.div`
+  position: sticky;
+  top: 0;
+  background-color: ${colors.bg_surface};
+  z-index: 999;
+`;
+
+const BottomDiv = styled.div`
   max-width: 662px;
   margin: 0 auto;
-  padding: 24px 0;
+`;
+
+const MainDiv = styled.div`
   width: 100%;
+  margin-left: 223px;
+  height: 100vh;
+  overflow: auto;
 `;
 
 const HeaderDiv = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
-  padding-bottom: 6px;
+  padding: 24px 0 6px;
+  max-width: 662px;
+  margin: 0 auto;
 `;
 
 const Title = styled.div`
@@ -51,4 +65,4 @@ const Tab = styled.p<Props>`
     `}
 `;
 
-export { Main, MainDiv, HeaderDiv, Title, TabDiv, Tab };
+export { Main, MainDiv, HeaderDiv, Title, TabDiv, Tab, TopDiv, BottomDiv };
