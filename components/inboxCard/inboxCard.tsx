@@ -13,12 +13,20 @@ import {
 import Avatar from "../avtar/Avtar";
 import SVGIcon from "@/assets/icons/SVGIcon";
 
+interface Status {
+  title: string;
+  isName: boolean;
+  iconName?: string;
+  avatarUrl?: string;
+}
+
 interface Props {
   name: string;
   title: string;
   description: string;
   time: string;
   showDotIcon?: boolean;
+  status: Status[];
 }
 
 export default function InboxCard({
@@ -27,23 +35,13 @@ export default function InboxCard({
   description,
   time,
   showDotIcon = false,
+  status,
 }: Props) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const handleDivClick = (index: number) => {
     setActiveIndex(index);
   };
-  const statuses = [
-    { title: "Question", isName: false },
-    { title: "Priority", isName: false },
-    {
-      title: "Sanjay M.",
-      isName: true,
-      avatarUrl:
-        "https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4",
-    },
-    // Add more statuses as needed
-  ];
 
   return (
     <CardDiv>
@@ -62,7 +60,7 @@ export default function InboxCard({
           <DesTitle>{title}</DesTitle>
           <NameText className="description">{description}</NameText>
           <StatusMainDiv>
-            {statuses.map((status, index) => (
+            {status.map((status, index) => (
               <StatusDiv
                 key={index}
                 isActive={activeIndex === index}
@@ -72,7 +70,7 @@ export default function InboxCard({
                   <Avatar name="" imgSrc={`${status.avatarUrl}`} size={20} />
                 ) : (
                   <SVGIcon
-                    name="inbox-icon"
+                    name={status.iconName}
                     width="12"
                     height="12"
                     className="icon"
