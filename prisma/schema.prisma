@@ -12,20 +12,19 @@ datasource db {
 }
 
 model User {
-  id           String    @id @default(uuid())
-  email        String    @unique
+  id           String           @id @default(uuid())
+  email        String           @unique
   display_name String
   profile_url  String
-  workspace    Workspace @relation(fields: [workspace_id], references: [id])
-  workspace_id String
   tickets      Ticket[]
+  workspaces   UserWorkspaces[]
 }
 
 model Workspace {
-  id      String   @id @default(uuid())
+  id      String           @id @default(uuid())
   name    String
-  users   User[]
   tickets Ticket[]
+  users   UserWorkspaces[]
 }
 
 model Ticket {
@@ -62,4 +61,22 @@ model Company {
   id       String    @id @default(uuid())
   name     String
   contacts Contact[]
+}
+
+model VerificationToken {
+  email   String   @id
+  token   String
+  expires DateTime
+}
+
+model UserWorkspaces {
+  id String @id @default(uuid())
+
+  workspace    Workspace @relation(fields: [workspace_id], references: [id])
+  workspace_id String
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  @@index([workspace_id, user_id])
 }
