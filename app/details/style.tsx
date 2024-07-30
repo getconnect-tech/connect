@@ -20,6 +20,9 @@ const BottomDiv = styled.div`
   max-width: 702px;
   width: 100%;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 86px);
 `;
 
 const MainDiv = styled.div`
@@ -104,8 +107,12 @@ const Input = styled.div`
 `;
 
 const CenterDiv = styled.div`
-  height: 100vh;
+  flex: 1;
   padding: 20px 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  margin-bottom: 20px;
 `;
 
 const InputIcon = styled.div`
