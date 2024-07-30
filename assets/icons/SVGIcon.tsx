@@ -227,6 +227,29 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
+    case "duplicate-icon":
+      return (
+        <>
+          <g fill={fill} clipPath="url(#a)">
+            <path d="M9 1a1 1 0 0 0-1-1H1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h3.5V4.5a1 1 0 0 1 1-1H9V1Z" />
+            <path d="M11.5 5h-5a.5.5 0 0 0-.5.5v6a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 .5-.5v-6a.5.5 0 0 0-.5-.5Z" />
+          </g>
+          <defs>
+            <clipPath id="a">
+              <path fill="#fff" d="M0 0h12v12H0z" />
+            </clipPath>
+          </defs>
+        </>
+      );
+    case "send-icon":
+      return (
+        <>
+          <path
+            fill={fill}
+            d="M2.707 5.707 5 3.414V11a1 1 0 1 0 2 0V3.414l2.293 2.293a1 1 0 0 0 1.414-1.414l-4-4a1 1 0 0 0-1.414 0l-4 4a1 1 0 0 0 1.414 1.414Z"
+          />
+        </>
+      );
   }
 };
 

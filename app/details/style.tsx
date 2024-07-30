@@ -13,7 +13,6 @@ const TopDiv = styled.div`
   top: 0;
   background-color: ${colors.bg_surface};
   z-index: 999;
-  padding: 9px 20px;
   border-bottom: 1px solid ${colors.border};
 `;
 
@@ -32,6 +31,7 @@ const HeaderDiv = styled.div`
   align-items: center;
   gap: 20px;
   justify-content: space-between;
+  padding: 9px 20px;
 `;
 
 const LeftDiv = styled.div`
@@ -64,6 +64,58 @@ const StatusDiv = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
+  padding: 9px 20px;
+  border-top: 1px solid ${colors.border};
+`;
+
+const InputDiv = styled.div`
+  display: flex;
+  gap: 12px;
+  position: sticky;
+  bottom: 0;
+  padding: 0 20px 20px;
+  background-color: ${colors.bg_surface};
+`;
+
+const Input = styled.div`
+  background-color: ${colors.bg_white};
+  border: 1px solid ${colors.border};
+  border-radius: 12px;
+  width: 100%;
+  padding: 12px;
+  input {
+    outline: none;
+    border: none;
+    max-height: 40px;
+    height: 100%;
+    width: 100%;
+    margin-top: -10px;
+    ${Typography.body_md_medium};
+    ${colors.text}
+    ::placeholder {
+      ${colors.text_text_secondary}
+    }
+  }
+`;
+
+const CenterDiv = styled.div`
+  height: 100vh;
+  padding: 0 20px;
+`;
+
+const InputIcon = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-bottom: 12px;
+  gap: 8px;
+  .send-icon {
+    background-color: ${colors.bg_surface_secondary};
+    border-radius: 50%;
+    &:hover {
+      background-color: ${colors.bg_surface_secondary_hover};
+    }
+  }
 `;
 
 export {
@@ -76,4 +128,8 @@ export {
   LeftDiv,
   IconDiv,
   StatusDiv,
+  InputDiv,
+  Input,
+  InputIcon,
+  CenterDiv,
 };
