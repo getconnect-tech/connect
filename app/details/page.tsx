@@ -196,7 +196,7 @@ export default function Details() {
               <InputIcon>
                 <IconDiv>
                   <SVGIcon
-                    name="duplicate-icon"
+                    name="attach-icon"
                     width="12"
                     height="12"
                     viewBox="0 0 12 12"
