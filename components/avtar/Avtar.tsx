@@ -5,6 +5,7 @@ import styled, { css } from "styled-components";
 
 const UserLogoWrapper = styled.div`
   display: flex;
+  z-index: 1;
 `;
 const UserLogo: any = styled.img`
   width: 28px;
