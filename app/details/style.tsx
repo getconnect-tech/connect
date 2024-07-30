@@ -16,7 +16,11 @@ const TopDiv = styled.div`
   border-bottom: 1px solid ${colors.border};
 `;
 
-const BottomDiv = styled.div``;
+const BottomDiv = styled.div`
+  max-width: 702px;
+  width: 100%;
+  margin: 0 auto;
+`;
 
 const MainDiv = styled.div`
   width: 100%;
@@ -73,8 +77,9 @@ const InputDiv = styled.div`
   gap: 12px;
   position: sticky;
   bottom: 0;
-  padding: 0 20px 20px;
+  padding: 0 0 20px;
   background-color: ${colors.bg_surface};
+  z-index: 1;
 `;
 
 const Input = styled.div`
@@ -100,7 +105,7 @@ const Input = styled.div`
 
 const CenterDiv = styled.div`
   height: 100vh;
-  padding: 0 20px;
+  padding: 20px 0 0;
 `;
 
 const InputIcon = styled.div`
@@ -118,6 +123,32 @@ const InputIcon = styled.div`
   }
 `;
 
+const ActivityDiv = styled.div`
+  display: flex;
+  gap: 12px;
+`;
+
+const Message = styled.p`
+  ${Typography.body_md_regular};
+  color: ${colors.text};
+  border-left: 1px solid ${colors.border};
+  padding-left: 18px;
+  margin-left: -23px;
+  span {
+    ${Typography.body_md_regular};
+    color: ${colors.text_text_secondary};
+  }
+  svg {
+    margin: 0 8px 3px;
+  }
+`;
+
+const LineDiv = styled.div`
+  border-left: 1px solid ${colors.border};
+  height: 20px;
+  margin-left: 9px;
+`;
+
 export {
   Main,
   MainDiv,
@@ -132,4 +163,7 @@ export {
   Input,
   InputIcon,
   CenterDiv,
+  ActivityDiv,
+  Message,
+  LineDiv,
 };
