@@ -62,21 +62,21 @@ export default function Details() {
           </HeaderDiv>
           <StatusDiv>
             <Tag
-              isActive={false}
+              isActive={true}
               onClick={() => {}}
               isName={false}
               iconName={"bug-icon"}
               title={"Bug"}
             />
             <Tag
-              isActive={false}
+              isActive={true}
               onClick={() => {}}
               isName={false}
-              iconName={"bug-icon"}
+              iconName={"priority-no-icon"}
               title={"Priority"}
             />
             <Tag
-              isActive={false}
+              isActive={true}
               onClick={() => {}}
               isName={true}
               iconName={"bug-icon"}
