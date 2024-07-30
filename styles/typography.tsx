@@ -26,4 +26,9 @@ export const Typography = {
     line-height: 16px;
     font-weight: 500;
   `,
+  heading_heading_semibold: css`
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 600;
+  `
 };
