@@ -1,4 +1,5 @@
 import { prisma } from "@/prisma/prisma";
+import { markUserAsVerified } from "@/services/membership/signup";
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -18,13 +19,8 @@ export const authOptions: AuthOptions = {
         if (isValidCode) {
           await prisma.verificationToken.delete({ where: { email } });
 
-          const user = await prisma.user.findUnique({ where: { email } });
-          if (user) {
-            return user;
-          } else {
-            const newUser = await prisma.user.create({ data: { email, display_name: "", profile_url: "" } });
-            return newUser;
-          }
+          const verifiedUser = await markUserAsVerified(email);
+          return verifiedUser;
         }
 
         return null;
