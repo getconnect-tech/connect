@@ -48,6 +48,7 @@ export const Bottom = styled.div`
   a {
     ${Typography.body_md_medium}
     color: ${colors.text_link};
+    cursor: pointer;
   }
 `;
 export const CodeSection = styled.div`
@@ -56,13 +57,13 @@ export const CodeSection = styled.div`
   gap: 24px;
   width: 100%;
   align-items: center;
- text-align: center;
-  p{
+  text-align: center;
+  p {
     margin-top: -24px;
     color: ${colors.text_text_secondary};
     ${Typography.body_md_regular};
   }
-  span{
+  span {
     ${Typography.body_md_medium};
   }
   .button {
@@ -74,8 +75,8 @@ export const TimeText = styled.div`
   ${Typography.body_md_medium};
   color: ${colors.text};
   gap: 8px;
-  
-  span{
+
+  span {
     color: ${colors.text_text_secondary};
   }
 `;
