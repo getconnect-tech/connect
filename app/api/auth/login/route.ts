@@ -5,7 +5,7 @@ import { NextRequest } from "next/server";
 
 export const POST = async (req: NextRequest) => {
   try {
-    const { email, displayName, profilePic } = await req.json();
+    const { email } = await req.json();
 
     if (isEmpty(email)) {
       return Response.json({ error: "'email' is required in request body!" }, { status: 400 });
