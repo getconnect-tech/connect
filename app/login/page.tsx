@@ -1,6 +1,15 @@
 "use client";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Bottom, CodeSection, Form, Heading, LoginSection, LoginText, MainDiv, TimeText } from "./style";
+import {
+  Bottom,
+  CodeSection,
+  Form,
+  Heading,
+  LoginSection,
+  LoginText,
+  MainDiv,
+  TimeText
+} from "./style";
 import SVGIcon from "@/assets/icons/SVGIcon";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
@@ -43,8 +52,9 @@ export default function LoginPage() {
     const seconds = (counter % 60).toString();
     return (
       <>
-        {minutes.length <= 1 ? "0" + minutes : minutes}:{seconds.length <= 1 ? "0" + seconds : seconds}
-        <span onClick={resendCode}>Resend Code</span>
+        {minutes.length <= 1 ? "0" + minutes : minutes}:
+        {seconds.length <= 1 ? "0" + seconds : seconds}
+        {!counter && <a onClick={resendCode}>Resend Code</a>}
       </>
     );
   }, [counter, resendCode]);
@@ -54,14 +64,24 @@ export default function LoginPage() {
       <MainDiv>
         <LoginSection>
           <Heading>
-            <SVGIcon name="secondary-logo" width="60px" height="60px" viewBox="0 0 60 60" />
+            <SVGIcon
+              name="secondary-logo"
+              width="60px"
+              height="60px"
+              viewBox="0 0 60 60"
+            />
             <LoginText>Welcome to Connect</LoginText>
           </Heading>
           {!showBottomSection ? (
             <>
               <Form>
                 <Input type={"text"} placeholder="Email address" />
-                <Button title="Continue" width={true} className="button" onClick={handleContinueClick} />
+                <Button
+                  title="Continue"
+                  width={true}
+                  className="button"
+                  onClick={handleContinueClick}
+                />
               </Form>
               <Bottom>
                 <p>By continuing, you are indicating that you have</p>
@@ -76,7 +96,8 @@ export default function LoginPage() {
           ) : (
             <CodeSection>
               <p>
-                We have sent a temporary code to <span>mohit.gajera@pixer.digital.</span>
+                We have sent a temporary code to{" "}
+                <span>mohit.gajera@pixer.digital.</span>
               </p>
               <Input placeholder={"Enter Code"} type={"number"} />
               <Button title="Login" isWidth width />
