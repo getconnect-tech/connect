@@ -69,6 +69,9 @@ export default function Inbox() {
             time={"3 min ago"}
             showDotIcon={true}
             status={statuses1}
+            src={
+              "https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4"
+            }
           />
           <InboxCard
             name={"Bhavdip Patel from Google"}
@@ -78,6 +81,9 @@ export default function Inbox() {
             }
             time={"10 min ago"}
             status={statuses2}
+            src={
+              "https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4"
+            }
           />
         </BottomDiv>
       </MainDiv>
