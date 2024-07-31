@@ -1,9 +1,14 @@
 import { prisma } from "@/prisma/prisma";
 
 // Service to check if user already signed-up or not
-export const isUserAlreadyExists = async (userEmail: string) => {
-  const user = await prisma.user.findUnique({ where: { email: userEmail, is_verified: true }, select: { id: true } });
-  return !!user;
+export const isUserAlreadyExists = async (userEmail: string, checkVerified = true) => {
+  if (checkVerified) {
+    const user = await prisma.user.findUnique({ where: { email: userEmail, is_verified: true }, select: { id: true } });
+    return !!user;
+  } else {
+    const user = await prisma.user.findUnique({ where: { email: userEmail }, select: { id: true } });
+    return !!user;
+  }
 };
 
 // Service to create new user on database

@@ -1,4 +1,5 @@
 import { isEmpty } from "@/helpers/common";
+import { sendVerificationCode } from "@/helpers/emails";
 import { createUser, isUserAlreadyExists } from "@/services/membership/signup";
 import { NextRequest } from "next/server";
 
@@ -12,14 +13,13 @@ export const POST = async (req: NextRequest) => {
 
     // Check if user already exists on database
     const isValidEmail = await isUserAlreadyExists(email);
-    if (isValidEmail) {
-      return Response.json({ error: "Account already exsists!" }, { status: 409 });
+    if (!isValidEmail) {
+      return Response.json({ error: "Account doesn't exsists!" }, { status: 404 });
     }
 
-    // if not create a new unverififed user
-    const newUser = await createUser({ email, profilePic, displayName });
+    const messageId = await sendVerificationCode(email);
 
-    return Response.json(newUser, { status: 201 });
+    return Response.json({ message: "Verification code sent to user!", messageId }, { status: 200 });
   } catch (err: any) {
     return Response.json({ error: err.message }, { status: 500 });
   }
