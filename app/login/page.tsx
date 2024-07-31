@@ -29,6 +29,11 @@ export default function LoginPage() {
     }, 1000);
   };
 
+  const resendCode = useCallback(() => {
+    setCounter(5 * 60);
+    startCounter();
+  }, []);
+
   useEffect(() => {
     startCounter();
   }, []);
@@ -36,13 +41,13 @@ export default function LoginPage() {
   const Counter = useMemo(() => {
     const minutes = Math.floor(counter / 60).toString();
     const seconds = (counter % 60).toString();
-    return `${minutes.length <= 1 ? "0" + minutes : minutes}:${seconds.length <= 1 ? "0" + seconds : seconds}`;
-  }, [counter]);
-
-  const resendCode = () => {
-    setCounter(5 * 60);
-    startCounter();
-  };
+    return (
+      <>
+        {minutes.length <= 1 ? "0" + minutes : minutes}:{seconds.length <= 1 ? "0" + seconds : seconds}
+        <span onClick={resendCode}>Resend Code</span>
+      </>
+    );
+  }, [counter, resendCode]);
 
   return (
     <div>
@@ -75,10 +80,7 @@ export default function LoginPage() {
               </p>
               <Input placeholder={"Enter Code"} type={"number"} />
               <Button title="Login" isWidth width />
-              <TimeText>
-                {Counter}
-                <span onClick={resendCode}>Resend Code</span>
-              </TimeText>
+              <TimeText>{Counter}</TimeText>
             </CodeSection>
           )}
         </LoginSection>
