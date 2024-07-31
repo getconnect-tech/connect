@@ -12,7 +12,7 @@ const CardTop = styled.div`
   padding: 12px;
   border-bottom: 1px solid ${colors.border};
   p {
-    ${Typography.body_sm_regular};
+    ${Typography.body_md_regular};
     color: ${colors.text_text_secondary};
     margin-top: 4px;
   }
@@ -20,7 +20,7 @@ const CardTop = styled.div`
 
 const CardMessage = styled.p`
   padding: 12px;
-  ${Typography.body_sm_regular};
+  ${Typography.body_md_regular};
   color: ${colors.text};
 `;
 

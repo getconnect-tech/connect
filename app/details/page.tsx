@@ -20,7 +20,6 @@ import {
 } from "./style";
 import NavbarPage from "@/components/navbar";
 import ProfileSection from "@/components/profileSection/profileSection";
-import InboxCard from "@/components/inboxCard/inboxCard";
 import SVGIcon from "@/assets/icons/SVGIcon";
 import { useRouter } from "next/navigation";
 import Tag from "@/components/tag/tag";
@@ -188,11 +187,7 @@ export default function Details() {
               name={""}
             />
             <Input>
-              <input
-                placeholder="Write a message"
-                type="text"
-                multiple={true}
-              />
+              <textarea placeholder="Write a message" />
               <InputIcon>
                 <IconDiv>
                   <SVGIcon
