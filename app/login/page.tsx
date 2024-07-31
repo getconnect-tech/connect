@@ -8,24 +8,29 @@ import Button from "@/components/button/button";
 let hasInterval = false;
 export default function LoginPage() {
   const [showBottomSection, setShowBottomSection] = useState(false);
-  const [counter, setCounter] = useState(5 * 60);
+  const [counter, setCounter] = useState(10);
 
   const handleContinueClick = useCallback(() => {
     setShowBottomSection(true);
   }, []);
 
-  useEffect(() => {
+  const startCounter = () => {
     if (hasInterval) return;
     hasInterval = true;
     const counterInterval = setInterval(() => {
       setCounter((prev) => {
         if (prev === 0) {
           clearInterval(counterInterval);
+          hasInterval = false;
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
+  };
+
+  useEffect(() => {
+    startCounter();
   }, []);
 
   const Counter = useMemo(() => {
@@ -34,7 +39,10 @@ export default function LoginPage() {
     return `${minutes.length <= 1 ? "0" + minutes : minutes}:${seconds.length <= 1 ? "0" + seconds : seconds}`;
   }, [counter]);
 
-  const resendCode = () => {};
+  const resendCode = () => {
+    setCounter(5 * 60);
+    startCounter();
+  };
 
   return (
     <div>
