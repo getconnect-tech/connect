@@ -1,5 +1,5 @@
 import { prisma } from "@/prisma/prisma";
-import { markUserAsVerified } from "@/services/userServices";
+import { markUserAsVerified } from "@/services/membership/signup";
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 

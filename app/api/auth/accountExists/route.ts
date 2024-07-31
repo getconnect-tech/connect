@@ -1,5 +1,5 @@
 import { prisma } from "@/prisma/prisma";
-import { isUserAlreadyExists } from "@/services/userServices";
+import { isUserAlreadyExists } from "@/services/membership/signup";
 import { NextRequest } from "next/server";
 
 export const POST = async (req: NextRequest) => {

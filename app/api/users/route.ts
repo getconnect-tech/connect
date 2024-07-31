@@ -1,5 +1,5 @@
 import { isEmpty } from "@/helpers/common";
-import { createUser, isUserAlreadyExists } from "@/services/userServices";
+import { createUser, isUserAlreadyExists } from "@/services/membership/signup";
 import { NextRequest } from "next/server";
 
 export const POST = async (req: NextRequest) => {
