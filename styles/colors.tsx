@@ -22,4 +22,8 @@ export const colors = {
   fill_danger: "#BC5749",
   black: "#000000",
   box_shadow: "#0000001a",
+  brand_fill_hover: "#3E3E3E",
+  text_disabled: "#C4C3C1",
+  brand_disabled: "#EBEAE7",
+  border_disabled: "#E7E7E4"
 };

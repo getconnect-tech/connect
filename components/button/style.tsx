@@ -1,0 +1,111 @@
+/* eslint-disable no-template-curly-in-string */
+import { colors } from "@/styles/colors";
+import { Typography } from "@/styles/typography";
+import styled, { css, keyframes } from "styled-components";
+
+interface WrapButton {
+  secondary: boolean;
+  isDelete: boolean;
+  isLoading?: boolean;
+  isWidth?: boolean;
+}
+
+interface Prop {
+  isLoading?: boolean;
+  isDelete?: boolean;
+  width?: boolean;
+}
+
+const Buttons = styled.button<WrapButton>`
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  ${Typography.body_md_medium}
+  padding: 8px 16px;
+  border-radius: 20px;
+  background-color: ${colors.brand};
+  color: ${colors.text_white};
+  border: none;
+  white-space: nowrap;
+  align-items: center;
+  cursor: pointer;
+  &:hover {
+    background-color: ${colors.brand_fill_hover};
+  }
+  ${(props) =>
+    props.secondary &&
+    css`
+      background-color: transparent;
+      color: ${colors.text};
+      border: 1px solid ${colors.border_input_border};
+      &:hover {
+        background-color: ${colors.bg_surface_hover};
+      }
+    `}
+  ${(props) =>
+    props.isWidth &&
+    css`
+      width: 100%;
+    `}
+  ${(props) =>
+    props.disabled &&
+    css`
+      color: ${colors.text_disabled};
+      background-color: ${props.secondary
+        ? "transparent"
+        : props.isLoading
+        ? colors.brand
+        : colors.brand_disabled};
+      border: ${props.secondary
+        ? "1px solid  ${colors.border_input_border}"
+        : "none"};
+
+      &:hover {
+        background-color: ${props.secondary
+          ? "transparent"
+          : props.isLoading
+          ? colors.brand
+          : colors.brand_disabled};
+      }
+    `}
+`;
+
+const ButtonWrap = styled.div<Prop>`
+  position: relative;
+  display: inline-block;
+  ${(props) =>
+    props.isLoading &&
+    css`
+      ${Buttons} {
+        color: transparent;
+        &::before {
+          position: absolute;
+          transform: translate(-50%, -50%);
+          content: "";
+          width: 20px;
+          height: 20px;
+          border: 2px solid ${colors.text_white};
+          border-top: 2px solid transparent;
+          border-radius: 50%;
+          animation: ${spin} 1s linear infinite;
+          z-index: 1;
+        }
+      }
+    `}
+  ${(props) =>
+    props.width &&
+    css`
+      width: 100%;
+    `}
+`;
+
+const spin = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+`;
+
+export { Buttons, ButtonWrap, spin };
