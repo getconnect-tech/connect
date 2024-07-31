@@ -1,6 +1,6 @@
 "use client";
 import SVGIcon from "@/assets/icons/SVGIcon";
-import { Errormessage, Input, InputDiv, InputSection, Maindiv } from "./style";
+import { Errormessage, InputBox, InputDiv, InputSection, Maindiv } from "./style";
 interface Props {
   title?: string;
   placeholder: string;
@@ -13,7 +13,7 @@ interface Props {
   onChange?: () => void;
   disabled?: boolean;
 }
-const InputComponent: React.FC<Props> = (Props) => {
+const Input: React.FC<Props> = (Props) => {
   const {
     title,
     placeholder,
@@ -31,7 +31,7 @@ const InputComponent: React.FC<Props> = (Props) => {
     <Maindiv>
       <InputDiv>
         <InputSection>
-          <Input
+          <InputBox
             placeholder={placeholder}
             hasError={hasError}
             className={className}
@@ -57,4 +57,4 @@ const InputComponent: React.FC<Props> = (Props) => {
     </Maindiv>
   );
 };
-export default InputComponent;
+export default Input;

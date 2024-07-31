@@ -2,15 +2,18 @@
 import React from "react";
 import {
   Bottom,
+  BottomSection,
+  CodeSection,
   Form,
   Heading,
   LoginSection,
   LoginText,
-  MainDiv
+  MainDiv,
+  TimeText
 } from "./style";
 import SVGIcon from "@/assets/icons/SVGIcon";
+import Input from "@/components/input/input";
 import Button from "@/components/button/button";
-import { Input } from "@/components/input/input";
 
 export default function LoginPage() {
   return (
@@ -26,7 +29,7 @@ export default function LoginPage() {
             />
             <LoginText>Welcome to Connect</LoginText>
           </Heading>
-          <Form>
+          {/* <Form>
             <Input type={"text"} placeholder="Email address" />
             <Button title="Continue" width={true} className="button" />
           </Form>
@@ -38,7 +41,20 @@ export default function LoginPage() {
             <p>
               <a>Privacy Policy</a>
             </p>
-          </Bottom>
+          </Bottom> */}
+
+          <BottomSection>
+            <p>
+              We have sent a temporary code to{" "}
+              <span>mohit.gajera@pixer.digital.</span>
+            </p>
+            <Input placeholder={"Enter Code"} />
+            <Button title="Login" isWidth width />
+            <TimeText>
+              04:49
+              <span>Resend Code</span>
+            </TimeText>
+          </BottomSection>
         </LoginSection>
       </MainDiv>
     </div>

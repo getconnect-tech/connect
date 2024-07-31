@@ -50,3 +50,34 @@ export const Bottom = styled.div`
     color: ${colors.text_link};
   }
 `;
+export const CodeSection = styled.div``;
+// export const Text = styled.div``;
+export const BottomSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  align-items: center;
+ text-align: center;
+  p{
+    margin-top: -24px;
+    color: ${colors.text_text_secondary};
+    ${Typography.body_md_regular};
+  }
+  span{
+    ${Typography.body_md_medium};
+  }
+  .button {
+    width: 100%;
+  }
+`;
+export const TimeText = styled.div`
+  display: flex;
+  ${Typography.body_md_medium};
+  color: ${colors.text};
+  gap: 8px;
+  
+  span{
+    color: ${colors.text_text_secondary};
+  }
+`;

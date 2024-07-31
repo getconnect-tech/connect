@@ -16,7 +16,7 @@ const InputSection = styled.div`
   position: relative;
 `;
 
-const Input = styled.input<Props>`
+const InputBox = styled.input<Props>`
   width: 100%;
   border-radius: 8px;
   padding: 10px 14px;
@@ -70,5 +70,6 @@ const Maindiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2px;
+  width: 100%;
 `;
-export { InputDiv, Input, Errormessage, Maindiv, InputSection };
+export { InputDiv, InputBox, Errormessage, Maindiv, InputSection };
