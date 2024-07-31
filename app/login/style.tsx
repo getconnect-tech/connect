@@ -76,7 +76,8 @@ export const TimeText = styled.div`
   color: ${colors.text};
   gap: 8px;
 
-  span {
+  a {
     color: ${colors.text_text_secondary};
+    cursor: pointer;
   }
 `;

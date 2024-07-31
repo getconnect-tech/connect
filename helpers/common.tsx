@@ -19,3 +19,16 @@ export const generateVerificationCode = (length = 5) => {
   }
   return code;
 };
+
+/**
+ * @desc Checks for valid email
+ * @param {*} value // Accepts string
+ */
+export const isValidEmail = (value: any) => {
+  // eslint-disable-next-line max-len
+  var myRegEx =
+    // eslint-disable-next-line max-len
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  var isValid = myRegEx.test(value);
+  return isValid ? true : false;
+};
