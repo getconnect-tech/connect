@@ -1,6 +1,12 @@
 "use client";
 import SVGIcon from "@/assets/icons/SVGIcon";
-import { Errormessage, InputBox, InputDiv, InputSection, Maindiv } from "./style";
+import {
+  Errormessage,
+  InputBox,
+  InputDiv,
+  InputSection,
+  Maindiv
+} from "./style";
 interface Props {
   title?: string;
   placeholder: string;
@@ -9,7 +15,7 @@ interface Props {
   className?: string;
   login?: boolean;
   value?: string;
-  type?: "email" | "password" | "text";
+  type?: "email" | "password" | "text" | "number";
   onChange?: () => void;
   disabled?: boolean;
 }

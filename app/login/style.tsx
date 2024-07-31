@@ -50,9 +50,7 @@ export const Bottom = styled.div`
     color: ${colors.text_link};
   }
 `;
-export const CodeSection = styled.div``;
-// export const Text = styled.div``;
-export const BottomSection = styled.div`
+export const CodeSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
