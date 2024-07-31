@@ -4,22 +4,19 @@ import { Errormessage, Input, InputDiv, InputSection, Maindiv } from "./style";
 interface Props {
   title?: string;
   placeholder: string;
-  width?: any;
   hasError?: boolean;
   error?: string;
   className?: string;
   login?: boolean;
   value?: string;
   type?: "email" | "password" | "text";
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: () => void;
   disabled?: boolean;
-  onForgotClick?: Function;
 }
 const InputComponent: React.FC<Props> = (Props) => {
   const {
     title,
     placeholder,
-    width,
     hasError,
     error,
     className,
@@ -36,7 +33,6 @@ const InputComponent: React.FC<Props> = (Props) => {
         <InputSection>
           <Input
             placeholder={placeholder}
-            width={width}
             hasError={hasError}
             className={className}
             onChange={onChange}
