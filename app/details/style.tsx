@@ -91,6 +91,9 @@ const Input = styled.div`
   border-radius: 12px;
   width: 100%;
   padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   textarea {
     outline: none;
     border: none;

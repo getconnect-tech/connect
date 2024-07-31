@@ -9,7 +9,7 @@ const MessageCardInnerDiv = styled.div`
 `;
 
 const CardTop = styled.div`
-  padding: 12px;
+  padding: 12px 12px 8px;
   border-bottom: 1px solid ${colors.border};
   p {
     ${Typography.body_md_regular};

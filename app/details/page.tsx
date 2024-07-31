@@ -126,24 +126,6 @@ export default function Details() {
                 name={""}
                 size={20}
               />
-              <MessageCard
-                title={"Sanjay send email"}
-                time={"2 days ago"}
-                subTitle={"To Teamcamp Support "}
-                message={
-                  "Hey,Thank you for choosing our services through our partner, Parthern. To ensure you receive the full benefits of your purchase, we invite you to create an account with us at Teamcamp.Create Your Account Today!Setting up your Teamcamp account is quick and easy. Follow this link to get started: www.teamcamp.app Need Help?If you have any questions or need assistance during the registration process, please do not hesitate to reply to this emailWe're excited to have you on board and look forward to supporting your project management needs!Warm regards,Sanjay M."
-                }
-              />
-            </ActivityDiv>
-            <LineDiv />
-            <ActivityDiv>
-              <Avatar
-                imgSrc={
-                  "https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4"
-                }
-                name={""}
-                size={20}
-              />
               <Message>
                 Connect AI <span>set priority to</span> Low
                 <SVGIcon
