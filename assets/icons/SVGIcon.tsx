@@ -355,6 +355,15 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
+    case "unassign-icon":
+      return (
+        <>
+          <path
+            fill="#C4C3C1"
+            d="M10 0C4.477 0 0 4.477 0 10s4.477 10 10 10 10-4.477 10-10S15.523 0 10 0Zm.008 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6ZM10 18.5c-2.21 0-4.23-.85-5.74-2.24.44-1.38 1.58-2.69 4.03-2.69h3.42c2.44 0 3.58 1.32 4.03 2.69A8.456 8.456 0 0 1 10 18.5Z"
+          />
+        </>
+      );
   }
 };
 
@@ -370,7 +379,7 @@ const SVGIcon = ({
   bgfill = "none",
   stroke = "",
   stopColor = "",
-  iconprimary = colors.icon
+  iconprimary = colors.icon,
 }) => (
   <svg
     stroke={stroke}
@@ -388,7 +397,7 @@ const SVGIcon = ({
       bgfill,
       stroke,
       stopColor,
-      iconprimary
+      iconprimary,
     })}
   </svg>
 );

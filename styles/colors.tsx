@@ -25,5 +25,6 @@ export const colors = {
   brand_fill_hover: "#3E3E3E",
   text_disabled: "#C4C3C1",
   brand_disabled: "#EBEAE7",
-  border_disabled: "#E7E7E4"
+  border_disabled: "#E7E7E4",
+  bg_white_hover: "#F2F2F2",
 };
