@@ -2,8 +2,6 @@ import { colors } from "@/styles/colors";
 import { Typography } from "@/styles/typography";
 import styled, { css } from "styled-components";
 interface Props {
-  labelCta?: boolean;
-  width?: any;
   hasError?: boolean;
   login?: boolean;
   onChange?: Function;
@@ -26,11 +24,6 @@ const Input = styled.input<Props>`
   background: transparent;
   color: ${colors.text};
   letter-spacing: 0.02em;
-  ${(props) =>
-    props.width &&
-    css`
-      width: ${props.width}px;
-    `}
   ${Typography.body_md_medium}
  
   &:focus-visible {
