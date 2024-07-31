@@ -91,14 +91,16 @@ const Input = styled.div`
   border-radius: 12px;
   width: 100%;
   padding: 12px;
-  input {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  textarea {
     outline: none;
     border: none;
     max-height: 40px;
     height: 100%;
     width: 100%;
-    margin-top: -10px;
-    ${Typography.body_md_medium};
+    ${Typography.body_md_regular};
     ${colors.text}
     ::placeholder {
       ${colors.text_text_secondary}
@@ -119,7 +121,6 @@ const InputIcon = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding-bottom: 12px;
   gap: 8px;
   .send-icon {
     background-color: ${colors.bg_surface_secondary};
