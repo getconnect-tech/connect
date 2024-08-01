@@ -21,7 +21,7 @@ import {
   Icon,
   LabelDiv,
   BottomFrame,
-  DetailSection
+  DetailSection,
 } from "./style";
 import SVGIcon from "@/assets/icons/SVGIcon";
 import Avatar from "@/components/avtar/Avtar";
@@ -56,7 +56,7 @@ export default function OnBordingStep1() {
     { name: "Data and Analytics" },
     { name: "Healthcare IT and Medical Devices" },
     { name: "Professional Services" },
-    { name: "Financial Technologies (FinTech)" }
+    { name: "Financial Technologies (FinTech)" },
   ];
   return (
     <MainDiv>
@@ -101,7 +101,6 @@ export default function OnBordingStep1() {
                     />
                   </DropBox>
                 </TextField>
-
                 <TextField isNext={showCard}>
                   <Label> Team Size</Label>
                   <DropBox>
@@ -114,9 +113,8 @@ export default function OnBordingStep1() {
                     />
                   </DropBox>
                 </TextField>
-
                 <TextField isNext={showCard}>
-                  <Label> Industry</Label>
+                  <Label>Industry</Label>
                   <div>
                     <DropBox onClick={handleDropdownClick}>
                       Select a Industry
@@ -131,10 +129,10 @@ export default function OnBordingStep1() {
                     </DropBox>
                     {dropdownOpen && (
                       <DropDown
-                        ref={dropDownRef1}
                         items={industryItems}
-                        iconSize="12"
-                        iconViewBox="0 0 12 12"
+                        iconSize="20"
+                        iconViewBox="0 0 20 20"
+                        onClose={() => setDropdownOpen(false)}
                       />
                     )}
                   </div>

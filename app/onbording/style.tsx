@@ -109,6 +109,7 @@ export const DropBox = styled.div`
   border-radius: 20px;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
   ${Typography.body_md_medium}
   color: ${colors.text_text_secondary};
 `;

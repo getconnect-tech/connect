@@ -32,8 +32,6 @@ export default function Details() {
   const router = useRouter();
   const [showDropDown1, setShowDropDown1] = useState(false);
   const [showDropDown2, setShowDropDown2] = useState(false);
-  const dropDownRef1 = useRef<HTMLDivElement | null>(null);
-  const dropDownRef2 = useRef<HTMLDivElement | null>(null);
 
   const handleTagClick1 = () => {
     setShowDropDown1((prev) => !prev);
@@ -42,33 +40,6 @@ export default function Details() {
   const handleTagClick2 = () => {
     setShowDropDown2((prev) => !prev);
   };
-
-  const handleClickOutside1 = (event: MouseEvent) => {
-    if (
-      dropDownRef1.current &&
-      !dropDownRef1.current.contains(event.target as Node)
-    ) {
-      setShowDropDown1(false);
-    }
-  };
-
-  const handleClickOutside2 = (event: MouseEvent) => {
-    if (
-      dropDownRef2.current &&
-      !dropDownRef2.current.contains(event.target as Node)
-    ) {
-      setShowDropDown2(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside1);
-    document.addEventListener("mousedown", handleClickOutside2);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside1);
-      document.removeEventListener("mousedown", handleClickOutside2);
-    };
-  }, []);
 
   const items1 = [
     { name: "No priority", icon: "priority-no-icon" },
@@ -150,10 +121,10 @@ export default function Details() {
               />
               {showDropDown1 && (
                 <DropDown
-                  ref={dropDownRef1}
                   items={items1}
-                  iconSize="12"
-                  iconViewBox="0 0 12 12"
+                  iconSize="20"
+                  iconViewBox="0 0 20 20"
+                  onClose={() => setShowDropDown1(false)}
                 />
               )}
             </div>
@@ -168,10 +139,10 @@ export default function Details() {
               />
               {showDropDown2 && (
                 <DropDown
-                  ref={dropDownRef2}
                   items={items2}
                   iconSize="20"
                   iconViewBox="0 0 20 20"
+                  onClose={() => setShowDropDown2(false)}
                 />
               )}
             </div>
