@@ -12,8 +12,9 @@ import {
 } from "./style";
 import NavbarPage from "@/components/navbar";
 import InboxCard from "@/components/inboxCard/inboxCard";
+import { observer } from "mobx-react-lite";
 
-export default function Inbox() {
+function Inbox() {
   const [activeTab, setActiveTab] = useState("Open");
   const tabItem = ["Open", "Snoozed", "Done"];
 
@@ -90,3 +91,5 @@ export default function Inbox() {
     </Main>
   );
 }
+
+export default observer(Inbox);
