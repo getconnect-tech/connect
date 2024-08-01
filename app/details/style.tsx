@@ -73,6 +73,7 @@ const StatusDiv = styled.div`
   align-items: center;
   padding: 9px 20px;
   border-top: 1px solid ${colors.border};
+  position: relative;
 `;
 
 const InputDiv = styled.div`

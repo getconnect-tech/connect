@@ -10,6 +10,7 @@ interface Props {
   src?: string;
   iconName: string;
   title: string;
+  ref?: React.Ref<HTMLDivElement>;
 }
 
 export default function Tag({
@@ -19,9 +20,10 @@ export default function Tag({
   src,
   iconName,
   title,
+  ref,
 }: Props) {
   return (
-    <StatusDiv isActive={isActive} onClick={onClick}>
+    <StatusDiv isActive={isActive} onClick={onClick} ref={ref}>
       {isName ? (
         <Avatar name="" imgSrc={`${src}`} size={20} />
       ) : (
