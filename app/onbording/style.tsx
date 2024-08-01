@@ -170,9 +170,10 @@ export const BottomFrame = styled.div`
   ${Typography.body_md_medium}
   color: ${colors.text_link};
   align-items: center;
-  gap: 4px;
+  /* gap: 4px; */
   span {
     color: ${colors.text_text_secondary};
+    margin-right: 4px;
   }
 `;
 export const DetailSection = styled.div`
