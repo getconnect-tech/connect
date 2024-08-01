@@ -8,6 +8,7 @@ interface WrapButton {
   isDelete: boolean;
   isLoading?: boolean;
   width?: boolean;
+  isLink?: boolean;
 }
 
 interface Prop {
@@ -66,6 +67,20 @@ const Buttons = styled.button<WrapButton>`
           : props.isLoading
           ? colors.brand
           : colors.brand_disabled};
+      }
+    `}
+    ${(props) =>
+    props.isLink &&
+    css`
+      background-color: transparent;
+      padding: 4px;
+      color: ${props.disabled ? colors.text_disabled : colors.text_link};
+      border: none;
+      &:hover {
+        color: ${props.disabled
+          ? colors.text_disabled
+          : colors.brand_fill_hover};
+        background-color: transparent;
       }
     `}
 `;
