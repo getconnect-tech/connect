@@ -47,7 +47,7 @@ export default function OnBordingStep1() {
     setInputField([...inputField, { email: "", fullname: "" }]);
   }, [inputField]);
 
-  const handleRemoveInputField = (index) => {
+  const handleRemoveInputField = (index: number) => {
     const newInputField = inputField.filter((_, i) => i !== index);
     setInputField(newInputField);
   };
