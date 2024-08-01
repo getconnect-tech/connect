@@ -1,6 +1,7 @@
 import React from "react";
 import { Buttons, ButtonWrap } from "./style";
 import SVGIcon from "@/assets/icons/SVGIcon";
+import { colors } from "@/styles/colors";
 
 interface Props {
   title?: string;
@@ -16,6 +17,7 @@ interface Props {
   iconColor?: string;
   iconViewBox?: string;
   className?: string;
+  isLink?: boolean;
 }
 
 const Button: React.FC<Props> = (Props) => {
@@ -33,6 +35,7 @@ const Button: React.FC<Props> = (Props) => {
     iconColor,
     iconViewBox,
     className,
+    isLink,
     ...props
   } = Props;
   return (
@@ -46,6 +49,7 @@ const Button: React.FC<Props> = (Props) => {
         type={type}
         className={className}
         width={width}
+        isLink={isLink}
         {...props}
       >
         {iconName && (
@@ -53,7 +57,7 @@ const Button: React.FC<Props> = (Props) => {
             name={iconName}
             height={iconSize}
             width={iconSize}
-            fill={iconColor}
+            fill={disabled ? colors.text_disabled : iconColor}
             viewBox={iconViewBox}
           />
         )}
