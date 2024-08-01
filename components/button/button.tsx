@@ -16,7 +16,6 @@ interface Props {
   iconColor?: string;
   iconViewBox?: string;
   className?: string;
-  isWidth?: boolean;
 }
 
 const Button: React.FC<Props> = (Props) => {
@@ -34,7 +33,6 @@ const Button: React.FC<Props> = (Props) => {
     iconColor,
     iconViewBox,
     className,
-    isWidth,
     ...props
   } = Props;
   return (
@@ -47,7 +45,7 @@ const Button: React.FC<Props> = (Props) => {
         isLoading={isLoading}
         type={type}
         className={className}
-        isWidth={isWidth}
+        width={width}
         {...props}
       >
         {iconName && (

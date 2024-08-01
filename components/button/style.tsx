@@ -7,7 +7,7 @@ interface WrapButton {
   secondary: boolean;
   isDelete: boolean;
   isLoading?: boolean;
-  isWidth?: boolean;
+  width?: boolean;
 }
 
 interface Prop {
@@ -43,7 +43,7 @@ const Buttons = styled.button<WrapButton>`
       }
     `}
   ${(props) =>
-    props.isWidth &&
+    props.width &&
     css`
       width: 100%;
     `}

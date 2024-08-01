@@ -18,15 +18,19 @@ const DropDown = React.forwardRef<HTMLDivElement, DropDownProps>(
       <MainDiv ref={ref} style={style}>
         {items.map((item, index) => (
           <ItemDiv key={index}>
-            {item.isName ? (
-              <Avatar name="" imgSrc={`${item.src}`} size={20} />
-            ) : (
-              <SVGIcon
-                name={item.icon}
-                width={iconSize}
-                height={iconSize}
-                viewBox={iconViewBox}
-              />
+            {item.icon && (
+              <>
+                {item.isName ? (
+                  <Avatar name="" imgSrc={`${item.src}`} size={20} />
+                ) : (
+                  <SVGIcon
+                    name={item.icon}
+                    width={iconSize}
+                    height={iconSize}
+                    viewBox={iconViewBox}
+                  />
+                )}
+              </>
             )}
             <p>{item.name}</p>
           </ItemDiv>
