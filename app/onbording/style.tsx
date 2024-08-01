@@ -9,6 +9,7 @@ export const MainDiv = styled.div`
   height: 100vh;
   justify-content: center;
   background-color: ${colors.bg_surface};
+  overflow: auto;
 `;
 export const OnBoardScreen = styled.div<Props>`
   display: flex;

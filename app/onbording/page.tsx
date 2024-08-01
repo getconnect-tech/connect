@@ -21,23 +21,28 @@ import {
   Icon,
   LabelDiv,
   BottomFrame,
-  DetailSection,
+  DetailSection
 } from "./style";
 import SVGIcon from "@/assets/icons/SVGIcon";
 import Avatar from "@/components/avtar/Avtar";
 import Button from "@/components/button/button";
 import Input from "@/components/input/input";
 import DropDown from "@/components/dropDown/dropDown";
+import { industryItems, teamMember } from "@/helpers/raw";
+import { useOutsideClick } from "@/helpers/common";
 
 export default function OnBordingStep1() {
   const [showCard, setShowCard] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [industryDropdownOpen, setIndustryDropdownOpen] = useState(false);
+  const [teamDropdownOpen, setTeamDropdownOpen] = useState(false);
   const [inputField, setInputField] = useState([{ email: "", fullname: "" }]);
-  const dropDownRef1 = useRef<HTMLDivElement | null>(null);
 
-  const handleDropdownClick = useCallback(() => {
-    setDropdownOpen(!dropdownOpen);
-  }, [dropdownOpen]);
+  const handleIndustryClick = useCallback(() => {
+    setIndustryDropdownOpen(!industryDropdownOpen);
+  }, [industryDropdownOpen]);
+  const handleTeamSizeClick = useCallback(() => {
+    setTeamDropdownOpen(!teamDropdownOpen);
+  }, [teamDropdownOpen]);
 
   const handleNextClick = useCallback(() => {
     setShowCard(true);
@@ -51,13 +56,6 @@ export default function OnBordingStep1() {
     const newInputField = inputField.filter((_, i) => i !== index);
     setInputField(newInputField);
   };
-  const industryItems = [
-    { name: "Technology and Software" },
-    { name: "Data and Analytics" },
-    { name: "Healthcare IT and Medical Devices" },
-    { name: "Professional Services" },
-    { name: "Financial Technologies (FinTech)" },
-  ];
   return (
     <MainDiv>
       <OnBoardScreen isNext={showCard}>
@@ -91,48 +89,60 @@ export default function OnBordingStep1() {
               <Form>
                 <TextField isNext={showCard}>
                   <Label> Company Name</Label>
-                  <DropBox>
-                    Enter Company Name
-                    <SVGIcon
-                      name="down-arrow-icon"
-                      width="12px"
-                      height="12px"
-                      viewBox="0 0 12 12"
-                    />
-                  </DropBox>
+                  <Input
+                    placeholder={"Enter company name"}
+                    style={{ padding: "8px 16px" }}
+                  />
                 </TextField>
+
                 <TextField isNext={showCard}>
                   <Label> Team Size</Label>
-                  <DropBox>
-                    Select a Team Size
-                    <SVGIcon
-                      name="down-arrow-icon"
-                      width="12px"
-                      height="12px"
-                      viewBox="0 0 12 12"
-                    />
-                  </DropBox>
-                </TextField>
-                <TextField isNext={showCard}>
-                  <Label>Industry</Label>
                   <div>
-                    <DropBox onClick={handleDropdownClick}>
-                      Select a Industry
+                    <DropBox onClick={handleTeamSizeClick}>
+                      Select a Team Size
                       <SVGIcon
                         name={
-                          dropdownOpen ? "up-arrow-icon" : "down-arrow-icon"
+                          teamDropdownOpen ? "up-arrow-icon" : "down-arrow-icon"
                         }
                         width="12px"
                         height="12px"
                         viewBox="0 0 12 12"
                       />
                     </DropBox>
-                    {dropdownOpen && (
+                    {teamDropdownOpen && (
+                      <DropDown
+                        items={teamMember}
+                        iconSize="20"
+                        iconViewBox="0 0 20 20"
+                        onClose={() => setTeamDropdownOpen(false)}
+                        style={{ width: "100%", maxWidth: 332 }}
+                      />
+                    )}
+                  </div>
+                </TextField>
+                <TextField isNext={showCard}>
+                  <Label>Industry</Label>
+                  <div>
+                    <DropBox onClick={handleIndustryClick}>
+                      Select a Industry
+                      <SVGIcon
+                        name={
+                          industryDropdownOpen
+                            ? "up-arrow-icon"
+                            : "down-arrow-icon"
+                        }
+                        width="12px"
+                        height="12px"
+                        viewBox="0 0 12 12"
+                      />
+                    </DropBox>
+                    {industryDropdownOpen && (
                       <DropDown
                         items={industryItems}
                         iconSize="20"
                         iconViewBox="0 0 20 20"
-                        onClose={() => setDropdownOpen(false)}
+                        onClose={() => setIndustryDropdownOpen(false)}
+                        style={{ width: "100%", maxWidth: 332 }}
                       />
                     )}
                   </div>
@@ -182,16 +192,16 @@ export default function OnBordingStep1() {
                       </TextField>
                     ))}
                   </DetailSection>
-                  <BottomFrame onClick={handleAddInput}>
-                    <SVGIcon
-                      name="plus-icon"
-                      width="12"
-                      height="12"
-                      viewBox="0 0 12 12"
+                  <BottomFrame>
+                    <Button
+                      title="Add Another"
+                      iconName="plus-icon"
+                      iconSize="12"
+                      iconViewBox="0 0 12 12"
+                      isLink
+                      onClick={handleAddInput}
                     />
-                    <p>
-                      Add another <span>or</span> add many at once
-                    </p>
+                    <span>or</span> add many at once
                   </BottomFrame>
                 </Card>
               </Form>
