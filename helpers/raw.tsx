@@ -6,7 +6,8 @@ export const industryItems = [
   { name: "Financial Technologies (FinTech)" }
 ];
 export const teamMember = [
-  { name: "Personal", value: 1 },
-  { name: "Freelance Business", value: 2 },
-  { name: "Team/Organization", value: 3 }
+  { name: "Small (1-10 members)", value: 1 },
+  { name: "Medium (11-50 members)", value: 2 },
+  { name: "Large (51-200 members)", value: 3 },
+  { name: "Enterprise (201+ members)", value: 4 }
 ];
