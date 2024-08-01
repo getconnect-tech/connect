@@ -8,10 +8,12 @@ import Avatar from "../avtar/Avtar";
 interface DropDownProps {
   items: { name: string; icon?: string; src?: string; isName?: boolean }[];
   style?: React.CSSProperties;
+  iconSize: string;
+  iconViewBox: string;
 }
 
 const DropDown = React.forwardRef<HTMLDivElement, DropDownProps>(
-  ({ items, style }, ref) => {
+  ({ items, style, iconSize, iconViewBox }, ref) => {
     return (
       <MainDiv ref={ref} style={style}>
         {items.map((item, index) => (
@@ -21,10 +23,9 @@ const DropDown = React.forwardRef<HTMLDivElement, DropDownProps>(
             ) : (
               <SVGIcon
                 name={item.icon}
-                width="20"
-                height="20"
-                className="icon"
-                viewBox="0 0 20 20"
+                width={iconSize}
+                height={iconSize}
+                viewBox={iconViewBox}
               />
             )}
             <p>{item.name}</p>

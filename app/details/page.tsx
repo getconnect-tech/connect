@@ -79,7 +79,7 @@ export default function Details() {
   ];
 
   const items2 = [
-    { name: "Unassigned", icon: "unassign-icon" },
+    { name: "Unassigned", icon: "dropdown-unassign-icon" },
     {
       name: "Sanjay M.",
       src: "https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4",
@@ -148,7 +148,14 @@ export default function Details() {
                 iconName={"priority-no-icon"}
                 title={"Priority"}
               />
-              {showDropDown1 && <DropDown ref={dropDownRef1} items={items1} />}
+              {showDropDown1 && (
+                <DropDown
+                  ref={dropDownRef1}
+                  items={items1}
+                  iconSize="12"
+                  iconViewBox="0 0 12 12"
+                />
+              )}
             </div>
             <div>
               <Tag
@@ -159,7 +166,14 @@ export default function Details() {
                 title={"Sanjay M."}
                 src="https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4"
               />
-              {showDropDown2 && <DropDown ref={dropDownRef2} items={items2} />}
+              {showDropDown2 && (
+                <DropDown
+                  ref={dropDownRef2}
+                  items={items2}
+                  iconSize="20"
+                  iconViewBox="0 0 20 20"
+                />
+              )}
             </div>
           </StatusDiv>
         </TopDiv>
