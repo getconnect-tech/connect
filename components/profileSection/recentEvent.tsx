@@ -10,7 +10,6 @@ import {
   LineDiv,
   Title,
   TitleDiv,
-  WorkDetailMainDiv,
 } from "./styles";
 import SVGIcon from "@/assets/icons/SVGIcon";
 
