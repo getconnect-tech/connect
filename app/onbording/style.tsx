@@ -53,8 +53,8 @@ export const CenterCard = styled.div`
   padding: 20px;
   gap: 20px;
   background-color: ${colors.bg_white};
-  box-shadow: 0px 0px 0px 0.5px rgba(0, 0, 0, 0.1),
-    0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 0px 0px 0.5px ${colors.box_shadow},
+    0px 2px 4px 0px ${colors.box_shadow_2};
   border-radius: 12px;
   width: 100%;
 `;
@@ -170,7 +170,6 @@ export const BottomFrame = styled.div`
   ${Typography.body_md_medium}
   color: ${colors.text_link};
   align-items: center;
-  /* gap: 4px; */
   span {
     color: ${colors.text_text_secondary};
     margin-right: 4px;
