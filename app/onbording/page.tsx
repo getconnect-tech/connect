@@ -21,7 +21,7 @@ import {
   Icon,
   LabelDiv,
   BottomFrame,
-  DetailSection,
+  DetailSection
 } from "./style";
 import SVGIcon from "@/assets/icons/SVGIcon";
 import Avatar from "@/components/avtar/Avtar";

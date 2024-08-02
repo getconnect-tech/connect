@@ -18,7 +18,7 @@ interface Prop {
 
 const Buttons = styled.button<WrapButton>`
   display: flex;
-  gap: 6px;
+  gap: 10px;
   justify-content: center;
   ${Typography.body_md_medium}
   padding: 8px 16px;
@@ -75,19 +75,11 @@ const Buttons = styled.button<WrapButton>`
       padding: 4px;
       color: ${props.disabled ? colors.text_disabled : colors.text_link};
       border: none;
-      svg {
-        fill: ${props.disabled ? colors.text_disabled : colors.brand};
-      }
       &:hover {
         color: ${props.disabled
           ? colors.text_disabled
           : colors.brand_fill_hover};
         background-color: transparent;
-        svg {
-          fill: ${props.disabled
-            ? colors.text_disabled
-            : colors.brand_fill_hover};
-        }
       }
     `}
 `;

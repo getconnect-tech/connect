@@ -57,6 +57,7 @@ const Button: React.FC<Props> = (Props) => {
             name={iconName}
             height={iconSize}
             width={iconSize}
+            fill={disabled ? colors.text_disabled : iconColor}
             viewBox={iconViewBox}
           />
         )}
