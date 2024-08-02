@@ -5,11 +5,18 @@ import SVGIcon from "@/assets/icons/SVGIcon";
 import Avatar from "../avtar/Avtar";
 
 interface DropDownProps {
-  items: { name: string; icon?: string; src?: string; isName?: boolean }[];
+  items: {
+    name: string;
+    icon?: string;
+    src?: string;
+    isName?: boolean;
+    value: string;
+  }[];
   style?: React.CSSProperties;
   iconSize: string;
   iconViewBox: string;
   onClose: () => void;
+  onChnage?: () => void;
 }
 
 export const useOutsideClick = (callback: () => void) => {
