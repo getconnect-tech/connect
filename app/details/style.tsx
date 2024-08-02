@@ -102,7 +102,8 @@ const Input = styled.div`
     height: 100%;
     width: 100%;
     ${Typography.body_md_regular};
-    ${colors.text}
+    ${colors.text};
+    resize: none;
     ::placeholder {
       ${colors.text_text_secondary}
     }
@@ -174,5 +175,5 @@ export {
   CenterDiv,
   ActivityDiv,
   Message,
-  LineDiv,
+  LineDiv
 };
