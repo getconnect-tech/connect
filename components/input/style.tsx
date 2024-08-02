@@ -18,14 +18,13 @@ const InputSection = styled.div`
 
 const InputBox = styled.input<Props>`
   width: 100%;
-  border-radius: 8px;
+  border-radius: 20px;
   padding: 10px 14px;
   border: 1px solid ${colors.border_input_border};
   background: transparent;
   color: ${colors.text};
-  letter-spacing: 0.02em;
   ${Typography.body_md_medium}
- 
+
   &:focus-visible {
     outline: none;
   }

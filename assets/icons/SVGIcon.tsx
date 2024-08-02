@@ -355,6 +355,53 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
+    case "cross-icon":
+      return (
+        <>
+          <g clipPath="url(#a)">
+            <mask
+              id="b"
+              width={12}
+              height={12}
+              x={0}
+              y={0}
+              maskUnits="userSpaceOnUse"
+              style={{
+                maskType: "luminance"
+              }}
+            >
+              <path fill="#fff" d="M12 0H0v12h12V0Z" />
+            </mask>
+            <g mask="url(#b)">
+              <path
+                fill="#313130"
+                d="M10.707 1.293a1 1 0 0 0-1.414 0L6 4.586 2.707 1.293a1 1 0 0 0-1.414 1.414L4.586 6 1.293 9.293a1 1 0 1 0 1.414 1.414L6 7.414l3.293 3.293a1 1 0 0 0 1.414-1.414L7.414 6l3.293-3.293a1 1 0 0 0 0-1.414Z"
+              />
+            </g>
+          </g>
+          <defs>
+            <clipPath id="a">
+              <path fill="#fff" d="M0 0h12v12H0z" />
+            </clipPath>
+          </defs>
+        </>
+      );
+    case "plus-icon":
+      return (
+        <>
+          <g clipPath="url(#a)">
+            <path
+              fill="#282828"
+              d="M11 5H7V1a1 1 0 0 0-2 0v4H1a1 1 0 1 0 0 2h4v4a1 1 0 1 0 2 0V7h4a1 1 0 1 0 0-2Z"
+            />
+          </g>
+          <defs>
+            <clipPath id="a">
+              <path fill="#fff" d="M0 0h12v12H0z" />
+            </clipPath>
+          </defs>
+        </>
+      );
     case "dropdown-unassign-icon":
       return (
         <>
@@ -383,7 +430,7 @@ const SVGIcon = ({
   bgfill = "none",
   stroke = "",
   stopColor = "",
-  iconprimary = colors.icon,
+  iconprimary = colors.icon
 }) => (
   <svg
     stroke={stroke}
@@ -401,7 +448,7 @@ const SVGIcon = ({
       bgfill,
       stroke,
       stopColor,
-      iconprimary,
+      iconprimary
     })}
   </svg>
 );

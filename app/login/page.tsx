@@ -1,6 +1,15 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Bottom, CodeSection, Form, Heading, LoginSection, LoginText, MainDiv, TimeText } from "./style";
+import React, { useCallback, useMemo, useState } from "react";
+import {
+  Bottom,
+  CodeSection,
+  Form,
+  Heading,
+  LoginSection,
+  LoginText,
+  MainDiv,
+  TimeText
+} from "./style";
 import SVGIcon from "@/assets/icons/SVGIcon";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
@@ -34,7 +43,11 @@ export default function LoginPage() {
       if (!isValidEmail(userEmail)) {
         throw new Error("Invalid email address!");
       }
-      const response = await fetch("/api/auth/login", { body: JSON.stringify({ email: userEmail }), method: "POST", cache: "no-cache" });
+      const response = await fetch("/api/auth/login", {
+        body: JSON.stringify({ email: userEmail }),
+        method: "POST",
+        cache: "no-cache"
+      });
 
       if (!response.ok) {
         if (response.status === 404) {
@@ -77,7 +90,8 @@ export default function LoginPage() {
     const seconds = (counter % 60).toString();
     return (
       <>
-        {minutes.length <= 1 ? "0" + minutes : minutes}:{seconds.length <= 1 ? "0" + seconds : seconds}
+        {minutes.length <= 1 ? "0" + minutes : minutes}:
+        {seconds.length <= 1 ? "0" + seconds : seconds}
         {<a onClick={resendCode}>Resend Code</a>}
       </>
     );
@@ -88,14 +102,30 @@ export default function LoginPage() {
       <MainDiv>
         <LoginSection>
           <Heading>
-            <SVGIcon name="secondary-logo" width="60px" height="60px" viewBox="0 0 60 60" />
+            <SVGIcon
+              name="secondary-logo"
+              width="60px"
+              height="60px"
+              viewBox="0 0 60 60"
+            />
             <LoginText>Welcome to Connect</LoginText>
           </Heading>
           {!showBottomSection ? (
             <>
               <Form>
-                <Input type={"text"} placeholder="Email address" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} />
-                <Button title="Continue" width={true} className="button" onClick={handleContinueClick} isLoading={isLoading} />
+                <Input
+                  type={"text"}
+                  placeholder="Email address"
+                  value={userEmail}
+                  onChange={(e) => setUserEmail(e.target.value)}
+                />
+                <Button
+                  title="Continue"
+                  width={true}
+                  className="button"
+                  onClick={handleContinueClick}
+                  isLoading={isLoading}
+                />
               </Form>
               <Bottom>
                 <p>By continuing, you are indicating that you have</p>
@@ -112,8 +142,17 @@ export default function LoginPage() {
               <p>
                 We have sent a temporary code to <span>{userEmail}.</span>
               </p>
-              <Input placeholder={"Enter Code"} type={"number"} onChange={(e) => setCode(e.target.value)} />
-              <Button title="Login" isWidth width onClick={handleLoginClick} isLoading={isLoading} />
+              <Input
+                placeholder={"Enter Code"}
+                type={"number"}
+                onChange={(e) => setCode(e.target.value)}
+              />
+              <Button
+                title="Login"
+                width
+                onClick={handleLoginClick}
+                isLoading={isLoading}
+              />
               <TimeText>{Counter}</TimeText>
             </CodeSection>
           )}

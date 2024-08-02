@@ -1,4 +1,3 @@
-/* eslint-disable no-template-curly-in-string */
 import { colors } from "@/styles/colors";
 import { Typography } from "@/styles/typography";
 import styled, { css, keyframes } from "styled-components";
@@ -7,7 +6,8 @@ interface WrapButton {
   secondary: boolean;
   isDelete: boolean;
   isLoading?: boolean;
-  isWidth?: boolean;
+  width?: boolean;
+  isLink?: boolean;
 }
 
 interface Prop {
@@ -43,7 +43,7 @@ const Buttons = styled.button<WrapButton>`
       }
     `}
   ${(props) =>
-    props.isWidth &&
+    props.width &&
     css`
       width: 100%;
     `}
@@ -66,6 +66,20 @@ const Buttons = styled.button<WrapButton>`
           : props.isLoading
           ? colors.brand
           : colors.brand_disabled};
+      }
+    `}
+    ${(props) =>
+    props.isLink &&
+    css`
+      background-color: transparent;
+      padding: 4px;
+      color: ${props.disabled ? colors.text_disabled : colors.text_link};
+      border: none;
+      &:hover {
+        color: ${props.disabled
+          ? colors.text_disabled
+          : colors.brand_fill_hover};
+        background-color: transparent;
       }
     `}
 `;

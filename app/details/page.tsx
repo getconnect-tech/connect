@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   ActivityDiv,
   BottomDiv,
@@ -16,7 +16,7 @@ import {
   Message,
   StatusDiv,
   Title,
-  TopDiv,
+  TopDiv
 } from "./style";
 import NavbarPage from "@/components/navbar";
 import ProfileSection from "@/components/profileSection/profileSection";
@@ -32,8 +32,6 @@ export default function Details() {
   const router = useRouter();
   const [showDropDown1, setShowDropDown1] = useState(false);
   const [showDropDown2, setShowDropDown2] = useState(false);
-  const dropDownRef1 = useRef<HTMLDivElement | null>(null);
-  const dropDownRef2 = useRef<HTMLDivElement | null>(null);
 
   const handleTagClick1 = () => {
     setShowDropDown1((prev) => !prev);
@@ -43,39 +41,12 @@ export default function Details() {
     setShowDropDown2((prev) => !prev);
   };
 
-  const handleClickOutside1 = (event: MouseEvent) => {
-    if (
-      dropDownRef1.current &&
-      !dropDownRef1.current.contains(event.target as Node)
-    ) {
-      setShowDropDown1(false);
-    }
-  };
-
-  const handleClickOutside2 = (event: MouseEvent) => {
-    if (
-      dropDownRef2.current &&
-      !dropDownRef2.current.contains(event.target as Node)
-    ) {
-      setShowDropDown2(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside1);
-    document.addEventListener("mousedown", handleClickOutside2);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside1);
-      document.removeEventListener("mousedown", handleClickOutside2);
-    };
-  }, []);
-
   const items1 = [
     { name: "No priority", icon: "priority-no-icon" },
     { name: "Urgent", icon: "priority-urgent-icon" },
     { name: "High", icon: "priority-high-icon" },
     { name: "Medium", icon: "priority-Medium-icon" },
-    { name: "Low", icon: "priority-low-icon" },
+    { name: "Low", icon: "priority-low-icon" }
   ];
 
   const items2 = [
@@ -83,23 +54,23 @@ export default function Details() {
     {
       name: "Sanjay M.",
       src: "https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4",
-      isName: true,
+      isName: true
     },
     {
       name: "Aniket",
       src: "https://bearbuk.blob.core.windows.net/project/Profile_63c0ec5555376218700f12d5_2023041410225842.png",
-      isName: true,
+      isName: true
     },
     {
       name: "Jemish",
       src: "https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4",
-      isName: true,
+      isName: true
     },
     {
       name: "Vatsal",
       src: "https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2F1708409574833_1712819712813.jpg?alt=media&token=42df7e19-9083-4c61-8b51-b43d5c3f4183",
-      isName: true,
-    },
+      isName: true
+    }
   ];
 
   return (
@@ -150,10 +121,10 @@ export default function Details() {
               />
               {showDropDown1 && (
                 <DropDown
-                  ref={dropDownRef1}
                   items={items1}
                   iconSize="12"
                   iconViewBox="0 0 12 12"
+                  onClose={() => setShowDropDown1(false)}
                 />
               )}
             </div>
@@ -168,10 +139,10 @@ export default function Details() {
               />
               {showDropDown2 && (
                 <DropDown
-                  ref={dropDownRef2}
                   items={items2}
                   iconSize="20"
                   iconViewBox="0 0 20 20"
+                  onClose={() => setShowDropDown2(false)}
                 />
               )}
             </div>

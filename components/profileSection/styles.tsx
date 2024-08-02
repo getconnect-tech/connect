@@ -156,5 +156,5 @@ export {
   DotLine,
   Dot,
   Line,
-  LineDiv,
+  LineDiv
 };
