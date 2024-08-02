@@ -1,4 +1,5 @@
 import { prisma } from "@/prisma/prisma";
+import { TeamSize } from "@prisma/client";
 
 // Service to check if user already signed-up or not
 export const isUserAlreadyExists = async (userEmail: string, checkVerified = true) => {
@@ -28,4 +29,10 @@ export const createUser = async (
 export const markUserAsVerified = async (userEmail: string) => {
   const updatedUser = await prisma.user.update({ where: { email: userEmail }, data: { is_verified: true } });
   return updatedUser;
+};
+
+// Service to create workspace
+export const createWorkspace = async ({ name, industry, teamSize }: { name: string; industry: string; teamSize: TeamSize }) => {
+  const newWorkspace = await prisma.workspace.create({ data: { name, industry, team_size: teamSize } });
+  return newWorkspace;
 };
