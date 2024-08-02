@@ -127,7 +127,7 @@ export default function LoginPage() {
                 We have sent a temporary code to <span>{userEmail}</span>
               </p>
               <Input placeholder={"Enter Code"} type={"number"} onChange={(e) => setCode(e.target.value)} />
-              <Button title="Login" isWidth onClick={handleLoginClick} isLoading={isLoading} />
+              <Button title="Login" width onClick={handleLoginClick} isLoading={isLoading} />
               {Counter}
             </CodeSection>
           )}
