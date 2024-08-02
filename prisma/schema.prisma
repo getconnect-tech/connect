@@ -30,6 +30,8 @@ model Workspace {
   users      UserWorkspaces[]
   created_at DateTime         @default(now())
   updated_at DateTime         @default(now()) @updatedAt
+  team_size  TeamSize
+  industry   String
 }
 
 model Ticket {
@@ -86,4 +88,11 @@ model UserWorkspaces {
   user_id String
 
   @@index([workspace_id, user_id])
+}
+
+enum TeamSize {
+  SMALL
+  MEDIUM
+  LARGE
+  ENTERPRISE
 }
