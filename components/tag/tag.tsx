@@ -23,7 +23,13 @@ export default function Tag({
   ref,
 }: Props) {
   return (
-    <StatusDiv isActive={isActive} onClick={onClick} ref={ref}>
+    //apply className while open drop down
+    <StatusDiv
+      isActive={isActive}
+      onClick={onClick}
+      ref={ref}
+      className="tag-div"
+    >
       {isName ? (
         <Avatar name="" imgSrc={`${src}`} size={20} />
       ) : (

@@ -111,6 +111,12 @@ export const DropBox = styled.div`
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
   ${Typography.body_md_medium}
   color: ${colors.text_text_secondary};
 `;
