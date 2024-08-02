@@ -39,7 +39,7 @@ export default function OnBordingStep1() {
   const handleIndustryClick = useCallback(() => {
     setIndustryDropdownOpen(!industryDropdownOpen);
   }, [industryDropdownOpen]);
-  
+
   const handleTeamSizeClick = useCallback(() => {
     setTeamDropdownOpen(!teamDropdownOpen);
   }, [teamDropdownOpen]);
@@ -173,14 +173,8 @@ export default function OnBordingStep1() {
                   <DetailSection>
                     {inputField.map((field, index) => (
                       <TextField isNext={showCard} key={index}>
-                        <Input
-                          placeholder={"Email Address"}
-                          value={field.email}
-                        />
-                        <Input
-                          placeholder={"Full Name"}
-                          value={field.fullname}
-                        />
+                        <Input placeholder={"Email Address"} type="email" />
+                        <Input placeholder={"Full Name"} type="text" />
                         <Icon onClick={() => handleRemoveInputField(index)}>
                           <SVGIcon
                             name="cross-icon"
