@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   CenterCard,
   Heading,
@@ -29,7 +29,6 @@ import Button from "@/components/button/button";
 import Input from "@/components/input/input";
 import DropDown from "@/components/dropDown/dropDown";
 import { industryItems, teamMember } from "@/helpers/raw";
-import { useOutsideClick } from "@/helpers/common";
 
 export default function OnBordingStep1() {
   const [showCard, setShowCard] = useState(false);
@@ -40,6 +39,7 @@ export default function OnBordingStep1() {
   const handleIndustryClick = useCallback(() => {
     setIndustryDropdownOpen(!industryDropdownOpen);
   }, [industryDropdownOpen]);
+  
   const handleTeamSizeClick = useCallback(() => {
     setTeamDropdownOpen(!teamDropdownOpen);
   }, [teamDropdownOpen]);

@@ -1,4 +1,3 @@
-/* eslint-disable no-template-curly-in-string */
 import { colors } from "@/styles/colors";
 import { Typography } from "@/styles/typography";
 import styled, { css, keyframes } from "styled-components";
