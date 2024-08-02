@@ -10,6 +10,7 @@ const MainDiv = styled.div`
     0px 4px 8px 0px ${colors.box_shadow}, 0px 8px 24px 0px ${colors.box_shadow};
   position: absolute;
   margin-top: 4px;
+  z-index: 1;
 `;
 
 const ItemDiv = styled.div`

@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Bottom, CodeSection, Form, Heading, LoginSection, LoginText, MainDiv, TimeText } from "./style";
 import SVGIcon from "@/assets/icons/SVGIcon";
 import Input from "@/components/input/input";
@@ -36,7 +36,11 @@ export default function LoginPage() {
       if (!isValidEmail(userEmail)) {
         throw new Error("Invalid email address!");
       }
-      const response = await fetch("/api/auth/login", { body: JSON.stringify({ email: userEmail }), method: "POST", cache: "no-cache" });
+      const response = await fetch("/api/auth/login", {
+        body: JSON.stringify({ email: userEmail }),
+        method: "POST",
+        cache: "no-cache",
+      });
 
       if (!response.ok) {
         if (response.status === 404) {
@@ -123,7 +127,7 @@ export default function LoginPage() {
                 We have sent a temporary code to <span>{userEmail}</span>
               </p>
               <Input placeholder={"Enter Code"} type={"number"} onChange={(e) => setCode(e.target.value)} />
-              <Button title="Login" isWidth width onClick={handleLoginClick} isLoading={isLoading} />
+              <Button title="Login" isWidth onClick={handleLoginClick} isLoading={isLoading} />
               {Counter}
             </CodeSection>
           )}
