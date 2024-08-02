@@ -367,7 +367,7 @@ const getPath = (name: string, props: any) => {
               y={0}
               maskUnits="userSpaceOnUse"
               style={{
-                maskType: "luminance"
+                maskType: "luminance",
               }}
             >
               <path fill="#fff" d="M12 0H0v12h12V0Z" />
@@ -391,7 +391,7 @@ const getPath = (name: string, props: any) => {
         <>
           <g clipPath="url(#a)">
             <path
-              fill="#282828"
+              fill={fill}
               d="M11 5H7V1a1 1 0 0 0-2 0v4H1a1 1 0 1 0 0 2h4v4a1 1 0 1 0 2 0V7h4a1 1 0 1 0 0-2Z"
             />
           </g>
@@ -430,7 +430,7 @@ const SVGIcon = ({
   bgfill = "none",
   stroke = "",
   stopColor = "",
-  iconprimary = colors.icon
+  iconprimary = colors.icon,
 }) => (
   <svg
     stroke={stroke}
@@ -448,7 +448,7 @@ const SVGIcon = ({
       bgfill,
       stroke,
       stopColor,
-      iconprimary
+      iconprimary,
     })}
   </svg>
 );
