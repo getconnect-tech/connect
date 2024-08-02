@@ -70,14 +70,14 @@ export const CodeSection = styled.div`
     width: 100%;
   }
 `;
-export const TimeText = styled.div`
+export const TimeText = styled.div<{ isActive?: boolean }>`
   display: flex;
   ${Typography.body_md_medium};
   color: ${colors.text};
   gap: 8px;
 
   a {
-    color: ${colors.text_text_secondary};
+    color: ${({ isActive }) => (isActive ? colors.text : colors.text_disabled)};
     cursor: pointer;
   }
 `;
