@@ -19,7 +19,7 @@ import { isValidEmail } from "@/helpers/common";
 
 const INITIAL_TIMER = 5 * 60;
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [showBottomSection, setShowBottomSection] = useState(false);
   const [counter, setCounter] = useState(INITIAL_TIMER);
   const [userEmail, setUserEmail] = useState("");
@@ -39,35 +39,16 @@ export default function LoginPage() {
     }, 1000);
   };
 
-  const handleContinueClick = useCallback(async () => {
+  const handleSignupClick = useCallback(async () => {
     setIsLoading(true);
     try {
-      if (!isValidEmail(userEmail)) {
-        throw new Error("Invalid email address!");
-      }
-      const response = await fetch("/api/auth/login", {
-        body: JSON.stringify({ email: userEmail }),
-        method: "POST",
-        cache: "no-cache",
-      });
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          setIsLoading(false);
-          alert("User not found!");
-          return;
-        }
-        throw new Error("Error while login in...");
-      }
-
       startCounter();
-
       setShowBottomSection(true);
     } catch (err: any) {
       alert(err.message);
     }
     setIsLoading(false);
-  }, [userEmail]);
+  }, []);
 
   const handleLoginClick = async () => {
     setIsLoading(true);
@@ -121,30 +102,46 @@ export default function LoginPage() {
               viewBox="0 0 60 60"
             />
             <LoginText>
-              {showBottomSection ? "Check your email" : "Login"}
+              {showBottomSection ? "Check your email" : "Create an account"}
             </LoginText>
           </Heading>
           {!showBottomSection ? (
             <>
               <Form>
-                <Input
-                  type={"text"}
-                  placeholder="Email address"
-                  value={userEmail}
-                  onChange={(e) => setUserEmail(e.target.value)}
-                />
+                <div className="input-div">
+                  <Input
+                    type={"text"}
+                    placeholder="Name"
+                    //   value={userEmail}
+                    //   onChange={(e) => setUserEmail(e.target.value)}
+                  />
+                  <Input
+                    type={"text"}
+                    placeholder="Email address"
+                    value={userEmail}
+                    onChange={(e) => setUserEmail(e.target.value)}
+                  />
+                </div>
                 <Button
-                  title="Login"
+                  title="Sign up"
                   width={true}
                   className="button"
-                  onClick={handleContinueClick}
                   isLoading={isLoading}
+                  onClick={handleSignupClick}
                 />
               </Form>
               <Bottom>
-                <p>Don’t have an account?</p>
                 <p>
-                  <a href="/signup">Create New Account</a>
+                  <a href="/login">Back to Login</a>
+                </p>
+              </Bottom>
+              <Bottom>
+                <p>By continuing, you are indicating that you have</p>
+                <p>
+                  read and agree to the <a>Terms of Use</a> and
+                </p>
+                <p>
+                  <a>Privacy Policy</a>
                 </p>
               </Bottom>
             </>
@@ -159,7 +156,7 @@ export default function LoginPage() {
                 onChange={(e) => setCode(e.target.value)}
               />
               <Button
-                title="Login"
+                title="Sign up"
                 width
                 onClick={handleLoginClick}
                 isLoading={isLoading}

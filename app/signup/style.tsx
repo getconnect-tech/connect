@@ -35,9 +35,16 @@ export const Form = styled.div`
   .button {
     width: 100%;
   }
+  .input-div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
 `;
 export const Bottom = styled.div`
   display: flex;
+  flex-direction: column;
   gap: 4px;
   p {
     ${Typography.body_md_regular}
