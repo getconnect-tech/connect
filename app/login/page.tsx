@@ -1,15 +1,6 @@
 "use client";
 import React, { useCallback, useMemo, useState } from "react";
-import {
-  Bottom,
-  CodeSection,
-  Form,
-  Heading,
-  LoginSection,
-  LoginText,
-  MainDiv,
-  TimeText
-} from "./style";
+import { Bottom, CodeSection, Form, Heading, LoginSection, LoginText, MainDiv, TimeText } from "./style";
 import SVGIcon from "@/assets/icons/SVGIcon";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
@@ -17,9 +8,11 @@ import { signInWithCode } from "@/services/membership/signin";
 import { useRouter } from "next/navigation";
 import { isValidEmail } from "@/helpers/common";
 
+const INITIAL_TIMER = 5 * 60;
+
 export default function LoginPage() {
   const [showBottomSection, setShowBottomSection] = useState(false);
-  const [counter, setCounter] = useState(5 * 60);
+  const [counter, setCounter] = useState(INITIAL_TIMER);
   const [userEmail, setUserEmail] = useState("");
   const [code, setCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +39,7 @@ export default function LoginPage() {
       const response = await fetch("/api/auth/login", {
         body: JSON.stringify({ email: userEmail }),
         method: "POST",
-        cache: "no-cache"
+        cache: "no-cache",
       });
 
       if (!response.ok) {
@@ -79,21 +72,28 @@ export default function LoginPage() {
     setIsLoading(false);
   };
 
-  const resendCode = useCallback(() => {
+  const resendCode = useCallback(async () => {
     if (counter > 0) return;
-    setCounter(5 * 60);
-    startCounter();
-  }, [counter]);
+    try {
+      fetch("/api/auth/sendVerificationCode", { method: "POST", body: JSON.stringify({ email: userEmail }) }).then(() => {
+        alert("New code sent!");
+      });
+
+      setCounter(INITIAL_TIMER);
+      startCounter();
+    } catch (err: any) {
+      alert(err.message);
+    }
+  }, [counter, userEmail]);
 
   const Counter = useMemo(() => {
-    const minutes = Math.floor(counter / 60).toString();
-    const seconds = (counter % 60).toString();
+    const minutes = `${Math.floor(counter / 60)}`.padStart(2, "0");
+    const seconds = `${counter % 60}`.padStart(2, "0");
     return (
-      <>
-        {minutes.length <= 1 ? "0" + minutes : minutes}:
-        {seconds.length <= 1 ? "0" + seconds : seconds}
+      <TimeText isActive={counter <= 0}>
+        {minutes}:{seconds}
         {<a onClick={resendCode}>Resend Code</a>}
-      </>
+      </TimeText>
     );
   }, [counter, resendCode]);
 
@@ -102,30 +102,14 @@ export default function LoginPage() {
       <MainDiv>
         <LoginSection>
           <Heading>
-            <SVGIcon
-              name="secondary-logo"
-              width="60px"
-              height="60px"
-              viewBox="0 0 60 60"
-            />
+            <SVGIcon name="secondary-logo" width="60px" height="60px" viewBox="0 0 60 60" />
             <LoginText>Welcome to Connect</LoginText>
           </Heading>
           {!showBottomSection ? (
             <>
               <Form>
-                <Input
-                  type={"text"}
-                  placeholder="Email address"
-                  value={userEmail}
-                  onChange={(e) => setUserEmail(e.target.value)}
-                />
-                <Button
-                  title="Continue"
-                  width={true}
-                  className="button"
-                  onClick={handleContinueClick}
-                  isLoading={isLoading}
-                />
+                <Input type={"text"} placeholder="Email address" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} />
+                <Button title="Continue" width={true} className="button" onClick={handleContinueClick} isLoading={isLoading} />
               </Form>
               <Bottom>
                 <p>By continuing, you are indicating that you have</p>
@@ -140,20 +124,11 @@ export default function LoginPage() {
           ) : (
             <CodeSection>
               <p>
-                We have sent a temporary code to <span>{userEmail}.</span>
+                We have sent a temporary code to <span>{userEmail}</span>
               </p>
-              <Input
-                placeholder={"Enter Code"}
-                type={"number"}
-                onChange={(e) => setCode(e.target.value)}
-              />
-              <Button
-                title="Login"
-                width
-                onClick={handleLoginClick}
-                isLoading={isLoading}
-              />
-              <TimeText>{Counter}</TimeText>
+              <Input placeholder={"Enter Code"} type={"number"} onChange={(e) => setCode(e.target.value)} />
+              <Button title="Login" width onClick={handleLoginClick} isLoading={isLoading} />
+              {Counter}
             </CodeSection>
           )}
         </LoginSection>
