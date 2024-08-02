@@ -10,7 +10,7 @@ interface DropDownProps {
     icon?: string;
     src?: string;
     isName?: boolean;
-    value: string;
+    value?: any;
   }[];
   style?: React.CSSProperties;
   iconSize: string;
