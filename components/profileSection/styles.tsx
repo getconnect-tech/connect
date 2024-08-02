@@ -61,6 +61,11 @@ const LeftDiv = styled.div`
   }
 `;
 
+const WorkDetailMainDiv = styled.div`
+  border-top: 1px solid ${colors.border};
+  border-bottom: 1px solid ${colors.border};
+`;
+
 const EventMainDiv = styled.div`
   border-bottom: 1px solid ${colors.border};
 `;
@@ -143,6 +148,7 @@ export {
   DetailsMainDiv,
   DetailsDiv,
   LeftDiv,
+  WorkDetailMainDiv,
   TitleDiv,
   EventMainDiv,
   EventDetailDiv,
@@ -150,5 +156,5 @@ export {
   DotLine,
   Dot,
   Line,
-  LineDiv,
+  LineDiv
 };
