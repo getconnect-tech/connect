@@ -21,7 +21,7 @@ import {
   Icon,
   LabelDiv,
   BottomFrame,
-  DetailSection
+  DetailSection,
 } from "./style";
 import SVGIcon from "@/assets/icons/SVGIcon";
 import Avatar from "@/components/avtar/Avtar";
@@ -38,10 +38,12 @@ export default function OnBordingStep1() {
 
   const handleIndustryClick = useCallback(() => {
     setIndustryDropdownOpen(!industryDropdownOpen);
+    setTeamDropdownOpen(false);
   }, [industryDropdownOpen]);
 
   const handleTeamSizeClick = useCallback(() => {
     setTeamDropdownOpen(!teamDropdownOpen);
+    setIndustryDropdownOpen(false);
   }, [teamDropdownOpen]);
 
   const handleNextClick = useCallback(() => {
@@ -98,7 +100,8 @@ export default function OnBordingStep1() {
                 <TextField isNext={showCard}>
                   <Label> Team Size</Label>
                   <div>
-                    <DropBox onClick={handleTeamSizeClick}>
+                    {/* apply className while open drop down */}
+                    <DropBox onClick={handleTeamSizeClick} className="tag-div">
                       Select a Team Size
                       <SVGIcon
                         name={
@@ -123,7 +126,8 @@ export default function OnBordingStep1() {
                 <TextField isNext={showCard}>
                   <Label>Industry</Label>
                   <div>
-                    <DropBox onClick={handleIndustryClick}>
+                    {/* apply className while open drop down */}
+                    <DropBox onClick={handleIndustryClick} className="tag-div">
                       Select a Industry
                       <SVGIcon
                         name={

@@ -16,7 +16,7 @@ import {
   Message,
   StatusDiv,
   Title,
-  TopDiv
+  TopDiv,
 } from "./style";
 import NavbarPage from "@/components/navbar";
 import ProfileSection from "@/components/profileSection/profileSection";
@@ -27,50 +27,45 @@ import Avatar from "@/components/avtar/Avtar";
 import MessageCard from "@/components/messageCard/messageCard";
 import QuestionCard from "@/components/questionCard/questionCard";
 import DropDown from "@/components/dropDown/dropDown";
+import { priorityItem } from "@/helpers/raw";
 
 export default function Details() {
   const router = useRouter();
-  const [showDropDown1, setShowDropDown1] = useState(false);
-  const [showDropDown2, setShowDropDown2] = useState(false);
+  const [priorityDropdown, setPriorityDropdown] = useState(false);
+  const [assignDropdown, setAssignDropdown] = useState(false);
 
-  const handleTagClick1 = () => {
-    setShowDropDown1((prev) => !prev);
+  const handlePriorityTag = () => {
+    setPriorityDropdown((prev) => !prev);
+    setAssignDropdown(false);
   };
 
-  const handleTagClick2 = () => {
-    setShowDropDown2((prev) => !prev);
+  const handleAssignTag = () => {
+    setAssignDropdown((prev) => !prev);
+    setPriorityDropdown(false);
   };
 
-  const items1 = [
-    { name: "No priority", icon: "priority-no-icon" },
-    { name: "Urgent", icon: "priority-urgent-icon" },
-    { name: "High", icon: "priority-high-icon" },
-    { name: "Medium", icon: "priority-Medium-icon" },
-    { name: "Low", icon: "priority-low-icon" }
-  ];
-
-  const items2 = [
+  const assignItem = [
     { name: "Unassigned", icon: "dropdown-unassign-icon" },
     {
       name: "Sanjay M.",
       src: "https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4",
-      isName: true
+      isName: true,
     },
     {
       name: "Aniket",
       src: "https://bearbuk.blob.core.windows.net/project/Profile_63c0ec5555376218700f12d5_2023041410225842.png",
-      isName: true
+      isName: true,
     },
     {
       name: "Jemish",
       src: "https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4",
-      isName: true
+      isName: true,
     },
     {
       name: "Vatsal",
       src: "https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2F1708409574833_1712819712813.jpg?alt=media&token=42df7e19-9083-4c61-8b51-b43d5c3f4183",
-      isName: true
-    }
+      isName: true,
+    },
   ];
 
   return (
@@ -114,35 +109,35 @@ export default function Details() {
             <div>
               <Tag
                 isActive={true}
-                onClick={handleTagClick1}
+                onClick={handlePriorityTag}
                 isName={false}
                 iconName={"priority-no-icon"}
                 title={"Priority"}
               />
-              {showDropDown1 && (
+              {priorityDropdown && (
                 <DropDown
-                  items={items1}
+                  items={priorityItem}
                   iconSize="12"
                   iconViewBox="0 0 12 12"
-                  onClose={() => setShowDropDown1(false)}
+                  onClose={() => setPriorityDropdown(false)}
                 />
               )}
             </div>
             <div>
               <Tag
                 isActive={true}
-                onClick={handleTagClick2}
+                onClick={handleAssignTag}
                 isName={true}
                 iconName={"bug-icon"}
                 title={"Sanjay M."}
                 src="https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4"
               />
-              {showDropDown2 && (
+              {assignDropdown && (
                 <DropDown
-                  items={items2}
+                  items={assignItem}
                   iconSize="20"
                   iconViewBox="0 0 20 20"
-                  onClose={() => setShowDropDown2(false)}
+                  onClose={() => setAssignDropdown(false)}
                 />
               )}
             </div>
