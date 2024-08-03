@@ -22,6 +22,7 @@ model User {
   created_at    DateTime         @default(now())
   updated_at    DateTime         @default(now()) @updatedAt
   invited_users InvitedUser[]
+  messages      Message[]
 }
 
 model Workspace {
@@ -34,29 +35,34 @@ model Workspace {
   team_size     TeamSize
   industry      String
   invited_users InvitedUser[]
+  tags          String[]
 }
 
 model Ticket {
-  id            String    @id @default(uuid())
-  workspace     Workspace @relation(fields: [workspace_id], references: [id])
+  id            String         @id @default(uuid())
+  workspace     Workspace      @relation(fields: [workspace_id], references: [id])
   workspace_id  String
   title         String
   messages      Message[]
-  contact       Contact   @relation(fields: [contact_id], references: [id])
+  contact       Contact        @relation(fields: [contact_id], references: [id])
   contact_id    String
-  assigned_user User      @relation(fields: [assigned_to], references: [id])
+  assigned_user User           @relation(fields: [assigned_to], references: [id])
   assigned_to   String
-  created_at    DateTime  @default(now())
-  updated_at    DateTime  @default(now()) @updatedAt
+  created_at    DateTime       @default(now())
+  updated_at    DateTime       @default(now()) @updatedAt
+  priority      PriorityLevels @default(NONE)
 }
 
 model Message {
-  id         String   @id @default(uuid())
+  id         String      @id @default(uuid())
   subject    String
   content    String
-  created_at DateTime @default(now())
-  ticket     Ticket   @relation(fields: [ticket_id], references: [id])
+  created_at DateTime    @default(now())
+  ticket     Ticket      @relation(fields: [ticket_id], references: [id])
   ticket_id  String
+  author     User        @relation(fields: [author_id], references: [id])
+  author_id  String
+  type       MessageType
 }
 
 model Contact {
@@ -108,4 +114,19 @@ enum TeamSize {
   MEDIUM
   LARGE
   ENTERPRISE
+}
+
+enum PriorityLevels {
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum MessageType {
+  MESSAGE
+  EMAIL
+  PRIORITY
+  ASSIGN
 }
