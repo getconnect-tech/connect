@@ -30,9 +30,3 @@ export const markUserAsVerified = async (userEmail: string) => {
   const updatedUser = await prisma.user.update({ where: { email: userEmail }, data: { is_verified: true } });
   return updatedUser;
 };
-
-// Service to create workspace
-export const createWorkspace = async ({ name, industry, teamSize }: { name: string; industry: string; teamSize: TeamSize }) => {
-  const newWorkspace = await prisma.workspace.create({ data: { name, industry, team_size: teamSize } });
-  return newWorkspace;
-};

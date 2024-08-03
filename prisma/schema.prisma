@@ -12,26 +12,28 @@ datasource db {
 }
 
 model User {
-  id           String           @id @default(uuid())
-  email        String           @unique
-  display_name String?
-  profile_url  String?
-  is_verified  Boolean          @default(false)
-  tickets      Ticket[]
-  workspaces   UserWorkspaces[]
-  created_at   DateTime         @default(now())
-  updated_at   DateTime         @default(now()) @updatedAt
+  id            String           @id @default(uuid())
+  email         String           @unique
+  display_name  String?
+  profile_url   String?
+  is_verified   Boolean          @default(false)
+  tickets       Ticket[]
+  workspaces    UserWorkspaces[]
+  created_at    DateTime         @default(now())
+  updated_at    DateTime         @default(now()) @updatedAt
+  invited_users InvitedUser[]
 }
 
 model Workspace {
-  id         String           @id @default(uuid())
-  name       String
-  tickets    Ticket[]
-  users      UserWorkspaces[]
-  created_at DateTime         @default(now())
-  updated_at DateTime         @default(now()) @updatedAt
-  team_size  TeamSize
-  industry   String
+  id            String           @id @default(uuid())
+  name          String
+  tickets       Ticket[]
+  users         UserWorkspaces[]
+  created_at    DateTime         @default(now())
+  updated_at    DateTime         @default(now()) @updatedAt
+  team_size     TeamSize
+  industry      String
+  invited_users InvitedUser[]
 }
 
 model Ticket {
@@ -88,6 +90,17 @@ model UserWorkspaces {
   user_id String
 
   @@index([workspace_id, user_id])
+}
+
+model InvitedUser {
+  id              String    @id @default(uuid())
+  name            String?
+  email           String
+  invited_by_user User      @relation(fields: [invited_by], references: [id])
+  invited_by      String
+  workspace       Workspace @relation(fields: [workspace_id], references: [id])
+  workspace_id    String
+  created_at      DateTime  @default(now())
 }
 
 enum TeamSize {
