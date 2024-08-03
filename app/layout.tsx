@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import StyledComponentsRegistry from "../components/styledRegistry";
+import StyledComponentsRegistry from "../components/appProvider";
 import SessionWrapper from "./SessionWrapper";
 import Favicon from "@/components/favIcon";
+import AppProvider from "../components/appProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +25,7 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <SessionWrapper>
-          <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+          <AppProvider>{children}</AppProvider>
         </SessionWrapper>
       </body>
     </html>

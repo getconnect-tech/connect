@@ -19,19 +19,25 @@ import {
 import SVGIcon from "@/assets/icons/SVGIcon";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
-import { signInWithCode } from "@/services/membership/signin";
 import { useRouter } from "next/navigation";
-import { isValidEmail } from "@/helpers/common";
+import { useStores } from "@/stores";
+import { observer } from "mobx-react-lite";
+import {
+  resendVerificationCode,
+  verifyAuthCode,
+  verifyUserEmail,
+} from "@/services/clientSide/authService";
 
 const INITIAL_TIMER = 5 * 60;
 
-export default function Login() {
+function Login() {
   const [showBottomSection, setShowBottomSection] = useState(false);
   const [counter, setCounter] = useState(INITIAL_TIMER);
-  const [userEmail, setUserEmail] = useState("");
+  const [email, setUserEmail] = useState("");
   const [code, setCode] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { userStore } = useStores();
+  const { loading } = userStore;
 
   useEffect(() => {
     router.prefetch("/");
@@ -52,64 +58,31 @@ export default function Login() {
   const handleContinueClick = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
-      setIsLoading(true);
-      try {
-        if (!isValidEmail(userEmail)) {
-          throw new Error("Invalid email address!");
-        }
-        const response = await fetch("/api/auth/login", {
-          body: JSON.stringify({ email: userEmail }),
-          method: "POST",
-          cache: "no-cache",
-        });
-
-        if (!response.ok) {
-          if (response.status === 404) {
-            setIsLoading(false);
-            alert("User not found!");
-            return;
-          }
-          throw new Error("Error while login in...");
-        }
+      const result = await verifyUserEmail(email);
+      if (result) {
         startCounter();
         setShowBottomSection(true);
-      } catch (err: any) {
-        alert(err.message);
       }
-      setIsLoading(false);
     },
-    [userEmail]
+    [email]
   );
 
-  const verifyAuthCode = async (e: SyntheticEvent) => {
+  const onVerifyAuthCode = async (e: SyntheticEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    try {
-      await signInWithCode(userEmail, code);
+    const result = await verifyAuthCode(email, code);
+    if (result) {
       router.push("/");
-    } catch (err: any) {
-      console.error(err);
-      alert("Incorrect code!");
     }
-    setIsLoading(false);
   };
 
-  const resendCode = useCallback(async () => {
+  const onResendCode = useCallback(async () => {
     if (counter > 0) return;
-    try {
-      fetch("/api/auth/sendVerificationCode", {
-        method: "POST",
-        body: JSON.stringify({ email: userEmail }),
-      }).then(() => {
-        alert("New code sent!");
-      });
-
+    const result = await resendVerificationCode(email);
+    if (result) {
       setCounter(INITIAL_TIMER);
       startCounter();
-    } catch (err: any) {
-      alert(err.message);
     }
-  }, [counter, userEmail]);
+  }, [counter, email]);
 
   const Counter = useMemo(() => {
     const minutes = `${Math.floor(counter / 60)}`.padStart(2, "0");
@@ -117,10 +90,10 @@ export default function Login() {
     return (
       <TimeText isActive={counter <= 0}>
         {minutes}:{seconds}
-        {<a onClick={resendCode}>Resend Code</a>}
+        {<a onClick={onResendCode}>Resend Code</a>}
       </TimeText>
     );
-  }, [counter, resendCode]);
+  }, [counter, onResendCode]);
 
   return (
     <div>
@@ -143,7 +116,7 @@ export default function Login() {
                 <Input
                   type={"text"}
                   placeholder="Email address"
-                  value={userEmail}
+                  value={email}
                   onChange={(e) => setUserEmail(e.target.value)}
                 />
                 <Button
@@ -151,7 +124,7 @@ export default function Login() {
                   width={true}
                   className="button"
                   type="submit"
-                  isLoading={isLoading}
+                  isLoading={loading}
                 />
               </Form>
               <Bottom>
@@ -162,16 +135,16 @@ export default function Login() {
               </Bottom>
             </>
           ) : (
-            <CodeSection onSubmit={verifyAuthCode}>
+            <CodeSection onSubmit={onVerifyAuthCode}>
               <p>
-                We have sent a temporary code to <span>{userEmail}</span>
+                We have sent a temporary code to <span>{email}</span>
               </p>
               <Input
                 placeholder={"Enter Code"}
                 type={"number"}
                 onChange={(e) => setCode(e.target.value)}
               />
-              <Button title="Login" width isLoading={isLoading} type="submit" />
+              <Button title="Login" width isLoading={loading} type="submit" />
               {Counter}
             </CodeSection>
           )}
@@ -180,3 +153,5 @@ export default function Login() {
     </div>
   );
 }
+
+export default observer(Login);

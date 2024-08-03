@@ -13,7 +13,7 @@ import {
 import SVGIcon from "@/assets/icons/SVGIcon";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
-import { signInWithCode } from "@/services/membership/signin";
+import { signInWithCode } from "@/services/serverSide/membership/signin";
 import { useRouter } from "next/navigation";
 import { isValidEmail } from "@/helpers/common";
 

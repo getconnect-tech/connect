@@ -6,7 +6,7 @@ import { ServerStyleSheet, StyleSheetManager } from "styled-components";
 import { Provider } from "mobx-react";
 import stores from "@/stores";
 
-export default function StyledComponentsRegistry({
+export default function AppProvider({
   children,
 }: {
   children: React.ReactNode;
