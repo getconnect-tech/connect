@@ -1,23 +1,30 @@
+import { User } from "@prisma/client";
 import { action, makeObservable, observable } from "mobx";
 
 class UserStore {
   loading = false;
-  user = null;
+  user: User | null = null;
 
   constructor() {
     makeObservable(this, {
       //Loading variable
-      setLoading: action,
       loading: observable,
+      setLoading: action,
 
       //User Details
       user: observable,
+      setUserDetails: action,
     });
   }
 
   // Loading actions
   setLoading(value: boolean) {
     this.loading = value;
+  }
+
+  // User actions
+  setUserDetails(value: User) {
+    this.user = value;
   }
 }
 
