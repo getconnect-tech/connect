@@ -1,6 +1,20 @@
 import { TeamSize } from "@prisma/client";
 import { prisma } from "@/prisma/prisma";
 
+// Service to get workspace by ID
+export const getWorkspaceById = async (workspaceId: string) => {
+  const workspace = await prisma.workspace.findUnique({
+    where: { id: workspaceId },
+    include: { users: { include: { user: true } }, invited_users: true, tickets: true },
+  });
+  if (!workspace) {
+    return null;
+  }
+
+  const formattedWorkspace = { ...workspace, users: workspace.users.map((x) => x.user) };
+  return formattedWorkspace;
+};
+
 // Service to create workspace
 export const createWorkspace = async ({ name, industry, teamSize }: { name: string; industry: string; teamSize: TeamSize }) => {
   const newWorkspace = await prisma.workspace.create({ data: { name, industry, team_size: teamSize } });
