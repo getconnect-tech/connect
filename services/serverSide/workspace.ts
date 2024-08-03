@@ -1,5 +1,5 @@
-import { prisma } from "@/prisma/prisma";
 import { TeamSize } from "@prisma/client";
+import { prisma } from "@/prisma/prisma";
 
 // Service to create workspace
 export const createWorkspace = async ({ name, industry, teamSize }: { name: string; industry: string; teamSize: TeamSize }) => {
