@@ -89,8 +89,8 @@ class Avatar extends Component<Props> {
   };
 
   render() {
-    const propss: Props = this.props;
-    const { imgSrc, size, name, classname, isShowBorder } = propss;
+    const props: Props = this.props;
+    const { imgSrc, size, name, classname, isShowBorder } = props;
     const avtarName = this.getAvtarName(name);
     return (
       <UserLogoWrapper>
