@@ -1,30 +1,23 @@
 "use client";
-import React, { useCallback, useMemo, useState } from "react";
-import {
-  Bottom,
-  CodeSection,
-  Form,
-  Heading,
-  LoginSection,
-  LoginText,
-  MainDiv,
-  TimeText,
-} from "./style";
+import React, { SyntheticEvent, useCallback, useMemo, useState } from "react";
+import { Bottom, CodeSection, Form, Heading, LoginSection, LoginText, MainDiv, TimeText } from "./style";
 import SVGIcon from "@/assets/icons/SVGIcon";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
-import { signInWithCode } from "@/services/serverSide/membership/signin";
 import { useRouter } from "next/navigation";
-import { isValidEmail } from "@/helpers/common";
-
+import { registerUser, resendVerificationCode, verifyAuthCode } from "@/services/clientSide/authService";
+import { useStores } from "@/stores";
+import { observer } from "mobx-react-lite";
 const INITIAL_TIMER = 5 * 60;
 
-export default function SignupPage() {
+function SignupPage() {
   const [showBottomSection, setShowBottomSection] = useState(false);
   const [counter, setCounter] = useState(INITIAL_TIMER);
   const [userEmail, setUserEmail] = useState("");
+  const [userName, setUserName] = useState("");
   const [code, setCode] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const { userStore } = useStores();
+  const { loading } = userStore;
   const router = useRouter();
 
   const startCounter = () => {
@@ -39,43 +32,35 @@ export default function SignupPage() {
     }, 1000);
   };
 
-  const handleSignupClick = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      startCounter();
-      setShowBottomSection(true);
-    } catch (err: any) {
-      alert(err.message);
-    }
-    setIsLoading(false);
-  }, []);
+  const handleContinue = useCallback(
+    async (e: SyntheticEvent) => {
+      e.preventDefault();
+      const result = await registerUser(userEmail, userName);
+      if (result) {
+        startCounter();
+        setShowBottomSection(true);
+      }
+    },
+    [userEmail, userName]
+  );
 
-  const handleLoginClick = async () => {
-    setIsLoading(true);
-    try {
-      await signInWithCode(userEmail, code);
-      router.push("/");
-    } catch (err: any) {
-      console.error(err);
-      alert("Incorrect code!");
-    }
-    setIsLoading(false);
-  };
+  const handleSignUpClick = useCallback(
+    async (e: SyntheticEvent) => {
+      e.preventDefault();
+      const result = await verifyAuthCode(userEmail, code);
+      if (result) {
+        router.push("/onbording");
+      }
+    },
+    [code, router, userEmail]
+  );
 
-  const resendCode = useCallback(async () => {
+  const onResendCode = useCallback(async () => {
     if (counter > 0) return;
-    try {
-      fetch("/api/auth/sendVerificationCode", {
-        method: "POST",
-        body: JSON.stringify({ email: userEmail }),
-      }).then(() => {
-        alert("New code sent!");
-      });
-
+    const result = await resendVerificationCode(userEmail);
+    if (result) {
       setCounter(INITIAL_TIMER);
       startCounter();
-    } catch (err: any) {
-      alert(err.message);
     }
   }, [counter, userEmail]);
 
@@ -85,50 +70,27 @@ export default function SignupPage() {
     return (
       <TimeText isActive={counter <= 0}>
         {minutes}:{seconds}
-        {<a onClick={resendCode}>Resend Code</a>}
+        {<a onClick={onResendCode}>Resend Code</a>}
       </TimeText>
     );
-  }, [counter, resendCode]);
+  }, [counter, onResendCode]);
 
   return (
     <div>
       <MainDiv>
         <LoginSection>
           <Heading>
-            <SVGIcon
-              name="secondary-logo"
-              width="60px"
-              height="60px"
-              viewBox="0 0 60 60"
-            />
-            <LoginText>
-              {showBottomSection ? "Check your email" : "Create an account"}
-            </LoginText>
+            <SVGIcon name="secondary-logo" width="60px" height="60px" viewBox="0 0 60 60" />
+            <LoginText>{showBottomSection ? "Check your email" : "Create an account"}</LoginText>
           </Heading>
           {!showBottomSection ? (
             <>
-              <Form>
+              <Form onSubmit={handleContinue}>
                 <div className="input-div">
-                  <Input
-                    type={"text"}
-                    placeholder="Name"
-                    //   value={userEmail}
-                    //   onChange={(e) => setUserEmail(e.target.value)}
-                  />
-                  <Input
-                    type={"text"}
-                    placeholder="Email address"
-                    value={userEmail}
-                    onChange={(e) => setUserEmail(e.target.value)}
-                  />
+                  <Input type={"text"} placeholder="Name" value={userName} onChange={(e) => setUserName(e.target.value)} />
+                  <Input type={"text"} placeholder="Email address" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} />
                 </div>
-                <Button
-                  title="Sign up"
-                  width={true}
-                  className="button"
-                  isLoading={isLoading}
-                  onClick={handleSignupClick}
-                />
+                <Button title="Sign up" width={true} className="button" isLoading={loading} type="submit" />
               </Form>
               <Bottom>
                 <p>
@@ -146,21 +108,12 @@ export default function SignupPage() {
               </Bottom>
             </>
           ) : (
-            <CodeSection>
+            <CodeSection onSubmit={handleSignUpClick}>
               <p>
                 We have sent a temporary code to <span>{userEmail}</span>
               </p>
-              <Input
-                placeholder={"Enter Code"}
-                type={"number"}
-                onChange={(e) => setCode(e.target.value)}
-              />
-              <Button
-                title="Sign up"
-                width
-                onClick={handleLoginClick}
-                isLoading={isLoading}
-              />
+              <Input placeholder={"Enter Code"} type={"number"} onChange={(e) => setCode(e.target.value)} />
+              <Button title="Sign up" type="submit" width isLoading={loading} />
               {Counter}
             </CodeSection>
           )}
@@ -169,3 +122,5 @@ export default function SignupPage() {
     </div>
   );
 }
+
+export default observer(SignupPage);
