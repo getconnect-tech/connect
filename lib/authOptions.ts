@@ -1,12 +1,15 @@
 import { prisma } from "@/prisma/prisma";
-import { markUserAsVerified } from "@/services/membership/signup";
+import { markUserAsVerified } from "@/services/serverSide/membership/signup";
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
-      credentials: { code: { label: "Code", type: "text" }, email: { label: "Email", type: "text" } },
+      credentials: {
+        code: { label: "Code", type: "text" },
+        email: { label: "Email", type: "text" },
+      },
       async authorize(credentials) {
         if (!credentials || !credentials.email || !credentials.code) {
           return null;
@@ -14,7 +17,9 @@ export const authOptions: AuthOptions = {
 
         const { email, code } = credentials;
 
-        const isValidCode = !!(await prisma.verificationToken.findUnique({ where: { email, token: code, expires: { gte: new Date() } } }));
+        const isValidCode = !!(await prisma.verificationToken.findUnique({
+          where: { email, token: code, expires: { gte: new Date() } },
+        }));
 
         if (isValidCode) {
           await prisma.verificationToken.delete({ where: { email } });
