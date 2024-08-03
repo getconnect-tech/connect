@@ -1,3 +1,46 @@
 {
-  "extends": "next/core-web-vitals"
+  "env": {
+    // "browser": true,
+    "es2021": true,
+    "commonjs": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "project": "./tsconfig.json" // Replace with the path to your tsconfig.json
+  },
+  "plugins": ["@typescript-eslint", "import", "prettier"],
+  "rules": {
+    // "no-console": "warn",
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "no-undef": "error",
+    "semi": "error",
+    "semi-spacing": "error",
+    "eqeqeq": "error",
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-useless-catch": "off",
+    "no-invalid-this": "error",
+    "no-return-assign": "error",
+    "no-unused-expressions": ["error", { "allowTernary": true }],
+    "no-useless-concat": "error",
+    "no-useless-return": "error",
+    "no-constant-condition": "error",
+    "no-unused-vars": ["error"],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "max-len": ["error", { "code": 120 }],
+    "import/order": [
+      "error",
+      { "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object"] }
+    ],
+    "no-async-promise-executor": "off"
+  }
 }
