@@ -30,7 +30,7 @@ import Input from "@/components/input/input";
 import DropDown from "@/components/dropDown/dropDown";
 import { industryItems, teamMember } from "@/helpers/raw";
 
-export default function OnBordingStep1() {
+export default function OnboardingStep1() {
   const [showCard, setShowCard] = useState(false);
   const [industryDropdownOpen, setIndustryDropdownOpen] = useState(false);
   const [teamDropdownOpen, setTeamDropdownOpen] = useState(false);
