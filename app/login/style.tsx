@@ -26,7 +26,7 @@ export const Heading = styled.div`
 export const LoginText = styled.div`
   ${Typography.heading_heading_semibold}
 `;
-export const Form = styled.div`
+export const Form = styled.form`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -50,7 +50,7 @@ export const Bottom = styled.div`
     cursor: pointer;
   }
 `;
-export const CodeSection = styled.div`
+export const CodeSection = styled.form`
   display: flex;
   flex-direction: column;
   gap: 24px;
