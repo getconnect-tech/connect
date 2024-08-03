@@ -27,6 +27,8 @@ import {
   verifyAuthCode,
   verifyUserEmail,
 } from "@/services/clientSide/authService";
+import { getSessionDetails } from "@/services/serverSide/auth/authentication";
+import { isEmpty } from "@/helpers/common";
 
 const INITIAL_TIMER = 5 * 60;
 
@@ -39,9 +41,15 @@ function Login() {
   const { userStore } = useStores();
   const { loading } = userStore;
 
-  useEffect(() => {
-    router.prefetch("/");
+  const checkUserSerrion = useCallback(async () => {
+    const session = await getSessionDetails();
+    if (!isEmpty(session)) router.push("/");
   }, [router]);
+
+  useEffect(() => {
+    checkUserSerrion();
+    router.prefetch("/");
+  }, [checkUserSerrion, router]);
 
   const startCounter = () => {
     const counterInterval = setInterval(() => {
