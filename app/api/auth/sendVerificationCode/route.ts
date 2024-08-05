@@ -1,5 +1,7 @@
+import errorMessages from "@/global/errorMessages";
 import { generateVerificationCode } from "@/helpers/common";
-import { sendEmail, sendVerificationCode } from "@/helpers/emails";
+import { sendVerificationCode } from "@/helpers/emails";
+import { handleApiError } from "@/helpers/errorHandler";
 import { prisma } from "@/prisma/prisma";
 import { isUserAlreadyExists } from "@/services/serverSide/membership/signup";
 import moment from "moment";
@@ -11,10 +13,7 @@ export const POST = async (req: NextRequest) => {
 
     const isValidEmail = await isUserAlreadyExists(email, false);
     if (!isValidEmail) {
-      return Response.json(
-        { error: "Account doesn't exsists!" },
-        { status: 404 }
-      );
+      return Response.json({ error: errorMessages.ACCOUNT_DOES_NOT_EXISTS }, { status: 404 });
     }
 
     const verificationCode = generateVerificationCode();
@@ -30,11 +29,8 @@ export const POST = async (req: NextRequest) => {
     // Send verification code to user
     const messageId = await sendVerificationCode(email);
 
-    return Response.json(
-      { message: "Verification code sent!", messageId },
-      { status: 200 }
-    );
+    return Response.json({ message: "Verification code sent!", messageId }, { status: 200 });
   } catch (err: any) {
-    return Response.json({ error: err.message }, { status: 500 });
+    return handleApiError(err);
   }
 };
