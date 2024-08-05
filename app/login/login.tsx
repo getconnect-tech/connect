@@ -10,6 +10,7 @@ import { observer } from "mobx-react-lite";
 import { resendVerificationCode, verifyAuthCode, verifyUserEmail } from "@/services/clientSide/authService";
 import { getSessionDetails } from "@/services/serverSide/auth/authentication";
 import { isEmpty } from "@/helpers/common";
+import { useSession } from "next-auth/react";
 
 const INITIAL_TIMER = 5 * 60;
 
@@ -21,16 +22,11 @@ function Login() {
   const router = useRouter();
   const { userStore } = useStores();
   const { loading } = userStore;
-
-  const checkUserSession = useCallback(async () => {
-    const session = await getSessionDetails();
-    if (!isEmpty(session)) router.push("/");
-  }, [router]);
+  const { status } = useSession();
 
   useEffect(() => {
-    checkUserSession();
     router.prefetch("/");
-  }, [checkUserSession, router]);
+  }, [router]);
 
   const startCounter = () => {
     const counterInterval = setInterval(() => {
@@ -83,6 +79,16 @@ function Login() {
       </TimeText>
     );
   }, [counter, onResendCode]);
+
+  if (status === "loading") {
+    // TODO: return loading component
+    return <></>;
+  }
+
+  if (status === "authenticated") {
+    router.replace("/");
+    return <></>;
+  }
 
   return (
     <div>

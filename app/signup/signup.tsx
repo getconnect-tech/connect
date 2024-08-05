@@ -1,34 +1,16 @@
 "use client";
-import React, {
-  SyntheticEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import {
-  Bottom,
-  CodeSection,
-  Form,
-  Heading,
-  LoginSection,
-  LoginText,
-  MainDiv,
-  TimeText,
-} from "./style";
+import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { Bottom, CodeSection, Form, Heading, LoginSection, LoginText, MainDiv, TimeText } from "./style";
 import SVGIcon from "@/assets/icons/SVGIcon";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
 import { useRouter } from "next/navigation";
-import {
-  registerUser,
-  resendVerificationCode,
-  verifyAuthCode,
-} from "@/services/clientSide/authService";
+import { registerUser, resendVerificationCode, verifyAuthCode } from "@/services/clientSide/authService";
 import { useStores } from "@/stores";
 import { observer } from "mobx-react-lite";
 import { isEmpty } from "@/helpers/common";
 import { getSessionDetails } from "@/services/serverSide/auth/authentication";
+import { useSession } from "next-auth/react";
 const INITIAL_TIMER = 5 * 60;
 
 function Signup() {
@@ -41,15 +23,12 @@ function Signup() {
   const { loading } = userStore;
   const router = useRouter();
 
-  const checkUserSerrion = useCallback(async () => {
-    const session = await getSessionDetails();
-    if (!isEmpty(session)) router.push("/");
-  }, [router]);
+  const { status } = useSession();
 
   useEffect(() => {
-    checkUserSerrion();
     router.prefetch("/onboarding");
-  }, [checkUserSerrion, router]);
+    router.prefetch("/");
+  }, [router]);
 
   const startCounter = () => {
     const counterInterval = setInterval(() => {
@@ -106,45 +85,32 @@ function Signup() {
     );
   }, [counter, onResendCode]);
 
+  if (status === "loading") {
+    // TODO: return loading component
+    return <></>;
+  }
+
+  if (status === "authenticated") {
+    router.replace("/");
+    return <></>;
+  }
+
   return (
     <div>
       <MainDiv>
         <LoginSection>
           <Heading>
-            <SVGIcon
-              name="secondary-logo"
-              width="60px"
-              height="60px"
-              viewBox="0 0 60 60"
-            />
-            <LoginText>
-              {showBottomSection ? "Check your email" : "Create an account"}
-            </LoginText>
+            <SVGIcon name="secondary-logo" width="60px" height="60px" viewBox="0 0 60 60" />
+            <LoginText>{showBottomSection ? "Check your email" : "Create an account"}</LoginText>
           </Heading>
           {!showBottomSection ? (
             <>
               <Form onSubmit={handleContinue}>
                 <div className="input-div">
-                  <Input
-                    type={"text"}
-                    placeholder="Name"
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
-                  />
-                  <Input
-                    type={"text"}
-                    placeholder="Email address"
-                    value={userEmail}
-                    onChange={(e) => setUserEmail(e.target.value)}
-                  />
+                  <Input type={"text"} placeholder="Name" value={userName} onChange={(e) => setUserName(e.target.value)} />
+                  <Input type={"text"} placeholder="Email address" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} />
                 </div>
-                <Button
-                  title="Sign up"
-                  width={true}
-                  className="button"
-                  isLoading={loading}
-                  type="submit"
-                />
+                <Button title="Sign up" width={true} className="button" isLoading={loading} type="submit" />
               </Form>
               <Bottom>
                 <p>
@@ -166,11 +132,7 @@ function Signup() {
               <p>
                 We have sent a temporary code to <span>{userEmail}</span>
               </p>
-              <Input
-                placeholder={"Enter Code"}
-                type={"number"}
-                onChange={(e) => setCode(e.target.value)}
-              />
+              <Input placeholder={"Enter Code"} type={"number"} onChange={(e) => setCode(e.target.value)} />
               <Button title="Sign up" type="submit" width isLoading={loading} />
               {Counter}
             </CodeSection>
