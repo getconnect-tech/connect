@@ -367,7 +367,7 @@ const getPath = (name: string, props: any) => {
               y={0}
               maskUnits="userSpaceOnUse"
               style={{
-                maskType: "luminance"
+                maskType: "luminance",
               }}
             >
               <path fill="#fff" d="M12 0H0v12h12V0Z" />
@@ -415,6 +415,15 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
+    case "search-icon":
+      return (
+        <>
+          <path
+            fill="#7B7A79"
+            d="M11.718 11.152 9.413 8.848A5.223 5.223 0 0 0 10.65 5.47 5.256 5.256 0 0 0 5.4.22 5.256 5.256 0 0 0 .15 5.47a5.256 5.256 0 0 0 5.25 5.25 5.223 5.223 0 0 0 3.377-1.236l2.305 2.304a.449.449 0 1 0 .636-.636ZM1.05 5.47A4.355 4.355 0 0 1 5.4 1.12a4.355 4.355 0 0 1 4.35 4.35A4.355 4.355 0 0 1 5.4 9.82a4.355 4.355 0 0 1-4.35-4.35Z"
+          />
+        </>
+      );
   }
 };
 
@@ -430,7 +439,7 @@ const SVGIcon = ({
   bgfill = "none",
   stroke = "",
   stopColor = "",
-  iconprimary = colors.icon
+  iconprimary = colors.icon,
 }) => (
   <svg
     stroke={stroke}
@@ -448,7 +457,7 @@ const SVGIcon = ({
       bgfill,
       stroke,
       stopColor,
-      iconprimary
+      iconprimary,
     })}
   </svg>
 );

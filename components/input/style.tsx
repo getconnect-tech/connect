@@ -6,11 +6,15 @@ interface Props {
   login?: boolean;
   onChange?: Function;
   disabled?: boolean;
+  isIcon?: boolean;
 }
 const InputDiv = styled.div<Props>`
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 8px;
+  svg {
+    position: absolute;
+  }
 `;
 const InputSection = styled.div`
   position: relative;
@@ -53,6 +57,11 @@ const InputBox = styled.input<Props>`
         color: ${colors.text_disabled};
       }
       border: 1px solid ${colors.border_disabled};
+    `}
+  ${(props) =>
+    props.isIcon &&
+    css`
+      margin-left: 8px;
     `}
 `;
 const Errormessage = styled.div`

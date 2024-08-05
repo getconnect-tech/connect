@@ -27,21 +27,30 @@ import Avatar from "@/components/avtar/Avtar";
 import MessageCard from "@/components/messageCard/messageCard";
 import QuestionCard from "@/components/questionCard/questionCard";
 import DropDown from "@/components/dropDown/dropDown";
-import { priorityItem } from "@/helpers/raw";
+import { lableItem, priorityItem } from "@/helpers/raw";
 
 export default function Details() {
   const router = useRouter();
+  const [labelDropdown, setLabelDropdown] = useState(false);
   const [priorityDropdown, setPriorityDropdown] = useState(false);
   const [assignDropdown, setAssignDropdown] = useState(false);
 
   const handlePriorityTag = () => {
     setPriorityDropdown((prev) => !prev);
     setAssignDropdown(false);
+    setLabelDropdown(false);
+  };
+
+  const handleLableTag = () => {
+    setLabelDropdown((prev) => !prev);
+    setAssignDropdown(false);
+    setPriorityDropdown(false);
   };
 
   const handleAssignTag = () => {
     setAssignDropdown((prev) => !prev);
     setPriorityDropdown(false);
+    setLabelDropdown(false);
   };
 
   const assignItem = [
@@ -99,13 +108,26 @@ export default function Details() {
             </IconDiv>
           </HeaderDiv>
           <StatusDiv>
-            <Tag
-              isActive={true}
-              onClick={() => {}}
-              isName={false}
-              iconName={"bug-icon"}
-              title={"Bug"}
-            />
+            <div>
+              <Tag
+                isActive={true}
+                onClick={handleLableTag}
+                isName={false}
+                iconName={"bug-icon"}
+                title={"Bug"}
+              />
+              {labelDropdown && (
+                <DropDown
+                  items={lableItem}
+                  iconSize="12"
+                  iconViewBox="0 0 12 12"
+                  onClose={() => setLabelDropdown(false)}
+                  style={{ maxWidth: 146, width: "100%" }}
+                  isSearch={true}
+                  isCheckbox={true}
+                />
+              )}
+            </div>
             <div>
               <Tag
                 isActive={true}
