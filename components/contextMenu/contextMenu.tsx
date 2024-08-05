@@ -38,7 +38,7 @@ export default function CustomContextMenu({ children }: Props) {
             <ContextMenuItem>
               <div>
                 <SVGIcon
-                  name='context-assign-icon'
+                  name='context-snooze-icon'
                   width='12'
                   height='12'
                   viewBox='0 0 12 12'
@@ -55,7 +55,7 @@ export default function CustomContextMenu({ children }: Props) {
             <ContextMenuItem>
               <div>
                 <SVGIcon
-                  name='context-assign-icon'
+                  name='context-label-icon'
                   width='12'
                   height='12'
                   viewBox='0 0 12 12'
