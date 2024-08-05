@@ -23,22 +23,25 @@ import {
   LabelDiv,
   BottomFrame,
   DetailSection,
-} from './style';
-import SVGIcon from '@/assets/icons/SVGIcon';
-import Avatar from '@/components/avtar/Avtar';
-import Button from '@/components/button/button';
-import Input from '@/components/input/input';
-import DropDown, { DropDownItem } from '@/components/dropDown/dropDown';
-import { industryItems, teamMember } from '@/helpers/raw';
-import { useStores } from '@/stores';
-import { observer } from 'mobx-react-lite';
+} from "./style";
+import SVGIcon from "@/assets/icons/SVGIcon";
+import Avatar from "@/components/avtar/Avtar";
+import Button from "@/components/button/button";
+import Input from "@/components/input/input";
+import DropDown, { DropDownItem } from "@/components/dropDown/dropDown";
+import { industryItems, teamMember } from "@/helpers/raw";
+import { useStores } from "@/stores";
+import { observer } from "mobx-react-lite";
+import { inviteUsersToWorkspace } from "@/services/clientSide/workspace";
+import { useRouter } from "next/navigation";
+import { isEmpty } from "@/helpers/common";
 
 function OnboardingStep1() {
   const [showCard, setShowCard] = useState(false);
   const [industryDropdownOpen, setIndustryDropdownOpen] = useState(false);
   const [teamDropdownOpen, setTeamDropdownOpen] = useState(false);
+  const [inputField, setInputField] = useState([{ email: '', displayName: '' }]);
 
-  const [inputField, setInputField] = useState([{ email: '', fullname: '' }]);
   const {
     userStore: { user },
     workspaceStore,
@@ -47,6 +50,7 @@ function OnboardingStep1() {
   const [workspaceName, setWorkspaceName] = useState('');
   const [workspaceTeamSize, setWorkspaceTeamSize] = useState<DropDownItem>();
   const [workspaceIndustry, setWorkspaceIndustry] = useState<DropDownItem>();
+  const router = useRouter();
 
 
   const handleIndustryClick = useCallback(() => {
@@ -59,19 +63,16 @@ function OnboardingStep1() {
     setIndustryDropdownOpen(false);
   }, [teamDropdownOpen]);
 
-  const handleNextClick = useCallback(() => {
-    try {
-      workspaceStore.setLoading(true);
-
+  const handleCreateWorkspace = useCallback(async () => {
+    // const result = await createWorkspace(workspaceName, workspaceTeamSize?.value, workspaceIndustry!.name);
+    const result = true;
+    if (result) {
       setShowCard(true);
-    } catch (err) {
-    } finally {
-      workspaceStore.setLoading(false);
     }
-  }, [workspaceStore]);
+  }, [workspaceIndustry, workspaceName, workspaceTeamSize?.value]);
 
   const handleAddInput = useCallback(() => {
-    setInputField([...inputField, { email: '', fullname: '' }]);
+    setInputField([...inputField, { email: '', displayName: '' }]);
   }, [inputField]);
 
   const handleRemoveInputField = (index: number) => {
@@ -85,6 +86,22 @@ function OnboardingStep1() {
 
   const handleIndustryChange = (item: DropDownItem) => {
     setWorkspaceIndustry(item);
+  };
+
+  const handleInvitedUserInputChange = (type: "displayName" | "email", value: string, index: number) => {
+    setInputField((prev) => {
+      const newState = [...prev];
+      newState[index][type] = value;
+      return newState;
+    });
+  };
+
+  const handleGetStarted = async () => {
+    const usersToInvite = inputField.filter(({ displayName, email }) => !isEmpty(displayName) && !isEmpty(email));
+    const result = await inviteUsersToWorkspace(usersToInvite);
+    if (result) {
+      router.replace("/");
+    }
   };
 
   return (
@@ -204,8 +221,18 @@ function OnboardingStep1() {
                   <DetailSection>
                     {inputField.map((field, index) => (
                       <TextField isNext={showCard} key={index}>
-                        <Input placeholder={'Email Address'} type='email' />
-                        <Input placeholder={'Full Name'} type='text' />
+                        <Input
+                          placeholder={"Email Address"}
+                          type="email"
+                          value={field.email}
+                          onChange={(e: ChangeEvent<HTMLInputElement>) => handleInvitedUserInputChange("email", e.target.value, index)}
+                        />
+                        <Input
+                          placeholder={"Full Name"}
+                          type="text"
+                          value={field.displayName}
+                          onChange={(e: ChangeEvent<HTMLInputElement>) => handleInvitedUserInputChange("displayName", e.target.value, index)}
+                        />
                         <Icon onClick={() => handleRemoveInputField(index)}>
                           <SVGIcon
                             name='cross-icon'
@@ -234,9 +261,9 @@ function OnboardingStep1() {
           <Bottom>
             <Steps>{showCard ? <p>Step 2 of 2</p> : <p>Step 1 of 2 </p>}</Steps>
             {showCard ? (
-              <Button title="Get started" onClick={handleNextClick} isLoading={workspaceStore.loading} />
+              <Button title="Get started" onClick={handleGetStarted} isLoading={workspaceStore.loading} />
             ) : (
-              <Button title="Create Workspace" onClick={handleNextClick} isLoading={workspaceStore.loading} />
+              <Button title="Create Workspace" onClick={handleCreateWorkspace} isLoading={workspaceStore.loading} />
             )}
           </Bottom>
         </Frame>

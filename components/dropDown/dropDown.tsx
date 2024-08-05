@@ -63,6 +63,7 @@ export default function DropDown({
   onClose,
   isSearch = false,
   isCheckbox = false,
+  onChange
 }: DropDownProps) {
   const dropDownRef = useOutsideClick(onClose);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -105,7 +106,11 @@ export default function DropDown({
             key={index}
             isSelected={!!selectedItems[item.name]}
             isHovered={hoveredItem === item.name}
-            onClick={() => handleItemClick(item.name)}
+            onClick={() => {
+              handleItemClick(item.name);
+              onChange && onChange(item);
+              onClose();
+            }}
             onMouseEnter={() => handleMouseEnter(item.name)}
             onMouseLeave={handleMouseLeave}
           >
