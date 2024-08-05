@@ -1,5 +1,6 @@
 'use client';
 import React, {
+  ChangeEvent,
   SyntheticEvent,
   useCallback,
   useEffect,
@@ -129,7 +130,9 @@ function Login() {
                   type={'text'}
                   placeholder='Email address'
                   value={email}
-                  onChange={(e) => setUserEmail(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setUserEmail(e.target.value)
+                  }
                 />
                 <Button
                   title='Login'
@@ -154,7 +157,9 @@ function Login() {
               <Input
                 placeholder={'Enter Code'}
                 type={'number'}
-                onChange={(e) => setCode(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setCode(e.target.value)
+                }
               />
               <Button title='Login' width isLoading={loading} type='submit' />
               {Counter}

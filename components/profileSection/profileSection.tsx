@@ -1,4 +1,6 @@
-import React from "react";
+/* eslint-disable max-len */
+import React from 'react';
+import Avatar from '../avtar/Avtar';
 import {
   CompanyName,
   DetailsDiv,
@@ -7,20 +9,19 @@ import {
   MainDiv,
   ProfileDiv,
   Title,
-} from "./styles";
-import Avatar from "../avtar/Avtar";
-import SVGIcon from "@/assets/icons/SVGIcon";
-import { colors } from "@/styles/colors";
-import WorkDetails from "./workDetails";
-import RecentEvent from "./recentEvent";
+} from './styles';
+import WorkDetails from './workDetails';
+import RecentEvent from './recentEvent';
+import SVGIcon from '@/assets/icons/SVGIcon';
+import { colors } from '@/styles/colors';
 
 export default function ProfileSection() {
   return (
     <MainDiv>
       <ProfileDiv>
         <Avatar
-          imgSrc="https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4"
-          name={""}
+          imgSrc='https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
+          name={''}
           size={58}
         />
         <div>
@@ -32,10 +33,10 @@ export default function ProfileSection() {
         <DetailsDiv>
           <LeftDiv>
             <SVGIcon
-              name="inbox-icon"
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
+              name='inbox-icon'
+              width='12'
+              height='12'
+              viewBox='0 0 12 12'
               fill={colors.icon}
             />
             <p>Role</p>
@@ -45,10 +46,10 @@ export default function ProfileSection() {
         <DetailsDiv>
           <LeftDiv>
             <SVGIcon
-              name="inbox-icon"
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
+              name='inbox-icon'
+              width='12'
+              height='12'
+              viewBox='0 0 12 12'
               fill={colors.icon}
             />
             <p>Phone</p>
@@ -58,10 +59,10 @@ export default function ProfileSection() {
         <DetailsDiv>
           <LeftDiv>
             <SVGIcon
-              name="inbox-icon"
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
+              name='inbox-icon'
+              width='12'
+              height='12'
+              viewBox='0 0 12 12'
               fill={colors.icon}
             />
             <p>Email</p>
@@ -71,10 +72,10 @@ export default function ProfileSection() {
         <DetailsDiv>
           <LeftDiv>
             <SVGIcon
-              name="inbox-icon"
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
+              name='inbox-icon'
+              width='12'
+              height='12'
+              viewBox='0 0 12 12'
               fill={colors.icon}
             />
             <p>First contacted</p>
@@ -84,10 +85,10 @@ export default function ProfileSection() {
         <DetailsDiv>
           <LeftDiv>
             <SVGIcon
-              name="inbox-icon"
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
+              name='inbox-icon'
+              width='12'
+              height='12'
+              viewBox='0 0 12 12'
               fill={colors.icon}
             />
             <p>Created by</p>
@@ -97,10 +98,10 @@ export default function ProfileSection() {
         <DetailsDiv>
           <LeftDiv>
             <SVGIcon
-              name="inbox-icon"
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
+              name='inbox-icon'
+              width='12'
+              height='12'
+              viewBox='0 0 12 12'
               fill={colors.icon}
             />
             <p>Access</p>
