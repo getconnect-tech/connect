@@ -63,13 +63,6 @@ export default function DropDown({
     [key: string]: boolean;
   }>({});
 
-  const handleItemClick = useCallback((name: string) => {
-    setSelectedItems((prevState) => ({
-      ...prevState,
-      [name]: !prevState[name],
-    }));
-  }, []);
-
   const handleMouseEnter = (name: string) => {
     setHoveredItem(name);
   };
@@ -96,16 +89,15 @@ export default function DropDown({
         {items.map((item, index) => (
           <ItemDiv
             key={index}
-            isSelected={!!selectedItems[item.name]}
             isHovered={hoveredItem === item.name}
             onClick={() => {
-              handleItemClick(item.name);
               onChange && onChange(item);
+              onClose();
             }}
             onMouseEnter={() => handleMouseEnter(item.name)}
             onMouseLeave={handleMouseLeave}
           >
-            {isCheckbox && <StyledCheckbox checked={selectedItems[item.name] || false} onChange={() => handleItemClick(item.name)} />}
+            {isCheckbox && <StyledCheckbox checked={selectedItems[item.name] || false} />}
             {item.icon && <SVGIcon name={item.icon} width={iconSize} height={iconSize} viewBox={iconViewBox} />}
             {item.src && item.isName && <Avatar name="" imgSrc={item.src} size={20} />}
             <p>{item.name}</p>

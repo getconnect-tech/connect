@@ -3,15 +3,13 @@ import { Typography } from "@/styles/typography";
 import styled from "styled-components";
 
 interface Props {
-  isSelected: boolean;
   isHovered: boolean;
 }
 
 const MainDiv = styled.div`
   background-color: ${colors.bg_white};
   border-radius: 12px;
-  box-shadow: 0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 4px 8px 0px ${colors.box_shadow}, 0px 8px 24px 0px ${colors.box_shadow};
+  box-shadow: 0px 0px 0px 0.5px ${colors.box_shadow}, 0px 4px 8px 0px ${colors.box_shadow}, 0px 8px 24px 0px ${colors.box_shadow};
   position: absolute;
   margin-top: 4px;
   z-index: 1;
@@ -31,20 +29,10 @@ const ItemDiv = styled.div<Props>`
   cursor: pointer;
   p {
     ${Typography.body_md_regular};
-    color: ${({ isSelected, isHovered }) =>
-      isSelected
-        ? colors.text
-        : isHovered
-        ? colors.text
-        : colors.text_text_secondary};
+    color: ${({ isHovered }) => (isHovered ? colors.text : colors.text_text_secondary)};
   }
   svg {
-    fill: ${({ isSelected, isHovered }) =>
-      isSelected
-        ? colors.icon_active
-        : isHovered
-        ? colors.icon_active
-        : colors.icon};
+    fill: ${({ isHovered }) => (isHovered ? colors.icon_active : colors.icon)};
   }
   &:hover {
     background-color: ${colors.bg_white_hover};
