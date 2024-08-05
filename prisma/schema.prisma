@@ -100,7 +100,7 @@ model UserWorkspaces {
 
 model InvitedUser {
   id              String    @id @default(uuid())
-  name            String?
+  name            String
   email           String
   invited_by_user User      @relation(fields: [invited_by], references: [id])
   invited_by      String

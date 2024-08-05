@@ -22,7 +22,7 @@ export const createWorkspace = async ({ name, industry, teamSize }: { name: stri
 };
 
 // Service to invite users to a workspace
-export const inviteUsers = async (users: { name: string; email: string }[], workspaceId: string, invitedBy: string) => {
+export const inviteUsers = async (users: { displayName: string; email: string }[], workspaceId: string, invitedBy: string) => {
   const filteredUsers = users.filter((user) => user.email !== invitedBy);
   const userEmails = filteredUsers.map((user) => user.email);
 
@@ -34,7 +34,12 @@ export const inviteUsers = async (users: { name: string; email: string }[], work
 
   const notVerifiedUsers = filteredUsers.filter((user) => !verifiedUsers.some((x) => x.email === user.email));
 
-  const usersToInvite = notVerifiedUsers.map((user) => ({ ...user, workspace_id: workspaceId, invited_by: invitedBy }));
+  const usersToInvite = notVerifiedUsers.map((user) => ({
+    name: user.displayName,
+    email: user.email,
+    workspace_id: workspaceId,
+    invited_by: invitedBy,
+  }));
   const result = await prisma.invitedUser.createMany({ data: usersToInvite });
 
   // TODO: send invitation mail to each user
