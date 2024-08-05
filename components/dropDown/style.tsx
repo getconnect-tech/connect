@@ -23,7 +23,7 @@ const MainDiv = styled.div`
   user-select: none;
 `;
 
-const ItemDiv = styled.div<{ isSelected: boolean; isHovered: boolean }>`
+const ItemDiv = styled.div<Props>`
   display: flex;
   align-items: center;
   gap: 12px;

@@ -16,9 +16,6 @@ const InputDiv = styled.div<Props>`
     position: absolute;
   }
 `;
-const InputSection = styled.div`
-  position: relative;
-`;
 
 const InputBox = styled.input<Props>`
   width: 100%;
@@ -80,4 +77,4 @@ const Maindiv = styled.div`
   gap: 2px;
   width: 100%;
 `;
-export { InputDiv, InputBox, Errormessage, Maindiv, InputSection };
+export { InputDiv, InputBox, Errormessage, Maindiv };

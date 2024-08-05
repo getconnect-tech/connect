@@ -4,7 +4,6 @@ import {
   Errormessage,
   InputBox,
   InputDiv,
-  InputSection,
   Maindiv,
 } from "./style";
 import { ChangeEvent } from "react";

@@ -9,7 +9,6 @@ import {
   SearchDiv,
   StyledCheckbox,
 } from "./style";
-import { colors } from "@/styles/colors";
 
 interface DropDownProps {
   items: {
