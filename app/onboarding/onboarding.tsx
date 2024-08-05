@@ -27,14 +27,24 @@ import SVGIcon from "@/assets/icons/SVGIcon";
 import Avatar from "@/components/avtar/Avtar";
 import Button from "@/components/button/button";
 import Input from "@/components/input/input";
-import DropDown from "@/components/dropDown/dropDown";
+import DropDown, { DropDownItem } from "@/components/dropDown/dropDown";
 import { industryItems, teamMember } from "@/helpers/raw";
+import { useStores } from "@/stores";
+import { observer } from "mobx-react-lite";
 
-export default function OnboardingStep1() {
+function OnboardingStep1() {
   const [showCard, setShowCard] = useState(false);
   const [industryDropdownOpen, setIndustryDropdownOpen] = useState(false);
   const [teamDropdownOpen, setTeamDropdownOpen] = useState(false);
   const [inputField, setInputField] = useState([{ email: "", fullname: "" }]);
+  const {
+    userStore: { user },
+    workspaceStore,
+  } = useStores();
+
+  const [workspaceName, setWorkspaceName] = useState("");
+  const [workspaceTeamSize, setWorkspaceTeamSize] = useState<DropDownItem>();
+  const [workspaceIndustry, setWorkspaceIndustry] = useState<DropDownItem>();
 
   const handleIndustryClick = useCallback(() => {
     setIndustryDropdownOpen(!industryDropdownOpen);
@@ -47,8 +57,15 @@ export default function OnboardingStep1() {
   }, [teamDropdownOpen]);
 
   const handleNextClick = useCallback(() => {
-    setShowCard(true);
-  }, []);
+    try {
+      workspaceStore.setLoading(true);
+
+      setShowCard(true);
+    } catch (err) {
+    } finally {
+      workspaceStore.setLoading(false);
+    }
+  }, [workspaceStore]);
 
   const handleAddInput = useCallback(() => {
     setInputField([...inputField, { email: "", fullname: "" }]);
@@ -58,19 +75,21 @@ export default function OnboardingStep1() {
     const newInputField = inputField.filter((_, i) => i !== index);
     setInputField(newInputField);
   };
+
+  const handleTeamSizeChange = (item: DropDownItem) => {
+    setWorkspaceTeamSize(item);
+  };
+
+  const handleIndustryChange = (item: DropDownItem) => {
+    setWorkspaceIndustry(item);
+  };
+
   return (
     <MainDiv>
       <OnBoardScreen isNext={showCard}>
         <Heading>
-          <SVGIcon
-            name="secondary-logo"
-            width="60px"
-            height="60px"
-            viewBox="0 0 60 60"
-          />
-          <Title isNext={showCard}>
-            Just a few quick things to set up your account
-          </Title>
+          <SVGIcon name="secondary-logo" width="60px" height="60px" viewBox="0 0 60 60" />
+          <Title isNext={showCard}>Just a few quick things to set up your account</Title>
         </Heading>
         <Frame>
           {!showCard ? (
@@ -84,29 +103,29 @@ export default function OnboardingStep1() {
                   size={58}
                 />
                 <Description>
-                  <h2>Hello, Sanjay M.</h2>
+                  <h2>Hello, {user?.display_name}</h2>
                   <p>First, tell us a bit about your company.</p>
                 </Description>
               </Profile>
               <Form>
                 <TextField isNext={showCard}>
-                  <Label> Company Name</Label>
+                  <Label>Company Name</Label>
                   <Input
                     placeholder={"Enter company name"}
                     style={{ padding: "8px 16px" }}
+                    value={workspaceName}
+                    onChange={(e) => setWorkspaceName(e.target.value)}
                   />
                 </TextField>
 
                 <TextField isNext={showCard}>
-                  <Label> Team Size</Label>
+                  <Label>Team Size</Label>
                   <div>
                     {/* apply className while open drop down */}
                     <DropBox onClick={handleTeamSizeClick} className="tag-div">
-                      Select a Team Size
+                      {workspaceTeamSize ? workspaceTeamSize.name : "Select a Team Size"}
                       <SVGIcon
-                        name={
-                          teamDropdownOpen ? "up-arrow-icon" : "down-arrow-icon"
-                        }
+                        name={teamDropdownOpen ? "up-arrow-icon" : "down-arrow-icon"}
                         width="12px"
                         height="12px"
                         viewBox="0 0 12 12"
@@ -118,6 +137,7 @@ export default function OnboardingStep1() {
                         iconSize="20"
                         iconViewBox="0 0 20 20"
                         onClose={() => setTeamDropdownOpen(false)}
+                        onChange={handleTeamSizeChange}
                         style={{ width: "100%", maxWidth: 332 }}
                       />
                     )}
@@ -128,13 +148,9 @@ export default function OnboardingStep1() {
                   <div>
                     {/* apply className while open drop down */}
                     <DropBox onClick={handleIndustryClick} className="tag-div">
-                      Select a Industry
+                      {workspaceIndustry ? workspaceIndustry.name : "Select a Industry"}
                       <SVGIcon
-                        name={
-                          industryDropdownOpen
-                            ? "up-arrow-icon"
-                            : "down-arrow-icon"
-                        }
+                        name={industryDropdownOpen ? "up-arrow-icon" : "down-arrow-icon"}
                         width="12px"
                         height="12px"
                         viewBox="0 0 12 12"
@@ -147,6 +163,7 @@ export default function OnboardingStep1() {
                         iconViewBox="0 0 20 20"
                         onClose={() => setIndustryDropdownOpen(false)}
                         style={{ width: "100%", maxWidth: 332 }}
+                        onChange={handleIndustryChange}
                       />
                     )}
                   </div>
@@ -164,15 +181,15 @@ export default function OnboardingStep1() {
                   size={58}
                 />
                 <Description>
-                  <h2>Hello, Sanjay M.</h2>
+                  <h2>Hello, {user?.display_name}</h2>
                   <p>Invite members to collaborate in Connect</p>
                 </Description>
               </NextProfile>
               <Form>
                 <Card>
                   <LabelDiv>
-                    <Label> Email Address</Label>
-                    <Label>Full Name(Optional)</Label>
+                    <Label>Email Address</Label>
+                    <Label>Full Name</Label>
                   </LabelDiv>
                   <DetailSection>
                     {inputField.map((field, index) => (
@@ -180,12 +197,7 @@ export default function OnboardingStep1() {
                         <Input placeholder={"Email Address"} type="email" />
                         <Input placeholder={"Full Name"} type="text" />
                         <Icon onClick={() => handleRemoveInputField(index)}>
-                          <SVGIcon
-                            name="cross-icon"
-                            width="12"
-                            height="12"
-                            viewBox="0 0 12 12"
-                          />
+                          <SVGIcon name="cross-icon" width="12" height="12" viewBox="0 0 12 12" />
                         </Icon>
                       </TextField>
                     ))}
@@ -199,7 +211,6 @@ export default function OnboardingStep1() {
                       isLink
                       onClick={handleAddInput}
                     />
-                    <span>or</span> add many at once
                   </BottomFrame>
                 </Card>
               </Form>
@@ -208,9 +219,9 @@ export default function OnboardingStep1() {
           <Bottom>
             <Steps>{showCard ? <p>Step 2 of 2</p> : <p>Step 1 of 2 </p>}</Steps>
             {showCard ? (
-              <Button title="Get started" onClick={handleNextClick} />
+              <Button title="Get started" onClick={handleNextClick} isLoading={workspaceStore.loading} />
             ) : (
-              <Button title="Next" onClick={handleNextClick} />
+              <Button title="Create Workspace" onClick={handleNextClick} isLoading={workspaceStore.loading} />
             )}
           </Bottom>
         </Frame>
@@ -218,3 +229,5 @@ export default function OnboardingStep1() {
     </MainDiv>
   );
 }
+
+export default observer(OnboardingStep1);

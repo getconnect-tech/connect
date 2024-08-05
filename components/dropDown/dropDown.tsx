@@ -4,19 +4,20 @@ import { ItemDiv, MainDiv } from "./style";
 import SVGIcon from "@/assets/icons/SVGIcon";
 import Avatar from "../avtar/Avtar";
 
+export type DropDownItem = {
+  name: string;
+  icon?: string;
+  src?: string;
+  isName?: boolean;
+  value?: any;
+};
 interface DropDownProps {
-  items: {
-    name: string;
-    icon?: string;
-    src?: string;
-    isName?: boolean;
-    value?: any;
-  }[];
+  items: DropDownItem[];
   style?: React.CSSProperties;
   iconSize: string;
   iconViewBox: string;
   onClose: () => void;
-  onChnage?: () => void;
+  onChange?: (newItem: DropDownItem) => any;
 }
 
 export const useOutsideClick = (callback: () => void) => {
@@ -44,30 +45,19 @@ export const useOutsideClick = (callback: () => void) => {
   return ref;
 };
 
-const DropDown = React.forwardRef<HTMLDivElement, DropDownProps>(
-  ({ items, style, iconSize, iconViewBox, onClose }, ref) => {
-    const dropDownRef = useOutsideClick(onClose);
-    return (
-      <MainDiv ref={dropDownRef} style={style} onClick={onClose}>
-        {items.map((item, index) => (
-          <ItemDiv key={index}>
-            {item.icon && (
-              <SVGIcon
-                name={item.icon}
-                width={iconSize}
-                height={iconSize}
-                viewBox={iconViewBox}
-              />
-            )}
-            {item.src && item.isName && (
-              <Avatar name="" imgSrc={item.src} size={20} />
-            )}
-            <p>{item.name}</p>
-          </ItemDiv>
-        ))}
-      </MainDiv>
-    );
-  }
-);
+const DropDown = React.forwardRef<HTMLDivElement, DropDownProps>(({ items, style, iconSize, iconViewBox, onClose, onChange }, ref) => {
+  const dropDownRef = useOutsideClick(onClose);
+  return (
+    <MainDiv ref={dropDownRef} style={style} onClick={onClose}>
+      {items.map((item, index) => (
+        <ItemDiv key={index} onClick={() => onChange && onChange(item)}>
+          {item.icon && <SVGIcon name={item.icon} width={iconSize} height={iconSize} viewBox={iconViewBox} />}
+          {item.src && item.isName && <Avatar name="" imgSrc={item.src} size={20} />}
+          <p>{item.name}</p>
+        </ItemDiv>
+      ))}
+    </MainDiv>
+  );
+});
 
 export default DropDown;

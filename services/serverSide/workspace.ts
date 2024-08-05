@@ -41,3 +41,8 @@ export const inviteUsers = async (users: { name: string; email: string }[], work
 
   return result;
 };
+
+export const addUserToWorkspace = async (workspaceId: string, userId: string) => {
+  const userWorkspaceRelation = await prisma.userWorkspaces.create({ data: { user_id: userId, workspace_id: workspaceId } });
+  return userWorkspaceRelation;
+};

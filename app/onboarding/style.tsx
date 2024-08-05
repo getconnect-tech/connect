@@ -53,8 +53,7 @@ export const CenterCard = styled.div`
   padding: 20px;
   gap: 20px;
   background-color: ${colors.bg_white};
-  box-shadow: 0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow_2};
+  box-shadow: 0px 0px 0px 0.5px ${colors.box_shadow}, 0px 2px 4px 0px ${colors.box_shadow_2};
   border-radius: 12px;
   width: 100%;
 `;
@@ -138,8 +137,7 @@ export const CenterCardNext = styled.div`
   padding: 20px;
   border-radius: 12px;
   background-color: ${colors.bg_white};
-  box-shadow: 0px 0px 0px 0.5px rgba(0, 0, 0, 0.1),
-    0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 0px 0px 0.5px rgba(0, 0, 0, 0.1), 0px 2px 4px 0px rgba(0, 0, 0, 0.05);
 `;
 export const NextProfile = styled.div`
   display: flex;
@@ -168,7 +166,7 @@ export const Icon = styled.div`
 export const LabelDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  width: calc(100% - 20px);
   padding-top: 20px;
 `;
 export const BottomFrame = styled.div`

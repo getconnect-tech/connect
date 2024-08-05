@@ -14,5 +14,6 @@ export default stores;
 export const useStores = () => {
   return useContext(MobXProviderContext) as {
     userStore: typeof userStore;
+    workspaceStore: typeof workspaceStore;
   };
 };
