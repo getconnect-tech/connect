@@ -32,7 +32,7 @@ import DropDown, { DropDownItem } from "@/components/dropDown/dropDown";
 import { industryItems, teamMember } from "@/helpers/raw";
 import { useStores } from "@/stores";
 import { observer } from "mobx-react-lite";
-import { inviteUsersToWorkspace } from "@/services/clientSide/workspace";
+import { createWorkspace, inviteUsersToWorkspace } from "@/services/clientSide/workspace";
 import { useRouter } from "next/navigation";
 import { isEmpty } from "@/helpers/common";
 
@@ -64,8 +64,7 @@ function OnboardingStep1() {
   }, [teamDropdownOpen]);
 
   const handleCreateWorkspace = useCallback(async () => {
-    // const result = await createWorkspace(workspaceName, workspaceTeamSize?.value, workspaceIndustry!.name);
-    const result = true;
+    const result = await createWorkspace(workspaceName, workspaceTeamSize?.value, workspaceIndustry!.name);
     if (result) {
       setShowCard(true);
     }
