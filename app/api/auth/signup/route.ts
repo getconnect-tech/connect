@@ -2,20 +2,23 @@ import errorMessages from "@/global/errorMessages";
 import { isEmpty } from "@/helpers/common";
 import { sendVerificationCode } from "@/helpers/emails";
 import { handleApiError } from "@/helpers/errorHandler";
+import { displayNameSchema, emailSchema, profilePicSchema } from "@/lib/zod";
 import { createUser, isUserAlreadyExists } from "@/services/serverSide/membership/signup";
 import { NextRequest } from "next/server";
+import { z } from "zod";
+
+const RequestBody = z.object({
+  email: emailSchema,
+  displayName: displayNameSchema,
+  profilePic: profilePicSchema,
+});
 
 export const POST = async (req: NextRequest) => {
   try {
-    const { email, displayName, profilePic } = await req.json();
+    const body = await req.json();
+    RequestBody.parse(body);
 
-    if (isEmpty(email)) {
-      return Response.json({ error: errorMessages.EMAIL_IS_REQUIRED }, { status: 400 });
-    }
-
-    if (isEmpty(displayName)) {
-      return Response.json({ error: errorMessages.DISPLAY_NAME_IS_REQUIRED }, { status: 400 });
-    }
+    const { email, displayName, profilePic } = body;
 
     // Check if user already exists on database
     const isValidEmail = await isUserAlreadyExists(email);

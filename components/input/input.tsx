@@ -4,8 +4,7 @@ import {
   Errormessage,
   InputBox,
   InputDiv,
-  InputSection,
-  Maindiv
+  Maindiv,
 } from "./style";
 import { ChangeEvent } from "react";
 interface Props {
@@ -20,6 +19,12 @@ interface Props {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
   style?: React.CSSProperties;
+  inputRef?: any;
+  autoFocus?: boolean;
+  iconName?: string;
+  iconSize?: string;
+  iconViewBox?: string;
+  isIcon?: boolean;
 }
 const Input: React.FC<Props> = (Props) => {
   const {
@@ -33,25 +38,40 @@ const Input: React.FC<Props> = (Props) => {
     value,
     disabled,
     style,
+    inputRef,
+    autoFocus,
+    iconName,
+    iconSize,
+    iconViewBox,
+    isIcon,
     ...props
   } = Props;
 
   return (
     <Maindiv>
       <InputDiv>
-        <InputSection>
-          <InputBox
-            placeholder={placeholder}
-            hasError={hasError}
-            className={className}
-            onChange={onChange}
-            disabled={disabled}
-            type={type}
-            value={value}
-            style={style}
-            {...props}
+        {isIcon && (
+          <SVGIcon
+            name={iconName}
+            width={iconSize}
+            height={iconSize}
+            viewBox={iconViewBox}
           />
-        </InputSection>
+        )}
+        <InputBox
+          ref={inputRef}
+          placeholder={placeholder}
+          hasError={hasError}
+          className={className}
+          onChange={onChange}
+          disabled={disabled}
+          type={type}
+          value={value}
+          style={style}
+          autoFocus={autoFocus}
+          isIcon={isIcon}
+          {...props}
+        />
       </InputDiv>
       {hasError && (
         <Errormessage>

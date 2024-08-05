@@ -2,6 +2,7 @@ import errorMessages from "@/global/errorMessages";
 import { isEmpty } from "@/helpers/common";
 import { sendVerificationCode } from "@/helpers/emails";
 import { handleApiError } from "@/helpers/errorHandler";
+import { emailSchema } from "@/lib/zod";
 import { isUserAlreadyExists } from "@/services/serverSide/membership/signup";
 import { NextRequest } from "next/server";
 
@@ -9,9 +10,7 @@ export const POST = async (req: NextRequest) => {
   try {
     const { email } = await req.json();
 
-    if (isEmpty(email)) {
-      return Response.json({ error: errorMessages.EMAIL_IS_REQUIRED }, { status: 400 });
-    }
+    emailSchema.parse(email);
 
     // Check if user already exists on database
     const isValidEmail = await isUserAlreadyExists(email);
