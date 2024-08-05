@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React, { useCallback, useEffect, useState } from "react";
-import { useRouter, useServerInsertedHTML } from "next/navigation";
-import { ServerStyleSheet, StyleSheetManager } from "styled-components";
-import { Provider } from "mobx-react";
-import stores from "@/stores";
-import { appInit } from "@/helpers/appInitHelper";
-import { APP_INIT_RESPONSE_TYPE } from "@/global/constants";
-import { isEmpty } from "@/helpers/common";
+import React, { useCallback, useEffect, useState } from 'react';
+import { useRouter, useServerInsertedHTML } from 'next/navigation';
+import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
+import { Provider } from 'mobx-react';
+import stores from '@/stores';
+import { appInit } from '@/helpers/appInitHelper';
+import { APP_INIT_RESPONSE_TYPE } from '@/global/constants';
+import { isEmpty } from '@/helpers/common';
 
 export default function AppProvider({
   children,
@@ -34,7 +34,7 @@ export default function AppProvider({
       )
         router.push(result.path);
     } catch (error) {
-      console.log("ERROR", error);
+      console.log('ERROR', error);
     }
   }, [router]);
 
@@ -42,7 +42,7 @@ export default function AppProvider({
     init();
   }, [init]);
 
-  if (typeof window !== "undefined")
+  if (typeof window !== 'undefined')
     return <Provider {...stores}>{children}</Provider>;
   return (
     <StyleSheetManager sheet={styledComponentsStyleSheet.instance}>

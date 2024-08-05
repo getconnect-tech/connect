@@ -1,6 +1,7 @@
-import { colors } from "@/styles/colors";
-import { Typography } from "@/styles/typography";
-import styled, { css, keyframes } from "styled-components";
+/* eslint-disable indent */
+import styled, { css, keyframes } from 'styled-components';
+import { colors } from '@/styles/colors';
+import { Typography } from '@/styles/typography';
 
 interface WrapButton {
   secondary: boolean;
@@ -52,20 +53,20 @@ const Buttons = styled.button<WrapButton>`
     css`
       color: ${colors.text_disabled};
       background-color: ${props.secondary
-        ? "transparent"
+        ? 'transparent'
         : props.isLoading
-        ? colors.brand
-        : colors.brand_disabled};
+          ? colors.brand
+          : colors.brand_disabled};
       border: ${props.secondary
-        ? "1px solid  ${colors.border_input_border}"
-        : "none"};
+        ? '1px solid  ${colors.border_input_border}'
+        : 'none'};
 
       &:hover {
         background-color: ${props.secondary
-          ? "transparent"
+          ? 'transparent'
           : props.isLoading
-          ? colors.brand
-          : colors.brand_disabled};
+            ? colors.brand
+            : colors.brand_disabled};
       }
     `}
     ${(props) =>
@@ -103,7 +104,7 @@ const ButtonWrap = styled.div<Prop>`
         &::before {
           position: absolute;
           transform: translate(-50%, -50%);
-          content: "";
+          content: '';
           width: 20px;
           height: 20px;
           border: 2px solid ${colors.text_white};

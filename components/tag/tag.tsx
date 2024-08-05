@@ -1,7 +1,7 @@
-import React from "react";
-import Avatar from "../avtar/Avtar";
-import SVGIcon from "@/assets/icons/SVGIcon";
-import { StatusDiv, StatusTitle } from "./styles";
+import React from 'react';
+import Avatar from '../avtar/Avtar';
+import { StatusDiv, StatusTitle } from './styles';
+import SVGIcon from '@/assets/icons/SVGIcon';
 
 interface Props {
   isActive: boolean;
@@ -28,17 +28,17 @@ export default function Tag({
       isActive={isActive}
       onClick={onClick}
       ref={ref}
-      className="tag-div"
+      className='tag-div'
     >
       {isName ? (
-        <Avatar name="" imgSrc={`${src}`} size={20} />
+        <Avatar name='' imgSrc={`${src}`} size={20} />
       ) : (
         <SVGIcon
           name={iconName}
-          width="12"
-          height="12"
-          className="icon"
-          viewBox="0 0 12 12"
+          width='12'
+          height='12'
+          className='icon'
+          viewBox='0 0 12 12'
         />
       )}
       <StatusTitle>{title}</StatusTitle>

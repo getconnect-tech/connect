@@ -1,5 +1,5 @@
-"use client";
-import React, { useState } from "react";
+'use client';
+import React, { useState } from 'react';
 import {
   Dot,
   DotLine,
@@ -10,8 +10,8 @@ import {
   LineDiv,
   Title,
   TitleDiv,
-} from "./styles";
-import SVGIcon from "@/assets/icons/SVGIcon";
+} from './styles';
+import SVGIcon from '@/assets/icons/SVGIcon';
 
 export default function RecentEvent() {
   const [showDetails, setShowDetails] = useState(false);
@@ -25,11 +25,11 @@ export default function RecentEvent() {
         <Title>Recent events</Title>
         <div onClick={toggleDetails}>
           <SVGIcon
-            name={showDetails ? "up-arrow-icon" : "down-arrow-icon"}
-            width="12"
-            height="12"
-            fill="none"
-            viewBox="0 0 12 12"
+            name={showDetails ? 'up-arrow-icon' : 'down-arrow-icon'}
+            width='12'
+            height='12'
+            fill='none'
+            viewBox='0 0 12 12'
           />
         </div>
       </TitleDiv>

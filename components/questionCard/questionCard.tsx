@@ -1,5 +1,5 @@
-import React from "react";
-import { Div, MainDiv } from "./style";
+import React from 'react';
+import { Div, MainDiv } from './style';
 
 interface Props {
   title: string;
