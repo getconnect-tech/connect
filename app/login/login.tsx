@@ -1,34 +1,16 @@
 "use client";
-import React, {
-  SyntheticEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import {
-  Bottom,
-  CodeSection,
-  Form,
-  Heading,
-  LoginSection,
-  LoginText,
-  MainDiv,
-  TimeText,
-} from "./style";
+import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { Bottom, CodeSection, Form, Heading, LoginSection, LoginText, MainDiv, TimeText } from "./style";
 import SVGIcon from "@/assets/icons/SVGIcon";
 import Input from "@/components/input/input";
 import Button from "@/components/button/button";
 import { useRouter } from "next/navigation";
 import { useStores } from "@/stores";
 import { observer } from "mobx-react-lite";
-import {
-  resendVerificationCode,
-  verifyAuthCode,
-  verifyUserEmail,
-} from "@/services/clientSide/authService";
+import { resendVerificationCode, verifyAuthCode, verifyUserEmail } from "@/services/clientSide/authService";
 import { getSessionDetails } from "@/services/serverSide/auth/authentication";
 import { isEmpty } from "@/helpers/common";
+import { useSession } from "next-auth/react";
 
 const INITIAL_TIMER = 5 * 60;
 
@@ -40,16 +22,11 @@ function Login() {
   const router = useRouter();
   const { userStore } = useStores();
   const { loading } = userStore;
-
-  const checkUserSerrion = useCallback(async () => {
-    const session = await getSessionDetails();
-    if (!isEmpty(session)) router.push("/");
-  }, [router]);
+  const { status } = useSession();
 
   useEffect(() => {
-    checkUserSerrion();
     router.prefetch("/");
-  }, [checkUserSerrion, router]);
+  }, [router]);
 
   const startCounter = () => {
     const counterInterval = setInterval(() => {
@@ -103,37 +80,29 @@ function Login() {
     );
   }, [counter, onResendCode]);
 
+  if (status === "loading") {
+    // TODO: return loading component
+    return <></>;
+  }
+
+  if (status === "authenticated") {
+    router.replace("/");
+    return <></>;
+  }
+
   return (
     <div>
       <MainDiv>
         <LoginSection>
           <Heading>
-            <SVGIcon
-              name="secondary-logo"
-              width="60px"
-              height="60px"
-              viewBox="0 0 60 60"
-            />
-            <LoginText>
-              {showBottomSection ? "Check your email" : "Login"}
-            </LoginText>
+            <SVGIcon name="secondary-logo" width="60px" height="60px" viewBox="0 0 60 60" />
+            <LoginText>{showBottomSection ? "Check your email" : "Login"}</LoginText>
           </Heading>
           {!showBottomSection ? (
             <>
               <Form onSubmit={handleContinueClick}>
-                <Input
-                  type={"text"}
-                  placeholder="Email address"
-                  value={email}
-                  onChange={(e) => setUserEmail(e.target.value)}
-                />
-                <Button
-                  title="Login"
-                  width={true}
-                  className="button"
-                  type="submit"
-                  isLoading={loading}
-                />
+                <Input type={"text"} placeholder="Email address" value={email} onChange={(e) => setUserEmail(e.target.value)} />
+                <Button title="Login" width={true} className="button" type="submit" isLoading={loading} />
               </Form>
               <Bottom>
                 <p>Don’t have an account?</p>
@@ -147,11 +116,7 @@ function Login() {
               <p>
                 We have sent a temporary code to <span>{email}</span>
               </p>
-              <Input
-                placeholder={"Enter Code"}
-                type={"number"}
-                onChange={(e) => setCode(e.target.value)}
-              />
+              <Input placeholder={"Enter Code"} type={"number"} onChange={(e) => setCode(e.target.value)} />
               <Button title="Login" width isLoading={loading} type="submit" />
               {Counter}
             </CodeSection>
