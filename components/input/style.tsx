@@ -6,14 +6,15 @@ interface Props {
   login?: boolean;
   onChange?: Function;
   disabled?: boolean;
+  isIcon?: boolean;
 }
 const InputDiv = styled.div<Props>`
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 8px;
-`;
-const InputSection = styled.div`
-  position: relative;
+  svg {
+    position: absolute;
+  }
 `;
 
 const InputBox = styled.input<Props>`
@@ -54,6 +55,11 @@ const InputBox = styled.input<Props>`
       }
       border: 1px solid ${colors.border_disabled};
     `}
+  ${(props) =>
+    props.isIcon &&
+    css`
+      margin-left: 8px;
+    `}
 `;
 const Errormessage = styled.div`
   display: flex;
@@ -71,4 +77,4 @@ const Maindiv = styled.div`
   gap: 2px;
   width: 100%;
 `;
-export { InputDiv, InputBox, Errormessage, Maindiv, InputSection };
+export { InputDiv, InputBox, Errormessage, Maindiv };

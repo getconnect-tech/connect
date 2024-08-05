@@ -1,8 +1,14 @@
-/* eslint-disable react/display-name */
-import React, { useEffect, useRef } from "react";
-import { ItemDiv, MainDiv } from "./style";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import SVGIcon from "@/assets/icons/SVGIcon";
 import Avatar from "../avtar/Avtar";
+import Input from "../input/input";
+import {
+  ItemDiv,
+  ItemMainDiv,
+  MainDiv,
+  SearchDiv,
+  StyledCheckbox,
+} from "./style";
 
 interface DropDownProps {
   items: {
@@ -16,9 +22,12 @@ interface DropDownProps {
   iconSize: string;
   iconViewBox: string;
   onClose: () => void;
-  onChnage?: () => void;
+  onChange?: () => void;
+  isSearch?: boolean;
+  isCheckbox?: boolean;
 }
 
+// Hook to handle outside clicks
 export const useOutsideClick = (callback: () => void) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -27,7 +36,6 @@ export const useOutsideClick = (callback: () => void) => {
       const target = event.target as HTMLElement;
 
       if (ref.current && !ref.current.contains(event.target as Node)) {
-        //className thorugh close drop down
         if (target.closest(`.tag-div`)) {
           return;
         }
@@ -44,13 +52,66 @@ export const useOutsideClick = (callback: () => void) => {
   return ref;
 };
 
-const DropDown = React.forwardRef<HTMLDivElement, DropDownProps>(
-  ({ items, style, iconSize, iconViewBox, onClose }, ref) => {
-    const dropDownRef = useOutsideClick(onClose);
-    return (
-      <MainDiv ref={dropDownRef} style={style} onClick={onClose}>
+export default function DropDown({
+  items,
+  style,
+  iconSize,
+  iconViewBox,
+  onClose,
+  isSearch = false,
+  isCheckbox = false,
+}: DropDownProps) {
+  const dropDownRef = useOutsideClick(onClose);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [selectedItems, setSelectedItems] = useState<{
+    [key: string]: boolean;
+  }>({});
+
+  const handleItemClick = useCallback((name: string) => {
+    setSelectedItems((prevState) => ({
+      ...prevState,
+      [name]: !prevState[name],
+    }));
+  }, []);
+
+  const handleMouseEnter = (name: string) => {
+    setHoveredItem(name);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredItem(null);
+  };
+  return (
+    <MainDiv ref={dropDownRef} style={style}>
+      {isSearch && (
+        <SearchDiv>
+          <Input
+            placeholder={"Search"}
+            style={{ border: "none", padding: "8px 12px" }}
+            autoFocus={true}
+            iconName="search-icon"
+            iconSize="12"
+            iconViewBox="0 0 12 12"
+            isIcon={true}
+          />
+        </SearchDiv>
+      )}
+      <ItemMainDiv>
         {items.map((item, index) => (
-          <ItemDiv key={index}>
+          <ItemDiv
+            key={index}
+            isSelected={!!selectedItems[item.name]}
+            isHovered={hoveredItem === item.name}
+            onClick={() => handleItemClick(item.name)}
+            onMouseEnter={() => handleMouseEnter(item.name)}
+            onMouseLeave={handleMouseLeave}
+          >
+            {isCheckbox && (
+              <StyledCheckbox
+                checked={selectedItems[item.name] || false}
+                onChange={() => handleItemClick(item.name)}
+              />
+            )}
             {item.icon && (
               <SVGIcon
                 name={item.icon}
@@ -65,9 +126,7 @@ const DropDown = React.forwardRef<HTMLDivElement, DropDownProps>(
             <p>{item.name}</p>
           </ItemDiv>
         ))}
-      </MainDiv>
-    );
-  }
-);
-
-export default DropDown;
+      </ItemMainDiv>
+    </MainDiv>
+  );
+}
