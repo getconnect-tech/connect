@@ -1,5 +1,6 @@
-"use client";
-import React, { useCallback, useState } from "react";
+/* eslint-disable max-len */
+'use client';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import {
   CenterCard,
   Heading,
@@ -22,29 +23,31 @@ import {
   LabelDiv,
   BottomFrame,
   DetailSection,
-} from "./style";
-import SVGIcon from "@/assets/icons/SVGIcon";
-import Avatar from "@/components/avtar/Avtar";
-import Button from "@/components/button/button";
-import Input from "@/components/input/input";
-import DropDown, { DropDownItem } from "@/components/dropDown/dropDown";
-import { industryItems, teamMember } from "@/helpers/raw";
-import { useStores } from "@/stores";
-import { observer } from "mobx-react-lite";
+} from './style';
+import SVGIcon from '@/assets/icons/SVGIcon';
+import Avatar from '@/components/avtar/Avtar';
+import Button from '@/components/button/button';
+import Input from '@/components/input/input';
+import DropDown, { DropDownItem } from '@/components/dropDown/dropDown';
+import { industryItems, teamMember } from '@/helpers/raw';
+import { useStores } from '@/stores';
+import { observer } from 'mobx-react-lite';
 
 function OnboardingStep1() {
   const [showCard, setShowCard] = useState(false);
   const [industryDropdownOpen, setIndustryDropdownOpen] = useState(false);
   const [teamDropdownOpen, setTeamDropdownOpen] = useState(false);
-  const [inputField, setInputField] = useState([{ email: "", fullname: "" }]);
+
+  const [inputField, setInputField] = useState([{ email: '', fullname: '' }]);
   const {
     userStore: { user },
     workspaceStore,
   } = useStores();
 
-  const [workspaceName, setWorkspaceName] = useState("");
+  const [workspaceName, setWorkspaceName] = useState('');
   const [workspaceTeamSize, setWorkspaceTeamSize] = useState<DropDownItem>();
   const [workspaceIndustry, setWorkspaceIndustry] = useState<DropDownItem>();
+
 
   const handleIndustryClick = useCallback(() => {
     setIndustryDropdownOpen(!industryDropdownOpen);
@@ -68,7 +71,7 @@ function OnboardingStep1() {
   }, [workspaceStore]);
 
   const handleAddInput = useCallback(() => {
-    setInputField([...inputField, { email: "", fullname: "" }]);
+    setInputField([...inputField, { email: '', fullname: '' }]);
   }, [inputField]);
 
   const handleRemoveInputField = (index: number) => {
@@ -88,8 +91,15 @@ function OnboardingStep1() {
     <MainDiv>
       <OnBoardScreen isNext={showCard}>
         <Heading>
-          <SVGIcon name="secondary-logo" width="60px" height="60px" viewBox="0 0 60 60" />
-          <Title isNext={showCard}>Just a few quick things to set up your account</Title>
+          <SVGIcon
+            name='secondary-logo'
+            width='60px'
+            height='60px'
+            viewBox='0 0 60 60'
+          />
+          <Title isNext={showCard}>
+            Just a few quick things to set up your account
+          </Title>
         </Heading>
         <Frame>
           {!showCard ? (
@@ -97,9 +107,9 @@ function OnboardingStep1() {
               <Profile>
                 <Avatar
                   imgSrc={
-                    "https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4"
+                    'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
                   }
-                  name={""}
+                  name={''}
                   size={58}
                 />
                 <Description>
@@ -114,7 +124,7 @@ function OnboardingStep1() {
                     placeholder={"Enter company name"}
                     style={{ padding: "8px 16px" }}
                     value={workspaceName}
-                    onChange={(e) => setWorkspaceName(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => setWorkspaceName(e.target.value)}
                   />
                 </TextField>
 
@@ -134,8 +144,8 @@ function OnboardingStep1() {
                     {teamDropdownOpen && (
                       <DropDown
                         items={teamMember}
-                        iconSize="20"
-                        iconViewBox="0 0 20 20"
+                        iconSize='20'
+                        iconViewBox='0 0 20 20'
                         onClose={() => setTeamDropdownOpen(false)}
                         onChange={handleTeamSizeChange}
                         style={{ width: "100%", maxWidth: 332 }}
@@ -159,8 +169,8 @@ function OnboardingStep1() {
                     {industryDropdownOpen && (
                       <DropDown
                         items={industryItems}
-                        iconSize="20"
-                        iconViewBox="0 0 20 20"
+                        iconSize='20'
+                        iconViewBox='0 0 20 20'
                         onClose={() => setIndustryDropdownOpen(false)}
                         style={{ width: "100%", maxWidth: 332 }}
                         onChange={handleIndustryChange}
@@ -175,9 +185,9 @@ function OnboardingStep1() {
               <NextProfile>
                 <Avatar
                   imgSrc={
-                    "https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4"
+                    'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
                   }
-                  name={""}
+                  name={''}
                   size={58}
                 />
                 <Description>
@@ -194,20 +204,25 @@ function OnboardingStep1() {
                   <DetailSection>
                     {inputField.map((field, index) => (
                       <TextField isNext={showCard} key={index}>
-                        <Input placeholder={"Email Address"} type="email" />
-                        <Input placeholder={"Full Name"} type="text" />
+                        <Input placeholder={'Email Address'} type='email' />
+                        <Input placeholder={'Full Name'} type='text' />
                         <Icon onClick={() => handleRemoveInputField(index)}>
-                          <SVGIcon name="cross-icon" width="12" height="12" viewBox="0 0 12 12" />
+                          <SVGIcon
+                            name='cross-icon'
+                            width='12'
+                            height='12'
+                            viewBox='0 0 12 12'
+                          />
                         </Icon>
                       </TextField>
                     ))}
                   </DetailSection>
                   <BottomFrame>
                     <Button
-                      title="Add Another"
-                      iconName="plus-icon"
-                      iconSize="12"
-                      iconViewBox="0 0 12 12"
+                      title='Add Another'
+                      iconName='plus-icon'
+                      iconSize='12'
+                      iconViewBox='0 0 12 12'
                       isLink
                       onClick={handleAddInput}
                     />

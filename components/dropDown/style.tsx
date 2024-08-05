@@ -1,15 +1,22 @@
-import { colors } from "@/styles/colors";
-import { Typography } from "@/styles/typography";
-import styled from "styled-components";
+/* eslint-disable prettier/prettier */
+/* eslint-disable max-len */
+/* eslint-disable indent */
+import styled from 'styled-components';
+import { colors } from '@/styles/colors';
+import { Typography } from '@/styles/typography';
 
 interface Props {
+  isSelected: boolean;
   isHovered: boolean;
 }
 
 const MainDiv = styled.div`
   background-color: ${colors.bg_white};
   border-radius: 12px;
-  box-shadow: 0px 0px 0px 0.5px ${colors.box_shadow}, 0px 4px 8px 0px ${colors.box_shadow}, 0px 8px 24px 0px ${colors.box_shadow};
+  box-shadow:
+    0px 0px 0px 0.5px ${colors.box_shadow},
+    0px 4px 8px 0px ${colors.box_shadow},
+    0px 8px 24px 0px ${colors.box_shadow};
   position: absolute;
   margin-top: 4px;
   z-index: 1;
@@ -29,10 +36,20 @@ const ItemDiv = styled.div<Props>`
   cursor: pointer;
   p {
     ${Typography.body_md_regular};
-    color: ${({ isHovered }) => (isHovered ? colors.text : colors.text_text_secondary)};
+    color: ${({ isSelected, isHovered }) =>
+      isSelected
+        ? colors.text
+        : isHovered
+          ? colors.text
+          : colors.text_text_secondary};
   }
   svg {
-    fill: ${({ isHovered }) => (isHovered ? colors.icon_active : colors.icon)};
+    fill: ${({ isSelected, isHovered }) =>
+      isSelected
+        ? colors.icon_active
+        : isHovered
+          ? colors.icon_active
+          : colors.icon};
   }
   &:hover {
     background-color: ${colors.bg_white_hover};
@@ -54,7 +71,7 @@ const checkmarkSVG = `
   </svg>
 `;
 
-const StyledCheckbox = styled.input.attrs({ type: "checkbox" })`
+const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   appearance: none;
   width: 16px;
   height: 16px;
@@ -68,7 +85,7 @@ const StyledCheckbox = styled.input.attrs({ type: "checkbox" })`
 
   &:checked {
     background-color: ${colors.brand};
-    background-image: url("data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}");
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;

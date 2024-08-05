@@ -1,6 +1,6 @@
-import { colors } from "@/styles/colors";
-import styled from "styled-components";
-import { Typography } from "../../styles/typography";
+import styled from 'styled-components';
+import { Typography } from '../../styles/typography';
+import { colors } from '@/styles/colors';
 
 const Main = styled.div`
   display: flex;
@@ -175,5 +175,5 @@ export {
   CenterDiv,
   ActivityDiv,
   Message,
-  LineDiv
+  LineDiv,
 };

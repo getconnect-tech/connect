@@ -1,6 +1,7 @@
-import { colors } from "@/styles/colors";
-import { Typography } from "@/styles/typography";
-import styled from "styled-components";
+/* eslint-disable indent */
+import styled from 'styled-components';
+import { colors } from '@/styles/colors';
+import { Typography } from '@/styles/typography';
 
 interface Props {
   isActive?: boolean;
@@ -16,10 +17,12 @@ const CardDiv = styled.div`
   justify-content: space-between;
   position: relative;
   gap: 12px;
-  box-shadow: 0px 0px 0px 0.5px ${colors.bg_surface_secondary_hover},
+  box-shadow:
+    0px 0px 0px 0.5px ${colors.bg_surface_secondary_hover},
     0px 2px 4px 0px ${colors.bg_surface_active};
   &:hover {
-    box-shadow: 0px 0px 0px 0.5px ${colors.border_hover},
+    box-shadow:
+      0px 0px 0px 0.5px ${colors.border_hover},
       0px 2px 4px 0px ${colors.bg_surface_active};
   }
 `;

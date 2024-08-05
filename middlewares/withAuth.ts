@@ -1,15 +1,16 @@
-import { getSessionDetails } from "@/services/serverSide/auth/authentication";
-import { User } from "@prisma/client";
-import { NextRequest } from "next/server";
+import { User } from '@prisma/client';
+import { NextRequest } from 'next/server';
+import { getSessionDetails } from '@/services/serverSide/auth/authentication';
 
 type AuthorizedRequest = NextRequest & { user: User };
+// eslint-disable-next-line no-unused-vars
 type RequestHandler = (req: AuthorizedRequest) => Response | Promise<Response>;
 
 const withAuth = (handler: RequestHandler) => async (req: NextRequest) => {
   const session = await getSessionDetails();
 
   if (!session?.user.id) {
-    return Response.json({ error: "Unauthorized!" }, { status: 401 });
+    return Response.json({ error: 'Unauthorized!' }, { status: 401 });
   }
 
   const authorizedRequest = req as AuthorizedRequest;

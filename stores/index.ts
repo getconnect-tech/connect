@@ -1,7 +1,7 @@
-import { useContext } from "react";
-import { MobXProviderContext } from "mobx-react";
-import { userStore } from "./userStore";
-import { workspaceStore } from "./workspaceStore";
+import { useContext } from 'react';
+import { MobXProviderContext } from 'mobx-react';
+import { userStore } from './userStore';
+import { workspaceStore } from './workspaceStore';
 
 // Combine all stores in one object
 const stores = {

@@ -1,5 +1,5 @@
-import React from "react";
-import Navbar from "./navbar";
+import React from 'react';
+import Navbar from './navbar';
 
 function NavbarPage() {
   return <Navbar />;
