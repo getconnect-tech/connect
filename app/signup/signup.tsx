@@ -28,8 +28,6 @@ import {
   verifyAuthCode,
 } from '@/services/clientSide/authService';
 import { useStores } from '@/stores';
-import { isEmpty } from '@/helpers/common';
-import { getSessionDetails } from '@/services/serverSide/auth/authentication';
 const INITIAL_TIMER = 5 * 60;
 
 function Signup() {

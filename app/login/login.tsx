@@ -1,31 +1,48 @@
-"use client";
-import React, { SyntheticEvent, useCallback, useEffect, useMemo, useState } from "react";
-import { Bottom, CodeSection, Form, Heading, LoginSection, LoginText, MainDiv, TimeText } from "./style";
-import SVGIcon from "@/assets/icons/SVGIcon";
-import Input from "@/components/input/input";
-import Button from "@/components/button/button";
-import { useRouter } from "next/navigation";
-import { useStores } from "@/stores";
-import { observer } from "mobx-react-lite";
-import { resendVerificationCode, verifyAuthCode, verifyUserEmail } from "@/services/clientSide/authService";
-import { getSessionDetails } from "@/services/serverSide/auth/authentication";
-import { isEmpty } from "@/helpers/common";
-import { useSession } from "next-auth/react";
+'use client';
+import React, {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { useRouter } from 'next/navigation';
+import { observer } from 'mobx-react-lite';
+import { useSession } from 'next-auth/react';
+import {
+  Bottom,
+  CodeSection,
+  Form,
+  Heading,
+  LoginSection,
+  LoginText,
+  MainDiv,
+  TimeText,
+} from './style';
+import SVGIcon from '@/assets/icons/SVGIcon';
+import Input from '@/components/input/input';
+import Button from '@/components/button/button';
+import { useStores } from '@/stores';
+import {
+  resendVerificationCode,
+  verifyAuthCode,
+  verifyUserEmail,
+} from '@/services/clientSide/authService';
 
 const INITIAL_TIMER = 5 * 60;
 
 function Login() {
   const [showBottomSection, setShowBottomSection] = useState(false);
   const [counter, setCounter] = useState(INITIAL_TIMER);
-  const [email, setUserEmail] = useState("");
-  const [code, setCode] = useState("");
+  const [email, setUserEmail] = useState('');
+  const [code, setCode] = useState('');
   const router = useRouter();
   const { userStore } = useStores();
   const { loading } = userStore;
   const { status } = useSession();
 
   useEffect(() => {
-    router.prefetch("/");
+    router.prefetch('/');
   }, [router]);
 
   const startCounter = () => {
@@ -49,14 +66,14 @@ function Login() {
         setShowBottomSection(true);
       }
     },
-    [email]
+    [email],
   );
 
   const onVerifyAuthCode = async (e: SyntheticEvent) => {
     e.preventDefault();
     const result = await verifyAuthCode(email, code);
     if (result) {
-      router.push("/");
+      router.push('/');
     }
   };
 
@@ -70,8 +87,8 @@ function Login() {
   }, [counter, email]);
 
   const Counter = useMemo(() => {
-    const minutes = `${Math.floor(counter / 60)}`.padStart(2, "0");
-    const seconds = `${counter % 60}`.padStart(2, "0");
+    const minutes = `${Math.floor(counter / 60)}`.padStart(2, '0');
+    const seconds = `${counter % 60}`.padStart(2, '0');
     return (
       <TimeText isActive={counter <= 0}>
         {minutes}:{seconds}
@@ -80,13 +97,13 @@ function Login() {
     );
   }, [counter, onResendCode]);
 
-  if (status === "loading") {
+  if (status === 'loading') {
     // TODO: return loading component
     return <></>;
   }
 
-  if (status === "authenticated") {
-    router.replace("/");
+  if (status === 'authenticated') {
+    router.replace('/');
     return <></>;
   }
 
@@ -95,19 +112,37 @@ function Login() {
       <MainDiv>
         <LoginSection>
           <Heading>
-            <SVGIcon name="secondary-logo" width="60px" height="60px" viewBox="0 0 60 60" />
-            <LoginText>{showBottomSection ? "Check your email" : "Login"}</LoginText>
+            <SVGIcon
+              name='secondary-logo'
+              width='60px'
+              height='60px'
+              viewBox='0 0 60 60'
+            />
+            <LoginText>
+              {showBottomSection ? 'Check your email' : 'Login'}
+            </LoginText>
           </Heading>
           {!showBottomSection ? (
             <>
               <Form onSubmit={handleContinueClick}>
-                <Input type={"text"} placeholder="Email address" value={email} onChange={(e) => setUserEmail(e.target.value)} />
-                <Button title="Login" width={true} className="button" type="submit" isLoading={loading} />
+                <Input
+                  type={'text'}
+                  placeholder='Email address'
+                  value={email}
+                  onChange={(e) => setUserEmail(e.target.value)}
+                />
+                <Button
+                  title='Login'
+                  width={true}
+                  className='button'
+                  type='submit'
+                  isLoading={loading}
+                />
               </Form>
               <Bottom>
                 <p>Don’t have an account?</p>
                 <p>
-                  <a href="/signup">Create New Account</a>
+                  <a href='/signup'>Create New Account</a>
                 </p>
               </Bottom>
             </>
@@ -116,8 +151,12 @@ function Login() {
               <p>
                 We have sent a temporary code to <span>{email}</span>
               </p>
-              <Input placeholder={"Enter Code"} type={"number"} onChange={(e) => setCode(e.target.value)} />
-              <Button title="Login" width isLoading={loading} type="submit" />
+              <Input
+                placeholder={'Enter Code'}
+                type={'number'}
+                onChange={(e) => setCode(e.target.value)}
+              />
+              <Button title='Login' width isLoading={loading} type='submit' />
               {Counter}
             </CodeSection>
           )}

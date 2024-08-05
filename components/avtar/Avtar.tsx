@@ -1,7 +1,7 @@
-import { isEmpty } from "@/helpers/common";
-import { colors } from "@/styles/colors";
-import { Component } from "react";
-import styled, { css } from "styled-components";
+import { Component } from 'react';
+import styled, { css } from 'styled-components';
+import { isEmpty } from '@/helpers/common';
+import { colors } from '@/styles/colors';
 
 const UserLogoWrapper = styled.div`
   display: flex;
@@ -66,13 +66,13 @@ class Avatar extends Component<Props> {
 
   getAvtarName = (name: string) => {
     if (isEmpty(name)) {
-      return "#";
+      return '#';
     }
-    let splitedName = name.trim().split(" ");
+    const splitedName = name.trim().split(' ');
     if (splitedName.length === 1) {
       return this.getChar(name);
     } else {
-      if (splitedName[1].trim() === "") {
+      if (splitedName[1].trim() === '') {
         return this.getChar(name);
       } else {
         return this.getChar(splitedName[0]) + this.getChar(splitedName[1]);
