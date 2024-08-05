@@ -1,12 +1,7 @@
-"use client";
-import SVGIcon from "@/assets/icons/SVGIcon";
-import {
-  Errormessage,
-  InputBox,
-  InputDiv,
-  Maindiv,
-} from "./style";
-import { ChangeEvent } from "react";
+'use client';
+import React from 'react';
+import { Errormessage, InputBox, InputDiv, Maindiv } from './style';
+import SVGIcon from '@/assets/icons/SVGIcon';
 interface Props {
   title?: string;
   placeholder: string;
@@ -15,8 +10,9 @@ interface Props {
   className?: string;
   login?: boolean;
   value?: string;
-  type?: "email" | "password" | "text" | "number";
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  type?: 'email' | 'password' | 'text' | 'number';
+  // eslint-disable-next-line no-unused-vars
+  onChange?: any;
   disabled?: boolean;
   style?: React.CSSProperties;
   inputRef?: any;
@@ -28,7 +24,7 @@ interface Props {
 }
 const Input: React.FC<Props> = (Props) => {
   const {
-    title,
+    // title,
     placeholder,
     hasError,
     error,
@@ -76,10 +72,10 @@ const Input: React.FC<Props> = (Props) => {
       {hasError && (
         <Errormessage>
           <SVGIcon
-            name="error-icon"
-            width="14"
-            height="14"
-            viewBox="0 0 14 14"
+            name='error-icon'
+            width='14'
+            height='14'
+            viewBox='0 0 14 14'
           />
           <p>{error}</p>
         </Errormessage>

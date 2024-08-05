@@ -1,11 +1,11 @@
-import { AxiosError } from "axios";
-import { NextResponse } from "next/server";
-import { ZodError } from "zod";
-import { generateErrorMessage } from "zod-error";
+import { AxiosError } from 'axios';
+import { NextResponse } from 'next/server';
+import { ZodError } from 'zod';
+import { generateErrorMessage } from 'zod-error';
 
 export const handleApiError = (error: any) => {
   let statusCode = 500;
-  let errMessage = "";
+  let errMessage = '';
 
   if (error instanceof Error) {
     errMessage = error.message;
@@ -30,12 +30,12 @@ export const handleApiError = (error: any) => {
       },
       message: {
         enabled: true,
-        label: "",
+        label: '',
       },
     });
   }
 
-  if (typeof error === "string") {
+  if (typeof error === 'string') {
     errMessage = error;
   }
 

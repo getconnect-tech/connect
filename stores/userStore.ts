@@ -1,5 +1,5 @@
-import { User } from "@prisma/client";
-import { action, makeObservable, observable } from "mobx";
+import { User } from '@prisma/client';
+import { action, makeObservable, observable } from 'mobx';
 
 class UserStore {
   loading = false;

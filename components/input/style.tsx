@@ -1,10 +1,10 @@
-import { colors } from "@/styles/colors";
-import { Typography } from "@/styles/typography";
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components';
+import { colors } from '@/styles/colors';
+import { Typography } from '@/styles/typography';
 interface Props {
   hasError?: boolean;
   login?: boolean;
-  onChange?: Function;
+  onChange?: () => void;
   disabled?: boolean;
   isIcon?: boolean;
 }

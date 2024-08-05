@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Avatar from '../avtar/Avtar';
+import Tag from '../tag/tag';
 import {
   CardDiv,
   DesTitle,
@@ -7,10 +10,7 @@ import {
   NameText,
   RightDiv,
   StatusMainDiv,
-} from "./style";
-import Avatar from "../avtar/Avtar";
-import { useRouter } from "next/navigation";
-import Tag from "../tag/tag";
+} from './style';
 
 interface Status {
   title: string;
@@ -48,16 +48,16 @@ export default function InboxCard({
   return (
     <CardDiv
       onClick={() => {
-        router.push("/details");
+        router.push('/details');
       }}
     >
       {showDotIcon && <DotIcon />}
       <LeftDiv>
-        <Avatar size={28} imgSrc={src} name={""} isShowBorder={true} />
+        <Avatar size={28} imgSrc={src} name={''} isShowBorder={true} />
         <RightDiv>
           <NameText>{name}</NameText>
           <DesTitle>{title}</DesTitle>
-          <NameText className="description">{description}</NameText>
+          <NameText className='description'>{description}</NameText>
           <StatusMainDiv>
             {status.map((status, index) => (
               <>

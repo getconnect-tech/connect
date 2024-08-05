@@ -1,4 +1,4 @@
-import { css } from "styled-components";
+import { css } from 'styled-components';
 
 export const Typography = {
   body_md_regular: css`
@@ -30,5 +30,5 @@ export const Typography = {
     font-size: 20px;
     line-height: 24px;
     font-weight: 600;
-  `
+  `,
 };

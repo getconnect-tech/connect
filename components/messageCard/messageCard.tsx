@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   CardMessage,
   CardTop,
@@ -6,8 +6,8 @@ import {
   MessageCardMinDiv,
   NameDiv,
   NameTitle,
-} from "./style";
-import SVGIcon from "@/assets/icons/SVGIcon";
+} from './style';
+import SVGIcon from '@/assets/icons/SVGIcon';
 
 interface Props {
   title: string;
@@ -24,11 +24,11 @@ export default function MessageCard({ title, time, subTitle, message }: Props) {
           <NameDiv>
             <NameTitle>{title}</NameTitle>
             <SVGIcon
-              name="dot-icon"
-              width="4"
-              height="4"
-              fill="none"
-              viewBox="0 0 4 4"
+              name='dot-icon'
+              width='4'
+              height='4'
+              fill='none'
+              viewBox='0 0 4 4'
             />
             <span>{time}</span>
           </NameDiv>

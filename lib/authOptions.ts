@@ -1,14 +1,14 @@
-import { prisma } from "@/prisma/prisma";
-import { markUserAsVerified } from "@/services/serverSide/membership/signup";
-import { AuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import { AuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { prisma } from '@/prisma/prisma';
+import { markUserAsVerified } from '@/services/serverSide/membership/signup';
 
 export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       credentials: {
-        code: { label: "Code", type: "text" },
-        email: { label: "Email", type: "text" },
+        code: { label: 'Code', type: 'text' },
+        email: { label: 'Email', type: 'text' },
       },
       async authorize(credentials) {
         if (!credentials || !credentials.email || !credentials.code) {
@@ -46,7 +46,7 @@ export const authOptions: AuthOptions = {
     },
   },
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // age of session cokkie in seconds
   },
 };
