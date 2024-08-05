@@ -160,6 +160,8 @@ export default function Details() {
                   iconSize="20"
                   iconViewBox="0 0 20 20"
                   onClose={() => setAssignDropdown(false)}
+                  isSearch={true}
+                  style={{ maxWidth: 146, width: "100%" }}
                 />
               )}
             </div>
