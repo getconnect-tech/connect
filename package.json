@@ -7,9 +7,9 @@
     "build": "next build",
     "start": "next start",
     "prepare": "husky install",
-    "check-format": "prettier --check .",
-    "check-lint": "eslint . --ext ts --ext tsx --ext js",
     "format": "prettier --write .",
+    "format-check": "prettier --check .",
+    "check-lint": "eslint . --ext ts --ext tsx --ext js",
     "lint:js": "eslint --max-warnings 0 app --ext .js,.jsx,.ts,.tsx",
     "lint": "npm run lint:js"
   },
