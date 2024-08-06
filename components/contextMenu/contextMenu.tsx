@@ -4,7 +4,6 @@ import * as ContextMenu from '@radix-ui/react-context-menu';
 import DropDown from '../dropDown/dropDown';
 import {
   ContextMenuContent,
-  ContextMenuItem,
   ContextMenuMainDiv,
   ContextMenuSubContent,
   ContextMenuSubTrigger,
@@ -39,6 +38,11 @@ export default function CustomContextMenu({ children }: Props) {
       src: 'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2F1708409574833_1712819712813.jpg?alt=media&token=42df7e19-9083-4c61-8b51-b43d5c3f4183',
       isName: true,
     },
+  ];
+  const snoozeItem = [
+    { name: 'Tomorrow', time: 'Wed, Jul 31' },
+    { name: 'Next week', time: 'Tue, Aug 6' },
+    { name: '3 days', time: 'Fri, Aug 2' },
   ];
   return (
     <ContextMenuMainDiv>
@@ -77,23 +81,39 @@ export default function CustomContextMenu({ children }: Props) {
                 </ContextMenuSubContent>
               </ContextMenu.Portal>
             </ContextMenu.Sub>
-            <ContextMenuItem>
-              <div>
+            <ContextMenu.Sub>
+              <ContextMenuSubTrigger>
+                <div>
+                  <SVGIcon
+                    name='context-snooze-icon'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
+                  />
+                  Snooze
+                </div>
                 <SVGIcon
-                  name='context-snooze-icon'
-                  width='12'
-                  height='12'
-                  viewBox='0 0 12 12'
+                  name='context-arrow-icon'
+                  width='10'
+                  height='10'
+                  viewBox='0 0 10 10'
                 />
-                Snooze
-              </div>
-              <SVGIcon
-                name='context-arrow-icon'
-                width='10'
-                height='10'
-                viewBox='0 0 10 10'
-              />
-            </ContextMenuItem>
+              </ContextMenuSubTrigger>
+              <ContextMenu.Portal>
+                <ContextMenuSubContent className='ContextMenuSubContent'>
+                  <DropDown
+                    items={snoozeItem}
+                    iconSize='12'
+                    iconViewBox='0 0 12 12'
+                    onClose={() => {}}
+                    isSearch={true}
+                    isContextMenu={true}
+                    isSnooze={true}
+                    style={{ minWidth: 212 }}
+                  />
+                </ContextMenuSubContent>
+              </ContextMenu.Portal>
+            </ContextMenu.Sub>
             <ContextMenu.Sub>
               <ContextMenuSubTrigger>
                 <div>

@@ -32,25 +32,18 @@ const MainDiv = styled.div<Props>`
 const ItemDiv = styled.div<Props>`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
   padding: 4px 8px;
   cursor: pointer;
   p {
-    ${Typography.body_md_regular};
+    ${Typography.body_sm_regular};
     color: ${({ isSelected, isHovered }) =>
       isSelected
         ? colors.text
         : isHovered
           ? colors.text
           : colors.text_text_secondary};
-  }
-  svg {
-    fill: ${({ isSelected, isHovered }) =>
-      isSelected
-        ? colors.icon_active
-        : isHovered
-          ? colors.icon_active
-          : colors.icon};
   }
   &:hover {
     background-color: ${colors.bg_white_hover};
@@ -60,6 +53,11 @@ const ItemDiv = styled.div<Props>`
 const SearchDiv = styled.div`
   padding: 0 0 0 12px;
   border-bottom: 1px solid ${colors.border};
+  .input {
+    border: none;
+    padding: 8px 12px;
+    ${Typography.body_md_regular};
+  }
 `;
 
 const ItemMainDiv = styled.div`
@@ -93,4 +91,34 @@ const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   }
 `;
 
-export { MainDiv, ItemDiv, SearchDiv, ItemMainDiv, StyledCheckbox };
+const ItemLeftDiv = styled.div<Props>`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  p {
+    ${Typography.body_md_regular};
+    color: ${({ isSelected, isHovered }) =>
+      isSelected
+        ? colors.text
+        : isHovered
+          ? colors.text
+          : colors.text_text_secondary};
+  }
+  svg {
+    fill: ${({ isSelected, isHovered }) =>
+      isSelected
+        ? colors.icon_active
+        : isHovered
+          ? colors.icon_active
+          : colors.icon};
+  }
+`;
+
+export {
+  MainDiv,
+  ItemDiv,
+  SearchDiv,
+  ItemMainDiv,
+  StyledCheckbox,
+  ItemLeftDiv,
+};

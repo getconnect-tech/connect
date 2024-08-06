@@ -4,6 +4,7 @@ import Avatar from '../avtar/Avtar';
 import Input from '../input/input';
 import {
   ItemDiv,
+  ItemLeftDiv,
   ItemMainDiv,
   MainDiv,
   SearchDiv,
@@ -17,6 +18,7 @@ export type DropDownItem = {
   src?: string;
   isName?: boolean;
   value?: any;
+  time?: string;
 };
 
 interface DropDownProps {
@@ -30,6 +32,7 @@ interface DropDownProps {
   isSearch?: boolean;
   isCheckbox?: boolean;
   isContextMenu?: boolean;
+  isSnooze?: boolean;
 }
 
 // Hook to handle outside clicks
@@ -66,6 +69,7 @@ export default function DropDown({
   isSearch = false,
   isCheckbox = false,
   isContextMenu = false,
+  isSnooze = false,
   onChange,
 }: DropDownProps) {
   const dropDownRef = useOutsideClick(onClose);
@@ -88,18 +92,19 @@ export default function DropDown({
   const handleMouseLeave = () => {
     setHoveredItem(null);
   };
+
   return (
     <MainDiv ref={dropDownRef} style={style} isContextMenu={isContextMenu}>
       {isSearch && (
         <SearchDiv>
           <Input
-            placeholder={'Search'}
-            style={{ border: 'none', padding: '8px 12px' }}
+            placeholder={isSnooze ? 'Snooze for... (e.g 7 days)' : 'Search'}
             autoFocus={true}
             iconName='search-icon'
             iconSize='12'
             iconViewBox='0 0 12 12'
             isIcon={true}
+            className='input'
           />
         </SearchDiv>
       )}
@@ -107,7 +112,7 @@ export default function DropDown({
         {items.map((item, index) => (
           <ItemDiv
             key={index}
-            isSelected={!!selectedItems[item.name]}
+            isSelected={selectedItems[item.name]}
             isHovered={hoveredItem === item.name}
             onClick={() => {
               handleItemClick(item.name);
@@ -119,24 +124,36 @@ export default function DropDown({
             onMouseEnter={() => handleMouseEnter(item.name)}
             onMouseLeave={handleMouseLeave}
           >
-            {isCheckbox && (
-              <StyledCheckbox
-                checked={selectedItems[item.name] || false}
-                onChange={() => handleItemClick(item.name)}
-              />
-            )}
-            {item.icon && (
-              <SVGIcon
-                name={item.icon}
-                width={iconSize}
-                height={iconSize}
-                viewBox={iconViewBox}
-              />
-            )}
-            {item.src && item.isName && (
-              <Avatar name='' imgSrc={item.src} size={20} />
-            )}
-            <p>{item.name}</p>
+            <ItemLeftDiv
+              isSelected={selectedItems[item.name]}
+              isHovered={hoveredItem === item.name}
+            >
+              {isCheckbox && (
+                <StyledCheckbox
+                  checked={selectedItems[item.name] || false}
+                  onChange={() => {
+                    handleItemClick(item.name);
+                    if (onChange) {
+                      onChange(item);
+                      onClose();
+                    }
+                  }}
+                />
+              )}
+              {item.icon && (
+                <SVGIcon
+                  name={item.icon}
+                  width={iconSize}
+                  height={iconSize}
+                  viewBox={iconViewBox}
+                />
+              )}
+              {item.src && item.isName && (
+                <Avatar name='' imgSrc={item.src} size={20} />
+              )}
+              <p>{item.name}</p>
+            </ItemLeftDiv>
+            {isSnooze && <p>{item.time}</p>}
           </ItemDiv>
         ))}
       </ItemMainDiv>
