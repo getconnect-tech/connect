@@ -1,23 +1,29 @@
-import { action, makeObservable, observable } from 'mobx';
+import { Workspace } from "@prisma/client";
+import { action, makeObservable, observable } from "mobx";
 
 class WorkspaceStore {
   loading = false;
-  currentWorkspace = null;
+  currentWorkspace: Workspace | null = null;
 
   constructor() {
     makeObservable(this, {
       //Loading
-      setLoading: action,
       loading: observable,
+      setLoading: action,
 
-      //User Details
+      // Current Workspace
       currentWorkspace: observable,
+      setCurrentWorkspace: action,
     });
   }
 
   // Loading actions
   setLoading(value: boolean) {
     this.loading = value;
+  }
+
+  setCurrentWorkspace(value: Workspace) {
+    this.currentWorkspace = value;
   }
 }
 

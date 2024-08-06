@@ -1,6 +1,8 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useCallback, useState } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import { useRouter } from 'next/navigation';
 import {
   CenterCard,
   Heading,
@@ -28,14 +30,32 @@ import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
-import DropDown from '@/components/dropDown/dropDown';
+import DropDown, { DropDownItem } from '@/components/dropDown/dropDown';
 import { industryItems, teamMember } from '@/helpers/raw';
+import { useStores } from '@/stores';
+import {
+  createWorkspace,
+  inviteUsersToWorkspace,
+} from '@/services/clientSide/workspace';
+import { isEmpty } from '@/helpers/common';
 
-export default function OnboardingStep1() {
+function OnboardingStep1() {
   const [showCard, setShowCard] = useState(false);
   const [industryDropdownOpen, setIndustryDropdownOpen] = useState(false);
   const [teamDropdownOpen, setTeamDropdownOpen] = useState(false);
-  const [inputField, setInputField] = useState([{ email: '', fullname: '' }]);
+  const [inputField, setInputField] = useState([
+    { email: '', displayName: '' },
+  ]);
+
+  const {
+    userStore: { user },
+    workspaceStore,
+  } = useStores();
+
+  const [workspaceName, setWorkspaceName] = useState('');
+  const [workspaceTeamSize, setWorkspaceTeamSize] = useState<DropDownItem>();
+  const [workspaceIndustry, setWorkspaceIndustry] = useState<DropDownItem>();
+  const router = useRouter();
 
   const handleIndustryClick = useCallback(() => {
     setIndustryDropdownOpen(!industryDropdownOpen);
@@ -47,18 +67,56 @@ export default function OnboardingStep1() {
     setIndustryDropdownOpen(false);
   }, [teamDropdownOpen]);
 
-  const handleNextClick = useCallback(() => {
-    setShowCard(true);
-  }, []);
+  const handleCreateWorkspace = useCallback(async () => {
+    const result = await createWorkspace(
+      workspaceName,
+      workspaceTeamSize?.value,
+      workspaceIndustry!.name,
+    );
+    if (result) {
+      setShowCard(true);
+    }
+  }, [workspaceIndustry, workspaceName, workspaceTeamSize?.value]);
 
   const handleAddInput = useCallback(() => {
-    setInputField([...inputField, { email: '', fullname: '' }]);
+    setInputField([...inputField, { email: '', displayName: '' }]);
   }, [inputField]);
 
   const handleRemoveInputField = (index: number) => {
     const newInputField = inputField.filter((_, i) => i !== index);
     setInputField(newInputField);
   };
+
+  const handleTeamSizeChange = (item: DropDownItem) => {
+    setWorkspaceTeamSize(item);
+  };
+
+  const handleIndustryChange = (item: DropDownItem) => {
+    setWorkspaceIndustry(item);
+  };
+
+  const handleInvitedUserInputChange = (
+    type: 'displayName' | 'email',
+    value: string,
+    index: number,
+  ) => {
+    setInputField((prev) => {
+      const newState = [...prev];
+      newState[index][type] = value;
+      return newState;
+    });
+  };
+
+  const handleGetStarted = async () => {
+    const usersToInvite = inputField.filter(
+      ({ displayName, email }) => !isEmpty(displayName) && !isEmpty(email),
+    );
+    const result = await inviteUsersToWorkspace(usersToInvite);
+    if (result) {
+      router.replace('/');
+    }
+  };
+
   return (
     <MainDiv>
       <OnBoardScreen isNext={showCard}>
@@ -85,25 +143,31 @@ export default function OnboardingStep1() {
                   size={58}
                 />
                 <Description>
-                  <h2>Hello, Sanjay M.</h2>
+                  <h2>Hello, {user?.display_name}</h2>
                   <p>First, tell us a bit about your company.</p>
                 </Description>
               </Profile>
               <Form>
                 <TextField isNext={showCard}>
-                  <Label> Company Name</Label>
+                  <Label>Company Name</Label>
                   <Input
                     placeholder={'Enter company name'}
                     style={{ padding: '8px 16px' }}
+                    value={workspaceName}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setWorkspaceName(e.target.value)
+                    }
                   />
                 </TextField>
 
                 <TextField isNext={showCard}>
-                  <Label> Team Size</Label>
+                  <Label>Team Size</Label>
                   <div>
                     {/* apply className while open drop down */}
                     <DropBox onClick={handleTeamSizeClick} className='tag-div'>
-                      Select a Team Size
+                      {workspaceTeamSize
+                        ? workspaceTeamSize.name
+                        : 'Select a Team Size'}
                       <SVGIcon
                         name={
                           teamDropdownOpen ? 'up-arrow-icon' : 'down-arrow-icon'
@@ -119,6 +183,7 @@ export default function OnboardingStep1() {
                         iconSize='20'
                         iconViewBox='0 0 20 20'
                         onClose={() => setTeamDropdownOpen(false)}
+                        onChange={handleTeamSizeChange}
                         style={{ width: '100%', maxWidth: 332 }}
                       />
                     )}
@@ -129,7 +194,9 @@ export default function OnboardingStep1() {
                   <div>
                     {/* apply className while open drop down */}
                     <DropBox onClick={handleIndustryClick} className='tag-div'>
-                      Select a Industry
+                      {workspaceIndustry
+                        ? workspaceIndustry.name
+                        : 'Select a Industry'}
                       <SVGIcon
                         name={
                           industryDropdownOpen
@@ -148,6 +215,7 @@ export default function OnboardingStep1() {
                         iconViewBox='0 0 20 20'
                         onClose={() => setIndustryDropdownOpen(false)}
                         style={{ width: '100%', maxWidth: 332 }}
+                        onChange={handleIndustryChange}
                       />
                     )}
                   </div>
@@ -165,21 +233,43 @@ export default function OnboardingStep1() {
                   size={58}
                 />
                 <Description>
-                  <h2>Hello, Sanjay M.</h2>
+                  <h2>Hello, {user?.display_name}</h2>
                   <p>Invite members to collaborate in Connect</p>
                 </Description>
               </NextProfile>
               <Form>
                 <Card>
                   <LabelDiv>
-                    <Label> Email Address</Label>
-                    <Label>Full Name(Optional)</Label>
+                    <Label>Email Address</Label>
+                    <Label>Full Name</Label>
                   </LabelDiv>
                   <DetailSection>
                     {inputField.map((field, index) => (
                       <TextField isNext={showCard} key={index}>
-                        <Input placeholder={'Email Address'} type='email' />
-                        <Input placeholder={'Full Name'} type='text' />
+                        <Input
+                          placeholder={'Email Address'}
+                          type='email'
+                          value={field.email}
+                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            handleInvitedUserInputChange(
+                              'email',
+                              e.target.value,
+                              index,
+                            )
+                          }
+                        />
+                        <Input
+                          placeholder={'Full Name'}
+                          type='text'
+                          value={field.displayName}
+                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            handleInvitedUserInputChange(
+                              'displayName',
+                              e.target.value,
+                              index,
+                            )
+                          }
+                        />
                         <Icon onClick={() => handleRemoveInputField(index)}>
                           <SVGIcon
                             name='cross-icon'
@@ -200,7 +290,6 @@ export default function OnboardingStep1() {
                       isLink
                       onClick={handleAddInput}
                     />
-                    <span>or</span> add many at once
                   </BottomFrame>
                 </Card>
               </Form>
@@ -209,9 +298,17 @@ export default function OnboardingStep1() {
           <Bottom>
             <Steps>{showCard ? <p>Step 2 of 2</p> : <p>Step 1 of 2 </p>}</Steps>
             {showCard ? (
-              <Button title='Get started' onClick={handleNextClick} />
+              <Button
+                title='Get started'
+                onClick={handleGetStarted}
+                isLoading={workspaceStore.loading}
+              />
             ) : (
-              <Button title='Next' onClick={handleNextClick} />
+              <Button
+                title='Create Workspace'
+                onClick={handleCreateWorkspace}
+                isLoading={workspaceStore.loading}
+              />
             )}
           </Bottom>
         </Frame>
@@ -219,3 +316,5 @@ export default function OnboardingStep1() {
     </MainDiv>
   );
 }
+
+export default observer(OnboardingStep1);

@@ -11,19 +11,22 @@ import {
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 
+export type DropDownItem = {
+  name: string;
+  icon?: string;
+  src?: string;
+  isName?: boolean;
+  value?: any;
+};
+
 interface DropDownProps {
-  items: {
-    name: string;
-    icon?: string;
-    src?: string;
-    isName?: boolean;
-    value?: any;
-  }[];
+  items: DropDownItem[];
   style?: React.CSSProperties;
   iconSize: string;
   iconViewBox: string;
   onClose: () => void;
-  onChange?: () => void;
+  // eslint-disable-next-line no-unused-vars
+  onChange?: (item: DropDownItem) => void;
   isSearch?: boolean;
   isCheckbox?: boolean;
 }
@@ -61,6 +64,7 @@ export default function DropDown({
   onClose,
   isSearch = false,
   isCheckbox = false,
+  onChange,
 }: DropDownProps) {
   const dropDownRef = useOutsideClick(onClose);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -103,7 +107,13 @@ export default function DropDown({
             key={index}
             isSelected={!!selectedItems[item.name]}
             isHovered={hoveredItem === item.name}
-            onClick={() => handleItemClick(item.name)}
+            onClick={() => {
+              handleItemClick(item.name);
+              if (onChange) {
+                onChange(item);
+              }
+              onClose();
+            }}
             onMouseEnter={() => handleMouseEnter(item.name)}
             onMouseLeave={handleMouseLeave}
           >

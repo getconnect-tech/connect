@@ -12,7 +12,7 @@ import {
 const RequestBody = z.object({
   email: emailSchema,
   displayName: displayNameSchema,
-  profilePic: profilePicSchema,
+  profilePic: profilePicSchema.optional(),
 });
 
 export const POST = async (req: NextRequest) => {

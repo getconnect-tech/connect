@@ -1,3 +1,5 @@
+import { TeamSize } from "@prisma/client";
+
 export const industryItems = [
   { name: "Technology and Software" },
   { name: "Data and Analytics" },
@@ -6,10 +8,10 @@ export const industryItems = [
   { name: "Financial Technologies (FinTech)" },
 ];
 export const teamMember = [
-  { name: "Small (1-10 members)", value: 1 },
-  { name: "Medium (11-50 members)", value: 2 },
-  { name: "Large (51-200 members)", value: 3 },
-  { name: "Enterprise (201+ members)", value: 4 },
+  { name: "Small (1-10 members)", value: TeamSize.SMALL },
+  { name: "Medium (11-50 members)", value: TeamSize.MEDIUM },
+  { name: "Large (51-200 members)", value: TeamSize.LARGE },
+  { name: "Enterprise (201+ members)", value: TeamSize.ENTERPRISE },
 ];
 export const priorityItem = [
   { name: "No priority", icon: "priority-no-icon" },
