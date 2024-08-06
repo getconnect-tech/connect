@@ -6,18 +6,19 @@ import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 interface Props {
-  isSelected: boolean;
-  isHovered: boolean;
+  isSelected?: boolean;
+  isHovered?: boolean;
+  isContextMenu?: boolean;
 }
 
-const MainDiv = styled.div`
+const MainDiv = styled.div<Props>`
   background-color: ${colors.bg_white};
   border-radius: 12px;
   box-shadow:
     0px 0px 0px 0.5px ${colors.box_shadow},
     0px 4px 8px 0px ${colors.box_shadow},
     0px 8px 24px 0px ${colors.box_shadow};
-  position: absolute;
+  position: ${({ isContextMenu }) => (isContextMenu ? 'relative' : 'absolute')};
   margin-top: 4px;
   z-index: 1;
   -webkit-user-select: none;

@@ -73,6 +73,7 @@ export default function CustomContextMenu({ children }: Props) {
                     iconViewBox='0 0 20 20'
                     onClose={() => setAssignDropdown(false)}
                     isSearch={true}
+                    isContextMenu={true}
                   />
                 </ContextMenuSubContent>
               </ContextMenu.Portal>

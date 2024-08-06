@@ -29,6 +29,7 @@ interface DropDownProps {
   onChange?: (item: DropDownItem) => void;
   isSearch?: boolean;
   isCheckbox?: boolean;
+  isContextMenu?: boolean;
 }
 
 // Hook to handle outside clicks
@@ -64,6 +65,7 @@ export default function DropDown({
   onClose,
   isSearch = false,
   isCheckbox = false,
+  isContextMenu = false,
   onChange,
 }: DropDownProps) {
   const dropDownRef = useOutsideClick(onClose);
@@ -87,7 +89,7 @@ export default function DropDown({
     setHoveredItem(null);
   };
   return (
-    <MainDiv ref={dropDownRef} style={style}>
+    <MainDiv ref={dropDownRef} style={style} isContextMenu={isContextMenu}>
       {isSearch && (
         <SearchDiv>
           <Input
