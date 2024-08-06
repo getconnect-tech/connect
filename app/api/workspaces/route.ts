@@ -1,8 +1,17 @@
-import { handleApiError } from "@/helpers/errorHandler";
-import { industrySchema, invitedUsersSchema, nameSchema, teamSizeSchema } from "@/lib/zod";
-import withAuth from "@/middlewares/withAuth";
-import { addUserToWorkspace, createWorkspace, inviteUsers } from "@/services/serverSide/workspace";
-import { z } from "zod";
+import { z } from 'zod';
+import { handleApiError } from '@/helpers/errorHandler';
+import {
+  industrySchema,
+  invitedUsersSchema,
+  nameSchema,
+  teamSizeSchema,
+} from '@/lib/zod';
+import withAuth from '@/middlewares/withAuth';
+import {
+  addUserToWorkspace,
+  createWorkspace,
+  inviteUsers,
+} from '@/services/serverSide/workspace';
 
 const RequestBody = z.object({
   name: nameSchema,
@@ -17,7 +26,9 @@ export const POST = withAuth(async (req) => {
 
     RequestBody.parse(requestBody);
 
-    const { name, teamSize, industry, invitedUsers } = requestBody as z.infer<typeof RequestBody>;
+    const { name, teamSize, industry, invitedUsers } = requestBody as z.infer<
+      typeof RequestBody
+    >;
     const user = req.user;
 
     const newWorkspace = await createWorkspace({ name, industry, teamSize });

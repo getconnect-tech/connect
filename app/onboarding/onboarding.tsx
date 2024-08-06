@@ -1,6 +1,8 @@
 /* eslint-disable max-len */
 'use client';
 import React, { ChangeEvent, useCallback, useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import { useRouter } from 'next/navigation';
 import {
   CenterCard,
   Heading,
@@ -23,24 +25,27 @@ import {
   LabelDiv,
   BottomFrame,
   DetailSection,
-} from "./style";
-import SVGIcon from "@/assets/icons/SVGIcon";
-import Avatar from "@/components/avtar/Avtar";
-import Button from "@/components/button/button";
-import Input from "@/components/input/input";
-import DropDown, { DropDownItem } from "@/components/dropDown/dropDown";
-import { industryItems, teamMember } from "@/helpers/raw";
-import { useStores } from "@/stores";
-import { observer } from "mobx-react-lite";
-import { createWorkspace, inviteUsersToWorkspace } from "@/services/clientSide/workspace";
-import { useRouter } from "next/navigation";
-import { isEmpty } from "@/helpers/common";
+} from './style';
+import SVGIcon from '@/assets/icons/SVGIcon';
+import Avatar from '@/components/avtar/Avtar';
+import Button from '@/components/button/button';
+import Input from '@/components/input/input';
+import DropDown, { DropDownItem } from '@/components/dropDown/dropDown';
+import { industryItems, teamMember } from '@/helpers/raw';
+import { useStores } from '@/stores';
+import {
+  createWorkspace,
+  inviteUsersToWorkspace,
+} from '@/services/clientSide/workspace';
+import { isEmpty } from '@/helpers/common';
 
 function OnboardingStep1() {
   const [showCard, setShowCard] = useState(false);
   const [industryDropdownOpen, setIndustryDropdownOpen] = useState(false);
   const [teamDropdownOpen, setTeamDropdownOpen] = useState(false);
-  const [inputField, setInputField] = useState([{ email: '', displayName: '' }]);
+  const [inputField, setInputField] = useState([
+    { email: '', displayName: '' },
+  ]);
 
   const {
     userStore: { user },
@@ -51,7 +56,6 @@ function OnboardingStep1() {
   const [workspaceTeamSize, setWorkspaceTeamSize] = useState<DropDownItem>();
   const [workspaceIndustry, setWorkspaceIndustry] = useState<DropDownItem>();
   const router = useRouter();
-
 
   const handleIndustryClick = useCallback(() => {
     setIndustryDropdownOpen(!industryDropdownOpen);
@@ -64,7 +68,11 @@ function OnboardingStep1() {
   }, [teamDropdownOpen]);
 
   const handleCreateWorkspace = useCallback(async () => {
-    const result = await createWorkspace(workspaceName, workspaceTeamSize?.value, workspaceIndustry!.name);
+    const result = await createWorkspace(
+      workspaceName,
+      workspaceTeamSize?.value,
+      workspaceIndustry!.name,
+    );
     if (result) {
       setShowCard(true);
     }
@@ -87,7 +95,11 @@ function OnboardingStep1() {
     setWorkspaceIndustry(item);
   };
 
-  const handleInvitedUserInputChange = (type: "displayName" | "email", value: string, index: number) => {
+  const handleInvitedUserInputChange = (
+    type: 'displayName' | 'email',
+    value: string,
+    index: number,
+  ) => {
     setInputField((prev) => {
       const newState = [...prev];
       newState[index][type] = value;
@@ -96,10 +108,12 @@ function OnboardingStep1() {
   };
 
   const handleGetStarted = async () => {
-    const usersToInvite = inputField.filter(({ displayName, email }) => !isEmpty(displayName) && !isEmpty(email));
+    const usersToInvite = inputField.filter(
+      ({ displayName, email }) => !isEmpty(displayName) && !isEmpty(email),
+    );
     const result = await inviteUsersToWorkspace(usersToInvite);
     if (result) {
-      router.replace("/");
+      router.replace('/');
     }
   };
 
@@ -137,10 +151,12 @@ function OnboardingStep1() {
                 <TextField isNext={showCard}>
                   <Label>Company Name</Label>
                   <Input
-                    placeholder={"Enter company name"}
-                    style={{ padding: "8px 16px" }}
+                    placeholder={'Enter company name'}
+                    style={{ padding: '8px 16px' }}
                     value={workspaceName}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setWorkspaceName(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setWorkspaceName(e.target.value)
+                    }
                   />
                 </TextField>
 
@@ -148,13 +164,17 @@ function OnboardingStep1() {
                   <Label>Team Size</Label>
                   <div>
                     {/* apply className while open drop down */}
-                    <DropBox onClick={handleTeamSizeClick} className="tag-div">
-                      {workspaceTeamSize ? workspaceTeamSize.name : "Select a Team Size"}
+                    <DropBox onClick={handleTeamSizeClick} className='tag-div'>
+                      {workspaceTeamSize
+                        ? workspaceTeamSize.name
+                        : 'Select a Team Size'}
                       <SVGIcon
-                        name={teamDropdownOpen ? "up-arrow-icon" : "down-arrow-icon"}
-                        width="12px"
-                        height="12px"
-                        viewBox="0 0 12 12"
+                        name={
+                          teamDropdownOpen ? 'up-arrow-icon' : 'down-arrow-icon'
+                        }
+                        width='12px'
+                        height='12px'
+                        viewBox='0 0 12 12'
                       />
                     </DropBox>
                     {teamDropdownOpen && (
@@ -164,7 +184,7 @@ function OnboardingStep1() {
                         iconViewBox='0 0 20 20'
                         onClose={() => setTeamDropdownOpen(false)}
                         onChange={handleTeamSizeChange}
-                        style={{ width: "100%", maxWidth: 332 }}
+                        style={{ width: '100%', maxWidth: 332 }}
                       />
                     )}
                   </div>
@@ -173,13 +193,19 @@ function OnboardingStep1() {
                   <Label>Industry</Label>
                   <div>
                     {/* apply className while open drop down */}
-                    <DropBox onClick={handleIndustryClick} className="tag-div">
-                      {workspaceIndustry ? workspaceIndustry.name : "Select a Industry"}
+                    <DropBox onClick={handleIndustryClick} className='tag-div'>
+                      {workspaceIndustry
+                        ? workspaceIndustry.name
+                        : 'Select a Industry'}
                       <SVGIcon
-                        name={industryDropdownOpen ? "up-arrow-icon" : "down-arrow-icon"}
-                        width="12px"
-                        height="12px"
-                        viewBox="0 0 12 12"
+                        name={
+                          industryDropdownOpen
+                            ? 'up-arrow-icon'
+                            : 'down-arrow-icon'
+                        }
+                        width='12px'
+                        height='12px'
+                        viewBox='0 0 12 12'
                       />
                     </DropBox>
                     {industryDropdownOpen && (
@@ -188,7 +214,7 @@ function OnboardingStep1() {
                         iconSize='20'
                         iconViewBox='0 0 20 20'
                         onClose={() => setIndustryDropdownOpen(false)}
-                        style={{ width: "100%", maxWidth: 332 }}
+                        style={{ width: '100%', maxWidth: 332 }}
                         onChange={handleIndustryChange}
                       />
                     )}
@@ -221,16 +247,28 @@ function OnboardingStep1() {
                     {inputField.map((field, index) => (
                       <TextField isNext={showCard} key={index}>
                         <Input
-                          placeholder={"Email Address"}
-                          type="email"
+                          placeholder={'Email Address'}
+                          type='email'
                           value={field.email}
-                          onChange={(e: ChangeEvent<HTMLInputElement>) => handleInvitedUserInputChange("email", e.target.value, index)}
+                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            handleInvitedUserInputChange(
+                              'email',
+                              e.target.value,
+                              index,
+                            )
+                          }
                         />
                         <Input
-                          placeholder={"Full Name"}
-                          type="text"
+                          placeholder={'Full Name'}
+                          type='text'
                           value={field.displayName}
-                          onChange={(e: ChangeEvent<HTMLInputElement>) => handleInvitedUserInputChange("displayName", e.target.value, index)}
+                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            handleInvitedUserInputChange(
+                              'displayName',
+                              e.target.value,
+                              index,
+                            )
+                          }
                         />
                         <Icon onClick={() => handleRemoveInputField(index)}>
                           <SVGIcon
@@ -260,9 +298,17 @@ function OnboardingStep1() {
           <Bottom>
             <Steps>{showCard ? <p>Step 2 of 2</p> : <p>Step 1 of 2 </p>}</Steps>
             {showCard ? (
-              <Button title="Get started" onClick={handleGetStarted} isLoading={workspaceStore.loading} />
+              <Button
+                title='Get started'
+                onClick={handleGetStarted}
+                isLoading={workspaceStore.loading}
+              />
             ) : (
-              <Button title="Create Workspace" onClick={handleCreateWorkspace} isLoading={workspaceStore.loading} />
+              <Button
+                title='Create Workspace'
+                onClick={handleCreateWorkspace}
+                isLoading={workspaceStore.loading}
+              />
             )}
           </Bottom>
         </Frame>

@@ -29,7 +29,9 @@ export const profilePicSchema = z
   })
   .url();
 
-export const teamSizeSchema = z.nativeEnum(TeamSize, { required_error: "'teamSize' is required!" });
+export const teamSizeSchema = z.nativeEnum(TeamSize, {
+  required_error: "'teamSize' is required!",
+});
 
 export const industrySchema = z
   .string({
@@ -42,5 +44,5 @@ export const invitedUsersSchema = z.array(
   z.object({
     email: emailSchema,
     displayName: displayNameSchema,
-  })
+  }),
 );

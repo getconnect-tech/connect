@@ -1,8 +1,8 @@
-import { handleApiError } from "@/helpers/errorHandler";
-import { invitedUsersSchema } from "@/lib/zod";
-import withWorkspaceAuth from "@/middlewares/withWorkspaceAuth";
-import { inviteUsers } from "@/services/serverSide/workspace";
-import { z } from "zod";
+import { z } from 'zod';
+import { handleApiError } from '@/helpers/errorHandler';
+import { invitedUsersSchema } from '@/lib/zod';
+import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
+import { inviteUsers } from '@/services/serverSide/workspace';
 
 export const POST = withWorkspaceAuth(async (req) => {
   try {
@@ -16,7 +16,7 @@ export const POST = withWorkspaceAuth(async (req) => {
 
     await inviteUsers(usersToInvite, workspace.id, user.id);
 
-    return Response.json({ message: "User invited!" }, { status: 200 });
+    return Response.json({ message: 'User invited!' }, { status: 200 });
   } catch (err) {
     return handleApiError(err);
   }

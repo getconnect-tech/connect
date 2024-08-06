@@ -12,12 +12,12 @@ import {
 import SVGIcon from '@/assets/icons/SVGIcon';
 
 export type DropDownItem = {
-    name: string;
-    icon?: string;
-    src?: string;
-    isName?: boolean;
-    value?: any;
-  }
+  name: string;
+  icon?: string;
+  src?: string;
+  isName?: boolean;
+  value?: any;
+};
 
 interface DropDownProps {
   items: DropDownItem[];
@@ -25,6 +25,7 @@ interface DropDownProps {
   iconSize: string;
   iconViewBox: string;
   onClose: () => void;
+  // eslint-disable-next-line no-unused-vars
   onChange?: (item: DropDownItem) => void;
   isSearch?: boolean;
   isCheckbox?: boolean;
@@ -63,7 +64,7 @@ export default function DropDown({
   onClose,
   isSearch = false,
   isCheckbox = false,
-  onChange
+  onChange,
 }: DropDownProps) {
   const dropDownRef = useOutsideClick(onClose);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -108,7 +109,9 @@ export default function DropDown({
             isHovered={hoveredItem === item.name}
             onClick={() => {
               handleItemClick(item.name);
-              onChange && onChange(item);
+              if (onChange) {
+                onChange(item);
+              }
               onClose();
             }}
             onMouseEnter={() => handleMouseEnter(item.name)}
