@@ -1,7 +1,7 @@
 import { AuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { prisma } from '@/prisma/prisma';
-import { markUserAsVerified } from '@/services/serverSide/membership/signup';
+import { addToInvitedWorkspaces, markUserAsVerified } from '@/services/serverSide/membership/signup';
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -24,8 +24,17 @@ export const authOptions: AuthOptions = {
         if (isValidCode) {
           await prisma.verificationToken.delete({ where: { email } });
 
-          const verifiedUser = await markUserAsVerified(email);
-          return verifiedUser;
+          let currentUser = await prisma.user.findUnique({ where: { email } });
+
+          if(!currentUser!.is_verified) {
+            // New account
+            currentUser = await markUserAsVerified(email);
+
+            // check if user was invited to any workspaces
+            await addToInvitedWorkspaces(currentUser.id, currentUser.email);
+          }
+
+          return currentUser;
         }
 
         return null;

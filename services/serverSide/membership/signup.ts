@@ -54,3 +54,13 @@ export const markUserAsVerified = async (userEmail: string) => {
   });
   return updatedUser;
 };
+
+export const addToInvitedWorkspaces = async (userId: string, userEmail: string) => {
+  const invitedWorkspaces = await prisma.invitedUser.findMany({ where: { email: userEmail } });
+  if(invitedWorkspaces.length > 0) {
+    const relationsToAdd = invitedWorkspaces.map(x => ({ user_id: userId, workspace_id: x.workspace_id }));
+    await prisma.userWorkspaces.createMany({ data: relationsToAdd });
+    await prisma.invitedUser.deleteMany({ where: { email: userEmail  } });
+  }
+  return true;
+}

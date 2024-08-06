@@ -10,5 +10,6 @@
   ],
   "eslint.options": {
     "extensions": [".js", ".ts", ".jsx", ".tsx"]
-  }
+  },
+  "editor.formatOnSave": true
 }

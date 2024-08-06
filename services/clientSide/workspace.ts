@@ -41,7 +41,9 @@ export const inviteUsersToWorkspace = async (usersToInvite: { displayName: strin
       invitedUsers: usersToInvite,
     };
 
-    const { data } = await axios.post(`${NEXT_PUBLIC_API_URL}/workspaces/inviteUsers`, payload);
+    const { data } = await axios.post(`${NEXT_PUBLIC_API_URL}/workspaces/inviteUsers`, payload, { headers: {
+      'workspace_id': workspaceStore.currentWorkspace?.id
+    } });
 
     return data;
   } catch (err: any) {
