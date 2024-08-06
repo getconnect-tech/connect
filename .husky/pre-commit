@@ -1,7 +1,7 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-protected_branch='master'
+protected_branch='main'
 protected_branch_2='dev'
 current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
 
@@ -15,4 +15,4 @@ if [ "$current_branch" = "$protected_branch_2" ]; then
 fi
 
 echo "Please wait... checking lint & formating"
-# yarn run lint
+yarn run lint
