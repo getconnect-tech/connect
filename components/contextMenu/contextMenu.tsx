@@ -1,10 +1,10 @@
 import React from 'react';
+import * as ContextMenu from '@radix-ui/react-context-menu';
 import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuMainDiv,
 } from './style';
-import * as ContextMenu from '@radix-ui/react-context-menu';
 import SVGIcon from '@/assets/icons/SVGIcon';
 
 interface Props {

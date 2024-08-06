@@ -1,14 +1,16 @@
-import styled from "styled-components";
-import * as ContextMenu from "@radix-ui/react-context-menu";
-import { colors } from "@/styles/colors";
-import { Typography } from "@/styles/typography";
+import styled from 'styled-components';
+import * as ContextMenu from '@radix-ui/react-context-menu';
+import { colors } from '@/styles/colors';
+import { Typography } from '@/styles/typography';
 
 const ContextMenuMainDiv = styled.div``;
 
 const ContextMenuContent = styled(ContextMenu.Content)`
   background-color: ${colors.bg_white};
-  box-shadow: 0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 4px 8px 0px ${colors.box_shadow}, 0px 8px 24px 0px ${colors.box_shadow};
+  box-shadow:
+    0px 0px 0px 0.5px ${colors.box_shadow},
+    0px 4px 8px 0px ${colors.box_shadow},
+    0px 8px 24px 0px ${colors.box_shadow};
   border-radius: 12px;
   padding: 4px;
   z-index: 1;
