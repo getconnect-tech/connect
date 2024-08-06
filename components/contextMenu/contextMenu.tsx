@@ -10,6 +10,7 @@ import {
   ContextMenuSubTrigger,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { lableItem, priorityItem } from '@/helpers/raw';
 
 interface Props {
   children: any;
@@ -95,40 +96,70 @@ export default function CustomContextMenu({ children }: Props) {
                 viewBox='0 0 10 10'
               />
             </ContextMenuItem>
-            <ContextMenuItem>
-              <div>
+            <ContextMenu.Sub>
+              <ContextMenuSubTrigger>
+                <div>
+                  <SVGIcon
+                    name='context-label-icon'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
+                  />
+                  Labels
+                </div>
                 <SVGIcon
-                  name='context-label-icon'
-                  width='12'
-                  height='12'
-                  viewBox='0 0 12 12'
+                  name='context-arrow-icon'
+                  width='10'
+                  height='10'
+                  viewBox='0 0 10 10'
                 />
-                Labels
-              </div>
-              <SVGIcon
-                name='context-arrow-icon'
-                width='10'
-                height='10'
-                viewBox='0 0 10 10'
-              />
-            </ContextMenuItem>
-            <ContextMenuItem>
-              <div>
+              </ContextMenuSubTrigger>
+              <ContextMenu.Portal>
+                <ContextMenuSubContent className='ContextMenuSubContent'>
+                  <DropDown
+                    items={lableItem}
+                    iconSize='12'
+                    iconViewBox='0 0 12 12'
+                    onClose={() => setAssignDropdown(false)}
+                    isSearch={true}
+                    isContextMenu={true}
+                    isCheckbox={true}
+                    style={{ maxWidth: 146 }}
+                  />
+                </ContextMenuSubContent>
+              </ContextMenu.Portal>
+            </ContextMenu.Sub>
+            <ContextMenu.Sub>
+              <ContextMenuSubTrigger>
+                <div>
+                  <SVGIcon
+                    name='priority-no-icon'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
+                  />
+                  Priority
+                </div>
                 <SVGIcon
-                  name='priority-no-icon'
-                  width='12'
-                  height='12'
-                  viewBox='0 0 12 12'
+                  name='context-arrow-icon'
+                  width='10'
+                  height='10'
+                  viewBox='0 0 10 10'
                 />
-                Priority
-              </div>
-              <SVGIcon
-                name='context-arrow-icon'
-                width='10'
-                height='10'
-                viewBox='0 0 10 10'
-              />
-            </ContextMenuItem>
+              </ContextMenuSubTrigger>
+              <ContextMenu.Portal>
+                <ContextMenuSubContent className='ContextMenuSubContent'>
+                  <DropDown
+                    items={priorityItem}
+                    iconSize='12'
+                    iconViewBox='0 0 12 12'
+                    onClose={() => setAssignDropdown(false)}
+                    isContextMenu={true}
+                    style={{ maxWidth: 126 }}
+                  />
+                </ContextMenuSubContent>
+              </ContextMenu.Portal>
+            </ContextMenu.Sub>
           </ContextMenuContent>
         </ContextMenu.Portal>
       </ContextMenu.Root>
