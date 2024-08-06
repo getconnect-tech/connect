@@ -12,6 +12,7 @@ import {
   createWorkspace,
   inviteUsers,
 } from '@/services/serverSide/workspace';
+import { getUserWorkspaces } from '@/services/serverSide/workspace';
 
 const RequestBody = z.object({
   name: nameSchema,
@@ -38,6 +39,15 @@ export const POST = withAuth(async (req) => {
     }
 
     return Response.json(newWorkspace, { status: 201 });
+  } catch (err) {
+    return handleApiError(err);
+  }
+});
+
+export const GET = withAuth(async (req) => {
+  try {
+    const userWorkspaces = await getUserWorkspaces(req.user.id);
+    return Response.json(userWorkspaces, { status: 200 });
   } catch (err) {
     return handleApiError(err);
   }
