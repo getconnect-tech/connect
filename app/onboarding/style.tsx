@@ -170,7 +170,7 @@ export const Icon = styled.div`
 export const LabelDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  width: calc(100% - 20px);
   padding-top: 20px;
 `;
 export const BottomFrame = styled.div`

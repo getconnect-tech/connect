@@ -95,7 +95,7 @@ model UserWorkspaces {
 
 model InvitedUser {
   id              String    @id @default(uuid())
-  name            String?
+  name            String
   email           String
   invited_by      String
   workspace_id    String

@@ -40,7 +40,7 @@ export const createWorkspace = async ({
 
 // Service to invite users to a workspace
 export const inviteUsers = async (
-  users: { name: string; email: string }[],
+  users: { displayName: string; email: string }[],
   workspaceId: string,
   invitedBy: string,
 ) => {
@@ -63,7 +63,8 @@ export const inviteUsers = async (
   );
 
   const usersToInvite = notVerifiedUsers.map((user) => ({
-    ...user,
+    name: user.displayName,
+    email: user.email,
     workspace_id: workspaceId,
     invited_by: invitedBy,
   }));
@@ -72,4 +73,9 @@ export const inviteUsers = async (
   // TODO: send invitation mail to each user
 
   return result;
+};
+
+export const addUserToWorkspace = async (workspaceId: string, userId: string) => {
+  const userWorkspaceRelation = await prisma.userWorkspaces.create({ data: { user_id: userId, workspace_id: workspaceId } });
+  return userWorkspaceRelation;
 };
