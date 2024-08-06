@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import DropDown from '../dropDown/dropDown';
 import {
@@ -17,8 +17,6 @@ interface Props {
 }
 
 export default function CustomContextMenu({ children }: Props) {
-  const [assignDropdown, setAssignDropdown] = useState(false);
-
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
     {
@@ -72,7 +70,7 @@ export default function CustomContextMenu({ children }: Props) {
                     items={assignItem}
                     iconSize='20'
                     iconViewBox='0 0 20 20'
-                    onClose={() => setAssignDropdown(false)}
+                    onClose={() => {}}
                     isSearch={true}
                     isContextMenu={true}
                   />
@@ -120,7 +118,7 @@ export default function CustomContextMenu({ children }: Props) {
                     items={lableItem}
                     iconSize='12'
                     iconViewBox='0 0 12 12'
-                    onClose={() => setAssignDropdown(false)}
+                    onClose={() => {}}
                     isSearch={true}
                     isContextMenu={true}
                     isCheckbox={true}
@@ -153,7 +151,7 @@ export default function CustomContextMenu({ children }: Props) {
                     items={priorityItem}
                     iconSize='12'
                     iconViewBox='0 0 12 12'
-                    onClose={() => setAssignDropdown(false)}
+                    onClose={() => {}}
                     isContextMenu={true}
                     style={{ maxWidth: 126 }}
                   />
