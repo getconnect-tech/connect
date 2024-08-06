@@ -1,7 +1,7 @@
-import { ServerClient } from "postmark";
-import { generateVerificationCode } from "./common";
-import moment from "moment";
-import { prisma } from "@/prisma/prisma";
+import { ServerClient } from 'postmark';
+import moment from 'moment';
+import { generateVerificationCode } from './common';
+import { prisma } from '@/prisma/prisma';
 
 const client = new ServerClient(process.env.POSTMARK_SERVER_TOKEN!);
 
@@ -18,7 +18,7 @@ export const sendEmail = async ({ email, subject, body }: any) => {
 export const sendVerificationCode = async (email: string) => {
   const verificationCode = generateVerificationCode();
 
-  const expiryTime = moment().add(5, "minutes").toDate(); // expiry time for verification code
+  const expiryTime = moment().add(5, 'minutes').toDate(); // expiry time for verification code
 
   await prisma.verificationToken.upsert({
     where: { email },
@@ -27,6 +27,10 @@ export const sendVerificationCode = async (email: string) => {
   });
 
   // Send verification code to user
-  const messageId = await sendEmail({ email, subject: "Login - Verification Code", body: `<p>${verificationCode}</p>` });
+  const messageId = await sendEmail({
+    email,
+    subject: 'Login - Verification Code',
+    body: `<p>${verificationCode}</p>`,
+  });
   return messageId;
 };

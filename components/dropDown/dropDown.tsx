@@ -1,14 +1,15 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import SVGIcon from "@/assets/icons/SVGIcon";
-import Avatar from "../avtar/Avtar";
-import Input from "../input/input";
+/* eslint-disable no-undef */
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import Avatar from '../avtar/Avtar';
+import Input from '../input/input';
 import {
   ItemDiv,
   ItemMainDiv,
   MainDiv,
   SearchDiv,
   StyledCheckbox,
-} from "./style";
+} from './style';
+import SVGIcon from '@/assets/icons/SVGIcon';
 
 interface DropDownProps {
   items: {
@@ -43,9 +44,9 @@ export const useOutsideClick = (callback: () => void) => {
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [callback]);
 
@@ -86,12 +87,12 @@ export default function DropDown({
       {isSearch && (
         <SearchDiv>
           <Input
-            placeholder={"Search"}
-            style={{ border: "none", padding: "8px 12px" }}
+            placeholder={'Search'}
+            style={{ border: 'none', padding: '8px 12px' }}
             autoFocus={true}
-            iconName="search-icon"
-            iconSize="12"
-            iconViewBox="0 0 12 12"
+            iconName='search-icon'
+            iconSize='12'
+            iconViewBox='0 0 12 12'
             isIcon={true}
           />
         </SearchDiv>
@@ -121,7 +122,7 @@ export default function DropDown({
               />
             )}
             {item.src && item.isName && (
-              <Avatar name="" imgSrc={item.src} size={20} />
+              <Avatar name='' imgSrc={item.src} size={20} />
             )}
             <p>{item.name}</p>
           </ItemDiv>

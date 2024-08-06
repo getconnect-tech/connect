@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { colors } from '@/styles/colors';
 
 const getViewBox = (name: string) => {
@@ -8,7 +9,10 @@ const getViewBox = (name: string) => {
 };
 
 const getPath = (name: string, props: any) => {
-  const { fill, stroke, stopColor, iconprimary } = props;
+  const {
+    fill,
+    // , stroke, stopColor, iconprimary
+  } = props;
   switch (name) {
     case 'logo-icon':
       return (

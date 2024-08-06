@@ -1,6 +1,6 @@
-import { colors } from "@/styles/colors";
-import { Typography } from "@/styles/typography";
-import styled from "styled-components";
+import styled from 'styled-components';
+import { colors } from '@/styles/colors';
+import { Typography } from '@/styles/typography';
 
 interface Props {
   isActive?: boolean;
@@ -50,7 +50,7 @@ const ItemDiv = styled.div<Props>`
   justify-content: space-between;
   cursor: pointer;
   background-color: ${({ isActive }) => isActive && colors.bg_surface_active};
-  border-radius: ${({ isActive }) => isActive && "30px"};
+  border-radius: ${({ isActive }) => isActive && '30px'};
   &:hover {
     background-color: ${colors.bg_surface_hover};
     border-radius: 30px;

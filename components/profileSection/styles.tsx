@@ -1,6 +1,6 @@
-import { colors } from "@/styles/colors";
-import { Typography } from "@/styles/typography";
-import styled from "styled-components";
+import styled from 'styled-components';
+import { colors } from '@/styles/colors';
+import { Typography } from '@/styles/typography';
 
 const MainDiv = styled.div`
   max-width: 315px;
@@ -156,5 +156,5 @@ export {
   DotLine,
   Dot,
   Line,
-  LineDiv
+  LineDiv,
 };

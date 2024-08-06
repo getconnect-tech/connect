@@ -1,14 +1,13 @@
-import React from "react";
-import { Buttons, ButtonWrap } from "./style";
-import SVGIcon from "@/assets/icons/SVGIcon";
-import { colors } from "@/styles/colors";
+import React from 'react';
+import { Buttons, ButtonWrap } from './style';
+import SVGIcon from '@/assets/icons/SVGIcon';
 
 interface Props {
   title?: string;
   onClick?: () => void;
   isLoading?: boolean;
   disabled?: boolean;
-  type?: "reset" | "submit" | "button";
+  type?: 'reset' | 'submit' | 'button';
   secondary?: boolean;
   iconSize?: string;
   iconName?: string;
@@ -32,7 +31,6 @@ const Button: React.FC<Props> = (Props) => {
     isLoading,
     isDelete = false,
     width,
-    iconColor,
     iconViewBox,
     className,
     isLink,
@@ -60,7 +58,7 @@ const Button: React.FC<Props> = (Props) => {
             viewBox={iconViewBox}
           />
         )}
-        {title || ""}
+        {title || ''}
       </Buttons>
     </ButtonWrap>
   );
