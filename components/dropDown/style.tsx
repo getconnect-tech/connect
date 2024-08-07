@@ -6,18 +6,20 @@ import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 interface Props {
-  isSelected: boolean;
-  isHovered: boolean;
+  isSelected?: boolean;
+  isHovered?: boolean;
+  isContextMenu?: boolean;
+  isShowSubmenu?: boolean;
 }
 
-const MainDiv = styled.div`
+const MainDiv = styled.div<Props>`
   background-color: ${colors.bg_white};
   border-radius: 12px;
   box-shadow:
     0px 0px 0px 0.5px ${colors.box_shadow},
     0px 4px 8px 0px ${colors.box_shadow},
     0px 8px 24px 0px ${colors.box_shadow};
-  position: absolute;
+  position: ${({ isContextMenu }) => (isContextMenu ? 'relative' : 'absolute')};
   margin-top: 4px;
   z-index: 1;
   -webkit-user-select: none;
@@ -26,16 +28,18 @@ const MainDiv = styled.div`
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
+  max-width: 180px;
 `;
 
 const ItemDiv = styled.div<Props>`
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
+  gap: 8px;
   padding: 4px 8px;
   cursor: pointer;
   p {
-    ${Typography.body_md_regular};
+    ${Typography.body_sm_regular};
     color: ${({ isSelected, isHovered }) =>
       isSelected
         ? colors.text
@@ -43,22 +47,26 @@ const ItemDiv = styled.div<Props>`
           ? colors.text
           : colors.text_text_secondary};
   }
-  svg {
-    fill: ${({ isSelected, isHovered }) =>
-      isSelected
-        ? colors.icon_active
-        : isHovered
-          ? colors.icon_active
-          : colors.icon};
-  }
   &:hover {
     background-color: ${colors.bg_white_hover};
-    border-radius: 8px;
+    border-radius: 6px;
   }
 `;
 const SearchDiv = styled.div`
   padding: 0 0 0 12px;
   border-bottom: 1px solid ${colors.border};
+  .input {
+    border: none;
+    padding: 8px 12px;
+    ${Typography.body_md_regular};
+    max-width: 134px;
+  }
+  .snooze-input {
+    border: none;
+    padding: 8px 12px;
+    ${Typography.body_md_regular};
+    max-width: none;
+  }
 `;
 
 const ItemMainDiv = styled.div`
@@ -85,11 +93,41 @@ const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
 
   &:checked {
     background-color: ${colors.brand};
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG,)}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;
   }
 `;
 
-export { MainDiv, ItemDiv, SearchDiv, ItemMainDiv, StyledCheckbox };
+const ItemLeftDiv = styled.div<Props>`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  p {
+    ${Typography.body_md_regular};
+    color: ${({ isSelected, isHovered }) =>
+      isSelected
+        ? colors.text
+        : isHovered
+          ? colors.text
+          : colors.text_text_secondary};
+  }
+  svg {
+    fill: ${({ isSelected, isHovered }) =>
+      isSelected
+        ? colors.icon_active
+        : isHovered
+          ? colors.icon_active
+          : colors.icon};
+  }
+`;
+
+export {
+  MainDiv,
+  ItemDiv,
+  SearchDiv,
+  ItemMainDiv,
+  StyledCheckbox,
+  ItemLeftDiv,
+};

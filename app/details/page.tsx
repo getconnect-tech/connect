@@ -118,7 +118,6 @@ export default function Details() {
               onChange={() => {}}
               isTag={true}
               isSearch={true}
-              dropDownStyle={{ maxWidth: 146, width: '100%' }}
               isCheckbox={true}
               isActive={true}
             />
@@ -142,7 +141,6 @@ export default function Details() {
               onChange={() => {}}
               isTag={true}
               isSearch={true}
-              dropDownStyle={{ maxWidth: 146, width: '100%' }}
               isActive={true}
               isName={true}
               iconSize='20'
