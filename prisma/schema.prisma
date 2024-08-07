@@ -48,18 +48,20 @@ model Ticket {
   assigned_user User           @relation(fields: [assigned_to], references: [id])
   contact       Contact        @relation(fields: [contact_id], references: [id])
   workspace     Workspace      @relation(fields: [workspace_id], references: [id])
+  mail_id       String
 }
 
 model Message {
-  id         String      @id @default(uuid())
-  subject    String
-  content    String
-  created_at DateTime    @default(now())
-  ticket_id  String
-  author_id  String
-  type       MessageType
-  author     User        @relation(fields: [author_id], references: [id])
-  ticket     Ticket      @relation(fields: [ticket_id], references: [id])
+  id           String      @id @default(uuid())
+  reference_id String
+  subject      String
+  content      String
+  created_at   DateTime    @default(now())
+  ticket_id    String
+  author_id    String
+  type         MessageType
+  author       User        @relation(fields: [author_id], references: [id])
+  ticket       Ticket      @relation(fields: [ticket_id], references: [id])
 }
 
 model Contact {
@@ -120,7 +122,7 @@ enum PriorityLevels {
 }
 
 enum MessageType {
-  MESSAGE
+  REGULAR
   EMAIL
   PRIORITY
   ASSIGN
