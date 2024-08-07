@@ -33,6 +33,8 @@ interface DropDownProps {
   isCheckbox?: boolean;
   isContextMenu?: boolean;
   isSnooze?: boolean;
+  // eslint-disable-next-line no-unused-vars
+  handleMouseEnter?: (e: any) => void;
 }
 
 // Hook to handle outside clicks
@@ -71,6 +73,7 @@ export default function DropDown({
   isContextMenu = false,
   isSnooze = false,
   onChange,
+  handleMouseEnter,
 }: DropDownProps) {
   const dropDownRef = useOutsideClick(onClose);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
@@ -85,9 +88,9 @@ export default function DropDown({
     }));
   }, []);
 
-  const handleMouseEnter = (name: string) => {
-    setHoveredItem(name);
-  };
+  // const handleMouseEnter = (name: string) => {
+  //   setHoveredItem(name);
+  // };
 
   const handleMouseLeave = () => {
     setHoveredItem(null);
@@ -121,7 +124,7 @@ export default function DropDown({
               }
               onClose();
             }}
-            onMouseEnter={() => handleMouseEnter(item.name)}
+            onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
             <ItemLeftDiv

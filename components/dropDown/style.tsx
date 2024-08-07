@@ -9,6 +9,7 @@ interface Props {
   isSelected?: boolean;
   isHovered?: boolean;
   isContextMenu?: boolean;
+  isShowSubmenu?: boolean;
 }
 
 const MainDiv = styled.div<Props>`
@@ -33,7 +34,7 @@ const ItemDiv = styled.div<Props>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
   padding: 4px 8px;
   cursor: pointer;
   p {
@@ -47,7 +48,7 @@ const ItemDiv = styled.div<Props>`
   }
   &:hover {
     background-color: ${colors.bg_white_hover};
-    border-radius: 8px;
+    border-radius: 6px;
   }
 `;
 const SearchDiv = styled.div`
@@ -84,7 +85,7 @@ const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
 
   &:checked {
     background-color: ${colors.brand};
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(  checkmarkSVG, )}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;

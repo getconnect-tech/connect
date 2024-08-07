@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import DropDown from '../dropDown/dropDown';
 import {
@@ -16,6 +16,33 @@ interface Props {
 }
 
 export default function CustomContextMenu({ children }: Props) {
+  const [submenuPosition, setSubmenuPosition] = useState<
+    'upwards' | 'downwards'
+  >('upwards');
+  const [isShowSubmenu, setIsShowSubmenu] = useState(false);
+  const handleMouseEnter = (
+    e: { key: string; domEvent: React.MouseEvent<HTMLElement> },
+    // eslint-disable-next-line no-unused-vars
+    setPosition: (position: 'upwards' | 'downwards') => void,
+    // eslint-disable-next-line no-unused-vars
+    setShowSubmenu: (show: boolean) => void,
+  ) => {
+    const domEvent = e.domEvent;
+    const triggerElement = domEvent.currentTarget;
+    const rect = triggerElement.getBoundingClientRect();
+    // eslint-disable-next-line no-undef
+    const spaceBelow = window.innerHeight - rect.bottom;
+    // eslint-disable-next-line no-undef
+    const spaceAbove = rect.top;
+
+    if (spaceBelow < 200 && spaceAbove > 200) {
+      setPosition('upwards');
+    } else {
+      setPosition('downwards');
+    }
+
+    setShowSubmenu(true);
+  };
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
     {
@@ -44,6 +71,7 @@ export default function CustomContextMenu({ children }: Props) {
     { name: 'Next week', time: 'Tue, Aug 6' },
     { name: '3 days', time: 'Fri, Aug 2' },
   ];
+
   return (
     <ContextMenuMainDiv>
       <ContextMenu.Root>
@@ -51,7 +79,7 @@ export default function CustomContextMenu({ children }: Props) {
         <ContextMenu.Portal>
           <ContextMenuContent>
             <ContextMenu.Sub>
-              <ContextMenuSubTrigger>
+              <ContextMenuSubTrigger isShowSubmenu={isShowSubmenu}>
                 <div>
                   <SVGIcon
                     name='context-assign-icon'
@@ -69,7 +97,13 @@ export default function CustomContextMenu({ children }: Props) {
                 />
               </ContextMenuSubTrigger>
               <ContextMenu.Portal>
-                <ContextMenuSubContent className='ContextMenuSubContent'>
+                <ContextMenuSubContent
+                  className={
+                    submenuPosition === 'upwards'
+                      ? 'submenu-upwards'
+                      : 'submenu-downwards'
+                  }
+                >
                   <DropDown
                     items={assignItem}
                     iconSize='20'
@@ -77,12 +111,15 @@ export default function CustomContextMenu({ children }: Props) {
                     onClose={() => {}}
                     isSearch={true}
                     isContextMenu={true}
+                    handleMouseEnter={(e: any) =>
+                      handleMouseEnter(e, setSubmenuPosition, setIsShowSubmenu)
+                    }
                   />
                 </ContextMenuSubContent>
               </ContextMenu.Portal>
             </ContextMenu.Sub>
             <ContextMenu.Sub>
-              <ContextMenuSubTrigger>
+              <ContextMenuSubTrigger isShowSubmenu={isShowSubmenu}>
                 <div>
                   <SVGIcon
                     name='context-snooze-icon'
@@ -100,7 +137,13 @@ export default function CustomContextMenu({ children }: Props) {
                 />
               </ContextMenuSubTrigger>
               <ContextMenu.Portal>
-                <ContextMenuSubContent className='ContextMenuSubContent'>
+                <ContextMenuSubContent
+                  className={
+                    submenuPosition === 'upwards'
+                      ? 'submenu-upwards'
+                      : 'submenu-downwards'
+                  }
+                >
                   <DropDown
                     items={snoozeItem}
                     iconSize='12'
@@ -110,12 +153,15 @@ export default function CustomContextMenu({ children }: Props) {
                     isContextMenu={true}
                     isSnooze={true}
                     style={{ minWidth: 212 }}
+                    handleMouseEnter={(e: any) =>
+                      handleMouseEnter(e, setSubmenuPosition, setIsShowSubmenu)
+                    }
                   />
                 </ContextMenuSubContent>
               </ContextMenu.Portal>
             </ContextMenu.Sub>
             <ContextMenu.Sub>
-              <ContextMenuSubTrigger>
+              <ContextMenuSubTrigger isShowSubmenu={isShowSubmenu}>
                 <div>
                   <SVGIcon
                     name='context-label-icon'
@@ -133,7 +179,13 @@ export default function CustomContextMenu({ children }: Props) {
                 />
               </ContextMenuSubTrigger>
               <ContextMenu.Portal>
-                <ContextMenuSubContent className='ContextMenuSubContent'>
+                <ContextMenuSubContent
+                  className={
+                    submenuPosition === 'upwards'
+                      ? 'submenu-upwards'
+                      : 'submenu-downwards'
+                  }
+                >
                   <DropDown
                     items={lableItem}
                     iconSize='12'
@@ -143,12 +195,15 @@ export default function CustomContextMenu({ children }: Props) {
                     isContextMenu={true}
                     isCheckbox={true}
                     style={{ maxWidth: 146 }}
+                    handleMouseEnter={(e: any) =>
+                      handleMouseEnter(e, setSubmenuPosition, setIsShowSubmenu)
+                    }
                   />
                 </ContextMenuSubContent>
               </ContextMenu.Portal>
             </ContextMenu.Sub>
             <ContextMenu.Sub>
-              <ContextMenuSubTrigger>
+              <ContextMenuSubTrigger isShowSubmenu={isShowSubmenu}>
                 <div>
                   <SVGIcon
                     name='priority-no-icon'
@@ -166,7 +221,13 @@ export default function CustomContextMenu({ children }: Props) {
                 />
               </ContextMenuSubTrigger>
               <ContextMenu.Portal>
-                <ContextMenuSubContent className='ContextMenuSubContent'>
+                <ContextMenuSubContent
+                  className={
+                    submenuPosition === 'upwards'
+                      ? 'submenu-upwards'
+                      : 'submenu-downwards'
+                  }
+                >
                   <DropDown
                     items={priorityItem}
                     iconSize='12'
@@ -174,6 +235,9 @@ export default function CustomContextMenu({ children }: Props) {
                     onClose={() => {}}
                     isContextMenu={true}
                     style={{ maxWidth: 126 }}
+                    handleMouseEnter={(e: any) =>
+                      handleMouseEnter(e, setSubmenuPosition, setIsShowSubmenu)
+                    }
                   />
                 </ContextMenuSubContent>
               </ContextMenu.Portal>

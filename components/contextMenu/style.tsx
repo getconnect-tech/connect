@@ -2,7 +2,9 @@ import styled from 'styled-components';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
-
+interface Props {
+  isShowSubmenu: boolean;
+}
 const ContextMenuMainDiv = styled.div``;
 
 const ContextMenuContent = styled(ContextMenu.Content)`
@@ -44,7 +46,7 @@ const ContextMenuItem = styled(ContextMenu.Item)`
   }
 `;
 
-const ContextMenuSubTrigger = styled(ContextMenu.SubTrigger)`
+const ContextMenuSubTrigger = styled(ContextMenu.SubTrigger)<Props>`
   ${Typography.body_md_regular};
   color: ${colors.text_text_secondary};
   border: none;
@@ -74,6 +76,7 @@ const ContextMenuSubTrigger = styled(ContextMenu.SubTrigger)`
     border-radius: 6px;
     color: ${colors.text};
   }
+  margin-right: ${({ isShowSubmenu }) => (isShowSubmenu ? '80px' : '0')};
 `;
 
 const ContextMenuSubContent = styled(ContextMenu.SubContent)`
@@ -94,6 +97,15 @@ const ContextMenuSubContent = styled(ContextMenu.SubContent)`
   display: flex;
   flex-direction: column;
   gap: 2px;
+  &.submenu-upwards {
+    bottom: calc(100% - 28px);
+    top: auto;
+  }
+
+  &.submenu-downwards {
+    top: 0;
+    bottom: auto;
+  }
 `;
 
 export {
