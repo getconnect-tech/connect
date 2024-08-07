@@ -1,15 +1,43 @@
 'use client';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { ItemMainDiv, Label, LogoDiv, MainDiv, TopDiv } from './style';
 import NavbarItem from './navbarItem';
 import SVGIcon from '@/assets/icons/SVGIcon';
 
+const navbarMenu = {
+  'Getting started': 0,
+  Inbox: 1,
+  Unassigned: 2,
+  All: 3,
+  Contacts: 4,
+  Insights: 5,
+  Bug: 6,
+  Question: 7,
+  Feedback: 8,
+  Support: 9,
+};
+
 function Navbar() {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const handleClick = useCallback((index: number) => {
-    setActiveIndex(index);
+  useEffect(() => {
+    if (pathname === '/inbox') setActiveIndex(navbarMenu.Inbox);
+    else if (pathname === '/contact') setActiveIndex(navbarMenu.Contacts);
   }, []);
+
+  const handleClick = useCallback((index: number, path?: string) => {
+    setActiveIndex(index); // Update active index
+    if (path) {
+      // Set the redirect path
+      router.push(path);
+    }
+  }, []);
+
+  console.log('activeIndex', activeIndex);
 
   return (
     <MainDiv>
@@ -44,7 +72,7 @@ function Navbar() {
             count={4}
             icon='inbox-icon'
             isActive={activeIndex === 1}
-            onClickItem={() => handleClick(1)}
+            onClickItem={() => handleClick(1, '/inbox')}
           />
           <NavbarItem
             title='Unassigned'
@@ -64,7 +92,7 @@ function Navbar() {
             title='Contacts'
             icon='contact-icon'
             isActive={activeIndex === 4}
-            onClickItem={() => handleClick(4)}
+            onClickItem={() => handleClick(4, '/contact')}
           />
           <NavbarItem
             title='Insights'
