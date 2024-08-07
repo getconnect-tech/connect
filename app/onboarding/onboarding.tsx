@@ -15,7 +15,6 @@ import {
   Form,
   TextField,
   Label,
-  DropBox,
   Bottom,
   Steps,
   CenterCardNext,
@@ -30,7 +29,7 @@ import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
-import DropDown, { DropDownItem } from '@/components/dropDown/dropDown';
+import { DropDownItem } from '@/components/dropDown/dropDown';
 import { industryItems, teamMember } from '@/helpers/raw';
 import { useStores } from '@/stores';
 import {
@@ -38,6 +37,8 @@ import {
   inviteUsersToWorkspace,
 } from '@/services/clientSide/workspace';
 import { isEmpty } from '@/helpers/common';
+import { colors } from '@/styles/colors';
+import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 
 function OnboardingStep1() {
   const [showCard, setShowCard] = useState(false);
@@ -159,66 +160,45 @@ function OnboardingStep1() {
                     }
                   />
                 </TextField>
-
                 <TextField isNext={showCard}>
                   <Label>Team Size</Label>
-                  <div>
-                    {/* apply className while open drop down */}
-                    <DropBox onClick={handleTeamSizeClick} className='tag-div'>
-                      {workspaceTeamSize
-                        ? workspaceTeamSize.name
-                        : 'Select a Team Size'}
-                      <SVGIcon
-                        name={
-                          teamDropdownOpen ? 'up-arrow-icon' : 'down-arrow-icon'
-                        }
-                        width='12px'
-                        height='12px'
-                        viewBox='0 0 12 12'
-                      />
-                    </DropBox>
-                    {teamDropdownOpen && (
-                      <DropDown
-                        items={teamMember}
-                        iconSize='20'
-                        iconViewBox='0 0 20 20'
-                        onClose={() => setTeamDropdownOpen(false)}
-                        onChange={handleTeamSizeChange}
-                        style={{ width: '100%', maxWidth: 332 }}
-                      />
-                    )}
-                  </div>
+                  <DropDownWithTag
+                    onClick={handleTeamSizeClick}
+                    title={'Select a Team Size'}
+                    selectedValue={workspaceTeamSize}
+                    style={{
+                      color: workspaceTeamSize && colors.text,
+                    }}
+                    iconName={
+                      teamDropdownOpen ? 'up-arrow-icon' : 'down-arrow-icon'
+                    }
+                    onClose={() => setTeamDropdownOpen(false)}
+                    items={teamMember}
+                    onChange={handleTeamSizeChange}
+                    dropdownOpen={teamDropdownOpen}
+                    dropDownStyle={{ width: '100%', maxWidth: 332 }}
+                    isTag={false}
+                  />
                 </TextField>
                 <TextField isNext={showCard}>
                   <Label>Industry</Label>
-                  <div>
-                    {/* apply className while open drop down */}
-                    <DropBox onClick={handleIndustryClick} className='tag-div'>
-                      {workspaceIndustry
-                        ? workspaceIndustry.name
-                        : 'Select a Industry'}
-                      <SVGIcon
-                        name={
-                          industryDropdownOpen
-                            ? 'up-arrow-icon'
-                            : 'down-arrow-icon'
-                        }
-                        width='12px'
-                        height='12px'
-                        viewBox='0 0 12 12'
-                      />
-                    </DropBox>
-                    {industryDropdownOpen && (
-                      <DropDown
-                        items={industryItems}
-                        iconSize='20'
-                        iconViewBox='0 0 20 20'
-                        onClose={() => setIndustryDropdownOpen(false)}
-                        style={{ width: '100%', maxWidth: 332 }}
-                        onChange={handleIndustryChange}
-                      />
-                    )}
-                  </div>
+                  <DropDownWithTag
+                    onClick={handleIndustryClick}
+                    title={'Select a Industry'}
+                    selectedValue={workspaceIndustry}
+                    style={{
+                      color: workspaceIndustry && colors.text,
+                    }}
+                    iconName={
+                      industryDropdownOpen ? 'up-arrow-icon' : 'down-arrow-icon'
+                    }
+                    onClose={() => setIndustryDropdownOpen(false)}
+                    items={industryItems}
+                    onChange={handleIndustryChange}
+                    dropdownOpen={industryDropdownOpen}
+                    dropDownStyle={{ width: '100%', maxWidth: 332 }}
+                    isTag={false}
+                  />
                 </TextField>
               </Form>
             </CenterCard>

@@ -23,12 +23,11 @@ import {
 import NavbarPage from '@/components/navbar';
 import ProfileSection from '@/components/profileSection/profileSection';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import Tag from '@/components/tag/tag';
 import Avatar from '@/components/avtar/Avtar';
 import MessageCard from '@/components/messageCard/messageCard';
 import QuestionCard from '@/components/questionCard/questionCard';
-import DropDown from '@/components/dropDown/dropDown';
 import { lableItem, priorityItem } from '@/helpers/raw';
+import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 
 export default function Details() {
   const router = useRouter();
@@ -109,63 +108,47 @@ export default function Details() {
             </IconDiv>
           </HeaderDiv>
           <StatusDiv>
-            <div>
-              <Tag
-                isActive={true}
-                onClick={handleLableTag}
-                isName={false}
-                iconName={'bug-icon'}
-                title={'Bug'}
-              />
-              {labelDropdown && (
-                <DropDown
-                  items={lableItem}
-                  iconSize='12'
-                  iconViewBox='0 0 12 12'
-                  onClose={() => setLabelDropdown(false)}
-                  style={{ maxWidth: 146, width: '100%' }}
-                  isSearch={true}
-                  isCheckbox={true}
-                />
-              )}
-            </div>
-            <div>
-              <Tag
-                isActive={true}
-                onClick={handlePriorityTag}
-                isName={false}
-                iconName={'priority-no-icon'}
-                title={'Priority'}
-              />
-              {priorityDropdown && (
-                <DropDown
-                  items={priorityItem}
-                  iconSize='12'
-                  iconViewBox='0 0 12 12'
-                  onClose={() => setPriorityDropdown(false)}
-                />
-              )}
-            </div>
-            <div>
-              <Tag
-                isActive={true}
-                onClick={handleAssignTag}
-                isName={true}
-                iconName={'bug-icon'}
-                title={'Sanjay M.'}
-                src='https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
-              />
-              {assignDropdown && (
-                <DropDown
-                  items={assignItem}
-                  iconSize='20'
-                  iconViewBox='0 0 20 20'
-                  onClose={() => setAssignDropdown(false)}
-                  isSearch={true}
-                  style={{ maxWidth: 146, width: '100%' }}
-                />
-              )}
-            </div>
+            <DropDownWithTag
+              onClick={handleLableTag}
+              title={'Bug'}
+              iconName={'bug-icon'}
+              dropdownOpen={labelDropdown}
+              onClose={() => setLabelDropdown(false)}
+              items={lableItem}
+              onChange={() => {}}
+              isTag={true}
+              isSearch={true}
+              dropDownStyle={{ maxWidth: 146, width: '100%' }}
+              isCheckbox={true}
+              isActive={true}
+            />
+            <DropDownWithTag
+              onClick={handlePriorityTag}
+              title={'Priority'}
+              iconName={'priority-no-icon'}
+              dropdownOpen={priorityDropdown}
+              onClose={() => setPriorityDropdown(false)}
+              items={priorityItem}
+              onChange={() => {}}
+              isTag={true}
+              isActive={true}
+            />
+            <DropDownWithTag
+              onClick={handleAssignTag}
+              title={'Sanjay M.'}
+              dropdownOpen={assignDropdown}
+              onClose={() => setAssignDropdown(false)}
+              items={assignItem}
+              onChange={() => {}}
+              isTag={true}
+              isSearch={true}
+              dropDownStyle={{ maxWidth: 146, width: '100%' }}
+              isActive={true}
+              isName={true}
+              iconSize='20'
+              iconViewBox='0 0 20 20'
+              src='https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
+            />
           </StatusDiv>
         </TopDiv>
         <BottomDiv>
