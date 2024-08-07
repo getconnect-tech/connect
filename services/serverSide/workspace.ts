@@ -75,7 +75,21 @@ export const inviteUsers = async (
   return result;
 };
 
-export const addUserToWorkspace = async (workspaceId: string, userId: string) => {
-  const userWorkspaceRelation = await prisma.userWorkspaces.create({ data: { user_id: userId, workspace_id: workspaceId } });
+export const addUserToWorkspace = async (
+  workspaceId: string,
+  userId: string,
+) => {
+  const userWorkspaceRelation = await prisma.userWorkspaces.create({
+    data: { user_id: userId, workspace_id: workspaceId },
+  });
   return userWorkspaceRelation;
+};
+
+export const getUserWorkspaces = async (userId: string) => {
+  const workspaces = await prisma.userWorkspaces.findMany({
+    where: { user_id: userId },
+    include: { workspace: { include: { users: true } } },
+  });
+  const formattedWorkspaces = workspaces.map(({ workspace }) => workspace);
+  return formattedWorkspaces;
 };
