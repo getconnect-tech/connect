@@ -63,10 +63,6 @@ const ContextMenuSubTrigger = styled(ContextMenu.SubTrigger)`
     border-radius: 6px;
     color: ${colors.text};
   }
-  /* display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 8px; */
   position: relative;
   &:hover {
     background-color: ${colors.bg_white_hover};
@@ -76,18 +72,9 @@ const ContextMenuSubTrigger = styled(ContextMenu.SubTrigger)`
 `;
 
 const ContextMenuSubContent = styled(ContextMenu.SubContent)`
-  /* background-color: ${colors.bg_white};
-  box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 4px 8px 0px ${colors.box_shadow},
-    0px 8px 24px 0px ${colors.box_shadow}; */
   border-radius: 12px;
   padding: 4px;
   z-index: 2;
-  min-width: 180px;
-  width: 100%;
-  position: absolute;
-  top: 0;
   left: 100%;
   margin-left: 2px;
   display: flex;

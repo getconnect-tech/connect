@@ -28,6 +28,7 @@ const MainDiv = styled.div<Props>`
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
+  max-width: 180px;
 `;
 
 const ItemDiv = styled.div<Props>`
@@ -58,6 +59,13 @@ const SearchDiv = styled.div`
     border: none;
     padding: 8px 12px;
     ${Typography.body_md_regular};
+    max-width: 134px;
+  }
+  .snooze-input {
+    border: none;
+    padding: 8px 12px;
+    ${Typography.body_md_regular};
+    max-width: none;
   }
 `;
 
@@ -85,7 +93,7 @@ const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
 
   &:checked {
     background-color: ${colors.brand};
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(  checkmarkSVG, )}');
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG,)}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;

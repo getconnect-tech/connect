@@ -365,8 +365,8 @@ const getPath = (name: string, props: any) => {
           <g clipPath='url(#a)'>
             <mask
               id='b'
-              width={12}
-              height={12}
+              width={16}
+              height={16}
               x={0}
               y={0}
               maskUnits='userSpaceOnUse'
@@ -374,18 +374,18 @@ const getPath = (name: string, props: any) => {
                 maskType: 'luminance',
               }}
             >
-              <path fill='#fff' d='M12 0H0v12h12V0Z' />
+              <path fill='#fff' d='M16 0H0v16h16V0Z' />
             </mask>
             <g mask='url(#b)'>
               <path
-                fill='#313130'
-                d='M10.707 1.293a1 1 0 0 0-1.414 0L6 4.586 2.707 1.293a1 1 0 0 0-1.414 1.414L4.586 6 1.293 9.293a1 1 0 1 0 1.414 1.414L6 7.414l3.293 3.293a1 1 0 0 0 1.414-1.414L7.414 6l3.293-3.293a1 1 0 0 0 0-1.414Z'
+                fill='#7B7A79'
+                d='m9.617 8 6.049-6.049A1.141 1.141 0 1 0 14.05.335L8 6.386 1.952.335A1.142 1.142 0 1 0 .336 1.952l6.049 6.05-6.049 6.048a1.141 1.141 0 1 0 1.616 1.616l6.049-6.049 6.049 6.05a1.14 1.14 0 0 0 1.616 0 1.141 1.141 0 0 0 0-1.617L9.616 8Z'
               />
             </g>
           </g>
           <defs>
             <clipPath id='a'>
-              <path fill='#fff' d='M0 0h12v12H0z' />
+              <path fill='#fff' d='M0 0h16v16H0z' />
             </clipPath>
           </defs>
         </>

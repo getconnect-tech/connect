@@ -88,10 +88,6 @@ export default function DropDown({
     }));
   }, []);
 
-  // const handleMouseEnter = (name: string) => {
-  //   setHoveredItem(name);
-  // };
-
   const handleMouseLeave = () => {
     setHoveredItem(null);
   };
@@ -107,7 +103,7 @@ export default function DropDown({
             iconSize='12'
             iconViewBox='0 0 12 12'
             isIcon={true}
-            className='input'
+            className={isSnooze ? 'snooze-input' : 'input'}
           />
         </SearchDiv>
       )}

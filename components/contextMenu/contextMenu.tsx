@@ -192,7 +192,6 @@ export default function CustomContextMenu({ children }: Props) {
                     isSearch={true}
                     isContextMenu={true}
                     isCheckbox={true}
-                    style={{ maxWidth: 146 }}
                   />
                 </ContextMenuSubContent>
               </ContextMenu.Portal>
@@ -232,7 +231,6 @@ export default function CustomContextMenu({ children }: Props) {
                     iconViewBox='0 0 12 12'
                     onClose={() => {}}
                     isContextMenu={true}
-                    style={{ maxWidth: 126 }}
                   />
                 </ContextMenuSubContent>
               </ContextMenu.Portal>
