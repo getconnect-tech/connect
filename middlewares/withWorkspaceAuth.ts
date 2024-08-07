@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { User } from '@prisma/client';
 import { NextRequest } from 'next/server';
 import { isEmpty } from '@/helpers/common';
@@ -7,10 +8,16 @@ import { getWorkspaceById } from '@/services/serverSide/workspace';
 type Workspace = NonNullable<Awaited<ReturnType<typeof getWorkspaceById>>>;
 type AuthorizedRequest = NextRequest & { user: User; workspace: Workspace };
 // eslint-disable-next-line no-unused-vars
-type RequestHandler = (req: AuthorizedRequest) => Response | Promise<Response>;
+type RequestHandler = (
+  // eslint-disable-next-line no-unused-vars
+  req: AuthorizedRequest,
+  // eslint-disable-next-line no-unused-vars
+  params: Record<string, string>,
+) => Response | Promise<Response>;
 
 const withWorkspaceAuth =
-  (handler: RequestHandler) => async (req: NextRequest) => {
+  (handler: RequestHandler) =>
+  async (req: NextRequest, { params }: { params: Record<string, string> }) => {
     const session = await getSessionDetails();
 
     if (!session?.user.id) {
@@ -40,7 +47,7 @@ const withWorkspaceAuth =
     authorizedRequest.user = session.user;
     authorizedRequest.workspace = workspace;
 
-    return handler(authorizedRequest);
+    return handler(authorizedRequest, params);
   };
 
 export default withWorkspaceAuth;
