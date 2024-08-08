@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import React, { useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Description,
   Frame1,
@@ -37,6 +38,7 @@ export const useOutsideClick = (callback: () => void) => {
   return ref;
 };
 export default function ProfileDropdown({ title, onClose }: Props) {
+  const router = useRouter();
   const dropDownRef = useOutsideClick(onClose);
   return (
     <>
@@ -48,7 +50,11 @@ export default function ProfileDropdown({ title, onClose }: Props) {
           </OrganisationProfile>
         </Frame1>
         <Frame2>
-          <ProfileItemDiv>
+          <ProfileItemDiv
+            onClick={() => {
+              router.push('/setting');
+            }}
+          >
             <SVGIcon
               name='setting-icon'
               width='12px'
