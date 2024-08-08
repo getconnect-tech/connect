@@ -32,3 +32,11 @@ export const isValidEmail = (value: any) => {
   const isValid = myRegEx.test(value);
   return isValid ? true : false;
 };
+
+/**
+ * @desc Convert string to capitalize
+ * @param {*} value
+ */
+export function capitalizeString(value: string) {
+  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+}

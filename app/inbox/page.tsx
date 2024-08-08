@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import {
   BottomDiv,
@@ -15,10 +15,26 @@ import {
 import NavbarPage from '@/components/navbar';
 import InboxCard from '@/components/inboxCard/inboxCard';
 import CustomContextMenu from '@/components/contextMenu/contextMenu';
+import { getTicketList } from '@/services/clientSide/ticketServices';
+import { useStores } from '@/stores';
+import { isEmpty } from '@/helpers/common';
 
 function Inbox() {
   const [activeTab, setActiveTab] = useState('Open');
   const tabItem = ['Open', 'Snoozed', 'Done'];
+  const { workspaceStore, ticketStore } = useStores();
+  const { currentWorkspace } = workspaceStore;
+  const { ticketList } = ticketStore;
+
+  const loadData = useCallback(async () => {
+    if (!isEmpty(currentWorkspace?.id)) {
+      await getTicketList();
+    }
+  }, [currentWorkspace?.id]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   return (
     <Main>
@@ -41,37 +57,20 @@ function Inbox() {
           </HeaderDiv>
         </TopDiv>
         <BottomDiv>
-          <CustomContextMenu>
-            <div>
-              <InboxCard
-                name={'Bhavdip Patel from Google'}
-                title={'Regarding app subscription issues from appsumo'}
-                description={
-                  'Complete your registration to activate your teamcamp subscription Complete your registration to activate your teamcamp subscription...'
-                }
-                time={'3 min ago'}
-                showDotIcon={true}
-                src={
-                  'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
-                }
-              />
-            </div>
-          </CustomContextMenu>
-          <CustomContextMenu>
-            <div>
-              <InboxCard
-                name={'Bhavdip Patel from Google'}
-                title={'Regarding app subscription issues from appsumo'}
-                description={
-                  'Complete your registration to activate your teamcamp subscription Complete your registration to activate your teamcamp subscription...'
-                }
-                time={'10 min ago'}
-                src={
-                  'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
-                }
-              />
-            </div>
-          </CustomContextMenu>
+          {/* Render Ticker List */}
+          {ticketList?.map((ticket) => (
+            <CustomContextMenu>
+              <div>
+                {/* Use Inbox card component for show tickets */}
+                <InboxCard
+                  ticketDetail={ticket}
+                  description={'Complete your registration...'}
+                  showDotIcon={true}
+                  src={''}
+                />
+              </div>
+            </CustomContextMenu>
+          ))}
         </BottomDiv>
       </MainDiv>
     </Main>

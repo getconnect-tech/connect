@@ -3,6 +3,8 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Ticket } from '@prisma/client';
+import moment from 'moment';
 import Avatar from '../avtar/Avtar';
 import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
 import {
@@ -15,24 +17,22 @@ import {
   StatusMainDiv,
 } from './style';
 import { lableItem, priorityItem } from '@/helpers/raw';
+import { capitalizeString } from '@/helpers/common';
 
 interface Props {
-  name: string;
-  title: string;
+  ticketDetail: Ticket;
   description: string;
-  time: string;
   showDotIcon?: boolean;
   src: string;
 }
 
 export default function InboxCard({
-  name,
-  title,
+  ticketDetail,
   description,
-  time,
   showDotIcon = false,
   src,
 }: Props) {
+  const { title, created_at, sender_name, source } = ticketDetail;
   const router = useRouter();
   const [labelDropdown, setLabelDropdown] = useState(false);
   const [priorityDropdown, setPriorityDropdown] = useState(false);
@@ -108,9 +108,11 @@ export default function InboxCard({
     >
       {showDotIcon && <DotIcon />}
       <LeftDiv>
-        <Avatar size={28} imgSrc={src} name={''} isShowBorder={true} />
+        <Avatar size={28} imgSrc={src} name={sender_name} isShowBorder={true} />
         <RightDiv>
-          <NameText>{name}</NameText>
+          <NameText>
+            {sender_name} from {capitalizeString(source)}
+          </NameText>
           <DesTitle>{title}</DesTitle>
           <NameText className='description'>{description}</NameText>
           <StatusMainDiv>
@@ -174,7 +176,7 @@ export default function InboxCard({
           </StatusMainDiv>
         </RightDiv>
       </LeftDiv>
-      <NameText>{time}</NameText>
+      <NameText>{moment(created_at).fromNow()}</NameText>
     </CardDiv>
   );
 }
