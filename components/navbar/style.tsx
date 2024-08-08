@@ -28,6 +28,22 @@ const LogoDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px;
+    p {
+      ${Typography.body_md_medium}
+      color: ${colors.text};
+      margin-right: 8px;
+    }
+    &:hover {
+      cursor: pointer;
+      background-color: ${colors.bg_surface_hover};
+      border-radius: 30px;
+    }
+  }
   .logo-icon {
     cursor: pointer;
     &:hover {

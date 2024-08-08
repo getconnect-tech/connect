@@ -1,10 +1,12 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { observer } from 'mobx-react-lite';
 import { ItemMainDiv, Label, LogoDiv, MainDiv, TopDiv } from './style';
 import NavbarItem from './navbarItem';
 import ProfileDropdown from './profileDropdown';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { useStores } from '@/stores';
 
 const navbarMenu = {
   'Getting started': 0,
@@ -22,6 +24,7 @@ const navbarMenu = {
 function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
+  const { workspaceStore } = useStores();
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(
     navbarMenu.Inbox,
@@ -48,20 +51,20 @@ function Navbar() {
     }
   }, []);
 
-  console.log('activeIndex', activeIndex);
-
   return (
     <MainDiv>
       <TopDiv>
         <LogoDiv onClick={handleProfilePopup} className='tag-div'>
-          <SVGIcon
-            name='logo-icon'
-            width='101'
-            height='28'
-            viewBox='0 0 101 28'
-            fill='none'
-            className='logo-icon'
-          />
+          <div>
+            <SVGIcon
+              name='logo-icon'
+              width='20'
+              height='21'
+              viewBox='0 0 20 21'
+              fill='none'
+            />
+            <p>{workspaceStore?.currentWorkspace?.name || ''}</p>
+          </div>
           <SVGIcon
             name='sidebar-icon'
             width='28'
@@ -147,4 +150,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default observer(Navbar);
