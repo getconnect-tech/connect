@@ -1,20 +1,51 @@
 'use client';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { ItemMainDiv, Label, LogoDiv, MainDiv, TopDiv } from './style';
 import NavbarItem from './navbarItem';
 import ProfileDropdown from './profileDropdown';
 import SVGIcon from '@/assets/icons/SVGIcon';
 
+const navbarMenu = {
+  'Getting started': 0,
+  Inbox: 1,
+  Unassigned: 2,
+  All: 3,
+  Contacts: 4,
+  Insights: 5,
+  Bug: 6,
+  Question: 7,
+  Feedback: 8,
+  Support: 9,
+};
+
 function Navbar() {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const handleClick = useCallback((index: number) => {
-    setActiveIndex(index);
-  }, []);
+  const [activeIndex, setActiveIndex] = useState<number | null>(
+    navbarMenu.Inbox,
+  );
 
   const closeDropdown = () => {
     setIsOpen(false);
   };
+
+  useEffect(() => {
+    if (pathname === '/') setActiveIndex(navbarMenu.Inbox);
+    else if (pathname === '/contact') setActiveIndex(navbarMenu.Contacts);
+  }, []);
+
+  const handleClick = useCallback((index: number, path?: string) => {
+    setActiveIndex(index); // Update active index
+    if (path) {
+      // Set the redirect path
+      router.push(path);
+    }
+  }, []);
+
+  console.log('activeIndex', activeIndex);
+
   return (
     <MainDiv>
       <TopDiv>
@@ -51,7 +82,7 @@ function Navbar() {
             count={4}
             icon='inbox-icon'
             isActive={activeIndex === 1}
-            onClickItem={() => handleClick(1)}
+            onClickItem={() => handleClick(1, '/')}
           />
           <NavbarItem
             title='Unassigned'
@@ -71,7 +102,7 @@ function Navbar() {
             title='Contacts'
             icon='contact-icon'
             isActive={activeIndex === 4}
-            onClickItem={() => handleClick(4)}
+            onClickItem={() => handleClick(4, '/contact')}
           />
           <NavbarItem
             title='Insights'

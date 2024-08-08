@@ -29,6 +29,9 @@ import {
   verifyAuthCode,
 } from '@/services/clientSide/authService';
 import { useStores } from '@/stores';
+import { appInit } from '@/helpers/appInitHelper';
+import { APP_INIT_RESPONSE_TYPE } from '@/global/constants';
+import { isEmpty } from '@/helpers/common';
 const INITIAL_TIMER = 5 * 60;
 
 function Signup() {
@@ -43,11 +46,34 @@ function Signup() {
 
   const { status } = useSession();
 
+  // Check for session status if it's authenticated will check appInit
+  const checkUserSession = useCallback(async () => {
+    try {
+      userStore.setLoading(true);
+      if (status === 'authenticated') {
+        const result = await appInit();
+        if (
+          result.type === APP_INIT_RESPONSE_TYPE.REDIRECT &&
+          !isEmpty(result.path)
+        )
+          router.push(result.path);
+      }
+    } catch (e) {
+      console.log('Error : ', e);
+    } finally {
+      userStore.setLoading(false);
+    }
+  }, [router]);
+
   useEffect(() => {
+    //Check session status
+    checkUserSession();
+    // Prefetch navigation routes
     router.prefetch('/onboarding');
     router.prefetch('/');
   }, [router]);
 
+  //Start couter for resend code enable
   const startCounter = () => {
     const counterInterval = setInterval(() => {
       setCounter((prev) => {
@@ -60,6 +86,7 @@ function Signup() {
     }, 1000);
   };
 
+  // First step for signup process - add name and email of user
   const handleContinue = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
@@ -72,17 +99,32 @@ function Signup() {
     [userEmail, userName],
   );
 
+  // Second step for signup process - Verify code send in email
   const handleSignUpClick = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
-      const result = await verifyAuthCode(userEmail, code);
-      if (result) {
-        router.push('/onboarding');
+      const response = await verifyAuthCode(userEmail, code);
+      if (response) {
+        // Check App Init function and navigate to appropriate route
+        try {
+          userStore.setLoading(true);
+          const result = await appInit();
+          if (
+            result.type === APP_INIT_RESPONSE_TYPE.REDIRECT &&
+            !isEmpty(result.path)
+          )
+            router.push(result.path);
+        } catch (e) {
+          console.log('Error : ', e);
+        } finally {
+          userStore.setLoading(false);
+        }
       }
     },
     [code, router, userEmail],
   );
 
+  // Resend code in user's email
   const onResendCode = useCallback(async () => {
     if (counter > 0) return;
     const result = await resendVerificationCode(userEmail);
@@ -92,6 +134,7 @@ function Signup() {
     }
   }, [counter, userEmail]);
 
+  // Use memo function for counter
   const Counter = useMemo(() => {
     const minutes = `${Math.floor(counter / 60)}`.padStart(2, '0');
     const seconds = `${counter % 60}`.padStart(2, '0');
@@ -103,13 +146,9 @@ function Signup() {
     );
   }, [counter, onResendCode]);
 
+  // Show loading state when session state is loading
   if (status === 'loading') {
     // TODO: return loading component
-    return <></>;
-  }
-
-  if (status === 'authenticated') {
-    router.replace('/');
     return <></>;
   }
 
@@ -129,6 +168,7 @@ function Signup() {
             </LoginText>
           </Heading>
           {!showBottomSection ? (
+            // Second Step for signup process
             <>
               <Form onSubmit={handleContinue}>
                 <div className='input-div'>
@@ -173,6 +213,7 @@ function Signup() {
               </Bottom>
             </>
           ) : (
+            // Second Step for signup process
             <CodeSection onSubmit={handleSignUpClick}>
               <p>
                 We have sent a temporary code to <span>{userEmail}</span>
