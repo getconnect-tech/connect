@@ -22,10 +22,12 @@ function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(
+    navbarMenu.Inbox,
+  );
 
   useEffect(() => {
-    if (pathname === '/inbox') setActiveIndex(navbarMenu.Inbox);
+    if (pathname === '/') setActiveIndex(navbarMenu.Inbox);
     else if (pathname === '/contact') setActiveIndex(navbarMenu.Contacts);
   }, []);
 
@@ -72,7 +74,7 @@ function Navbar() {
             count={4}
             icon='inbox-icon'
             isActive={activeIndex === 1}
-            onClickItem={() => handleClick(1, '/inbox')}
+            onClickItem={() => handleClick(1, '/')}
           />
           <NavbarItem
             title='Unassigned'

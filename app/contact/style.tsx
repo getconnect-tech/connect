@@ -17,6 +17,7 @@ const TopDiv = styled.div`
   top: 0;
   background-color: ${colors.bg_surface};
   z-index: 999;
+  margin-bottom: 12px;
 `;
 
 const BottomDiv = styled.div`
@@ -76,7 +77,7 @@ const ListMainDiv = styled.div`
     0px 2px 4px 0px ${colors.box_shadow_2};
   border-radius: 12px;
   max-width: 662px;
-  margin: 0 auto;
+  margin: 4px auto 0;
 `;
 
 export {
