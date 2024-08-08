@@ -68,6 +68,12 @@ const ContextMenuSubTrigger = styled(ContextMenu.SubTrigger)`
     background-color: ${colors.bg_white_hover};
     border-radius: 6px;
     color: ${colors.text};
+    .svg-icon {
+      fill: ${colors.icon_hover};
+    }
+  }
+  .svg-icon {
+    fill: ${colors.icon};
   }
 `;
 

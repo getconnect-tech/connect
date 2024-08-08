@@ -2,19 +2,23 @@
 import React, { useCallback, useState } from 'react';
 import { ItemMainDiv, Label, LogoDiv, MainDiv, TopDiv } from './style';
 import NavbarItem from './navbarItem';
+import ProfileDropdown from './profileDropdown';
 import SVGIcon from '@/assets/icons/SVGIcon';
 
 function Navbar() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
+  const [isOpen, setIsOpen] = useState(false);
   const handleClick = useCallback((index: number) => {
     setActiveIndex(index);
   }, []);
 
+  const closeDropdown = () => {
+    setIsOpen(false);
+  };
   return (
     <MainDiv>
       <TopDiv>
-        <LogoDiv>
+        <LogoDiv onClick={() => setIsOpen((prev) => !prev)} className='tag-div'>
           <SVGIcon
             name='logo-icon'
             width='101'
@@ -32,6 +36,9 @@ function Navbar() {
             className='logo-icon'
           />
         </LogoDiv>
+        {isOpen && (
+          <ProfileDropdown title='My Profile' onClose={closeDropdown} />
+        )}
         <NavbarItem
           title='Getting started'
           icon='started-icon'

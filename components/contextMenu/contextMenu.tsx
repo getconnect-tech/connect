@@ -84,6 +84,7 @@ export default function CustomContextMenu({ children }: Props) {
                     width='12'
                     height='12'
                     viewBox='0 0 12 12'
+                    className='svg-icon'
                   />
                   Assigned to
                 </div>
@@ -124,6 +125,7 @@ export default function CustomContextMenu({ children }: Props) {
                     width='12'
                     height='12'
                     viewBox='0 0 12 12'
+                    className='svg-icon'
                   />
                   Snooze
                 </div>
@@ -166,6 +168,7 @@ export default function CustomContextMenu({ children }: Props) {
                     width='12'
                     height='12'
                     viewBox='0 0 12 12'
+                    className='svg-icon'
                   />
                   Labels
                 </div>
@@ -207,6 +210,7 @@ export default function CustomContextMenu({ children }: Props) {
                     width='12'
                     height='12'
                     viewBox='0 0 12 12'
+                    className='svg-icon'
                   />
                   Priority
                 </div>
