@@ -5,12 +5,10 @@ export const postMessage = async ({
   messageContent,
   messageType,
   referenceId,
-  subject,
   ticketId,
 }: {
   messageContent: string;
   referenceId: string;
-  subject: string;
   messageType: MessageType;
   ticketId: string;
 }) => {
@@ -18,7 +16,6 @@ export const postMessage = async ({
     data: {
       content: messageContent,
       reference_id: referenceId,
-      subject,
       type: messageType,
       ticket_id: ticketId,
     },
