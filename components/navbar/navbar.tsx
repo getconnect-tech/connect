@@ -27,9 +27,13 @@ function Navbar() {
     navbarMenu.Inbox,
   );
 
-  const closeDropdown = () => {
+  const closeDropdown = useCallback(() => {
     setIsOpen(false);
-  };
+  }, []);
+
+  const handleProfilePopup = useCallback(() => {
+    setIsOpen((prev) => !prev);
+  }, []);
 
   useEffect(() => {
     if (pathname === '/') setActiveIndex(navbarMenu.Inbox);
@@ -49,7 +53,7 @@ function Navbar() {
   return (
     <MainDiv>
       <TopDiv>
-        <LogoDiv onClick={() => setIsOpen((prev) => !prev)} className='tag-div'>
+        <LogoDiv onClick={handleProfilePopup} className='tag-div'>
           <SVGIcon
             name='logo-icon'
             width='101'
