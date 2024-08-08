@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { ItemMainDiv, Label, LogoDiv, MainDiv, TopDiv } from './style';
 import NavbarItem from './navbarItem';
+import ProfileDropdown from './profileDropdown';
 import SVGIcon from '@/assets/icons/SVGIcon';
 
 const navbarMenu = {
@@ -21,10 +22,18 @@ const navbarMenu = {
 function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
-
+  const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(
     navbarMenu.Inbox,
   );
+
+  const closeDropdown = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
+  const handleProfilePopup = useCallback(() => {
+    setIsOpen((prev) => !prev);
+  }, []);
 
   useEffect(() => {
     if (pathname === '/') setActiveIndex(navbarMenu.Inbox);
@@ -44,7 +53,7 @@ function Navbar() {
   return (
     <MainDiv>
       <TopDiv>
-        <LogoDiv>
+        <LogoDiv onClick={handleProfilePopup} className='tag-div'>
           <SVGIcon
             name='logo-icon'
             width='101'
@@ -62,6 +71,9 @@ function Navbar() {
             className='logo-icon'
           />
         </LogoDiv>
+        {isOpen && (
+          <ProfileDropdown title='My Profile' onClose={closeDropdown} />
+        )}
         <NavbarItem
           title='Getting started'
           icon='started-icon'
