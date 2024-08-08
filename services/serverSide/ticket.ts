@@ -4,6 +4,7 @@ import { prisma } from '@/prisma/prisma';
 export const getWorkspaceTickets = async (workspaceId: string) => {
   const tickets = await prisma.ticket.findMany({
     where: { workspace_id: workspaceId },
+    orderBy: { created_at: 'desc' },
   });
   return tickets;
 };
