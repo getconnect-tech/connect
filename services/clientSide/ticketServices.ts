@@ -12,6 +12,43 @@ export const getTicketList = async () => {
     ticketStore.setLoading(true);
     const response = await axios.get(`${NEXT_PUBLIC_API_URL}/tickets`);
     const { data } = response;
+
+    if (!data || data?.length === 0) {
+      const mockData = [
+        {
+          id: '746a45db-4ede-4ab6-959c-19d7b7cd9f47',
+          workspace_id: '3e4b0b59-00af-4683-8158-b139925d38ff',
+          title: 'Test message from gmail',
+          contact_id: null,
+          assigned_to: null,
+          created_at: '2024-08-08T10:03:27.341Z',
+          updated_at: '2024-08-08T10:03:27.341Z',
+          priority: 'NONE',
+          source: 'MAIL',
+          mail_id:
+            '<CAFYk3OX9wLATj+yVGmB_oSEqmNzgZEmqUEv6cq6ps65nghesxw@mail.gmail.com>',
+          sender_name: 'Vatsal Ghoghari',
+          sender_mail: 'vghoghari82@gmail.com',
+        },
+        {
+          id: '96882ab7-4b22-48cc-88a0-dd23d99ad9d6',
+          workspace_id: '3e4b0b59-00af-4683-8158-b139925d38ff',
+          title: 'I found bugin ticker generate message',
+          contact_id: null,
+          assigned_to: null,
+          created_at: '2024-08-08T10:32:03.065Z',
+          updated_at: '2024-08-08T10:32:03.065Z',
+          priority: 'NONE',
+          source: 'MAIL',
+          mail_id:
+            '<TY0PR06MB5625D47D4955E92645EB99E5C4B92@TY0PR06MB5625.apcprd06.prod.outlook.com>',
+          sender_name: 'Aniket Ramani',
+          sender_mail: 'aniket@pixer.digital',
+        },
+      ];
+      ticketStore.setTicketList(data);
+      return mockData;
+    }
     // set ticket list in store
     ticketStore.setTicketList(data);
     return data;
