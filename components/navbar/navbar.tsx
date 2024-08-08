@@ -15,14 +15,16 @@ function Navbar() {
     <MainDiv>
       <TopDiv>
         <LogoDiv>
-          <SVGIcon
-            name='logo-icon'
-            width='101'
-            height='28'
-            viewBox='0 0 101 28'
-            fill='none'
-            className='logo-icon'
-          />
+          <div>
+            <SVGIcon
+              name='logo-icon'
+              width='20'
+              height='21'
+              viewBox='0 0 20 21'
+              fill='none'
+            />
+            <p>Connect</p>
+          </div>
           <SVGIcon
             name='sidebar-icon'
             width='28'
