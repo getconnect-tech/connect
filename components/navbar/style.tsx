@@ -98,7 +98,74 @@ const LeftDiv = styled.div`
   align-items: center;
   gap: 8px;
 `;
-
+const ProfileDrop = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 52px;
+  max-width: 191px;
+  width: 100%;
+  border-radius: 12px;
+  background-color: ${colors.bg_white};
+  box-shadow:
+    0px 0px 0px 0.5px ${colors.box_shadow},
+    0px 4px 8px 0px ${colors.box_shadow},
+    0px 8px 24px 0px ${colors.box_shadow};
+`;
+const Frame1 = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  border-bottom: 0.5px solid ${colors.border};
+`;
+const Frame2 = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px;
+`;
+const OrganisationProfile = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 8px;
+  p {
+    ${Typography.body_md_medium};
+    color: ${colors.text_text_secondary};
+  }
+  &:hover {
+    cursor: pointer;
+    background-color: ${colors.bg_white_hover};
+    border-radius: 6px;
+    p {
+      color: ${colors.text};
+    }
+  }
+`;
+const Description = styled.div`
+  ${Typography.body_sm_regular};
+  color: ${colors.text_text_secondary};
+`;
+const ProfileItemDiv = styled.div`
+  display: flex;
+  padding: 4px 8px;
+  gap: 8px;
+  align-items: center;
+  fill: ${colors.icon};
+  p {
+    ${Typography.body_md_regular}
+    color: ${colors.text_text_secondary};
+  }
+  &:hover {
+    fill: ${colors.icon_hover};
+    cursor: pointer;
+    background-color: ${colors.bg_white_hover};
+    border-radius: 6px;
+    p {
+      color: ${colors.text};
+    }
+  }
+`;
 export {
   MainDiv,
   LogoDiv,
@@ -109,4 +176,10 @@ export {
   TopDiv,
   CountText,
   LeftDiv,
+  ProfileDrop,
+  Frame1,
+  Frame2,
+  OrganisationProfile,
+  Description,
+  ProfileItemDiv,
 };
