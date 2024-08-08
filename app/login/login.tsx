@@ -29,6 +29,9 @@ import {
   verifyAuthCode,
   verifyUserEmail,
 } from '@/services/clientSide/authService';
+import { appInit } from '@/helpers/appInitHelper';
+import { APP_INIT_RESPONSE_TYPE } from '@/global/constants';
+import { isEmpty } from '@/helpers/common';
 
 const INITIAL_TIMER = 5 * 60;
 
@@ -42,10 +45,33 @@ function Login() {
   const { loading } = userStore;
   const { status } = useSession();
 
+  // Check for session status if it's authenticated will check appInit
+  const checkUserSession = useCallback(async () => {
+    try {
+      userStore.setLoading(true);
+      if (status === 'authenticated') {
+        const result = await appInit();
+        if (
+          result.type === APP_INIT_RESPONSE_TYPE.REDIRECT &&
+          !isEmpty(result.path)
+        )
+          router.push(result.path);
+      }
+    } catch (e) {
+      console.log('Error : ', e);
+    } finally {
+      userStore.setLoading(false);
+    }
+  }, [router]);
+
   useEffect(() => {
+    //Check session status
+    checkUserSession();
+    // Prefetch navigation routes
     router.prefetch('/');
   }, [router]);
 
+  //Start couter for resend code enable
   const startCounter = () => {
     const counterInterval = setInterval(() => {
       setCounter((prev) => {
@@ -58,6 +84,7 @@ function Login() {
     }, 1000);
   };
 
+  // Login first step - validate user email
   const handleContinueClick = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
@@ -70,14 +97,29 @@ function Login() {
     [email],
   );
 
+  //Login second step - verify code
   const onVerifyAuthCode = async (e: SyntheticEvent) => {
     e.preventDefault();
-    const result = await verifyAuthCode(email, code);
-    if (result) {
-      router.push('/');
+    const response = await verifyAuthCode(email, code);
+    if (response) {
+      // Check App Init function and navigate to appropriate route
+      try {
+        userStore.setLoading(true);
+        const result = await appInit();
+        if (
+          result.type === APP_INIT_RESPONSE_TYPE.REDIRECT &&
+          !isEmpty(result.path)
+        )
+          router.push(result.path);
+      } catch (e) {
+        console.log('Error : ', e);
+      } finally {
+        userStore.setLoading(false);
+      }
     }
   };
 
+  // Resend code
   const onResendCode = useCallback(async () => {
     if (counter > 0) return;
     const result = await resendVerificationCode(email);
@@ -87,6 +129,7 @@ function Login() {
     }
   }, [counter, email]);
 
+  // Use memo function for counter show
   const Counter = useMemo(() => {
     const minutes = `${Math.floor(counter / 60)}`.padStart(2, '0');
     const seconds = `${counter % 60}`.padStart(2, '0');
@@ -100,11 +143,6 @@ function Login() {
 
   if (status === 'loading') {
     // TODO: return loading component
-    return <></>;
-  }
-
-  if (status === 'authenticated') {
-    router.replace('/');
     return <></>;
   }
 
@@ -124,6 +162,7 @@ function Login() {
             </LoginText>
           </Heading>
           {!showBottomSection ? (
+            // Login first step
             <>
               <Form onSubmit={handleContinueClick}>
                 <Input
@@ -150,6 +189,7 @@ function Login() {
               </Bottom>
             </>
           ) : (
+            // Login second step
             <CodeSection onSubmit={onVerifyAuthCode}>
               <p>
                 We have sent a temporary code to <span>{email}</span>

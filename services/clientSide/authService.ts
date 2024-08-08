@@ -5,6 +5,10 @@ import { isValidEmail } from '@/helpers/common';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { userStore } from '@/stores/userStore';
 
+/**
+ * @desc Verify user email
+ * @param {*} email
+ */
 export const verifyUserEmail = async (email: string) => {
   try {
     userStore.setLoading(true);
@@ -27,6 +31,10 @@ export const verifyUserEmail = async (email: string) => {
   }
 };
 
+/**
+ * @desc Gegister user details
+ * @param {*} email name
+ */
 export const registerUser = async (email: string, name: string) => {
   try {
     userStore.setLoading(true);
@@ -49,6 +57,10 @@ export const registerUser = async (email: string, name: string) => {
   }
 };
 
+/**
+ * @desc Verify authentication code
+ * @param {*} email code
+ */
 export const verifyAuthCode = async (email: string, code: string) => {
   try {
     userStore.setLoading(true);
@@ -63,6 +75,10 @@ export const verifyAuthCode = async (email: string, code: string) => {
   }
 };
 
+/**
+ * @desc Resend verification code
+ * @param {*} email
+ */
 export const resendVerificationCode = async (email: string) => {
   try {
     userStore.setLoading(true);
