@@ -25,6 +25,8 @@ interface Props {
   iconViewBox?: string;
   src?: string;
   selectedValue?: DropDownItem;
+  className?: string;
+  onMouseEnter?: any;
 }
 
 export default function DropDownWithTag({
@@ -46,14 +48,19 @@ export default function DropDownWithTag({
   iconViewBox = '0 0 12 12',
   src,
   selectedValue,
+  className,
+  onMouseEnter,
 }: Props) {
   return (
-    <div>
+    <div onMouseEnter={onMouseEnter}>
       {/* apply className while open drop down */}
       {isTag ? (
         <Tag
           isActive={isActive}
-          onClick={() => onClick({ name: '', value: '' })}
+          onClick={(e: { stopPropagation: () => void }) => {
+            e.stopPropagation(); // Stop event propagation
+            onClick({ name: title, value: '' }); // Handle the click action
+          }}
           isName={isName}
           iconName={iconName}
           title={selectedValue ? selectedValue.name : title}
@@ -61,7 +68,10 @@ export default function DropDownWithTag({
         />
       ) : (
         <DropBox
-          onClick={() => onClick({ name: '', value: '' })}
+          onClick={(e: { stopPropagation: () => void }) => {
+            e.stopPropagation(); // Stop event propagation
+            onClick({ name: title, value: '' }); // Handle the click action
+          }}
           className='tag-div'
           style={style}
         >
@@ -84,6 +94,7 @@ export default function DropDownWithTag({
           style={dropDownStyle}
           isSearch={isSearch}
           isCheckbox={isCheckbox}
+          className={className}
         />
       )}
     </div>
