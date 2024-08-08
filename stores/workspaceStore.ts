@@ -1,5 +1,6 @@
-import { Workspace } from "@prisma/client";
-import { action, makeObservable, observable } from "mobx";
+import { Workspace } from '@prisma/client';
+import axios from 'axios';
+import { action, makeObservable, observable } from 'mobx';
 
 class WorkspaceStore {
   loading = false;
@@ -23,6 +24,7 @@ class WorkspaceStore {
   }
 
   setCurrentWorkspace(value: Workspace) {
+    axios.defaults.headers.common['workspace_id'] = value?.id;
     this.currentWorkspace = value;
   }
 }
