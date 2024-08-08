@@ -58,9 +58,9 @@ model Message {
   content      String
   created_at   DateTime    @default(now())
   ticket_id    String
-  author_id    String
+  author_id    String?
   type         MessageType
-  author       User        @relation(fields: [author_id], references: [id])
+  author       User?       @relation(fields: [author_id], references: [id])
   ticket       Ticket      @relation(fields: [ticket_id], references: [id])
 }
 
