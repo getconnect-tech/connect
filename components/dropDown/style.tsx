@@ -21,7 +21,7 @@ const MainDiv = styled.div<Props>`
     0px 8px 24px 0px ${colors.box_shadow};
   position: ${({ isContextMenu }) => (isContextMenu ? 'relative' : 'absolute')};
   margin-top: 4px;
-  z-index: 1;
+  z-index: 2;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
@@ -93,7 +93,7 @@ const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
 
   &:checked {
     background-color: ${colors.brand};
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG,)}');
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;

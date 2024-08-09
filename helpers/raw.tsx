@@ -20,7 +20,7 @@ export const priorityItem = [
   { name: 'Medium', icon: 'priority-Medium-icon' },
   { name: 'Low', icon: 'priority-low-icon' },
 ];
-export const lableItem = [
+export const labelItem = [
   { name: 'Bug', icon: 'bug-icon' },
   { name: 'Question', icon: 'question-icon' },
   { name: 'Feedback', icon: 'feedback-icon' },

@@ -11,7 +11,7 @@ import {
   ContextMenuSubTrigger,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { lableItem, priorityItem } from '@/helpers/raw';
+import { labelItem, priorityItem } from '@/helpers/raw';
 
 interface Props {
   children: any;
@@ -188,7 +188,7 @@ export default function CustomContextMenu({ children }: Props) {
                   }
                 >
                   <DropDown
-                    items={lableItem}
+                    items={labelItem}
                     iconSize='12'
                     iconViewBox='0 0 12 12'
                     onClose={() => {}}

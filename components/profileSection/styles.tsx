@@ -5,6 +5,7 @@ import { Typography } from '@/styles/typography';
 const MainDiv = styled.div`
   max-width: 315px;
   width: 100%;
+  overflow: auto;
 `;
 
 const ProfileDiv = styled.div`

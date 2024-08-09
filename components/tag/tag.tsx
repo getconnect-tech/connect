@@ -5,7 +5,8 @@ import SVGIcon from '@/assets/icons/SVGIcon';
 
 interface Props {
   isActive: boolean;
-  onClick: () => void;
+  // eslint-disable-next-line no-unused-vars
+  onClick: (e: any) => void;
   isName: boolean;
   src?: string;
   iconName: string;
