@@ -26,6 +26,10 @@ class UserStore {
   setUserDetails(value: User) {
     this.user = value;
   }
+
+  clearUserDetails() {
+    this.user = null;
+  }
 }
 
 export const userStore = new UserStore();
