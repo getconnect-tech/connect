@@ -1,18 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { BottomBlock, Item, MainDiv, NavItems, Title, TopBlock } from './style';
 
 export default function SettingNavBar() {
   const router = useRouter();
-  const [activeItem, setActiveItem] = useState('');
   const pathname = usePathname();
+  const defaultPath = '/setting/myprofile';
+  const [activeItem, setActiveItem] = useState(pathname || defaultPath);
+
   useEffect(() => {
-    setActiveItem(pathname);
+    setActiveItem(pathname || defaultPath);
   }, [pathname]);
-  const handleItemClick = (path: string) => {
-    setActiveItem(path);
-    router.push(path);
-  };
+
+  const handleItemClick = useCallback(
+    (path: string) => {
+      setActiveItem(path);
+      router.push(path);
+    },
+    [router],
+  );
+
   return (
     <>
       <>
@@ -21,8 +28,8 @@ export default function SettingNavBar() {
             <Title> You</Title>
             <NavItems>
               <Item
-                onClick={() => handleItemClick('/setting/myprofile')}
-                active={activeItem === '/setting/myprofile'}
+                onClick={() => handleItemClick(defaultPath)}
+                active={activeItem === defaultPath}
               >
                 My Profile
               </Item>

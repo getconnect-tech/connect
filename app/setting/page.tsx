@@ -1,10 +1,20 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { Div, IconDiv, MainDiv } from './style';
 import SettingNavBar from '@/components/settingNavBar/settingNavBar';
 import SVGIcon from '@/assets/icons/SVGIcon';
 
 export default function Setting() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const defaultPath = '/setting/myprofile';
+
+  useEffect(() => {
+    if (pathname === '/setting') {
+      router.push(defaultPath);
+    }
+  }, [pathname, router]);
   return (
     <MainDiv>
       <IconDiv>
