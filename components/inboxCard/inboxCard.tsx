@@ -42,9 +42,6 @@ export default function InboxCard({
 }: Props) {
   const { title, created_at, sender_name, source } = ticketDetail;
   const router = useRouter();
-  const [labelDropdown, setLabelDropdown] = useState(false);
-  const [priorityDropdown, setPriorityDropdown] = useState(false);
-  const [assignDropdown, setAssignDropdown] = useState(false);
   const { ticketStore } = useStores();
 
   const handleDropdownClick = (dropdown: string) => {
