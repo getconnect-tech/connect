@@ -1,0 +1,26 @@
+enum TeamSize {
+    SMALL
+    MEDIUM
+    LARGE
+    ENTERPRISE
+}
+
+enum PriorityLevels {
+    NONE
+    LOW
+    MEDIUM
+    HIGH
+    URGENT
+}
+
+enum MessageType {
+    REGULAR
+    EMAIL
+    PRIORITY
+    ASSIGN
+}
+
+enum TicketSource {
+    MAIL
+    WEB
+}
