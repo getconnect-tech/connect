@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 /* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
@@ -25,6 +26,9 @@ interface Props {
   description: string;
   showDotIcon?: boolean;
   src: string;
+  currentOpenDropdown: string | null;
+  setCurrentOpenDropdown: (dropdown: string | null) => void;
+  dropdownIdentifier: string;
 }
 
 export default function InboxCard({
@@ -32,6 +36,9 @@ export default function InboxCard({
   description,
   showDotIcon = false,
   src,
+  currentOpenDropdown,
+  setCurrentOpenDropdown,
+  dropdownIdentifier,
 }: Props) {
   const { title, created_at, sender_name, source } = ticketDetail;
   const router = useRouter();
@@ -40,22 +47,11 @@ export default function InboxCard({
   const [assignDropdown, setAssignDropdown] = useState(false);
   const { ticketStore } = useStores();
 
-  const handlePriorityTag = () => {
-    setPriorityDropdown((prev) => !prev);
-    setAssignDropdown(false);
-    setLabelDropdown(false);
-  };
-
-  const handleLabelTag = () => {
-    setLabelDropdown((prev) => !prev);
-    setAssignDropdown(false);
-    setPriorityDropdown(false);
-  };
-
-  const handleAssignTag = () => {
-    setAssignDropdown((prev) => !prev);
-    setPriorityDropdown(false);
-    setLabelDropdown(false);
+  const handleDropdownClick = (dropdown: string) => {
+    const identifier = `${dropdownIdentifier}-${dropdown}`;
+    setCurrentOpenDropdown(
+      currentOpenDropdown === identifier ? null : identifier,
+    );
   };
 
   const [submenuPosition, setSubmenuPosition] = useState<
@@ -119,11 +115,13 @@ export default function InboxCard({
           <NameText className='description'>{description}</NameText>
           <StatusMainDiv>
             <DropDownWithTag
-              onClick={handleLabelTag}
+              onClick={() => handleDropdownClick('label')}
               title={'Bug'}
               iconName={'bug-icon'}
-              dropdownOpen={labelDropdown}
-              onClose={() => setLabelDropdown(false)}
+              dropdownOpen={
+                currentOpenDropdown === `${dropdownIdentifier}-label`
+              }
+              onClose={() => setCurrentOpenDropdown(null)}
               items={labelItem}
               onChange={() => {}}
               isTag={true}
@@ -138,11 +136,13 @@ export default function InboxCard({
               onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
             />
             <DropDownWithTag
-              onClick={handlePriorityTag}
+              onClick={() => handleDropdownClick('priority')}
               title={'Priority'}
               iconName={'priority-no-icon'}
-              dropdownOpen={priorityDropdown}
-              onClose={() => setPriorityDropdown(false)}
+              dropdownOpen={
+                currentOpenDropdown === `${dropdownIdentifier}-priority`
+              }
+              onClose={() => setCurrentOpenDropdown(null)}
               items={priorityItem}
               onChange={() => {}}
               isTag={true}
@@ -155,10 +155,12 @@ export default function InboxCard({
               onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
             />
             <DropDownWithTag
-              onClick={handleAssignTag}
+              onClick={() => handleDropdownClick('assign')}
               title={'Sanjay M.'}
-              dropdownOpen={assignDropdown}
-              onClose={() => setAssignDropdown(false)}
+              dropdownOpen={
+                currentOpenDropdown === `${dropdownIdentifier}-assign`
+              }
+              onClose={() => setCurrentOpenDropdown(null)}
               items={assignItem}
               onChange={() => {}}
               isTag={true}

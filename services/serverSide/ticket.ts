@@ -1,5 +1,6 @@
-import { TicketSource } from '@prisma/client';
+import { PriorityLevels, TicketSource } from '@prisma/client';
 import { prisma } from '@/prisma/prisma';
+import { removeNullUndefined } from '@/helpers/common';
 
 export const getWorkspaceTickets = async (workspaceId: string) => {
   const tickets = await prisma.ticket.findMany({
@@ -36,6 +37,28 @@ export const createTicket = async ({
       sender_name: senderName,
       sender_mail: senderEmail,
     },
+  });
+
+  return newTicket;
+};
+
+export const updateTicket = async (
+  ticketId: string,
+  ticketUpdates: {
+    title?: string;
+    priority?: PriorityLevels;
+    source?: TicketSource;
+    contanctId?: string;
+    assignedTo?: string;
+    senderName?: string;
+    senderEmail?: string;
+  },
+) => {
+  removeNullUndefined(ticketUpdates);
+
+  const newTicket = await prisma.ticket.update({
+    where: { id: ticketId },
+    data: ticketUpdates,
   });
 
   return newTicket;

@@ -29,6 +29,8 @@ const MainDiv = styled.div<Props>`
   -o-user-select: none;
   user-select: none;
   max-width: 180px;
+  max-height: 185px;
+  overflow: auto;
 `;
 
 const ItemDiv = styled.div<Props>`
@@ -55,6 +57,9 @@ const ItemDiv = styled.div<Props>`
 const SearchDiv = styled.div`
   padding: 0 0 0 12px;
   border-bottom: 1px solid ${colors.border};
+  position: sticky;
+  top: 0;
+  background: ${colors.bg_white};
   .input {
     border: none;
     padding: 8px 12px;
@@ -93,7 +98,9 @@ const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
 
   &:checked {
     background-color: ${colors.brand};
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(
+      checkmarkSVG,
+    )}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;

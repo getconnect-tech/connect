@@ -22,6 +22,9 @@ import { isEmpty } from '@/helpers/common';
 function Inbox() {
   const [activeTab, setActiveTab] = useState('Open');
   const tabItem = ['Open', 'Snoozed', 'Done'];
+  const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
+    null,
+  );
   const { workspaceStore, ticketStore } = useStores();
   const { currentWorkspace } = workspaceStore;
   const { ticketList } = ticketStore;
@@ -67,6 +70,9 @@ function Inbox() {
                   description={'Complete your registration...'}
                   showDotIcon={true}
                   src={''}
+                  currentOpenDropdown={currentOpenDropdown}
+                  setCurrentOpenDropdown={setCurrentOpenDropdown}
+                  dropdownIdentifier={`card-${ticket.id}`}
                 />
               </div>
             </CustomContextMenu>
