@@ -4,6 +4,7 @@ import { InboundEmailPayload } from '@/utils/dataTypes';
 import { handleApiError } from '@/helpers/errorHandler';
 import { createTicket, getTicketByMailId } from '@/services/serverSide/ticket';
 import { postMessage } from '@/services/serverSide/message';
+import { WORKSPACE_ID_WEBHOOK } from '@/helpers/environment';
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -23,7 +24,7 @@ export const POST = async (req: NextRequest) => {
         mailId: referenceId,
         subject: emailPayload.Subject,
         // eslint-disable-next-line max-len
-        workspaceId: '3e4b0b59-00af-4683-8158-b139925d38ff', // TODO: Replace with workspace id where we want to want forward the tickets
+        workspaceId: WORKSPACE_ID_WEBHOOK || 'unknown', // TODO: Replace with workspace id where we want to want forward the tickets
         senderEmail: emailPayload.From,
         senderName: emailPayload.FromName,
       });
