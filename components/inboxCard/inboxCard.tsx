@@ -16,7 +16,7 @@ import {
   RightDiv,
   StatusMainDiv,
 } from './style';
-import { lableItem, priorityItem } from '@/helpers/raw';
+import { labelItem, priorityItem } from '@/helpers/raw';
 import { capitalizeString } from '@/helpers/common';
 
 interface Props {
@@ -44,7 +44,7 @@ export default function InboxCard({
     setLabelDropdown(false);
   };
 
-  const handleLableTag = () => {
+  const handleLabelTag = () => {
     setLabelDropdown((prev) => !prev);
     setAssignDropdown(false);
     setPriorityDropdown(false);
@@ -117,12 +117,12 @@ export default function InboxCard({
           <NameText className='description'>{description}</NameText>
           <StatusMainDiv>
             <DropDownWithTag
-              onClick={handleLableTag}
+              onClick={handleLabelTag}
               title={'Bug'}
               iconName={'bug-icon'}
               dropdownOpen={labelDropdown}
               onClose={() => setLabelDropdown(false)}
-              items={lableItem}
+              items={labelItem}
               onChange={() => {}}
               isTag={true}
               isSearch={true}
