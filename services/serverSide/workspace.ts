@@ -9,6 +9,7 @@ export const getWorkspaceById = async (workspaceId: string) => {
       users: { include: { user: true } },
       invited_users: true,
       tickets: true,
+      ticketLabels: true,
     },
   });
   if (!workspace) {

@@ -1,11 +1,10 @@
 /* eslint-disable indent */
-import { User } from '@prisma/client';
+import { User, Workspace } from '@prisma/client';
 import { NextRequest } from 'next/server';
 import { isEmpty } from '@/helpers/common';
 import { getSessionDetails } from '@/services/serverSide/auth/authentication';
-import { getWorkspaceById } from '@/services/serverSide/workspace';
+import { prisma } from '@/prisma/prisma';
 
-type Workspace = NonNullable<Awaited<ReturnType<typeof getWorkspaceById>>>;
 type AuthorizedRequest = NextRequest & { user: User; workspace: Workspace };
 // eslint-disable-next-line no-unused-vars
 type RequestHandler = (
@@ -33,13 +32,16 @@ const withWorkspaceAuth =
       );
     }
 
-    const workspace = await getWorkspaceById(workspaceId!);
+    const workspace = await prisma.workspace.findUnique({
+      where: { id: workspaceId! },
+      include: { users: { select: { user_id: true } } },
+    });
 
     if (!workspace) {
       return Response.json({ error: 'Invalid workspace_id!' });
     }
 
-    if (!workspace.users.some((user: User) => user.id === session.user.id)) {
+    if (!workspace.users.some((user) => user.user_id === session.user.id)) {
       return Response.json({ error: 'Unauthorized!' }, { status: 401 });
     }
 

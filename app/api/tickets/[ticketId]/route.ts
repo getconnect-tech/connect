@@ -10,14 +10,14 @@ import {
   isValidTicketSource,
   isValidTitle,
 } from '@/lib/zod/ticket';
-import { updateTicket } from '@/services/serverSide/ticket';
+import { getTicketById, updateTicket } from '@/services/serverSide/ticket';
 
 // GET /api/tickets/[ticketId]
 export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
-    const ticket = req.workspace.tickets.find(
-      (ticket) => ticket.id === ticketId,
-    );
+    const workspaceId = req.workspace.id;
+
+    const ticket = await getTicketById(ticketId, workspaceId);
 
     if (!ticket) {
       return Response.json({ error: 'Not found!' }, { status: 404 });
