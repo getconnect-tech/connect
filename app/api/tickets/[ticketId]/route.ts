@@ -2,13 +2,13 @@ import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import {
-  isValidAssignTo,
-  isValidContactId,
-  isValidPriority,
-  isValidSenderEmail,
-  isValidSenderName,
-  isValidTicketSource,
-  isValidTitle,
+  assginToSchema,
+  contactIdSchema,
+  prioritySchema,
+  senderEmailSchema,
+  senderNameSchema,
+  ticketSourceSchema,
+  titleSchema,
 } from '@/lib/zod/ticket';
 import { getTicketById, updateTicket } from '@/services/serverSide/ticket';
 
@@ -31,13 +31,13 @@ export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
 
 // PUT /api/tickets/[ticketId]
 const UpdateTicketRequestBody = z.object({
-  title: isValidTitle.optional(),
-  contanctId: isValidContactId.optional(),
-  assignedTo: isValidAssignTo.optional(),
-  priority: isValidPriority.optional(),
-  source: isValidTicketSource.optional(),
-  senderName: isValidSenderName.optional(),
-  senderEmail: isValidSenderEmail.optional(),
+  title: titleSchema.optional(),
+  contanctId: contactIdSchema.optional(),
+  assignedTo: assginToSchema.optional(),
+  priority: prioritySchema.optional(),
+  source: ticketSourceSchema.optional(),
+  senderName: senderNameSchema.optional(),
+  senderEmail: senderEmailSchema.optional(),
 });
 
 export const PUT = withWorkspaceAuth(async (req, { ticketId }) => {
