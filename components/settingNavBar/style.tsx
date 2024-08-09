@@ -8,6 +8,7 @@ export const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 190px;
+  width: 100%;
   gap: 12px;
 `;
 

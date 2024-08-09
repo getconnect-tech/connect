@@ -15,6 +15,7 @@ export const Div = styled.div`
   display: flex;
   margin: 0 auto;
   max-width: 884px;
+  width: 100%;
   padding-top: 98px;
 `;
 export const IconDiv = styled.div`
