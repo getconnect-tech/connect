@@ -1,6 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { BottomBlock, Item, MainDiv, NavItems, Title, TopBlock } from './style';
+import {
+  BottomBlock,
+  IconDiv,
+  Item,
+  MainDiv,
+  NavItems,
+  Title,
+  TopBlock,
+} from './style';
+import SVGIcon from '@/assets/icons/SVGIcon';
 
 export default function SettingNavBar() {
   const router = useRouter();
@@ -23,6 +32,18 @@ export default function SettingNavBar() {
   return (
     <>
       <MainDiv>
+        <IconDiv
+          onClick={() => {
+            router.push('/');
+          }}
+        >
+          <SVGIcon
+            name='cross-icon'
+            width='16'
+            height='16'
+            viewBox='0 0 16 16'
+          />
+        </IconDiv>
         <TopBlock>
           <Title> You</Title>
           <NavItems>
@@ -48,7 +69,12 @@ export default function SettingNavBar() {
         </TopBlock>
         <BottomBlock>
           <Title>WorkSpace</Title>
-          <Item>WorkSpace Profile</Item>
+          <Item
+            onClick={() => handleItemClick('/setting/workspaceprofile')}
+            active={activeItem === '/setting/workspaceprofile'}
+          >
+            WorkSpace Profile
+          </Item>
           <Item>Channels</Item>
           <Item>Labels</Item>
           <Item>Macros</Item>

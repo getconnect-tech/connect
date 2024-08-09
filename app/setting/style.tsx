@@ -20,25 +20,7 @@ export const Div = styled.div`
   width: 100%;
   padding-top: 98px;
 `;
-export const IconDiv = styled.div`
-  position: absolute;
-  width: 28px;
-  height: 28px;
-  top: 20px;
-  right: 20px;
-  padding: 6px;
-  svg {
-    fill: ${colors.icon};
-  }
-  &:hover {
-    cursor: pointer;
-    border-radius: 50px;
-    background-color: ${colors.bg_surface_secondary_hover};
-    svg {
-      fill: ${colors.icon_hover};
-    }
-  }
-`;
+
 export const RightDiv = styled.div`
   display: flex;
   flex-direction: column;
