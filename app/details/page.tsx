@@ -26,7 +26,7 @@ import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
 import MessageCard from '@/components/messageCard/messageCard';
 import QuestionCard from '@/components/questionCard/questionCard';
-import { lableItem, priorityItem } from '@/helpers/raw';
+import { labelItem, priorityItem } from '@/helpers/raw';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 
 export default function Details() {
@@ -41,7 +41,7 @@ export default function Details() {
     setLabelDropdown(false);
   };
 
-  const handleLableTag = () => {
+  const handleLabelTag = () => {
     setLabelDropdown((prev) => !prev);
     setAssignDropdown(false);
     setPriorityDropdown(false);
@@ -109,12 +109,12 @@ export default function Details() {
           </HeaderDiv>
           <StatusDiv>
             <DropDownWithTag
-              onClick={handleLableTag}
+              onClick={handleLabelTag}
               title={'Bug'}
               iconName={'bug-icon'}
               dropdownOpen={labelDropdown}
               onClose={() => setLabelDropdown(false)}
-              items={lableItem}
+              items={labelItem}
               onChange={() => {}}
               isTag={true}
               isSearch={true}

@@ -72,6 +72,15 @@ const StatusMainDiv = styled.div`
   gap: 8px;
   align-items: center;
   padding-top: 4px;
+  .submenu-upwards {
+    bottom: calc(100% - 83px);
+    top: auto;
+  }
+
+  .submenu-downwards {
+    top: calc(100% - 12px);
+    bottom: auto;
+  }
 `;
 
 const StatusDiv = styled.div<Props>`
