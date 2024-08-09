@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { ticketStore } from '@/stores/ticketStore';
+import { isEmpty } from '@/helpers/common';
 
 /**
  * @desc Get ticket list
@@ -51,6 +52,49 @@ export const getTicketList = async () => {
     }
     // set ticket list in store
     ticketStore.setTicketList(data);
+    return data;
+  } catch (err: any) {
+    alert(err.message);
+    return null;
+  } finally {
+    ticketStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc Get ticket details
+ * @param {*} ticketId
+ */
+export const getTicketDetails = async (ticketId: string) => {
+  try {
+    ticketStore.setLoading(true);
+    const response = await axios.get(
+      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}`,
+    );
+    const { data } = response;
+
+    if (!data || isEmpty(data)) {
+      // Set mock data if not getting from API
+      const mockData = {
+        id: '746a45db-4ede-4ab6-959c-19d7b7cd9f47',
+        workspace_id: '3e4b0b59-00af-4683-8158-b139925d38ff',
+        title: 'Test message from gmail',
+        contact_id: null,
+        assigned_to: null,
+        created_at: '2024-08-08T10:03:27.341Z',
+        updated_at: '2024-08-08T10:03:27.341Z',
+        priority: 'NONE',
+        source: 'MAIL',
+        mail_id:
+          '<CAFYk3OX9wLATj+yVGmB_oSEqmNzgZEmqUEv6cq6ps65nghesxw@mail.gmail.com>',
+        sender_name: 'Vatsal Ghoghari',
+        sender_mail: 'vghoghari82@gmail.com',
+      };
+      ticketStore.setTicketList(data);
+      return mockData;
+    }
+    // set ticket details in store
+    ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
     alert(err.message);

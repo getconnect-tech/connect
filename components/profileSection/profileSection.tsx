@@ -14,18 +14,19 @@ import WorkDetails from './workDetails';
 import RecentEvent from './recentEvent';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { colors } from '@/styles/colors';
+import { useStores } from '@/stores';
 
 export default function ProfileSection() {
+  const { ticketStore } = useStores();
+  const { ticketDetails } = ticketStore;
+  const { sender_mail, sender_name } = ticketDetails || {};
+
   return (
     <MainDiv>
       <ProfileDiv>
-        <Avatar
-          imgSrc='https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
-          name={''}
-          size={58}
-        />
+        <Avatar imgSrc='' name={sender_name || 'Unknown'} size={58} />
         <div>
-          <Title>Sanjay Patel</Title>
+          <Title>{sender_name || ''}</Title>
           <CompanyName>Pixer Digital</CompanyName>
         </div>
       </ProfileDiv>
@@ -67,7 +68,7 @@ export default function ProfileSection() {
             />
             <p>Email</p>
           </LeftDiv>
-          <p>John.pixer@gmail.com</p>
+          <p>{sender_mail}</p>
         </DetailsDiv>
         <DetailsDiv>
           <LeftDiv>

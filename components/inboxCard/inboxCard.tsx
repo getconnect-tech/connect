@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Ticket } from '@prisma/client';
 import moment from 'moment';
@@ -18,6 +19,7 @@ import {
 } from './style';
 import { labelItem, priorityItem } from '@/helpers/raw';
 import { capitalizeString } from '@/helpers/common';
+import { useStores } from '@/stores';
 
 interface Props {
   ticketDetail: Ticket;
@@ -40,6 +42,7 @@ export default function InboxCard({
 }: Props) {
   const { title, created_at, sender_name, source } = ticketDetail;
   const router = useRouter();
+  const { ticketStore } = useStores();
 
   const handleDropdownClick = (dropdown: string) => {
     const identifier = `${dropdownIdentifier}-${dropdown}`;
@@ -91,9 +94,13 @@ export default function InboxCard({
       isName: true,
     },
   ];
+  const onClickTicket = useCallback(() => {
+    ticketStore.setTicketDetails(ticketDetail);
+    router.push(`/details/${ticketDetail?.id}`);
+  }, []);
 
   return (
-    <CardDiv onClick={() => router.push('/details')}>
+    <CardDiv onClick={onClickTicket}>
       {showDotIcon && <DotIcon />}
       <LeftDiv>
         <Avatar size={28} imgSrc={src} name={sender_name} isShowBorder={true} />
