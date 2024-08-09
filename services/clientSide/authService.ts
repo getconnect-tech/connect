@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import axios from 'axios';
+import { signOut } from 'next-auth/react';
 import { signInWithCode } from '../serverSide/membership/signin';
 import { isValidEmail } from '@/helpers/common';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
@@ -89,6 +90,22 @@ export const resendVerificationCode = async (email: string) => {
     );
     if (result) alert('New code sent!');
     return true;
+  } catch (err: any) {
+    alert(err.message);
+    return false;
+  } finally {
+    userStore.setLoading(false);
+  }
+};
+
+export const logout = async () => {
+  try {
+    userStore.setLoading(true);
+
+    const response = await signOut({ redirect: false });
+
+    userStore.clearUserDetails();
+    return response;
   } catch (err: any) {
     alert(err.message);
     return false;
