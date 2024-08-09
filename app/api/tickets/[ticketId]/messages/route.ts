@@ -1,12 +1,10 @@
 import { handleApiError } from '@/helpers/errorHandler';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
-import { prisma } from '@/prisma/prisma';
+import { getTicketMessages } from '@/services/serverSide/message';
 
 export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
-    const messages = await prisma.message.findMany({
-      where: { ticket_id: ticketId },
-    });
+    const messages = await getTicketMessages(ticketId);
 
     return Response.json(messages, { status: 200 });
   } catch (err) {

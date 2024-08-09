@@ -11,10 +11,11 @@ export const POST = withWorkspaceAuth(async (req) => {
     invitedUsersSchema.parse(invitedUsers);
 
     const usersToInvite = invitedUsers as z.infer<typeof invitedUsersSchema>;
-    const user = req.user;
-    const workspace = req.workspace;
 
-    await inviteUsers(usersToInvite, workspace.id, user.id);
+    const userId = req.user.id;
+    const workspaceId = req.workspace.id;
+
+    await inviteUsers(usersToInvite, workspaceId, userId);
 
     return Response.json({ message: 'User invited!' }, { status: 200 });
   } catch (err) {
