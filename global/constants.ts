@@ -14,3 +14,5 @@ export const RANDOM_COLORS = [
   '#ff7c73',
   '#FF2C54',
 ];
+
+export const ONBOARDING_ROUTES = ['/login', '/signup', '/onboarding'];

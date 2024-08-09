@@ -28,6 +28,13 @@ const LogoDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
   div {
     display: flex;
     align-items: center;
@@ -37,6 +44,10 @@ const LogoDiv = styled.div`
       ${Typography.body_md_medium}
       color: ${colors.text};
       margin-right: 8px;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
     }
     &:hover {
       cursor: pointer;
@@ -102,7 +113,7 @@ const ProfileDrop = styled.div`
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: 52px;
+  margin-top: 4px;
   max-width: 191px;
   width: 100%;
   border-radius: 12px;
@@ -124,7 +135,7 @@ const Frame2 = styled.div`
   gap: 2px;
   padding: 4px;
 `;
-const OrganisationProfile = styled.div`
+const OrganizationProfile = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -179,7 +190,7 @@ export {
   ProfileDrop,
   Frame1,
   Frame2,
-  OrganisationProfile,
+  OrganizationProfile,
   Description,
   ProfileItemDiv,
 };
