@@ -1,7 +1,9 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
-
+interface Props {
+  active?: boolean;
+}
 export const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -26,7 +28,7 @@ export const NavItems = styled.div`
   flex-direction: column;
   gap: 1px;
 `;
-export const Item = styled.div`
+export const Item = styled.div<Props>`
   display: flex;
   padding: 4px 4px 4px 12px;
   ${Typography.body_md_regular}
@@ -37,6 +39,13 @@ export const Item = styled.div`
     color: ${colors.text};
     background-color: ${colors.bg_surface_active};
   }
+  ${({ active }) =>
+    active &&
+    css`
+      border-radius: 50px;
+      color: ${colors.text};
+      background-color: ${colors.bg_surface_active};
+    `}
 `;
 export const BottomBlock = styled.div`
   display: flex;

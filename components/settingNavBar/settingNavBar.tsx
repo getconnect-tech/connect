@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { BottomBlock, Item, MainDiv, NavItems, Title, TopBlock } from './style';
 
 export default function SettingNavBar() {
+  const router = useRouter();
+  const [activeItem, setActiveItem] = useState('');
+  const pathname = usePathname();
+  useEffect(() => {
+    setActiveItem(pathname);
+  }, [pathname]);
+  const handleItemClick = (path: string) => {
+    setActiveItem(path);
+    router.push(path);
+  };
   return (
     <>
       <>
@@ -9,8 +20,18 @@ export default function SettingNavBar() {
           <TopBlock>
             <Title> You</Title>
             <NavItems>
-              <Item>My Profile</Item>
-              <Item>Change Password</Item>
+              <Item
+                onClick={() => handleItemClick('/setting/myprofile')}
+                active={activeItem === '/setting/myprofile'}
+              >
+                My Profile
+              </Item>
+              <Item
+                onClick={() => handleItemClick('/setting/changepassword')}
+                active={activeItem === '/setting/changepassword'}
+              >
+                Change Password
+              </Item>
               <Item>Notifications</Item>
             </NavItems>
           </TopBlock>
