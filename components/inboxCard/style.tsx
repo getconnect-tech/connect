@@ -47,13 +47,13 @@ const RightDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
-  max-width: 500px;
+  max-width: 485px;
   .description {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
-    word-break: break-all;
+    word-break: break-word;
   }
 `;
 

@@ -5,7 +5,7 @@ import {
   Description,
   Frame1,
   Frame2,
-  OrganisationProfile,
+  OrganizationProfile,
   ProfileDrop,
   ProfileItemDiv,
 } from './style';
@@ -51,10 +51,10 @@ export default function ProfileDropdown({ title, onClose }: Props) {
     <>
       <ProfileDrop onClick={onClose} ref={dropDownRef}>
         <Frame1>
-          <OrganisationProfile>
+          <OrganizationProfile>
             <p>{title}</p>
             <Description>Add or switch organisation</Description>
-          </OrganisationProfile>
+          </OrganizationProfile>
         </Frame1>
         <Frame2>
           <ProfileItemDiv>

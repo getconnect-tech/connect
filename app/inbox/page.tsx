@@ -12,7 +12,6 @@ import {
   Title,
   TopDiv,
 } from './style';
-import NavbarPage from '@/components/navbar';
 import InboxCard from '@/components/inboxCard/inboxCard';
 import CustomContextMenu from '@/components/contextMenu/contextMenu';
 import { getTicketList } from '@/services/clientSide/ticketServices';
@@ -41,7 +40,6 @@ function Inbox() {
 
   return (
     <Main>
-      <NavbarPage />
       <MainDiv>
         <TopDiv>
           <HeaderDiv>

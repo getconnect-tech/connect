@@ -21,7 +21,6 @@ import {
   Title,
   TopDiv,
 } from '../style';
-import NavbarPage from '@/components/navbar';
 import ProfileSection from '@/components/profileSection/profileSection';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
@@ -101,7 +100,6 @@ function TicketDetails(props: Props) {
 
   return (
     <Main>
-      <NavbarPage />
       <MainDiv>
         <TopDiv>
           <HeaderDiv>
