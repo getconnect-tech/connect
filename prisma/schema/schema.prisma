@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
 }
 
 datasource db {
@@ -29,10 +30,23 @@ model Workspace {
   updated_at    DateTime         @default(now()) @updatedAt
   industry      String
   team_size     TeamSize
-  tags          String[]
   invited_users InvitedUser[]
   tickets       Ticket[]
   users         UserWorkspaces[]
+  Label         Label[]
+}
+
+model Label {
+  id         String   @id @default(uuid())
+  name       String
+  icon       String
+  color      String   @default("#7B7A79")
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  worksapce    Workspace     @relation(fields: [workspace_id], references: [id])
+  workspace_id String
+  tickets      TicketLabel[]
 }
 
 model Ticket {
@@ -52,6 +66,7 @@ model Ticket {
   mail_id       String         @unique
   sender_name   String
   sender_mail   String
+  labels        TicketLabel[]
 }
 
 model Message {
@@ -87,16 +102,6 @@ model VerificationToken {
   expires DateTime
 }
 
-model UserWorkspaces {
-  id           String    @id @default(uuid())
-  workspace_id String
-  user_id      String
-  user         User      @relation(fields: [user_id], references: [id])
-  workspace    Workspace @relation(fields: [workspace_id], references: [id])
-
-  @@index([workspace_id, user_id])
-}
-
 model InvitedUser {
   id              String    @id @default(uuid())
   name            String
@@ -106,31 +111,4 @@ model InvitedUser {
   created_at      DateTime  @default(now())
   invited_by_user User      @relation(fields: [invited_by], references: [id])
   workspace       Workspace @relation(fields: [workspace_id], references: [id])
-}
-
-enum TeamSize {
-  SMALL
-  MEDIUM
-  LARGE
-  ENTERPRISE
-}
-
-enum PriorityLevels {
-  NONE
-  LOW
-  MEDIUM
-  HIGH
-  URGENT
-}
-
-enum MessageType {
-  REGULAR
-  EMAIL
-  PRIORITY
-  ASSIGN
-}
-
-enum TicketSource {
-  MAIL
-  WEB
 }
