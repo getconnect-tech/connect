@@ -4,16 +4,21 @@ import { action, makeObservable, observable } from 'mobx';
 class TicketStore {
   loading = false;
   ticketList: Ticket[] = [];
+  ticketDetails: Ticket | null = null;
 
   constructor() {
     makeObservable(this, {
-      //Loading variable
+      // Loading variable
       loading: observable,
       setLoading: action,
 
-      //Ticket List
+      // Ticket List
       ticketList: observable,
       setTicketList: action,
+
+      // Ticket Details
+      ticketDetails: observable,
+      setTicketDetails: action,
     });
   }
 
@@ -25,6 +30,11 @@ class TicketStore {
   // Ticket list actions
   setTicketList(value: Ticket[]) {
     this.ticketList = value;
+  }
+
+  // Ticket Details actions
+  setTicketDetails(value: Ticket) {
+    this.ticketDetails = value;
   }
 }
 

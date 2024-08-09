@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { observer } from 'mobx-react-lite';
 import {
   ActivityDiv,
   BottomDiv,
@@ -19,7 +20,7 @@ import {
   StatusDiv,
   Title,
   TopDiv,
-} from './style';
+} from '../style';
 import NavbarPage from '@/components/navbar';
 import ProfileSection from '@/components/profileSection/profileSection';
 import SVGIcon from '@/assets/icons/SVGIcon';
@@ -28,12 +29,33 @@ import MessageCard from '@/components/messageCard/messageCard';
 import QuestionCard from '@/components/questionCard/questionCard';
 import { labelItem, priorityItem } from '@/helpers/raw';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
+import { useStores } from '@/stores';
+import { getTicketDetails } from '@/services/clientSide/ticketServices';
+import { isEmpty } from '@/helpers/common';
 
-export default function Details() {
+interface Props {
+  ticket_id: string;
+}
+
+function TicketDetails(props: Props) {
+  const { ticket_id } = props;
   const router = useRouter();
   const [labelDropdown, setLabelDropdown] = useState(false);
   const [priorityDropdown, setPriorityDropdown] = useState(false);
   const [assignDropdown, setAssignDropdown] = useState(false);
+  const { ticketStore, workspaceStore } = useStores();
+  const { currentWorkspace } = workspaceStore;
+  const { ticketDetails } = ticketStore;
+
+  const loadData = useCallback(async () => {
+    if (!isEmpty(currentWorkspace?.id)) {
+      await getTicketDetails(ticket_id);
+    }
+  }, [ticket_id, currentWorkspace?.id]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const handlePriorityTag = () => {
     setPriorityDropdown((prev) => !prev);
@@ -96,7 +118,7 @@ export default function Details() {
                   viewBox='0 0 16 16'
                 />
               </IconDiv>
-              <Title>Regarding app subscription issues from appsumo</Title>
+              <Title>{ticketDetails?.title || ''}</Title>
             </LeftDiv>
             <IconDiv>
               <SVGIcon
@@ -261,3 +283,5 @@ export default function Details() {
     </Main>
   );
 }
+
+export default observer(TicketDetails);
