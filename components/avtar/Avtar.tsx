@@ -2,6 +2,7 @@ import { Component } from 'react';
 import styled, { css } from 'styled-components';
 import { isEmpty } from '@/helpers/common';
 import { colors } from '@/styles/colors';
+import { RANDOM_COLORS } from '@/global/constants';
 
 const UserLogoWrapper = styled.div`
   display: flex;
@@ -88,10 +89,18 @@ class Avatar extends Component<Props> {
     return this.getChar(name).charCodeAt(0);
   };
 
+  getColorIndex = (name: string) => {
+    const asciiValue = this.getAsciiChar(name);
+    const colorIndex = (asciiValue - 64) % (RANDOM_COLORS.length - 1);
+    return colorIndex;
+  };
+
   render() {
     const props: Props = this.props;
     const { imgSrc, size, name, classname, isShowBorder } = props;
     const avtarName = this.getAvtarName(name);
+    const colorIndex = this.getColorIndex(avtarName);
+    const randColor = RANDOM_COLORS[colorIndex];
     return (
       <UserLogoWrapper>
         {imgSrc ? (
@@ -103,6 +112,7 @@ class Avatar extends Component<Props> {
           />
         ) : (
           <TextWrapper
+            randColor={randColor}
             size={size}
             isShowBorder={isShowBorder}
             className={classname}

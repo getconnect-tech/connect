@@ -71,7 +71,7 @@ function Login() {
     router.prefetch('/');
   }, [router]);
 
-  //Start couter for resend code enable
+  //Start counter for resend code enable
   const startCounter = () => {
     const counterInterval = setInterval(() => {
       setCounter((prev) => {
