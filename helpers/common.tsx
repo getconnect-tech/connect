@@ -41,6 +41,10 @@ export function capitalizeString(value: string) {
   return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
 }
 
+/**
+ * @desc Remove null and undefined fields from object
+ * @param {Record<string, any>} obj
+ */
 export function removeNullUndefined(obj: Record<string, any>) {
   for (const key in obj) {
     if (obj[key] === null || obj[key] === undefined) {

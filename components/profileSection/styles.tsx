@@ -43,6 +43,12 @@ const DetailsDiv = styled.div`
   p {
     ${Typography.body_sm_medium}
     color: ${colors.text};
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    word-wrap: break-word;
+    max-width: 155px;
   }
 `;
 
@@ -58,7 +64,7 @@ const LeftDiv = styled.div`
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
-    word-break: break-all;
+    word-break: break-word;
   }
 `;
 

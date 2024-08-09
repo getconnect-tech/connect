@@ -33,7 +33,7 @@ model Workspace {
   invited_users InvitedUser[]
   tickets       Ticket[]
   users         UserWorkspaces[]
-  Label         Label[]
+  ticketLabels  Label[]
 }
 
 model Label {

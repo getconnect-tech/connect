@@ -6,8 +6,37 @@ export const getWorkspaceTickets = async (workspaceId: string) => {
   const tickets = await prisma.ticket.findMany({
     where: { workspace_id: workspaceId },
     orderBy: { created_at: 'desc' },
+    include: { labels: { include: { label: true } } },
   });
-  return tickets;
+
+  const formattedTickets = tickets.map((ticket) => ({
+    ...ticket,
+    labels: ticket.labels.map((x) => x.label),
+  }));
+
+  return formattedTickets;
+};
+
+export const getTicketById = async (ticketId: string, workspaceId?: string) => {
+  const query = { id: ticketId, workspace_id: workspaceId };
+
+  removeNullUndefined(query);
+
+  const ticket = await prisma.ticket.findUnique({
+    where: query,
+    include: { labels: { include: { label: true } } },
+  });
+
+  if (!ticket) {
+    return null;
+  }
+
+  const formattedTicket = {
+    ...ticket,
+    labels: ticket.labels.map((x) => x.label),
+  };
+
+  return formattedTicket;
 };
 
 export const getTicketByMailId = async (mailId: string) => {
@@ -62,4 +91,19 @@ export const updateTicket = async (
   });
 
   return newTicket;
+};
+
+export const addLabel = async (ticketId: string, labelId: string) => {
+  const ticketLabelRelation = await prisma.ticketLabel.create({
+    data: { ticket_id: ticketId, label_id: labelId },
+  });
+
+  return ticketLabelRelation;
+};
+
+export const removeLabel = async (ticketId: string, labelId: string) => {
+  const res = await prisma.ticketLabel.deleteMany({
+    where: { ticket_id: ticketId, label_id: labelId },
+  });
+  return res;
 };

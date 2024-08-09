@@ -1,6 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import NavbarPage from '../../components/navbar/index';
 import { HeaderDiv, Main, MainDiv, Tab, TabDiv, Title, TopDiv } from './style';
 import PersonList from './personList';
 import CompanyList from './companyList';
@@ -10,7 +9,6 @@ export default function Contact() {
   const tabItem = ['People', 'Company'];
   return (
     <Main>
-      <NavbarPage />
       <MainDiv>
         <TopDiv>
           <HeaderDiv>

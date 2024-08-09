@@ -54,29 +54,31 @@ function Navbar() {
   return (
     <MainDiv>
       <TopDiv>
-        <LogoDiv onClick={handleProfilePopup} className='tag-div'>
-          <div>
+        <div>
+          <LogoDiv onClick={handleProfilePopup} className='tag-div'>
+            <div>
+              <SVGIcon
+                name='logo-icon'
+                width='20'
+                height='21'
+                viewBox='0 0 20 21'
+                fill='none'
+              />
+              <p>{workspaceStore?.currentWorkspace?.name || ''}</p>
+            </div>
             <SVGIcon
-              name='logo-icon'
-              width='20'
-              height='21'
-              viewBox='0 0 20 21'
+              name='sidebar-icon'
+              width='28'
+              height='28'
+              viewBox='0 0 28 28'
               fill='none'
+              className='logo-icon'
             />
-            <p>{workspaceStore?.currentWorkspace?.name || ''}</p>
-          </div>
-          <SVGIcon
-            name='sidebar-icon'
-            width='28'
-            height='28'
-            viewBox='0 0 28 28'
-            fill='none'
-            className='logo-icon'
-          />
-        </LogoDiv>
-        {isOpen && (
-          <ProfileDropdown title='My Profile' onClose={closeDropdown} />
-        )}
+          </LogoDiv>
+          {isOpen && (
+            <ProfileDropdown title='My Profile' onClose={closeDropdown} />
+          )}
+        </div>
         <NavbarItem
           title='Getting started'
           icon='started-icon'
