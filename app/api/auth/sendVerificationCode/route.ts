@@ -4,7 +4,7 @@ import errorMessages from '@/global/errorMessages';
 import { generateVerificationCode } from '@/helpers/common';
 import { sendVerificationCode } from '@/helpers/emails';
 import { handleApiError } from '@/helpers/errorHandler';
-import { emailSchema } from '@/lib/zod';
+import { emailSchema } from '@/lib/zod/common';
 import { prisma } from '@/prisma/prisma';
 import { isUserAlreadyExists } from '@/services/serverSide/membership/signup';
 

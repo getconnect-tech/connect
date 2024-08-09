@@ -1,11 +1,6 @@
 import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
-import {
-  industrySchema,
-  invitedUsersSchema,
-  nameSchema,
-  teamSizeSchema,
-} from '@/lib/zod';
+import { nameSchema } from '@/lib/zod/common';
 import withAuth from '@/middlewares/withAuth';
 import {
   addUserToWorkspace,
@@ -13,6 +8,8 @@ import {
   inviteUsers,
 } from '@/services/serverSide/workspace';
 import { getUserWorkspaces } from '@/services/serverSide/workspace';
+import { industrySchema, teamSizeSchema } from '@/lib/zod/workspace';
+import { invitedUsersSchema } from '@/lib/zod/user';
 
 const RequestBody = z.object({
   name: nameSchema,
