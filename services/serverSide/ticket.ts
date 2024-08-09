@@ -18,11 +18,9 @@ export const getWorkspaceTickets = async (workspaceId: string) => {
 };
 
 export const getTicketById = async (ticketId: string, workspaceId?: string) => {
-  const query: { id: string; workspace_id?: string } = { id: ticketId };
+  const query = { id: ticketId, workspace_id: workspaceId };
 
-  if (workspaceId) {
-    query.workspace_id = workspaceId;
-  }
+  removeNullUndefined(query);
 
   const ticket = await prisma.ticket.findUnique({
     where: query,
@@ -93,4 +91,19 @@ export const updateTicket = async (
   });
 
   return newTicket;
+};
+
+export const addLabel = async (ticketId: string, labelId: string) => {
+  const ticketLabelRelation = await prisma.ticketLabel.create({
+    data: { ticket_id: ticketId, label_id: labelId },
+  });
+
+  return ticketLabelRelation;
+};
+
+export const removeLabel = async (ticketId: string, labelId: string) => {
+  const res = await prisma.ticketLabel.deleteMany({
+    where: { ticket_id: ticketId, label_id: labelId },
+  });
+  return res;
 };
