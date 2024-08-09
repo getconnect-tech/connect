@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Description,
   Frame1,
@@ -9,6 +10,7 @@ import {
   ProfileItemDiv,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { logout } from '@/services/clientSide/authService';
 interface Props {
   title: string;
   onClose: () => void;
@@ -37,7 +39,14 @@ export const useOutsideClick = (callback: () => void) => {
   return ref;
 };
 export default function ProfileDropdown({ title, onClose }: Props) {
+  const router = useRouter();
   const dropDownRef = useOutsideClick(onClose);
+
+  const onClickLogout = useCallback(async () => {
+    await logout();
+    router.push('/login');
+  }, []);
+
   return (
     <>
       <ProfileDrop onClick={onClose} ref={dropDownRef}>
@@ -57,7 +66,7 @@ export default function ProfileDropdown({ title, onClose }: Props) {
             />
             <p>Settings</p>
           </ProfileItemDiv>
-          <ProfileItemDiv>
+          <ProfileItemDiv onClick={onClickLogout}>
             <SVGIcon
               name='logout-icon'
               width='12px'

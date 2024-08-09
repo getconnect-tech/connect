@@ -98,12 +98,14 @@ export const resendVerificationCode = async (email: string) => {
   }
 };
 
+/**
+ * @desc Logout user session
+ * @param {*}
+ */
 export const logout = async () => {
   try {
     userStore.setLoading(true);
-
     const response = await signOut({ redirect: false });
-
     userStore.clearUserDetails();
     return response;
   } catch (err: any) {
