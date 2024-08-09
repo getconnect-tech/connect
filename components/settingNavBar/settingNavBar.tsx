@@ -38,7 +38,12 @@ export default function SettingNavBar() {
             >
               Change Password
             </Item>
-            <Item>Notifications</Item>
+            <Item
+              onClick={() => handleItemClick('/setting/notification')}
+              active={activeItem === '/setting/notification'}
+            >
+              Notifications
+            </Item>
           </NavItems>
         </TopBlock>
         <BottomBlock>
