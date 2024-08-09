@@ -1,8 +1,8 @@
 import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
-import { invitedUsersSchema } from '@/lib/zod';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import { inviteUsers } from '@/services/serverSide/workspace';
+import { invitedUsersSchema } from '@/lib/zod/user';
 
 export const POST = withWorkspaceAuth(async (req) => {
   try {

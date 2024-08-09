@@ -40,3 +40,11 @@ export const isValidEmail = (value: any) => {
 export function capitalizeString(value: string) {
   return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
 }
+
+export function removeNullUndefined(obj: Record<string, any>) {
+  for (const key in obj) {
+    if (obj[key] === null || obj[key] === undefined) {
+      delete obj[key];
+    }
+  }
+}

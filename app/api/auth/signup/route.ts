@@ -3,11 +3,12 @@ import { z } from 'zod';
 import errorMessages from '@/global/errorMessages';
 import { sendVerificationCode } from '@/helpers/emails';
 import { handleApiError } from '@/helpers/errorHandler';
-import { displayNameSchema, emailSchema, profilePicSchema } from '@/lib/zod';
+import { emailSchema } from '@/lib/zod/common';
 import {
   createUser,
   isUserAlreadyExists,
 } from '@/services/serverSide/membership/signup';
+import { displayNameSchema, profilePicSchema } from '@/lib/zod/user';
 
 const RequestBody = z.object({
   email: emailSchema,

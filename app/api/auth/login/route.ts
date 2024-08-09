@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 import errorMessages from '@/global/errorMessages';
 import { sendVerificationCode } from '@/helpers/emails';
 import { handleApiError } from '@/helpers/errorHandler';
-import { emailSchema } from '@/lib/zod';
+import { emailSchema } from '@/lib/zod/common';
 import { isUserAlreadyExists } from '@/services/serverSide/membership/signup';
 
 export const POST = async (req: NextRequest) => {
