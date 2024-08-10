@@ -12,7 +12,6 @@ export const Main = styled.div`
 
 export const MainDiv = styled.div`
   width: 100%;
-  overflow: auto;
 `;
 export const Div = styled.div`
   display: flex;
