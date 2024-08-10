@@ -53,7 +53,7 @@ export default function ProfileDropdown({ title, onClose }: Props) {
         <Frame1>
           <OrganizationProfile>
             <p>{title}</p>
-            <Description>Add or switch organisation</Description>
+            <Description>Add or switch organization</Description>
           </OrganizationProfile>
         </Frame1>
         <Frame2>

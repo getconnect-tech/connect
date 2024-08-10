@@ -52,6 +52,9 @@ const ItemDiv = styled.div<Props>`
   &:hover {
     background-color: ${colors.bg_white_hover};
     border-radius: 8px;
+    p {
+      color: ${colors.text};
+    }
   }
 `;
 const SearchDiv = styled.div`
