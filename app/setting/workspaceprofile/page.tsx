@@ -16,16 +16,11 @@ import {
   TextField,
   Title,
 } from '../style';
-import Avatar from '@/components/avtar/Avtar';
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
 import SVGIcon from '@/assets/icons/SVGIcon';
 
-interface Props {
-  isProfile: boolean;
-}
-
-const WorkspaceProfile: React.FC<Props> = ({ isProfile }) => {
+export default function WorkspaceProfile() {
   return (
     <Main>
       <MainDiv>
@@ -36,22 +31,12 @@ const WorkspaceProfile: React.FC<Props> = ({ isProfile }) => {
           </Head>
           <ProfileDetail>
             <ProfileImage>
-              {isProfile ? (
-                <Avatar
-                  size={58}
-                  imgSrc={
-                    'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
-                  }
-                  name={''}
-                />
-              ) : (
-                <SVGIcon
-                  name='workspaceProfile-icon'
-                  width='58'
-                  height='58'
-                  viewBox='0 0 58 58'
-                />
-              )}
+              <SVGIcon
+                name='workspaceProfile-icon'
+                width='58'
+                height='58'
+                viewBox='0 0 58 58'
+              />
               <Frame>
                 <Link>Upload new image</Link>
                 <p>
@@ -74,6 +59,4 @@ const WorkspaceProfile: React.FC<Props> = ({ isProfile }) => {
       </MainDiv>
     </Main>
   );
-};
-
-export default WorkspaceProfile;
+}
