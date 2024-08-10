@@ -4,14 +4,15 @@ import styled from 'styled-components';
 import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
-export const MainDiv = styled.div`
+export const Main = styled.div`
   display: flex;
   background-color: ${colors.bg_surface};
-  height: 100vh;
-  margin: 0 auto;
-  justify-content: center;
-  padding-top: 98px;
-  gap: 32px;
+  width: 100%;
+`;
+
+export const MainDiv = styled.div`
+  width: 100%;
+  overflow: auto;
 `;
 export const Div = styled.div`
   display: flex;

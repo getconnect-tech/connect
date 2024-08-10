@@ -7,6 +7,7 @@ import {
   Head,
   Label,
   Link,
+  Main,
   MainDiv,
   ProfileDetail,
   ProfileImage,
@@ -15,16 +16,14 @@ import {
   TextField,
   Title,
 } from '../style';
-import SettingNavBar from '@/components/settingNavBar/settingNavBar';
 import Avatar from '@/components/avtar/Avtar';
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
 
 export default function MyProfile() {
   return (
-    <>
+    <Main>
       <MainDiv>
-        <SettingNavBar />
         <RightDiv>
           <Head>
             <Title>My Profile</Title>
@@ -66,6 +65,6 @@ export default function MyProfile() {
           </ProfileDetail>
         </RightDiv>
       </MainDiv>
-    </>
+    </Main>
   );
 }

@@ -12,7 +12,7 @@ export const MainDiv = styled.div`
   gap: 12px;
 `;
 export const IconDiv = styled.div`
-  position: absolute;
+  position: fixed;
   width: 28px;
   height: 28px;
   top: 20px;
@@ -69,6 +69,7 @@ export const Item = styled.div<Props>`
 export const BottomBlock = styled.div`
   display: flex;
   flex-direction: column;
-  padding-bottom: 12px;
+  padding: 12px 0;
   gap: 6px;
 `;
+export const NavBarMainDiv = styled.div``;

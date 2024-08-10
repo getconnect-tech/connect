@@ -3,6 +3,7 @@
 import {
   Description,
   Head,
+  Main,
   MainDiv,
   NotificationCard,
   NotificationItem,
@@ -10,13 +11,12 @@ import {
   StyledCheckbox,
   Title,
 } from '../style';
-import SettingNavBar from '@/components/settingNavBar/settingNavBar';
 
 export default function Notification() {
   return (
-    <>
+    <Main>
       <MainDiv>
-        <SettingNavBar />
+        {/* <SettingNavBar /> */}
         <RightDiv>
           <Head>
             <Title>Notification</Title>
@@ -34,6 +34,6 @@ export default function Notification() {
           </NotificationCard>
         </RightDiv>
       </MainDiv>
-    </>
+    </Main>
   );
 }

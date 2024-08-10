@@ -1,15 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import {
-  BottomBlock,
-  IconDiv,
-  Item,
-  MainDiv,
-  NavItems,
-  Title,
-  TopBlock,
-} from './style';
-import SVGIcon from '@/assets/icons/SVGIcon';
+import { BottomBlock, Item, MainDiv, NavItems, Title, TopBlock } from './style';
 
 export default function SettingNavBar() {
   const router = useRouter();
@@ -30,20 +21,8 @@ export default function SettingNavBar() {
   );
 
   return (
-    <>
-      <MainDiv>
-        <IconDiv
-          onClick={() => {
-            router.push('/');
-          }}
-        >
-          <SVGIcon
-            name='cross-icon'
-            width='16'
-            height='16'
-            viewBox='0 0 16 16'
-          />
-        </IconDiv>
+    <MainDiv>
+      <div>
         <TopBlock>
           <Title> You</Title>
           <NavItems>
@@ -84,7 +63,7 @@ export default function SettingNavBar() {
           <Item>Integrations</Item>
           <Item>Subscription</Item>
         </BottomBlock>
-      </MainDiv>
-    </>
+      </div>
+    </MainDiv>
   );
 }

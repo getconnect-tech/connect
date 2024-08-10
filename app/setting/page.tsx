@@ -1,8 +1,8 @@
+/* eslint-disable max-len */
 'use client';
 import React, { useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { Div, MainDiv } from './style';
-import SettingNavBar from '@/components/settingNavBar/settingNavBar';
+import MyProfile from './myprofile/page';
 
 export default function Setting() {
   const router = useRouter();
@@ -15,10 +15,8 @@ export default function Setting() {
     }
   }, [pathname, router]);
   return (
-    <MainDiv>
-      <Div>
-        <SettingNavBar />
-      </Div>
-    </MainDiv>
+    <>
+      <MyProfile />
+    </>
   );
 }

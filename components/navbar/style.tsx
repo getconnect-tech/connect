@@ -147,7 +147,7 @@ const OrganizationProfile = styled.div`
   &:hover {
     cursor: pointer;
     background-color: ${colors.bg_white_hover};
-    border-radius: 6px;
+    border-radius: 8px;
     p {
       color: ${colors.text};
     }
@@ -171,7 +171,7 @@ const ProfileItemDiv = styled.div`
     fill: ${colors.icon_hover};
     cursor: pointer;
     background-color: ${colors.bg_white_hover};
-    border-radius: 6px;
+    border-radius: 8px;
     p {
       color: ${colors.text};
     }

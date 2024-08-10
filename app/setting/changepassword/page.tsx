@@ -5,6 +5,7 @@ import {
   Description,
   Head,
   Label,
+  Main,
   MainDiv,
   PasswordInputs,
   ProfileDetail,
@@ -12,15 +13,13 @@ import {
   TextField,
   Title,
 } from '../style';
-import SettingNavBar from '@/components/settingNavBar/settingNavBar';
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
 
 export default function Password() {
   return (
-    <>
+    <Main>
       <MainDiv>
-        <SettingNavBar />
         <RightDiv>
           <Head>
             <Title>Change your password</Title>
@@ -45,6 +44,6 @@ export default function Password() {
           </ProfileDetail>
         </RightDiv>
       </MainDiv>
-    </>
+    </Main>
   );
 }
