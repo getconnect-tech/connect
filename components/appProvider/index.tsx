@@ -5,6 +5,7 @@ import { useRouter, usePathname, useServerInsertedHTML } from 'next/navigation';
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 import { Provider } from 'mobx-react';
 import NavbarPage from '../navbar';
+import SettingAppProvider from '../settingAppProvider';
 import stores from '@/stores';
 import { appInit } from '@/helpers/appInitHelper';
 import { APP_INIT_RESPONSE_TYPE, ONBOARDING_ROUTES } from '@/global/constants';
@@ -18,8 +19,7 @@ export default function AppProvider({
   const router = useRouter();
   const pathname = usePathname();
   let NavbarComponent = null;
-  // Only create stylesheet once with lazy initial state
-  // x-ref: https://reactjs.org/docs/hooks-reference.html#lazy-initial-state
+
   const [styledComponentsStyleSheet] = useState(() => new ServerStyleSheet());
 
   useServerInsertedHTML(() => {
@@ -34,8 +34,9 @@ export default function AppProvider({
       if (
         result.type === APP_INIT_RESPONSE_TYPE.REDIRECT &&
         !isEmpty(result.path)
-      )
+      ) {
         router.push(result.path);
+      }
     } catch (error) {
       console.log('ERROR', error);
     }
@@ -45,10 +46,13 @@ export default function AppProvider({
     init();
   }, [init]);
 
+  // Conditional check to render SettingAppProvider if the pathname is '/setting'
+  if (pathname.startsWith('/setting')) {
+    return <SettingAppProvider>{children}</SettingAppProvider>;
+  }
+
   if (ONBOARDING_ROUTES.includes(pathname)) {
-    NavbarComponent = null; // No navbar for these screens
-  } else if (pathname.startsWith('/settings')) {
-    // NavbarComponent = <SettingsNavbar />; // Different navbar for settings screen
+    NavbarComponent = null;
   } else {
     NavbarComponent = <NavbarPage />; // Default navbar
   }

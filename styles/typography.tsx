@@ -26,9 +26,19 @@ export const Typography = {
     line-height: 16px;
     font-weight: 500;
   `,
+  body_sm_semibold: css`
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+  `,
   heading_heading_semibold: css`
     font-size: 20px;
     line-height: 24px;
     font-weight: 600;
+  `,
+  heading_lg_regular: css`
+    font-size: 20px;
+    line-height: 24px;
+    font-weight: 500;
   `,
 };

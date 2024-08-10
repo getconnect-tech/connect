@@ -57,7 +57,11 @@ export default function ProfileDropdown({ title, onClose }: Props) {
           </OrganizationProfile>
         </Frame1>
         <Frame2>
-          <ProfileItemDiv>
+          <ProfileItemDiv
+            onClick={() => {
+              router.push('/setting');
+            }}
+          >
             <SVGIcon
               name='setting-icon'
               width='12px'
