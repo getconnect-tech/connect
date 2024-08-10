@@ -7,6 +7,7 @@ import {
   Head,
   Label,
   Link,
+  Main,
   MainDiv,
   ProfileDetail,
   ProfileImage,
@@ -19,15 +20,13 @@ import Avatar from '@/components/avtar/Avtar';
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import SettingNavBar from '@/components/settingNavBar/settingNavBar';
 interface Props {
   isProfile?: boolean;
 }
 export default function WorkspaceProfile({ isProfile }: Props) {
   return (
-    <>
+    <Main>
       <MainDiv>
-        <SettingNavBar />
         <RightDiv>
           <Head>
             <Title>Workspace Profile</Title>
@@ -71,6 +70,6 @@ export default function WorkspaceProfile({ isProfile }: Props) {
           </ProfileDetail>
         </RightDiv>
       </MainDiv>
-    </>
+    </Main>
   );
 }

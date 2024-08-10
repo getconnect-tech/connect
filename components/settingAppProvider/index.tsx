@@ -1,25 +1,23 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { useRouter, usePathname, useServerInsertedHTML } from 'next/navigation';
+import { useRouter, useServerInsertedHTML } from 'next/navigation';
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 import { Provider } from 'mobx-react';
-import NavbarPage from '../navbar';
-import SettingAppProvider from '../settingAppProvider';
+import SettingNavBar from '../settingNavBar/settingNavBar';
 import stores from '@/stores';
 import { appInit } from '@/helpers/appInitHelper';
-import { APP_INIT_RESPONSE_TYPE, ONBOARDING_ROUTES } from '@/global/constants';
+import { APP_INIT_RESPONSE_TYPE } from '@/global/constants';
 import { isEmpty } from '@/helpers/common';
 
-export default function AppProvider({
+export default function SettingAppProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const pathname = usePathname();
-  let NavbarComponent = null;
-
+  // Only create stylesheet once with lazy initial state
+  // x-ref: https://reactjs.org/docs/hooks-reference.html#lazy-initial-state
   const [styledComponentsStyleSheet] = useState(() => new ServerStyleSheet());
 
   useServerInsertedHTML(() => {
@@ -34,9 +32,8 @@ export default function AppProvider({
       if (
         result.type === APP_INIT_RESPONSE_TYPE.REDIRECT &&
         !isEmpty(result.path)
-      ) {
+      )
         router.push(result.path);
-      }
     } catch (error) {
       console.log('ERROR', error);
     }
@@ -46,28 +43,17 @@ export default function AppProvider({
     init();
   }, [init]);
 
-  // Conditional check to render SettingAppProvider if the pathname is '/setting'
-  if (pathname.startsWith('/setting')) {
-    return <SettingAppProvider>{children}</SettingAppProvider>;
-  }
-
-  if (ONBOARDING_ROUTES.includes(pathname)) {
-    NavbarComponent = null;
-  } else {
-    NavbarComponent = <NavbarPage />; // Default navbar
-  }
-
   if (typeof window !== 'undefined')
     return (
       <Provider {...stores}>
-        {NavbarComponent}
+        <SettingNavBar />
         {children}
       </Provider>
     );
 
   return (
     <StyleSheetManager sheet={styledComponentsStyleSheet.instance}>
-      {NavbarComponent}
+      <SettingNavBar />
       <Provider {...stores}>{children}</Provider>
     </StyleSheetManager>
   );
