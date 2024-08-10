@@ -20,9 +20,11 @@ import Avatar from '@/components/avtar/Avtar';
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
 import SVGIcon from '@/assets/icons/SVGIcon';
+
 interface Props {
-  isProfile?: boolean;
+  isProfile: boolean;
 }
+
 export default function WorkspaceProfile({ isProfile }: Props) {
   return (
     <Main>
