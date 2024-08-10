@@ -25,7 +25,7 @@ interface Props {
   isProfile: boolean;
 }
 
-export default function WorkspaceProfile({ isProfile }: Props) {
+const WorkspaceProfile: React.FC<Props> = ({ isProfile }) => {
   return (
     <Main>
       <MainDiv>
@@ -74,4 +74,6 @@ export default function WorkspaceProfile({ isProfile }: Props) {
       </MainDiv>
     </Main>
   );
-}
+};
+
+export default WorkspaceProfile;
