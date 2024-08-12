@@ -19,14 +19,15 @@ import { useStores } from '@/stores';
 export default function ProfileSection() {
   const { ticketStore } = useStores();
   const { ticketDetails } = ticketStore;
-  const { sender_mail, sender_name } = ticketDetails || {};
+  // const { } = ticketDetails || {};
+  console.log('ticketDetails', ticketDetails);
 
   return (
     <MainDiv>
       <ProfileDiv>
-        <Avatar imgSrc='' name={sender_name || 'Unknown'} size={58} />
+        <Avatar imgSrc='' name={'Hello--' || 'Unknown'} size={58} />
         <div>
-          <Title>{sender_name || ''}</Title>
+          <Title>{'Hello--' || ''}</Title>
           <CompanyName>Pixer Digital</CompanyName>
         </div>
       </ProfileDiv>
@@ -68,7 +69,7 @@ export default function ProfileSection() {
             />
             <p>Email</p>
           </LeftDiv>
-          <p>{sender_mail}</p>
+          <p>{'Hello--@gmail.com'}</p>
         </DetailsDiv>
         <DetailsDiv>
           <LeftDiv>
