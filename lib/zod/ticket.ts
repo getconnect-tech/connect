@@ -27,15 +27,3 @@ export const prioritySchema = z.nativeEnum(PriorityLevels, {
 export const ticketSourceSchema = z.nativeEnum(TicketSource, {
   required_error: "'source' is required!",
 });
-
-export const senderNameSchema = z.string({
-  required_error: "'senderName' is required!",
-  invalid_type_error: "'senderName' must be of type string!",
-});
-
-export const senderEmailSchema = z
-  .string({
-    required_error: "'senderEmail' is required!",
-    invalid_type_error: "'senderEmail' must be of type string!",
-  })
-  .email();

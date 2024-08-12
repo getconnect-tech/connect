@@ -1,10 +1,10 @@
-import { Ticket } from '@prisma/client';
 import { action, makeObservable, observable } from 'mobx';
+import { TicketDetailsInterface } from '@/utils/appTypes';
 
 class TicketStore {
   loading = false;
-  ticketList: Ticket[] = [];
-  ticketDetails: Ticket | null = null;
+  ticketList: TicketDetailsInterface[] = [];
+  ticketDetails: TicketDetailsInterface | null = null;
 
   constructor() {
     makeObservable(this, {
@@ -28,12 +28,12 @@ class TicketStore {
   }
 
   // Ticket list actions
-  setTicketList(value: Ticket[]) {
+  setTicketList(value: TicketDetailsInterface[]) {
     this.ticketList = value;
   }
 
   // Ticket Details actions
-  setTicketDetails(value: Ticket) {
+  setTicketDetails(value: TicketDetailsInterface) {
     this.ticketDetails = value;
   }
 }
