@@ -15,12 +15,9 @@ import SVGIcon from '@/assets/icons/SVGIcon';
 
 export const Div = styled.div`
   display: flex;
-  gap: 32px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 884px;
+  gap: 64px;
+  margin: auto;
+  max-width: 916px;
   width: 100%;
 `;
 

@@ -8,17 +8,11 @@ export const Main = styled.div`
   display: flex;
   background-color: ${colors.bg_surface};
   width: 100%;
+  margin-top: 50px;
 `;
 
 export const MainDiv = styled.div`
   width: 100%;
-`;
-export const Div = styled.div`
-  display: flex;
-  margin: 0 auto;
-  max-width: 884px;
-  width: 100%;
-  padding-top: 98px;
 `;
 
 export const RightDiv = styled.div`
@@ -69,6 +63,7 @@ export const Link = styled.a`
   padding: 4px 0;
   ${Typography.body_md_medium};
   color: ${colors.text_link};
+  cursor: pointer;
 `;
 export const ProfileInputs = styled.div`
   display: flex;

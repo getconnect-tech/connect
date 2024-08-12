@@ -55,8 +55,8 @@ function Navbar() {
     <MainDiv>
       <TopDiv>
         <div>
-          <LogoDiv onClick={handleProfilePopup} className='tag-div'>
-            <div>
+          <LogoDiv className='tag-div'>
+            <div onClick={handleProfilePopup}>
               <SVGIcon
                 name='logo-icon'
                 width='20'

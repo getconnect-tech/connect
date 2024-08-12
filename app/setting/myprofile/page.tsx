@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Description,
   Frame,
@@ -21,6 +21,17 @@ import Button from '@/components/button/button';
 import Input from '@/components/input/input';
 
 export default function MyProfile() {
+  const handleKeyPress = useCallback(
+    (event: { which: any; keyCode: any; preventDefault: () => void }) => {
+      // Allow only digits
+      const charCode = event.which ? event.which : event.keyCode;
+      if (charCode < 48 || charCode > 57) {
+        event.preventDefault();
+      }
+    },
+    [],
+  );
+
   return (
     <Main>
       <MainDiv>
@@ -58,6 +69,7 @@ export default function MyProfile() {
                 <Input
                   placeholder={'Enter phone number'}
                   style={{ padding: '8px 16px' }}
+                  onKeyPress={handleKeyPress}
                 />
               </TextField>
             </ProfileInputs>
