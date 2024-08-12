@@ -53,19 +53,17 @@ model Ticket {
   id            String         @id @default(uuid())
   workspace_id  String
   title         String
-  contact_id    String?
+  contact_id    String
   assigned_to   String?
   created_at    DateTime       @default(now())
   updated_at    DateTime       @default(now()) @updatedAt
   priority      PriorityLevels @default(NONE)
   messages      Message[]
   assigned_user User?          @relation(fields: [assigned_to], references: [id])
-  contact       Contact?       @relation(fields: [contact_id], references: [id])
+  contact       Contact        @relation(fields: [contact_id], references: [id])
   workspace     Workspace      @relation(fields: [workspace_id], references: [id])
   source        TicketSource
   mail_id       String         @unique
-  sender_name   String
-  sender_mail   String
   labels        TicketLabel[]
 }
 
@@ -83,16 +81,17 @@ model Message {
 
 model Contact {
   id         String   @id @default(uuid())
-  first_name String
-  last_name  String
-  company_id String
-  company    Company  @relation(fields: [company_id], references: [id])
+  name       String
+  email      String   @unique
+  company_id String?
+  company    Company? @relation(fields: [company_id], references: [id])
   tickets    Ticket[]
 }
 
 model Company {
   id       String    @id @default(uuid())
   name     String
+  email    String
   contacts Contact[]
 }
 
