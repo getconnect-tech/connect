@@ -14,19 +14,19 @@ export const teamMember = [
   { name: 'Enterprise (201+ members)', value: TeamSize.ENTERPRISE },
 ];
 export const priorityItem = [
-  { name: 'No priority', icon: 'priority-no-icon', value: PriorityLevels.NONE },
+  { name: 'No priority', icon: 'priority-NONE', value: PriorityLevels.NONE },
   {
     name: 'Urgent',
-    icon: 'priority-urgent-icon',
+    icon: 'priority-URGENT',
     value: PriorityLevels.URGENT,
   },
-  { name: 'High', icon: 'priority-high-icon', value: PriorityLevels.HIGH },
+  { name: 'High', icon: 'priority-HIGH', value: PriorityLevels.HIGH },
   {
     name: 'Medium',
-    icon: 'priority-Medium-icon',
+    icon: 'priority-MEDIUM',
     value: PriorityLevels.MEDIUM,
   },
-  { name: 'Low', icon: 'priority-low-icon', value: PriorityLevels.LOW },
+  { name: 'Low', icon: 'priority-LOW', value: PriorityLevels.LOW },
 ];
 export const labelItem = [
   { name: 'Bug', icon: 'bug-icon' },

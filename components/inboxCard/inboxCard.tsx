@@ -31,6 +31,7 @@ interface Props {
   setCurrentOpenDropdown: (dropdown: string | null) => void;
   dropdownIdentifier: string;
   loadData: () => void;
+  ticketIndex: number;
 }
 
 export default function InboxCard({
@@ -41,7 +42,7 @@ export default function InboxCard({
   currentOpenDropdown,
   setCurrentOpenDropdown,
   dropdownIdentifier,
-  loadData,
+  ticketIndex,
 }: Props) {
   const { title, created_at, source, contact, priority } = ticketDetail;
   const router = useRouter();
@@ -103,16 +104,14 @@ export default function InboxCard({
   }, []);
 
   const onChangePriority = useCallback(async (item: any) => {
-    console.log('item', item);
-    const payload: any = { priority: item?.value };
+    const payload = { priority: item?.value };
     try {
-      const updatedTicket = await updateTicketDetails(
-        ticketDetail?.id,
-        payload,
-      );
-      if (updatedTicket) {
-        loadData();
-      }
+      const updatedTicketDetails = {
+        ...(ticketDetail || {}),
+        priority: item?.value,
+      };
+      ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
+      await updateTicketDetails(ticketDetail?.id, payload);
     } catch (e) {
       console.log('Error : ', e);
     }
@@ -125,12 +124,12 @@ export default function InboxCard({
         <Avatar
           size={28}
           imgSrc={src}
-          name={contact.name}
+          name={contact?.name || ''}
           isShowBorder={true}
         />
         <RightDiv>
           <NameText>
-            {contact.name} from {capitalizeString(source)}
+            {contact?.name} from {capitalizeString(source)}
           </NameText>
           <DesTitle>{title}</DesTitle>
           <NameText className='description'>{description}</NameText>
@@ -168,6 +167,7 @@ export default function InboxCard({
               onChange={onChangePriority}
               isTag={true}
               isActive={true}
+              selectedValue={{ name: priority }}
               className={
                 submenuPosition === 'upwards'
                   ? 'submenu-upwards'

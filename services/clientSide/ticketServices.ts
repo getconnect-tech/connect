@@ -108,7 +108,7 @@ export const getTicketDetails = async (ticketId: string) => {
  * @desc Update ticket details
  * @param {*} ticketId
  */
-export const updateTicketDetails = async (ticketId: any, payload: string) => {
+export const updateTicketDetails = async (ticketId: any, payload: object) => {
   try {
     ticketStore.setLoading(true);
     const response = await axios.put(
