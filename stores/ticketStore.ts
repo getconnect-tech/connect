@@ -15,6 +15,7 @@ class TicketStore {
       // Ticket List
       ticketList: observable,
       setTicketList: action,
+      updateTicketListItem: action,
 
       // Ticket Details
       ticketDetails: observable,
@@ -30,6 +31,10 @@ class TicketStore {
   // Ticket list actions
   setTicketList(value: TicketDetailsInterface[]) {
     this.ticketList = value;
+  }
+
+  updateTicketListItem(index: number, value: TicketDetailsInterface) {
+    this.ticketList[index] = value;
   }
 
   // Ticket Details actions

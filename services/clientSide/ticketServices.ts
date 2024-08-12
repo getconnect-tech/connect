@@ -103,3 +103,27 @@ export const getTicketDetails = async (ticketId: string) => {
     ticketStore.setLoading(false);
   }
 };
+
+/**
+ * @desc Update ticket details
+ * @param {*} ticketId
+ */
+export const updateTicketDetails = async (ticketId: any, payload: object) => {
+  try {
+    ticketStore.setLoading(true);
+    const response = await axios.put(
+      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}`,
+      payload,
+    );
+    const { data } = response;
+
+    // set ticket details in store
+    ticketStore.setTicketDetails(data);
+    return data;
+  } catch (err: any) {
+    alert(err.message);
+    return null;
+  } finally {
+    ticketStore.setLoading(false);
+  }
+};

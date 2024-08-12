@@ -263,7 +263,7 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
-    case 'priority-urgent-icon':
+    case 'priority-URGENT':
       return (
         <>
           <path
@@ -272,7 +272,7 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
-    case 'priority-high-icon':
+    case 'priority-HIGH':
       return (
         <>
           <path
@@ -281,7 +281,7 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
-    case 'priority-Medium-icon':
+    case 'priority-MEDIUM':
       return (
         <>
           <path
@@ -294,7 +294,7 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
-    case 'priority-low-icon':
+    case 'priority-LOW':
       return (
         <>
           <path
@@ -307,7 +307,7 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
-    case 'priority-no-icon':
+    case 'priority-NONE':
       return (
         <>
           <path

@@ -1,4 +1,4 @@
-import { TeamSize } from '@prisma/client';
+import { PriorityLevels, TeamSize } from '@prisma/client';
 
 export const industryItems = [
   { name: 'Technology and Software' },
@@ -14,11 +14,19 @@ export const teamMember = [
   { name: 'Enterprise (201+ members)', value: TeamSize.ENTERPRISE },
 ];
 export const priorityItem = [
-  { name: 'No priority', icon: 'priority-no-icon' },
-  { name: 'Urgent', icon: 'priority-urgent-icon' },
-  { name: 'High', icon: 'priority-high-icon' },
-  { name: 'Medium', icon: 'priority-Medium-icon' },
-  { name: 'Low', icon: 'priority-low-icon' },
+  { name: 'No priority', icon: 'priority-NONE', value: PriorityLevels.NONE },
+  {
+    name: 'Urgent',
+    icon: 'priority-URGENT',
+    value: PriorityLevels.URGENT,
+  },
+  { name: 'High', icon: 'priority-HIGH', value: PriorityLevels.HIGH },
+  {
+    name: 'Medium',
+    icon: 'priority-MEDIUM',
+    value: PriorityLevels.MEDIUM,
+  },
+  { name: 'Low', icon: 'priority-LOW', value: PriorityLevels.LOW },
 ];
 export const labelItem = [
   { name: 'Bug', icon: 'bug-icon' },
