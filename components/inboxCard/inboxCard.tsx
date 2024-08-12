@@ -4,7 +4,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Ticket } from '@prisma/client';
 import moment from 'moment';
 import Avatar from '../avtar/Avtar';
 import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
@@ -20,9 +19,10 @@ import {
 import { labelItem, priorityItem } from '@/helpers/raw';
 import { capitalizeString } from '@/helpers/common';
 import { useStores } from '@/stores';
+import { TicketDetailsInterface } from '@/utils/appTypes';
 
 interface Props {
-  ticketDetail: Ticket;
+  ticketDetail: TicketDetailsInterface;
   description: string;
   showDotIcon?: boolean;
   src: string;
@@ -40,7 +40,7 @@ export default function InboxCard({
   setCurrentOpenDropdown,
   dropdownIdentifier,
 }: Props) {
-  const { title, created_at, source } = ticketDetail;
+  const { title, created_at, source, contact } = ticketDetail;
   const router = useRouter();
   const { ticketStore } = useStores();
 
@@ -103,10 +103,15 @@ export default function InboxCard({
     <CardDiv onClick={onClickTicket}>
       {showDotIcon && <DotIcon />}
       <LeftDiv>
-        <Avatar size={28} imgSrc={src} name={'Hello--'} isShowBorder={true} />
+        <Avatar
+          size={28}
+          imgSrc={src}
+          name={contact.name}
+          isShowBorder={true}
+        />
         <RightDiv>
           <NameText>
-            {'Hello--'} from {capitalizeString(source)}
+            {contact.name} from {capitalizeString(source)}
           </NameText>
           <DesTitle>{title}</DesTitle>
           <NameText className='description'>{description}</NameText>
