@@ -5,13 +5,12 @@ import { useRouter, useServerInsertedHTML } from 'next/navigation';
 import styled, { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 import { Provider } from 'mobx-react';
 import SettingNavBar from '../settingNavBar/settingNavBar';
-import { IconDiv } from '../settingNavBar/style';
+import Icon from '../icon/icon';
 import stores from '@/stores';
 import { appInit } from '@/helpers/appInitHelper';
 import { APP_INIT_RESPONSE_TYPE } from '@/global/constants';
 import { isEmpty } from '@/helpers/common';
 import { colors } from '@/styles/colors';
-import SVGIcon from '@/assets/icons/SVGIcon';
 
 export const Div = styled.div`
   display: flex;
@@ -24,6 +23,11 @@ export const Div = styled.div`
 export const MainDiv = styled.div`
   background-color: ${colors.bg_surface};
   height: 100vh;
+  .icon {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+  }
 `;
 
 export default function SettingAppProvider({
@@ -63,18 +67,15 @@ export default function SettingAppProvider({
     return (
       <Provider {...stores}>
         <MainDiv>
-          <IconDiv
+          <Icon
             onClick={() => {
               router.push('/');
             }}
-          >
-            <SVGIcon
-              name='cross-icon'
-              width='16'
-              height='16'
-              viewBox='0 0 16 16'
-            />
-          </IconDiv>
+            iconName={'cross-icon'}
+            iconSize={'16'}
+            iconViewBox={'0 0 16 16'}
+            className='icon'
+          />
           <Div>
             <SettingNavBar />
             {children}

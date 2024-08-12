@@ -28,10 +28,9 @@ const getPath = (name: string, props: any) => {
       return (
         <>
           <path
-            fill='#000'
-            fillOpacity={0.5}
+            fill={fill}
             fillRule='evenodd'
-            d='M19 7H9a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-8a3 3 0 0 0-3-3ZM8 10a1 1 0 0 1 1-1h2v10H9a1 1 0 0 1-1-1v-8Zm5 9h6a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-6v10Z'
+            d='M13 1H3a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V4a3 3 0 0 0-3-3ZM2 4a1 1 0 0 1 1-1h2v10H3a1 1 0 0 1-1-1V4Zm5 9h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H7v10Z'
             clipRule='evenodd'
           />
         </>
@@ -373,7 +372,7 @@ const getPath = (name: string, props: any) => {
           </mask>
           <g mask='url(#a)'>
             <path
-              fill='#7B7A79'
+              fill={fill}
               d='m9.617 8 6.049-6.049A1.141 1.141 0 1 0 14.05.335L8 6.386 1.952.335A1.142 1.142 0 1 0 .336 1.952l6.049 6.05-6.049 6.048a1.141 1.141 0 1 0 1.616 1.616l6.049-6.049 6.049 6.05a1.14 1.14 0 0 0 1.616 0 1.141 1.141 0 0 0 0-1.617L9.616 8Z'
             />
           </g>
