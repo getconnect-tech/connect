@@ -83,8 +83,6 @@ export const updateTicket = async (
     source?: TicketSource;
     contanctId?: string;
     assignedTo?: string;
-    senderName?: string;
-    senderEmail?: string;
   },
 ) => {
   removeNullUndefined(ticketUpdates);

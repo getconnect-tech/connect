@@ -5,8 +5,6 @@ import {
   assginToSchema,
   contactIdSchema,
   prioritySchema,
-  senderEmailSchema,
-  senderNameSchema,
   ticketSourceSchema,
   titleSchema,
 } from '@/lib/zod/ticket';
@@ -36,8 +34,6 @@ const UpdateTicketRequestBody = z.object({
   assignedTo: assginToSchema.optional(),
   priority: prioritySchema.optional(),
   source: ticketSourceSchema.optional(),
-  senderName: senderNameSchema.optional(),
-  senderEmail: senderEmailSchema.optional(),
 });
 
 export const PUT = withWorkspaceAuth(async (req, { ticketId }) => {
