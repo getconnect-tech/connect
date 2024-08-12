@@ -10,6 +10,7 @@ export const MainDiv = styled.div`
   max-width: 190px;
   width: 100%;
   gap: 12px;
+  margin-top: 50px;
 `;
 export const IconDiv = styled.div`
   position: fixed;
@@ -49,7 +50,7 @@ export const NavItems = styled.div`
 `;
 export const Item = styled.div<Props>`
   display: flex;
-  padding: 4px 4px 4px 12px;
+  padding: 4px 12px;
   ${Typography.body_md_regular}
   color: ${colors.text_text_secondary};
   &:hover {

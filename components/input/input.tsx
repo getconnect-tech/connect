@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 'use client';
 import React from 'react';
 import { Errormessage, InputBox, InputDiv, Maindiv } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
+
 interface Props {
   title?: string;
   placeholder: string;
@@ -13,6 +15,7 @@ interface Props {
   type?: 'email' | 'password' | 'text' | 'number';
   // eslint-disable-next-line no-unused-vars
   onChange?: any;
+  onKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   disabled?: boolean;
   style?: React.CSSProperties;
   inputRef?: any;
@@ -22,27 +25,26 @@ interface Props {
   iconViewBox?: string;
   isIcon?: boolean;
 }
-const Input: React.FC<Props> = (Props) => {
-  const {
-    // title,
-    placeholder,
-    hasError,
-    error,
-    className,
-    type,
-    onChange,
-    value,
-    disabled,
-    style,
-    inputRef,
-    autoFocus,
-    iconName,
-    iconSize,
-    iconViewBox,
-    isIcon,
-    ...props
-  } = Props;
 
+const Input: React.FC<Props> = ({
+  placeholder,
+  hasError,
+  error,
+  className,
+  type,
+  onChange,
+  onKeyPress,
+  value,
+  disabled,
+  style,
+  inputRef,
+  autoFocus,
+  iconName,
+  iconSize,
+  iconViewBox,
+  isIcon,
+  ...props
+}) => {
   return (
     <Maindiv>
       <InputDiv>
@@ -60,6 +62,7 @@ const Input: React.FC<Props> = (Props) => {
           hasError={hasError}
           className={className}
           onChange={onChange}
+          onKeyPress={onKeyPress}
           disabled={disabled}
           type={type}
           value={value}
@@ -83,4 +86,5 @@ const Input: React.FC<Props> = (Props) => {
     </Maindiv>
   );
 };
+
 export default Input;
