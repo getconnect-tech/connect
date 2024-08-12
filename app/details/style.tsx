@@ -1,6 +1,12 @@
+/* eslint-disable indent */
 import styled from 'styled-components';
 import { Typography } from '../../styles/typography';
 import { colors } from '@/styles/colors';
+import { DropDownItem } from '@/components/dropDown/dropDown';
+
+interface Props {
+  modeSelectedItem: DropDownItem;
+}
 
 const Main = styled.div`
   display: flex;
@@ -72,21 +78,30 @@ const InputDiv = styled.div`
   z-index: 1;
 `;
 
-const Input = styled.div`
-  background-color: ${colors.bg_white};
-  border: 1px solid ${colors.border};
+const Input = styled.div<Props>`
+  background-color: ${({ modeSelectedItem }) =>
+    modeSelectedItem?.name === 'Internal'
+      ? colors.brand_disabled
+      : colors.bg_white};
   border-radius: 12px;
   width: 100%;
   padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 2px;
+  box-shadow:
+    0px 0px 0px 0.5px ${colors.box_shadow},
+    0px 2px 4px 0px ${colors.box_shadow_2};
   textarea {
     outline: none;
     border: none;
     max-height: 40px;
     height: 100%;
     width: 100%;
+    background-color: ${({ modeSelectedItem }) =>
+      modeSelectedItem?.name === 'Internal'
+        ? colors.brand_disabled
+        : colors.bg_white};
     ${Typography.body_md_regular};
     ${colors.text};
     resize: none;
@@ -107,7 +122,7 @@ const CenterDiv = styled.div`
 
 const InputIcon = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   gap: 8px;
   .send-icon {
@@ -116,6 +131,14 @@ const InputIcon = styled.div`
     &:hover {
       background-color: ${colors.bg_surface_secondary_hover};
     }
+  }
+  .submenu-upwards {
+    bottom: calc(100% - 50px);
+    top: auto;
+  }
+  .submenu-downwards {
+    top: 0;
+    bottom: auto;
   }
 `;
 
@@ -145,6 +168,18 @@ const LineDiv = styled.div`
   margin-left: 9px;
 `;
 
+const IconDiv = styled.div<Props>`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  .icon {
+    background-color: ${({ modeSelectedItem }) =>
+      modeSelectedItem?.name === 'Internal'
+        ? colors.bg_surface_secondary_hover
+        : colors.bg_surface_secondary};
+  }
+`;
+
 export {
   Main,
   MainDiv,
@@ -161,4 +196,5 @@ export {
   ActivityDiv,
   Message,
   LineDiv,
+  IconDiv,
 };

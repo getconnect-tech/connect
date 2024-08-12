@@ -128,7 +128,11 @@ export default function DropDown({
               }
               onClose();
             }}
-            onMouseEnter={handleMouseEnter}
+            onMouseEnter={() => {
+              // eslint-disable-next-line no-unused-expressions, @typescript-eslint/no-unused-expressions
+              handleMouseEnter;
+              setHoveredItem(item.name);
+            }}
             onMouseLeave={handleMouseLeave}
           >
             <ItemLeftDiv

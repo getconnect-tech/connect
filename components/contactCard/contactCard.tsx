@@ -15,7 +15,7 @@ interface Props {
   imgSrc: string;
   name: string;
   email: string;
-  comapanyImg?: string;
+  companyImg?: string;
   isCompany?: boolean;
   companyName?: string;
   openCount: string;
@@ -27,7 +27,7 @@ export default function ContactCard({
   imgSrc,
   name,
   email,
-  comapanyImg = '',
+  companyImg = '',
   isCompany = true,
   companyName,
   openCount,
@@ -52,7 +52,7 @@ export default function ContactCard({
                 <DotIcon />
                 <CompanyNameDiv>
                   <Avatar
-                    imgSrc={comapanyImg}
+                    imgSrc={companyImg}
                     name={''}
                     size={20}
                     isShowBorder={true}

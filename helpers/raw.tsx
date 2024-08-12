@@ -33,3 +33,7 @@ export const labelItem = [
   { name: 'Question', icon: 'question-icon' },
   { name: 'Feedback', icon: 'feedback-icon' },
 ];
+export const modeItem = [
+  { name: 'Email', icon: 'email-icon' },
+  { name: 'Internal', icon: 'internal-icon' },
+];
