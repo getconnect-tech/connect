@@ -206,7 +206,7 @@ export default function CustomContextMenu({ children }: Props) {
               >
                 <div>
                   <SVGIcon
-                    name='priority-no-icon'
+                    name='priority-NONE'
                     width='12'
                     height='12'
                     viewBox='0 0 12 12'

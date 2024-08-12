@@ -40,7 +40,7 @@ export default function InboxCard({
   setCurrentOpenDropdown,
   dropdownIdentifier,
 }: Props) {
-  const { title, created_at, source, contact } = ticketDetail;
+  const { title, created_at, source, contact, priority } = ticketDetail;
   const router = useRouter();
   const { ticketStore } = useStores();
 
@@ -99,6 +99,10 @@ export default function InboxCard({
     router.push(`/details/${ticketDetail?.id}`);
   }, []);
 
+  const onChangePriority = useCallback((item: any) => {
+    console.log('item', item);
+  }, []);
+
   return (
     <CardDiv onClick={onClickTicket}>
       {showDotIcon && <DotIcon />}
@@ -140,13 +144,13 @@ export default function InboxCard({
             <DropDownWithTag
               onClick={() => handleDropdownClick('priority')}
               title={'Priority'}
-              iconName={'priority-no-icon'}
+              iconName={`priority-${priority}`}
               dropdownOpen={
                 currentOpenDropdown === `${dropdownIdentifier}-priority`
               }
               onClose={() => setCurrentOpenDropdown(null)}
               items={priorityItem}
-              onChange={() => {}}
+              onChange={onChangePriority}
               isTag={true}
               isActive={true}
               className={

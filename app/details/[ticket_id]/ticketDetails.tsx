@@ -144,7 +144,7 @@ function TicketDetails(props: Props) {
             <DropDownWithTag
               onClick={handlePriorityTag}
               title={'Priority'}
-              iconName={'priority-no-icon'}
+              iconName={'priority-NONE'}
               dropdownOpen={priorityDropdown}
               onClose={() => setPriorityDropdown(false)}
               items={priorityItem}
