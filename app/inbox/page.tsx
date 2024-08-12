@@ -71,6 +71,7 @@ function Inbox() {
                   currentOpenDropdown={currentOpenDropdown}
                   setCurrentOpenDropdown={setCurrentOpenDropdown}
                   dropdownIdentifier={`card-${ticket.id}`}
+                  loadData={loadData}
                 />
               </div>
             </CustomContextMenu>

@@ -20,6 +20,7 @@ import { labelItem, priorityItem } from '@/helpers/raw';
 import { capitalizeString } from '@/helpers/common';
 import { useStores } from '@/stores';
 import { TicketDetailsInterface } from '@/utils/appTypes';
+import { updateTicketDetails } from '@/services/clientSide/ticketServices';
 
 interface Props {
   ticketDetail: TicketDetailsInterface;
@@ -29,6 +30,7 @@ interface Props {
   currentOpenDropdown: string | null;
   setCurrentOpenDropdown: (dropdown: string | null) => void;
   dropdownIdentifier: string;
+  loadData: () => void;
 }
 
 export default function InboxCard({
@@ -39,6 +41,7 @@ export default function InboxCard({
   currentOpenDropdown,
   setCurrentOpenDropdown,
   dropdownIdentifier,
+  loadData,
 }: Props) {
   const { title, created_at, source, contact, priority } = ticketDetail;
   const router = useRouter();
@@ -99,8 +102,20 @@ export default function InboxCard({
     router.push(`/details/${ticketDetail?.id}`);
   }, []);
 
-  const onChangePriority = useCallback((item: any) => {
+  const onChangePriority = useCallback(async (item: any) => {
     console.log('item', item);
+    const payload: any = { priority: item?.value };
+    try {
+      const updatedTicket = await updateTicketDetails(
+        ticketDetail?.id,
+        payload,
+      );
+      if (updatedTicket) {
+        loadData();
+      }
+    } catch (e) {
+      console.log('Error : ', e);
+    }
   }, []);
 
   return (
