@@ -20,7 +20,6 @@ import {
   CenterCardNext,
   NextProfile,
   Card,
-  Icon,
   LabelDiv,
   BottomFrame,
   DetailSection,
@@ -39,6 +38,7 @@ import {
 import { isEmpty } from '@/helpers/common';
 import { colors } from '@/styles/colors';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
+import Icon from '@/components/icon/icon';
 
 function OnboardingStep1() {
   const [showCard, setShowCard] = useState(false);
@@ -250,14 +250,12 @@ function OnboardingStep1() {
                             )
                           }
                         />
-                        <Icon onClick={() => handleRemoveInputField(index)}>
-                          <SVGIcon
-                            name='cross-icon'
-                            width='16'
-                            height='16'
-                            viewBox='0 0 16 16'
-                          />
-                        </Icon>
+                        <Icon
+                          onClick={() => handleRemoveInputField(index)}
+                          iconName={'cross-icon'}
+                          iconSize={'16'}
+                          iconViewBox={'0 0 16 16'}
+                        />
                       </TextField>
                     ))}
                   </DetailSection>

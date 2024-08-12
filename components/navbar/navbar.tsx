@@ -2,7 +2,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
-import { ItemMainDiv, Label, LogoDiv, MainDiv, TopDiv } from './style';
+import Icon from '../icon/icon';
+import {
+  ItemMainDiv,
+  Label,
+  LogoDiv,
+  MainDiv,
+  OrganizationNameDiv,
+  TopDiv,
+} from './style';
 import NavbarItem from './navbarItem';
 import ProfileDropdown from './profileDropdown';
 import SVGIcon from '@/assets/icons/SVGIcon';
@@ -56,7 +64,7 @@ function Navbar() {
       <TopDiv>
         <div>
           <LogoDiv className='tag-div'>
-            <div onClick={handleProfilePopup}>
+            <OrganizationNameDiv onClick={handleProfilePopup}>
               <SVGIcon
                 name='logo-icon'
                 width='20'
@@ -65,14 +73,13 @@ function Navbar() {
                 fill='none'
               />
               <p>{workspaceStore?.currentWorkspace?.name || ''}</p>
-            </div>
-            <SVGIcon
-              name='sidebar-icon'
-              width='28'
-              height='28'
-              viewBox='0 0 28 28'
-              fill='none'
-              className='logo-icon'
+            </OrganizationNameDiv>
+            <Icon
+              onClick={() => {}}
+              iconName={'sidebar-icon'}
+              iconSize={'16'}
+              iconViewBox={'0 0 16 16'}
+              className='icon'
             />
           </LogoDiv>
           {isOpen && (

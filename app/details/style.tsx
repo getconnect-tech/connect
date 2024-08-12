@@ -39,28 +39,13 @@ const HeaderDiv = styled.div`
   align-items: center;
   gap: 20px;
   justify-content: space-between;
-  padding: 9px 20px;
+  padding: 7px 20px;
 `;
 
 const LeftDiv = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-`;
-
-const IconDiv = styled.div`
-  width: 24px;
-  height: 24px;
-  fill: ${colors.icon};
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  &:hover {
-    fill: ${colors.icon_hover};
-    background-color: ${colors.bg_surface_hover};
-    border-radius: 100%;
-  }
 `;
 
 const Title = styled.div`
@@ -168,7 +153,6 @@ export {
   TopDiv,
   BottomDiv,
   LeftDiv,
-  IconDiv,
   StatusDiv,
   InputDiv,
   Input,

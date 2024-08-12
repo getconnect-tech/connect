@@ -35,32 +35,26 @@ const LogoDiv = styled.div`
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
-  div {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px;
-    p {
-      ${Typography.body_md_medium}
-      color: ${colors.text};
-      margin-right: 8px;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      overflow: hidden;
-    }
-    &:hover {
-      cursor: pointer;
-      background-color: ${colors.bg_surface_hover};
-      border-radius: 30px;
-    }
+`;
+
+const OrganizationNameDiv = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px;
+  p {
+    ${Typography.body_md_medium}
+    color: ${colors.text};
+    margin-right: 8px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
   }
-  .logo-icon {
+  &:hover {
     cursor: pointer;
-    &:hover {
-      background-color: ${colors.bg_surface_hover};
-      border-radius: 30px;
-    }
+    background-color: ${colors.bg_surface_hover};
+    border-radius: 30px;
   }
 `;
 
@@ -193,4 +187,5 @@ export {
   OrganizationProfile,
   Description,
   ProfileItemDiv,
+  OrganizationNameDiv,
 };

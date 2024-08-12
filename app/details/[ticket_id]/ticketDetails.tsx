@@ -8,7 +8,6 @@ import {
   BottomDiv,
   CenterDiv,
   HeaderDiv,
-  IconDiv,
   Input,
   InputDiv,
   InputIcon,
@@ -31,6 +30,7 @@ import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import { useStores } from '@/stores';
 import { getTicketDetails } from '@/services/clientSide/ticketServices';
 import { isEmpty } from '@/helpers/common';
+import Icon from '@/components/icon/icon';
 
 interface Props {
   ticket_id: string;
@@ -104,28 +104,23 @@ function TicketDetails(props: Props) {
         <TopDiv>
           <HeaderDiv>
             <LeftDiv>
-              <IconDiv
+              <Icon
                 onClick={() => {
-                  router.push('/inbox');
+                  router.push('/');
                 }}
-              >
-                <SVGIcon
-                  name='back-icon'
-                  width='16'
-                  height='16'
-                  viewBox='0 0 16 16'
-                />
-              </IconDiv>
+                iconName='back-icon'
+                iconSize='16'
+                iconViewBox='0 0 16 16'
+                size={true}
+              />
               <Title>{ticketDetails?.title || ''}</Title>
             </LeftDiv>
-            <IconDiv>
-              <SVGIcon
-                name='three-dot-icon'
-                width='16'
-                height='16'
-                viewBox='0 0 16 16'
-              />
-            </IconDiv>
+            <Icon
+              onClick={() => {}}
+              iconName='three-dot-icon'
+              iconSize='16'
+              iconViewBox='0 0 16 16'
+            />
           </HeaderDiv>
           <StatusDiv>
             <DropDownWithTag
@@ -256,22 +251,20 @@ function TicketDetails(props: Props) {
             <Input>
               <textarea placeholder='Write a message' />
               <InputIcon>
-                <IconDiv>
-                  <SVGIcon
-                    name='attach-icon'
-                    width='12'
-                    height='12'
-                    viewBox='0 0 12 12'
-                  />
-                </IconDiv>
-                <IconDiv className='send-icon'>
-                  <SVGIcon
-                    name='send-icon'
-                    width='12'
-                    height='12'
-                    viewBox='0 0 12 12'
-                  />
-                </IconDiv>
+                <Icon
+                  onClick={() => {}}
+                  iconName='attach-icon'
+                  iconSize='12'
+                  iconViewBox='0 0 12 12'
+                  size={true}
+                />
+                <Icon
+                  onClick={() => {}}
+                  iconName='send-icon'
+                  iconSize='12'
+                  iconViewBox='0 0 12 12'
+                  size={true}
+                />
               </InputIcon>
             </Input>
           </InputDiv>
