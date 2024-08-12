@@ -40,7 +40,7 @@ export default function InboxCard({
   setCurrentOpenDropdown,
   dropdownIdentifier,
 }: Props) {
-  const { title, created_at, sender_name, source } = ticketDetail;
+  const { title, created_at, source } = ticketDetail;
   const router = useRouter();
   const { ticketStore } = useStores();
 
@@ -103,10 +103,10 @@ export default function InboxCard({
     <CardDiv onClick={onClickTicket}>
       {showDotIcon && <DotIcon />}
       <LeftDiv>
-        <Avatar size={28} imgSrc={src} name={sender_name} isShowBorder={true} />
+        <Avatar size={28} imgSrc={src} name={'Hello--'} isShowBorder={true} />
         <RightDiv>
           <NameText>
-            {sender_name} from {capitalizeString(source)}
+            {'Hello--'} from {capitalizeString(source)}
           </NameText>
           <DesTitle>{title}</DesTitle>
           <NameText className='description'>{description}</NameText>
