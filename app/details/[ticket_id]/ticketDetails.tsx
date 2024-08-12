@@ -31,6 +31,7 @@ import { useStores } from '@/stores';
 import { getTicketDetails } from '@/services/clientSide/ticketServices';
 import { isEmpty } from '@/helpers/common';
 import Icon from '@/components/icon/icon';
+import RichTextBox from '@/components/commentBox';
 
 interface Props {
   ticket_id: string;
@@ -250,6 +251,7 @@ function TicketDetails(props: Props) {
             />
             <Input>
               <textarea placeholder='Write a message' />
+              <RichTextBox />
               <InputIcon>
                 <Icon
                   onClick={() => {}}

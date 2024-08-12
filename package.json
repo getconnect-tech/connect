@@ -16,6 +16,8 @@
   "dependencies": {
     "@prisma/client": "^5.18.0",
     "@radix-ui/react-context-menu": "^2.2.1",
+    "@syncfusion/ej2-react-dropdowns": "^26.2.8",
+    "@syncfusion/ej2-react-richtexteditor": "^26.2.8",
     "axios": "^1.7.3",
     "mobx": "^6.13.1",
     "mobx-react": "^9.1.1",
