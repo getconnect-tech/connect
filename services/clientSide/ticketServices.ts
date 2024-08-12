@@ -104,7 +104,6 @@ export const getTicketDetails = async (ticketId: string) => {
   }
 };
 
-
 /**
  * @desc Update ticket details
  * @param {*} ticketId
