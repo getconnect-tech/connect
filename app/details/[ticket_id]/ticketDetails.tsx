@@ -33,7 +33,6 @@ import { getTicketDetails } from '@/services/clientSide/ticketServices';
 import { isEmpty } from '@/helpers/common';
 import Icon from '@/components/icon/icon';
 import { DropDownItem } from '@/components/dropDown/dropDown';
-import { colors } from '@/styles/colors';
 
 interface Props {
   ticket_id: string;
@@ -319,10 +318,7 @@ function TicketDetails(props: Props) {
                   }
                   dropDownStyle={{ maxWidth: 142, width: '100%' }}
                   tagStyle={{
-                    backgroundColor:
-                      modeSelectedItem?.name === 'Internal'
-                        ? colors.bg_surface_secondary_hover
-                        : colors.bg_surface_secondary,
+                    backgroundColor: 'unset',
                   }}
                 />
                 <IconDiv modeSelectedItem={modeSelectedItem}>
