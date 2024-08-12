@@ -12,6 +12,7 @@ interface Props {
   iconName: string;
   title: string;
   ref?: React.Ref<HTMLDivElement>;
+  style?: React.CSSProperties;
 }
 
 export default function Tag({
@@ -22,6 +23,7 @@ export default function Tag({
   iconName,
   title,
   ref,
+  style,
 }: Props) {
   return (
     //apply className while open drop down
@@ -30,6 +32,7 @@ export default function Tag({
       onClick={onClick}
       ref={ref}
       className='tag-div'
+      style={style}
     >
       {isName ? (
         <Avatar name='' imgSrc={`${src}`} size={20} />

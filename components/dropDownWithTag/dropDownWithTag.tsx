@@ -27,6 +27,7 @@ interface Props {
   selectedValue?: DropDownItem;
   className?: string;
   onMouseEnter?: any;
+  tagStyle?: React.CSSProperties;
 }
 
 export default function DropDownWithTag({
@@ -50,6 +51,7 @@ export default function DropDownWithTag({
   selectedValue,
   className,
   onMouseEnter,
+  tagStyle,
 }: Props) {
   return (
     <div onMouseEnter={onMouseEnter}>
@@ -65,6 +67,7 @@ export default function DropDownWithTag({
           iconName={iconName}
           title={selectedValue ? selectedValue.name : title}
           src={src}
+          style={tagStyle}
         />
       ) : (
         <DropBox

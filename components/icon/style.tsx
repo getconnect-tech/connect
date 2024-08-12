@@ -1,8 +1,9 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { colors } from '@/styles/colors';
 
 interface Props {
   size?: boolean;
+  isActive?: boolean;
 }
 
 export const IconDiv = styled.div<Props>`
@@ -23,4 +24,10 @@ export const IconDiv = styled.div<Props>`
       fill: ${colors.icon_hover};
     }
   }
+  ${(props) =>
+    props.isActive &&
+    css`
+      background-color: ${colors.bg_surface_secondary};
+      border-radius: 50%;
+    `}
 `;
