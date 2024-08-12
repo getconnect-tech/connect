@@ -4,7 +4,7 @@ import { InboundEmailPayload } from '@/utils/dataTypes';
 import { handleApiError } from '@/helpers/errorHandler';
 import { createTicket, getTicketByMailId } from '@/services/serverSide/ticket';
 import { postMessage } from '@/services/serverSide/message';
-import { WORKSPACE_ID_WEBHOOK } from '@/helpers/environment';
+import { hasWorkspace } from '@/services/serverSide/workspace';
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -18,13 +18,20 @@ export const POST = async (req: NextRequest) => {
     )!.Value;
     const referenceId = references[0] || mailId;
 
+    const workspaceId = emailPayload.OriginalRecipient.split('@')[0]!;
+
+    const isWorkspaceExsits = await hasWorkspace(workspaceId);
+
+    if (!isWorkspaceExsits) {
+      return new Response('Workspace not found!', { status: 200 });
+    }
+
     let ticket = await getTicketByMailId(referenceId);
     if (!ticket) {
       ticket = await createTicket({
         mailId: referenceId,
         subject: emailPayload.Subject,
-        // eslint-disable-next-line max-len
-        workspaceId: WORKSPACE_ID_WEBHOOK || 'unknown', // TODO: Replace with workspace id where we want to want forward the tickets
+        workspaceId: workspaceId,
         senderEmail: emailPayload.From,
         senderName: emailPayload.FromName,
       });

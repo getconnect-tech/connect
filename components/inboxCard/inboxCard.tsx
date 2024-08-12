@@ -20,6 +20,7 @@ import { labelItem, priorityItem } from '@/helpers/raw';
 import { capitalizeString } from '@/helpers/common';
 import { useStores } from '@/stores';
 import { TicketDetailsInterface } from '@/utils/appTypes';
+import { updateTicketDetails } from '@/services/clientSide/ticketServices';
 
 interface Props {
   ticketDetail: TicketDetailsInterface;
@@ -29,6 +30,8 @@ interface Props {
   currentOpenDropdown: string | null;
   setCurrentOpenDropdown: (dropdown: string | null) => void;
   dropdownIdentifier: string;
+  loadData: () => void;
+  ticketIndex: number;
 }
 
 export default function InboxCard({
@@ -39,8 +42,9 @@ export default function InboxCard({
   currentOpenDropdown,
   setCurrentOpenDropdown,
   dropdownIdentifier,
+  ticketIndex,
 }: Props) {
-  const { title, created_at, source, contact } = ticketDetail;
+  const { title, created_at, source, contact, priority } = ticketDetail;
   const router = useRouter();
   const { ticketStore } = useStores();
 
@@ -99,6 +103,20 @@ export default function InboxCard({
     router.push(`/details/${ticketDetail?.id}`);
   }, []);
 
+  const onChangePriority = useCallback(async (item: any) => {
+    const payload = { priority: item?.value };
+    try {
+      const updatedTicketDetails = {
+        ...(ticketDetail || {}),
+        priority: item?.value,
+      };
+      ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
+      await updateTicketDetails(ticketDetail?.id, payload);
+    } catch (e) {
+      console.log('Error : ', e);
+    }
+  }, []);
+
   return (
     <CardDiv onClick={onClickTicket}>
       {showDotIcon && <DotIcon />}
@@ -106,12 +124,12 @@ export default function InboxCard({
         <Avatar
           size={28}
           imgSrc={src}
-          name={contact.name}
+          name={contact?.name || ''}
           isShowBorder={true}
         />
         <RightDiv>
           <NameText>
-            {contact.name} from {capitalizeString(source)}
+            {contact?.name} from {capitalizeString(source)}
           </NameText>
           <DesTitle>{title}</DesTitle>
           <NameText className='description'>{description}</NameText>
@@ -140,15 +158,16 @@ export default function InboxCard({
             <DropDownWithTag
               onClick={() => handleDropdownClick('priority')}
               title={'Priority'}
-              iconName={'priority-no-icon'}
+              iconName={`priority-${priority}`}
               dropdownOpen={
                 currentOpenDropdown === `${dropdownIdentifier}-priority`
               }
               onClose={() => setCurrentOpenDropdown(null)}
               items={priorityItem}
-              onChange={() => {}}
+              onChange={onChangePriority}
               isTag={true}
               isActive={true}
+              selectedValue={{ name: priority }}
               className={
                 submenuPosition === 'upwards'
                   ? 'submenu-upwards'

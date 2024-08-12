@@ -94,3 +94,10 @@ export const getUserWorkspaces = async (userId: string) => {
   const formattedWorkspaces = workspaces.map(({ workspace }) => workspace);
   return formattedWorkspaces;
 };
+
+export const hasWorkspace = async (workspaceId: string) => {
+  const workspace = await prisma.workspace.findUnique({
+    where: { id: workspaceId },
+  });
+  return !!workspace;
+};

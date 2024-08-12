@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
+import { PriorityLevels } from '@prisma/client';
 import {
   ActivityDiv,
   BottomDiv,
@@ -29,7 +30,10 @@ import QuestionCard from '@/components/questionCard/questionCard';
 import { labelItem, modeItem, priorityItem } from '@/helpers/raw';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import { useStores } from '@/stores';
-import { getTicketDetails } from '@/services/clientSide/ticketServices';
+import {
+  getTicketDetails,
+  updateTicketDetails,
+} from '@/services/clientSide/ticketServices';
 import { isEmpty } from '@/helpers/common';
 import Icon from '@/components/icon/icon';
 import { DropDownItem } from '@/components/dropDown/dropDown';
@@ -48,6 +52,7 @@ function TicketDetails(props: Props) {
   const { ticketStore, workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
   const { ticketDetails } = ticketStore;
+  const { priority } = ticketDetails || {};
   const [modeSelectedItem, setModeSelectedItem] = useState<DropDownItem>({
     name: 'Email',
     icon: 'email-icon',
@@ -140,6 +145,25 @@ function TicketDetails(props: Props) {
     },
   ];
 
+  const onChangePriority = useCallback(
+    async (item: { name: string; icon: string; value: PriorityLevels }) => {
+      const payload = { priority: item?.value };
+      try {
+        if (ticketDetails?.id) {
+          const updatedTicketDetails = {
+            ...ticketDetails,
+            priority: item?.value,
+          };
+          ticketStore.setTicketDetails(updatedTicketDetails);
+          await updateTicketDetails(ticketDetails?.id, payload);
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetails],
+  );
+
   return (
     <Main>
       <MainDiv>
@@ -181,11 +205,12 @@ function TicketDetails(props: Props) {
             <DropDownWithTag
               onClick={handlePriorityTag}
               title={'Priority'}
-              iconName={'priority-no-icon'}
+              iconName={`priority-${priority || 'NONE'}`}
               dropdownOpen={priorityDropdown}
               onClose={() => setPriorityDropdown(false)}
               items={priorityItem}
-              onChange={() => {}}
+              onChange={onChangePriority}
+              selectedValue={{ name: priority || 'NONE' }}
               isTag={true}
               isActive={true}
             />

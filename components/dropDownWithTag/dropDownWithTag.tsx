@@ -3,6 +3,7 @@ import DropDown, { DropDownItem } from '../dropDown/dropDown';
 import Tag from '../tag/tag';
 import { DropBox } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { capitalizeString } from '@/helpers/common';
 
 interface Props {
   // eslint-disable-next-line no-unused-vars
@@ -13,7 +14,7 @@ interface Props {
   onClose: () => void;
   items: DropDownItem[];
   // eslint-disable-next-line no-unused-vars
-  onChange: (item: DropDownItem) => void;
+  onChange: (item: any) => void;
   style?: React.CSSProperties;
   dropDownStyle?: React.CSSProperties;
   isTag: boolean;
@@ -65,7 +66,7 @@ export default function DropDownWithTag({
           }}
           isName={isName}
           iconName={iconName}
-          title={selectedValue ? selectedValue.name : title}
+          title={selectedValue ? capitalizeString(selectedValue.name) : title}
           src={src}
           style={tagStyle}
         />
