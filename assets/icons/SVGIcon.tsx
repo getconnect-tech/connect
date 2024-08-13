@@ -505,6 +505,24 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
+    case 'close-icon':
+      return (
+        <>
+          <g clipPath='url(#a)'>
+            <path
+              fill={fill}
+              fillRule='evenodd'
+              d='M6 12A6 6 0 1 0 6 0a6 6 0 0 0 0 12ZM5 6.793l3.147-3.147a.5.5 0 0 1 .707.707l-3.5 3.5a.5.5 0 0 1-.707 0l-1.5-1.5a.5.5 0 0 1 .707-.707L5 6.793Z'
+              clipRule='evenodd'
+            />
+          </g>
+          <defs>
+            <clipPath id='a'>
+              <path fill='#fff' d='M0 0h12v12H0z' />
+            </clipPath>
+          </defs>
+        </>
+      );
   }
 };
 

@@ -63,9 +63,16 @@ const StatusDiv = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
+  justify-content: space-between;
   padding: 9px 20px;
   border-top: 1px solid ${colors.border};
   position: relative;
+`;
+
+const ButtonDiv = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
 `;
 
 const InputDiv = styled.div`
@@ -180,4 +187,5 @@ export {
   Message,
   LineDiv,
   IconDiv,
+  ButtonDiv,
 };

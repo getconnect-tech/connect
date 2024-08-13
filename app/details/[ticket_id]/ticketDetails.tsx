@@ -7,6 +7,7 @@ import { PriorityLevels } from '@prisma/client';
 import {
   ActivityDiv,
   BottomDiv,
+  ButtonDiv,
   CenterDiv,
   HeaderDiv,
   IconDiv,
@@ -38,6 +39,7 @@ import { isEmpty } from '@/helpers/common';
 import Icon from '@/components/icon/icon';
 import RichTextBox from '@/components/commentBox';
 import { DropDownItem } from '@/components/dropDown/dropDown';
+import Tag from '@/components/tag/tag';
 
 interface Props {
   ticket_id: string;
@@ -189,47 +191,66 @@ function TicketDetails(props: Props) {
               iconViewBox='0 0 16 16'
             />
           </HeaderDiv>
+
           <StatusDiv>
-            <DropDownWithTag
-              onClick={handleLabelTag}
-              title={'Bug'}
-              iconName={'bug-icon'}
-              dropdownOpen={labelDropdown}
-              onClose={() => setLabelDropdown(false)}
-              items={labelItem}
-              onChange={() => {}}
-              isTag={true}
-              isSearch={true}
-              isCheckbox={true}
-              isActive={true}
-            />
-            <DropDownWithTag
-              onClick={handlePriorityTag}
-              title={'Priority'}
-              iconName={`priority-${priority || 'NONE'}`}
-              dropdownOpen={priorityDropdown}
-              onClose={() => setPriorityDropdown(false)}
-              items={priorityItem}
-              onChange={onChangePriority}
-              selectedValue={{ name: priority || 'NONE' }}
-              isTag={true}
-              isActive={true}
-            />
-            <DropDownWithTag
-              onClick={handleAssignTag}
-              title={'Sanjay M.'}
-              dropdownOpen={assignDropdown}
-              onClose={() => setAssignDropdown(false)}
-              items={assignItem}
-              onChange={() => {}}
-              isTag={true}
-              isSearch={true}
-              isActive={true}
-              isName={true}
-              iconSize='20'
-              iconViewBox='0 0 20 20'
-              src='https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
-            />
+            <ButtonDiv>
+              <DropDownWithTag
+                onClick={handleLabelTag}
+                title={'Bug'}
+                iconName={'bug-icon'}
+                dropdownOpen={labelDropdown}
+                onClose={() => setLabelDropdown(false)}
+                items={labelItem}
+                onChange={() => {}}
+                isTag={true}
+                isSearch={true}
+                isCheckbox={true}
+                isActive={true}
+              />
+              <DropDownWithTag
+                onClick={handlePriorityTag}
+                title={'Priority'}
+                iconName={`priority-${priority || 'NONE'}`}
+                dropdownOpen={priorityDropdown}
+                onClose={() => setPriorityDropdown(false)}
+                items={priorityItem}
+                onChange={onChangePriority}
+                selectedValue={{ name: priority || 'NONE' }}
+                isTag={true}
+                isActive={true}
+              />
+              <DropDownWithTag
+                onClick={handleAssignTag}
+                title={'Sanjay M.'}
+                dropdownOpen={assignDropdown}
+                onClose={() => setAssignDropdown(false)}
+                items={assignItem}
+                onChange={() => {}}
+                isTag={true}
+                isSearch={true}
+                isActive={true}
+                isName={true}
+                iconSize='20'
+                iconViewBox='0 0 20 20'
+                src='https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
+              />
+            </ButtonDiv>
+            <ButtonDiv>
+              <Tag
+                title='Close'
+                iconName='close-icon'
+                isActive={false}
+                onClick={() => {}}
+                isName={false}
+              />
+              <Tag
+                title='Snooze'
+                iconName='context-snooze-icon'
+                isActive={false}
+                onClick={() => {}}
+                isName={false}
+              />
+            </ButtonDiv>
           </StatusDiv>
         </TopDiv>
         <BottomDiv>
