@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { signOut } from 'next-auth/react';
 import { signInWithCode } from '../serverSide/membership/signin';
-import { isValidEmail } from '@/helpers/common';
+import { getAPIErrorMessage, isValidEmail } from '@/helpers/common';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { userStore } from '@/stores/userStore';
 
@@ -25,7 +25,7 @@ export const verifyUserEmail = async (email: string) => {
       return true;
     }
   } catch (err: any) {
-    alert(err.message);
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return false;
   } finally {
     userStore.setLoading(false);
@@ -51,7 +51,7 @@ export const registerUser = async (email: string, name: string) => {
       return true;
     }
   } catch (err: any) {
-    alert(err.message);
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return false;
   } finally {
     userStore.setLoading(false);
@@ -69,7 +69,7 @@ export const verifyAuthCode = async (email: string, code: string) => {
     if (result) return true;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err: any) {
-    alert('Incorrect code!');
+    alert(getAPIErrorMessage(err) || 'Incorrect code!');
     return false;
   } finally {
     userStore.setLoading(false);
@@ -91,7 +91,7 @@ export const resendVerificationCode = async (email: string) => {
     if (result) alert('New code sent!');
     return true;
   } catch (err: any) {
-    alert(err.message);
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return false;
   } finally {
     userStore.setLoading(false);
@@ -109,7 +109,7 @@ export const logout = async () => {
     userStore.clearUserDetails();
     return response;
   } catch (err: any) {
-    alert(err.message);
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return false;
   } finally {
     userStore.setLoading(false);
