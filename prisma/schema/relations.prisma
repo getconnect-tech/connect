@@ -4,6 +4,7 @@ model UserWorkspaces {
     user_id      String
     user         User      @relation(fields: [user_id], references: [id])
     workspace    Workspace @relation(fields: [workspace_id], references: [id])
+    role         UserRole  @default(MEMBER)
 
     @@index([workspace_id, user_id])
 }
