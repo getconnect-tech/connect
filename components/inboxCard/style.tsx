@@ -12,9 +12,7 @@ const CardDiv = styled.div`
   padding: 12px 12px 12px 8px;
   margin: 12px 0;
   border-radius: 12px;
-  display: flex;
   cursor: pointer;
-  justify-content: space-between;
   position: relative;
   gap: 12px;
   box-shadow:
@@ -39,15 +37,21 @@ const DotIcon = styled.div`
 
 const LeftDiv = styled.div`
   display: flex;
+  justify-content: space-between;
   gap: 12px;
   padding-left: 13px;
+  div {
+    display: flex;
+    gap: 12px;
+  }
 `;
 
 const RightDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
-  max-width: 485px;
+  margin-left: 53px;
+  margin-top: -4px;
   .description {
     display: -webkit-box;
     -webkit-box-orient: vertical;
