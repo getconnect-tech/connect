@@ -159,9 +159,7 @@ export default function DropDown({
                   viewBox={iconViewBox}
                 />
               )}
-              {item.src && item.isName && (
-                <Avatar name='' imgSrc={item.src} size={20} />
-              )}
+              {item.isName && <Avatar name={item.name} imgSrc='' size={20} />}
               <p>{item.name}</p>
             </ItemLeftDiv>
             {isSnooze && <p>{item.time}</p>}

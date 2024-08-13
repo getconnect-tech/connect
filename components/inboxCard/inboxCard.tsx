@@ -46,7 +46,8 @@ export default function InboxCard({
 }: Props) {
   const { title, created_at, source, contact, priority } = ticketDetail;
   const router = useRouter();
-  const { ticketStore } = useStores();
+  const { ticketStore, workspaceStore } = useStores();
+  const { currentWorkspace } = workspaceStore;
 
   const handleDropdownClick = (dropdown: string) => {
     const identifier = `${dropdownIdentifier}-${dropdown}`;
@@ -77,26 +78,11 @@ export default function InboxCard({
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
-    {
-      name: 'Sanjay M.',
-      src: 'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4',
+    ...((currentWorkspace as any)?.users?.map((user: any) => ({
+      name: user.display_name,
+      src: '',
       isName: true,
-    },
-    {
-      name: 'Aniket',
-      src: 'https://bearbuk.blob.core.windows.net/project/Profile_63c0ec5555376218700f12d5_2023041410225842.png',
-      isName: true,
-    },
-    {
-      name: 'Jemish',
-      src: 'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4',
-      isName: true,
-    },
-    {
-      name: 'Vatsal',
-      src: 'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2F1708409574833_1712819712813.jpg?alt=media&token=42df7e19-9083-4c61-8b51-b43d5c3f4183',
-      isName: true,
-    },
+    })) || []),
   ];
   const onClickTicket = useCallback(() => {
     ticketStore.setTicketDetails(ticketDetail);

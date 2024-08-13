@@ -89,9 +89,12 @@ export const addUserToWorkspace = async (
 export const getUserWorkspaces = async (userId: string) => {
   const workspaces = await prisma.userWorkspaces.findMany({
     where: { user_id: userId },
-    include: { workspace: { include: { users: true } } },
+    include: { workspace: { include: { users: { include: { user: true } } } } },
   });
-  const formattedWorkspaces = workspaces.map(({ workspace }) => workspace);
+  const formattedWorkspaces = workspaces.map(({ workspace }) => ({
+    ...workspace,
+    users: workspace.users.map((x) => x.user),
+  }));
   return formattedWorkspaces;
 };
 
