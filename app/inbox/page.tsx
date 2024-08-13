@@ -59,7 +59,7 @@ function Inbox() {
         </TopDiv>
         <BottomDiv>
           {/* Render Ticker List */}
-          {ticketList?.map((ticket) => (
+          {ticketList?.map((ticket, index) => (
             <CustomContextMenu>
               <div>
                 {/* Use Inbox card component for show tickets */}
@@ -71,6 +71,8 @@ function Inbox() {
                   currentOpenDropdown={currentOpenDropdown}
                   setCurrentOpenDropdown={setCurrentOpenDropdown}
                   dropdownIdentifier={`card-${ticket.id}`}
+                  loadData={loadData}
+                  ticketIndex={index}
                 />
               </div>
             </CustomContextMenu>

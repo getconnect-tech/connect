@@ -11,7 +11,7 @@ const cardData = [
     email: 'grothoff@icloud.com',
     openCount: '2',
     closeCount: '6',
-    comapanyImg:
+    companyImg:
       'https://static.vecteezy.com/system/resources/previews/027/127/473/original/microsoft-logo-microsoft-icon-transparent-free-png.png',
     companyName: 'Microsoft',
   },
@@ -22,7 +22,7 @@ const cardData = [
     email: 'adamk@me.com',
     openCount: '1',
     closeCount: '12',
-    comapanyImg:
+    companyImg:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6HMrE7xvKu5-UahOPBs3GcE4AZJk8LsX7tg&s',
     companyName: 'Google',
   },
@@ -33,7 +33,7 @@ const cardData = [
     email: 'seano@icloud.com',
     openCount: '3',
     closeCount: '20',
-    comapanyImg:
+    companyImg:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6HMrE7xvKu5-UahOPBs3GcE4AZJk8LsX7tg&s',
     companyName: 'Google',
   },
@@ -50,7 +50,7 @@ export default function PersonList() {
           email={card.email}
           openCount={card.openCount}
           closeCount={card.closeCount}
-          comapanyImg={card.comapanyImg}
+          companyImg={card.companyImg}
           companyName={card.companyName}
         />
       ))}

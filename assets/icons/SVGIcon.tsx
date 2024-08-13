@@ -263,7 +263,7 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
-    case 'priority-urgent-icon':
+    case 'priority-URGENT':
       return (
         <>
           <path
@@ -272,7 +272,7 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
-    case 'priority-high-icon':
+    case 'priority-HIGH':
       return (
         <>
           <path
@@ -281,7 +281,7 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
-    case 'priority-Medium-icon':
+    case 'priority-MEDIUM':
       return (
         <>
           <path
@@ -294,7 +294,7 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
-    case 'priority-low-icon':
+    case 'priority-LOW':
       return (
         <>
           <path
@@ -307,7 +307,7 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
-    case 'priority-no-icon':
+    case 'priority-NONE':
       return (
         <>
           <path
@@ -484,6 +484,24 @@ const getPath = (name: string, props: any) => {
           <path
             fill='#C4C3C1'
             d='M29 0C12.983 0 0 12.983 0 29s12.983 29 29 29 29-12.983 29-29S45.017 0 29 0Zm.023 14.5a8.7 8.7 0 0 1 8.7 8.7 8.7 8.7 0 0 1-8.7 8.7 8.7 8.7 0 0 1-8.7-8.7 8.7 8.7 0 0 1 8.7-8.7ZM29 53.65a24.522 24.522 0 0 1-16.646-6.496c1.276-4.002 4.582-7.801 11.687-7.801h9.918c7.076 0 10.382 3.828 11.687 7.801A24.522 24.522 0 0 1 29 53.65Z'
+          />
+        </>
+      );
+    case 'email-icon':
+      return (
+        <>
+          <path
+            fill={fill}
+            d='M10 1H2C.667 1 0 1.667 0 3v6c0 1.333.667 2 2 2h8c1.333 0 2-.667 2-2V3c0-1.333-.667-2-2-2Zm-.04 3.07L6.687 6.453a1.165 1.165 0 0 1-1.372 0L2.039 4.072a.5.5 0 1 1 .589-.809l3.275 2.381a.166.166 0 0 0 .195 0l3.275-2.381a.5.5 0 1 1 .588.809Z'
+          />
+        </>
+      );
+    case 'internal-icon':
+      return (
+        <>
+          <path
+            fill={fill}
+            d='M6 .334c-3.313 0-6 2-6 5.334C0 7.08.487 8.262 1.3 9.142c-.1.64-.46 1.373-1.187 1.96-.22.186-.093.553.194.56.946.033 2.406-.094 3.3-1.047.733.253 1.54.387 2.393.387 3.313 0 6-2.001 6-5.334C12 2.334 9.313.334 6 .334ZM6.667 7.5H3.333a.5.5 0 0 1 0-1h3.334a.5.5 0 0 1 0 1Zm2-2.666H3.333a.5.5 0 0 1 0-1h5.334a.5.5 0 0 1 0 1Z'
           />
         </>
       );

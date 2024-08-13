@@ -3,11 +3,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
+import { PriorityLevels } from '@prisma/client';
 import {
   ActivityDiv,
   BottomDiv,
   CenterDiv,
   HeaderDiv,
+  IconDiv,
   Input,
   InputDiv,
   InputIcon,
@@ -25,13 +27,17 @@ import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
 import MessageCard from '@/components/messageCard/messageCard';
 import QuestionCard from '@/components/questionCard/questionCard';
-import { labelItem, priorityItem } from '@/helpers/raw';
+import { labelItem, modeItem, priorityItem } from '@/helpers/raw';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import { useStores } from '@/stores';
-import { getTicketDetails } from '@/services/clientSide/ticketServices';
+import {
+  getTicketDetails,
+  updateTicketDetails,
+} from '@/services/clientSide/ticketServices';
 import { isEmpty } from '@/helpers/common';
 import Icon from '@/components/icon/icon';
 import RichTextBox from '@/components/commentBox';
+import { DropDownItem } from '@/components/dropDown/dropDown';
 
 interface Props {
   ticket_id: string;
@@ -42,10 +48,41 @@ function TicketDetails(props: Props) {
   const router = useRouter();
   const [labelDropdown, setLabelDropdown] = useState(false);
   const [priorityDropdown, setPriorityDropdown] = useState(false);
+  const [messageModeDropdown, setMessageModeDropdown] = useState(false);
   const [assignDropdown, setAssignDropdown] = useState(false);
   const { ticketStore, workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
   const { ticketDetails } = ticketStore;
+  const { priority } = ticketDetails || {};
+  const [modeSelectedItem, setModeSelectedItem] = useState<DropDownItem>({
+    name: 'Email',
+    icon: 'email-icon',
+  });
+  const [submenuPosition, setSubmenuPosition] = useState<
+    'upwards' | 'downwards'
+  >('upwards');
+
+  const handleModeItemChange = (item: DropDownItem) => {
+    setModeSelectedItem(item);
+  };
+
+  const handleMouseEnter = (
+    e: React.MouseEvent<HTMLElement>,
+    // eslint-disable-next-line no-unused-vars
+    setPosition: (position: 'upwards' | 'downwards') => void,
+  ) => {
+    const triggerElement = e.currentTarget;
+    const rect = triggerElement.getBoundingClientRect();
+    // eslint-disable-next-line no-undef
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+
+    if (spaceBelow < 200 && spaceAbove > 200) {
+      setPosition('upwards');
+    } else {
+      setPosition('downwards');
+    }
+  };
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
@@ -61,18 +98,28 @@ function TicketDetails(props: Props) {
     setPriorityDropdown((prev) => !prev);
     setAssignDropdown(false);
     setLabelDropdown(false);
+    setMessageModeDropdown(false);
+  };
+
+  const handleMessageModeTag = () => {
+    setMessageModeDropdown((prev) => !prev);
+    setAssignDropdown(false);
+    setLabelDropdown(false);
+    setPriorityDropdown(false);
   };
 
   const handleLabelTag = () => {
     setLabelDropdown((prev) => !prev);
     setAssignDropdown(false);
     setPriorityDropdown(false);
+    setMessageModeDropdown(false);
   };
 
   const handleAssignTag = () => {
     setAssignDropdown((prev) => !prev);
     setPriorityDropdown(false);
     setLabelDropdown(false);
+    setMessageModeDropdown(false);
   };
 
   const assignItem = [
@@ -98,6 +145,25 @@ function TicketDetails(props: Props) {
       isName: true,
     },
   ];
+
+  const onChangePriority = useCallback(
+    async (item: { name: string; icon: string; value: PriorityLevels }) => {
+      const payload = { priority: item?.value };
+      try {
+        if (ticketDetails?.id) {
+          const updatedTicketDetails = {
+            ...ticketDetails,
+            priority: item?.value,
+          };
+          ticketStore.setTicketDetails(updatedTicketDetails);
+          await updateTicketDetails(ticketDetails?.id, payload);
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetails],
+  );
 
   return (
     <Main>
@@ -140,11 +206,12 @@ function TicketDetails(props: Props) {
             <DropDownWithTag
               onClick={handlePriorityTag}
               title={'Priority'}
-              iconName={'priority-no-icon'}
+              iconName={`priority-${priority || 'NONE'}`}
               dropdownOpen={priorityDropdown}
               onClose={() => setPriorityDropdown(false)}
               items={priorityItem}
-              onChange={() => {}}
+              onChange={onChangePriority}
+              selectedValue={{ name: priority || 'NONE' }}
               isTag={true}
               isActive={true}
             />
@@ -249,24 +316,56 @@ function TicketDetails(props: Props) {
               size={20}
               name={''}
             />
-            <Input>
+            <Input modeSelectedItem={modeSelectedItem}>
               <textarea placeholder='Write a message' />
               <RichTextBox />
               <InputIcon>
-                <Icon
-                  onClick={() => {}}
-                  iconName='attach-icon'
+                <DropDownWithTag
+                  onClick={handleMessageModeTag}
+                  selectedValue={modeSelectedItem}
+                  dropdownOpen={messageModeDropdown}
+                  title='Email'
+                  onClose={() => {
+                    setMessageModeDropdown(false);
+                  }}
+                  items={modeItem}
+                  onChange={handleModeItemChange}
+                  isTag={true}
+                  iconName={modeSelectedItem?.icon}
                   iconSize='12'
                   iconViewBox='0 0 12 12'
-                  size={true}
+                  isActive={true}
+                  className={
+                    submenuPosition === 'upwards'
+                      ? 'submenu-upwards'
+                      : 'submenu-downwards'
+                  }
+                  onMouseEnter={(e: any) =>
+                    handleMouseEnter(e, setSubmenuPosition)
+                  }
+                  dropDownStyle={{ maxWidth: 142, width: '100%' }}
+                  tagStyle={{
+                    backgroundColor: 'unset',
+                  }}
                 />
-                <Icon
-                  onClick={() => {}}
-                  iconName='send-icon'
-                  iconSize='12'
-                  iconViewBox='0 0 12 12'
-                  size={true}
-                />
+                <IconDiv modeSelectedItem={modeSelectedItem}>
+                  <Icon
+                    onClick={() => {}}
+                    iconName='attach-icon'
+                    iconSize='12'
+                    iconViewBox='0 0 12 12'
+                    size={true}
+                  />
+                  <Icon
+                    onClick={() => {}}
+                    iconName='send-icon'
+                    iconSize='12'
+                    iconViewBox='0 0 12 12'
+                    size={true}
+                    isActive={true}
+                    className='icon'
+                  />
+                </IconDiv>
               </InputIcon>
             </Input>
           </InputDiv>

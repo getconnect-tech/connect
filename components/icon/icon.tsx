@@ -9,6 +9,7 @@ interface Props {
   iconViewBox: string;
   size?: boolean;
   className?: string;
+  isActive?: boolean;
 }
 
 function Icon({
@@ -18,9 +19,15 @@ function Icon({
   iconViewBox,
   size,
   className,
+  isActive = false,
 }: Props) {
   return (
-    <IconDiv onClick={onClick} size={size} className={className}>
+    <IconDiv
+      onClick={onClick}
+      size={size}
+      className={className}
+      isActive={isActive}
+    >
       <SVGIcon
         name={iconName}
         width={iconSize}
