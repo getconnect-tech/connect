@@ -1,5 +1,6 @@
-import { TeamSize } from '@prisma/client';
+import { TeamSize, UserRole } from '@prisma/client';
 import { prisma } from '@/prisma/prisma';
+import { removeNullUndefined } from '@/helpers/common';
 
 // Service to get workspace by ID
 export const getWorkspaceById = async (workspaceId: string) => {
@@ -79,19 +80,60 @@ export const inviteUsers = async (
 export const addUserToWorkspace = async (
   workspaceId: string,
   userId: string,
+  userRole?: UserRole,
 ) => {
   const userWorkspaceRelation = await prisma.userWorkspaces.create({
-    data: { user_id: userId, workspace_id: workspaceId },
+    data: {
+      user_id: userId,
+      workspace_id: workspaceId,
+      role: userRole || UserRole.MEMBER,
+    },
   });
   return userWorkspaceRelation;
+};
+
+export const removeUserFromWorkspace = async (
+  workspaceId: string,
+  userId: string,
+) => {
+  const res = await prisma.userWorkspaces.deleteMany({
+    where: { workspace_id: workspaceId, user_id: userId },
+  });
+  return res;
+};
+
+export const updateUser = async ({
+  workspaceId,
+  userUpdates,
+  userId,
+}: {
+  workspaceId: string;
+  userId: string;
+  userUpdates: { role?: UserRole };
+}) => {
+  removeNullUndefined(userUpdates);
+
+  await prisma.userWorkspaces.updateMany({
+    where: { workspace_id: workspaceId, user_id: userId },
+    data: userUpdates,
+  });
+
+  const result = await prisma.userWorkspaces.findFirst({
+    where: { workspace_id: workspaceId, user_id: userId },
+  });
+
+  return result;
 };
 
 export const getUserWorkspaces = async (userId: string) => {
   const workspaces = await prisma.userWorkspaces.findMany({
     where: { user_id: userId },
-    include: { workspace: { include: { users: true } } },
+    include: { workspace: { include: { users: { include: { user: true } } } } },
   });
-  const formattedWorkspaces = workspaces.map(({ workspace }) => workspace);
+  const formattedWorkspaces = workspaces.map(({ workspace }) => ({
+    ...workspace,
+    users: workspace.users.map((x) => x.user),
+  }));
   return formattedWorkspaces;
 };
 
