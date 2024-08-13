@@ -35,13 +35,14 @@ export const TopBlock = styled.div`
   display: flex;
   flex-direction: column;
   border-bottom: 1px solid ${colors.border};
-  gap: 6px;
+  gap: 1px;
   padding-bottom: 12px;
 `;
 export const Title = styled.div`
   padding: 4px 12px;
   ${Typography.body_sm_semibold}
   color: ${colors.text_text_secondary};
+  margin-bottom: 5px;
 `;
 export const NavItems = styled.div`
   display: flex;
@@ -71,6 +72,6 @@ export const BottomBlock = styled.div`
   display: flex;
   flex-direction: column;
   padding: 12px 0;
-  gap: 6px;
+  gap: 1px;
 `;
 export const NavBarMainDiv = styled.div``;
