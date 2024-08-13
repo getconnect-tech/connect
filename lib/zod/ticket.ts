@@ -1,4 +1,4 @@
-import { PriorityLevels, TicketSource } from '@prisma/client';
+import { PriorityLevels, TicketSource, TicketStatus } from '@prisma/client';
 import { z } from 'zod';
 
 export const titleSchema = z.string({
@@ -27,3 +27,14 @@ export const prioritySchema = z.nativeEnum(PriorityLevels, {
 export const ticketSourceSchema = z.nativeEnum(TicketSource, {
   required_error: "'source' is required!",
 });
+
+export const statusSchema = z.nativeEnum(TicketStatus, {
+  required_error: "'status' is required!",
+});
+
+export const snoozeUntilSchema = z
+  .string({
+    required_error: "'snoozeUntil' is required!",
+    invalid_type_error: "'snoozeUntil' must be of type string!",
+  })
+  .datetime({ message: 'Invalid date string!' });

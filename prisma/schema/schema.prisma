@@ -65,6 +65,8 @@ model Ticket {
   source        TicketSource
   mail_id       String         @unique
   labels        TicketLabel[]
+  status        TicketStatus   @default(OPEN)
+  snooze_until  DateTime?
 }
 
 model Message {
