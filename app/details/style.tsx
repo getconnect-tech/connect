@@ -72,9 +72,7 @@ const StatusDiv = styled.div`
 const ButtonDiv = styled.div`
   display: flex;
   gap: 8px;
-  .button {
-    padding: 6px 12px;
-  }
+  align-items: center;
 `;
 
 const InputDiv = styled.div`
