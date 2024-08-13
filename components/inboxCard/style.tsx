@@ -3,10 +3,6 @@ import styled from 'styled-components';
 import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
-interface Props {
-  isActive?: boolean;
-}
-
 const CardDiv = styled.div`
   background-color: ${colors.bg_white};
   padding: 12px 12px 12px 8px;
@@ -22,6 +18,9 @@ const CardDiv = styled.div`
     box-shadow:
       0px 0px 0px 0.5px ${colors.border_hover},
       0px 2px 4px 0px ${colors.bg_surface_active};
+  }
+  &:hover .tagDiv {
+    display: flex;
   }
 `;
 
@@ -77,6 +76,11 @@ const StatusMainDiv = styled.div`
   gap: 8px;
   align-items: center;
   padding-top: 4px;
+  justify-content: space-between;
+  .statusDiv {
+    display: flex;
+    gap: 8px;
+  }
   .submenu-upwards {
     bottom: calc(100% - 83px);
     top: auto;
@@ -88,33 +92,27 @@ const StatusMainDiv = styled.div`
   }
 `;
 
-const StatusDiv = styled.div<Props>`
-  padding: 2px 12px 2px 2px;
-  background-color: ${colors.bg_surface_secondary};
+const TagDiv = styled.div`
+  display: none;
+  width: 52px;
   border-radius: 30px;
-  display: flex;
-  align-items: center;
+  background-color: ${colors.bg_surface_secondary};
   gap: 6px;
-  cursor: pointer;
-  &:hover {
-    background-color: ${colors.bg_surface_secondary_hover};
-    .icon {
+  padding: 0px 8px;
+  align-items: center;
+  svg {
+    fill: ${colors.icon};
+
+    &:hover {
       fill: ${colors.icon_hover};
     }
-    p {
-      color: ${colors.text};
-    }
-  }
-  .icon {
-    fill: ${({ isActive }) => (isActive ? colors.icon_hover : colors.icon)};
-    margin: 4px 0 4px 10px;
-  }
-  p {
-    color: ${({ isActive }) =>
-      isActive ? colors.text : colors.text_text_secondary};
   }
 `;
-
+const LineDiv = styled.div`
+  width: 1px;
+  height: 24px;
+  background-color: ${colors.border_input_border};
+`;
 const StatusTitle = styled.p`
   ${Typography.body_sm_medium}
   color: ${colors.text_text_secondary};
@@ -128,6 +126,7 @@ export {
   DotIcon,
   CardDiv,
   StatusMainDiv,
-  StatusDiv,
   StatusTitle,
+  TagDiv,
+  LineDiv,
 };
