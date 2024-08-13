@@ -28,7 +28,6 @@ const BottomDiv = styled.div`
 const MainDiv = styled.div`
   width: 100%;
   margin-left: 223px;
-  height: 100vh;
   overflow: auto;
 `;
 

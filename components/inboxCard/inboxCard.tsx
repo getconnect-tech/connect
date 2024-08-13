@@ -121,87 +121,87 @@ export default function InboxCard({
     <CardDiv onClick={onClickTicket}>
       {showDotIcon && <DotIcon />}
       <LeftDiv>
-        <Avatar
-          size={28}
-          imgSrc={src}
-          name={contact?.name || ''}
-          isShowBorder={true}
-        />
-        <RightDiv>
+        <div>
+          <Avatar
+            size={28}
+            imgSrc={src}
+            name={contact?.name || ''}
+            isShowBorder={true}
+          />
           <NameText>
             {contact?.name} from {capitalizeString(source)}
           </NameText>
-          <DesTitle>{title}</DesTitle>
-          <NameText className='description'>{description}</NameText>
-          <StatusMainDiv>
-            <DropDownWithTag
-              onClick={() => handleDropdownClick('label')}
-              title={'Bug'}
-              iconName={'bug-icon'}
-              dropdownOpen={
-                currentOpenDropdown === `${dropdownIdentifier}-label`
-              }
-              onClose={() => setCurrentOpenDropdown(null)}
-              items={labelItem}
-              onChange={() => {}}
-              isTag={true}
-              isSearch={true}
-              isCheckbox={true}
-              isActive={true}
-              className={
-                submenuPosition === 'upwards'
-                  ? 'submenu-upwards'
-                  : 'submenu-downwards'
-              }
-              onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
-            />
-            <DropDownWithTag
-              onClick={() => handleDropdownClick('priority')}
-              title={'Priority'}
-              iconName={`priority-${priority}`}
-              dropdownOpen={
-                currentOpenDropdown === `${dropdownIdentifier}-priority`
-              }
-              onClose={() => setCurrentOpenDropdown(null)}
-              items={priorityItem}
-              onChange={onChangePriority}
-              isTag={true}
-              isActive={true}
-              selectedValue={{ name: priority }}
-              className={
-                submenuPosition === 'upwards'
-                  ? 'submenu-upwards'
-                  : 'submenu-downwards'
-              }
-              onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
-            />
-            <DropDownWithTag
-              onClick={() => handleDropdownClick('assign')}
-              title={'Sanjay M.'}
-              dropdownOpen={
-                currentOpenDropdown === `${dropdownIdentifier}-assign`
-              }
-              onClose={() => setCurrentOpenDropdown(null)}
-              items={assignItem}
-              onChange={() => {}}
-              isTag={true}
-              isSearch={true}
-              isActive={true}
-              isName={true}
-              iconSize='20'
-              iconViewBox='0 0 20 20'
-              className={
-                submenuPosition === 'upwards'
-                  ? 'submenu-upwards'
-                  : 'submenu-downwards'
-              }
-              onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
-              src='https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
-            />
-          </StatusMainDiv>
-        </RightDiv>
+        </div>
+        <NameText>{moment(created_at).fromNow()}</NameText>
       </LeftDiv>
-      <NameText>{moment(created_at).fromNow()}</NameText>
+      <RightDiv>
+        <DesTitle>{title}</DesTitle>
+        <NameText className='description'>{description}</NameText>
+        <StatusMainDiv>
+          <DropDownWithTag
+            onClick={() => handleDropdownClick('label')}
+            title={'Bug'}
+            iconName={'bug-icon'}
+            dropdownOpen={currentOpenDropdown === `${dropdownIdentifier}-label`}
+            onClose={() => setCurrentOpenDropdown(null)}
+            items={labelItem}
+            onChange={() => {}}
+            isTag={true}
+            isSearch={true}
+            isCheckbox={true}
+            isActive={true}
+            className={
+              submenuPosition === 'upwards'
+                ? 'submenu-upwards'
+                : 'submenu-downwards'
+            }
+            onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
+          />
+          <DropDownWithTag
+            onClick={() => handleDropdownClick('priority')}
+            title={'Priority'}
+            iconName={`priority-${priority}`}
+            dropdownOpen={
+              currentOpenDropdown === `${dropdownIdentifier}-priority`
+            }
+            onClose={() => setCurrentOpenDropdown(null)}
+            items={priorityItem}
+            onChange={onChangePriority}
+            isTag={true}
+            isActive={true}
+            selectedValue={{ name: priority }}
+            className={
+              submenuPosition === 'upwards'
+                ? 'submenu-upwards'
+                : 'submenu-downwards'
+            }
+            onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
+          />
+          <DropDownWithTag
+            onClick={() => handleDropdownClick('assign')}
+            title={'Sanjay M.'}
+            dropdownOpen={
+              currentOpenDropdown === `${dropdownIdentifier}-assign`
+            }
+            onClose={() => setCurrentOpenDropdown(null)}
+            items={assignItem}
+            onChange={() => {}}
+            isTag={true}
+            isSearch={true}
+            isActive={true}
+            isName={true}
+            iconSize='20'
+            iconViewBox='0 0 20 20'
+            className={
+              submenuPosition === 'upwards'
+                ? 'submenu-upwards'
+                : 'submenu-downwards'
+            }
+            onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
+            src='https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
+          />
+        </StatusMainDiv>
+      </RightDiv>
     </CardDiv>
   );
 }

@@ -6,6 +6,7 @@ const MessageCardInnerDiv = styled.div`
   background-color: ${colors.bg_white};
   border: 1px solid ${colors.border};
   border-radius: 12px;
+  word-break: break-word;
 `;
 
 const CardTop = styled.div`
