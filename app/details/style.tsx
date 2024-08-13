@@ -35,7 +35,6 @@ const BottomDiv = styled.div`
 const MainDiv = styled.div`
   width: 100%;
   margin-left: 223px;
-  height: 100vh;
   overflow: auto;
   border-right: 1px solid ${colors.border};
 `;
@@ -80,7 +79,7 @@ const InputDiv = styled.div`
   gap: 12px;
   position: sticky;
   bottom: 0;
-  padding: 0 0 20px;
+  padding: 8px 0 20px;
   background-color: ${colors.bg_surface};
   z-index: 1;
 `;
@@ -124,7 +123,7 @@ const CenterDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: end;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 `;
 
 const InputIcon = styled.div`

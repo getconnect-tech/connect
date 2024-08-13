@@ -190,7 +190,6 @@ function TicketDetails(props: Props) {
               iconViewBox='0 0 16 16'
             />
           </HeaderDiv>
-
           <StatusDiv>
             <ButtonDiv>
               <DropDownWithTag
