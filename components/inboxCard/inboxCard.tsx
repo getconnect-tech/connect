@@ -12,15 +12,18 @@ import {
   DesTitle,
   DotIcon,
   LeftDiv,
+  LineDiv,
   NameText,
   RightDiv,
   StatusMainDiv,
+  TagDiv,
 } from './style';
 import { labelItem, priorityItem } from '@/helpers/raw';
 import { capitalizeString } from '@/helpers/common';
 import { useStores } from '@/stores';
 import { TicketDetailsInterface } from '@/utils/appTypes';
 import { updateTicketDetails } from '@/services/clientSide/ticketServices';
+import SVGIcon from '@/assets/icons/SVGIcon';
 
 interface Props {
   ticketDetail: TicketDetailsInterface;
@@ -138,68 +141,88 @@ export default function InboxCard({
         <DesTitle>{title}</DesTitle>
         <NameText className='description'>{description}</NameText>
         <StatusMainDiv>
-          <DropDownWithTag
-            onClick={() => handleDropdownClick('label')}
-            title={'Bug'}
-            iconName={'bug-icon'}
-            dropdownOpen={currentOpenDropdown === `${dropdownIdentifier}-label`}
-            onClose={() => setCurrentOpenDropdown(null)}
-            items={labelItem}
-            onChange={() => {}}
-            isTag={true}
-            isSearch={true}
-            isCheckbox={true}
-            isActive={true}
-            className={
-              submenuPosition === 'upwards'
-                ? 'submenu-upwards'
-                : 'submenu-downwards'
-            }
-            onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
-          />
-          <DropDownWithTag
-            onClick={() => handleDropdownClick('priority')}
-            title={'Priority'}
-            iconName={`priority-${priority}`}
-            dropdownOpen={
-              currentOpenDropdown === `${dropdownIdentifier}-priority`
-            }
-            onClose={() => setCurrentOpenDropdown(null)}
-            items={priorityItem}
-            onChange={onChangePriority}
-            isTag={true}
-            isActive={true}
-            selectedValue={{ name: priority }}
-            className={
-              submenuPosition === 'upwards'
-                ? 'submenu-upwards'
-                : 'submenu-downwards'
-            }
-            onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
-          />
-          <DropDownWithTag
-            onClick={() => handleDropdownClick('assign')}
-            title={'Sanjay M.'}
-            dropdownOpen={
-              currentOpenDropdown === `${dropdownIdentifier}-assign`
-            }
-            onClose={() => setCurrentOpenDropdown(null)}
-            items={assignItem}
-            onChange={() => {}}
-            isTag={true}
-            isSearch={true}
-            isActive={true}
-            isName={true}
-            iconSize='20'
-            iconViewBox='0 0 20 20'
-            className={
-              submenuPosition === 'upwards'
-                ? 'submenu-upwards'
-                : 'submenu-downwards'
-            }
-            onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
-            src='https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
-          />
+          <div className='statusDiv'>
+            <DropDownWithTag
+              onClick={() => handleDropdownClick('label')}
+              title={'Bug'}
+              iconName={'bug-icon'}
+              dropdownOpen={
+                currentOpenDropdown === `${dropdownIdentifier}-label`
+              }
+              onClose={() => setCurrentOpenDropdown(null)}
+              items={labelItem}
+              onChange={() => {}}
+              isTag={true}
+              isSearch={true}
+              isCheckbox={true}
+              isActive={true}
+              className={
+                submenuPosition === 'upwards'
+                  ? 'submenu-upwards'
+                  : 'submenu-downwards'
+              }
+              onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
+            />
+            <DropDownWithTag
+              onClick={() => handleDropdownClick('priority')}
+              title={'Priority'}
+              iconName={`priority-${priority}`}
+              dropdownOpen={
+                currentOpenDropdown === `${dropdownIdentifier}-priority`
+              }
+              onClose={() => setCurrentOpenDropdown(null)}
+              items={priorityItem}
+              onChange={onChangePriority}
+              isTag={true}
+              isActive={true}
+              selectedValue={{ name: priority }}
+              className={
+                submenuPosition === 'upwards'
+                  ? 'submenu-upwards'
+                  : 'submenu-downwards'
+              }
+              onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
+            />
+            <DropDownWithTag
+              onClick={() => handleDropdownClick('assign')}
+              title={'Sanjay M.'}
+              dropdownOpen={
+                currentOpenDropdown === `${dropdownIdentifier}-assign`
+              }
+              onClose={() => setCurrentOpenDropdown(null)}
+              items={assignItem}
+              onChange={() => {}}
+              isTag={true}
+              isSearch={true}
+              isActive={true}
+              isName={true}
+              iconSize='20'
+              iconViewBox='0 0 20 20'
+              className={
+                submenuPosition === 'upwards'
+                  ? 'submenu-upwards'
+                  : 'submenu-downwards'
+              }
+              onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
+              src='https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
+            />
+          </div>
+          <TagDiv className='tagDiv'>
+            <SVGIcon
+              name='close-icon'
+              width='12'
+              height='12'
+              viewBox='0 0 12 12'
+              className='line'
+            />
+            <LineDiv />
+            <SVGIcon
+              name='context-snooze-icon'
+              width='12'
+              height='12'
+              viewBox='0 0 12 12'
+            />
+          </TagDiv>
         </StatusMainDiv>
       </RightDiv>
     </CardDiv>
