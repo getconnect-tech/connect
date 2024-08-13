@@ -47,12 +47,12 @@ export default function SettingNavBar() {
           </NavItems>
         </TopBlock>
         <BottomBlock>
-          <Title>WorkSpace</Title>
+          <Title>Workspace</Title>
           <Item
             onClick={() => handleItemClick('/setting/workspaceprofile')}
             active={activeItem === '/setting/workspaceprofile'}
           >
-            WorkSpace Profile
+            Workspace Profile
           </Item>
           <Item>Channels</Item>
           <Item>Labels</Item>
