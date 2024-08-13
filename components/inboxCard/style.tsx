@@ -69,6 +69,7 @@ const NameText = styled.div`
 const DesTitle = styled.div`
   ${Typography.body_md_medium};
   color: ${colors.text};
+  word-wrap: break-word;
 `;
 
 const StatusMainDiv = styled.div`
