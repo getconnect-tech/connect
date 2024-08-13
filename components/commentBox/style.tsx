@@ -180,7 +180,7 @@ const Main = styled.div<Props>`
   .e-richtexteditor.e-rte-tb-expand {
     border: none;
   }
-  .e-richtexteditor .e-toolbar-wrapper {
+  .e-richtexteditor {
     background: unset !important;
     height: unset !important;
   }
