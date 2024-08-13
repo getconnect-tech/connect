@@ -1,4 +1,9 @@
-import { PriorityLevels, Prisma, TicketSource } from '@prisma/client';
+import {
+  PriorityLevels,
+  Prisma,
+  TicketSource,
+  TicketStatus,
+} from '@prisma/client';
 import { createOrUpdateContact } from './contact';
 import { prisma } from '@/prisma/prisma';
 import { removeNullUndefined } from '@/helpers/common';
@@ -83,13 +88,28 @@ export const updateTicket = async (
     source?: TicketSource;
     contanctId?: string;
     assignedTo?: string;
+    status?: TicketStatus;
+    snoozeUntil?: string;
   },
 ) => {
-  removeNullUndefined(ticketUpdates);
+  const update: any = {
+    title: ticketUpdates.title,
+    priority: ticketUpdates.priority,
+    source: ticketUpdates.source,
+    contact_id: ticketUpdates.contanctId,
+    assigned_to: ticketUpdates.assignedTo,
+    status: ticketUpdates.status,
+  };
+
+  if (ticketUpdates.snoozeUntil) {
+    update.snooze_until = ticketUpdates.snoozeUntil;
+  }
+
+  removeNullUndefined(update);
 
   const newTicket = await prisma.ticket.update({
     where: { id: ticketId },
-    data: ticketUpdates,
+    data: update,
   });
 
   return newTicket;

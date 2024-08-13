@@ -24,3 +24,9 @@ enum TicketSource {
     MAIL
     WEB
 }
+
+enum TicketStatus {
+    OPEN
+    CLOSED
+    SNOOZE
+}
