@@ -3,6 +3,7 @@ import { TeamSize, Workspace } from '@prisma/client';
 import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { workspaceStore } from '@/stores/workspaceStore';
+import { getAPIErrorMessage } from '@/helpers/common';
 
 /**
  * @desc Create Workspace
@@ -34,7 +35,7 @@ export const createWorkspace = async (
 
     return newWorkspace;
   } catch (err: any) {
-    alert(err.message);
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return null;
   } finally {
     workspaceStore.setLoading(false);
@@ -67,7 +68,7 @@ export const inviteUsersToWorkspace = async (
 
     return data;
   } catch (err: any) {
-    alert(err.message);
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return null;
   } finally {
     workspaceStore.setLoading(false);
@@ -87,7 +88,7 @@ export const getWorkspaceList = async () => {
     workspaceStore.setCurrentWorkspace(data[0]);
     return data;
   } catch (err: any) {
-    alert(err.message);
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return null;
   } finally {
     workspaceStore.setLoading(false);

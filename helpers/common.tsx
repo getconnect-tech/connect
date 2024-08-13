@@ -52,3 +52,11 @@ export function removeNullUndefined(obj: Record<string, any>) {
     }
   }
 }
+
+/**
+ * @desc Convert response error message
+ * @param {Record<string, any>} obj
+ */
+export function getAPIErrorMessage(obj: Record<string, any>) {
+  return obj?.response?.data?.error;
+}

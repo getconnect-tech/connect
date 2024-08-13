@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { ticketStore } from '@/stores/ticketStore';
-import { isEmpty } from '@/helpers/common';
+import { getAPIErrorMessage, isEmpty } from '@/helpers/common';
 
 /**
  * @desc Get ticket list
@@ -54,7 +54,7 @@ export const getTicketList = async () => {
     ticketStore.setTicketList(data);
     return data;
   } catch (err: any) {
-    alert(err.message);
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -97,7 +97,7 @@ export const getTicketDetails = async (ticketId: string) => {
     ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
-    alert(err.message);
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -121,7 +121,7 @@ export const updateTicketDetails = async (ticketId: any, payload: object) => {
     ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
-    alert(err.message);
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return null;
   } finally {
     ticketStore.setLoading(false);
