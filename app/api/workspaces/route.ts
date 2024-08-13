@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { UserRole } from '@prisma/client';
 import { handleApiError } from '@/helpers/errorHandler';
 import { nameSchema } from '@/lib/zod/common';
 import withAuth from '@/middlewares/withAuth';
@@ -30,7 +31,7 @@ export const POST = withAuth(async (req) => {
     const user = req.user;
 
     const newWorkspace = await createWorkspace({ name, industry, teamSize });
-    await addUserToWorkspace(newWorkspace.id, user.id);
+    await addUserToWorkspace(newWorkspace.id, user.id, UserRole.OWNER);
     if (invitedUsers) {
       await inviteUsers(invitedUsers, newWorkspace.id, user.id);
     }
