@@ -317,7 +317,6 @@ function TicketDetails(props: Props) {
               name={''}
             />
             <Input modeSelectedItem={modeSelectedItem}>
-              <textarea placeholder='Write a message' />
               <RichTextBox />
               <InputIcon>
                 <DropDownWithTag

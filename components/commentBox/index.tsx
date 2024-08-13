@@ -49,41 +49,10 @@ function RichTextBox(this: any, props: any) {
   const fieldsData = { text: 'name' };
   const mentionRef = useRef<MentionComponent>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const emojiPickerRef = useRef<HTMLDivElement | null>(null);
   const [uploadedFiles, setUploadedFiles] = useState<any>([]);
   const [valueContent, setValueContent] = useState<string>('');
+
   let rteObj: any = useRef(null);
-  const [isEmojiDropdownOpen, setIsEmojiDropdownOpen] = useState(false);
-
-  useEffect(() => {
-    if (isEmojiDropdownOpen) {
-      setTimeout(() => {
-        if (emojiPickerRef.current) {
-          const searchInput = emojiPickerRef.current.querySelector('input');
-          if (searchInput) {
-            searchInput.focus();
-          }
-        }
-      }, 0);
-    }
-  }, [isEmojiDropdownOpen]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        isEmojiDropdownOpen &&
-        emojiPickerRef.current &&
-        event.target instanceof Node &&
-        !emojiPickerRef.current.contains(event.target as Node)
-      ) {
-        setIsEmojiDropdownOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isEmojiDropdownOpen]);
 
   useEffect(() => {
     rteObj.focusIn();
@@ -138,8 +107,6 @@ function RichTextBox(this: any, props: any) {
       'UnorderedList',
       'OrderedList',
       'CreateLink',
-      // 'SourceCode',
-      // 'CreateTable',
       'Undo',
       'Redo',
     ],
@@ -223,13 +190,7 @@ function RichTextBox(this: any, props: any) {
             previousElement = (container.parentNode as HTMLElement)
               .previousElementSibling;
           }
-          if (
-            previousElement &&
-            previousElement.classList.contains(
-              'screen-recording-custom-main-div',
-            ) &&
-            range.startOffset === 0
-          ) {
+          if (previousElement && range.startOffset === 0) {
             previousElement.parentNode!.removeChild(previousElement);
             args.cancel = true;
           }
@@ -418,15 +379,10 @@ function RichTextBox(this: any, props: any) {
       <>
         <div onDragOver={handleDragOver} onDrop={handleDrop}>
           <Main
-            isApplyMinHeight={props?.isApplyMinHeight}
-            isResponsiveMinHeight={props?.isResponsiveMinHeight}
-            isApplyMaxHeight={props?.isApplyMaxHeight}
             isApplyMsgModel={props?.isApplyMsgModel}
-            isApplyMargin={props?.isApplyMargin}
             isInlineToolbar={isInlineToolbar}
             isplaceholder={props?.isplaceholder}
             isScrollbarnone={isScrollbarnone}
-            isPaddingright={props?.isPaddingright}
           >
             <TextMainDiv>
               {!disable && (
@@ -445,13 +401,11 @@ function RichTextBox(this: any, props: any) {
                     actionBegin={handleKeyDown}
                     enableAutoUrl={true}
                     saveInterval={1000}
-                    // autoFocus={true}
-                    // enableAutoFocus={true}
                     pasteCleanupSettings={pasteCleanupSettings}
                     change={(item) => onChangeText(item?.value)}
                     value={valueContent}
                     actionComplete={handleActionComplete}
-                    placeholder={props?.placeholder}
+                    placeholder={'Write a message'}
                   >
                     <Inject
                       services={[
@@ -468,16 +422,13 @@ function RichTextBox(this: any, props: any) {
                     ref={mentionRef}
                     id='mentionEditor'
                     target='#inlineRTE_rte-edit-view'
-                    // suggestionCount={8}
                     showMentionChar={false}
                     allowSpaces={true}
                     dataSource={
                       isEveryoneMentionEnable ? usersWithAll : props?.users
                     }
                     fields={fieldsData}
-                    // popupWidth='250px'
                     popupHeight='200px'
-                    // isMessageMentionModal={props?.isMessageMentionModal}
                     itemTemplate={itemTemplate}
                     displayTemplate={displayTemplate}
                   ></Mentioncomponent>
