@@ -22,6 +22,7 @@ export const updateUserDetails = async (displayName: string) => {
     userStore.setLoading(false);
   }
 };
+
 /**
  * @desc Get user details
  * @param {*}

@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useCallback, useState } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import {
   Description,
@@ -78,7 +78,9 @@ const MyProfile = () => {
                   placeholder={'Enter Full name'}
                   style={{ padding: '8px 16px' }}
                   value={displayName}
-                  onChange={(e: any) => setDisplayName(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setDisplayName(e.target.value)
+                  }
                 />
               </TextField>
               <TextField>

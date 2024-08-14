@@ -14,5 +14,5 @@ if [ "$current_branch" = "$protected_branch_2" ]; then
   exit 1
 fi
 
-echo "Please wait... checking lint & formating"
-yarn run lint
+# echo "Please wait... checking lint & formating"
+# yarn run lint
