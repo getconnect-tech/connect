@@ -10,11 +10,10 @@ const MainDiv = styled.div`
 
 const ProfileDiv = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 20px;
+  gap: 8px;
+  padding: 12px 20px 16px;
+  border-top: 1px solid ${colors.border};
 `;
 
 const Title = styled.p`
@@ -33,7 +32,7 @@ const DetailsMainDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 0 20px 20px;
+  padding: 0 20px 12px;
 `;
 
 const DetailsDiv = styled.div`
@@ -69,7 +68,6 @@ const LeftDiv = styled.div`
 `;
 
 const WorkDetailMainDiv = styled.div`
-  border-top: 1px solid ${colors.border};
   border-bottom: 1px solid ${colors.border};
 `;
 
@@ -81,7 +79,7 @@ const TitleDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 12px 20px 12px;
+  margin: 12px 20px;
   div {
     width: 24px;
     height: 24px;
@@ -95,7 +93,7 @@ const TitleDiv = styled.div`
 const EventDetailDiv = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 16px 20px;
+  padding: 0 20px 12px;
   position: relative;
 `;
 
