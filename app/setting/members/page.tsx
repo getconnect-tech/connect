@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 'use client';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import {
   Description,
   Head,
@@ -13,27 +14,36 @@ import {
 } from '../style';
 import Button from '@/components/button/button';
 import MemberCard from '@/components/memberCard/memberCard';
+import { getWorkspaceList } from '@/services/clientSide/workspaceServices';
+import { useStores } from '@/stores';
 
-function Members() {
-  const members = [
-    {
-      name: 'Sanjay M.',
-      email: 'sanjay@pixer.io',
-      src: 'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4',
-      designation: 'Owner',
-    },
-    {
-      name: 'Anna Sthesia',
-      email: 'anna@acme.com',
-      src: 'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUser%20Image_1716282098691.jpg?alt=media&token=34984821-78db-4248-94c8-35f186397d7e',
-    },
-    {
-      name: 'Poppa Cherry',
-      email: 'poppa@massive.com',
-      designation: 'Admin',
-      src: 'https://bearbuk.blob.core.windows.net/content/Profile_5bd2e78640458116088c9b44_2019053114342861_120.png',
-    },
-  ];
+interface Member {
+  id: string;
+  email: string;
+  display_name: string;
+  profile_url: string | null;
+  created_at: string;
+  is_verified: boolean;
+  updated_at: string;
+  designation: string | null;
+}
+
+const Members = () => {
+  const { workspaceStore } = useStores();
+  const [members, setMembers] = useState(Array<Member>);
+
+  const getWorkspaceMember = useCallback(async () => {
+    workspaceStore.setLoading(true);
+    // get user data from workspace object
+    const [{ users }] = await getWorkspaceList();
+    setMembers(users);
+    workspaceStore.setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    getWorkspaceMember();
+  }, []);
+
   return (
     <Main>
       <MainDiv>
@@ -46,13 +56,13 @@ function Members() {
             <Button title='Invite Member' />
           </Head>
           <MainCardDiv>
-            {members.map((member, index) => (
+            {members?.map((member: Member) => (
               <MemberCard
-                key={index}
-                name={member.name}
+                key={member.id}
+                name={member.display_name}
                 email={member.email}
-                src={member.src}
-                designation={member.designation}
+                src={member.profile_url || ''}
+                designation={member.designation || ''}
               />
             ))}
           </MainCardDiv>
@@ -60,6 +70,6 @@ function Members() {
       </MainDiv>
     </Main>
   );
-}
+};
 
-export default Members;
+export default observer(Members);
