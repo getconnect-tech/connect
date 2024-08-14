@@ -3,7 +3,7 @@ import { isEmpty } from './common';
 import { getSessionDetails } from '@/services/serverSide/auth/authentication';
 import { APP_INIT_RESPONSE_TYPE } from '@/global/constants';
 import { userStore } from '@/stores/userStore';
-import { getWorkspaceList } from '@/services/clientSide/workspace';
+import { getWorkspaceList } from '@/services/clientSide/workspaceServices';
 
 export const appInit: any = async () => {
   const session = await getSessionDetails();
