@@ -10,6 +10,7 @@ interface Props {
   isHovered?: boolean;
   isContextMenu?: boolean;
   isShowSubmenu?: boolean;
+  isDelete?: boolean;
 }
 
 const MainDiv = styled.div<Props>`
@@ -113,12 +114,14 @@ const ItemLeftDiv = styled.div<Props>`
   gap: 8px;
   p {
     ${Typography.body_md_regular};
-    color: ${({ isSelected, isHovered }) =>
+    color: ${({ isSelected, isHovered, isDelete }) =>
       isSelected
         ? colors.text
         : isHovered
           ? colors.text
-          : colors.text_text_secondary};
+          : isDelete
+            ? colors.fill_danger
+            : colors.text_text_secondary};
   }
   svg {
     fill: ${({ isSelected, isHovered }) =>

@@ -19,6 +19,7 @@ export type DropDownItem = {
   isName?: boolean;
   value?: any;
   time?: string;
+  isDelete?: boolean;
 };
 
 interface DropDownProps {
@@ -137,7 +138,8 @@ export default function DropDown({
           >
             <ItemLeftDiv
               isSelected={selectedItems[item.name]}
-              isHovered={hoveredItem === item.name}
+              isHovered={!item.isDelete && hoveredItem === item.name}
+              isDelete={item.isDelete || false}
             >
               {isCheckbox && (
                 <StyledCheckbox
