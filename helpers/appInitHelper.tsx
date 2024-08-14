@@ -2,8 +2,8 @@
 import { isEmpty } from './common';
 import { getSessionDetails } from '@/services/serverSide/auth/authentication';
 import { APP_INIT_RESPONSE_TYPE } from '@/global/constants';
-import { userStore } from '@/stores/userStore';
 import { getWorkspaceList } from '@/services/clientSide/workspaceServices';
+import { getUserDetails } from '@/services/clientSide/userService';
 
 export const appInit: any = async () => {
   const session = await getSessionDetails();
@@ -15,9 +15,9 @@ export const appInit: any = async () => {
       return;
     return { type: APP_INIT_RESPONSE_TYPE.REDIRECT, path: '/login' };
   }
-  const userDetails = session?.user;
-  if (userDetails) {
-    userStore.setUserDetails(userDetails);
+
+  if (session?.user) {
+    await getUserDetails();
 
     // Get user's workspace list
     const workspaceList = await getWorkspaceList();

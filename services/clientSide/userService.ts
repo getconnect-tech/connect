@@ -22,3 +22,22 @@ export const updateUserDetails = async (displayName: string) => {
     userStore.setLoading(false);
   }
 };
+/**
+ * @desc Get user details
+ * @param {*}
+ */
+export const getUserDetails = async () => {
+  try {
+    userStore.setLoading(true);
+    const response = await axios.get(`${NEXT_PUBLIC_API_URL}/user`);
+    const { data } = response;
+    // set user details
+    userStore.setUserDetails(data);
+    return data;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return null;
+  } finally {
+    userStore.setLoading(false);
+  }
+};
