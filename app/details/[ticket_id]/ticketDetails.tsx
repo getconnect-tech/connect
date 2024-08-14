@@ -256,6 +256,7 @@ function TicketDetails(props: Props) {
                 items={snoozeItem}
                 onChange={() => {}}
                 isTag={true}
+                isActive={snoozeDropdown && true}
                 isSnooze={true}
                 dropDownStyle={{ maxWidth: 212, width: '100%' }}
                 className={
