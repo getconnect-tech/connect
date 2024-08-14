@@ -5,6 +5,7 @@ import {
   Description,
   Head,
   Label,
+  LeftDiv,
   Main,
   MainDiv,
   PasswordInputs,
@@ -16,14 +17,16 @@ import {
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
 
-export default function Password() {
+function ChangePassword() {
   return (
     <Main>
       <MainDiv>
         <RightDiv>
           <Head>
-            <Title>Change your password</Title>
-            <Description>Set a new password for your account</Description>
+            <LeftDiv>
+              <Title>Change your password</Title>
+              <Description>Set a new password for your account</Description>
+            </LeftDiv>
           </Head>
           <ProfileDetail>
             <PasswordInputs>
@@ -47,3 +50,5 @@ export default function Password() {
     </Main>
   );
 }
+
+export default ChangePassword;

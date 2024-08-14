@@ -11,6 +11,7 @@ export const MainDiv = styled.div`
   width: 100%;
   gap: 12px;
   margin-top: 50px;
+  position: fixed;
 `;
 export const IconDiv = styled.div`
   position: fixed;

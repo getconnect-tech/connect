@@ -6,6 +6,7 @@ import {
   Frame,
   Head,
   Label,
+  LeftDiv,
   Link,
   Main,
   MainDiv,
@@ -20,7 +21,7 @@ import Avatar from '@/components/avtar/Avtar';
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
 
-export default function MyProfile() {
+function MyProfile() {
   const handleKeyPress = useCallback(
     (event: { which: any; keyCode: any; preventDefault: () => void }) => {
       // Allow only digits
@@ -37,8 +38,10 @@ export default function MyProfile() {
       <MainDiv>
         <RightDiv>
           <Head>
-            <Title>My Profile</Title>
-            <Description>Manage your account Profile</Description>
+            <LeftDiv>
+              <Title>My Profile</Title>
+              <Description>Manage your account Profile</Description>
+            </LeftDiv>
           </Head>
           <ProfileDetail>
             <ProfileImage>
@@ -80,3 +83,5 @@ export default function MyProfile() {
     </Main>
   );
 }
+
+export default MyProfile;
