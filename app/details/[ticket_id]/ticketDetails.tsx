@@ -52,6 +52,7 @@ function TicketDetails(props: Props) {
   const [priorityDropdown, setPriorityDropdown] = useState(false);
   const [messageModeDropdown, setMessageModeDropdown] = useState(false);
   const [assignDropdown, setAssignDropdown] = useState(false);
+  const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const { ticketStore, workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
   const { ticketDetails } = ticketStore;
@@ -101,6 +102,15 @@ function TicketDetails(props: Props) {
     setAssignDropdown(false);
     setLabelDropdown(false);
     setMessageModeDropdown(false);
+    setSnoozeDropdown(false);
+  };
+
+  const handleSnoozeTag = () => {
+    setSnoozeDropdown((prev) => !prev);
+    setAssignDropdown(false);
+    setLabelDropdown(false);
+    setMessageModeDropdown(false);
+    setPriorityDropdown(false);
   };
 
   const handleMessageModeTag = () => {
@@ -108,6 +118,7 @@ function TicketDetails(props: Props) {
     setAssignDropdown(false);
     setLabelDropdown(false);
     setPriorityDropdown(false);
+    setSnoozeDropdown(false);
   };
 
   const handleLabelTag = () => {
@@ -115,6 +126,7 @@ function TicketDetails(props: Props) {
     setAssignDropdown(false);
     setPriorityDropdown(false);
     setMessageModeDropdown(false);
+    setSnoozeDropdown(false);
   };
 
   const handleAssignTag = () => {
@@ -122,6 +134,7 @@ function TicketDetails(props: Props) {
     setPriorityDropdown(false);
     setLabelDropdown(false);
     setMessageModeDropdown(false);
+    setSnoozeDropdown(false);
   };
 
   const assignItem = [
@@ -132,6 +145,13 @@ function TicketDetails(props: Props) {
       isName: true,
     })) || []),
   ];
+
+  const snoozeItem = [
+    { name: 'Tomorrow', time: 'Wed, Jul 31' },
+    { name: 'Next week', time: 'Tue, Aug 6' },
+    { name: '3 days', time: 'Fri, Aug 2' },
+  ];
+
   const onChangePriority = useCallback(
     async (item: { name: string; icon: string; value: PriorityLevels }) => {
       const payload = { priority: item?.value };
@@ -226,12 +246,28 @@ function TicketDetails(props: Props) {
                 onClick={() => {}}
                 isName={false}
               />
-              <Tag
-                title='Snooze'
+              <DropDownWithTag
+                onClick={handleSnoozeTag}
+                title={'Snooze'}
                 iconName='context-snooze-icon'
-                isActive={false}
-                onClick={() => {}}
-                isName={false}
+                dropdownOpen={snoozeDropdown}
+                onClose={() => {
+                  setSnoozeDropdown(false);
+                }}
+                items={snoozeItem}
+                onChange={() => {}}
+                isTag={true}
+                isActive={snoozeDropdown && true}
+                isSnooze={true}
+                dropDownStyle={{ maxWidth: 212, width: '100%' }}
+                className={
+                  submenuPosition === 'upwards'
+                    ? 'submenu-upwards'
+                    : 'submenu-downwards'
+                }
+                onMouseEnter={(e: any) =>
+                  handleMouseEnter(e, setSubmenuPosition)
+                }
               />
             </ButtonDiv>
           </StatusDiv>

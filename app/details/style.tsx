@@ -72,6 +72,15 @@ const ButtonDiv = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
+  .submenu-upwards {
+    bottom: calc(100% - 50px);
+    top: auto;
+  }
+  .submenu-downwards {
+    top: 33px;
+    bottom: auto;
+    right: 20px;
+  }
 `;
 
 const InputDiv = styled.div`

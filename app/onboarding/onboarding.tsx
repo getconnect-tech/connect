@@ -34,7 +34,7 @@ import { useStores } from '@/stores';
 import {
   createWorkspace,
   inviteUsersToWorkspace,
-} from '@/services/clientSide/workspace';
+} from '@/services/clientSide/workspaceServices';
 import { isEmpty } from '@/helpers/common';
 import { colors } from '@/styles/colors';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
