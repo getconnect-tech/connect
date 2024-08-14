@@ -1,3 +1,5 @@
+import { getUserWorkspaces } from '@/services/serverSide/workspace';
+
 export interface InboundEmailPayload {
   FromName: string;
   MessageStream: string;
@@ -58,3 +60,7 @@ export interface Attachment {
   ContentType: string;
   ContentLength: number;
 }
+
+export type Workspace = NonNullable<
+  Awaited<ReturnType<typeof getUserWorkspaces>>
+>[0];
