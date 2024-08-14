@@ -5,6 +5,7 @@
 import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
+import { PriorityLevels } from '@prisma/client';
 import Avatar from '../avtar/Avtar';
 import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
 import {
@@ -82,13 +83,14 @@ export default function InboxCard({
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
-    ...((currentWorkspace as any)?.users?.map((user: any) => ({
-      name: user.display_name,
+    ...(currentWorkspace?.users?.map((user) => ({
+      name: user.display_name || '',
       src: '',
       isName: true,
       user_id: user.id,
     })) || []),
   ];
+
   const onClickTicket = useCallback(() => {
     ticketStore.setTicketDetails(ticketDetail);
     router.push(`/details/${ticketDetail?.id}`);
@@ -97,24 +99,27 @@ export default function InboxCard({
   /*
    * @desc Update ticket details priority in inbox card
    */
-  const onChangePriority = useCallback(async (item: any) => {
-    const payload = { priority: item?.value };
-    try {
-      const updatedTicketDetails = {
-        ...(ticketDetail || {}),
-        priority: item?.value,
-      };
-      ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
-      await updateTicketDetails(ticketDetail?.id, payload);
-    } catch (e) {
-      console.log('Error : ', e);
-    }
-  }, []);
+  const onChangePriority = useCallback(
+    async (item: { value: PriorityLevels }) => {
+      const payload = { priority: item?.value };
+      try {
+        const updatedTicketDetails = {
+          ...(ticketDetail || {}),
+          priority: item?.value,
+        };
+        ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
+        await updateTicketDetails(ticketDetail?.id, payload);
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [],
+  );
 
   /*
    * @desc Update ticket details assign user in inbox card
    */
-  const onChangeAssign = useCallback(async (item: any) => {
+  const onChangeAssign = useCallback(async (item: { user_id: string }) => {
     const payload = { assignedTo: item?.user_id };
     try {
       const updatedTicketDetails = {
@@ -127,9 +132,11 @@ export default function InboxCard({
       console.log('Error : ', e);
     }
   }, []);
-  const assignedUser = (currentWorkspace as any)?.users?.find(
-    (user: any) => user.id === assigned_to,
+
+  const assignedUser = currentWorkspace?.users?.find(
+    (user: { id: string | null }) => user.id === assigned_to,
   );
+
   return (
     <CardDiv onClick={onClickTicket}>
       {showDotIcon && <DotIcon />}
@@ -195,7 +202,7 @@ export default function InboxCard({
             />
             <DropDownWithTag
               onClick={() => handleDropdownClick('assign')}
-              title={assignedUser?.display_name}
+              title={assignedUser?.display_name || ''}
               dropdownOpen={
                 currentOpenDropdown === `${dropdownIdentifier}-assign`
               }

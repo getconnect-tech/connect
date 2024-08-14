@@ -139,8 +139,8 @@ function TicketDetails(props: Props) {
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
-    ...((currentWorkspace as any)?.users?.map((user: any) => ({
-      name: user.display_name,
+    ...(currentWorkspace?.users?.map((user) => ({
+      name: user.display_name || '',
       src: '',
       isName: true,
       user_id: user.id,
@@ -174,6 +174,7 @@ function TicketDetails(props: Props) {
     },
     [ticketDetails],
   );
+
   /*
    * @desc Update ticket details assign user in ticket details
    */
@@ -184,7 +185,6 @@ function TicketDetails(props: Props) {
       value: PriorityLevels;
       user_id: string;
     }) => {
-      console.log('item', item);
       const payload = { assignedTo: item?.user_id };
       try {
         if (ticketDetails?.id) {
@@ -201,8 +201,8 @@ function TicketDetails(props: Props) {
     },
     [ticketDetails],
   );
-  const assignedUser = (currentWorkspace as any)?.users?.find(
-    (user: any) => user.id === assigned_to,
+  const assignedUser = currentWorkspace?.users?.find(
+    (user: { id: string | null | undefined }) => user.id === assigned_to,
   );
 
   return (
@@ -258,7 +258,7 @@ function TicketDetails(props: Props) {
               />
               <DropDownWithTag
                 onClick={handleAssignTag}
-                title={assignedUser?.display_name}
+                title={assignedUser?.display_name || ''}
                 dropdownOpen={assignDropdown}
                 onClose={() => setAssignDropdown(false)}
                 items={assignItem}

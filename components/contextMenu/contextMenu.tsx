@@ -3,6 +3,7 @@
 /* eslint-disable max-len */
 import React, { useCallback, useState } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
+import { PriorityLevels } from '@prisma/client';
 import DropDown from '../dropDown/dropDown';
 import {
   ContextMenuContent,
@@ -22,11 +23,8 @@ interface Props {
   ticketIndex: number;
 }
 
-export default function CustomContextMenu({
-  children,
-  ticketDetail,
-  ticketIndex,
-}: Props) {
+export default function CustomContextMenu(props: Props) {
+  const { children, ticketDetail, ticketIndex } = props;
   const { ticketStore, workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
   const [submenuPosition, setSubmenuPosition] = useState<
@@ -51,38 +49,44 @@ export default function CustomContextMenu({
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
-    ...((currentWorkspace as any)?.users?.map((user: any) => ({
-      name: user.display_name,
+    ...(currentWorkspace?.users?.map((user) => ({
+      name: user.display_name || '',
       src: '',
       isName: true,
       user_id: user.id,
     })) || []),
   ];
+
   const snoozeItem = [
     { name: 'Tomorrow', time: 'Wed, Jul 31' },
     { name: 'Next week', time: 'Tue, Aug 6' },
     { name: '3 days', time: 'Fri, Aug 2' },
   ];
+
   /*
    * @desc Update ticket details priority in context menu
    */
-  const onChangePriority = useCallback(async (item: any) => {
-    const payload = { priority: item?.value };
-    try {
-      const updatedTicketDetails = {
-        ...(ticketDetail || {}),
-        priority: item?.value,
-      };
-      ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
-      await updateTicketDetails(ticketDetail?.id, payload);
-    } catch (e) {
-      console.log('Error : ', e);
-    }
-  }, []);
+  const onChangePriority = useCallback(
+    async (item: { value: PriorityLevels }) => {
+      const payload = { priority: item?.value };
+      try {
+        const updatedTicketDetails = {
+          ...(ticketDetail || {}),
+          priority: item?.value,
+        };
+        ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
+        await updateTicketDetails(ticketDetail?.id, payload);
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [],
+  );
+
   /*
    * @desc Update ticket details assign user in context menu
    */
-  const onChangeAssign = useCallback(async (item: any) => {
+  const onChangeAssign = useCallback(async (item: { user_id: string }) => {
     const payload = { assignedTo: item?.user_id };
     try {
       const updatedTicketDetails = {

@@ -1,9 +1,10 @@
 /* eslint-disable no-undef */
-import { TeamSize, Workspace } from '@prisma/client';
+import { TeamSize } from '@prisma/client';
 import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { getAPIErrorMessage } from '@/helpers/common';
+import { Workspace } from '@/utils/dataTypes';
 
 /**
  * @desc Create Workspace

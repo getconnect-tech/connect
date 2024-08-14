@@ -28,7 +28,7 @@ interface DropDownProps {
   iconViewBox: string;
   onClose: () => void;
   // eslint-disable-next-line no-unused-vars
-  onChange?: (item: DropDownItem) => void;
+  onChange?: (item: any) => void;
   isSearch?: boolean;
   isCheckbox?: boolean;
   isContextMenu?: boolean;
