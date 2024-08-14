@@ -23,6 +23,7 @@ export const Div = styled.div`
 export const MainDiv = styled.div`
   background-color: ${colors.bg_surface};
   height: 100vh;
+  overflow: auto;
   .icon {
     position: fixed;
     top: 20px;

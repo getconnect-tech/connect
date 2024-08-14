@@ -3,6 +3,7 @@
 import {
   Description,
   Head,
+  LeftDiv,
   Main,
   MainDiv,
   NotificationCard,
@@ -12,15 +13,16 @@ import {
   Title,
 } from '../style';
 
-export default function Notification() {
+function Notification() {
   return (
     <Main>
       <MainDiv>
-        {/* <SettingNavBar /> */}
         <RightDiv>
           <Head>
-            <Title>Notification</Title>
-            <Description>Select where you will be notified</Description>
+            <LeftDiv>
+              <Title>Notification</Title>
+              <Description>Select where you will be notified</Description>
+            </LeftDiv>
           </Head>
           <NotificationCard>
             <NotificationItem>
@@ -37,3 +39,5 @@ export default function Notification() {
     </Main>
   );
 }
+
+export default Notification;

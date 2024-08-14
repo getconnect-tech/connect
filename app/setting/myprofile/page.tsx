@@ -7,6 +7,7 @@ import {
   Frame,
   Head,
   Label,
+  LeftDiv,
   Link,
   Main,
   MainDiv,
@@ -49,8 +50,10 @@ const MyProfile = () => {
       <MainDiv>
         <RightDiv>
           <Head>
-            <Title>My Profile</Title>
-            <Description>Manage your account Profile</Description>
+            <LeftDiv>
+              <Title>My Profile</Title>
+              <Description>Manage your account Profile</Description>
+            </LeftDiv>
           </Head>
           <ProfileDetail>
             <ProfileImage>
