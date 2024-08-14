@@ -28,4 +28,5 @@ export const colors = {
   border_disabled: '#E7E7E4',
   bg_white_hover: '#F2F2F2',
   box_shadow_2: '#0000000D',
+  bg_overlay: '#00000080',
 };

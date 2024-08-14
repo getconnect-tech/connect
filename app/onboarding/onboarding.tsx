@@ -123,10 +123,10 @@ function OnboardingStep1() {
       <OnBoardScreen isNext={showCard}>
         <Heading>
           <SVGIcon
-            name='secondary-logo'
+            name='logo-icon'
             width='60px'
             height='60px'
-            viewBox='0 0 60 60'
+            viewBox='0 0 20 20'
           />
           <Title isNext={showCard}>
             Just a few quick things to set up your account
@@ -253,8 +253,9 @@ function OnboardingStep1() {
                         <Icon
                           onClick={() => handleRemoveInputField(index)}
                           iconName={'cross-icon'}
-                          iconSize={'16'}
+                          iconSize={'12'}
                           iconViewBox={'0 0 16 16'}
+                          size={true}
                         />
                       </TextField>
                     ))}

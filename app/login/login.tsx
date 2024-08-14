@@ -152,10 +152,10 @@ function Login() {
         <LoginSection>
           <Heading>
             <SVGIcon
-              name='secondary-logo'
+              name='logo-icon'
               width='60px'
               height='60px'
-              viewBox='0 0 60 60'
+              viewBox='0 0 20 20'
             />
             <LoginText>
               {showBottomSection ? 'Check your email' : 'Login'}

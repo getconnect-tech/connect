@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Description,
   Head,
@@ -13,8 +13,20 @@ import {
 } from '../style';
 import Button from '@/components/button/button';
 import MemberCard from '@/components/memberCard/memberCard';
+import ModalCustom from '@/components/modal/modal';
+import InviteMemberModal from '@/components/inviteMemberModal/inviteMemberModal';
 
 function Members() {
+  const [inviteModal, setInviteModal] = useState(false);
+
+  const onOpenInviteModal = useCallback(() => {
+    setInviteModal(true);
+  }, []);
+
+  const onCloseInviteModal = useCallback(() => {
+    setInviteModal(false);
+  }, []);
+
   const members = [
     {
       name: 'Sanjay M.',
@@ -35,30 +47,37 @@ function Members() {
     },
   ];
   return (
-    <Main>
-      <MainDiv>
-        <RightDiv>
-          <Head>
-            <LeftDiv>
-              <Title>Members</Title>
-              <Description>Invite your team member to collaborate.</Description>
-            </LeftDiv>
-            <Button title='Invite Member' />
-          </Head>
-          <MainCardDiv>
-            {members.map((member, index) => (
-              <MemberCard
-                key={index}
-                name={member.name}
-                email={member.email}
-                src={member.src}
-                designation={member.designation}
-              />
-            ))}
-          </MainCardDiv>
-        </RightDiv>
-      </MainDiv>
-    </Main>
+    <>
+      <Main>
+        <MainDiv>
+          <RightDiv>
+            <Head>
+              <LeftDiv>
+                <Title>Members</Title>
+                <Description>
+                  Invite your team member to collaborate.
+                </Description>
+              </LeftDiv>
+              <Button title='Invite Member' onClick={onOpenInviteModal} />
+            </Head>
+            <MainCardDiv>
+              {members.map((member, index) => (
+                <MemberCard
+                  key={index}
+                  name={member.name}
+                  email={member.email}
+                  src={member.src}
+                  designation={member.designation}
+                />
+              ))}
+            </MainCardDiv>
+          </RightDiv>
+        </MainDiv>
+      </Main>
+      <ModalCustom open={inviteModal} onClose={onCloseInviteModal}>
+        <InviteMemberModal onClose={onCloseInviteModal} />
+      </ModalCustom>
+    </>
   );
 }
 
