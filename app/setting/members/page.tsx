@@ -1,8 +1,7 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
-import { User } from '@prisma/client';
 import {
   Description,
   Head,
@@ -20,13 +19,12 @@ import { useStores } from '@/stores';
 
 const Members = () => {
   const { workspaceStore } = useStores();
-  const [members, setMembers] = useState<User[]>([]);
+  const { currentWorkspace } = workspaceStore;
 
   const getWorkspaceMember = useCallback(async () => {
     workspaceStore.setLoading(true);
     // get user data from workspace object
-    const [{ users }] = await getWorkspaceList();
-    setMembers(users);
+    await getWorkspaceList();
     workspaceStore.setLoading(false);
   }, []);
 
@@ -46,7 +44,7 @@ const Members = () => {
             <Button title='Invite Member' />
           </Head>
           <MainCardDiv>
-            {members?.map((member) => (
+            {currentWorkspace?.users?.map((member) => (
               <MemberCard
                 key={member.id}
                 name={member.display_name || ''}
