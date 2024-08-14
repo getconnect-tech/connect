@@ -29,6 +29,7 @@ interface Props {
   className?: string;
   onMouseEnter?: any;
   tagStyle?: React.CSSProperties;
+  isSnooze?: boolean;
 }
 
 export default function DropDownWithTag({
@@ -53,6 +54,7 @@ export default function DropDownWithTag({
   className,
   onMouseEnter,
   tagStyle,
+  isSnooze = false,
 }: Props) {
   return (
     <div onMouseEnter={onMouseEnter}>
@@ -99,6 +101,7 @@ export default function DropDownWithTag({
           isSearch={isSearch}
           isCheckbox={isCheckbox}
           className={className}
+          isSnooze={isSnooze}
         />
       )}
     </div>
