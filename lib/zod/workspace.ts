@@ -1,4 +1,4 @@
-import { TeamSize } from '@prisma/client';
+import { TeamSize, UserRole } from '@prisma/client';
 import { z } from 'zod';
 
 export const teamSizeSchema = z.nativeEnum(TeamSize, {
@@ -11,3 +11,7 @@ export const industrySchema = z
     invalid_type_error: "'industry' must be of type string!",
   })
   .min(3, { message: "'industry' must have atleast 3 characters!" });
+
+export const roleSchema = z.nativeEnum(UserRole, {
+  required_error: "'role' is required!",
+});
