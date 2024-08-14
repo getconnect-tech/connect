@@ -20,7 +20,6 @@ export default function ProfileSection() {
 
   return (
     <MainDiv>
-      <div></div>
       <ProfileDiv>
         <Avatar
           imgSrc=''

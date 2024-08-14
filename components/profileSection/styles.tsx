@@ -80,13 +80,13 @@ const TitleDiv = styled.div`
   align-items: center;
   justify-content: space-between;
   margin: 12px 20px;
-  div {
-    width: 24px;
-    height: 24px;
+  cursor: pointer;
+  position: relative;
+  .icon {
+    display: none;
   }
-  svg {
-    margin: 6px;
-    cursor: pointer;
+  &:hover .icon {
+    display: flex;
   }
 `;
 
@@ -145,6 +145,22 @@ const LineDiv = styled.div`
   border-left: 1px solid ${colors.border};
 `;
 
+const AIIcon = styled.div`
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${colors.brand};
+  border-radius: 50%;
+`;
+
+const NameDiv = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
 export {
   MainDiv,
   ProfileDiv,
@@ -162,4 +178,6 @@ export {
   Dot,
   Line,
   LineDiv,
+  AIIcon,
+  NameDiv,
 };
