@@ -44,7 +44,8 @@ export default function InboxCard({
   dropdownIdentifier,
   ticketIndex,
 }: Props) {
-  const { title, created_at, source, contact, priority } = ticketDetail;
+  const { title, created_at, source, contact, priority, assigned_to } =
+    ticketDetail;
   const router = useRouter();
   const { ticketStore, workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
@@ -82,6 +83,7 @@ export default function InboxCard({
       name: user.display_name,
       src: '',
       isName: true,
+      user_id: user.id,
     })) || []),
   ];
   const onClickTicket = useCallback(() => {
@@ -89,6 +91,9 @@ export default function InboxCard({
     router.push(`/details/${ticketDetail?.id}`);
   }, []);
 
+  /*
+   * @desc Update ticket details priority in inbox card
+   */
   const onChangePriority = useCallback(async (item: any) => {
     const payload = { priority: item?.value };
     try {
@@ -103,6 +108,25 @@ export default function InboxCard({
     }
   }, []);
 
+  /*
+   * @desc Update ticket details assign user in inbox card
+   */
+  const onChangeAssign = useCallback(async (item: any) => {
+    const payload = { assignedTo: item?.user_id };
+    try {
+      const updatedTicketDetails = {
+        ...(ticketDetail || {}),
+        assigned_to: item?.user_id,
+      };
+      ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
+      await updateTicketDetails(ticketDetail?.id, payload);
+    } catch (e) {
+      console.log('Error : ', e);
+    }
+  }, []);
+  const assignedUser = (currentWorkspace as any)?.users?.find(
+    (user: any) => user.id === assigned_to,
+  );
   return (
     <CardDiv onClick={onClickTicket}>
       {showDotIcon && <DotIcon />}
@@ -165,13 +189,13 @@ export default function InboxCard({
           />
           <DropDownWithTag
             onClick={() => handleDropdownClick('assign')}
-            title={'Sanjay M.'}
+            title={assignedUser?.display_name}
             dropdownOpen={
               currentOpenDropdown === `${dropdownIdentifier}-assign`
             }
             onClose={() => setCurrentOpenDropdown(null)}
             items={assignItem}
-            onChange={() => {}}
+            onChange={onChangeAssign}
             isTag={true}
             isSearch={true}
             isActive={true}
@@ -184,7 +208,7 @@ export default function InboxCard({
                 : 'submenu-downwards'
             }
             onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
-            src='https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
+            src={''}
           />
         </StatusMainDiv>
       </RightDiv>
