@@ -1,5 +1,5 @@
-import { Contact, Ticket } from '@prisma/client';
+import { formatTicket } from '@/services/serverSide/ticket';
 
-export interface TicketDetailsInterface extends Ticket {
-  contact?: Contact;
-}
+export type TicketDetailsInterface = NonNullable<
+  Awaited<ReturnType<typeof formatTicket>>
+>;
