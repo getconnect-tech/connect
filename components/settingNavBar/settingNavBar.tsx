@@ -57,7 +57,12 @@ export default function SettingNavBar() {
           <Item>Channels</Item>
           <Item>Labels</Item>
           <Item>Macros</Item>
-          <Item>Members</Item>
+          <Item
+            onClick={() => handleItemClick('/setting/members')}
+            active={activeItem === '/setting/members'}
+          >
+            Members
+          </Item>
           <Item>API Keys</Item>
           <Item>Migration</Item>
           <Item>Integrations</Item>
