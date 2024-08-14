@@ -107,23 +107,6 @@ const Input = styled.div<Props>`
   box-shadow:
     0px 0px 0px 0.5px ${colors.box_shadow},
     0px 2px 4px 0px ${colors.box_shadow_2};
-  textarea {
-    outline: none;
-    border: none;
-    max-height: 40px;
-    height: 100%;
-    width: 100%;
-    background-color: ${({ modeSelectedItem }) =>
-      modeSelectedItem?.name === 'Internal'
-        ? colors.brand_disabled
-        : colors.bg_white};
-    ${Typography.body_md_regular};
-    ${colors.text};
-    resize: none;
-    ::placeholder {
-      ${colors.text_text_secondary}
-    }
-  }
 `;
 
 const CenterDiv = styled.div`
@@ -148,7 +131,7 @@ const InputIcon = styled.div`
     }
   }
   .submenu-upwards {
-    bottom: calc(100% - 50px);
+    bottom: 60px;
     top: auto;
   }
   .submenu-downwards {

@@ -37,6 +37,7 @@ import {
 } from '@/services/clientSide/ticketServices';
 import { isEmpty } from '@/helpers/common';
 import Icon from '@/components/icon/icon';
+import RichTextBox from '@/components/commentBox';
 import { DropDownItem } from '@/components/dropDown/dropDown';
 import Tag from '@/components/tag/tag';
 
@@ -356,7 +357,7 @@ function TicketDetails(props: Props) {
               name={''}
             />
             <Input modeSelectedItem={modeSelectedItem}>
-              <textarea placeholder='Write a message' />
+              <RichTextBox />
               <InputIcon>
                 <DropDownWithTag
                   onClick={handleMessageModeTag}
