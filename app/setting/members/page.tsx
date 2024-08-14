@@ -2,6 +2,7 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { User } from '@prisma/client';
 import {
   Description,
   Head,
@@ -17,20 +18,9 @@ import MemberCard from '@/components/memberCard/memberCard';
 import { getWorkspaceList } from '@/services/clientSide/workspaceServices';
 import { useStores } from '@/stores';
 
-interface Member {
-  id: string;
-  email: string;
-  display_name: string;
-  profile_url: string | null;
-  created_at: string;
-  is_verified: boolean;
-  updated_at: string;
-  designation: string | null;
-}
-
 const Members = () => {
   const { workspaceStore } = useStores();
-  const [members, setMembers] = useState(Array<Member>);
+  const [members, setMembers] = useState<User[]>([]);
 
   const getWorkspaceMember = useCallback(async () => {
     workspaceStore.setLoading(true);
@@ -56,13 +46,13 @@ const Members = () => {
             <Button title='Invite Member' />
           </Head>
           <MainCardDiv>
-            {members?.map((member: Member) => (
+            {members?.map((member) => (
               <MemberCard
                 key={member.id}
-                name={member.display_name}
+                name={member.display_name || ''}
                 email={member.email}
                 src={member.profile_url || ''}
-                designation={member.designation || ''}
+                designation={''}
               />
             ))}
           </MainCardDiv>
