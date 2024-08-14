@@ -48,19 +48,25 @@ const TextMainDiv = styled.div<Props>`
   h6 {
     background-color: transparent !important;
     color: ${colors.text} !important;
+    max-width: 600px;
+    width: 100%;
   }
   p {
     margin: 0;
     color: ${colors.text} !important;
     background-color: transparent !important;
+    max-width: 600px;
+    width: 100%;
   }
   ul,
   ol {
-    color: ${({ theme }) => theme.title} !important;
+    color: ${colors.text} !important;
     background-color: transparent !important;
+    max-width: 600px;
+    width: 100%;
     li {
       ::marker {
-        color: ${({ theme }) => theme.title} !important;
+        color: ${colors.text} !important;
         background-color: transparent !important;
       }
     }
@@ -68,9 +74,13 @@ const TextMainDiv = styled.div<Props>`
   p > span {
     color: ${colors.text} !important;
     background-color: transparent !important;
+    max-width: 600px;
+    width: 100%;
   }
   a {
     color: ${colors.text};
+    max-width: 600px;
+    width: 100%;
   }
   #inlineRTE_rte-edit-view_options {
     border: ${colors.border};
@@ -157,7 +167,7 @@ const TextMainDiv = styled.div<Props>`
   .e-richtexteditor .e-source-content .e-content {
     min-height: 40px;
     margin-bottom: 4px;
-    max-height: 100px;
+    max-height: 200px;
     overflow: auto;
   }
   .e-richtexteditor .e-rte-content .e-content pre {
