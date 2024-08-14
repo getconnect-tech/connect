@@ -6,6 +6,7 @@ import {
   Frame,
   Head,
   Label,
+  LeftDiv,
   Link,
   Main,
   MainDiv,
@@ -20,14 +21,16 @@ import Button from '@/components/button/button';
 import Input from '@/components/input/input';
 import SVGIcon from '@/assets/icons/SVGIcon';
 
-export default function WorkspaceProfile() {
+function WorkspaceProfile() {
   return (
     <Main>
       <MainDiv>
         <RightDiv>
           <Head>
-            <Title>Workspace Profile</Title>
-            <Description>Manage your Workspace Profile</Description>
+            <LeftDiv>
+              <Title>Workspace Profile</Title>
+              <Description>Manage your Workspace Profile</Description>
+            </LeftDiv>
           </Head>
           <ProfileDetail>
             <ProfileImage>
@@ -60,3 +63,5 @@ export default function WorkspaceProfile() {
     </Main>
   );
 }
+
+export default WorkspaceProfile;

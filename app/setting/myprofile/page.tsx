@@ -1,11 +1,13 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useCallback } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import {
   Description,
   Frame,
   Head,
   Label,
+  LeftDiv,
   Link,
   Main,
   MainDiv,
@@ -19,8 +21,14 @@ import {
 import Avatar from '@/components/avtar/Avtar';
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
+import { useStores } from '@/stores';
+import { updateUserDetails } from '@/services/clientSide/userService';
 
-export default function MyProfile() {
+const MyProfile = () => {
+  const { userStore } = useStores();
+  const { user } = userStore;
+  const [displayName, setDisplayName] = useState(user?.display_name || '');
+
   const handleKeyPress = useCallback(
     (event: { which: any; keyCode: any; preventDefault: () => void }) => {
       // Allow only digits
@@ -32,13 +40,20 @@ export default function MyProfile() {
     [],
   );
 
+  const handleUpdate = () => {
+    if (user) userStore.setUserDetails({ ...user, display_name: displayName });
+    updateUserDetails(displayName);
+  };
+
   return (
     <Main>
       <MainDiv>
         <RightDiv>
           <Head>
-            <Title>My Profile</Title>
-            <Description>Manage your account Profile</Description>
+            <LeftDiv>
+              <Title>My Profile</Title>
+              <Description>Manage your account Profile</Description>
+            </LeftDiv>
           </Head>
           <ProfileDetail>
             <ProfileImage>
@@ -62,6 +77,10 @@ export default function MyProfile() {
                 <Input
                   placeholder={'Enter Full name'}
                   style={{ padding: '8px 16px' }}
+                  value={displayName}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setDisplayName(e.target.value)
+                  }
                 />
               </TextField>
               <TextField>
@@ -73,10 +92,12 @@ export default function MyProfile() {
                 />
               </TextField>
             </ProfileInputs>
-            <Button title='Update' />
+            <Button onClick={handleUpdate} title='Update' />
           </ProfileDetail>
         </RightDiv>
       </MainDiv>
     </Main>
   );
-}
+};
+
+export default observer(MyProfile);
