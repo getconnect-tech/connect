@@ -27,12 +27,7 @@ function MemberCard({ designation, name, email, src, userName = '' }: Props) {
   return (
     <CardDiv>
       <LeftDiv>
-        <Avatar
-          imgSrc={src}
-          name={`${!src && userName}`}
-          size={28}
-          isShowBorder={true}
-        />
+        <Avatar imgSrc={src} name={name} size={28} isShowBorder={true} />
         <NameDiv>
           <h6>{name}</h6>
           <p>{email}</p>

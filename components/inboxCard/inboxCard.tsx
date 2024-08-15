@@ -5,6 +5,7 @@
 import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
+import { PriorityLevels } from '@prisma/client';
 import Avatar from '../avtar/Avtar';
 import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
 import {
@@ -47,7 +48,8 @@ export default function InboxCard({
   dropdownIdentifier,
   ticketIndex,
 }: Props) {
-  const { title, created_at, source, contact, priority } = ticketDetail;
+  const { title, created_at, source, contact, priority, assigned_to } =
+    ticketDetail;
   const router = useRouter();
   const { ticketStore, workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
@@ -81,23 +83,48 @@ export default function InboxCard({
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
-    ...((currentWorkspace as any)?.users?.map((user: any) => ({
-      name: user.display_name,
+    ...(currentWorkspace?.users?.map((user) => ({
+      name: user.display_name || '',
       src: '',
       isName: true,
+      user_id: user.id,
     })) || []),
   ];
+
   const onClickTicket = useCallback(() => {
     ticketStore.setTicketDetails(ticketDetail);
     router.push(`/details/${ticketDetail?.id}`);
   }, []);
 
-  const onChangePriority = useCallback(async (item: any) => {
-    const payload = { priority: item?.value };
+  /*
+   * @desc Update ticket details priority in inbox card
+   */
+  const onChangePriority = useCallback(
+    async (item: { value: PriorityLevels }) => {
+      const payload = { priority: item?.value };
+      try {
+        const updatedTicketDetails = {
+          ...(ticketDetail || {}),
+          priority: item?.value,
+        };
+        ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
+        await updateTicketDetails(ticketDetail?.id, payload);
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [],
+  );
+
+  /*
+   * @desc Update ticket details assign user in inbox card
+   */
+  const onChangeAssign = useCallback(async (item: { user_id: string }) => {
+    const payload = { assignedTo: item?.user_id };
     try {
       const updatedTicketDetails = {
         ...(ticketDetail || {}),
-        priority: item?.value,
+        assigned_to: item?.user_id,
       };
       ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
       await updateTicketDetails(ticketDetail?.id, payload);
@@ -105,6 +132,10 @@ export default function InboxCard({
       console.log('Error : ', e);
     }
   }, []);
+
+  const assignedUser = currentWorkspace?.users?.find(
+    (user: { id: string | null }) => user.id === assigned_to,
+  );
 
   return (
     <CardDiv onClick={onClickTicket}>
@@ -171,13 +202,13 @@ export default function InboxCard({
             />
             <DropDownWithTag
               onClick={() => handleDropdownClick('assign')}
-              title={'Sanjay M.'}
+              title={assignedUser?.display_name || ''}
               dropdownOpen={
                 currentOpenDropdown === `${dropdownIdentifier}-assign`
               }
               onClose={() => setCurrentOpenDropdown(null)}
               items={assignItem}
-              onChange={() => {}}
+              onChange={onChangeAssign}
               isTag={true}
               isSearch={true}
               isActive={true}
@@ -190,7 +221,7 @@ export default function InboxCard({
                   : 'submenu-downwards'
               }
               onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
-              src='https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
+              src=''
             />
           </div>
           <TagDiv className='tagDiv'>

@@ -19,7 +19,6 @@ export default function Tag({
   isActive,
   onClick,
   isName,
-  src,
   iconName,
   title,
   ref,
@@ -35,7 +34,7 @@ export default function Tag({
       style={style}
     >
       {isName ? (
-        <Avatar name='' imgSrc={`${src}`} size={20} />
+        <Avatar name={title} imgSrc='' size={20} />
       ) : (
         <SVGIcon
           name={iconName}

@@ -143,3 +143,25 @@ export const hasWorkspace = async (workspaceId: string) => {
   });
   return !!workspace;
 };
+
+export const updateWorkspace = async (
+  workspaecId: string,
+  workspaceUpdates: {
+    name?: string;
+    image_url?: string;
+  },
+) => {
+  const update = {
+    name: workspaceUpdates.name,
+    image_url: workspaceUpdates.image_url,
+  };
+
+  removeNullUndefined(update);
+
+  const updatedWorkspace = await prisma.workspace.update({
+    where: { id: workspaecId },
+    data: update,
+  });
+
+  return updatedWorkspace;
+};

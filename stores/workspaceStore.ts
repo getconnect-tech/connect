@@ -1,6 +1,6 @@
-import { Workspace } from '@prisma/client';
 import axios from 'axios';
 import { action, makeObservable, observable } from 'mobx';
+import { Workspace } from '@/utils/dataTypes';
 
 class WorkspaceStore {
   loading = false;

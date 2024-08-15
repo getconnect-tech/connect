@@ -13,3 +13,10 @@ export const nameSchema = z
     invalid_type_error: "'name' must be of type string!",
   })
   .regex(/^[a-zA-Z ]{2,30}$/, 'Invalid name!');
+
+export const imageUrlSchema = z
+  .string({
+    required_error: "'imageUrl' is required!",
+    invalid_type_error: "'imageUrl' must be of type string!",
+  })
+  .url();
