@@ -9,9 +9,10 @@ interface Props {
   name: string;
   email: string;
   src: string;
+  userName?: string;
 }
 
-function MemberCard({ designation, name, email, src }: Props) {
+function MemberCard({ designation, name, email, src, userName = '' }: Props) {
   const [openDropdown, setOpenDropdown] = useState(false);
 
   const dropDownItem = [
@@ -26,7 +27,12 @@ function MemberCard({ designation, name, email, src }: Props) {
   return (
     <CardDiv>
       <LeftDiv>
-        <Avatar imgSrc={src} name={''} size={28} isShowBorder={true} />
+        <Avatar
+          imgSrc={src}
+          name={`${!src && userName}`}
+          size={28}
+          isShowBorder={true}
+        />
         <NameDiv>
           <h6>{name}</h6>
           <p>{email}</p>
