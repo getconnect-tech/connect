@@ -524,6 +524,44 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
+    case 'copy-icon':
+      return (
+        <>
+          <g fill='#7B7A79' clipPath='url(#a)'>
+            <path d='M12 1.833A1.334 1.334 0 0 0 10.667.5H1.333A1.333 1.333 0 0 0 0 1.833V12.5a1.333 1.333 0 0 0 1.333 1.333H6V6.5a1.333 1.333 0 0 1 1.333-1.333H12V1.833Z' />
+            <path d='M15.333 7.167H8.667A.667.667 0 0 0 8 7.833v8c0 .368.298.667.667.667h6.666a.667.667 0 0 0 .667-.667v-8a.667.667 0 0 0-.667-.666Z' />
+          </g>
+          <defs>
+            <clipPath id='a'>
+              <path fill='#fff' d='M0 .5h16v16H0z' />
+            </clipPath>
+          </defs>
+        </>
+      );
+
+    case `duplicate-icon`:
+      return (
+        <>
+          <rect
+            width={9.337}
+            height={9.337}
+            x={4.665}
+            y={5.165}
+            stroke='#505556'
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            rx={1.333}
+            fill='none'
+          />
+          <path
+            stroke='#505556'
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            d='M4.665 11.835H3.331A1.334 1.334 0 0 1 1.998 10.5V3.83c0-.736.597-1.333 1.333-1.333h6.67c.737 0 1.334.597 1.334 1.333v1.334'
+            fill='none'
+          />
+        </>
+      );
   }
 };
 
