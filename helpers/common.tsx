@@ -1,3 +1,13 @@
+/* eslint-disable no-undef */
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from 'firebase/storage';
+import { app } from '@/utils/firebase';
+import { workspaceStore } from '@/stores/workspaceStore';
+
 export function isEmpty(value: any) {
   if (
     value === undefined ||
@@ -60,3 +70,75 @@ export function removeNullUndefined(obj: Record<string, any>) {
 export function getAPIErrorMessage(obj: Record<string, any>) {
   return obj?.response?.data?.error;
 }
+
+/**
+ * @desc Generate random filename
+ * @param
+ */
+export const generateRandomFilename = () => {
+  let lastTimestamp = 0;
+  let timestamp = Date.now();
+  if (timestamp <= lastTimestamp) {
+    timestamp = lastTimestamp + 1;
+  }
+  lastTimestamp = timestamp;
+  return timestamp;
+};
+
+/**
+ * @desc Convert file data to firebase URL
+ * @param {Record<string, any>} file folderName
+ */
+export const getFirebaseUrlFromFile = async (file: any, folderName: string) => {
+  try {
+    const promises = [];
+    let profile;
+    if (!isEmpty(file)) {
+      const myPromise = new Promise(function (myResolve, myReject) {
+        const storage = getStorage(app);
+        const metadata = {
+          contentType: file?.type,
+        };
+        const fileExtension = file?.name.split('.').pop();
+        const uniqueFilename = generateRandomFilename();
+        const fullFilename = `${file?.name.replace(/\.[^/.]+$/, '')}_${uniqueFilename}.${fileExtension}`;
+        let pathName = '';
+        if (folderName !== 'UserProfiles/') {
+          const workspace = workspaceStore.currentWorkspace;
+          pathName = `workspaces/${workspace?.id}/${folderName}`;
+        } else {
+          pathName = folderName;
+        }
+        const storageRef = ref(storage, pathName + fullFilename);
+        const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+        uploadTask.on(
+          'state_changed',
+          () => {
+            // const progress =
+            //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          },
+          (error) => {
+            myReject(error);
+            console.log('error', error);
+            alert('Getting error for upload file');
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              profile = downloadURL;
+              myResolve(profile);
+            });
+          },
+        );
+      });
+      promises.push(myPromise);
+    }
+    try {
+      await Promise.all(promises);
+      return profile;
+    } catch (e) {
+      alert(e);
+    }
+  } catch (e) {
+    alert(`Getting error for upload file ${e}`);
+  }
+};
