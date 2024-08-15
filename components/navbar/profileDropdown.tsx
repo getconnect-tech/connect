@@ -50,7 +50,11 @@ export default function ProfileDropdown({ title, onClose }: Props) {
   return (
     <>
       <ProfileDrop onClick={onClose} ref={dropDownRef}>
-        <Frame1>
+        <Frame1
+          onClick={() => {
+            router.push('/selectworkspace');
+          }}
+        >
           <OrganizationProfile>
             <p>{title}</p>
             <Description>Add or switch organization</Description>
