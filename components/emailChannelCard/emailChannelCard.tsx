@@ -23,9 +23,7 @@ interface Props {
   isOpen: boolean;
   onToggle: () => void;
   currentStep: number;
-  table?: boolean;
   onSaveAndContinue: () => void;
-  tableLabel?: string;
 }
 export function EmailChannelCard({
   stepName,
@@ -35,9 +33,7 @@ export function EmailChannelCard({
   isOpen,
   onToggle,
   currentStep,
-  table,
   onSaveAndContinue,
-  tableLabel,
 }: Props) {
   const [isChecked, setIsChecked] = useState(false);
 
@@ -57,7 +53,7 @@ export function EmailChannelCard({
             {currentStep === 1 && (
               <Input placeholder='e.g. support@pixer.io' className='input' />
             )}
-            {label && (
+            {currentStep === 2 && (
               <>
                 <InputDiv className='copy-icon'>
                   <Description>{label}</Description>
@@ -86,9 +82,9 @@ export function EmailChannelCard({
                 />
               </>
             )}
-            {table && (
+            {currentStep === 3 && (
               <>
-                <Description>{tableLabel}</Description>
+                <Description>{label}</Description>
                 <TableWrapper>
                   <Table>
                     <thead>
