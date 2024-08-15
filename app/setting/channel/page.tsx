@@ -61,6 +61,7 @@ export default function Channel() {
               stepName='Step3'
               stepContent='Sending emails'
               description='This step allows Connect to send emails on your behalf. Verifying your domain gives email clients confidence it was sent by Connect with your permission'
+              tableLabel='Add the following records to the DNS settings for pixer.io.'
               isOpen={openCard === 'Step3'}
               onToggle={() => handleToggle('Step3')}
               currentStep={3}

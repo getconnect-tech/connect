@@ -62,6 +62,9 @@ export const Div = styled.div`
     ${Typography.body_md_medium}
     color: ${colors.brand_fill_hover};
   }
+  .input {
+    max-width: 260px;
+  }
 `;
 export const InputDiv = styled.div`
   display: flex;
@@ -69,8 +72,10 @@ export const InputDiv = styled.div`
   gap: 16px;
   &.copy-icon {
     position: relative;
+    max-width: 519px;
   }
   svg {
+    cursor: pointer;
     position: absolute;
     top: 49px;
     right: 16px;
