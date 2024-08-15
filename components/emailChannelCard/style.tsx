@@ -24,6 +24,9 @@ export const ProfileDetail = styled.div<Props>`
     css`
       background-color: ${colors.bg_white};
       border-radius: 12px;
+      box-shadow:
+        0px 0px 0px 0.5px ${colors.box_shadow},
+        0px 2px 4px 0px ${colors.box_shadow_2};
     `}
 `;
 
@@ -71,25 +74,16 @@ export const InputDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  &.copy-icon {
-    position: relative;
-    max-width: 519px;
-  }
-  svg {
-    cursor: pointer;
-    position: absolute;
-    top: 49px;
-    right: 16px;
-  }
 `;
 export const CheckBox = styled.div<Props>`
   display: flex;
+  align-items: center;
   gap: 8px;
   p {
     ${Typography.body_md_regular}
     color: ${colors.text_text_secondary};
     ${(props) =>
-    props.isChecked &&
+      props.isChecked &&
       css`
         color: ${colors.text};
       `}
@@ -116,7 +110,9 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   &:checked {
     background-color: ${colors.brand};
     // eslint-disable-next-line prettier/prettier
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(
+      checkmarkSVG,
+    )}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;
@@ -167,4 +163,29 @@ export const TableWrapper = styled.div`
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid ${colors.border};
+`;
+
+export const EmailAddressDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 30px;
+  max-width: 519px;
+  width: 100%;
+  border: 1px solid ${colors.border_input_border};
+  p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    word-break: break-all;
+    ${Typography.body_md_medium};
+    color: ${colors.text};
+    margin-right: 16px;
+  }
+  .copy-icon {
+    width: 16px;
+    height: 16px;
+  }
 `;
