@@ -551,6 +551,29 @@ const getPath = (name: string, props: any) => {
           </defs>
         </>
       );
+    case 'duplicate-icon':
+      return (
+        <>
+          <rect
+            width={9.337}
+            height={9.337}
+            x={4.665}
+            y={5.165}
+            stroke='#505556'
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            rx={1.333}
+            fill='none'
+          />
+          <path
+            stroke='#505556'
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            d='M4.665 11.835H3.331A1.334 1.334 0 0 1 1.998 10.5V3.83c0-.736.597-1.333 1.333-1.333h6.67c.737 0 1.334.597 1.334 1.333v1.334'
+            fill='none'
+          />
+        </>
+      );
   }
 };
 
