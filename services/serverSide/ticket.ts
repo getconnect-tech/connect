@@ -9,14 +9,22 @@ import { prisma } from '@/prisma/prisma';
 import { removeNullUndefined } from '@/helpers/common';
 
 type TicketWithPayload = Prisma.TicketGetPayload<{
-  include: { labels: { include: { label: true } }; contact: true };
+  include: {
+    labels: { include: { label: true } };
+    contact: true;
+    assigned_user: true;
+  };
 }>;
 
 export const getWorkspaceTickets = async (workspaceId: string) => {
   const tickets = await prisma.ticket.findMany({
     where: { workspace_id: workspaceId },
     orderBy: { created_at: 'desc' },
-    include: { labels: { include: { label: true } }, contact: true },
+    include: {
+      labels: { include: { label: true } },
+      contact: true,
+      assigned_user: true,
+    },
   });
 
   const formattedTickets = tickets.map(formatTicket);
@@ -31,7 +39,11 @@ export const getTicketById = async (ticketId: string, workspaceId?: string) => {
 
   const ticket = await prisma.ticket.findUnique({
     where: query,
-    include: { labels: { include: { label: true } }, contact: true },
+    include: {
+      labels: { include: { label: true } },
+      contact: true,
+      assigned_user: true,
+    },
   });
 
   if (!ticket) {
