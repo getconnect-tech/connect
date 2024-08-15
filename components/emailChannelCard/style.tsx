@@ -83,7 +83,7 @@ export const CheckBox = styled.div<Props>`
     ${Typography.body_md_regular}
     color: ${colors.text_text_secondary};
     ${(props) =>
-      props.isChecked &&
+    props.isChecked &&
       css`
         color: ${colors.text};
       `}
