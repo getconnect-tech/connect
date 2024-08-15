@@ -34,7 +34,7 @@ function MemberCard({ designation, name, email, src }: Props) {
       </LeftDiv>
       <RightDiv>
         {designation && <h6>{designation}</h6>}
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: 'relative' }} className='tag-div'>
           <Icon
             onClick={handleClickIcon}
             iconName='three-dot-icon'

@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
 import Icon from '../icon/icon';
+import DropDown from '../dropDown/dropDown';
 import {
   ItemMainDiv,
   Label,
@@ -15,6 +16,7 @@ import NavbarItem from './navbarItem';
 import ProfileDropdown from './profileDropdown';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { useStores } from '@/stores';
+import { supportItem } from '@/helpers/raw';
 
 const navbarMenu = {
   'Getting started': 0,
@@ -34,9 +36,18 @@ function Navbar() {
   const pathname = usePathname();
   const { workspaceStore } = useStores();
   const [isOpen, setIsOpen] = useState(false);
+  const [isSupportDropdown, setSupportDropdown] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(
     navbarMenu.Inbox,
   );
+
+  const openSupportDropdown = useCallback(() => {
+    setSupportDropdown(true);
+  }, []);
+
+  const closeSupportDropdown = useCallback(() => {
+    setSupportDropdown(false);
+  }, []);
 
   const closeDropdown = useCallback(() => {
     setIsOpen(false);
@@ -149,12 +160,26 @@ function Navbar() {
           />
         </ItemMainDiv>
       </TopDiv>
-      <NavbarItem
-        title='Support'
-        icon='support-icon'
-        isActive={activeIndex === 9}
-        onClickItem={() => handleClick(9)}
-      />
+      <div className='tag-div'>
+        <NavbarItem
+          title='Support'
+          icon='support-icon'
+          isActive={activeIndex === 9}
+          onClickItem={() => {
+            handleClick(9);
+            openSupportDropdown();
+          }}
+        />
+        {isSupportDropdown && (
+          <DropDown
+            items={supportItem}
+            iconSize={'12'}
+            iconViewBox={'0 0 12 12'}
+            onClose={closeSupportDropdown}
+            style={{ bottom: 52, maxWidth: 191, width: '100%' }}
+          />
+        )}
+      </div>
     </MainDiv>
   );
 }

@@ -37,3 +37,7 @@ export const modeItem = [
   { name: 'Email', icon: 'email-icon' },
   { name: 'Internal', icon: 'internal-icon' },
 ];
+export const supportItem = [
+  { name: 'Contact us', icon: 'internal-icon' },
+  { name: 'Documents', icon: 'document-icon' },
+];
