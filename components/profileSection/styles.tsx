@@ -13,7 +13,6 @@ const ProfileDiv = styled.div`
   align-items: center;
   gap: 8px;
   padding: 12px 20px 16px;
-  border-top: 1px solid ${colors.border};
 `;
 
 const Title = styled.p`
@@ -33,6 +32,14 @@ const DetailsMainDiv = styled.div`
   flex-direction: column;
   gap: 16px;
   padding: 0 20px 12px;
+`;
+
+const DetailsProfileDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 20px 12px;
+  border-bottom: 1px solid ${colors.border};
 `;
 
 const DetailsDiv = styled.div`
@@ -80,13 +87,13 @@ const TitleDiv = styled.div`
   align-items: center;
   justify-content: space-between;
   margin: 12px 20px;
-  div {
-    width: 24px;
-    height: 24px;
+  cursor: pointer;
+  position: relative;
+  .icon {
+    display: none;
   }
-  svg {
-    margin: 6px;
-    cursor: pointer;
+  &:hover .icon {
+    display: flex;
   }
 `;
 
@@ -145,6 +152,62 @@ const LineDiv = styled.div`
   border-left: 1px solid ${colors.border};
 `;
 
+const AIIcon = styled.div`
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${colors.brand};
+  border-radius: 50%;
+`;
+
+const NameDiv = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const AIText = styled.p`
+  ${Typography.body_sm_medium};
+  color: ${colors.text};
+`;
+
+const DescriptionDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  h6 {
+    ${Typography.body_sm_medium};
+    color: ${colors.text_text_secondary};
+  }
+`;
+
+const ActionsDiv = styled.div`
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+`;
+
+const Actions = styled.p`
+  ${Typography.body_sm_regular};
+  color: ${colors.text_text_secondary};
+  padding: 4px 12px;
+  background-color: ${colors.bg_surface_secondary};
+  border-radius: 30px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  span {
+    ${Typography.body_sm_medium};
+    color: ${colors.text};
+  }
+`;
+
 export {
   MainDiv,
   ProfileDiv,
@@ -162,4 +225,11 @@ export {
   Dot,
   Line,
   LineDiv,
+  AIIcon,
+  NameDiv,
+  DetailsProfileDiv,
+  AIText,
+  DescriptionDiv,
+  ActionsDiv,
+  Actions,
 };

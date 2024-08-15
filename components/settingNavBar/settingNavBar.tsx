@@ -33,12 +33,6 @@ export default function SettingNavBar() {
               My Profile
             </Item>
             <Item
-              onClick={() => handleItemClick('/setting/changepassword')}
-              active={activeItem === '/setting/changepassword'}
-            >
-              Change Password
-            </Item>
-            <Item
               onClick={() => handleItemClick('/setting/notification')}
               active={activeItem === '/setting/notification'}
             >
@@ -54,7 +48,12 @@ export default function SettingNavBar() {
           >
             Workspace Profile
           </Item>
-          <Item>Channels</Item>
+          <Item
+            onClick={() => handleItemClick('/setting/channel')}
+            active={activeItem === '/setting/channel'}
+          >
+            Channels
+          </Item>
           <Item>Labels</Item>
           <Item>Macros</Item>
           <Item

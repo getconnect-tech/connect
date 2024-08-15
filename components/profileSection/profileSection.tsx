@@ -3,7 +3,7 @@ import React from 'react';
 import Avatar from '../avtar/Avtar';
 import {
   DetailsDiv,
-  DetailsMainDiv,
+  DetailsProfileDiv,
   LeftDiv,
   MainDiv,
   ProfileDiv,
@@ -11,6 +11,7 @@ import {
 } from './styles';
 import WorkDetails from './workDetails';
 import RecentEvent from './recentEvent';
+import AIBlock from './aiBlock';
 import { useStores } from '@/stores';
 
 export default function ProfileSection() {
@@ -20,7 +21,7 @@ export default function ProfileSection() {
 
   return (
     <MainDiv>
-      <div></div>
+      <AIBlock />
       <ProfileDiv>
         <Avatar
           imgSrc=''
@@ -30,7 +31,7 @@ export default function ProfileSection() {
         />
         <Title>{contact?.name || ''}</Title>
       </ProfileDiv>
-      <DetailsMainDiv>
+      <DetailsProfileDiv>
         <DetailsDiv>
           <LeftDiv>
             <p>Role</p>
@@ -67,7 +68,7 @@ export default function ProfileSection() {
           </LeftDiv>
           <p>Everyone</p>
         </DetailsDiv>
-      </DetailsMainDiv>
+      </DetailsProfileDiv>
       <WorkDetails />
       <RecentEvent />
     </MainDiv>
