@@ -29,4 +29,5 @@ export const colors = {
   bg_white_hover: '#F2F2F2',
   box_shadow_2: '#0000000D',
   bg_overlay: '#00000080',
+  box_shadow_3: `#00000033`,
 };

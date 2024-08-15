@@ -21,6 +21,11 @@ export const Card = styled.div`
     ${Typography.body_md_medium}
     color: ${colors.text};
   }
+  &:hover {
+    box-shadow:
+      0px 0px 0px 0.5px ${colors.box_shadow_3},
+      0px 2px 4px 0px ${colors.box_shadow_2};
+  }
 `;
 
 interface Props {
