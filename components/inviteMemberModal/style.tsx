@@ -23,7 +23,7 @@ export const Title = styled.div`
   color: ${colors.text};
 `;
 
-export const BottomDiv = styled.div`
+export const BottomDiv = styled.form`
   padding: 12px 16px;
   .email-label {
     margin-top: 12px;

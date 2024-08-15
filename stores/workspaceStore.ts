@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { action, makeObservable, observable } from 'mobx';
-import { Workspace } from '@/utils/dataTypes';
+import { InviteModal, Workspace } from '@/utils/dataTypes';
 
 class WorkspaceStore {
   loading = false;
   currentWorkspace: Workspace | null = null;
+  inviteModalInput: InviteModal = { name: '', email: '' };
 
   constructor() {
     makeObservable(this, {
@@ -15,6 +16,11 @@ class WorkspaceStore {
       // Current Workspace
       currentWorkspace: observable,
       setCurrentWorkspace: action,
+
+      // Invite Mopdal Input
+      inviteModalInput: observable,
+      updateInviteModalInput: action,
+      resetInviteModalInput: action,
     });
   }
 
@@ -26,6 +32,14 @@ class WorkspaceStore {
   setCurrentWorkspace(value: Workspace) {
     axios.defaults.headers.common['workspace_id'] = value?.id;
     this.currentWorkspace = value;
+  }
+
+  updateInviteModalInput(propsName: 'name' | 'email', value: string) {
+    this.inviteModalInput[propsName] = value;
+  }
+
+  resetInviteModalInput() {
+    this.inviteModalInput = { name: '', email: '' };
   }
 }
 

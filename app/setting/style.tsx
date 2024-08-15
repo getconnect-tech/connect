@@ -123,7 +123,9 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
 
   &:checked {
     background-color: ${colors.brand};
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG,)}');
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(
+      checkmarkSVG,
+    )}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;
@@ -172,10 +174,11 @@ export const MainCardDiv = styled.div`
 export const EmailCardDiv = styled.div`
   display: flex;
   flex-direction: column;
-  box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow_2};
-  overflow: hidden;
   background-color: ${colors.bg_surface_secondary};
   border-radius: 12px;
+  .line-div {
+    height: 0.4px;
+    margin: 0 16px;
+    background: ${colors.border_hover};
+  }
 `;

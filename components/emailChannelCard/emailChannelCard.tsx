@@ -5,6 +5,7 @@ import {
   CheckBox,
   Description,
   Div,
+  EmailAddressDiv,
   Head,
   InputDiv,
   ProfileDetail,
@@ -21,7 +22,6 @@ interface Props {
   description?: string;
   label?: string;
   isOpen: boolean;
-  onToggle: () => void;
   currentStep: number;
   onSaveAndContinue: () => void;
 }
@@ -31,7 +31,6 @@ export function EmailChannelCard({
   description,
   label,
   isOpen,
-  onToggle,
   currentStep,
   onSaveAndContinue,
 }: Props) {
@@ -43,7 +42,7 @@ export function EmailChannelCard({
   return (
     <div>
       <ProfileDetail isOpen={isOpen}>
-        <Head onClick={onToggle}>
+        <Head>
           <StepName>{stepName}</StepName>
           <StepContent>{stepContent}</StepContent>
         </Head>
@@ -55,18 +54,21 @@ export function EmailChannelCard({
             )}
             {currentStep === 2 && (
               <>
-                <InputDiv className='copy-icon'>
+                <InputDiv>
                   <Description>{label}</Description>
-                  <Input
-                    placeholder='40c17585b3fe12467fb00efc70ddc46d@inbound.postmarkapp.com'
-                    className='copy-icon'
-                  />
-                  <SVGIcon
-                    name='copy-icon'
-                    width='16'
-                    height='16'
-                    viewBox='0 0 16 16'
-                  />
+                  <EmailAddressDiv>
+                    <p>
+                      40c17585b3fe12467fb00efc70ddc46d@inbound.postmarkapp.com
+                    </p>
+                    <div className='copy-icon'>
+                      <SVGIcon
+                        name='copy-icon'
+                        width='16'
+                        height='16'
+                        viewBox='0 0 16 16'
+                      />
+                    </div>
+                  </EmailAddressDiv>
                   <CheckBox isChecked={isChecked}>
                     <StyledCheckbox
                       checked={isChecked}
