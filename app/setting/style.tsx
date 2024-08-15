@@ -169,3 +169,13 @@ export const MainCardDiv = styled.div`
   border-radius: 12px;
   margin-bottom: 16px;
 `;
+export const EmailCardDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    0px 0px 0px 0.5px ${colors.box_shadow},
+    0px 2px 4px 0px ${colors.box_shadow_2};
+  overflow: hidden;
+  background-color: ${colors.bg_surface_secondary};
+  border-radius: 12px;
+`;
