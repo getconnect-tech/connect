@@ -143,6 +143,7 @@ export default function CustomContextMenu(props: Props) {
                     onClose={() => {}}
                     isSearch={true}
                     isContextMenu={true}
+                    style={{ marginTop: -4 }}
                   />
                 </ContextMenuSubContent>
               </ContextMenu.Portal>
@@ -185,7 +186,7 @@ export default function CustomContextMenu(props: Props) {
                     isSearch={true}
                     isContextMenu={true}
                     isSnooze={true}
-                    style={{ minWidth: 212 }}
+                    style={{ minWidth: 212, marginTop: -4 }}
                   />
                 </ContextMenuSubContent>
               </ContextMenu.Portal>
@@ -228,6 +229,7 @@ export default function CustomContextMenu(props: Props) {
                     isSearch={true}
                     isContextMenu={true}
                     isCheckbox={true}
+                    style={{ marginTop: -4 }}
                   />
                 </ContextMenuSubContent>
               </ContextMenu.Portal>
@@ -269,6 +271,7 @@ export default function CustomContextMenu(props: Props) {
                     iconViewBox='0 0 12 12'
                     onClose={() => {}}
                     isContextMenu={true}
+                    style={{ marginTop: -4 }}
                   />
                 </ContextMenuSubContent>
               </ContextMenu.Portal>

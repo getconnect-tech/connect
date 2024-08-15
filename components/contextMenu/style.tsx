@@ -82,7 +82,8 @@ const ContextMenuSubContent = styled(ContextMenu.SubContent)`
   padding: 4px;
   z-index: 2;
   left: 100%;
-  margin-left: 2px;
+  margin-left: 1px;
+  margin-right: 1px;
   display: flex;
   flex-direction: column;
   gap: 2px;
