@@ -60,7 +60,7 @@ function Inbox() {
         <BottomDiv>
           {/* Render Ticker List */}
           {ticketList?.map((ticket, index) => (
-            <CustomContextMenu>
+            <CustomContextMenu ticketDetail={ticket} ticketIndex={index}>
               <div>
                 {/* Use Inbox card component for show tickets */}
                 <InboxCard

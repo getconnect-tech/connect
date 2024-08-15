@@ -56,7 +56,7 @@ function TicketDetails(props: Props) {
   const { ticketStore, workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
   const { ticketDetails } = ticketStore;
-  const { priority } = ticketDetails || {};
+  const { priority, assigned_to } = ticketDetails || {};
   const [modeSelectedItem, setModeSelectedItem] = useState<DropDownItem>({
     name: 'Email',
     icon: 'email-icon',
@@ -139,10 +139,11 @@ function TicketDetails(props: Props) {
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
-    ...((currentWorkspace as any)?.users?.map((user: any) => ({
-      name: user.display_name,
+    ...(currentWorkspace?.users?.map((user) => ({
+      name: user.display_name || '',
       src: '',
       isName: true,
+      user_id: user.id,
     })) || []),
   ];
 
@@ -152,6 +153,9 @@ function TicketDetails(props: Props) {
     { name: '3 days', time: 'Fri, Aug 2' },
   ];
 
+  /*
+   * @desc Update ticket details priority in ticket details
+   */
   const onChangePriority = useCallback(
     async (item: { name: string; icon: string; value: PriorityLevels }) => {
       const payload = { priority: item?.value };
@@ -169,6 +173,36 @@ function TicketDetails(props: Props) {
       }
     },
     [ticketDetails],
+  );
+
+  /*
+   * @desc Update ticket details assign user in ticket details
+   */
+  const onChangeAssign = useCallback(
+    async (item: {
+      name: string;
+      icon: string;
+      value: PriorityLevels;
+      user_id: string;
+    }) => {
+      const payload = { assignedTo: item?.user_id };
+      try {
+        if (ticketDetails?.id) {
+          const updatedTicketDetails = {
+            ...ticketDetails,
+            assigned_to: item?.user_id,
+          };
+          ticketStore.setTicketDetails(updatedTicketDetails);
+          await updateTicketDetails(ticketDetails?.id, payload);
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetails],
+  );
+  const assignedUser = currentWorkspace?.users?.find(
+    (user: { id: string | null | undefined }) => user.id === assigned_to,
   );
 
   return (
@@ -224,11 +258,11 @@ function TicketDetails(props: Props) {
               />
               <DropDownWithTag
                 onClick={handleAssignTag}
-                title={'Sanjay M.'}
+                title={assignedUser?.display_name || ''}
                 dropdownOpen={assignDropdown}
                 onClose={() => setAssignDropdown(false)}
                 items={assignItem}
-                onChange={() => {}}
+                onChange={onChangeAssign}
                 isTag={true}
                 isSearch={true}
                 isActive={true}
