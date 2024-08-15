@@ -1,6 +1,11 @@
 /* eslint-disable max-len */
 'use client';
-import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
+import React, {
+  ChangeEvent,
+  SyntheticEvent,
+  useCallback,
+  useState,
+} from 'react';
 import {
   Description,
   Frame,
@@ -30,16 +35,20 @@ function WorkspaceProfile() {
     currentWorkspace?.name || '',
   );
 
-  const handleUpdate = (e: SyntheticEvent) => {
-    e.preventDefault();
-    const payload = { name: organizationName };
-    if (currentWorkspace)
-      workspaceStore.setCurrentWorkspace({
-        ...(currentWorkspace || {}),
-        ...payload,
-      });
-    if (organizationName) updateWorkspaceDetails(payload);
-  };
+
+  const handleUpdate = useCallback(
+    (e: SyntheticEvent) => {
+      e.preventDefault();
+      const payload = { name: organizationName };
+      if (currentWorkspace)
+        workspaceStore.setCurrentWorkspace({
+          ...(currentWorkspace || {}),
+          ...payload,
+        });
+      if (organizationName) updateWorkspaceDetails(payload);
+    },
+    [organizationName],
+  );
 
   return (
     <Main>
