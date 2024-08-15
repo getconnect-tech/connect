@@ -2,7 +2,6 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { User } from '@prisma/client';
 import {
   Description,
   Head,
@@ -23,7 +22,7 @@ import Modal from '@/components/modal/modal';
 const Members = () => {
   const [inviteModal, setInviteModal] = useState(false);
   const { workspaceStore } = useStores();
-  const [members, setMembers] = useState<User[]>([]);
+  const { currentWorkspace } = workspaceStore;
 
   const onOpenInviteModal = useCallback(() => {
     setInviteModal(true);
@@ -36,8 +35,7 @@ const Members = () => {
   const getWorkspaceMember = useCallback(async () => {
     workspaceStore.setLoading(true);
     // get user data from workspace object
-    const [{ users }] = await getWorkspaceList();
-    setMembers(users);
+    await getWorkspaceList();
     workspaceStore.setLoading(false);
   }, []);
 
@@ -60,7 +58,7 @@ const Members = () => {
               <Button title='Invite Member' onClick={onOpenInviteModal} />
             </Head>
             <MainCardDiv>
-              {members?.map((member) => (
+              {currentWorkspace?.users?.map((member) => (
                 <MemberCard
                   key={member.id}
                   name={member.display_name || ''}

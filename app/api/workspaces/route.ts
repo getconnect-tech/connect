@@ -1,18 +1,20 @@
 import { z } from 'zod';
 import { UserRole } from '@prisma/client';
 import { handleApiError } from '@/helpers/errorHandler';
-import { nameSchema } from '@/lib/zod/common';
+import { imageUrlSchema, nameSchema } from '@/lib/zod/common';
 import withAuth from '@/middlewares/withAuth';
 import {
   addUserToWorkspace,
   createWorkspace,
   inviteUsers,
+  updateWorkspace,
 } from '@/services/serverSide/workspace';
 import { getUserWorkspaces } from '@/services/serverSide/workspace';
 import { industrySchema, teamSizeSchema } from '@/lib/zod/workspace';
 import { invitedUsersSchema } from '@/lib/zod/user';
+import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 
-const RequestBody = z.object({
+const CreateRequestBody = z.object({
   name: nameSchema,
   teamSize: teamSizeSchema,
   industry: industrySchema,
@@ -23,10 +25,10 @@ export const POST = withAuth(async (req) => {
   try {
     const requestBody = await req.json();
 
-    RequestBody.parse(requestBody);
+    CreateRequestBody.parse(requestBody);
 
     const { name, teamSize, industry, invitedUsers } = requestBody as z.infer<
-      typeof RequestBody
+      typeof CreateRequestBody
     >;
     const user = req.user;
 
@@ -46,6 +48,28 @@ export const GET = withAuth(async (req) => {
   try {
     const userWorkspaces = await getUserWorkspaces(req.user.id);
     return Response.json(userWorkspaces, { status: 200 });
+  } catch (err) {
+    return handleApiError(err);
+  }
+});
+
+const UpdateRequestBody = z.object({
+  name: nameSchema.optional(),
+  imageUrl: imageUrlSchema.optional(),
+});
+
+export const PUT = withWorkspaceAuth(async (req) => {
+  try {
+    const requestBody = await req.json();
+
+    UpdateRequestBody.parse(requestBody);
+
+    const updatedWorkspace = await updateWorkspace(
+      req.workspace.id,
+      requestBody,
+    );
+
+    return Response.json(updatedWorkspace, { status: 200 });
   } catch (err) {
     return handleApiError(err);
   }

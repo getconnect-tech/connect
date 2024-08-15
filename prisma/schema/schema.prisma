@@ -29,6 +29,7 @@ model Workspace {
   created_at    DateTime         @default(now())
   updated_at    DateTime         @default(now()) @updatedAt
   industry      String
+  image_url     String?
   team_size     TeamSize
   invited_users InvitedUser[]
   tickets       Ticket[]
