@@ -26,15 +26,19 @@ import { updateWorkspaceDetails } from '@/services/clientSide/workspaceServices'
 function WorkspaceProfile() {
   const { workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
-  const [organizationName, setOrganizationName] = useState(
-    currentWorkspace?.name,
+  const [organizationName, setOrganizationName] = useState<string>(
+    currentWorkspace?.name || '',
   );
 
   const handleUpdate = (e: SyntheticEvent) => {
     e.preventDefault();
+    const payload = { name: organizationName };
     if (currentWorkspace)
-      workspaceStore.setCurrentWorkspace({ ...currentWorkspace });
-    if (organizationName) updateWorkspaceDetails(organizationName);
+      workspaceStore.setCurrentWorkspace({
+        ...(currentWorkspace || {}),
+        ...payload,
+      });
+    if (organizationName) updateWorkspaceDetails(payload);
   };
 
   return (

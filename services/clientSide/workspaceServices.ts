@@ -111,10 +111,9 @@ export const getWorkspaceList = async () => {
  * @desc Update workspace details
  * @param {*} organizationName
  */
-export const updateWorkspaceDetails = async (organizationName: string) => {
+export const updateWorkspaceDetails = async (payload: { name: string }) => {
   try {
     workspaceStore.setLoading(true);
-    const payload = { name: organizationName };
     const result = await axios.put(
       `${NEXT_PUBLIC_API_URL}/workspaces`,
       payload,

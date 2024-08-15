@@ -123,7 +123,7 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
 
   &:checked {
     background-color: ${colors.brand};
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG,)}');
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;
