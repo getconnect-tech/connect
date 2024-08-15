@@ -19,6 +19,7 @@
     "@syncfusion/ej2-react-dropdowns": "^26.2.8",
     "@syncfusion/ej2-react-richtexteditor": "^26.2.8",
     "axios": "^1.7.3",
+    "firebase": "^10.12.5",
     "mobx": "^6.13.1",
     "mobx-react": "^9.1.1",
     "mobx-react-lite": "^4.0.7",
