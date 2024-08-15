@@ -95,3 +95,23 @@ export const getWorkspaceList = async () => {
     workspaceStore.setLoading(false);
   }
 };
+
+/**
+ * @desc Update workspace details
+ * @param {*} organizationName
+ */
+export const updateWorkspaceDetails = async (organizationName: string) => {
+  try {
+    workspaceStore.setLoading(true);
+    const payload = { name: organizationName };
+    const result = await axios.put(`${NEXT_PUBLIC_API_URL}/workspace`, payload);
+    console.log('result', result);
+    if (result) alert('Workspace details updated');
+    return true;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return false;
+  } finally {
+    workspaceStore.setLoading(false);
+  }
+};

@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import {
   Description,
   Frame,
@@ -20,8 +20,22 @@ import {
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { useStores } from '@/stores';
+import { updateWorkspaceDetails } from '@/services/clientSide/workspaceServices';
 
 function WorkspaceProfile() {
+  const { workspaceStore } = useStores();
+  const { currentWorkspace } = workspaceStore;
+  const [organizationName, setOrganizationName] = useState(
+    currentWorkspace?.name,
+  );
+
+  const handleUpdate = () => {
+    if (currentWorkspace)
+      workspaceStore.setCurrentWorkspace({ ...currentWorkspace });
+    if (organizationName) updateWorkspaceDetails(organizationName);
+  };
+
   return (
     <Main>
       <MainDiv>
@@ -53,10 +67,14 @@ function WorkspaceProfile() {
                 <Input
                   placeholder={'Enter organization name'}
                   style={{ padding: '8px 16px' }}
+                  value={organizationName}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setOrganizationName(e.target.value)
+                  }
                 />
               </TextField>
             </ProfileInputs>
-            <Button title='Update' />
+            <Button onClick={handleUpdate} title='Update' />
           </ProfileDetail>
         </RightDiv>
       </MainDiv>
