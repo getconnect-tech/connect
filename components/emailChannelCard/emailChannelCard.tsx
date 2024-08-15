@@ -16,7 +16,6 @@ import {
   TableWrapper,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { colors } from '@/styles/colors';
 interface Props {
   stepName?: string;
   stepContent?: string;
