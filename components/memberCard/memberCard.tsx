@@ -9,10 +9,9 @@ interface Props {
   name: string;
   email: string;
   src: string;
-  userName?: string;
 }
 
-function MemberCard({ designation, name, email, src, userName = '' }: Props) {
+function MemberCard({ designation, name, email, src }: Props) {
   const [openDropdown, setOpenDropdown] = useState(false);
 
   const dropDownItem = [
