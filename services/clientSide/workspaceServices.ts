@@ -55,8 +55,12 @@ export const inviteUsersToWorkspace = async (
 
     // Check for empty displayName or email in usersToInvite array
     for (const user of usersToInvite) {
-      if (!isEmpty(user.displayName) || !isEmpty(user.email)) {
-        alert('Both Name and email are required for all users.');
+      if (!isEmpty(user.displayName)) {
+        alert('Name is required for user.');
+        return false;
+      }
+      if (!isEmpty(user.email)) {
+        alert('Email is required for user.');
         return false;
       }
     }
