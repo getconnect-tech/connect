@@ -4,7 +4,7 @@ import SVGIcon from '@/assets/icons/SVGIcon';
 
 interface Props {
   title?: string;
-  onClick?: () => void;
+  onClick?: any;
   isLoading?: boolean;
   disabled?: boolean;
   type?: 'reset' | 'submit' | 'button';
