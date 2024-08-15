@@ -6,6 +6,7 @@ import { Typography } from '@/styles/typography';
 
 interface Props {
   isOpen?: boolean;
+  isChecked?: boolean;
 }
 
 export const ProfileDetail = styled.div<Props>`
@@ -50,7 +51,7 @@ export const StepContent = styled.div`
 
 export const Description = styled.div`
   ${Typography.body_md_medium}
-  color: ${colors.brand_fill_hover};
+  color: ${colors.text};
 `;
 
 export const Div = styled.div`
@@ -81,12 +82,17 @@ export const InputDiv = styled.div`
     right: 16px;
   }
 `;
-export const CheckBox = styled.div`
+export const CheckBox = styled.div<Props>`
   display: flex;
   gap: 8px;
   p {
     ${Typography.body_md_regular}
     color: ${colors.text_text_secondary};
+    ${(props) =>
+    props.isChecked &&
+      css`
+        color: ${colors.text};
+      `}
   }
 `;
 const checkmarkSVG = `
@@ -119,7 +125,6 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
 export const Table = styled.table`
   width: 100%;
   border-radius: 8px;
-  /* border: 1px solid ${colors.border}; */
   border-collapse: collapse;
   overflow: hidden;
 

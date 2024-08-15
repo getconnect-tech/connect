@@ -67,7 +67,7 @@ export function EmailChannelCard({
                     height='16'
                     viewBox='0 0 16 16'
                   />
-                  <CheckBox>
+                  <CheckBox isChecked={isChecked}>
                     <StyledCheckbox
                       checked={isChecked}
                       onChange={handleCheckboxChange}
