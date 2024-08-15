@@ -70,7 +70,7 @@ function SelectWorkSpace() {
             iconName='plus-icon'
             iconSize='12'
             iconViewBox='0 0 12 12'
-            secondary
+            secondary={true}
           />
         </OrganizationDiv>
       </Content>
