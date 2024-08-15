@@ -14,16 +14,16 @@ import {
 import SVGIcon from '@/assets/icons/SVGIcon';
 
 export default function RecentEvent() {
-  const [showDetails, setShowDetails] = useState(false);
+  const [showDetails, setShowDetails] = useState(true);
 
   const toggleDetails = () => {
     setShowDetails((prevShowDetails) => !prevShowDetails);
   };
   return (
     <EventMainDiv>
-      <TitleDiv>
+      <TitleDiv onClick={toggleDetails}>
         <Title>Recent events</Title>
-        <div onClick={toggleDetails}>
+        <div className='icon'>
           <SVGIcon
             name={showDetails ? 'up-arrow-icon' : 'down-arrow-icon'}
             width='12'
