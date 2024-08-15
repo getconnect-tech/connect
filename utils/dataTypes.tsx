@@ -61,6 +61,11 @@ export interface Attachment {
   ContentLength: number;
 }
 
+export interface InviteModal {
+  name: string;
+  email: string;
+}
+
 export type Workspace = NonNullable<
   Awaited<ReturnType<typeof getUserWorkspaces>>
 >[0];
