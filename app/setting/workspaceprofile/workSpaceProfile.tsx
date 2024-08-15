@@ -35,7 +35,6 @@ function WorkspaceProfile() {
     currentWorkspace?.name || '',
   );
 
-
   const handleUpdate = useCallback(
     (e: SyntheticEvent) => {
       e.preventDefault();
