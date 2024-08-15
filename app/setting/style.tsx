@@ -45,7 +45,7 @@ export const Title = styled.div`
   color: ${colors.text};
 `;
 
-export const ProfileDetail = styled.div`
+export const ProfileDetail = styled.form`
   display: flex;
   flex-direction: column;
   border-radius: 12px;
