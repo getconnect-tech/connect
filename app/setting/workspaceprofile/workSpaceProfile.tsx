@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React from 'react';
+import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import {
   Description,
   Frame,
@@ -20,8 +20,27 @@ import {
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { useStores } from '@/stores';
+import { updateWorkspaceDetails } from '@/services/clientSide/workspaceServices';
 
 function WorkspaceProfile() {
+  const { workspaceStore } = useStores();
+  const { currentWorkspace } = workspaceStore;
+  const [organizationName, setOrganizationName] = useState<string>(
+    currentWorkspace?.name || '',
+  );
+
+  const handleUpdate = (e: SyntheticEvent) => {
+    e.preventDefault();
+    const payload = { name: organizationName };
+    if (currentWorkspace)
+      workspaceStore.setCurrentWorkspace({
+        ...(currentWorkspace || {}),
+        ...payload,
+      });
+    if (organizationName) updateWorkspaceDetails(payload);
+  };
+
   return (
     <Main>
       <MainDiv>
@@ -32,7 +51,7 @@ function WorkspaceProfile() {
               <Description>Manage your Workspace Profile</Description>
             </LeftDiv>
           </Head>
-          <ProfileDetail>
+          <ProfileDetail onSubmit={handleUpdate}>
             <ProfileImage>
               <SVGIcon
                 name='workspaceProfile-icon'
@@ -53,10 +72,14 @@ function WorkspaceProfile() {
                 <Input
                   placeholder={'Enter organization name'}
                   style={{ padding: '8px 16px' }}
+                  value={organizationName}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setOrganizationName(e.target.value)
+                  }
                 />
               </TextField>
             </ProfileInputs>
-            <Button title='Update' />
+            <Button type='submit' title='Update' />
           </ProfileDetail>
         </RightDiv>
       </MainDiv>
