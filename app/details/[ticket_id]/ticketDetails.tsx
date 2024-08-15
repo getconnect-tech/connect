@@ -182,7 +182,7 @@ function TicketDetails(props: Props) {
                   router.push('/');
                 }}
                 iconName='back-icon'
-                iconSize='16'
+                iconSize='12'
                 iconViewBox='0 0 16 16'
                 size={true}
               />

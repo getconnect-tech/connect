@@ -16,7 +16,7 @@ function MemberCard({ designation, name, email, src }: Props) {
 
   const dropDownItem = [
     { name: 'Make Admin', icon: 'admin-icon' },
-    { name: 'Delete', icon: 'delete-icon' },
+    { name: 'Delete', icon: 'delete-icon', isDelete: true },
   ];
 
   const handleClickIcon = useCallback(() => {
