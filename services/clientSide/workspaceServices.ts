@@ -104,8 +104,10 @@ export const updateWorkspaceDetails = async (organizationName: string) => {
   try {
     workspaceStore.setLoading(true);
     const payload = { name: organizationName };
-    const result = await axios.put(`${NEXT_PUBLIC_API_URL}/workspace`, payload);
-    console.log('result', result);
+    const result = await axios.put(
+      `${NEXT_PUBLIC_API_URL}/workspaces`,
+      payload,
+    );
     if (result) alert('Workspace details updated');
     return true;
   } catch (err: any) {

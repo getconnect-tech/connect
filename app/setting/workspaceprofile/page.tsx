@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import {
   Description,
   Frame,
@@ -30,7 +30,8 @@ function WorkspaceProfile() {
     currentWorkspace?.name,
   );
 
-  const handleUpdate = () => {
+  const handleUpdate = (e: SyntheticEvent) => {
+    e.preventDefault();
     if (currentWorkspace)
       workspaceStore.setCurrentWorkspace({ ...currentWorkspace });
     if (organizationName) updateWorkspaceDetails(organizationName);
@@ -46,7 +47,7 @@ function WorkspaceProfile() {
               <Description>Manage your Workspace Profile</Description>
             </LeftDiv>
           </Head>
-          <ProfileDetail>
+          <ProfileDetail onSubmit={handleUpdate}>
             <ProfileImage>
               <SVGIcon
                 name='workspaceProfile-icon'
@@ -74,7 +75,7 @@ function WorkspaceProfile() {
                 />
               </TextField>
             </ProfileInputs>
-            <Button onClick={handleUpdate} title='Update' />
+            <Button type='submit' title='Update' />
           </ProfileDetail>
         </RightDiv>
       </MainDiv>
