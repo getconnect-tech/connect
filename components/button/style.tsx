@@ -19,7 +19,7 @@ interface Prop {
 
 const Buttons = styled.button<WrapButton>`
   display: flex;
-  gap: 6px;
+  gap: 8px;
   justify-content: center;
   ${Typography.body_md_medium}
   padding: 8px 16px;
