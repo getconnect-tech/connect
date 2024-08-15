@@ -538,28 +538,17 @@ const getPath = (name: string, props: any) => {
           </defs>
         </>
       );
-
-    case `duplicate-icon`:
+    case 'ai-icon':
       return (
         <>
-          <rect
-            width={9.337}
-            height={9.337}
-            x={4.665}
-            y={5.165}
-            stroke='#505556'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            rx={1.333}
-            fill='none'
-          />
-          <path
-            stroke='#505556'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='M4.665 11.835H3.331A1.334 1.334 0 0 1 1.998 10.5V3.83c0-.736.597-1.333 1.333-1.333h6.67c.737 0 1.334.597 1.334 1.333v1.334'
-            fill='none'
-          />
+          <g fill='#fff' clipPath='url(#a)'>
+            <path d='M9.75 4.5a.562.562 0 0 1-.563-.563 1.125 1.125 0 0 0-1.124-1.124.562.562 0 1 1 0-1.126A1.125 1.125 0 0 0 9.187.563a.562.562 0 1 1 1.126 0 1.125 1.125 0 0 0 1.124 1.125.562.562 0 1 1 0 1.125 1.125 1.125 0 0 0-1.124 1.126.562.562 0 0 1-.563.562ZM4.5 12a.75.75 0 0 1-.75-.75 3 3 0 0 0-3-3 .75.75 0 0 1 0-1.5 3 3 0 0 0 3-3 .75.75 0 1 1 1.5 0 3 3 0 0 0 3 3 .75.75 0 1 1 0 1.5 3 3 0 0 0-3 3 .75.75 0 0 1-.75.75Z' />
+          </g>
+          <defs>
+            <clipPath id='a'>
+              <path fill='#fff' d='M0 0h12v12H0z' />
+            </clipPath>
+          </defs>
         </>
       );
   }
