@@ -16,11 +16,7 @@ const defaultProps = {
   open: false,
 };
 
-const ModalCustom = ({
-  children,
-  open,
-  onClose,
-}: Props & typeof defaultProps) => {
+const Modal = ({ children, open, onClose }: Props & typeof defaultProps) => {
   const close = useCallback(() => {
     if (onClose) {
       onClose();
@@ -45,13 +41,13 @@ const ModalCustom = ({
   );
 };
 
-ModalCustom.propTypes = {
+Modal.propTypes = {
   position: PropTypes.oneOf(['center', 'right']),
   open: PropTypes.bool,
   onClose: PropTypes.func,
   width: PropTypes.number,
 };
 
-ModalCustom.defaultProps = defaultProps;
+Modal.defaultProps = defaultProps;
 
-export default ModalCustom;
+export default Modal;
