@@ -3,7 +3,7 @@ import { TeamSize } from '@prisma/client';
 import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { workspaceStore } from '@/stores/workspaceStore';
-import { getAPIErrorMessage } from '@/helpers/common';
+import { getAPIErrorMessage, isEmpty } from '@/helpers/common';
 import { Workspace } from '@/utils/dataTypes';
 
 /**
@@ -53,10 +53,16 @@ export const inviteUsersToWorkspace = async (
   try {
     workspaceStore.setLoading(true);
 
+    // Check for empty displayName or email in usersToInvite array
+    for (const user of usersToInvite) {
+      if (!isEmpty(user.displayName) || !isEmpty(user.email)) {
+        alert('Both displayName and email are required for all users.');
+      }
+    }
+
     const payload = {
       invitedUsers: usersToInvite,
     };
-
     const { data } = await axios.post(
       `${NEXT_PUBLIC_API_URL}/workspaces/inviteUsers`,
       payload,
@@ -66,7 +72,7 @@ export const inviteUsersToWorkspace = async (
         },
       },
     );
-
+    if (data) alert('User invited succesfully');
     return data;
   } catch (err: any) {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');

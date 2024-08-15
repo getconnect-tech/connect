@@ -20,6 +20,7 @@ class WorkspaceStore {
       // Invite Mopdal Input
       inviteModalInput: observable,
       updateInviteModalInput: action,
+      resetInviteModalInput: action,
     });
   }
 
@@ -35,6 +36,10 @@ class WorkspaceStore {
 
   updateInviteModalInput(propsName: 'name' | 'email', value: string) {
     this.inviteModalInput[propsName] = value;
+  }
+
+  resetInviteModalInput() {
+    this.inviteModalInput = { name: '', email: '' };
   }
 }
 

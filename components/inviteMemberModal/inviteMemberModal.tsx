@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, SyntheticEvent } from 'react';
 import { observer } from 'mobx-react-lite';
 import Icon from '../icon/icon';
 import Input from '../input/input';
@@ -15,17 +15,19 @@ const InviteMemberModal = ({ onClose }: Props) => {
   const { workspaceStore } = useStores();
   const { inviteModalInput, loading } = workspaceStore;
 
-  const handleInvite = async () => {
-    workspaceStore.setLoading(true);
+  const handleInvite = async (e: SyntheticEvent) => {
+    e.preventDefault();
     try {
-      await inviteUsersToWorkspace([
+      const result = await inviteUsersToWorkspace([
         { displayName: inviteModalInput.name, email: inviteModalInput.email },
       ]);
+      if (result) {
+        // reset modal input
+        workspaceStore.resetInviteModalInput();
+        onClose();
+      }
     } catch (error) {
       console.log('error', error);
-    } finally {
-      onClose();
-      workspaceStore.setLoading(false);
     }
   };
 
@@ -44,7 +46,7 @@ const InviteMemberModal = ({ onClose }: Props) => {
           onClick={onClose}
         />
       </Header>
-      <BottomDiv>
+      <BottomDiv onSubmit={handleInvite}>
         <Label>Name</Label>
         <Input
           value={inviteModalInput.name}
@@ -62,7 +64,7 @@ const InviteMemberModal = ({ onClose }: Props) => {
           placeholder={'Enter email address'}
         />
         <div className='button'>
-          <Button onClick={handleInvite} title='Invite' isLoading={loading} />
+          <Button type='submit' title='Invite' isLoading={loading} />
         </div>
       </BottomDiv>
     </MainDiv>
