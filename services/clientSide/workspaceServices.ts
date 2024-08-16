@@ -5,6 +5,7 @@ import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { getAPIErrorMessage, isEmpty } from '@/helpers/common';
 import { Workspace } from '@/utils/dataTypes';
+import { MakeAdmin } from '@/utils/appTypes';
 
 /**
  * @desc Create Workspace
@@ -132,7 +133,7 @@ export const updateWorkspaceDetails = async (payload: { name: string }) => {
  * @desc Make admin
  * @param {*} payload
  */
-export const makeAdmin = async (payload: { userId: string; role: string }) => {
+export const makeAdmin = async (payload: MakeAdmin) => {
   try {
     workspaceStore.setLoading(true);
     const result = await axios.put(
