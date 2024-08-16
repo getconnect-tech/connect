@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable max-len */
 'use client';
 import React, {
   ChangeEvent,
@@ -65,7 +64,6 @@ const MyProfile = () => {
       e.preventDefault();
       try {
         userStore.setLoading(true);
-        const currentDisplayName = displayName;
         let profile;
         if (image) {
           profile = await getFirebaseUrlFromFile(image?.file, 'UserProfiles');
@@ -80,14 +78,14 @@ const MyProfile = () => {
           displayName: string;
           profilePic: string | null;
         } = {
-          displayName: currentDisplayName,
+          displayName,
           profilePic: updatedImege,
         };
         updateUserDetails(payload);
         if (user?.id)
           userStore.setUserDetails({
             ...(user || {}),
-            display_name: currentDisplayName,
+            display_name: displayName,
             profile_url: updatedImege,
           });
       } catch (error) {
@@ -168,17 +166,15 @@ const MyProfile = () => {
                 ref={inputRef}
                 style={{ display: 'none' }}
               />
-              {!isEmpty(image?.profile || user?.profile_url) && (
-                <Avatar
-                  size={58}
-                  imgSrc={
-                    typeof image?.profile === 'string'
-                      ? image.profile
-                      : user?.profile_url || ''
-                  }
-                  name={user?.display_name || ''}
-                />
-              )}
+              <Avatar
+                size={58}
+                imgSrc={
+                  typeof image?.profile === 'string'
+                    ? image.profile
+                    : user?.profile_url || ''
+                }
+                name={user?.display_name || ''}
+              />
               <Frame>
                 <Link onClick={handleUploadClick}>Upload new image</Link>
                 <p>
