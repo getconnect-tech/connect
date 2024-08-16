@@ -5,13 +5,14 @@ import DropDown from '../dropDown/dropDown';
 import { CardDiv, LeftDiv, NameDiv, RightDiv } from './style';
 
 interface Props {
+  userId: string;
   designation?: string;
   name: string;
   email: string;
   src: string;
 }
 
-function MemberCard({ designation, name, email, src }: Props) {
+function MemberCard({ userId, designation, name, email, src }: Props) {
   const [openDropdown, setOpenDropdown] = useState(false);
 
   const dropDownItem = [
@@ -47,6 +48,7 @@ function MemberCard({ designation, name, email, src }: Props) {
               items={dropDownItem}
               iconSize={'12'}
               iconViewBox={'0 0 12 12'}
+              userId={userId}
               onClose={() => {
                 setOpenDropdown(false);
               }}
