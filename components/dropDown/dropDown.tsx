@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { UserRole } from '@prisma/client';
 import Avatar from '../avtar/Avtar';
 import Input from '../input/input';
 import {
@@ -11,6 +12,7 @@ import {
   StyledCheckbox,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { makeAdmin } from '@/services/clientSide/workspaceServices';
 
 export type DropDownItem = {
   name: string;
@@ -25,6 +27,7 @@ export type DropDownItem = {
 interface DropDownProps {
   items: DropDownItem[];
   style?: React.CSSProperties;
+  userId?: string;
   iconSize: string;
   iconViewBox: string;
   onClose: () => void;
@@ -67,6 +70,7 @@ export const useOutsideClick = (callback: () => void) => {
 export default function DropDown({
   items,
   style,
+  userId,
   iconSize,
   iconViewBox,
   onClose,
@@ -83,6 +87,14 @@ export default function DropDown({
   const [selectedItems, setSelectedItems] = useState<{
     [key: string]: boolean;
   }>({});
+
+  const handleAdmin = async () => {
+    try {
+      if (userId) await makeAdmin({ userId, role: UserRole.ADMIN });
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
 
   const handleItemClick = useCallback((name: string) => {
     setSelectedItems((prevState) => ({
@@ -123,6 +135,7 @@ export default function DropDown({
             isHovered={hoveredItem === item.name}
             onClick={(e) => {
               e.stopPropagation();
+              if (hoveredItem === 'Make Admin') handleAdmin();
               handleItemClick(item.name);
               if (onChange) {
                 onChange(item);

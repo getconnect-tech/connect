@@ -5,6 +5,7 @@ import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { getAPIErrorMessage, isEmpty } from '@/helpers/common';
 import { Workspace } from '@/utils/dataTypes';
+import { MakeAdmin } from '@/utils/appTypes';
 
 /**
  * @desc Create Workspace
@@ -108,6 +109,26 @@ export const getWorkspaceList = async () => {
 };
 
 /**
+ * @desc Get workspace by id
+ * @param {*} workspaceId
+ */
+export const getWorkspaceById = async (workspaceId: string) => {
+  try {
+    workspaceStore.setLoading(true);
+    const response = await axios.get(
+      `${NEXT_PUBLIC_API_URL}/workspaces/${workspaceId}`,
+    );
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return null;
+  } finally {
+    workspaceStore.setLoading(false);
+  }
+};
+
+/**
  * @desc Update workspace details
  * @param {*} organizationName
  */
@@ -122,6 +143,27 @@ export const updateWorkspaceDetails = async (payload: {
       payload,
     );
     if (result) alert('Workspace details updated');
+    return true;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return false;
+  } finally {
+    workspaceStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc Make admin
+ * @param {*} payload
+ */
+export const makeAdmin = async (payload: MakeAdmin) => {
+  try {
+    workspaceStore.setLoading(true);
+    const result = await axios.put(
+      `${NEXT_PUBLIC_API_URL}/workspaces/users/${payload.userId}`,
+      { role: payload.role },
+    );
+    if (result) alert('Make Admin');
     return true;
   } catch (err: any) {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');
