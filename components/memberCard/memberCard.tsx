@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
@@ -9,19 +9,30 @@ interface Props {
   name: string;
   email: string;
   src: string;
+  currentOpenDropdown?: string | null;
+  dropdownIdentifier?: string;
+  // eslint-disable-next-line no-unused-vars
+  setOpenDropdown: (dropdown: string | null) => void;
 }
 
-function MemberCard({ designation, name, email, src }: Props) {
-  const [openDropdown, setOpenDropdown] = useState(false);
-
+function MemberCard({
+  designation,
+  name,
+  email,
+  src,
+  dropdownIdentifier,
+  currentOpenDropdown,
+  setOpenDropdown,
+}: Props) {
   const dropDownItem = [
     { name: 'Make Admin', icon: 'admin-icon' },
     { name: 'Delete', icon: 'delete-icon', isDelete: true },
   ];
 
   const handleClickIcon = useCallback(() => {
-    setOpenDropdown(!openDropdown);
-  }, [openDropdown]);
+    const identifier = `${dropdownIdentifier}-member`;
+    setOpenDropdown(currentOpenDropdown === identifier ? null : identifier);
+  }, [dropdownIdentifier, currentOpenDropdown, setOpenDropdown]);
 
   return (
     <CardDiv>
@@ -42,15 +53,15 @@ function MemberCard({ designation, name, email, src }: Props) {
             iconViewBox='0 0 16 16'
             size={true}
           />
-          {openDropdown && (
+          {currentOpenDropdown === `${dropdownIdentifier}-member` && (
             <DropDown
               items={dropDownItem}
               iconSize={'12'}
               iconViewBox={'0 0 12 12'}
               onClose={() => {
-                setOpenDropdown(false);
+                setOpenDropdown(null);
               }}
-              style={{ right: 0 }}
+              style={{ right: 0, zIndex: 1 }}
             />
           )}
         </div>

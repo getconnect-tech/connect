@@ -180,3 +180,47 @@ export const EmailCardDiv = styled.div`
     background: ${colors.border_hover};
   }
 `;
+
+export const EmptyStateDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+`;
+
+export const EmptyLabelDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  padding-top: 104px;
+`;
+export const IconDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  box-shadow:
+    0px 0px 0px 0.5px ${colors.box_shadow},
+    0px 2px 4px 0px ${colors.box_shadow_2};
+  background-color: ${colors.bg_white};
+  border-radius: 50%;
+  cursor: pointer;
+  svg {
+    z-index: 6;
+  }
+`;
+export const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  h2 {
+    ${Typography.body_md_semibold}
+    color: ${colors.text};
+  }
+  p {
+    ${Typography.body_md_regular}
+    color: ${colors.text_text_secondary};
+  }
+`;
