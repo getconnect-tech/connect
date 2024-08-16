@@ -65,7 +65,7 @@ const Members = () => {
                   name={member.display_name || ''}
                   email={member.email}
                   src={member.profile_url || ''}
-                  designation={''}
+                  designation={member.role !== 'MEMBER' ? member.role : ''}
                 />
               ))}
             </MainCardDiv>
