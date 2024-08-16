@@ -48,16 +48,16 @@ const MyProfile = () => {
     loadData();
   }, [loadData]);
 
-  const handleKeyPress = useCallback(
-    (event: { which: any; keyCode: any; preventDefault: () => void }) => {
-      // Allow only digits
-      const charCode = event.which ? event.which : event.keyCode;
-      if (charCode < 48 || charCode > 57) {
-        event.preventDefault();
-      }
-    },
-    [],
-  );
+  // const handleKeyPress = useCallback(
+  //   (event: { which: any; keyCode: any; preventDefault: () => void }) => {
+  //     // Allow only digits
+  //     const charCode = event.which ? event.which : event.keyCode;
+  //     if (charCode < 48 || charCode > 57) {
+  //       event.preventDefault();
+  //     }
+  //   },
+  //   [],
+  // );
 
   const onSubmit = useCallback(
     async (e: React.SyntheticEvent) => {
@@ -197,14 +197,14 @@ const MyProfile = () => {
                   }
                 />
               </TextField>
-              <TextField>
+              {/* <TextField>
                 <Label>Phone Number</Label>
                 <Input
                   placeholder={'Enter phone number'}
                   style={{ padding: '8px 16px' }}
                   onKeyPress={handleKeyPress}
                 />
-              </TextField>
+              </TextField> */}
             </ProfileInputs>
             <Button isLoading={loading} title='Update' />
           </ProfileDetail>
