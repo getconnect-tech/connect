@@ -109,10 +109,33 @@ export const getWorkspaceList = async () => {
 };
 
 /**
+ * @desc Get workspace by id
+ * @param {*} workspaceId
+ */
+export const getWorkspaceById = async (workspaceId: string) => {
+  try {
+    workspaceStore.setLoading(true);
+    const response = await axios.get(
+      `${NEXT_PUBLIC_API_URL}/workspaces/${workspaceId}`,
+    );
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return null;
+  } finally {
+    workspaceStore.setLoading(false);
+  }
+};
+
+/**
  * @desc Update workspace details
  * @param {*} organizationName
  */
-export const updateWorkspaceDetails = async (payload: { name: string }) => {
+export const updateWorkspaceDetails = async (payload: {
+  name: string;
+  imageUrl: string | null;
+}) => {
   try {
     workspaceStore.setLoading(true);
     const result = await axios.put(

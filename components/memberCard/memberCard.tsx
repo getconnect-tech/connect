@@ -3,6 +3,7 @@ import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
 import { CardDiv, LeftDiv, NameDiv, RightDiv } from './style';
+import { capitalizeString } from '@/helpers/common';
 
 interface Props {
   userId: string;
@@ -43,7 +44,7 @@ function MemberCard({
         </NameDiv>
       </LeftDiv>
       <RightDiv>
-        {designation && <h6>{designation}</h6>}
+        {designation && <h6>{capitalizeString(designation)}</h6>}
         <div style={{ position: 'relative' }} className='tag-div'>
           <Icon
             onClick={handleClickIcon}

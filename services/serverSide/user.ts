@@ -7,9 +7,8 @@ export const updateUser = async (
 ) => {
   const update = {
     display_name: userUpdates.displayName,
-    profile_pic: userUpdates.profilePic,
+    profile_url: userUpdates.profilePic,
   };
-
   removeNullUndefined(update);
   const updatedUser = await prisma.user.update({
     where: { id: userId },

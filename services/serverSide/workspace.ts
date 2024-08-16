@@ -149,21 +149,21 @@ export const hasWorkspace = async (workspaceId: string) => {
 };
 
 export const updateWorkspace = async (
-  workspaecId: string,
+  workspaceId: string,
   workspaceUpdates: {
     name?: string;
-    image_url?: string;
+    imageUrl?: string;
   },
 ) => {
   const update = {
     name: workspaceUpdates.name,
-    image_url: workspaceUpdates.image_url,
+    image_url: workspaceUpdates.imageUrl,
   };
 
   removeNullUndefined(update);
 
   const updatedWorkspace = await prisma.workspace.update({
-    where: { id: workspaecId },
+    where: { id: workspaceId },
     data: update,
   });
 
