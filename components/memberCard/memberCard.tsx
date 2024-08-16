@@ -7,13 +7,22 @@ import { capitalizeString } from '@/helpers/common';
 
 interface Props {
   userId: string;
+  // eslint-disable-next-line no-unused-vars
+  handleClick?: (value: string | null, userId: string) => void;
   designation?: string;
   name: string;
   email: string;
   src: string;
 }
 
-function MemberCard({ userId, designation, name, email, src }: Props) {
+function MemberCard({
+  userId,
+  handleClick,
+  designation,
+  name,
+  email,
+  src,
+}: Props) {
   const [openDropdown, setOpenDropdown] = useState(false);
 
   const dropDownItem = [
@@ -50,6 +59,7 @@ function MemberCard({ userId, designation, name, email, src }: Props) {
               iconSize={'12'}
               iconViewBox={'0 0 12 12'}
               userId={userId}
+              handleClick={handleClick}
               onClose={() => {
                 setOpenDropdown(false);
               }}

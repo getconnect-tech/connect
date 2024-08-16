@@ -56,11 +56,11 @@ export const inviteUsersToWorkspace = async (
 
     // Check for empty displayName or email in usersToInvite array
     for (const user of usersToInvite) {
-      if (!isEmpty(user.displayName)) {
+      if (isEmpty(user.displayName)) {
         alert('Name is required for user.');
         return false;
       }
-      if (!isEmpty(user.email)) {
+      if (isEmpty(user.email)) {
         alert('Email is required for user.');
         return false;
       }
@@ -164,6 +164,26 @@ export const makeAdmin = async (payload: MakeAdmin) => {
       { role: payload.role },
     );
     if (result) alert('Make Admin');
+    return true;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return false;
+  } finally {
+    workspaceStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc Delete user from Member
+ * @param {*} userId
+ */
+export const removeMemberFromWorkspace = async (userId: string) => {
+  try {
+    workspaceStore.setLoading(true);
+    const result = await axios.delete(
+      `${NEXT_PUBLIC_API_URL}/workspaces/users/${userId}`,
+    );
+    if (result) alert('User Deleted');
     return true;
   } catch (err: any) {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');
