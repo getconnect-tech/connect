@@ -61,6 +61,7 @@ const Members = () => {
               {currentWorkspace?.users?.map((member) => (
                 <MemberCard
                   key={member.id}
+                  userId={member.id}
                   name={member.display_name || ''}
                   email={member.email}
                   src={member.profile_url || ''}
