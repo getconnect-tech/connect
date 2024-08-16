@@ -100,11 +100,11 @@ const MyProfile = () => {
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleUploadClick = () => {
+  const handleUploadClick = useCallback(() => {
     inputRef.current?.click();
-  };
+  }, []);
 
-  const convertBase64 = (file: File) => {
+  const convertBase64 = useCallback((file: File) => {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.readAsDataURL(file);
@@ -119,34 +119,37 @@ const MyProfile = () => {
         reject(error);
       };
     });
-  };
+  }, []);
 
-  const handleFileRead = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      const file = event.target.files?.[0];
-      if (!file) {
-        alert('No file selected.');
-        return;
+  const handleFileRead = useCallback(
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
+      try {
+        const file = event.target.files?.[0];
+        if (!file) {
+          alert('No file selected.');
+          return;
+        }
+        const fileData = file.name.split('.');
+        if (file.size > 500000) {
+          alert('Please upload less than 500kb photo size.');
+          return false;
+        }
+        if (
+          fileData[1] === 'jpg' ||
+          fileData[1] === 'jpeg' ||
+          fileData[1] === 'png'
+        ) {
+          await convertBase64(file);
+        } else {
+          alert('Please upload a valid type photo.');
+          return false;
+        }
+      } catch (e) {
+        console.log('error', e);
       }
-      const fileData = file.name.split('.');
-      if (file.size > 500000) {
-        alert('Please upload less than 500kb photo size.');
-        return false;
-      }
-      if (
-        fileData[1] === 'jpg' ||
-        fileData[1] === 'jpeg' ||
-        fileData[1] === 'png'
-      ) {
-        await convertBase64(file);
-      } else {
-        alert('Please upload a valid type photo.');
-        return false;
-      }
-    } catch (e) {
-      console.log('error', e);
-    }
-  };
+    },
+    [],
+  );
 
   return (
     <Main>
