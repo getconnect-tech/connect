@@ -27,7 +27,7 @@ export type DropDownItem = {
 interface DropDownProps {
   items: DropDownItem[];
   style?: React.CSSProperties;
-  userId: string;
+  userId?: string;
   iconSize: string;
   iconViewBox: string;
   onClose: () => void;
@@ -90,7 +90,7 @@ export default function DropDown({
 
   const handleAdmin = async () => {
     try {
-      await makeAdmin({ userId, role: UserRole.ADMIN });
+      if (userId) await makeAdmin({ userId, role: UserRole.ADMIN });
     } catch (error) {
       console.log('error', error);
     }
