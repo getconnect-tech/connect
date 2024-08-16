@@ -5,7 +5,7 @@ import DropDown from '../dropDown/dropDown';
 import { CardDiv, LeftDiv, NameDiv, RightDiv } from './style';
 
 interface Props {
-  userId: string;
+  userId?: string;
   designation?: string;
   name: string;
   email: string;

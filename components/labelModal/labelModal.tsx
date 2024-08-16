@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Input from '../input/input';
 import Button from '../button/button';
+import LabelIconDropdown from '../labelIcoDropdown/labelIconDropdown';
 import {
   ButtonDiv,
   Content,
@@ -16,18 +17,27 @@ interface Props {
   onClose: () => void;
 }
 function LabelModal({ onClose }: Props) {
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+
+  const toggleDropdown = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
+
   return (
     <MainDiv>
       <ModalHeader>Create new label</ModalHeader>
       <Content>
-        <IconDiv >
-          <SVGIcon
-            name='label-icon'
-            width='16'
-            height='16'
-            viewBox='0 0 20 20'
-          />
-        </IconDiv>
+        <div>
+          <IconDiv onClick={toggleDropdown}>
+            <SVGIcon
+              name='label-icon'
+              width='16'
+              height='16'
+              viewBox='0 0 20 20'
+            />
+          </IconDiv>
+          {dropdownVisible && <LabelIconDropdown />}
+        </div>
         <InputField>
           <Label>Label Name</Label>
           <Input placeholder={'Enter label Name'} />

@@ -583,7 +583,7 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
-    case `label-icon`:
+    case 'label-icon':
       return (
         <>
           <path

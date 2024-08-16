@@ -1,8 +1,11 @@
 'use client';
 import React, { useCallback, useState } from 'react';
 import {
+  Content,
   Description,
+  EmptyLabelDiv,
   Head,
+  IconDiv,
   LeftDiv,
   Main,
   MainCardDiv,
@@ -14,6 +17,8 @@ import LabelCard from '@/components/labelCard/labelCard';
 import Button from '@/components/button/button';
 import Modal from '@/components/modal/modal';
 import LabelModal from '@/components/labelModal/labelModal';
+import { isEmpty } from '@/helpers/common';
+import SVGIcon from '@/assets/icons/SVGIcon';
 
 function Labels() {
   const [labelModal, setLabelModal] = useState(false);
@@ -44,35 +49,36 @@ function Labels() {
               </LeftDiv>
               <Button title='Invite Member' onClick={onOpenLabelModal} />
             </Head>
-
-            {/* <EmptyLabelDiv>
-      <IconDiv>
-        <SVGIcon
-          name='label-icon'
-          width='20'
-          height='20'
-          viewBox='0 0 20 20'
-        />
-      </IconDiv>
-      <Content>
-        <h2>No Labels created yet</h2>
-        <p>Create Labels to help organise tickets in your team.</p>
-      </Content>
-      <Button title='New Label' />
-    </EmptyLabelDiv> */}
-
-            <MainCardDiv>
-              {labelData.map((label) => (
-                <LabelCard
-                  key={label.id}
-                  label={label.label}
-                  iconName={label.iconName}
-                  currentOpenDropdown={currentOpenDropdown}
-                  setOpenDropdown={setCurrentOpenDropdown}
-                  dropdownIdentifier={`card-${label.id}`}
-                />
-              ))}
-            </MainCardDiv>
+            {isEmpty(labelData) ? (
+              <EmptyLabelDiv>
+                <IconDiv>
+                  <SVGIcon
+                    name='label-icon'
+                    width='20'
+                    height='20'
+                    viewBox='0 0 20 20'
+                  />
+                </IconDiv>
+                <Content>
+                  <h2>No Labels created yet</h2>
+                  <p>Create Labels to help organise tickets in your team.</p>
+                </Content>
+                <Button title='New Label' />
+              </EmptyLabelDiv>
+            ) : (
+              <MainCardDiv>
+                {labelData.map((label) => (
+                  <LabelCard
+                    key={label.id}
+                    label={label.label}
+                    iconName={label.iconName}
+                    currentOpenDropdown={currentOpenDropdown}
+                    setOpenDropdown={setCurrentOpenDropdown}
+                    dropdownIdentifier={`card-${label.id}`}
+                  />
+                ))}
+              </MainCardDiv>
+            )}
           </RightDiv>
         </MainDiv>
       </Main>
