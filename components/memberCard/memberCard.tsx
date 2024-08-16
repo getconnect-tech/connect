@@ -5,6 +5,7 @@ import DropDown from '../dropDown/dropDown';
 import { CardDiv, LeftDiv, NameDiv, RightDiv } from './style';
 
 interface Props {
+  userId: string;
   designation?: string;
   name: string;
   email: string;
@@ -23,6 +24,7 @@ function MemberCard({
   dropdownIdentifier,
   currentOpenDropdown,
   setOpenDropdown,
+  userId,
 }: Props) {
   const dropDownItem = [
     { name: 'Make Admin', icon: 'admin-icon' },
@@ -58,6 +60,7 @@ function MemberCard({
               items={dropDownItem}
               iconSize={'12'}
               iconViewBox={'0 0 12 12'}
+              userId={userId}
               onClose={() => {
                 setOpenDropdown(null);
               }}
