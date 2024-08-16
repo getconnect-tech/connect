@@ -8,14 +8,17 @@ import { getAPIErrorMessage } from '@/helpers/common';
  * @desc Update user details
  * @param {*} displayName
  */
-export const updateUserDetails = async (displayName: string) => {
+export const updateUserDetails = async (payload: {
+  displayName: string;
+  profilePic: string | null;
+}) => {
   try {
     userStore.setLoading(true);
-    const payload = { displayName: displayName };
     const result = await axios.put(`${NEXT_PUBLIC_API_URL}/user`, payload);
     if (result) alert('User details updated');
     return true;
   } catch (err: any) {
+    console.log('err', err);
     alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return false;
   } finally {
