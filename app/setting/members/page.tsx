@@ -2,6 +2,7 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { UserRole } from '@prisma/client';
 import {
   Description,
   Head,
@@ -14,7 +15,11 @@ import {
 } from '../style';
 import Button from '@/components/button/button';
 import MemberCard from '@/components/memberCard/memberCard';
-import { getWorkspaceList } from '@/services/clientSide/workspaceServices';
+import {
+  getWorkspaceList,
+  makeAdmin,
+  removeMemberFromWorkspace,
+} from '@/services/clientSide/workspaceServices';
 import { useStores } from '@/stores';
 import InviteMemberModal from '@/components/inviteMemberModal/inviteMemberModal';
 import Modal from '@/components/modal/modal';
@@ -31,6 +36,28 @@ const Members = () => {
   const onCloseInviteModal = useCallback(() => {
     setInviteModal(false);
   }, []);
+
+  const handleClick = async (hoveredItem: string | null, userId: string) => {
+    if (hoveredItem === 'Make Admin') {
+      try {
+        if (userId) await makeAdmin({ userId, role: UserRole.ADMIN });
+      } catch (error) {
+        console.log('error', error);
+      }
+    }
+    if (hoveredItem === 'Delete') {
+      try {
+        if (userId) {
+          const result = await removeMemberFromWorkspace(userId);
+          if (result) {
+            workspaceStore.removeUserFromWorkspace(userId);
+          }
+        }
+      } catch (error) {
+        console.log('error', error);
+      }
+    }
+  };
 
   const getWorkspaceMember = useCallback(async () => {
     workspaceStore.setLoading(true);
@@ -62,6 +89,7 @@ const Members = () => {
                 <MemberCard
                   key={member.id}
                   userId={member.id}
+                  handleClick={handleClick}
                   name={member.display_name || ''}
                   email={member.email}
                   src={member.profile_url || ''}

@@ -1,6 +1,11 @@
 /* eslint-disable no-undef */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { UserRole } from '@prisma/client';
+import React, {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { observer } from 'mobx-react-lite';
 import Avatar from '../avtar/Avtar';
 import Input from '../input/input';
@@ -13,11 +18,6 @@ import {
   StyledCheckbox,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import {
-  makeAdmin,
-  removeMemberFromWorkspace,
-} from '@/services/clientSide/workspaceServices';
-import { workspaceStore } from '@/stores/workspaceStore';
 
 export type DropDownItem = {
   name: string;
@@ -33,6 +33,8 @@ interface DropDownProps {
   items: DropDownItem[];
   style?: React.CSSProperties;
   userId?: string;
+  // eslint-disable-next-line no-unused-vars
+  handleClick?: (hoveredItem: string | null, userId: string) => void;
   iconSize: string;
   iconViewBox: string;
   onClose: () => void;
@@ -76,6 +78,7 @@ const DropDown = ({
   items,
   style,
   userId,
+  handleClick,
   iconSize,
   iconViewBox,
   onClose,
@@ -93,26 +96,6 @@ const DropDown = ({
     [key: string]: boolean;
   }>({});
 
-  const handleAdmin = async () => {
-    try {
-      if (userId) await makeAdmin({ userId, role: UserRole.ADMIN });
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-  const handleDelete = async () => {
-    try {
-      if (userId) {
-        const result = await removeMemberFromWorkspace(userId);
-        if (result) {
-          workspaceStore.removeUserFromWorkspace(userId);
-        }
-      }
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
   const handleItemClick = useCallback((name: string) => {
     setSelectedItems((prevState) => ({
       ...prevState,
@@ -123,6 +106,19 @@ const DropDown = ({
   const handleMouseLeave = () => {
     setHoveredItem(null);
   };
+
+  const onClickItem = useCallback(
+    (e: SyntheticEvent, item: DropDownItem, hoveredItem: string | null) => {
+      e.stopPropagation();
+      if (handleClick) handleClick(hoveredItem, userId || '');
+      handleItemClick(item.name);
+      if (onChange) {
+        onChange(item);
+      }
+      onClose();
+    },
+    [],
+  );
 
   return (
     <MainDiv
@@ -150,16 +146,7 @@ const DropDown = ({
             key={index}
             isSelected={selectedItems[item.name]}
             isHovered={hoveredItem === item.name}
-            onClick={(e) => {
-              e.stopPropagation();
-              if (hoveredItem === 'Make Admin') handleAdmin();
-              if (hoveredItem === 'Delete') handleDelete();
-              handleItemClick(item.name);
-              if (onChange) {
-                onChange(item);
-              }
-              onClose();
-            }}
+            onClick={(e) => onClickItem(e, item, hoveredItem)}
             onMouseEnter={() => {
               // eslint-disable-next-line no-unused-expressions, @typescript-eslint/no-unused-expressions
               handleMouseEnter;

@@ -37,18 +37,11 @@ class WorkspaceStore {
 
   // Remove user from workspace
   removeUserFromWorkspace(userId: string) {
-    const userData = this.currentWorkspace;
-
-    if (!userData || !userData.users) {
-      return;
-    }
-
-    // Loop through the users array
-    for (let i = 0; i < userData.users.length; i++) {
-      if (userData.users[i].id === userId) {
-        userData.users.splice(i, 1);
-        break;
-      }
+    const userIndex = this.currentWorkspace?.users?.findIndex(
+      (user) => user?.id === userId,
+    );
+    if (userIndex && userIndex !== -1) {
+      this.currentWorkspace?.users?.splice(userIndex, 1);
     }
   }
 
