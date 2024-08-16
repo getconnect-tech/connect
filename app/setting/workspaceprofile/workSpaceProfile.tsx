@@ -114,7 +114,7 @@ const WorkspaceProfile = () => {
         if (image) {
           profile = await getFirebaseUrlFromFile(image?.file, 'UserProfiles');
         }
-        const updatedImege =
+        const updatedImage =
           !isEmpty(image?.profile) && profile
             ? profile
             : currentWorkspace?.image_url
@@ -122,10 +122,10 @@ const WorkspaceProfile = () => {
               : null;
         const payload: {
           name: string;
-          image_url: string | null;
+          imageUrl: string | null;
         } = {
           name: organizationName,
-          image_url: updatedImege,
+          imageUrl: updatedImage,
         };
         await updateWorkspaceDetails(payload);
 

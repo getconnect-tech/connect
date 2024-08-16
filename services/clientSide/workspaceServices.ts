@@ -134,7 +134,7 @@ export const getWorkspaceById = async (workspaceId: string) => {
  */
 export const updateWorkspaceDetails = async (payload: {
   name: string;
-  image_url: string | null;
+  imageUrl: string | null;
 }) => {
   try {
     workspaceStore.setLoading(true);
