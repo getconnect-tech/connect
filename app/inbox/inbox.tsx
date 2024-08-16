@@ -65,9 +65,10 @@ function Inbox() {
           </HeaderDiv>
         </TopDiv>
         <BottomDiv>
-          {loading ? (
-            <InboxLoading /> // Show loading state while data is being fetched
-          ) : isEmpty(ticketList) ? (
+          {loading && (!ticketList || ticketList?.length === 0) && (
+            <InboxLoading />
+          )}
+          {!loading && (!ticketList || ticketList?.length === 0) && (
             <EmptyState
               iconName='inbox-icon'
               iconSize='20'
@@ -76,29 +77,27 @@ function Inbox() {
               // eslint-disable-next-line max-len
               description='This is where you will receive notifications for all types of tickets. Enjoy your clutter-free inbox!'
             />
-          ) : (
-            <>
-              {ticketList.map((ticket, index) => (
-                <CustomContextMenu
-                  key={ticket.id}
-                  ticketDetail={ticket}
-                  ticketIndex={index}
-                >
-                  <InboxCard
-                    ticketDetail={ticket}
-                    description='Complete your registration...'
-                    showDotIcon={true}
-                    src=''
-                    currentOpenDropdown={currentOpenDropdown}
-                    setCurrentOpenDropdown={setCurrentOpenDropdown}
-                    dropdownIdentifier={`card-${ticket.id}`}
-                    loadData={loadData}
-                    ticketIndex={index}
-                  />
-                </CustomContextMenu>
-              ))}
-            </>
           )}
+          {ticketList?.length > 0 &&
+            ticketList.map((ticket, index) => (
+              <CustomContextMenu
+                key={ticket.id}
+                ticketDetail={ticket}
+                ticketIndex={index}
+              >
+                <InboxCard
+                  ticketDetail={ticket}
+                  description='Complete your registration...'
+                  showDotIcon={true}
+                  src=''
+                  currentOpenDropdown={currentOpenDropdown}
+                  setCurrentOpenDropdown={setCurrentOpenDropdown}
+                  dropdownIdentifier={`card-${ticket.id}`}
+                  loadData={loadData}
+                  ticketIndex={index}
+                />
+              </CustomContextMenu>
+            ))}
         </BottomDiv>
       </MainDiv>
     </Main>
