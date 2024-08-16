@@ -41,7 +41,7 @@ const Members = () => {
 
   useEffect(() => {
     getWorkspaceMember();
-  }, []);
+  }, [inviteModal]);
 
   return (
     <>

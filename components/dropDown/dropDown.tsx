@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { UserRole } from '@prisma/client';
+import { observer } from 'mobx-react-lite';
 import Avatar from '../avtar/Avtar';
 import Input from '../input/input';
 import {
@@ -12,7 +13,11 @@ import {
   StyledCheckbox,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { makeAdmin } from '@/services/clientSide/workspaceServices';
+import {
+  makeAdmin,
+  removeMemberFromWorkspace,
+} from '@/services/clientSide/workspaceServices';
+import { workspaceStore } from '@/stores/workspaceStore';
 
 export type DropDownItem = {
   name: string;
@@ -67,7 +72,7 @@ export const useOutsideClick = (callback: () => void) => {
   return ref;
 };
 
-export default function DropDown({
+const DropDown = ({
   items,
   style,
   userId,
@@ -81,7 +86,7 @@ export default function DropDown({
   onChange,
   handleMouseEnter,
   className,
-}: DropDownProps) {
+}: DropDownProps) => {
   const dropDownRef = useOutsideClick(onClose);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [selectedItems, setSelectedItems] = useState<{
@@ -91,6 +96,18 @@ export default function DropDown({
   const handleAdmin = async () => {
     try {
       if (userId) await makeAdmin({ userId, role: UserRole.ADMIN });
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+  const handleDelete = async () => {
+    try {
+      if (userId) {
+        const result = await removeMemberFromWorkspace(userId);
+        if (result) {
+          workspaceStore.removeUserFromWorkspace(userId);
+        }
+      }
     } catch (error) {
       console.log('error', error);
     }
@@ -136,6 +153,7 @@ export default function DropDown({
             onClick={(e) => {
               e.stopPropagation();
               if (hoveredItem === 'Make Admin') handleAdmin();
+              if (hoveredItem === 'Delete') handleDelete();
               handleItemClick(item.name);
               if (onChange) {
                 onChange(item);
@@ -183,4 +201,6 @@ export default function DropDown({
       </ItemMainDiv>
     </MainDiv>
   );
-}
+};
+
+export default observer(DropDown);

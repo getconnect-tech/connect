@@ -16,6 +16,7 @@ class WorkspaceStore {
       // Current Workspace
       currentWorkspace: observable,
       setCurrentWorkspace: action,
+      removeUserFromWorkspace: action,
 
       // Invite Mopdal Input
       inviteModalInput: observable,
@@ -32,6 +33,23 @@ class WorkspaceStore {
   setCurrentWorkspace(value: Workspace) {
     axios.defaults.headers.common['workspace_id'] = value?.id;
     this.currentWorkspace = value;
+  }
+
+  // Remove user from workspace
+  removeUserFromWorkspace(userId: string) {
+    const userData = this.currentWorkspace;
+
+    if (!userData || !userData.users) {
+      return;
+    }
+
+    // Loop through the users array
+    for (let i = 0; i < userData.users.length; i++) {
+      if (userData.users[i].id === userId) {
+        userData.users.splice(i, 1);
+        break;
+      }
+    }
   }
 
   updateInviteModalInput(propsName: 'name' | 'email', value: string) {
