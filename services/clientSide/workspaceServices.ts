@@ -111,7 +111,10 @@ export const getWorkspaceList = async () => {
  * @desc Update workspace details
  * @param {*} organizationName
  */
-export const updateWorkspaceDetails = async (payload: { name: string }) => {
+export const updateWorkspaceDetails = async (payload: {
+  name: string;
+  image_url: string | null;
+}) => {
   try {
     workspaceStore.setLoading(true);
     const result = await axios.put(

@@ -93,7 +93,7 @@ export const getFirebaseUrlFromFile = async (file: any, folderName: string) => {
   try {
     const promises = [];
     let profile;
-    if (!isEmpty(file)) {
+    if (file) {
       const myPromise = new Promise(function (myResolve, myReject) {
         const storage = getStorage(app);
         const metadata = {
@@ -103,7 +103,7 @@ export const getFirebaseUrlFromFile = async (file: any, folderName: string) => {
         const uniqueFilename = generateRandomFilename();
         const fullFilename = `${file?.name.replace(/\.[^/.]+$/, '')}_${uniqueFilename}.${fileExtension}`;
         let pathName = '';
-        if (folderName !== 'UserProfiles/') {
+        if (folderName !== 'UserProfiles') {
           const workspace = workspaceStore.currentWorkspace;
           pathName = `workspaces/${workspace?.id}/${folderName}`;
         } else {
