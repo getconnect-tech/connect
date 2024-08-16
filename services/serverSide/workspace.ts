@@ -13,13 +13,17 @@ export const getWorkspaceById = async (workspaceId: string) => {
       ticketLabels: true,
     },
   });
+
   if (!workspace) {
     return null;
   }
 
   const formattedWorkspace = {
     ...workspace,
-    users: workspace.users.map((x) => x.user),
+    users: workspace.users.map((x) => ({
+      ...x.user,
+      role: x.role,
+    })),
   };
   return formattedWorkspace;
 };
@@ -132,7 +136,7 @@ export const getUserWorkspaces = async (userId: string) => {
   });
   const formattedWorkspaces = workspaces.map(({ workspace }) => ({
     ...workspace,
-    users: workspace.users.map((x) => x.user),
+    users: workspace.users.map((x) => ({ ...x.user, role: x.role })),
   }));
   return formattedWorkspaces;
 };
