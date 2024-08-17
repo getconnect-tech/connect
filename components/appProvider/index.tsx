@@ -51,11 +51,6 @@ export default function AppProvider({
     init();
   }, [init]);
 
-  // Conditional check to render SettingAppProvider if the pathname is '/setting'
-  if (pathname.startsWith('/setting')) {
-    return <SettingAppProvider>{children}</SettingAppProvider>;
-  }
-
   if (ONBOARDING_ROUTES.includes(pathname)) {
     NavbarComponent = null;
   } else {
@@ -63,7 +58,9 @@ export default function AppProvider({
   }
 
   if (typeof window !== 'undefined')
-    return (
+    return pathname.startsWith('/setting') ? (
+      <SettingAppProvider>{children}</SettingAppProvider>
+    ) : (
       <Provider {...stores}>
         {NavbarComponent}
         {children}
@@ -72,8 +69,14 @@ export default function AppProvider({
 
   return (
     <StyleSheetManager sheet={styledComponentsStyleSheet.instance}>
-      {NavbarComponent}
-      <Provider {...stores}>{children}</Provider>
+      {pathname.startsWith('/setting') ? (
+        <SettingAppProvider>{children}</SettingAppProvider>
+      ) : (
+        <>
+          {NavbarComponent}
+          <Provider {...stores}>{children}</Provider>
+        </>
+      )}
     </StyleSheetManager>
   );
 }

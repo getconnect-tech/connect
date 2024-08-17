@@ -19,7 +19,7 @@ export const GET = withAuth(async (req) => {
 });
 
 const RequestBody = z.object({
-  dispalyName: displayNameSchema.optional(),
+  displayName: displayNameSchema.optional(),
   profilePic: profilePicSchema.optional(),
 });
 

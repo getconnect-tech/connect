@@ -1,6 +1,12 @@
 /* eslint-disable no-undef */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { UserRole } from '@prisma/client';
+import React, {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { observer } from 'mobx-react-lite';
 import Avatar from '../avtar/Avtar';
 import Input from '../input/input';
 import {
@@ -12,7 +18,6 @@ import {
   StyledCheckbox,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { makeAdmin } from '@/services/clientSide/workspaceServices';
 
 export type DropDownItem = {
   name: string;
@@ -28,6 +33,8 @@ interface DropDownProps {
   items: DropDownItem[];
   style?: React.CSSProperties;
   userId?: string;
+  // eslint-disable-next-line no-unused-vars
+  handleClick?: (hoveredItem: string | null, userId: string) => void;
   iconSize: string;
   iconViewBox: string;
   onClose: () => void;
@@ -67,10 +74,11 @@ export const useOutsideClick = (callback: () => void) => {
   return ref;
 };
 
-export default function DropDown({
+const DropDown = ({
   items,
   style,
   userId,
+  handleClick,
   iconSize,
   iconViewBox,
   onClose,
@@ -81,20 +89,12 @@ export default function DropDown({
   onChange,
   handleMouseEnter,
   className,
-}: DropDownProps) {
+}: DropDownProps) => {
   const dropDownRef = useOutsideClick(onClose);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [selectedItems, setSelectedItems] = useState<{
     [key: string]: boolean;
   }>({});
-
-  const handleAdmin = async () => {
-    try {
-      if (userId) await makeAdmin({ userId, role: UserRole.ADMIN });
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
 
   const handleItemClick = useCallback((name: string) => {
     setSelectedItems((prevState) => ({
@@ -106,6 +106,19 @@ export default function DropDown({
   const handleMouseLeave = () => {
     setHoveredItem(null);
   };
+
+  const onClickItem = useCallback(
+    (e: SyntheticEvent, item: DropDownItem, hoveredItem: string | null) => {
+      e.stopPropagation();
+      if (handleClick) handleClick(hoveredItem, userId || '');
+      handleItemClick(item.name);
+      if (onChange) {
+        onChange(item);
+      }
+      onClose();
+    },
+    [],
+  );
 
   return (
     <MainDiv
@@ -133,15 +146,7 @@ export default function DropDown({
             key={index}
             isSelected={selectedItems[item.name]}
             isHovered={hoveredItem === item.name}
-            onClick={(e) => {
-              e.stopPropagation();
-              if (hoveredItem === 'Make Admin') handleAdmin();
-              handleItemClick(item.name);
-              if (onChange) {
-                onChange(item);
-              }
-              onClose();
-            }}
+            onClick={(e) => onClickItem(e, item, hoveredItem)}
             onMouseEnter={() => {
               // eslint-disable-next-line no-unused-expressions, @typescript-eslint/no-unused-expressions
               handleMouseEnter;
@@ -183,4 +188,6 @@ export default function DropDown({
       </ItemMainDiv>
     </MainDiv>
   );
-}
+};
+
+export default observer(DropDown);

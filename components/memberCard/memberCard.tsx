@@ -3,9 +3,12 @@ import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
 import { CardDiv, LeftDiv, NameDiv, RightDiv } from './style';
+import { capitalizeString } from '@/helpers/common';
 
 interface Props {
-  userId?: string;
+  userId: string;
+  // eslint-disable-next-line no-unused-vars
+  handleClick?: (value: string | null, userId: string) => void;
   designation?: string;
   name: string;
   email: string;
@@ -17,6 +20,8 @@ interface Props {
 }
 
 function MemberCard({
+  userId,
+  handleClick,
   designation,
   name,
   email,
@@ -24,7 +29,6 @@ function MemberCard({
   dropdownIdentifier,
   currentOpenDropdown,
   setOpenDropdown,
-  userId,
 }: Props) {
   const dropDownItem = [
     { name: 'Make Admin', icon: 'admin-icon' },
@@ -46,7 +50,7 @@ function MemberCard({
         </NameDiv>
       </LeftDiv>
       <RightDiv>
-        {designation && <h6>{designation}</h6>}
+        {designation && <h6>{capitalizeString(designation)}</h6>}
         <div style={{ position: 'relative' }} className='tag-div'>
           <Icon
             onClick={handleClickIcon}
@@ -61,6 +65,7 @@ function MemberCard({
               iconSize={'12'}
               iconViewBox={'0 0 12 12'}
               userId={userId}
+              handleClick={handleClick}
               onClose={() => {
                 setOpenDropdown(null);
               }}
