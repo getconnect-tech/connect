@@ -161,7 +161,7 @@ export const updateWorkspaceDetails = async (payload: {
  * @desc Make admin
  * @param {*} payload
  */
-export const makeAdmin = async (payload: MakeAdmin) => {
+export const updateRole = async (payload: MakeAdmin) => {
   try {
     workspaceStore.setLoading(true);
     const result = await axios.put(

@@ -17,8 +17,8 @@ import Button from '@/components/button/button';
 import MemberCard from '@/components/memberCard/memberCard';
 import {
   getWorkspaceList,
-  makeAdmin,
   removeMemberFromWorkspace,
+  updateRole,
 } from '@/services/clientSide/workspaceServices';
 import { useStores } from '@/stores';
 import InviteMemberModal from '@/components/inviteMemberModal/inviteMemberModal';
@@ -38,11 +38,14 @@ const Members = () => {
   }, []);
 
   const handleClick = async (hoveredItem: string | null, userId: string) => {
-    if (hoveredItem === 'Make Admin') {
+    if (hoveredItem === 'Make Admin' || hoveredItem === 'Remove Admin') {
       try {
         workspaceStore.setLoading(true);
         if (userId) {
-          const result = await makeAdmin({ userId, role: UserRole.ADMIN });
+          const result =
+            hoveredItem === 'Make Admin'
+              ? await updateRole({ userId, role: UserRole.ADMIN })
+              : await updateRole({ userId, role: UserRole.MEMBER });
           if (result) {
             getWorkspaceMember();
           }

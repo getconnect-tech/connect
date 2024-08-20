@@ -3,7 +3,7 @@ import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
 import { CardDiv, LeftDiv, NameDiv, RightDiv } from './style';
-import { capitalizeString } from '@/helpers/common';
+import { capitalizeString, isEmpty } from '@/helpers/common';
 
 interface Props {
   userId: string;
@@ -24,9 +24,11 @@ function MemberCard({
   src,
 }: Props) {
   const [openDropdown, setOpenDropdown] = useState(false);
-
   const dropDownItem = [
-    { name: 'Make Admin', icon: 'admin-icon' },
+    {
+      name: isEmpty(designation) ? 'Make Admin' : 'Remove Admin',
+      icon: 'admin-icon',
+    },
     { name: 'Delete', icon: 'delete-icon', isDelete: true },
   ];
 
