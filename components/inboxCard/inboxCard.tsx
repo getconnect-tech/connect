@@ -85,7 +85,7 @@ export default function InboxCard({
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
     ...(currentWorkspace?.users?.map((user) => ({
       name: user.display_name || '',
-      src: '',
+      src: user.profile_url || '',
       isName: true,
       user_id: user.id,
     })) || []),
@@ -221,7 +221,7 @@ export default function InboxCard({
                   : 'submenu-downwards'
               }
               onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
-              src=''
+              src={assignedUser?.profile_url || ''}
             />
           </div>
           <TagDiv className='tagDiv'>
