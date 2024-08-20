@@ -52,7 +52,7 @@ export default function CustomContextMenu(props: Props) {
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
     ...(currentWorkspace?.users?.map((user) => ({
       name: user.display_name || '',
-      src: '',
+      src: user.profile_url || '',
       isName: true,
       user_id: user.id,
     })) || []),

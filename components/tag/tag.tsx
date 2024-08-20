@@ -23,6 +23,7 @@ export default function Tag({
   title,
   ref,
   style,
+  src,
 }: Props) {
   return (
     //apply className while open drop down
@@ -34,7 +35,7 @@ export default function Tag({
       style={style}
     >
       {isName ? (
-        <Avatar name={title} imgSrc='' size={20} />
+        <Avatar name={title} imgSrc={src || ''} size={20} />
       ) : (
         <SVGIcon
           name={iconName}
