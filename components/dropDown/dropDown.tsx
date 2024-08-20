@@ -134,7 +134,7 @@ const DropDown = ({
         items?.filter((item) =>
           item?.name?.toLowerCase().includes(value?.toLowerCase()),
         ) || [];
-      setSearchResult(result.length > 0 || !isEmpty(value) ? result : items);
+      setSearchResult(result);
     },
     [items],
   );
@@ -147,7 +147,6 @@ const DropDown = ({
       timeoutRef.current = setTimeout(() => {
         searchQuery(value);
       }, 300);
-
       if (isEmpty(value)) {
         setSearchResult(items);
       }
@@ -180,7 +179,7 @@ const DropDown = ({
         </SearchDiv>
       )}
       <ItemMainDiv>
-        {(searchResult.length > 0 ? searchResult : items).map((item, index) => (
+        {searchResult.map((item, index) => (
           <ItemDiv
             key={index}
             isSelected={selectedItems[item.name]}
