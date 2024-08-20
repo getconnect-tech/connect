@@ -24,7 +24,7 @@ export const RightDiv = styled.div`
   .empty-state {
     position: absolute;
     bottom: 20%;
-    left: 50%;
+    left: 53%;
   }
 `;
 
