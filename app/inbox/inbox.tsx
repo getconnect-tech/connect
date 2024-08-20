@@ -64,45 +64,47 @@ function Inbox() {
             </TabDiv>
           </HeaderDiv>
         </TopDiv>
-        <BottomDiv>
-          {loading && (!ticketList || ticketList?.length === 0) && (
-            <InboxLoading />
-          )}
-          {!loading && (!ticketList || ticketList?.length === 0) && (
-            <EmptyState
-              iconName='inbox-icon'
-              iconSize='20'
-              iconViewBox='0 0 12 12'
-              title='Your inbox is empty now.'
-              // eslint-disable-next-line max-len
-              description='This is where you will receive notifications for all types of tickets. Enjoy your clutter-free inbox!'
-            />
-          )}
-          {ticketList?.length > 0 &&
-            ticketList.map((ticket, index) => (
-              <>
-                <CustomContextMenu
-                  key={ticket.id}
-                  ticketDetail={ticket}
-                  ticketIndex={index}
-                >
-                  <div>
-                    <InboxCard
-                      ticketDetail={ticket}
-                      description='Complete your registration...'
-                      showDotIcon={true}
-                      src=''
-                      currentOpenDropdown={currentOpenDropdown}
-                      setCurrentOpenDropdown={setCurrentOpenDropdown}
-                      dropdownIdentifier={`card-${ticket.id}`}
-                      loadData={loadData}
-                      ticketIndex={index}
-                    />
-                  </div>
-                </CustomContextMenu>
-              </>
-            ))}
-        </BottomDiv>
+        <div style={{ padding: '0 20px' }}>
+          <BottomDiv>
+            {loading && (!ticketList || ticketList?.length === 0) && (
+              <InboxLoading />
+            )}
+            {!loading && (!ticketList || ticketList?.length === 0) && (
+              <EmptyState
+                iconName='inbox-icon'
+                iconSize='20'
+                iconViewBox='0 0 12 12'
+                title='Your inbox is empty now.'
+                // eslint-disable-next-line max-len
+                description='This is where you will receive notifications for all types of tickets. Enjoy your clutter-free inbox!'
+              />
+            )}
+            {ticketList?.length > 0 &&
+              ticketList.map((ticket, index) => (
+                <>
+                  <CustomContextMenu
+                    key={ticket.id}
+                    ticketDetail={ticket}
+                    ticketIndex={index}
+                  >
+                    <div>
+                      <InboxCard
+                        ticketDetail={ticket}
+                        description='Complete your registration...'
+                        showDotIcon={true}
+                        src=''
+                        currentOpenDropdown={currentOpenDropdown}
+                        setCurrentOpenDropdown={setCurrentOpenDropdown}
+                        dropdownIdentifier={`card-${ticket.id}`}
+                        loadData={loadData}
+                        ticketIndex={index}
+                      />
+                    </div>
+                  </CustomContextMenu>
+                </>
+              ))}
+          </BottomDiv>
+        </div>
       </MainDiv>
     </Main>
   );
