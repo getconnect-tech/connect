@@ -25,6 +25,7 @@ function Labels() {
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
+
   const onOpenLabelModal = useCallback(() => {
     setLabelModal(true);
   }, []);
@@ -32,11 +33,13 @@ function Labels() {
   const onCloseLabelModal = useCallback(() => {
     setLabelModal(false);
   }, []);
+
   const labelData = [
     { id: 1, label: 'Bug', iconName: 'bug-icon' },
     { id: 2, label: 'Questions', iconName: 'question-icon' },
     { id: 3, label: 'Feedback', iconName: 'feedback-icon' },
   ];
+
   return (
     <>
       <Main>
@@ -47,7 +50,9 @@ function Labels() {
                 <Title>Labels</Title>
                 <Description>Manage workspace labels</Description>
               </LeftDiv>
-              <Button title='Invite Member' onClick={onOpenLabelModal} />
+              {!isEmpty(labelData) && (
+                <Button title='New Label' onClick={onOpenLabelModal} />
+              )}
             </Head>
             {isEmpty(labelData) ? (
               <EmptyLabelDiv>
@@ -61,9 +66,9 @@ function Labels() {
                 </IconDiv>
                 <Content>
                   <h2>No Labels created yet</h2>
-                  <p>Create Labels to help organise tickets in your team.</p>
+                  <p>Create Labels to help organize tickets in your team.</p>
+                  <Button title='New Label' onClick={onOpenLabelModal} />
                 </Content>
-                <Button title='New Label' />
               </EmptyLabelDiv>
             ) : (
               <MainCardDiv>
