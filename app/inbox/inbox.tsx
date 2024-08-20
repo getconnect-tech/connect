@@ -80,23 +80,27 @@ function Inbox() {
           )}
           {ticketList?.length > 0 &&
             ticketList.map((ticket, index) => (
-              <CustomContextMenu
-                key={ticket.id}
-                ticketDetail={ticket}
-                ticketIndex={index}
-              >
-                <InboxCard
+              <>
+                <CustomContextMenu
+                  key={ticket.id}
                   ticketDetail={ticket}
-                  description='Complete your registration...'
-                  showDotIcon={true}
-                  src=''
-                  currentOpenDropdown={currentOpenDropdown}
-                  setCurrentOpenDropdown={setCurrentOpenDropdown}
-                  dropdownIdentifier={`card-${ticket.id}`}
-                  loadData={loadData}
                   ticketIndex={index}
-                />
-              </CustomContextMenu>
+                >
+                  <div>
+                    <InboxCard
+                      ticketDetail={ticket}
+                      description='Complete your registration...'
+                      showDotIcon={true}
+                      src=''
+                      currentOpenDropdown={currentOpenDropdown}
+                      setCurrentOpenDropdown={setCurrentOpenDropdown}
+                      dropdownIdentifier={`card-${ticket.id}`}
+                      loadData={loadData}
+                      ticketIndex={index}
+                    />
+                  </div>
+                </CustomContextMenu>
+              </>
             ))}
         </BottomDiv>
       </MainDiv>
