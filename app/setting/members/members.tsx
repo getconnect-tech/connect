@@ -71,6 +71,7 @@ const Members = () => {
                   currentOpenDropdown={currentOpenDropdown}
                   setOpenDropdown={setCurrentOpenDropdown}
                   dropdownIdentifier={`card-${member.id}`}
+                  userId={''}
                 />
               ))}
             </MainCardDiv>
