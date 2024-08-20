@@ -185,3 +185,10 @@ export const EmailCardDiv = styled.div`
     background: ${colors.border_hover};
   }
 `;
+
+export const EmptyStateDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
+`;
