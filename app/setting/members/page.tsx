@@ -103,6 +103,17 @@ const Members = () => {
                   designation={member.role !== 'MEMBER' ? member.role : ''}
                 />
               ))}
+              {currentWorkspace?.invited_users?.map((member) => (
+                <MemberCard
+                  key={member.id}
+                  userId={member.id}
+                  handleClick={handleClick}
+                  name={member.name || ''}
+                  email={member.email}
+                  src={''}
+                  designation={'Pending'}
+                />
+              ))}
             </MainCardDiv>
           </RightDiv>
         </MainDiv>
