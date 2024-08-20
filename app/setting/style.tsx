@@ -21,6 +21,11 @@ export const RightDiv = styled.div`
   max-width: 662px;
   width: 100%;
   gap: 6px;
+  .empty-state {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+  }
 `;
 
 export const Head = styled.div`
