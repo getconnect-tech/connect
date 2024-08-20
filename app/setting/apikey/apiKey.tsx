@@ -67,7 +67,7 @@ function ApiKey() {
               <Button title='Create Key' onClick={onOpenKeyModal} />
             </Head>
             {loading && <ApiKeyLoading />}
-            {!loading && !isEmpty(apiKeys) && (
+            {!loading && isEmpty(apiKeys) && (
               <EmptyState
                 iconName='empty-apikey-icon'
                 iconSize='20'
@@ -77,7 +77,7 @@ function ApiKey() {
                 className='empty-state'
               />
             )}
-            {!loading && isEmpty(apiKeys) && (
+            {!loading && !isEmpty(apiKeys) && (
               <MainCardDiv>
                 {apiKeys.map((apiKey, index) => (
                   <ApiKeyCard
