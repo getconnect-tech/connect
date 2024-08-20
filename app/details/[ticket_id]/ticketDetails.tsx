@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
-import { PriorityLevels } from '@prisma/client';
+import { PriorityLevels, TicketStatus } from '@prisma/client';
 import {
   ActivityDiv,
   BottomDiv,
@@ -205,6 +205,25 @@ function TicketDetails(props: Props) {
     (user: { id: string | null | undefined }) => user.id === assigned_to,
   );
 
+  /*
+   * @desc Close ticket
+   */
+  const handleCloseTicket = useCallback(async () => {
+    const payload = { status: TicketStatus.CLOSED };
+    try {
+      if (ticketDetails?.id) {
+        const updatedTicketDetails = {
+          ...ticketDetails,
+          status: TicketStatus.CLOSED,
+        };
+        ticketStore.setTicketDetails(updatedTicketDetails);
+        await updateTicketDetails(ticketDetails?.id, payload);
+      }
+    } catch (e) {
+      console.log('Error : ', e);
+    }
+  }, [ticketDetails]);
+
   return (
     <Main>
       <MainDiv>
@@ -277,7 +296,7 @@ function TicketDetails(props: Props) {
                 title='Close'
                 iconName='close-icon'
                 isActive={false}
-                onClick={() => {}}
+                onClick={handleCloseTicket}
                 isName={false}
               />
               <DropDownWithTag
