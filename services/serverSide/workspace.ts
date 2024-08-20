@@ -100,8 +100,10 @@ export const removeUserFromWorkspace = async (
   workspaceId: string,
   userId: string,
 ) => {
-  const res = await prisma.userWorkspaces.deleteMany({
-    where: { workspace_id: workspaceId, user_id: userId },
+  const res = await prisma.userWorkspaces.delete({
+    where: {
+      user_workspace_id: { user_id: userId, workspace_id: workspaceId },
+    },
   });
   return res;
 };
@@ -117,16 +119,14 @@ export const updateUser = async ({
 }) => {
   removeNullUndefined(userUpdates);
 
-  await prisma.userWorkspaces.updateMany({
-    where: { workspace_id: workspaceId, user_id: userId },
+  const updatedRelation = await prisma.userWorkspaces.update({
+    where: {
+      user_workspace_id: { workspace_id: workspaceId, user_id: userId },
+    },
     data: userUpdates,
   });
 
-  const result = await prisma.userWorkspaces.findFirst({
-    where: { workspace_id: workspaceId, user_id: userId },
-  });
-
-  return result;
+  return updatedRelation;
 };
 
 export const getUserWorkspaces = async (userId: string) => {

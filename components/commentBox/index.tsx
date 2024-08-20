@@ -45,8 +45,9 @@ function RichTextBox(this: any, props: any) {
     isInlineToolbar = true,
     isScrollbarnone = false,
     isEveryoneMentionEnable = false,
+    isInternalDiscussion,
   } = props;
-  const fieldsData = { text: 'name' };
+  const fieldsData = { text: 'display_name' };
   const mentionRef = useRef<MentionComponent>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [uploadedFiles, setUploadedFiles] = useState<any>([]);
@@ -59,8 +60,8 @@ function RichTextBox(this: any, props: any) {
   }, [rteObj]);
 
   function itemTemplate(data: {
-    profile_photo: string;
-    name: string;
+    profile_url: string;
+    display_name: string;
     id: string;
   }) {
     return (
@@ -69,19 +70,23 @@ function RichTextBox(this: any, props: any) {
           {data?.id === 'everyone' ? (
             <img src={''} alt='emptyprofile' width={18} height={18} />
           ) : (
-            <Avatar imgSrc={data.profile_photo} size={18} name={data?.name} />
+            <Avatar
+              imgSrc={data.profile_url}
+              size={18}
+              name={data?.display_name}
+            />
           )}
-          <p>{data.name}</p>
+          <p>{data.display_name}</p>
         </MentionList>
       </MentionTable>
     );
   }
 
-  function displayTemplate(data: { name: string; id: string }) {
+  function displayTemplate(data: { display_name: string; id: string }) {
     return (
       <React.Fragment>
         <a className='display-template' title={data.id}>
-          @{data.name}
+          @{data.display_name}
         </a>
       </React.Fragment>
     );
@@ -370,7 +375,7 @@ function RichTextBox(this: any, props: any) {
   };
 
   const usersWithAll = [
-    { id: 'everyone', name: 'Everyone' },
+    { id: 'everyone', display_name: 'Everyone' },
     ...(props?.users || []),
   ];
 
@@ -418,20 +423,22 @@ function RichTextBox(this: any, props: any) {
                       ]}
                     />
                   </RichTextEditorComponent>
-                  <Mentioncomponent
-                    ref={mentionRef}
-                    id='mentionEditor'
-                    target='#inlineRTE_rte-edit-view'
-                    showMentionChar={false}
-                    allowSpaces={true}
-                    dataSource={
-                      isEveryoneMentionEnable ? usersWithAll : props?.users
-                    }
-                    fields={fieldsData}
-                    popupHeight='200px'
-                    itemTemplate={itemTemplate}
-                    displayTemplate={displayTemplate}
-                  ></Mentioncomponent>
+                  {isInternalDiscussion && (
+                    <Mentioncomponent
+                      ref={mentionRef}
+                      id='mentionEditor'
+                      target='#inlineRTE_rte-edit-view'
+                      showMentionChar={false}
+                      allowSpaces={true}
+                      dataSource={
+                        isEveryoneMentionEnable ? usersWithAll : props?.users
+                      }
+                      fields={fieldsData}
+                      popupHeight='200px'
+                      itemTemplate={itemTemplate}
+                      displayTemplate={displayTemplate}
+                    ></Mentioncomponent>
+                  )}
                 </>
               )}
               {disable && <DummyDiv></DummyDiv>}
