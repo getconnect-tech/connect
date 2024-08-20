@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { action, makeObservable, observable } from 'mobx';
-import { InviteModal, Workspace } from '@/utils/dataTypes';
+import { CurrentWorkspace, InviteModal } from '@/utils/dataTypes';
 
 class WorkspaceStore {
   loading = false;
-  currentWorkspace: Workspace | null = null;
+  currentWorkspace: CurrentWorkspace | null = null;
   inviteModalInput: InviteModal = { name: '', email: '' };
 
   constructor() {
@@ -30,7 +30,7 @@ class WorkspaceStore {
     this.loading = value;
   }
 
-  setCurrentWorkspace(value: Workspace) {
+  setCurrentWorkspace(value: CurrentWorkspace) {
     axios.defaults.headers.common['workspace_id'] = value?.id;
     this.currentWorkspace = value;
   }

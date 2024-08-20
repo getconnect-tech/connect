@@ -1,8 +1,8 @@
 import { handleApiError } from '@/helpers/errorHandler';
-import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
+import withAuth from '@/middlewares/withAuth';
 import { getWorkspaceById } from '@/services/serverSide/workspace';
 
-export const GET = withWorkspaceAuth(async (req, { workspaceId }) => {
+export const GET = withAuth(async (_req, { workspaceId }) => {
   try {
     const workspace = await getWorkspaceById(workspaceId);
 

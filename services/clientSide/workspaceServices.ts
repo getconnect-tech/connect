@@ -4,7 +4,7 @@ import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { getAPIErrorMessage, isEmpty } from '@/helpers/common';
-import { Workspace } from '@/utils/dataTypes';
+import { CurrentWorkspace } from '@/utils/dataTypes';
 import { MakeAdmin } from '@/utils/appTypes';
 
 /**
@@ -31,7 +31,7 @@ export const createWorkspace = async (
       `${NEXT_PUBLIC_API_URL}/workspaces`,
       payload,
     );
-    const newWorkspace = data as Workspace;
+    const newWorkspace = data as CurrentWorkspace;
 
     workspaceStore.setCurrentWorkspace(newWorkspace);
 
@@ -98,8 +98,10 @@ export const getWorkspaceList = async () => {
     const response = await axios.get(`${NEXT_PUBLIC_API_URL}/workspaces`);
     const { data } = response;
     // set current workspace as first workspace get in list
-    workspaceStore.setCurrentWorkspace(data[0]);
-    return data;
+    if (data?.length > 0) {
+      await getWorkspaceById(data[0]?.id);
+      return data;
+    }
   } catch (err: any) {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return null;
@@ -119,7 +121,10 @@ export const getWorkspaceById = async (workspaceId: string) => {
       `${NEXT_PUBLIC_API_URL}/workspaces/${workspaceId}`,
     );
     const { data } = response;
-    return data;
+    if (data) {
+      workspaceStore.setCurrentWorkspace(data);
+      return data;
+    }
   } catch (err: any) {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return null;

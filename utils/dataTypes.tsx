@@ -1,4 +1,7 @@
-import { getUserWorkspaces } from '@/services/serverSide/workspace';
+import {
+  getUserWorkspaces,
+  getWorkspaceById,
+} from '@/services/serverSide/workspace';
 
 export interface InboundEmailPayload {
   FromName: string;
@@ -69,3 +72,7 @@ export interface InviteModal {
 export type Workspace = NonNullable<
   Awaited<ReturnType<typeof getUserWorkspaces>>
 >[0];
+
+export type CurrentWorkspace = NonNullable<
+  Awaited<ReturnType<typeof getWorkspaceById>>
+>;
