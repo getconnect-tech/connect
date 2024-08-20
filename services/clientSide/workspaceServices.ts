@@ -4,7 +4,7 @@ import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { getAPIErrorMessage, isEmpty } from '@/helpers/common';
-import { Workspace } from '@/utils/dataTypes';
+import { CurrentWorkspace } from '@/utils/dataTypes';
 import { MakeAdmin } from '@/utils/appTypes';
 
 /**
@@ -31,7 +31,7 @@ export const createWorkspace = async (
       `${NEXT_PUBLIC_API_URL}/workspaces`,
       payload,
     );
-    const newWorkspace = data as Workspace;
+    const newWorkspace = data as CurrentWorkspace;
 
     workspaceStore.setCurrentWorkspace(newWorkspace);
 
