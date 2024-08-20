@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react';
+import { UserRole } from '@prisma/client';
 import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
 import { CardDiv, LeftDiv, NameDiv, RightDiv } from './style';
-import { capitalizeString, isEmpty } from '@/helpers/common';
+import { capitalizeString } from '@/helpers/common';
 
 interface Props {
   userId: string;
@@ -24,13 +25,28 @@ function MemberCard({
   src,
 }: Props) {
   const [openDropdown, setOpenDropdown] = useState(false);
-  const dropDownItem = [
-    {
-      name: isEmpty(designation) ? 'Make Admin' : 'Remove Admin',
-      icon: 'admin-icon',
-    },
-    { name: 'Delete', icon: 'delete-icon', isDelete: true },
-  ];
+  let dropDownItem;
+  if (designation === UserRole.OWNER) {
+    dropDownItem = [];
+  }
+  if (designation === UserRole.MEMBER) {
+    dropDownItem = [
+      {
+        name: 'Make Admin',
+        icon: 'admin-icon',
+      },
+      { name: 'Delete', icon: 'delete-icon', isDelete: true },
+    ];
+  }
+  if (designation === UserRole.ADMIN) {
+    dropDownItem = [
+      {
+        name: 'Remove Admin',
+        icon: 'admin-icon',
+      },
+      { name: 'Delete', icon: 'delete-icon', isDelete: true },
+    ];
+  }
 
   const handleClickIcon = useCallback(() => {
     setOpenDropdown(!openDropdown);
@@ -46,7 +62,9 @@ function MemberCard({
         </NameDiv>
       </LeftDiv>
       <RightDiv>
-        {designation && <h6>{capitalizeString(designation)}</h6>}
+        {designation && designation !== UserRole.MEMBER && (
+          <h6>{capitalizeString(designation)}</h6>
+        )}
         <div style={{ position: 'relative' }} className='tag-div'>
           <Icon
             onClick={handleClickIcon}
@@ -57,7 +75,7 @@ function MemberCard({
           />
           {openDropdown && (
             <DropDown
-              items={dropDownItem}
+              items={dropDownItem || []}
               iconSize={'12'}
               iconViewBox={'0 0 12 12'}
               userId={userId}

@@ -103,7 +103,7 @@ const Members = () => {
                   name={member.display_name || ''}
                   email={member.email}
                   src={member.profile_url || ''}
-                  designation={member.role !== 'MEMBER' ? member.role : ''}
+                  designation={member.role}
                 />
               ))}
               {currentWorkspace?.invited_users?.map((member) => (
@@ -114,7 +114,7 @@ const Members = () => {
                   name={member.name || ''}
                   email={member.email}
                   src={''}
-                  designation={'Pending'}
+                  designation={'PENDING'}
                 />
               ))}
             </MainCardDiv>
