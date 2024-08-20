@@ -1,11 +1,8 @@
 'use client';
 import React, { useCallback, useState } from 'react';
 import {
-  Content,
   Description,
-  EmptyLabelDiv,
   Head,
-  IconDiv,
   LeftDiv,
   Main,
   MainCardDiv,
@@ -18,7 +15,7 @@ import Button from '@/components/button/button';
 import Modal from '@/components/modal/modal';
 import LabelModal from '@/components/labelModal/labelModal';
 import { isEmpty } from '@/helpers/common';
-import SVGIcon from '@/assets/icons/SVGIcon';
+import EmptyState from '@/components/emptyState/emptyState';
 
 function Labels() {
   const [labelModal, setLabelModal] = useState(false);
@@ -54,22 +51,19 @@ function Labels() {
                 <Button title='New Label' onClick={onOpenLabelModal} />
               )}
             </Head>
-            {isEmpty(labelData) ? (
-              <EmptyLabelDiv>
-                <IconDiv>
-                  <SVGIcon
-                    name='label-icon'
-                    width='20'
-                    height='20'
-                    viewBox='0 0 20 20'
-                  />
-                </IconDiv>
-                <Content>
-                  <h2>No Labels created yet</h2>
-                  <p>Create Labels to help organize tickets in your team.</p>
-                  <Button title='New Label' onClick={onOpenLabelModal} />
-                </Content>
-              </EmptyLabelDiv>
+            {!isEmpty(labelData) ? (
+              <EmptyState
+                iconName={'label-icon'}
+                iconSize={'20'}
+                iconViewBox={'0 0 20 20'}
+                title={'No Labels created yet'}
+                description={
+                  'Create Labels to help organize tickets in your team.'
+                }
+                buttonTitle='New Label'
+                onClick={onOpenLabelModal}
+                className='empty-state'
+              />
             ) : (
               <MainCardDiv>
                 {labelData.map((label) => (
