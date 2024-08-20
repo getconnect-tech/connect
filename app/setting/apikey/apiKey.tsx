@@ -64,7 +64,9 @@ function ApiKey() {
               <LeftDiv>
                 <Title>API keys</Title>
               </LeftDiv>
-              <Button title='Create Key' onClick={onOpenKeyModal} />
+              {!isEmpty(apiKeys) && (
+                <Button title='Create Key' onClick={onOpenKeyModal} />
+              )}
             </Head>
             {loading && <ApiKeyLoading />}
             {!loading && isEmpty(apiKeys) && (
@@ -75,6 +77,7 @@ function ApiKey() {
                 title='No API keys created yet'
                 buttonTitle='Create Key'
                 className='empty-state'
+                onClick={onOpenKeyModal}
               />
             )}
             {!loading && !isEmpty(apiKeys) && (
