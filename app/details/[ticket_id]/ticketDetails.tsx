@@ -141,7 +141,7 @@ function TicketDetails(props: Props) {
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
     ...(currentWorkspace?.users?.map((user) => ({
       name: user.display_name || '',
-      src: '',
+      src: user.profile_url || '',
       isName: true,
       user_id: user.id,
     })) || []),
@@ -269,7 +269,7 @@ function TicketDetails(props: Props) {
                 isName={true}
                 iconSize='20'
                 iconViewBox='0 0 20 20'
-                src='https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
+                src={assignedUser?.profile_url || ''}
               />
             </ButtonDiv>
             <ButtonDiv>
