@@ -601,6 +601,22 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
+    case 'label-plus-icon':
+      return (
+        <>
+          <g clipPath='url(#a)'>
+            <path
+              fill='#fff'
+              d='M9.167 4.667H5.833V1.333a.833.833 0 0 0-1.666 0v3.334H.833a.833.833 0 1 0 0 1.666h3.334v3.334a.833.833 0 0 0 1.666 0V6.333h3.334a.833.833 0 0 0 0-1.666Z'
+            />
+          </g>
+          <defs>
+            <clipPath id='a'>
+              <path fill='#fff' d='M0 .5h10v10H0z' />
+            </clipPath>
+          </defs>
+        </>
+      );
   }
 };
 

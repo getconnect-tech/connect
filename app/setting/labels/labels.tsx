@@ -48,10 +48,16 @@ function Labels() {
                 <Description>Manage workspace labels</Description>
               </LeftDiv>
               {!isEmpty(labelData) && (
-                <Button title='New Label' onClick={onOpenLabelModal} />
+                <Button
+                  title='New Label'
+                  onClick={onOpenLabelModal}
+                  iconName='label-plus-icon'
+                  iconSize='10'
+                  iconViewBox='0 0 10 10'
+                />
               )}
             </Head>
-            {!isEmpty(labelData) ? (
+            {isEmpty(labelData) ? (
               <EmptyState
                 iconName={'label-icon'}
                 iconSize={'20'}
@@ -63,6 +69,9 @@ function Labels() {
                 buttonTitle='New Label'
                 onClick={onOpenLabelModal}
                 className='empty-state'
+                buttonIconName='label-plus-icon'
+                buttonIconSize='10'
+                buttonIconViewBox='0 0 10 10'
               />
             ) : (
               <MainCardDiv>
