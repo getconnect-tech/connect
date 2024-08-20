@@ -98,8 +98,10 @@ export const getWorkspaceList = async () => {
     const response = await axios.get(`${NEXT_PUBLIC_API_URL}/workspaces`);
     const { data } = response;
     // set current workspace as first workspace get in list
-    workspaceStore.setCurrentWorkspace(data[0]);
-    return data;
+    if (data?.length > 0) {
+      await getWorkspaceById(data[0]?.id);
+      return data;
+    }
   } catch (err: any) {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return null;
@@ -119,7 +121,10 @@ export const getWorkspaceById = async (workspaceId: string) => {
       `${NEXT_PUBLIC_API_URL}/workspaces/${workspaceId}`,
     );
     const { data } = response;
-    return data;
+    if (data) {
+      workspaceStore.setCurrentWorkspace(data);
+      return data;
+    }
   } catch (err: any) {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return null;
