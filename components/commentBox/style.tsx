@@ -48,21 +48,21 @@ const TextMainDiv = styled.div<Props>`
   h6 {
     background-color: transparent !important;
     color: ${colors.text} !important;
-    max-width: 600px;
+    max-width: 644px;
     width: 100%;
   }
   p {
     margin: 0;
     color: ${colors.text} !important;
     background-color: transparent !important;
-    max-width: 600px;
+    max-width: 644px;
     width: 100%;
   }
   ul,
   ol {
     color: ${colors.text} !important;
     background-color: transparent !important;
-    max-width: 600px;
+    max-width: 644px;
     width: 100%;
     li {
       ::marker {
@@ -74,12 +74,12 @@ const TextMainDiv = styled.div<Props>`
   p > span {
     color: ${colors.text} !important;
     background-color: transparent !important;
-    max-width: 600px;
+    max-width: 644px;
     width: 100%;
   }
   a {
     color: ${colors.text};
-    max-width: 600px;
+    max-width: 644px;
     width: 100%;
   }
   #inlineRTE_rte-edit-view_options {

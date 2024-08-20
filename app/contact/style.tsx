@@ -18,6 +18,7 @@ const TopDiv = styled.div`
   background-color: ${colors.bg_surface};
   z-index: 999;
   margin-bottom: 12px;
+  padding: 0 20px;
 `;
 
 const BottomDiv = styled.div`
