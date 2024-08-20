@@ -26,6 +26,7 @@ import Modal from '@/components/modal/modal';
 
 const Members = () => {
   const [inviteModal, setInviteModal] = useState(false);
+  const [updateRole, setUpdateRole] = useState(false);
   const { workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
 
@@ -40,7 +41,14 @@ const Members = () => {
   const handleClick = async (hoveredItem: string | null, userId: string) => {
     if (hoveredItem === 'Make Admin') {
       try {
-        if (userId) await makeAdmin({ userId, role: UserRole.ADMIN });
+        workspaceStore.setLoading(true);
+        if (userId) {
+          const result = await makeAdmin({ userId, role: UserRole.ADMIN });
+          if (result) {
+            setUpdateRole(!updateRole);
+          }
+        }
+        workspaceStore.setLoading(false);
       } catch (error) {
         console.log('error', error);
       }
@@ -68,7 +76,7 @@ const Members = () => {
 
   useEffect(() => {
     getWorkspaceMember();
-  }, [inviteModal]);
+  }, [inviteModal, updateRole]);
 
   return (
     <>
