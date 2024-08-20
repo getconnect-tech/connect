@@ -17,12 +17,12 @@ const TopDiv = styled.div`
   top: 0;
   background-color: ${colors.bg_surface};
   z-index: 999;
+  padding: 0 20px;
 `;
 
 const BottomDiv = styled.div`
   max-width: 662px;
   margin: 0 auto;
-  padding: 0 20px;
 `;
 
 const MainDiv = styled.div`
@@ -35,7 +35,7 @@ const HeaderDiv = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 24px 20px 6px;
+  padding: 24px 0 6px;
   max-width: 662px;
   margin: 0 auto;
 `;
