@@ -1,12 +1,37 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Input from '../input/input';
 import Icon from '../icon/icon';
 import { Icons, MainDiv, SearchDiv } from './style';
 import { labelIcons } from '@/helpers/raw';
 
-function LabelIconDropdown() {
+interface Props {
+  onClose?: () => void;
+}
+function LabelIconDropdown({ onClose }: Props) {
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(true);
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+        if (onClose) {
+          onClose();
+        }
+      }
+    }
+
+    // eslint-disable-next-line no-undef
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      // eslint-disable-next-line no-undef
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [dropdownRef, onClose]);
+
+  if (!isOpen) return null;
+
   return (
-    <MainDiv>
+    <MainDiv ref={dropdownRef}>
       <SearchDiv>
         <Input
           placeholder='Search'
@@ -22,7 +47,9 @@ function LabelIconDropdown() {
         {labelIcons.map((icon, index) => (
           <Icon
             key={index}
-            onClick={() => {}}
+            onClick={() => {
+              setIsOpen(false);
+            }}
             iconName={icon.iconName}
             iconSize={'12'}
             iconViewBox={'0 0 12 12'}
