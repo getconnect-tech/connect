@@ -23,7 +23,10 @@ import { labelItem, priorityItem } from '@/helpers/raw';
 import { capitalizeString } from '@/helpers/common';
 import { useStores } from '@/stores';
 import { TicketDetailsInterface } from '@/utils/appTypes';
-import { updateTicketDetails } from '@/services/clientSide/ticketServices';
+import {
+  updateTicketDetails,
+  updateTicketPriority,
+} from '@/services/clientSide/ticketServices';
 import SVGIcon from '@/assets/icons/SVGIcon';
 
 interface Props {
@@ -108,7 +111,7 @@ export default function InboxCard({
           priority: item?.value,
         };
         ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
-        await updateTicketDetails(ticketDetail?.id, payload);
+        await updateTicketPriority(ticketDetail?.id, payload);
       } catch (e) {
         console.log('Error : ', e);
       }

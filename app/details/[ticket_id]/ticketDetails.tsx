@@ -34,6 +34,7 @@ import { useStores } from '@/stores';
 import {
   getTicketDetails,
   updateTicketDetails,
+  updateTicketPriority,
 } from '@/services/clientSide/ticketServices';
 import { isEmpty } from '@/helpers/common';
 import Icon from '@/components/icon/icon';
@@ -166,7 +167,7 @@ function TicketDetails(props: Props) {
             priority: item?.value,
           };
           ticketStore.setTicketDetails(updatedTicketDetails);
-          await updateTicketDetails(ticketDetails?.id, payload);
+          await updateTicketPriority(ticketDetails?.id, payload);
         }
       } catch (e) {
         console.log('Error : ', e);
