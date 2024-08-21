@@ -18,6 +18,7 @@ import {
   SuccessfullModalDiv,
   IllustrationDiv,
   Content,
+  ModalContant,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 interface Props {
@@ -64,45 +65,47 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
               You can also email us at support@connect.com
             </ModalDescription>
           </ModalHeader>
-          <RichTextBox
-            className='richtext'
-            placeholder='How can we help you?'
-          />
-          <input
-            type='file'
-            ref={fileInputRef}
-            style={{ display: 'none' }}
-            onChange={handleFileChange}
-            multiple={true}
-          />
-          {files.length > 0 && (
-            <FileCardContainer>
-              {files.map((file, index) => (
-                <FileCard key={index}>
-                  <IconDiv>
-                    <SVGIcon
-                      name='file-icon'
-                      width='16'
-                      height='16'
-                      viewBox='0 0 16 16'
-                    />
-                  </IconDiv>
-                  <FileCardRight>
-                    <h2>{file.name}</h2>
-                    <p>{(file.size / 1024).toFixed(2)} KB</p>
-                  </FileCardRight>
-                  <RemoveIcon onClick={() => handleRemoveFile(index)}>
-                    <SVGIcon
-                      name='cross-icon'
-                      width='8'
-                      height='8'
-                      viewBox='0 0 16 16'
-                    />
-                  </RemoveIcon>
-                </FileCard>
-              ))}
-            </FileCardContainer>
-          )}
+          <ModalContant>
+            <RichTextBox
+              className='richtext'
+              placeholder='How can we help you?'
+            />
+            <input
+              type='file'
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={handleFileChange}
+              multiple={true}
+            />
+            {files.length > 0 && (
+              <FileCardContainer>
+                {files.map((file, index) => (
+                  <FileCard key={index}>
+                    <IconDiv>
+                      <SVGIcon
+                        name='file-icon'
+                        width='16'
+                        height='16'
+                        viewBox='0 0 16 16'
+                      />
+                    </IconDiv>
+                    <FileCardRight>
+                      <h2>{file.name}</h2>
+                      <p>{(file.size / 1024).toFixed(2)} KB</p>
+                    </FileCardRight>
+                    <RemoveIcon onClick={() => handleRemoveFile(index)}>
+                      <SVGIcon
+                        name='cross-icon'
+                        width='8'
+                        height='8'
+                        viewBox='0 0 16 16'
+                      />
+                    </RemoveIcon>
+                  </FileCard>
+                ))}
+              </FileCardContainer>
+            )}
+          </ModalContant>
           <ModalBottom>
             <Icon
               iconName='attach-file-icon'

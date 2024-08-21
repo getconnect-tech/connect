@@ -7,7 +7,6 @@ export const ModalDiv = styled.div`
   width: 100%;
   border-radius: 12px;
   min-width: 500px;
-  max-height: 437px;
   min-height: 437px;
   background-color: ${colors.bg_white};
   position: relative;
@@ -167,4 +166,9 @@ export const Content = styled.div`
     ${Typography.body_md_regular}
     color: ${colors.text_text_secondary};
   }
+`;
+
+export const ModalContant = styled.div`
+  overflow: auto;
+    max-height: 320px;
 `;
