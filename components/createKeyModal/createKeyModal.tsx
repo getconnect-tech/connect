@@ -17,7 +17,6 @@ function CreateKeyModal({ onClose }: Props) {
       firstPlaceholder='Enter your key name'
       buttonCancel='Cancel'
       span='(This is just for your reference)'
-      
     />
   );
 }
