@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
-import { TeamSize } from '@prisma/client';
+import { TeamSize, UserRole } from '@prisma/client';
 import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { getAPIErrorMessage, isEmpty } from '@/helpers/common';
 import { CurrentWorkspace } from '@/utils/dataTypes';
-import { MakeAdmin } from '@/utils/appTypes';
+import { UpdateRole } from '@/utils/appTypes';
 
 /**
  * @desc Create Workspace
@@ -158,17 +158,22 @@ export const updateWorkspaceDetails = async (payload: {
 };
 
 /**
- * @desc Make admin
+ * @desc Update Role
  * @param {*} payload
  */
-export const makeAdmin = async (payload: MakeAdmin) => {
+export const updateRole = async (payload: UpdateRole) => {
   try {
     workspaceStore.setLoading(true);
     const result = await axios.put(
       `${NEXT_PUBLIC_API_URL}/workspaces/users/${payload.userId}`,
       { role: payload.role },
     );
-    if (result) alert('Make Admin');
+    if (result) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      payload.role === UserRole.ADMIN
+        ? alert('Make Admin')
+        : alert('Remove from admin');
+    }
     return true;
   } catch (err: any) {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');

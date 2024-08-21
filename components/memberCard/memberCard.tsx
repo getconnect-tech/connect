@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { UserRole } from '@prisma/client';
 import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
@@ -30,10 +31,28 @@ function MemberCard({
   currentOpenDropdown,
   setOpenDropdown,
 }: Props) {
-  const dropDownItem = [
-    { name: 'Make Admin', icon: 'admin-icon' },
-    { name: 'Delete', icon: 'delete-icon', isDelete: true },
-  ];
+  let dropDownItem;
+  if (designation === UserRole.OWNER) {
+    dropDownItem = [];
+  }
+  if (designation === UserRole.MEMBER) {
+    dropDownItem = [
+      {
+        name: 'Make Admin',
+        icon: 'admin-icon',
+      },
+      { name: 'Delete', icon: 'delete-icon', isDelete: true },
+    ];
+  }
+  if (designation === UserRole.ADMIN) {
+    dropDownItem = [
+      {
+        name: 'Remove Admin',
+        icon: 'admin-icon',
+      },
+      { name: 'Delete', icon: 'delete-icon', isDelete: true },
+    ];
+  }
 
   const handleClickIcon = useCallback(() => {
     const identifier = `${dropdownIdentifier}-member`;
@@ -50,7 +69,9 @@ function MemberCard({
         </NameDiv>
       </LeftDiv>
       <RightDiv>
-        {designation && <h6>{capitalizeString(designation)}</h6>}
+        {designation && designation !== UserRole.MEMBER && (
+          <h6>{capitalizeString(designation)}</h6>
+        )}
         <div style={{ position: 'relative' }} className='tag-div'>
           <Icon
             onClick={handleClickIcon}
@@ -61,7 +82,7 @@ function MemberCard({
           />
           {currentOpenDropdown === `${dropdownIdentifier}-member` && (
             <DropDown
-              items={dropDownItem}
+              items={dropDownItem || []}
               iconSize={'12'}
               iconViewBox={'0 0 12 12'}
               userId={userId}
