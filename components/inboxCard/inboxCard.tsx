@@ -123,16 +123,18 @@ export default function InboxCard({
    * @desc Update ticket details assign user in inbox card
    */
   const onChangeAssign = useCallback(async (item: { user_id: string }) => {
-    const payload = { assignedTo: item?.user_id };
-    try {
-      const updatedTicketDetails = {
-        ...(ticketDetail || {}),
-        assigned_to: item?.user_id,
-      };
-      ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
-      await updateTicketDetails(ticketDetail?.id, payload);
-    } catch (e) {
-      console.log('Error : ', e);
+    if (item?.user_id) {
+      const payload = { assignedTo: item?.user_id };
+      try {
+        const updatedTicketDetails = {
+          ...(ticketDetail || {}),
+          assigned_to: item?.user_id,
+        };
+        ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
+        await updateTicketDetails(ticketDetail?.id, payload);
+      } catch (e) {
+        console.log('Error : ', e);
+      }
     }
   }, []);
 
@@ -205,7 +207,7 @@ export default function InboxCard({
             />
             <DropDownWithTag
               onClick={() => handleDropdownClick('assign')}
-              title={assignedUser?.display_name || ''}
+              title={assignedUser?.display_name || 'Unassigned'}
               dropdownOpen={
                 currentOpenDropdown === `${dropdownIdentifier}-assign`
               }
