@@ -34,9 +34,11 @@ function SelectWorkSpace() {
   }, []);
 
   const handleClick = useCallback(async (workSpaceId: string) => {
+    // set current workspace in localstorage
     UserPreferenceSingleton.getInstance().setCurrentWorkspace(workSpaceId);
-
+    // get workspace data
     await getWorkspaceById(workSpaceId);
+    router.push('/');
   }, []);
 
   useEffect(() => {
