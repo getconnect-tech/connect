@@ -16,3 +16,5 @@ export const RANDOM_COLORS = [
 ];
 
 export const ONBOARDING_ROUTES = ['/login', '/signup', '/onboarding'];
+
+export const USER_PREFERENCES = 'user-preference-connect';
