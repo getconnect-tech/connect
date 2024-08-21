@@ -6,6 +6,7 @@ import DropDown from '../dropDown/dropDown';
 import Modal from '../modal/modal';
 import ContactUsModal from '../contactUsModal/contactUsModal';
 import Avatar from '../avtar/Avtar';
+import Icon from '../icon/icon';
 import {
   ItemMainDiv,
   Label,
@@ -96,7 +97,15 @@ function Navbar() {
                   }
                   name={currentWorkspace?.name || ''}
                 />
+                <p>{workspaceStore?.currentWorkspace?.name || ''}</p>
               </OrganizationNameDiv>
+              <Icon
+                onClick={() => {}}
+                iconName={'sidebar-icon'}
+                iconSize={'16'}
+                iconViewBox={'0 0 16 16'}
+                className='icon'
+              />
             </LogoDiv>
             {isOpen && (
               <ProfileDropdown title='My Profile' onClose={closeDropdown} />
