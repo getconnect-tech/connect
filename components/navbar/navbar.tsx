@@ -35,7 +35,7 @@ function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
   const { workspaceStore } = useStores();
-  const { currentWorkspace } = workspaceStore;
+  const { currentWorkspace } = workspaceStore || {};
   const [isOpen, setIsOpen] = useState(false);
   const [isSupportDropdown, setSupportDropdown] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(
