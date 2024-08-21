@@ -219,7 +219,6 @@ function TicketDetails(props: Props) {
         };
         ticketStore.setTicketDetails(updatedTicketDetails);
         await updateTicketDetails(ticketDetails?.id, payload);
-        router.push('/');
       }
     } catch (e) {
       console.log('Error : ', e);
