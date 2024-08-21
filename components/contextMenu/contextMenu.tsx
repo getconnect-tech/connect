@@ -16,7 +16,10 @@ import SVGIcon from '@/assets/icons/SVGIcon';
 import { labelItem, priorityItem } from '@/helpers/raw';
 import { useStores } from '@/stores';
 import { TicketDetailsInterface } from '@/utils/appTypes';
-import { updateTicketDetails } from '@/services/clientSide/ticketServices';
+import {
+  updateTicketDetails,
+  updateTicketPriority,
+} from '@/services/clientSide/ticketServices';
 
 interface Props {
   children: any;
@@ -76,7 +79,7 @@ export default function CustomContextMenu(props: Props) {
           priority: item?.value,
         };
         ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
-        await updateTicketDetails(ticketDetail?.id, payload);
+        await updateTicketPriority(ticketDetail?.id, payload);
       } catch (e) {
         console.log('Error : ', e);
       }
