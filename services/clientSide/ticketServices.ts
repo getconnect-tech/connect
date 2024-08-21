@@ -127,3 +127,27 @@ export const updateTicketDetails = async (ticketId: any, payload: object) => {
     ticketStore.setLoading(false);
   }
 };
+
+/**
+ * @desc Update ticket Priority
+ * @param {*} ticketId
+ */
+export const updateTicketPriority = async (ticketId: any, payload: object) => {
+  try {
+    ticketStore.setLoading(true);
+    const response = await axios.put(
+      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}/changePriority`,
+      payload,
+    );
+    const { data } = response;
+
+    // set ticket details in store
+    ticketStore.setTicketDetails(data);
+    return data;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return null;
+  } finally {
+    ticketStore.setLoading(false);
+  }
+};
