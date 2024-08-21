@@ -4,8 +4,9 @@ import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { getAPIErrorMessage, isEmpty } from '@/helpers/common';
-import { CurrentWorkspace } from '@/utils/dataTypes';
+import { CurrentWorkspace, Workspace } from '@/utils/dataTypes';
 import { UpdateRole } from '@/utils/appTypes';
+import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
 
 /**
  * @desc Create Workspace
@@ -100,7 +101,23 @@ export const getWorkspaceList = async () => {
     // set current workspace as first workspace get in list
     if (data?.length > 0) {
       workspaceStore.setWorkspaceList(data);
-      await getWorkspaceById(data[0]?.id);
+      const currentWorkspace =
+        UserPreferenceSingleton.getInstance().getCurrentWorkspace();
+      if (currentWorkspace) {
+        const isFoundWorkspace = data?.find(
+          (workspace: Workspace) => workspace?.id === currentWorkspace,
+        );
+        if (isFoundWorkspace) await getWorkspaceById(currentWorkspace);
+        else {
+          UserPreferenceSingleton.getInstance().setCurrentWorkspace(
+            data[0]?.id,
+          );
+          await getWorkspaceById(data[0]?.id);
+        }
+      } else {
+        UserPreferenceSingleton.getInstance().setCurrentWorkspace(data[0]?.id);
+        await getWorkspaceById(data[0]?.id);
+      }
       return data;
     }
   } catch (err: any) {

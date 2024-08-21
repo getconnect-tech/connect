@@ -46,6 +46,8 @@ function RichTextBox(this: any, props: any) {
     isScrollbarnone = false,
     isEveryoneMentionEnable = false,
     isInternalDiscussion,
+    className = '',
+    placeholder = '',
   } = props;
   const fieldsData = { text: 'display_name' };
   const mentionRef = useRef<MentionComponent>(null);
@@ -389,7 +391,7 @@ function RichTextBox(this: any, props: any) {
             isplaceholder={props?.isplaceholder}
             isScrollbarnone={isScrollbarnone}
           >
-            <TextMainDiv>
+            <TextMainDiv className={className}>
               {!disable && (
                 <>
                   <RichTextEditorComponent
@@ -410,7 +412,7 @@ function RichTextBox(this: any, props: any) {
                     change={(item) => onChangeText(item?.value)}
                     value={valueContent}
                     actionComplete={handleActionComplete}
-                    placeholder={'Write a message'}
+                    placeholder={placeholder}
                   >
                     <Inject
                       services={[
