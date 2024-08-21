@@ -271,6 +271,7 @@ function TicketDetails(props: Props) {
                 iconSize='20'
                 iconViewBox='0 0 20 20'
                 src={assignedUser?.profile_url || ''}
+                unAssign={assignedUser ? '' : 'dropdown-unassign-icon'}
               />
             </ButtonDiv>
             <ButtonDiv>
