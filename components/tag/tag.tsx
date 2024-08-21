@@ -13,6 +13,9 @@ interface Props {
   title: string;
   ref?: React.Ref<HTMLDivElement>;
   style?: React.CSSProperties;
+  iconSize?: string;
+  unAssign?: string;
+  iconViewBox?: string;
 }
 
 export default function Tag({
@@ -24,6 +27,9 @@ export default function Tag({
   ref,
   style,
   src,
+  iconSize,
+  unAssign,
+  iconViewBox,
 }: Props) {
   return (
     //apply className while open drop down
@@ -35,7 +41,21 @@ export default function Tag({
       style={style}
     >
       {isName ? (
-        <Avatar name={title} imgSrc={src || ''} size={20} />
+        <>
+          {unAssign ? (
+            <>
+              <SVGIcon
+                name={unAssign}
+                width={iconSize}
+                height={iconSize}
+                viewBox={iconViewBox}
+              />
+              <p>Unassigned</p>
+            </>
+          ) : (
+            <Avatar name={title} imgSrc={src || ''} size={20} />
+          )}
+        </>
       ) : (
         <SVGIcon
           name={iconName}

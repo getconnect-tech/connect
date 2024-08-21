@@ -207,7 +207,7 @@ export default function InboxCard({
             />
             <DropDownWithTag
               onClick={() => handleDropdownClick('assign')}
-              title={assignedUser?.display_name || 'Unassigned'}
+              title={assignedUser?.display_name || ''}
               dropdownOpen={
                 currentOpenDropdown === `${dropdownIdentifier}-assign`
               }
@@ -227,6 +227,7 @@ export default function InboxCard({
               }
               onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
               src={assignedUser?.profile_url || ''}
+              unAssign={assignedUser ? '' : 'dropdown-unassign-icon'}
             />
           </div>
           <TagDiv className='tagDiv'>
