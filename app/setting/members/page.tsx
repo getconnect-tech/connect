@@ -42,10 +42,12 @@ const Members = () => {
       try {
         workspaceStore.setLoading(true);
         if (userId) {
-          const result =
-            hoveredItem === 'Make Admin'
-              ? await updateRole({ userId, role: UserRole.ADMIN })
-              : await updateRole({ userId, role: UserRole.MEMBER });
+          const result = await updateRole({
+            userId,
+            role:
+              hoveredItem === 'Make Admin' ? UserRole.ADMIN : UserRole.MEMBER,
+          });
+
           if (result) {
             getWorkspaceMember();
           }
