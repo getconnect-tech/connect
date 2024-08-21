@@ -72,7 +72,7 @@ model Ticket {
 
 model Message {
   id           String      @id @default(uuid())
-  reference_id String      @unique
+  reference_id String
   content      String
   created_at   DateTime    @default(now())
   ticket_id    String
