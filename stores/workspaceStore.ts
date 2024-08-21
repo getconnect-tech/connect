@@ -6,7 +6,7 @@ class WorkspaceStore {
   loading = false;
   currentWorkspace: CurrentWorkspace | null = null;
   inviteModalInput: InviteModal = { name: '', email: '' };
-  workspaceList: Workspace | null = null;
+  workspaceList: Workspace[] | null = null;
 
   constructor() {
     makeObservable(this, {
@@ -59,7 +59,7 @@ class WorkspaceStore {
   }
 
   // New action to set workspace list
-  setWorkspaceList(value: Workspace) {
+  setWorkspaceList(value: Workspace[]) {
     this.workspaceList = value;
   }
 }

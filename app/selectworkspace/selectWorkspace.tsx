@@ -10,6 +10,7 @@ import Button from '@/components/button/button';
 import { getWorkspaceList } from '@/services/clientSide/workspaceServices';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { getAPIErrorMessage } from '@/helpers/common';
+import { Workspace } from '@/utils/dataTypes';
 
 function SelectWorkSpace() {
   // const workspaceCard = [
@@ -79,15 +80,12 @@ function SelectWorkSpace() {
         <OrganizationDiv>
           <CardsDiv>
             {workspaceList?.map(
-              (
-                item: { name: string; image_url: string | undefined },
-                index: React.Key | null | undefined,
-              ) => {
+              (item: Workspace, index: React.Key | null | undefined) => {
                 return (
                   <WorkspaceCard
                     key={index}
                     organizationName={item.name}
-                    src={item.image_url}
+                    src={item.image_url || ''}
                   />
                 );
               },
