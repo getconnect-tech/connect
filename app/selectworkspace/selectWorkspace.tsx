@@ -13,31 +13,8 @@ import { getAPIErrorMessage } from '@/helpers/common';
 import { Workspace } from '@/utils/dataTypes';
 
 function SelectWorkSpace() {
-  // const workspaceCard = [
-  //   {
-  //     name: 'Workspace',
-  //     src: 'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/workspaces%2FUvUkEHJUSP5z1Zd1t2xno%2FOrganizationProfiles%2F002_1716377141553.jpg?alt=media&token=b73333cb-8fcf-4ce0-8638-39a540ec1d3e',
-  //   },
-  //   {
-  //     name: 'Pixer Digital',
-  //     src: 'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/OrganizationProfiles%2Fpixer%20logo.png?alt=media&token=0f6ab873-8d4c-4b90-b917-193d416d7f05',
-  //   },
-  //   {
-  //     name: 'Workspace',
-  //     src: 'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/OrganizationProfiles%2Fpixer%20logo.png?alt=media&token=0f6ab873-8d4c-4b90-b917-193d416d7f05',
-  //   },
-  //   {
-  //     name: 'Workspace',
-  //     src: 'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/OrganizationProfiles%2Fpixer%20logo.png?alt=media&token=0f6ab873-8d4c-4b90-b917-193d416d7f05',
-  //   },
-  //   {
-  //     name: 'Workspace',
-  //     src: 'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/OrganizationProfiles%2Fpixer%20logo.png?alt=media&token=0f6ab873-8d4c-4b90-b917-193d416d7f05',
-  //   },
-  // ];
   const router = useRouter();
   const { workspaceList } = workspaceStore;
-  console.log('workspaceList', workspaceList);
 
   const loadData = useCallback(async () => {
     try {
