@@ -56,31 +56,7 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
 
   return (
     <ModalDiv>
-      {success ? (
-        <SuccessfullModalDiv>
-          <IllustrationDiv>
-            <SVGIcon
-              name='successfull-icon'
-              width='24'
-              height='24'
-              viewBox='0 0 24 24'
-            />
-          </IllustrationDiv>
-          <Content>
-            <h2>Message Sent</h2>
-            <p>We’ll be touch with you soon over email.</p>
-          </Content>
-          <CloseIconDiv>
-            <Icon
-              iconName='cross-icon'
-              iconSize='12'
-              iconViewBox='0 0 16 16'
-              onClick={onClose}
-              size={true}
-            />
-          </CloseIconDiv>
-        </SuccessfullModalDiv>
-      ) : (
+      {!success ? (
         <>
           <ModalHeader>
             <ModalTitle>Contact us</ModalTitle>
@@ -140,6 +116,30 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
             </RightDiv>
           </ModalBottom>
         </>
+      ) : (
+        <SuccessfullModalDiv>
+          <IllustrationDiv>
+            <SVGIcon
+              name='successfull-icon'
+              width='24'
+              height='24'
+              viewBox='0 0 24 24'
+            />
+          </IllustrationDiv>
+          <Content>
+            <h2>Message Sent</h2>
+            <p>We’ll be touch with you soon over email.</p>
+          </Content>
+          <CloseIconDiv>
+            <Icon
+              iconName='cross-icon'
+              iconSize='12'
+              iconViewBox='0 0 16 16'
+              onClick={onClose}
+              size={true}
+            />
+          </CloseIconDiv>
+        </SuccessfullModalDiv>
       )}
     </ModalDiv>
   );
