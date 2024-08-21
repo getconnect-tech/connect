@@ -5,7 +5,7 @@
 import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
-import { PriorityLevels } from '@prisma/client';
+import { PriorityLevels, TicketStatus } from '@prisma/client';
 import Avatar from '../avtar/Avtar';
 import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
 import {
@@ -137,6 +137,24 @@ export default function InboxCard({
     (user: { id: string | null }) => user.id === assigned_to,
   );
 
+  /*
+   * @desc Close ticket
+   */
+  const handleCloseTicket = useCallback(async () => {
+    const payload = { status: TicketStatus.CLOSED };
+    try {
+      if (ticketDetail?.id) {
+        ticketStore.updateTicketListItem(ticketIndex, {
+          ...ticketDetail,
+          status: TicketStatus.CLOSED,
+        });
+        await updateTicketDetails(ticketDetail?.id, payload);
+      }
+    } catch (e) {
+      console.log('Error : ', e);
+    }
+  }, [ticketDetail]);
+
   return (
     <CardDiv onClick={onClickTicket}>
       {showDotIcon && <DotIcon />}
@@ -224,22 +242,26 @@ export default function InboxCard({
               src={assignedUser?.profile_url || ''}
             />
           </div>
-          <TagDiv className='tagDiv'>
-            <SVGIcon
-              name='close-icon'
-              width='12'
-              height='12'
-              viewBox='0 0 12 12'
-              className='line'
-            />
-            <LineDiv />
-            <SVGIcon
-              name='context-snooze-icon'
-              width='12'
-              height='12'
-              viewBox='0 0 12 12'
-            />
-          </TagDiv>
+          {ticketDetail.status !== TicketStatus.CLOSED && (
+            <TagDiv className='tagDiv'>
+              <div onClick={handleCloseTicket}>
+                <SVGIcon
+                  name='close-icon'
+                  width='12'
+                  height='12'
+                  viewBox='0 0 12 12'
+                  className='line'
+                />
+              </div>
+              <LineDiv />
+              <SVGIcon
+                name='context-snooze-icon'
+                width='12'
+                height='12'
+                viewBox='0 0 12 12'
+              />
+            </TagDiv>
+          )}
         </StatusMainDiv>
       </RightDiv>
     </CardDiv>

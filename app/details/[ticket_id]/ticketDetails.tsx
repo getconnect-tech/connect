@@ -218,6 +218,7 @@ function TicketDetails(props: Props) {
         };
         ticketStore.setTicketDetails(updatedTicketDetails);
         await updateTicketDetails(ticketDetails?.id, payload);
+        router.push('/');
       }
     } catch (e) {
       console.log('Error : ', e);
@@ -292,13 +293,15 @@ function TicketDetails(props: Props) {
               />
             </ButtonDiv>
             <ButtonDiv>
-              <Tag
-                title='Close'
-                iconName='close-icon'
-                isActive={false}
-                onClick={handleCloseTicket}
-                isName={false}
-              />
+              {ticketDetails?.status !== TicketStatus.CLOSED && (
+                <Tag
+                  title='Close'
+                  iconName='close-icon'
+                  isActive={false}
+                  onClick={handleCloseTicket}
+                  isName={false}
+                />
+              )}
               <DropDownWithTag
                 onClick={handleSnoozeTag}
                 title={'Snooze'}
