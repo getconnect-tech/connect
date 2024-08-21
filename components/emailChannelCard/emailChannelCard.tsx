@@ -81,6 +81,7 @@ export function EmailChannelCard({
                   title='Save and Continue'
                   onClick={onSaveAndContinue}
                   disabled={!isChecked}
+                  variant='medium'
                 />
               </>
             )}
@@ -134,11 +135,15 @@ export function EmailChannelCard({
                   It might take a couple of minutes for your DNS changes to
                   propagate, although in some cases it can take up to 24 hours.
                 </p>
-                <Button title='Verify DNS and continue' />
+                <Button title='Verify DNS and continue' variant='medium' />
               </>
             )}
             {currentStep === 1 && (
-              <Button title='Save and Continue' onClick={onSaveAndContinue} />
+              <Button
+                title='Save and Continue'
+                onClick={onSaveAndContinue}
+                variant='medium'
+              />
             )}
           </Div>
         )}
