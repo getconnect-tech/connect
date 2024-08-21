@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
+import { UserRole } from '@prisma/client';
 import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
@@ -13,6 +14,10 @@ interface Props {
   name: string;
   email: string;
   src: string;
+  currentOpenDropdown?: string | null;
+  dropdownIdentifier?: string;
+  // eslint-disable-next-line no-unused-vars
+  setOpenDropdown: (dropdown: string | null) => void;
 }
 
 function MemberCard({
@@ -22,17 +27,37 @@ function MemberCard({
   name,
   email,
   src,
+  dropdownIdentifier,
+  currentOpenDropdown,
+  setOpenDropdown,
 }: Props) {
-  const [openDropdown, setOpenDropdown] = useState(false);
-
-  const dropDownItem = [
-    { name: 'Make Admin', icon: 'admin-icon' },
-    { name: 'Delete', icon: 'delete-icon', isDelete: true },
-  ];
+  let dropDownItem;
+  if (designation === UserRole.OWNER) {
+    dropDownItem = [];
+  }
+  if (designation === UserRole.MEMBER) {
+    dropDownItem = [
+      {
+        name: 'Make Admin',
+        icon: 'admin-icon',
+      },
+      { name: 'Delete', icon: 'delete-icon', isDelete: true },
+    ];
+  }
+  if (designation === UserRole.ADMIN) {
+    dropDownItem = [
+      {
+        name: 'Remove Admin',
+        icon: 'admin-icon',
+      },
+      { name: 'Delete', icon: 'delete-icon', isDelete: true },
+    ];
+  }
 
   const handleClickIcon = useCallback(() => {
-    setOpenDropdown(!openDropdown);
-  }, [openDropdown]);
+    const identifier = `${dropdownIdentifier}-member`;
+    setOpenDropdown(currentOpenDropdown === identifier ? null : identifier);
+  }, [dropdownIdentifier, currentOpenDropdown, setOpenDropdown]);
 
   return (
     <CardDiv>
@@ -44,7 +69,9 @@ function MemberCard({
         </NameDiv>
       </LeftDiv>
       <RightDiv>
-        {designation && <h6>{capitalizeString(designation)}</h6>}
+        {designation && designation !== UserRole.MEMBER && (
+          <h6>{capitalizeString(designation)}</h6>
+        )}
         <div style={{ position: 'relative' }} className='tag-div'>
           <Icon
             onClick={handleClickIcon}
@@ -53,17 +80,17 @@ function MemberCard({
             iconViewBox='0 0 16 16'
             size={true}
           />
-          {openDropdown && (
+          {currentOpenDropdown === `${dropdownIdentifier}-member` && (
             <DropDown
-              items={dropDownItem}
+              items={dropDownItem || []}
               iconSize={'12'}
               iconViewBox={'0 0 12 12'}
               userId={userId}
               handleClick={handleClick}
               onClose={() => {
-                setOpenDropdown(false);
+                setOpenDropdown(null);
               }}
-              style={{ right: 0 }}
+              style={{ right: 0, zIndex: 1 }}
             />
           )}
         </div>

@@ -3,9 +3,12 @@ import { prisma } from '@/prisma/prisma';
 import { removeNullUndefined } from '@/helpers/common';
 
 // Service to get workspace by ID
-export const getWorkspaceById = async (workspaceId: string) => {
+export const getWorkspaceById = async (
+  workspaceId: string,
+  currentUserId: string,
+) => {
   const workspace = await prisma.workspace.findUnique({
-    where: { id: workspaceId },
+    where: { id: workspaceId, users: { some: { user_id: currentUserId } } },
     include: {
       users: { include: { user: true } },
       invited_users: true,
@@ -18,13 +21,19 @@ export const getWorkspaceById = async (workspaceId: string) => {
     return null;
   }
 
+  const currentRole = workspace.users.find(
+    (x) => x.user_id === currentUserId,
+  )!.role;
+
   const formattedWorkspace = {
     ...workspace,
     users: workspace.users.map((x) => ({
       ...x.user,
       role: x.role,
     })),
+    role: currentRole,
   };
+
   return formattedWorkspace;
 };
 

@@ -1,6 +1,6 @@
 import { formatTicket } from '@/services/serverSide/ticket';
 
-export interface MakeAdmin {
+export interface UpdateRole {
   userId: string;
   role: string;
 }
