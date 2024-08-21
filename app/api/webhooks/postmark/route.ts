@@ -39,8 +39,8 @@ export const POST = async (req: NextRequest) => {
 
     await postMessage({
       messageContent: emailPayload.HtmlBody,
-      messageType: MessageType.EMAIL,
-      referenceId,
+      messageType: MessageType.FROM_CONTACT,
+      referenceId: mailId,
       ticketId: ticket.id,
     });
 

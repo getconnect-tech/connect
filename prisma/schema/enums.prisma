@@ -16,8 +16,11 @@ enum PriorityLevels {
 enum MessageType {
     REGULAR
     EMAIL
-    PRIORITY
-    ASSIGN
+    CHANGE_PRIORITY
+    CHANGE_ASSIGNEE
+    CHANGE_LABEL
+    CHANGE_STATUS
+    FROM_CONTACT
 }
 
 enum TicketSource {
