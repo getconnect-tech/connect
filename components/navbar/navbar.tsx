@@ -4,6 +4,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
+import Modal from '../modal/modal';
+import ContactUsModal from '../contactUsModal/contactUsModal';
 import {
   ItemMainDiv,
   Label,
@@ -37,6 +39,7 @@ function Navbar() {
   const { workspaceStore } = useStores();
   const [isOpen, setIsOpen] = useState(false);
   const [isSupportDropdown, setSupportDropdown] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(
     navbarMenu.Inbox,
   );
@@ -62,6 +65,10 @@ function Navbar() {
     else if (pathname === '/contact') setActiveIndex(navbarMenu.Contacts);
   }, []);
 
+  const handleModalClose = useCallback(() => {
+    setIsModalOpen(false);
+  }, []);
+
   const handleClick = useCallback((index: number, path?: string) => {
     setActiveIndex(index); // Update active index
     if (path) {
@@ -70,117 +77,127 @@ function Navbar() {
     }
   }, []);
 
+  const handleSupportClick = useCallback(() => {
+    setIsModalOpen(true);
+  }, []);
+
   return (
-    <MainDiv>
-      <TopDiv>
-        <div>
-          <LogoDiv className='tag-div'>
-            <OrganizationNameDiv onClick={handleProfilePopup}>
-              <SVGIcon
-                name='logo-icon'
-                width='20'
-                height='21'
-                viewBox='0 0 20 21'
-                fill='none'
+    <>
+      <MainDiv>
+        <TopDiv>
+          <div>
+            <LogoDiv className='tag-div'>
+              <OrganizationNameDiv onClick={handleProfilePopup}>
+                <SVGIcon
+                  name='logo-icon'
+                  width='20'
+                  height='21'
+                  viewBox='0 0 20 21'
+                  fill='none'
+                />
+                <p>{workspaceStore?.currentWorkspace?.name || ''}</p>
+              </OrganizationNameDiv>
+              <Icon
+                onClick={() => {}}
+                iconName={'sidebar-icon'}
+                iconSize={'16'}
+                iconViewBox={'0 0 16 16'}
+                className='icon'
               />
-              <p>{workspaceStore?.currentWorkspace?.name || ''}</p>
-            </OrganizationNameDiv>
-            <Icon
-              onClick={() => {}}
-              iconName={'sidebar-icon'}
-              iconSize={'16'}
-              iconViewBox={'0 0 16 16'}
-              className='icon'
+            </LogoDiv>
+            {isOpen && (
+              <ProfileDropdown title='My Profile' onClose={closeDropdown} />
+            )}
+          </div>
+          <NavbarItem
+            title='Getting started'
+            icon='started-icon'
+            isActive={activeIndex === 0}
+            onClickItem={() => handleClick(0)}
+          />
+          <ItemMainDiv>
+            <NavbarItem
+              title='Inbox'
+              count={4}
+              icon='inbox-icon'
+              isActive={activeIndex === 1}
+              onClickItem={() => handleClick(1, '/')}
             />
-          </LogoDiv>
-          {isOpen && (
-            <ProfileDropdown title='My Profile' onClose={closeDropdown} />
+            <NavbarItem
+              title='Unassigned'
+              icon='unassign-icon'
+              isActive={activeIndex === 2}
+              onClickItem={() => handleClick(2)}
+            />
+            <NavbarItem
+              title='All'
+              icon='all-icon'
+              isActive={activeIndex === 3}
+              onClickItem={() => handleClick(3)}
+            />
+          </ItemMainDiv>
+          <ItemMainDiv>
+            <NavbarItem
+              title='Contacts'
+              icon='contact-icon'
+              isActive={activeIndex === 4}
+              onClickItem={() => handleClick(4, '/contact')}
+            />
+            <NavbarItem
+              title='Insights'
+              icon='insight-icon'
+              isActive={activeIndex === 5}
+              onClickItem={() => handleClick(5)}
+            />
+          </ItemMainDiv>
+          <ItemMainDiv>
+            <Label>Label</Label>
+            <NavbarItem
+              title='Bug'
+              icon='bug-icon'
+              isActive={activeIndex === 6}
+              onClickItem={() => handleClick(6)}
+            />
+            <NavbarItem
+              title='Question'
+              icon='question-icon'
+              isActive={activeIndex === 7}
+              onClickItem={() => handleClick(7)}
+            />
+            <NavbarItem
+              title='Feedback'
+              icon='feedback-icon'
+              isActive={activeIndex === 8}
+              onClickItem={() => handleClick(8)}
+            />
+          </ItemMainDiv>
+        </TopDiv>
+        <div className='tag-div'>
+          <NavbarItem
+            title='Support'
+            icon='support-icon'
+            isActive={activeIndex === 9}
+            onClickItem={() => {
+              handleClick(9);
+              openSupportDropdown();
+            }}
+          />
+          {isSupportDropdown && (
+            <DropDown
+              items={supportItem}
+              iconSize={'12'}
+              iconViewBox={'0 0 12 12'}
+              onClose={closeSupportDropdown}
+              style={{ bottom: 52, maxWidth: 191, width: '100%' }}
+              onChange={handleSupportClick}
+            />
           )}
         </div>
-        <NavbarItem
-          title='Getting started'
-          icon='started-icon'
-          isActive={activeIndex === 0}
-          onClickItem={() => handleClick(0)}
-        />
-        <ItemMainDiv>
-          <NavbarItem
-            title='Inbox'
-            count={4}
-            icon='inbox-icon'
-            isActive={activeIndex === 1}
-            onClickItem={() => handleClick(1, '/')}
-          />
-          <NavbarItem
-            title='Unassigned'
-            icon='unassign-icon'
-            isActive={activeIndex === 2}
-            onClickItem={() => handleClick(2)}
-          />
-          <NavbarItem
-            title='All'
-            icon='all-icon'
-            isActive={activeIndex === 3}
-            onClickItem={() => handleClick(3)}
-          />
-        </ItemMainDiv>
-        <ItemMainDiv>
-          <NavbarItem
-            title='Contacts'
-            icon='contact-icon'
-            isActive={activeIndex === 4}
-            onClickItem={() => handleClick(4, '/contact')}
-          />
-          <NavbarItem
-            title='Insights'
-            icon='insight-icon'
-            isActive={activeIndex === 5}
-            onClickItem={() => handleClick(5)}
-          />
-        </ItemMainDiv>
-        <ItemMainDiv>
-          <Label>Label</Label>
-          <NavbarItem
-            title='Bug'
-            icon='bug-icon'
-            isActive={activeIndex === 6}
-            onClickItem={() => handleClick(6)}
-          />
-          <NavbarItem
-            title='Question'
-            icon='question-icon'
-            isActive={activeIndex === 7}
-            onClickItem={() => handleClick(7)}
-          />
-          <NavbarItem
-            title='Feedback'
-            icon='feedback-icon'
-            isActive={activeIndex === 8}
-            onClickItem={() => handleClick(8)}
-          />
-        </ItemMainDiv>
-      </TopDiv>
-      <div className='tag-div'>
-        <NavbarItem
-          title='Support'
-          icon='support-icon'
-          isActive={activeIndex === 9}
-          onClickItem={() => {
-            handleClick(9);
-            openSupportDropdown();
-          }}
-        />
-        {isSupportDropdown && (
-          <DropDown
-            items={supportItem}
-            iconSize={'12'}
-            iconViewBox={'0 0 12 12'}
-            onClose={closeSupportDropdown}
-            style={{ bottom: 52, maxWidth: 191, width: '100%' }}
-          />
-        )}
-      </div>
-    </MainDiv>
+      </MainDiv>
+      <Modal open={isModalOpen} onClose={handleModalClose}>
+        <ContactUsModal onClose={handleModalClose} />
+      </Modal>
+    </>
   );
 }
 
