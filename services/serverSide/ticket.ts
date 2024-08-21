@@ -149,3 +149,15 @@ export const formatTicket = (ticket: TicketWithPayload) => {
   };
   return formattedTicket;
 };
+
+export const updatePriority = async (
+  ticketId: string,
+  newPriority: PriorityLevels,
+) => {
+  const updatedTicket = await prisma.ticket.update({
+    where: { id: ticketId },
+    data: { priority: newPriority },
+  });
+
+  return updatedTicket;
+};

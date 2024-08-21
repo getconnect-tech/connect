@@ -2,9 +2,10 @@ import { handleApiError } from '@/helpers/errorHandler';
 import withAuth from '@/middlewares/withAuth';
 import { getWorkspaceById } from '@/services/serverSide/workspace';
 
-export const GET = withAuth(async (_req, { workspaceId }) => {
+export const GET = withAuth(async (req, { workspaceId }) => {
   try {
-    const workspace = await getWorkspaceById(workspaceId);
+    const userId = req.user.id;
+    const workspace = await getWorkspaceById(workspaceId, userId);
 
     if (!workspace) {
       return Response.json({ error: 'Not found!' }, { status: 404 });

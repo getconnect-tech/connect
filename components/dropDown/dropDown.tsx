@@ -18,6 +18,7 @@ import {
   StyledCheckbox,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { isEmpty } from '@/helpers/common';
 
 export type DropDownItem = {
   name: string;
@@ -95,6 +96,13 @@ const DropDown = ({
   const [selectedItems, setSelectedItems] = useState<{
     [key: string]: boolean;
   }>({});
+  const [query, setQuery] = useState('');
+  const [searchResult, setSearchResult] = useState<DropDownItem[]>([]);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    setSearchResult(items);
+  }, [items]);
 
   const handleItemClick = useCallback((name: string) => {
     setSelectedItems((prevState) => ({
@@ -120,6 +128,32 @@ const DropDown = ({
     [],
   );
 
+  const searchQuery = useCallback(
+    (value: string) => {
+      const result =
+        items?.filter((item) =>
+          item?.name?.toLowerCase().includes(value?.toLowerCase()),
+        ) || [];
+      setSearchResult(result);
+    },
+    [items],
+  );
+
+  const onChangeSearch = useCallback(
+    (value: string) => {
+      setQuery(value);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+      timeoutRef.current = setTimeout(() => {
+        searchQuery(value);
+      }, 300);
+      if (isEmpty(value)) {
+        setSearchResult(items);
+      }
+    },
+    [searchQuery, items],
+  );
+
   return (
     <MainDiv
       ref={dropDownRef}
@@ -137,11 +171,15 @@ const DropDown = ({
             iconViewBox='0 0 12 12'
             isIcon={true}
             className={isSnooze ? 'snooze-input' : 'input'}
+            value={query}
+            onChange={(e: { target: { value: string } }) =>
+              onChangeSearch(e.target.value)
+            }
           />
         </SearchDiv>
       )}
       <ItemMainDiv>
-        {items.map((item, index) => (
+        {searchResult.map((item, index) => (
           <ItemDiv
             key={index}
             isSelected={selectedItems[item.name]}
