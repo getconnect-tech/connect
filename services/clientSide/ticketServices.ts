@@ -161,7 +161,7 @@ export const getTicketMessages = async (ticketId: string) => {
   try {
     ticketStore.setLoading(true);
     const response = await axios.get(
-      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}//messages`,
+      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}/messages`,
     );
     const { data } = response;
     return data;
