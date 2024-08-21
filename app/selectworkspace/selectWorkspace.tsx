@@ -36,6 +36,7 @@ function SelectWorkSpace() {
   // ];
   const router = useRouter();
   const { workspaceList } = workspaceStore;
+  console.log('workspaceList', workspaceList);
 
   const loadData = useCallback(async () => {
     try {
@@ -77,15 +78,20 @@ function SelectWorkSpace() {
         </Head>
         <OrganizationDiv>
           <CardsDiv>
-            {workspaceList.map((item, index) => {
-              return (
-                <WorkspaceCard
-                  key={index}
-                  organizationName={item.name}
-                  src={item.image_url}
-                />
-              );
-            })}
+            {workspaceList?.map(
+              (
+                item: { name: string; image_url: string | undefined },
+                index: React.Key | null | undefined,
+              ) => {
+                return (
+                  <WorkspaceCard
+                    key={index}
+                    organizationName={item.name}
+                    src={item.image_url}
+                  />
+                );
+              },
+            )}
           </CardsDiv>
           <Button
             title='New workspace'
