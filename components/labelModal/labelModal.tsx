@@ -1,17 +1,5 @@
 import React, { useState } from 'react';
-import Input from '../input/input';
-import Button from '../button/button';
-import LabelIconDropdown from '../labelIcoDropdown/labelIconDropdown';
-import {
-  ButtonDiv,
-  Content,
-  IconDiv,
-  InputField,
-  Label,
-  MainDiv,
-  ModalHeader,
-} from './style';
-import SVGIcon from '@/assets/icons/SVGIcon';
+import ModalComponent from '../modalComponent/modalComponent';
 
 interface Props {
   onClose: () => void;
@@ -24,30 +12,20 @@ function LabelModal({ onClose }: Props) {
   };
 
   return (
-    <MainDiv>
-      <ModalHeader>Create new label</ModalHeader>
-      <Content>
-        <div>
-          <IconDiv onClick={toggleDropdown}>
-            <SVGIcon
-              name='label-icon'
-              width='16'
-              height='16'
-              viewBox='0 0 20 20'
-            />
-          </IconDiv>
-          {dropdownVisible && <LabelIconDropdown />}
-        </div>
-        <InputField>
-          <Label>Label Name</Label>
-          <Input placeholder={'Enter label Name'} />
-        </InputField>
-      </Content>
-      <ButtonDiv>
-        <Button title='Cancel' secondary onClick={onClose} />
-        <Button title='Create' />
-      </ButtonDiv>
-    </MainDiv>
+    <ModalComponent
+      onClose={onClose}
+      onSubmit={() => {}}
+      loading={false}
+      buttonTitle='Create'
+      isIcon={false}
+      title={'Create new label'}
+      inputFirstLabel={'Label Name'}
+      firstPlaceholder='Enter label Name'
+      buttonCancel='Cancel'
+      isDropdown={true}
+      dropdownVisible={dropdownVisible}
+      onDropdownClick={toggleDropdown}
+    />
   );
 }
 
