@@ -99,6 +99,7 @@ export const getWorkspaceList = async () => {
     const { data } = response;
     // set current workspace as first workspace get in list
     if (data?.length > 0) {
+      workspaceStore.setWorkspaceList(data);
       await getWorkspaceById(data[0]?.id);
       return data;
     }

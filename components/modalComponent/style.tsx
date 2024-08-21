@@ -34,8 +34,12 @@ export const BottomDiv = styled.form`
     margin-top: 20px;
     gap: 8px;
   }
-  .input {
-    padding: 8px 16px;
+  .label-dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    position: relative;
   }
 `;
 
@@ -47,4 +51,15 @@ export const Label = styled.div`
     ${Typography.body_md_regular};
     color: ${colors.text_text_secondary};
   }
+`;
+
+export const IconDiv = styled.div`
+  background-color: ${colors.bg_surface_secondary};
+  padding: 12px;
+  border-radius: 50%;
+  display: flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  cursor: pointer;
 `;

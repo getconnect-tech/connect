@@ -1,9 +1,6 @@
 import React, { ChangeEvent, SyntheticEvent } from 'react';
 import { observer } from 'mobx-react-lite';
-import Icon from '../icon/icon';
-import Input from '../input/input';
-import Button from '../button/button';
-import { BottomDiv, Header, Label, MainDiv, Title } from './style';
+import ModalComponent from '../modalComponent/modalComponent';
 import { inviteUsersToWorkspace } from '@/services/clientSide/workspaceServices';
 import { useStores } from '@/stores';
 
@@ -36,38 +33,25 @@ const InviteMemberModal = ({ onClose }: Props) => {
   };
 
   return (
-    <MainDiv>
-      <Header>
-        <Title>Invite Member</Title>
-        <Icon
-          iconName='cross-icon'
-          iconSize='12'
-          iconViewBox='0 0 16 16'
-          onClick={onClose}
-        />
-      </Header>
-      <BottomDiv onSubmit={handleInvite}>
-        <Label>Name</Label>
-        <Input
-          value={inviteModalInput.name}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            handleOnChange('name', e.target.value)
-          }
-          placeholder={'Enter name'}
-        />
-        <Label className='email-label'>Email</Label>
-        <Input
-          value={inviteModalInput.email}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            handleOnChange('email', e.target.value)
-          }
-          placeholder={'Enter email address'}
-        />
-        <div className='button'>
-          <Button type='submit' title='Invite' isLoading={loading} />
-        </div>
-      </BottomDiv>
-    </MainDiv>
+    <ModalComponent
+      onClose={onClose}
+      onSubmit={() => handleInvite}
+      loading={loading}
+      value={inviteModalInput.name}
+      value2={inviteModalInput.email}
+      onChange2={(e: ChangeEvent<HTMLInputElement>) =>
+        handleOnChange('email', e.target.value)
+      }
+      onChange={(e: ChangeEvent<HTMLInputElement>) =>
+        handleOnChange('name', e.target.value)
+      }
+      buttonTitle='Invite'
+      title={'Invite Member'}
+      inputFirstLabel={'Name'}
+      inputSecondLabel='Email'
+      firstPlaceholder='Enter name'
+      secondPlaceholder='Enter email address'
+    />
   );
 };
 
