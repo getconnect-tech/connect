@@ -25,8 +25,8 @@ const Buttons = styled.button<WrapButton>`
   padding: 8px 16px;
   border-radius: 20px;
   background-color: ${colors.brand};
+  border: 1px solid ${colors.brand};
   color: ${colors.text_white};
-  border: none;
   white-space: nowrap;
   align-items: center;
   cursor: pointer;

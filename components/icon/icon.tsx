@@ -1,6 +1,7 @@
 import React from 'react';
 import { IconDiv } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import LabelSvgIcon from '@/assets/icons/labelIcons';
 
 interface Props {
   onClick: () => void;
@@ -10,6 +11,7 @@ interface Props {
   size?: boolean;
   className?: string;
   isActive?: boolean;
+  labelSvg?: boolean;
 }
 
 function Icon({
@@ -20,6 +22,7 @@ function Icon({
   size,
   className,
   isActive = false,
+  labelSvg = false,
 }: Props) {
   return (
     <IconDiv
@@ -28,12 +31,21 @@ function Icon({
       className={className}
       isActive={isActive}
     >
-      <SVGIcon
-        name={iconName}
-        width={iconSize}
-        height={iconSize}
-        viewBox={iconViewBox}
-      />
+      {labelSvg ? (
+        <LabelSvgIcon
+          name={iconName}
+          width={iconSize}
+          height={iconSize}
+          viewBox={iconViewBox}
+        />
+      ) : (
+        <SVGIcon
+          name={iconName}
+          width={iconSize}
+          height={iconSize}
+          viewBox={iconViewBox}
+        />
+      )}
     </IconDiv>
   );
 }

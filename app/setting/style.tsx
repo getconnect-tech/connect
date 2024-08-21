@@ -21,6 +21,11 @@ export const RightDiv = styled.div`
   max-width: 662px;
   width: 100%;
   gap: 6px;
+  .empty-state {
+    position: absolute;
+    bottom: 20%;
+    left: 53%;
+  }
 `;
 
 export const Head = styled.div`
@@ -179,4 +184,11 @@ export const EmailCardDiv = styled.div`
     margin: 0 16px;
     background: ${colors.border_hover};
   }
+`;
+
+export const EmptyStateDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
 `;

@@ -8,10 +8,13 @@ interface Props {
   iconSize: string;
   iconViewBox: string;
   title: string;
-  description: string;
+  description?: string;
   buttonTitle?: string;
   onClick?: () => void;
   className?: string;
+  buttonIconViewBox?: string;
+  buttonIconName?: string;
+  buttonIconSize?: string;
 }
 
 function EmptyState({
@@ -23,6 +26,9 @@ function EmptyState({
   buttonTitle,
   onClick,
   className,
+  buttonIconName,
+  buttonIconSize,
+  buttonIconViewBox,
 }: Props) {
   return (
     <MainDiv className={className}>
@@ -36,9 +42,17 @@ function EmptyState({
       </IconDiv>
       <div>
         <h6>{title}</h6>
-        <p>{description}</p>
+        {description && <p>{description}</p>}
       </div>
-      {buttonTitle && <Button title={buttonTitle} onClick={onClick} />}
+      {buttonTitle && (
+        <Button
+          title={buttonTitle}
+          onClick={onClick}
+          iconName={buttonIconName}
+          iconSize={buttonIconSize}
+          iconViewBox={buttonIconViewBox}
+        />
+      )}
     </MainDiv>
   );
 }
