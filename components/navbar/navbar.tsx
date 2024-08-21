@@ -4,6 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
+import Avatar from '../avtar/Avtar';
 import {
   ItemMainDiv,
   Label,
@@ -14,7 +15,6 @@ import {
 } from './style';
 import NavbarItem from './navbarItem';
 import ProfileDropdown from './profileDropdown';
-import SVGIcon from '@/assets/icons/SVGIcon';
 import { useStores } from '@/stores';
 import { supportItem } from '@/helpers/raw';
 
@@ -35,12 +35,12 @@ function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
   const { workspaceStore } = useStores();
+  const { currentWorkspace } = workspaceStore;
   const [isOpen, setIsOpen] = useState(false);
   const [isSupportDropdown, setSupportDropdown] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(
     navbarMenu.Inbox,
   );
-
   const openSupportDropdown = useCallback(() => {
     setSupportDropdown(true);
   }, []);
@@ -76,12 +76,14 @@ function Navbar() {
         <div>
           <LogoDiv className='tag-div'>
             <OrganizationNameDiv onClick={handleProfilePopup}>
-              <SVGIcon
-                name='logo-icon'
-                width='20'
-                height='21'
-                viewBox='0 0 20 21'
-                fill='none'
+              <Avatar
+                size={25}
+                imgSrc={
+                  typeof currentWorkspace?.image_url === 'string'
+                    ? currentWorkspace?.image_url
+                    : currentWorkspace?.image_url || ''
+                }
+                name={currentWorkspace?.name || ''}
               />
               <p>{workspaceStore?.currentWorkspace?.name || ''}</p>
             </OrganizationNameDiv>
