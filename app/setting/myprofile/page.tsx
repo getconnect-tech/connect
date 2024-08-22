@@ -206,7 +206,7 @@ const MyProfile = () => {
                 />
               </TextField> */}
             </ProfileInputs>
-            <Button isLoading={loading} title='Update' />
+            <Button isLoading={loading} title='Update' variant='medium' />
           </ProfileDetail>
         </RightDiv>
       </MainDiv>
