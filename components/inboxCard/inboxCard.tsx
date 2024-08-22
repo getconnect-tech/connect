@@ -25,6 +25,7 @@ import { capitalizeString } from '@/helpers/common';
 import { useStores } from '@/stores';
 import { TicketDetailsInterface } from '@/utils/appTypes';
 import {
+  changeTicketStatus,
   updateTicketDetails,
   updateTicketPriority,
 } from '@/services/clientSide/ticketServices';
@@ -152,7 +153,7 @@ export default function InboxCard({
           ...ticketDetail,
           status: TicketStatus.CLOSED,
         });
-        await updateTicketDetails(ticketDetail?.id, payload);
+        await changeTicketStatus(ticketDetail?.id, payload);
       }
     } catch (e) {
       console.log('Error : ', e);
