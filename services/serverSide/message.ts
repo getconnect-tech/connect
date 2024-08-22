@@ -36,6 +36,7 @@ export const getTicketMessages = async (ticketId: string) => {
   const messages = await prisma.message.findMany({
     where: { ticket_id: ticketId },
     include: { author: true },
+    orderBy: { created_at: 'asc' },
   });
 
   // Collect Ids of all distinct Assignees
