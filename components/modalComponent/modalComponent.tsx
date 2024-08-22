@@ -4,7 +4,7 @@ import Input from '../input/input';
 import Button from '../button/button';
 import LabelIconDropdown from '../labelIcoDropdown/labelIconDropdown';
 import { BottomDiv, Header, IconDiv, Label, MainDiv, Title } from './style';
-import SVGIcon from '@/assets/icons/SVGIcon';
+import LabelSvgIcon from '@/assets/icons/labelIcons';
 
 interface Props {
   onClose: () => void;
@@ -49,10 +49,9 @@ function ModalComponent({
   onDropdownClick,
   dropdownVisible,
 }: Props) {
-  const [icon, setIcon] = useState<string>('label-icon');
+  const [icon, setIcon] = useState<string>('tag-icon');
   const handleLableName = (iconName: string) => {
     setIcon(iconName);
-    console.log(iconName);
   };
   return (
     <MainDiv>
@@ -71,7 +70,12 @@ function ModalComponent({
         {isDropdown && (
           <div className='label-dropdown'>
             <IconDiv onClick={onDropdownClick}>
-              <SVGIcon name={icon} width='16' height='16' viewBox='0 0 20 20' />
+              <LabelSvgIcon
+                name={icon}
+                width='16'
+                height='16'
+                viewBox='0 0 20 20'
+              />
             </IconDiv>
             {dropdownVisible && (
               <LabelIconDropdown handleLableName={handleLableName} />
