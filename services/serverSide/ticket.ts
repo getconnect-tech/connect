@@ -161,3 +161,12 @@ export const updatePriority = async (
 
   return updatedTicket;
 };
+
+export const updateAssignee = async (ticketId: string, newAssignee: string) => {
+  const updatedTicket = await prisma.ticket.update({
+    where: { id: ticketId },
+    data: { assigned_to: newAssignee },
+  });
+
+  return updatedTicket;
+};
