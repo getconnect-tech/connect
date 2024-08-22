@@ -85,14 +85,14 @@ export const getTicketMessages = async (ticketId: string) => {
         const assignee = message.reference_id
           ? usersMap.get(message.reference_id)!
           : null;
-        return { ...message, assignee };
+        return { ...message, assignee, label: null };
       }
       case MessageType.CHANGE_LABEL: {
         const label = labelsMap.get(message.reference_id)!;
-        return { ...message, label };
+        return { ...message, label, assignee: null };
       }
       default:
-        return message;
+        return { ...message, label: null, assignee: null };
     }
   });
 
