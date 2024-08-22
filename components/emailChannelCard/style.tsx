@@ -93,7 +93,7 @@ export const CheckBox = styled.div<Props>`
     ${Typography.body_md_regular}
     color: ${colors.text_text_secondary};
     ${(props) =>
-      props.isChecked &&
+    props.isChecked &&
       css`
         color: ${colors.text};
       `}
@@ -120,9 +120,7 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   &:checked {
     background-color: ${colors.brand};
     // eslint-disable-next-line prettier/prettier
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(
-      checkmarkSVG,
-    )}');
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;
