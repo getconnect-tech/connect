@@ -29,7 +29,6 @@ const MessageCardMinDiv = styled.div`
   border-left: 1px solid ${colors.border};
   padding-left: 18px;
   margin-left: -23px;
-  width: 100%;
 `;
 
 const NameDiv = styled.div`
