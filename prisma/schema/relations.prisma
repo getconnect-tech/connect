@@ -4,6 +4,7 @@ model UserWorkspaces {
     user         User      @relation(fields: [user_id], references: [id])
     workspace    Workspace @relation(fields: [workspace_id], references: [id])
     role         UserRole  @default(MEMBER)
+    created_at   DateTime  @default(now())
 
     @@id(name: "user_workspace_id", [workspace_id, user_id])
 }
