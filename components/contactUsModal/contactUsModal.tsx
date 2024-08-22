@@ -114,8 +114,17 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
               onClick={handleIconClick}
             />
             <RightDiv>
-              <Button title='Cancel' secondary={true} onClick={onClose} />
-              <Button title='Send message' onClick={handleSendMessage} />
+              <Button
+                title='Cancel'
+                secondary={true}
+                onClick={onClose}
+                variant='medium'
+              />
+              <Button
+                title='Send message'
+                onClick={handleSendMessage}
+                variant='medium'
+              />
             </RightDiv>
           </ModalBottom>
         </>
