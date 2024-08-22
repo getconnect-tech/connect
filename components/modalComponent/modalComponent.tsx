@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Icon from '../icon/icon';
 import Input from '../input/input';
 import Button from '../button/button';
@@ -49,6 +49,11 @@ function ModalComponent({
   onDropdownClick,
   dropdownVisible,
 }: Props) {
+  const [icon, setIcon] = useState<string>('label-icon');
+  const handleLableName = (iconName: string) => {
+    setIcon(iconName);
+    console.log(iconName);
+  };
   return (
     <MainDiv>
       <Header>
@@ -66,14 +71,11 @@ function ModalComponent({
         {isDropdown && (
           <div className='label-dropdown'>
             <IconDiv onClick={onDropdownClick}>
-              <SVGIcon
-                name='label-icon'
-                width='16'
-                height='16'
-                viewBox='0 0 20 20'
-              />
+              <SVGIcon name={icon} width='16' height='16' viewBox='0 0 20 20' />
             </IconDiv>
-            {dropdownVisible && <LabelIconDropdown />}
+            {dropdownVisible && (
+              <LabelIconDropdown handleLableName={handleLableName} />
+            )}
           </div>
         )}
         <Label>
