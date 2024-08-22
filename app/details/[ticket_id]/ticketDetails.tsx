@@ -33,6 +33,7 @@ import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import { useStores } from '@/stores';
 import {
   getTicketDetails,
+  updateAssignee,
   updateTicketDetails,
   updateTicketPriority,
 } from '@/services/clientSide/ticketServices';
@@ -187,15 +188,16 @@ function TicketDetails(props: Props) {
       value: PriorityLevels;
       user_id: string;
     }) => {
-      const payload = { assignedTo: item?.user_id };
+      const payload = { assignee: item?.user_id };
       try {
+        console.log('asfafadfsasdfsd');
         if (ticketDetails?.id) {
           const updatedTicketDetails = {
             ...ticketDetails,
             assigned_to: item?.user_id,
           };
           ticketStore.setTicketDetails(updatedTicketDetails);
-          await updateTicketDetails(ticketDetails?.id, payload);
+          await updateAssignee(ticketDetails?.id, payload);
         }
       } catch (e) {
         console.log('Error : ', e);
