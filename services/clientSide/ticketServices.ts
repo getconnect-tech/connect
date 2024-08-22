@@ -164,7 +164,11 @@ export const getTicketMessages = async (ticketId: string) => {
       `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}/messages`,
     );
     const { data } = response;
-    return data;
+    if (data) {
+      ticketStore.setTicketMessages(data);
+      return data;
+    }
+    return false;
   } catch (err: any) {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return null;
