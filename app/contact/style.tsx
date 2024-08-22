@@ -16,7 +16,7 @@ const TopDiv = styled.div`
   position: sticky;
   top: 0;
   background-color: ${colors.bg_surface};
-  z-index: 999;
+  z-index: 99;
   margin-bottom: 12px;
   padding: 0 20px;
 `;
