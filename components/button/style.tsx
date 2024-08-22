@@ -53,15 +53,12 @@ const Buttons = styled.button<WrapButton>`
     props.disabled &&
     css`
       color: ${colors.text_disabled};
+      border: 1px solid ${colors.brand_disabled};
       background-color: ${props.secondary
         ? 'transparent'
         : props.isLoading
           ? colors.brand
           : colors.brand_disabled};
-      border: ${props.secondary
-        ? '1px solid  ${colors.border_input_border}'
-        : 'none'};
-
       &:hover {
         background-color: ${props.secondary
           ? 'transparent'

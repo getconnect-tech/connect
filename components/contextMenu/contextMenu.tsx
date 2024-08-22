@@ -13,7 +13,7 @@ import {
   ContextMenuSubTrigger,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { labelItem, priorityItem } from '@/helpers/raw';
+import { labelItem, priorityItem, snoozeItem } from '@/helpers/raw';
 import { useStores } from '@/stores';
 import { TicketDetailsInterface } from '@/utils/appTypes';
 import {
@@ -59,12 +59,6 @@ export default function CustomContextMenu(props: Props) {
       isName: true,
       user_id: user.id,
     })) || []),
-  ];
-
-  const snoozeItem = [
-    { name: 'Tomorrow', time: 'Wed, Jul 31' },
-    { name: 'Next week', time: 'Tue, Aug 6' },
-    { name: '3 days', time: 'Fri, Aug 2' },
   ];
 
   /*
@@ -187,10 +181,9 @@ export default function CustomContextMenu(props: Props) {
                       iconSize='12'
                       iconViewBox='0 0 12 12'
                       onClose={() => {}}
-                      isSearch={true}
                       isContextMenu={true}
                       isSnooze={true}
-                      style={{ minWidth: 212, marginTop: -4 }}
+                      style={{ minWidth: 260, marginTop: -4 }}
                     />
                   </ContextMenuSubContent>
                 </ContextMenu.Portal>

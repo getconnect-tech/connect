@@ -28,7 +28,7 @@ import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
 import MessageCard from '@/components/messageCard/messageCard';
 import QuestionCard from '@/components/questionCard/questionCard';
-import { labelItem, modeItem, priorityItem } from '@/helpers/raw';
+import { labelItem, modeItem, priorityItem, snoozeItem } from '@/helpers/raw';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import { useStores } from '@/stores';
 import {
@@ -147,12 +147,6 @@ function TicketDetails(props: Props) {
       isName: true,
       user_id: user.id,
     })) || []),
-  ];
-
-  const snoozeItem = [
-    { name: 'Tomorrow', time: 'Wed, Jul 31' },
-    { name: 'Next week', time: 'Tue, Aug 6' },
-    { name: '3 days', time: 'Fri, Aug 2' },
   ];
 
   /*
@@ -311,7 +305,7 @@ function TicketDetails(props: Props) {
                 isTag={true}
                 isActive={snoozeDropdown && true}
                 isSnooze={true}
-                dropDownStyle={{ maxWidth: 212, width: '100%' }}
+                dropDownStyle={{ maxWidth: 260, width: '100%' }}
                 className={
                   submenuPosition === 'upwards'
                     ? 'submenu-upwards'

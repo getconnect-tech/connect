@@ -11,7 +11,7 @@ interface Props {
   error?: string;
   className?: string;
   login?: boolean;
-  value?: string;
+  value?: any;
   type?: 'email' | 'password' | 'text' | 'number';
   // eslint-disable-next-line no-unused-vars
   onChange?: any;
