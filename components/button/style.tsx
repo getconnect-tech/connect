@@ -102,6 +102,16 @@ const Buttons = styled.button<WrapButton>`
     css`
       ${Typography.body_sm_medium}
     `}
+    ${(props) =>
+    props.isDelete &&
+    css`
+      background-color: ${colors.fill_danger};
+      color: ${colors.text_white};
+      border-color: ${colors.fill_danger};
+      &:hover {
+        background-color: ${colors.fill_danger};
+      }
+    `}
 `;
 
 const ButtonWrap = styled.div<Prop>`
