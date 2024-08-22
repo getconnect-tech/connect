@@ -178,3 +178,11 @@ export const updateWorkspace = async (
 
   return updatedWorkspace;
 };
+
+export const removeInvitedUser = async (invitedUserId: string) => {
+  const deletedInvitedUser = await prisma.invitedUser.delete({
+    where: { id: invitedUserId },
+  });
+
+  return deletedInvitedUser;
+};
