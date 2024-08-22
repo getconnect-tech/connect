@@ -417,6 +417,7 @@ function TicketDetails(props: Props) {
                 <RichTextBox
                   isInternalDiscussion={modeSelectedItem.name !== 'Email'}
                   users={currentWorkspace?.users}
+                  placeholder='Write a message'
                 />
                 <InputIcon>
                   <DropDownWithTag
