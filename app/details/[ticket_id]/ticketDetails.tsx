@@ -33,6 +33,7 @@ import { labelItem, modeItem, priorityItem } from '@/helpers/raw';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import { useStores } from '@/stores';
 import {
+  changeTicketStatus,
   getTicketDetails,
   getTicketMessages,
   updateTicketDetails,
@@ -229,7 +230,7 @@ function TicketDetails(props: Props) {
           status: TicketStatus.CLOSED,
         };
         ticketStore.setTicketDetails(updatedTicketDetails);
-        await updateTicketDetails(ticketDetails?.id, payload);
+        await changeTicketStatus(ticketDetails?.id, payload);
       }
     } catch (e) {
       console.log('Error : ', e);
