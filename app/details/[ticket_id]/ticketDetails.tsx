@@ -41,6 +41,7 @@ import Icon from '@/components/icon/icon';
 import RichTextBox from '@/components/commentBox';
 import { DropDownItem } from '@/components/dropDown/dropDown';
 import Tag from '@/components/tag/tag';
+import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
 
 interface Props {
   ticket_id: string;
@@ -55,8 +56,8 @@ function TicketDetails(props: Props) {
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const { ticketStore, workspaceStore } = useStores();
-  const { currentWorkspace } = workspaceStore;
-  const { ticketDetails } = ticketStore;
+  const { currentWorkspace } = workspaceStore || {};
+  const { ticketDetails } = ticketStore || {};
   const { priority, assigned_to } = ticketDetails || {};
   const [modeSelectedItem, setModeSelectedItem] = useState<DropDownItem>({
     name: 'Email',
@@ -276,20 +277,15 @@ function TicketDetails(props: Props) {
                 isTag={true}
                 isActive={true}
               />
-              <DropDownWithTag
+              <AssigneeDropdown
                 onClick={handleAssignTag}
-                title={assignedUser?.display_name || ''}
+                selectedValue={assignedUser}
                 dropdownOpen={assignDropdown}
                 onClose={() => setAssignDropdown(false)}
                 items={assignItem}
                 onChange={onChangeAssign}
-                isTag={true}
-                isSearch={true}
                 isActive={true}
-                isName={true}
                 iconSize='20'
-                iconViewBox='0 0 20 20'
-                src={assignedUser?.profile_url || ''}
               />
             </ButtonDiv>
             <ButtonDiv>
