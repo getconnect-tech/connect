@@ -44,7 +44,7 @@ class TicketStore {
   }
 
   // Ticket Details actions
-  setTicketDetails(value: TicketDetailsInterface) {
+  setTicketDetails(value: TicketDetailsInterface | null) {
     this.ticketDetails = value;
   }
 

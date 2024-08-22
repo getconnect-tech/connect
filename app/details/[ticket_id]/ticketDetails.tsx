@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
 import { MessageType, PriorityLevels, TicketStatus } from '@prisma/client';
+import moment from 'moment';
 import {
   ActivityDiv,
   BottomDiv,
@@ -93,13 +94,19 @@ function TicketDetails(props: Props) {
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
-      await getTicketDetails(ticket_id);
-      await getTicketMessages(ticket_id);
+      await Promise.all([
+        getTicketDetails(ticket_id),
+        getTicketMessages(ticket_id),
+      ]);
     }
   }, [ticket_id, currentWorkspace?.id]);
 
   useEffect(() => {
     loadData();
+    return () => {
+      ticketStore.setTicketDetails(null);
+      ticketStore.setTicketMessages([]);
+    };
   }, [loadData]);
 
   const handlePriorityTag = () => {
@@ -294,7 +301,7 @@ function TicketDetails(props: Props) {
                   fill='none'
                   viewBox='0 0 4 4'
                 />
-                <span>2 min ago</span>
+                <span>{moment(message?.created_at).fromNow()}</span>
               </Message>
             </ActivityDiv>
           );
@@ -302,14 +309,14 @@ function TicketDetails(props: Props) {
           return (
             <ActivityDiv>
               <Avatar
-                imgSrc={
-                  'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
-                }
-                name={''}
+                imgSrc={message?.author?.profile_url || ''}
+                name={message?.author?.display_name || ''}
                 size={20}
               />
               <Message>
-                Connect AI <span>assigned this ticket to</span> Sanjay M.
+                {message?.author?.display_name || ''}{' '}
+                <span>assigned this ticket to</span>{' '}
+                {message?.assignee?.display_name || ''}
                 <SVGIcon
                   name='dot-icon'
                   width='4'
@@ -317,12 +324,12 @@ function TicketDetails(props: Props) {
                   fill='none'
                   viewBox='0 0 4 4'
                 />
-                <span>2 min ago</span>
+                <span>{moment(message?.created_at).fromNow()}</span>
               </Message>
             </ActivityDiv>
           );
         default:
-          return <></>;
+          return <>{message.content}</>;
       }
     },
     [contact?.name],
