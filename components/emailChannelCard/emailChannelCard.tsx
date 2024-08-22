@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Input from '../input/input';
 import Button from '../button/button';
-import Icon from '../icon/icon';
 import {
   CheckBox,
   Description,
@@ -104,12 +103,14 @@ export function EmailChannelCard({
                           <div className='td-div'>
                             ve- donan
                             verify=docs.teapcaso.a00.19087c03680302478e1
-                            <SVGIcon
-                              name='apikey-copy-icon'
-                              width='12'
-                              height='12'
-                              viewBox='0 0 12 12'
-                            />
+                            <div className='copy-icon'>
+                              <SVGIcon
+                                name='apikey-copy-icon'
+                                width='12'
+                                height='12'
+                                viewBox='0 0 12 12'
+                              />
+                            </div>
                           </div>
                         </td>
                       </tr>
@@ -119,12 +120,14 @@ export function EmailChannelCard({
                         <td>
                           <div className='td-div'>
                             cname.vencz-dns.com
-                            <SVGIcon
-                              name='apikey-copy-icon'
-                              width='12'
-                              height='12'
-                              viewBox='0 0 12 12'
-                            />
+                            <div className='copy-icon'>
+                              <SVGIcon
+                                name='apikey-copy-icon'
+                                width='12'
+                                height='12'
+                                viewBox='0 0 12 12'
+                              />
+                            </div>
                           </div>
                         </td>
                       </tr>

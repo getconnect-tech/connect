@@ -79,7 +79,7 @@ export const InputDiv = styled.div`
   svg {
     fill: ${colors.icon_disable};
     :hover {
-      fill: ${colors.icon};
+      fill: ${colors.icon_active};
       cursor: pointer;
     }
   }
@@ -138,6 +138,26 @@ export const Table = styled.table`
     display: flex;
     align-items: center;
   }
+  .copy-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 12px;
+    svg {
+      cursor: pointer;
+      fill: ${colors.icon_disable};
+    }
+    &:hover {
+      background-color: ${colors.bg_surface_secondary};
+      border-radius: 50%;
+      svg {
+        fill: ${colors.icon_active};
+      }
+    }
+  }
 
   thead {
     background-color: ${colors.bg_white};
@@ -168,15 +188,6 @@ export const Table = styled.table`
       border-bottom: none;
     }
   }
-  svg {
-    position: absolute;
-    right: 12px;
-    cursor: pointer;
-    fill: ${colors.icon_disable};
-    :hover {
-      fill: ${colors.icon};
-    }
-  }
 `;
 export const TableWrapper = styled.div`
   border-radius: 8px;
@@ -202,9 +213,5 @@ export const EmailAddressDiv = styled.div`
     word-break: break-all;
     ${Typography.body_md_medium};
     color: ${colors.text};
-  }
-  .copy-icon {
-    width: 16px;
-    height: 16px;
   }
 `;
