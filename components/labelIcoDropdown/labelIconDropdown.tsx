@@ -7,9 +7,9 @@ import { labelIcons } from '@/helpers/raw';
 interface Props {
   onClose?: () => void;
   // eslint-disable-next-line no-unused-vars
-  handleLableName?: (iconName: string) => void;
+  handleLabelName?: (iconName: string) => void;
 }
-function LabelIconDropdown({ onClose, handleLableName }: Props) {
+function LabelIconDropdown({ onClose, handleLabelName: handleLableName }: Props) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(true);
 

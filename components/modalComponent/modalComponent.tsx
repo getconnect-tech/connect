@@ -50,7 +50,7 @@ function ModalComponent({
   dropdownVisible,
 }: Props) {
   const [icon, setIcon] = useState<string>('tag-icon');
-  const handleLableName = (iconName: string) => {
+  const handleLabelName = (iconName: string) => {
     setIcon(iconName);
   };
   return (
@@ -78,7 +78,7 @@ function ModalComponent({
               />
             </IconDiv>
             {dropdownVisible && (
-              <LabelIconDropdown handleLableName={handleLableName} />
+              <LabelIconDropdown handleLabelName={handleLabelName} />
             )}
           </div>
         )}
