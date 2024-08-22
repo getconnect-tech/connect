@@ -97,7 +97,11 @@ const Members = () => {
                   Invite your team member to collaborate.
                 </Description>
               </LeftDiv>
-              <Button title='Invite Member' onClick={onOpenInviteModal} />
+              <Button
+                title='Invite Member'
+                onClick={onOpenInviteModal}
+                variant='medium'
+              />
             </Head>
             <MainCardDiv>
               {currentWorkspace?.users?.map((member) => (

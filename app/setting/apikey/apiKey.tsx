@@ -65,7 +65,11 @@ function ApiKey() {
                 <Title>API keys</Title>
               </LeftDiv>
               {!isEmpty(apiKeys) && (
-                <Button title='Create Key' onClick={onOpenKeyModal} />
+                <Button
+                  title='Create Key'
+                  onClick={onOpenKeyModal}
+                  variant='medium'
+                />
               )}
             </Head>
             {loading && <ApiKeyLoading />}

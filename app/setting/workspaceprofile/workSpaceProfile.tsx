@@ -197,7 +197,12 @@ const WorkspaceProfile = () => {
                 />
               </TextField>
             </ProfileInputs>
-            <Button type='submit' title='Update' isLoading={loading} />
+            <Button
+              type='submit'
+              title='Update'
+              isLoading={loading}
+              variant='medium'
+            />
           </ProfileDetail>
         </RightDiv>
       </MainDiv>
