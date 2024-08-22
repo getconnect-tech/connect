@@ -5,6 +5,7 @@ import { Typography } from '@/styles/typography';
 export const MainDiv = styled.div`
   display: flex;
   max-width: 360px;
+  min-width: 360px;
   width: 100%;
   border-radius: 12px;
   background-color: ${colors.bg_white};

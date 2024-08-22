@@ -17,8 +17,13 @@ function DeleteModal({ headTitle, title, description, onclose }: Props) {
         <p>{description}</p>
       </Content>
       <BottomDiv>
-        <Button title='Cancel' secondary={true} onClick={onclose} />
-        <Button title='Delete' isDelete={true} />
+        <Button
+          title='Cancel'
+          secondary={true}
+          onClick={onclose}
+          variant='medium'
+        />
+        <Button title='Delete' isDelete={true} variant='medium' />
       </BottomDiv>
     </MainDiv>
   );
