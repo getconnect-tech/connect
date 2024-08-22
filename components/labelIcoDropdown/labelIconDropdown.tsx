@@ -9,13 +9,16 @@ interface Props {
   // eslint-disable-next-line no-unused-vars
   handleLabelName?: (iconName: string) => void;
 }
-function LabelIconDropdown({ onClose, handleLabelName: handleLableName }: Props) {
+function LabelIconDropdown({
+  onClose,
+  handleLabelName: handleLabelName,
+}: Props) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(true);
 
   const handleClick = (iconName: string) => {
     setIsOpen(false);
-    if (handleLableName) handleLableName(iconName);
+    if (handleLabelName) handleLabelName(iconName);
   };
 
   useEffect(() => {
