@@ -159,7 +159,8 @@ const DropDown = ({
     [searchQuery, items],
   );
 
-  const handleDateTimeClick = () => {
+  const handleDateTimeClick = (e: SyntheticEvent) => {
+    e.stopPropagation();
     setShowDatePicker(true);
   };
 

@@ -12,3 +12,74 @@ a {
   color: inherit;
   text-decoration: none;
 }
+:where(.css-dev-only-do-not-override-1gwfwyx).ant-picker-dropdown
+  .ant-picker-time-panel-column,
+:where(.css-1gwfwyx).ant-picker-dropdown .ant-picker-time-panel-column {
+  scrollbar-color: #dcdcd9 transparent;
+  width: 68px;
+  overflow-y: auto;
+}
+.ant-picker-now-btn {
+  display: none;
+}
+.ant-btn .css-dev-only-do-not-override-1gwfwyx .ant-btn-primary .ant-btn-sm {
+  background-color: #282828;
+}
+.ant-picker.ant-picker-outlined.css-dev-only-do-not-override-1gwfwyx {
+  border-radius: 30px;
+  border-color: #dcdcd9;
+  width: 114px;
+}
+.anticon.anticon-clock-circle {
+  display: none;
+}
+:where(.css-dev-only-do-not-override-1gwfwyx).ant-picker-dropdown
+  .ant-picker-time-panel-column:not(:first-child),
+:where(.css-1gwfwyx).ant-picker-dropdown
+  .ant-picker-time-panel-column:not(:first-child) {
+  border-inline-start: 1px solid #e9e8e5;
+}
+:where(.css-dev-only-do-not-override-1gwfwyx).ant-picker-dropdown
+  .ant-picker-footer,
+:where(.css-1gwfwyx).ant-picker-dropdown .ant-picker-footer {
+  border-top: 1px solid #e9e8e5;
+}
+:where(.css-dev-only-do-not-override-1gwfwyx).ant-picker-dropdown
+  .ant-picker-panel
+  > .ant-picker-time-panel,
+:where(.css-1gwfwyx).ant-picker-dropdown
+  .ant-picker-panel
+  > .ant-picker-time-panel {
+  padding: 0;
+}
+:where(.css-dev-only-do-not-override-1gwfwyx).ant-picker-dropdown
+  .ant-picker-time-panel-column,
+:where(.css-1gwfwyx).ant-picker-dropdown .ant-picker-time-panel-column {
+  margin: 0;
+}
+:where(.css-dev-only-do-not-override-1gwfwyx).ant-btn-primary:disabled,
+:where(.css-dev-only-do-not-override-1gwfwyx).ant-btn-primary.ant-btn-disabled,
+:where(.css-1gwfwyx).ant-btn-primary:disabled,
+:where(.css-1gwfwyx).ant-btn-primary.ant-btn-disabled {
+  background-color: #282828;
+  border: none;
+  border-radius: 30px;
+  height: 24px;
+  width: 42px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  line-height: 16px;
+}
+:where(.css-dev-only-do-not-override-1gwfwyx).ant-picker-dropdown
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell
+  .ant-picker-time-panel-cell-inner:hover,
+:where(.css-1gwfwyx).ant-picker-dropdown
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell
+  .ant-picker-time-panel-cell-inner:hover {
+  background-color: #f2f2f2;
+  border-radius: 6px;
+}

@@ -137,3 +137,5 @@ export const Label = styled.p`
   ${Typography.body_sm_medium};
   color: ${colors.text};
 `;
+
+export const TimePickerDiv = styled.div``;

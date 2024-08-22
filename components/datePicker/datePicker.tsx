@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Calendar from 'react-calendar';
+import { TimePicker, TimePickerProps } from 'antd';
 import Icon from '../icon/icon';
 import Input from '../input/input';
 import Button from '../button/button';
@@ -10,11 +11,16 @@ import {
   Inputs,
   Label,
   MainDiv,
+  TimePickerDiv,
 } from './style';
 
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
+
+const onChange: TimePickerProps['onChange'] = (time, timeString) => {
+  console.log(time, timeString);
+};
 
 interface Props {
   onClose: () => void;
@@ -81,16 +87,34 @@ function DatePickerModal({ onClose }: Props) {
           </div>
           <div>
             <Label>Time</Label>
-            <Input
-              placeholder={'HH:MM'}
-              className='input'
-              // onClick={handleModalClick} // Prevent close on time input click
-            />
+            <TimePickerDiv>
+              <TimePicker
+                format='h:00 A'
+                placeholder='HH:MM'
+                onChange={onChange}
+                disabled={false}
+                popupStyle={{
+                  border: '1px solid',
+                  borderRadius: 8,
+                  borderColor: '#E3E8EA',
+                }}
+              />
+            </TimePickerDiv>
           </div>
         </Inputs>
         <div className='buttons'>
-          <Button title='Cancel' secondary={true} onClick={handleCancel} />
-          <Button title='Snooze' disabled={false} onClick={handleSnooze} />
+          <Button
+            title='Cancel'
+            secondary={true}
+            onClick={handleCancel}
+            variant='medium'
+          />
+          <Button
+            title='Snooze'
+            disabled={false}
+            onClick={handleSnooze}
+            variant='medium'
+          />
         </div>
       </InputMainDiv>
     </MainDiv>
