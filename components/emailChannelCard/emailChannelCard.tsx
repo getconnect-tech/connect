@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Input from '../input/input';
 import Button from '../button/button';
+import Icon from '../icon/icon';
 import {
   CheckBox,
   Description,
@@ -60,14 +61,12 @@ export function EmailChannelCard({
                     <p>
                       40c17585b3fe12467fb00efc70ddc46d@inbound.postmarkapp.com
                     </p>
-                    <div className='copy-icon'>
-                      <SVGIcon
-                        name='copy-icon'
-                        width='16'
-                        height='16'
-                        viewBox='0 0 16 16'
-                      />
-                    </div>
+                    <SVGIcon
+                      name='apikey-copy-icon'
+                      width='12'
+                      height='12'
+                      viewBox='0 0 12 12'
+                    />
                   </EmailAddressDiv>
                   <CheckBox isChecked={isChecked}>
                     <StyledCheckbox
@@ -102,39 +101,40 @@ export function EmailChannelCard({
                         <td>TXT</td>
                         <td>_vercel.teamcamp.app</td>
                         <td>
-                          <span>
+                          <div className='td-div'>
                             ve- donan
-                            <br />
                             verify=docs.teapcaso.a00.19087c03680302478e1
-                          </span>
-                          <SVGIcon
-                            name='duplicate-icon'
-                            width='16'
-                            height='16'
-                            viewBox='0 0 16 16'
-                          />
+                            <SVGIcon
+                              name='apikey-copy-icon'
+                              width='12'
+                              height='12'
+                              viewBox='0 0 12 12'
+                            />
+                          </div>
                         </td>
                       </tr>
                       <tr>
                         <td>CNAME</td>
                         <td>docs</td>
                         <td>
-                          cname.vencz-dns.com
-                          <SVGIcon
-                            name='duplicate-icon'
-                            width='16'
-                            height='16'
-                            viewBox='0 0 16 16'
-                          />
+                          <div className='td-div'>
+                            cname.vencz-dns.com
+                            <SVGIcon
+                              name='apikey-copy-icon'
+                              width='12'
+                              height='12'
+                              viewBox='0 0 12 12'
+                            />
+                          </div>
                         </td>
                       </tr>
                     </tbody>
                   </Table>
                 </TableWrapper>
-                <p>
+                <Description>
                   It might take a couple of minutes for your DNS changes to
                   propagate, although in some cases it can take up to 24 hours.
-                </p>
+                </Description>
                 <Button title='Verify DNS and continue' variant='medium' />
               </>
             )}

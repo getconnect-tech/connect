@@ -43,7 +43,7 @@ export const Head = styled.div`
 
 export const StepName = styled.div`
   ${Typography.body_sm_regular}
-  color: ${colors.text};
+  color: ${colors.text_text_secondary};
   cursor: pointer;
 `;
 
@@ -53,7 +53,7 @@ export const StepContent = styled.div`
 `;
 
 export const Description = styled.div`
-  ${Typography.body_md_medium}
+  ${Typography.body_md_regular}
   color: ${colors.text};
 `;
 
@@ -67,23 +67,33 @@ export const Div = styled.div`
     color: ${colors.brand_fill_hover};
   }
   .input {
-    max-width: 260px;
+    max-width: 320px;
+    ${Typography.body_md_medium};
+    padding: 8px 16px;
   }
 `;
 export const InputDiv = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+  svg {
+    fill: ${colors.icon_disable};
+    :hover {
+      fill: ${colors.icon};
+      cursor: pointer;
+    }
+  }
 `;
 export const CheckBox = styled.div<Props>`
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-top: 4px;
   p {
     ${Typography.body_md_regular}
     color: ${colors.text_text_secondary};
     ${(props) =>
-    props.isChecked &&
+      props.isChecked &&
       css`
         color: ${colors.text};
       `}
@@ -110,10 +120,13 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   &:checked {
     background-color: ${colors.brand};
     // eslint-disable-next-line prettier/prettier
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(
+      checkmarkSVG,
+    )}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;
+    border: none;
   }
 `;
 export const Table = styled.table`
@@ -121,6 +134,10 @@ export const Table = styled.table`
   border-radius: 8px;
   border-collapse: collapse;
   overflow: hidden;
+  .td-div {
+    display: flex;
+    align-items: center;
+  }
 
   thead {
     background-color: ${colors.bg_white};
@@ -134,13 +151,13 @@ export const Table = styled.table`
   }
 
   th {
-    ${Typography.body_sm_medium}
+    ${Typography.body_md_medium}
     color: ${colors.text};
   }
 
   td {
-    ${Typography.body_sm_medium}
-    color: ${colors.text};
+    ${Typography.body_md_regular}
+    color: ${colors.text_text_secondary};
     position: relative;
   }
 
@@ -155,6 +172,10 @@ export const Table = styled.table`
     position: absolute;
     right: 12px;
     cursor: pointer;
+    fill: ${colors.icon_disable};
+    :hover {
+      fill: ${colors.icon};
+    }
   }
 `;
 export const TableWrapper = styled.div`
@@ -171,6 +192,7 @@ export const EmailAddressDiv = styled.div`
   border-radius: 30px;
   max-width: 519px;
   width: 100%;
+  height: 36px;
   border: 1px solid ${colors.border_input_border};
   p {
     display: -webkit-box;
@@ -180,7 +202,6 @@ export const EmailAddressDiv = styled.div`
     word-break: break-all;
     ${Typography.body_md_medium};
     color: ${colors.text};
-    margin-right: 16px;
   }
   .copy-icon {
     width: 16px;
