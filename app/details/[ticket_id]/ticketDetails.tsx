@@ -43,6 +43,7 @@ import RichTextBox from '@/components/commentBox';
 import { DropDownItem } from '@/components/dropDown/dropDown';
 import Tag from '@/components/tag/tag';
 import { MessageDetails } from '@/utils/dataTypes';
+import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
 
 interface Props {
   ticket_id: string;
@@ -378,20 +379,15 @@ function TicketDetails(props: Props) {
                 isTag={true}
                 isActive={true}
               />
-              <DropDownWithTag
+              <AssigneeDropdown
                 onClick={handleAssignTag}
-                title={assignedUser?.display_name || ''}
+                selectedValue={assignedUser}
                 dropdownOpen={assignDropdown}
                 onClose={() => setAssignDropdown(false)}
                 items={assignItem}
                 onChange={onChangeAssign}
-                isTag={true}
-                isSearch={true}
                 isActive={true}
-                isName={true}
                 iconSize='20'
-                iconViewBox='0 0 20 20'
-                src={assignedUser?.profile_url || ''}
               />
             </ButtonDiv>
             <ButtonDiv>

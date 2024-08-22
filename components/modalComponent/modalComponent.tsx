@@ -96,9 +96,19 @@ function ModalComponent({
         )}
         <div className='button'>
           {buttonCancel && (
-            <Button title={buttonCancel} onClick={onClose} secondary={true} />
+            <Button
+              title={buttonCancel}
+              onClick={onClose}
+              secondary={true}
+              variant='medium'
+            />
           )}
-          <Button type='submit' title={buttonTitle} isLoading={loading} />
+          <Button
+            type='submit'
+            title={buttonTitle}
+            isLoading={loading}
+            variant='medium'
+          />
         </div>
       </BottomDiv>
     </MainDiv>

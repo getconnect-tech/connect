@@ -8,6 +8,7 @@ interface Props {
   isLoading?: boolean;
   disabled?: boolean;
   type?: 'reset' | 'submit' | 'button';
+  variant?: 'large' | 'medium' | 'small';
   secondary?: boolean;
   iconSize?: string;
   iconName?: string;
@@ -34,6 +35,7 @@ const Button: React.FC<Props> = (Props) => {
     iconViewBox,
     className,
     isLink,
+    variant,
     ...props
   } = Props;
   return (
@@ -48,6 +50,7 @@ const Button: React.FC<Props> = (Props) => {
         className={className}
         width={width}
         isLink={isLink}
+        variant={variant}
         {...props}
       >
         {iconName && (

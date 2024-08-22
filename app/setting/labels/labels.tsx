@@ -54,6 +54,7 @@ function Labels() {
                   iconName='label-plus-icon'
                   iconSize='10'
                   iconViewBox='0 0 10 10'
+                  variant='medium'
                 />
               )}
             </Head>
