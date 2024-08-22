@@ -8,8 +8,8 @@ import SVGIcon from '@/assets/icons/SVGIcon';
 import WorkspaceCard from '@/components/workspaceCard/workspaceCard';
 import Button from '@/components/button/button';
 import {
-  getWorkspaceById,
   getWorkspaceList,
+  workspaceChange,
 } from '@/services/clientSide/workspaceServices';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { getAPIErrorMessage } from '@/helpers/common';
@@ -37,7 +37,7 @@ function SelectWorkSpace() {
     // set current workspace in localstorage
     UserPreferenceSingleton.getInstance().setCurrentWorkspace(workSpaceId);
     // get workspace data
-    const result = await getWorkspaceById(workSpaceId);
+    const result = await workspaceChange(workSpaceId);
     if (result) router.push('/');
   }, []);
 
