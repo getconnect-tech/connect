@@ -151,3 +151,24 @@ export const updateTicketPriority = async (ticketId: any, payload: object) => {
     ticketStore.setLoading(false);
   }
 };
+
+/**
+ * @desc Get ticket messages
+ * @param {*} ticketId
+ */
+
+export const getTicketMessages = async (ticketId: string) => {
+  try {
+    ticketStore.setLoading(true);
+    const response = await axios.get(
+      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}/messages`,
+    );
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return null;
+  } finally {
+    ticketStore.setLoading(false);
+  }
+};
