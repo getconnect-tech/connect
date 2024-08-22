@@ -110,7 +110,7 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
             <Icon
               iconName='attach-file-icon'
               iconSize='16'
-              iconViewBox='0 0 16 16'
+              iconViewBox='0 0 17 16'
               onClick={handleIconClick}
             />
             <RightDiv>

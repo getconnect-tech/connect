@@ -127,6 +127,10 @@ export const FileCardContainer = styled.div`
   flex-wrap: wrap;
   gap: 12px;
   padding: 12px 16px;
+  background-color: ${colors.bg_white};
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
 `;
 
 export const CloseIconDiv = styled.div`
@@ -170,5 +174,5 @@ export const Content = styled.div`
 
 export const ModalContant = styled.div`
   overflow: auto;
-    max-height: 320px;
+  max-height: 320px;
 `;
