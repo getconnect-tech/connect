@@ -74,7 +74,7 @@ function ModalComponent({
                 name={icon}
                 width='16'
                 height='16'
-                viewBox='0 0 20 20'
+                viewBox='0 0 12 12'
               />
             </IconDiv>
             {dropdownVisible && (
