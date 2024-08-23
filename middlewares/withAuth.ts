@@ -2,6 +2,7 @@
 import { User } from '@prisma/client';
 import { NextRequest } from 'next/server';
 import { getSessionDetails } from '@/services/serverSide/auth/authentication';
+import { getApiDetails } from '@/services/serverSide/apiKey';
 
 type AuthorizedRequest = NextRequest & { user: User };
 type RequestHandler = (
@@ -14,14 +15,41 @@ type RequestHandler = (
 const withAuth =
   (handler: RequestHandler) =>
   async (req: NextRequest, { params }: { params: Record<string, string> }) => {
-    const session = await getSessionDetails();
-
-    if (!session?.user.id) {
-      return Response.json({ error: 'Unauthorized!' }, { status: 401 });
-    }
-
     const authorizedRequest = req as AuthorizedRequest;
-    authorizedRequest.user = session.user;
+    const authorizationHeader = req.nextUrl.searchParams.get('API_KEY');
+
+    if (authorizationHeader) {
+      if (!authorizationHeader.startsWith('Bearer ')) {
+        return Response.json(
+          {
+            error:
+              "Misconfigured authorization header. Did you forget to add 'Bearer '?",
+          },
+          { status: 400 },
+        );
+      }
+
+      const apiKey = authorizationHeader.slice(7);
+
+      const apiKeyDetails = await getApiDetails(apiKey);
+
+      if (!apiKeyDetails) {
+        return Response.json(
+          { error: 'Unauthorized: Invalid API key!' },
+          { status: 401 },
+        );
+      }
+
+      authorizedRequest.user = apiKeyDetails.user;
+    } else {
+      const session = await getSessionDetails();
+
+      if (!session?.user.id) {
+        return Response.json({ error: 'Unauthorized!' }, { status: 401 });
+      }
+
+      authorizedRequest.user = session.user;
+    }
 
     return handler(authorizedRequest, params);
   };
