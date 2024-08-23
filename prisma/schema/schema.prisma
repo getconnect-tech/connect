@@ -21,6 +21,7 @@ model User {
   messages      Message[]
   tickets       Ticket[]
   workspaces    UserWorkspaces[]
+  api_keys      ApiKeys[]
 }
 
 model Workspace {
@@ -35,6 +36,7 @@ model Workspace {
   tickets       Ticket[]
   users         UserWorkspaces[]
   ticketLabels  Label[]
+  api_keys      ApiKeys[]
 }
 
 model Label {
@@ -114,4 +116,13 @@ model InvitedUser {
   created_at      DateTime  @default(now())
   invited_by_user User      @relation(fields: [invited_by], references: [id])
   workspace       Workspace @relation(fields: [workspace_id], references: [id])
+}
+
+model ApiKeys {
+  api_key      String    @id
+  workspace_id String
+  created_by   String
+  created_at   DateTime  @default(now())
+  workspace    Workspace @relation(fields: [workspace_id], references: [id])
+  user         User      @relation(fields: [created_by], references: [id])
 }
