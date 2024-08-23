@@ -35,8 +35,8 @@ import { useStores } from '@/stores';
 import {
   changeTicketStatus,
   getTicketDetails,
+  updateAssignee,
   getTicketMessages,
-  updateTicketDetails,
   updateTicketPriority,
 } from '@/services/clientSide/ticketServices';
 import { capitalizeString, isEmpty } from '@/helpers/common';
@@ -198,7 +198,7 @@ function TicketDetails(props: Props) {
       value: PriorityLevels;
       user_id: string;
     }) => {
-      const payload = { assignedTo: item?.user_id };
+      const payload = { assignee: item?.user_id };
       try {
         if (ticketDetails?.id) {
           const updatedTicketDetails = {
@@ -206,7 +206,7 @@ function TicketDetails(props: Props) {
             assigned_to: item?.user_id,
           };
           ticketStore.setTicketDetails(updatedTicketDetails);
-          await updateTicketDetails(ticketDetails?.id, payload);
+          await updateAssignee(ticketDetails?.id, payload);
         }
       } catch (e) {
         console.log('Error : ', e);
