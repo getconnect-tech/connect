@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import {
   CardMessage,
   CardTop,
@@ -11,7 +12,7 @@ import SVGIcon from '@/assets/icons/SVGIcon';
 
 interface Props {
   title: string;
-  time: string;
+  time: Date;
   subTitle: string;
   message: string;
 }
@@ -30,11 +31,13 @@ export default function MessageCard({ title, time, subTitle, message }: Props) {
               fill='none'
               viewBox='0 0 4 4'
             />
-            <span>{time}</span>
+            <span>{moment(time).fromNow()}</span>
           </NameDiv>
           <p>{subTitle}</p>
         </CardTop>
-        <CardMessage>{message}</CardMessage>
+        <CardMessage>
+          <div dangerouslySetInnerHTML={{ __html: message }} />
+        </CardMessage>
       </MessageCardInnerDiv>
     </MessageCardMinDiv>
   );

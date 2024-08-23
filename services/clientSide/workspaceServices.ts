@@ -220,3 +220,23 @@ export const removeMemberFromWorkspace = async (userId: string) => {
     workspaceStore.setLoading(false);
   }
 };
+
+/**
+ * @desc Delete invited user from workspace
+ * @param {*} userId
+ */
+export const removeInviteUsersFromWorkspace = async (userId: string) => {
+  try {
+    workspaceStore.setLoading(true);
+    const result = await axios.delete(
+      `${NEXT_PUBLIC_API_URL}/workspaces/inviteUsers/${userId}`,
+    );
+    if (result) alert('Invite User Removed');
+    return true;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return false;
+  } finally {
+    workspaceStore.setLoading(false);
+  }
+};
