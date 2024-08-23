@@ -4,10 +4,10 @@ import { colors } from '@/styles/colors';
 const Main = styled.div`
   max-width: 662px;
   width: 100%;
-  margin: 12px auto 0;
+  margin: 26px auto 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   .second-block {
     opacity: 70%;
   }
