@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import Calendar from 'react-calendar';
 import { TimePicker, TimePickerProps } from 'antd';
 import Icon from '../icon/icon';
@@ -24,7 +24,34 @@ interface Props {
   onClose: () => void;
 }
 
+export const useOutsideClick = (callback: () => void) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        if (target.closest(`.tag-div`)) {
+          return;
+        }
+        callback();
+      }
+    };
+
+    // eslint-disable-next-line no-undef
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      // eslint-disable-next-line no-undef
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [callback]);
+
+  return ref;
+};
+
 function DatePickerModal({ onClose }: Props) {
+  const dropDownRef = useOutsideClick(onClose);
   const [value, setValue] = useState<Value>(new Date());
   const [dateInput, setDateInput] = useState<string>(
     new Date().toLocaleDateString('en-US'),
@@ -76,7 +103,7 @@ function DatePickerModal({ onClose }: Props) {
   };
 
   return (
-    <MainDiv onClick={handleModalClick}>
+    <MainDiv onClick={handleModalClick} ref={dropDownRef}>
       <div
         className={`modal-content ${
           submenuPosition === 'upwards'
