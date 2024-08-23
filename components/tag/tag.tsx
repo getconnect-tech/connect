@@ -10,9 +10,10 @@ interface Props {
   isName: boolean;
   src?: string;
   iconName: string;
-  title: string;
+  title: string | undefined;
   ref?: React.Ref<HTMLDivElement>;
   style?: React.CSSProperties;
+  svgStyle?: React.CSSProperties;
 }
 
 export default function Tag({
@@ -24,6 +25,7 @@ export default function Tag({
   ref,
   style,
   src,
+  svgStyle,
 }: Props) {
   return (
     //apply className while open drop down
@@ -35,7 +37,7 @@ export default function Tag({
       style={style}
     >
       {isName ? (
-        <Avatar name={title} imgSrc={src || ''} size={20} />
+        <Avatar name={title || ''} imgSrc={src || ''} size={20} />
       ) : (
         <SVGIcon
           name={iconName}
@@ -43,9 +45,10 @@ export default function Tag({
           height='12'
           className='icon'
           viewBox='0 0 12 12'
+          style={svgStyle}
         />
       )}
-      <StatusTitle>{title}</StatusTitle>
+      {title && <StatusTitle>{title}</StatusTitle>}
     </StatusDiv>
   );
 }
