@@ -233,7 +233,7 @@ function TicketDetails(props: Props) {
         if (ticketDetails?.id) {
           const updatedTicketDetails = {
             ...ticketDetails,
-            status: TicketStatus.CLOSED,
+            status: payload.status,
           };
           ticketStore.setTicketDetails(updatedTicketDetails);
           await changeTicketStatus(ticketDetails?.id, payload);
