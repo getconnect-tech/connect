@@ -23,6 +23,11 @@ const CardMessage = styled.p`
   padding: 12px;
   ${Typography.body_md_regular};
   color: ${colors.text};
+  div {
+    font-size: 14px !important;
+    color: ${colors.text} !important;
+    font-family: unset !important;
+  }
 `;
 
 const MessageCardMinDiv = styled.div`
