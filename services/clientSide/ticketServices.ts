@@ -237,8 +237,6 @@ export const sendMessage = async (ticketId: string, payload: object) => {
       payload,
     );
     const { data } = response;
-    // set ticket details in store
-    ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');
