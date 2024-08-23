@@ -96,6 +96,7 @@ export const createTicket = async ({
       title: subject,
       source: TicketSource.MAIL,
       contact_id: contact.id,
+      subject,
     },
   });
 
