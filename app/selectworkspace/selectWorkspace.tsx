@@ -7,10 +7,14 @@ import Icon from '@/components/icon/icon';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import WorkspaceCard from '@/components/workspaceCard/workspaceCard';
 import Button from '@/components/button/button';
-import { getWorkspaceList } from '@/services/clientSide/workspaceServices';
+import {
+  getWorkspaceList,
+  workspaceChange,
+} from '@/services/clientSide/workspaceServices';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { getAPIErrorMessage } from '@/helpers/common';
 import { Workspace } from '@/utils/dataTypes';
+import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
 
 function SelectWorkSpace() {
   const router = useRouter();
@@ -27,6 +31,14 @@ function SelectWorkSpace() {
     } finally {
       workspaceStore.setLoading(false);
     }
+  }, []);
+
+  const handleClick = useCallback(async (workSpaceId: string) => {
+    // set current workspace in localstorage
+    UserPreferenceSingleton.getInstance().setCurrentWorkspace(workSpaceId);
+    // get workspace data
+    const result = await workspaceChange(workSpaceId);
+    if (result) router.push('/');
   }, []);
 
   useEffect(() => {
@@ -63,6 +75,8 @@ function SelectWorkSpace() {
                     key={index}
                     organizationName={item.name}
                     src={item.image_url || ''}
+                    workSpaceId={item.id}
+                    handleClick={handleClick}
                   />
                 );
               },

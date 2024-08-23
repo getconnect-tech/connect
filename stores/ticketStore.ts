@@ -23,6 +23,9 @@ class TicketStore {
       ticketDetails: observable,
       setTicketDetails: action,
 
+      // Reset Ticket Data
+      resetTicketData: action,
+
       // Ticket Messages
       messages: observable,
       setTicketMessages: action,
@@ -37,6 +40,13 @@ class TicketStore {
   // Ticket list actions
   setTicketList(value: TicketDetailsInterface[]) {
     this.ticketList = value;
+  }
+
+  // Reset Ticket list
+  resetTicketData() {
+    this.loading = false;
+    this.ticketList = [];
+    this.ticketDetails = null;
   }
 
   updateTicketListItem(index: number, value: TicketDetailsInterface) {
