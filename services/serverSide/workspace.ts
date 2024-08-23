@@ -189,3 +189,17 @@ export const removeInvitedUser = async (invitedUserId: string) => {
 
   return deletedInvitedUser;
 };
+
+export const getUserRole = async (workspaceId: string, userId: string) => {
+  const userWorkspaceRel = await prisma.userWorkspaces.findUnique({
+    where: {
+      user_workspace_id: { user_id: userId, workspace_id: workspaceId },
+    },
+  });
+
+  if (!userWorkspaceRel) {
+    return null;
+  }
+
+  return userWorkspaceRel.role;
+};

@@ -24,3 +24,12 @@ export const createApiKey = async ({
 
   return apiKey;
 };
+
+export const getApiDetails = async (apiKey: string) => {
+  const apiDetails = await prisma.apiKeys.findUnique({
+    where: { api_key: apiKey },
+    include: { user: true, workspace: true },
+  });
+
+  return apiDetails;
+};
