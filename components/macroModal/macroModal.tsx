@@ -30,6 +30,7 @@ function MacroModal({ onClose }: Props) {
             isApplyMinHeight={412}
             isInlineToolbar={false}
             className='rich-text'
+            placeholder='Enter description'
           />
         </TextField>
       </ContentDiv>

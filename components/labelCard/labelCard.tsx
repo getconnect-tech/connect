@@ -71,7 +71,11 @@ function LabelCard({
                 setOpenDropdown(null);
               }}
               style={{ right: 0, width: 116, zIndex: 1 }}
-              onChange={onOpenLabelModal}
+              onChange={(item) => {
+                if (!item.isDelete) {
+                  onOpenLabelModal();
+                }
+              }}
             />
           )}
         </div>
