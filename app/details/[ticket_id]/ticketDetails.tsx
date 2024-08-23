@@ -46,6 +46,7 @@ import { DropDownItem } from '@/components/dropDown/dropDown';
 import Tag from '@/components/tag/tag';
 import { MessageDetails } from '@/utils/dataTypes';
 import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
+import SnoozeDropdown from '@/components/snoozeDropdown/snoozeDropdown';
 
 interface Props {
   ticket_id: string;
@@ -438,28 +439,13 @@ function TicketDetails(props: Props) {
                   isName={false}
                 />
               )}
-              <DropDownWithTag
+              <SnoozeDropdown
                 onClick={handleSnoozeTag}
-                title={'Snooze'}
-                iconName='context-snooze-icon'
                 dropdownOpen={snoozeDropdown}
-                onClose={() => {
-                  setSnoozeDropdown(false);
-                }}
+                onClose={() => setSnoozeDropdown(false)}
                 items={snoozeItem}
                 onChange={() => {}}
-                isTag={true}
-                isActive={snoozeDropdown && true}
-                isSnooze={true}
-                dropDownStyle={{ maxWidth: 260, width: '100%' }}
-                className={
-                  submenuPosition === 'upwards'
-                    ? 'submenu-upwards'
-                    : 'submenu-downwards'
-                }
-                onMouseEnter={(e: any) =>
-                  handleMouseEnter(e, setSubmenuPosition)
-                }
+                isActive={snoozeDropdown ? true : false}
               />
             </ButtonDiv>
           </StatusDiv>

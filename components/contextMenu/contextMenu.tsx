@@ -5,6 +5,7 @@ import React, { useCallback, useState } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { PriorityLevels } from '@prisma/client';
 import DropDown from '../dropDown/dropDown';
+import DatePickerModal from '../datePicker/datePicker';
 import {
   ContextMenuContent,
   ContextMenuItem,
@@ -30,6 +31,7 @@ interface Props {
 export default function CustomContextMenu(props: Props) {
   const { children, ticketDetail, ticketIndex } = props;
   const { ticketStore, workspaceStore } = useStores();
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const { currentWorkspace } = workspaceStore;
   const [submenuPosition, setSubmenuPosition] = useState<
     'upwards' | 'downwards'
@@ -176,15 +178,26 @@ export default function CustomContextMenu(props: Props) {
                         : 'submenu-downwards'
                     }
                   >
-                    <DropDown
-                      items={snoozeItem}
-                      iconSize='12'
-                      iconViewBox='0 0 12 12'
-                      onClose={() => {}}
-                      isContextMenu={true}
-                      isSnooze={true}
-                      style={{ minWidth: 260, marginTop: -4 }}
-                    />
+                    <>
+                      <DropDown
+                        items={snoozeItem}
+                        iconSize='12'
+                        iconViewBox='0 0 12 12'
+                        onClose={() => {}}
+                        isContextMenu={true}
+                        isSnooze={true}
+                        style={{ minWidth: 260, marginTop: -4 }}
+                        onChange={() => {
+                          // onChange(item);
+                          setShowDatePicker(true);
+                        }}
+                      />
+                      {showDatePicker && (
+                        <DatePickerModal
+                          onClose={() => setShowDatePicker(false)}
+                        />
+                      )}
+                    </>
                   </ContextMenuSubContent>
                 </ContextMenu.Portal>
               </ContextMenu.Sub>

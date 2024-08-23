@@ -67,8 +67,8 @@ a {
   .ant-picker-time-panel-column
   > li.ant-picker-time-panel-cell-selected
   .ant-picker-time-panel-cell-inner {
-  background-color: #282828;
-  color: #ffffff;
+  background-color: #f2f2f2;
+  color: #282828 !important;
   border-radius: 6px;
 }
 .ant-picker-dropdown
@@ -79,7 +79,10 @@ a {
   .ant-picker-time-panel-column
   > li.ant-picker-time-panel-cell-selected
   .ant-picker-time-panel-cell-inner:hover {
-  background-color: #3e3e3e;
+  background-color: #f2f2f2;
+}
+.ant-picker-time-panel-cell-inner {
+  color: #7b7a79 !important;
 }
 .ant-btn-primary {
   background-color: #282828;

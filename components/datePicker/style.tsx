@@ -7,7 +7,7 @@ export const MainDiv = styled.div`
   width: 100%;
   background-color: ${colors.bg_white};
   position: absolute;
-  right: 20px;
+  right: 0;
   top: 38px;
   border-radius: 12px;
   z-index: 11;
