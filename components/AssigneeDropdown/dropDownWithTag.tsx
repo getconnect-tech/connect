@@ -46,10 +46,11 @@ export default function AssigneeDropdown({
         title={
           selectedValue
             ? capitalizeString(selectedValue?.display_name || '')
-            : 'Unassigned'
+            : undefined
         }
         src={selectedValue?.profile_url || ''}
-        style={tagStyle}
+        style={selectedValue ? tagStyle : { padding: 0 }}
+        svgStyle={selectedValue ? tagStyle : { margin: 6 }}
       />
       {dropdownOpen && (
         <DropDown
