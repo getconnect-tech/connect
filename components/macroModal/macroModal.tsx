@@ -21,11 +21,7 @@ function MacroModal({ onClose }: Props) {
       <ContentDiv>
         <TextField>
           <Label>Title</Label>
-          <Input
-            placeholder={'Template1'}
-            value='Template1'
-            className='input'
-          />
+          <Input placeholder={'Enter the title'} className='input' />
         </TextField>
         <TextField>
           <Label>Description</Label>
