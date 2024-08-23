@@ -221,21 +221,26 @@ function TicketDetails(props: Props) {
   /*
    * @desc Close ticket
    */
-  const handleCloseTicket = useCallback(async () => {
-    const payload = { status: TicketStatus.CLOSED };
-    try {
-      if (ticketDetails?.id) {
-        const updatedTicketDetails = {
-          ...ticketDetails,
-          status: TicketStatus.CLOSED,
-        };
-        ticketStore.setTicketDetails(updatedTicketDetails);
-        await changeTicketStatus(ticketDetails?.id, payload);
+  const handleTicketStatus = useCallback(
+    async (status: TicketStatus) => {
+      const payload = {
+        status,
+      };
+      try {
+        if (ticketDetails?.id) {
+          const updatedTicketDetails = {
+            ...ticketDetails,
+            status,
+          };
+          ticketStore.setTicketDetails(updatedTicketDetails);
+          await changeTicketStatus(ticketDetails?.id, payload);
+        }
+      } catch (e) {
+        console.log('Error : ', e);
       }
-    } catch (e) {
-      console.log('Error : ', e);
-    }
-  }, [ticketDetails]);
+    },
+    [ticketDetails],
+  );
 
   /*
    * @desc Render message based on message type
@@ -422,12 +427,20 @@ function TicketDetails(props: Props) {
               />
             </ButtonDiv>
             <ButtonDiv>
-              {ticketDetails?.status !== TicketStatus.CLOSED && (
+              {ticketDetails?.status !== TicketStatus.CLOSED ? (
                 <Tag
                   title='Close'
                   iconName='close-icon'
                   isActive={false}
-                  onClick={handleCloseTicket}
+                  onClick={() => handleTicketStatus(TicketStatus.CLOSED)}
+                  isName={false}
+                />
+              ) : (
+                <Tag
+                  title='Re-Open'
+                  iconName='close-icon'
+                  isActive={false}
+                  onClick={() => handleTicketStatus(TicketStatus.OPEN)}
                   isName={false}
                 />
               )}
