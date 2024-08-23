@@ -18,10 +18,11 @@ export const MainDiv = styled.div`
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
-  max-width: 196px;
-  max-height: 160px;
+  max-width: 288px;
+  max-height: 216px;
+  width: 100%;
   overflow: auto;
-  left: 90px;
+  left: 40px;
   top: 40px;
 `;
 
@@ -41,6 +42,7 @@ export const SearchDiv = styled.div`
 
 export const Icons = styled.div`
   display: flex;
-  padding: 2px;
+  padding: 4px;
   flex-wrap: wrap;
+  gap: 8px;
 `;
