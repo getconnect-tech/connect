@@ -7,6 +7,7 @@ interface Props {
   onChange?: () => void;
   disabled?: boolean;
   isIcon?: boolean;
+  variant?: 'large' | 'medium' | 'small';
 }
 const InputDiv = styled.div<Props>`
   display: flex;
@@ -20,11 +21,23 @@ const InputDiv = styled.div<Props>`
 const InputBox = styled.input<Props>`
   width: 100%;
   border-radius: 20px;
-  padding: 10px 14px;
+  padding: 8px 16px;
   border: 1px solid ${colors.border_input_border};
   background: transparent;
   color: ${colors.text};
-  ${Typography.body_md_medium}
+  ${Typography.body_md_medium};
+  ${(props) =>
+    props.variant === 'large' &&
+    css`
+      ${Typography.body_md_medium};
+      padding: 8px 16px;
+    `}
+  ${(props) =>
+    props.variant === 'medium' &&
+    css`
+      ${Typography.body_sm_medium};
+      padding: 8px 16px;
+    `}
 
   &:focus-visible {
     outline: none;
