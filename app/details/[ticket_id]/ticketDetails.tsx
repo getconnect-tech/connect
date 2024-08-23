@@ -317,9 +317,9 @@ function TicketDetails(props: Props) {
                 size={20}
               />
               <MessageCard
-                title={'Sanjay send email'}
+                title={`${message?.author?.display_name} send email`}
                 time={message?.created_at}
-                subTitle={'To Teamcamp Support '}
+                subTitle={`To ${contact?.email}`}
                 message={message.content || ''}
               />
             </ActivityDiv>
@@ -397,7 +397,7 @@ function TicketDetails(props: Props) {
           return <>{message.content}</>;
       }
     },
-    [contact?.name],
+    [contact?.name, contact?.email],
   );
 
   return (
