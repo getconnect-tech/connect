@@ -61,9 +61,10 @@ function TicketDetails(props: Props) {
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const [commentValue, setCommentValue] = useState<string>('');
-  const { ticketStore, workspaceStore } = useStores();
+  const { ticketStore, workspaceStore, userStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
+  const { user } = userStore || {};
   const { priority, assigned_to, contact } = ticketDetails || {};
   const [modeSelectedItem, setModeSelectedItem] = useState<DropDownItem>({
     name: 'Email',
@@ -516,11 +517,9 @@ function TicketDetails(props: Props) {
             </CenterDiv>
             <InputDiv>
               <Avatar
-                imgSrc={
-                  'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
-                }
+                imgSrc={user?.profile_url || ''}
                 size={20}
-                name={''}
+                name={user?.display_name || ''}
               />
               <Input modeSelectedItem={modeSelectedItem}>
                 <RichTextBox
