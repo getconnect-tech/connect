@@ -29,6 +29,7 @@ const MainDiv = styled.div`
   width: 100%;
   margin-left: 223px;
   overflow: auto;
+  position: relative;
 `;
 
 const HeaderDiv = styled.div`
