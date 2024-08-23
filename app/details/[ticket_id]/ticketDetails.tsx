@@ -38,6 +38,7 @@ import {
   updateAssignee,
   getTicketMessages,
   updateTicketPriority,
+  sendMessage,
 } from '@/services/clientSide/ticketServices';
 import { capitalizeString, isEmpty } from '@/helpers/common';
 import Icon from '@/components/icon/icon';
@@ -60,6 +61,7 @@ function TicketDetails(props: Props) {
   const [messageModeDropdown, setMessageModeDropdown] = useState(false);
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
+  const [commentValue, setCommentValue] = useState<string>('');
   const { ticketStore, workspaceStore, userStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
@@ -106,11 +108,14 @@ function TicketDetails(props: Props) {
 
   useEffect(() => {
     loadData();
+  }, [loadData]);
+
+  useEffect(() => {
     return () => {
       ticketStore.setTicketDetails(null);
       ticketStore.setTicketMessages([]);
     };
-  }, [loadData]);
+  }, []);
 
   const handlePriorityTag = () => {
     setPriorityDropdown((prev) => !prev);
@@ -175,7 +180,10 @@ function TicketDetails(props: Props) {
             priority: item?.value,
           };
           ticketStore.setTicketDetails(updatedTicketDetails);
-          await updateTicketPriority(ticketDetails?.id, payload);
+          const result = await updateTicketPriority(ticketDetails?.id, payload);
+          if (result) {
+            loadData();
+          }
         }
       } catch (e) {
         console.log('Error : ', e);
@@ -202,7 +210,10 @@ function TicketDetails(props: Props) {
             assigned_to: item?.user_id,
           };
           ticketStore.setTicketDetails(updatedTicketDetails);
-          await updateAssignee(ticketDetails?.id, payload);
+          const result = await updateAssignee(ticketDetails?.id, payload);
+          if (result) {
+            loadData();
+          }
         }
       } catch (e) {
         console.log('Error : ', e);
@@ -239,6 +250,33 @@ function TicketDetails(props: Props) {
   );
 
   /*
+   * @desc Send comment
+   */
+  const handleCommentSend = useCallback(
+    async (content: string, mode: string) => {
+      let type;
+      if (mode !== 'Email') {
+        type = MessageType.REGULAR;
+      } else {
+        type = MessageType.EMAIL;
+      }
+      const payload = { content: content, type };
+      try {
+        if (ticket_id) {
+          const result = await sendMessage(ticket_id, payload);
+          if (result) {
+            getTicketMessages(ticket_id);
+            setCommentValue('');
+          }
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticket_id],
+  );
+
+  /*
    * @desc Render message based on message type
    */
   const renderActivityMessage = useCallback(
@@ -248,15 +286,13 @@ function TicketDetails(props: Props) {
           return (
             <ActivityDiv>
               <Avatar
-                imgSrc={
-                  'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
-                }
-                name={''}
+                imgSrc={message?.author?.profile_url || ''}
+                name={message?.author?.display_name || ''}
                 size={20}
               />
               <QuestionCard
-                title={'@Aniket can you please look into this?'}
-                time={'3 day ago'}
+                title={message?.content || ''}
+                time={message?.created_at}
               />
             </ActivityDiv>
           );
@@ -275,7 +311,11 @@ function TicketDetails(props: Props) {
         case MessageType.EMAIL:
           return (
             <ActivityDiv>
-              <Avatar imgSrc={''} name={contact?.name || ''} size={20} />
+              <Avatar
+                imgSrc={message?.author?.profile_url || ''}
+                name={message?.author?.display_name || ''}
+                size={20}
+              />
               <MessageCard
                 title={'Sanjay send email'}
                 time={message?.created_at}
@@ -472,6 +512,8 @@ function TicketDetails(props: Props) {
                   isInternalDiscussion={modeSelectedItem.name !== 'Email'}
                   users={currentWorkspace?.users}
                   placeholder='Write a message'
+                  valueContent={commentValue}
+                  setValueContent={setCommentValue}
                 />
                 <InputIcon>
                   <DropDownWithTag
@@ -511,7 +553,9 @@ function TicketDetails(props: Props) {
                       size={true}
                     />
                     <Icon
-                      onClick={() => {}}
+                      onClick={() =>
+                        handleCommentSend(commentValue, modeSelectedItem.name)
+                      }
                       iconName='send-icon'
                       iconSize='12'
                       iconViewBox='0 0 12 12'
