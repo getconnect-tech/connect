@@ -3,6 +3,7 @@ import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
 import Modal from '../modal/modal';
 import DeleteModal from '../deleteModal/deleteModal';
+import MacroModal from '../macroModal/macroModal';
 import { CardMainDiv, LeftDiv, RightDiv, TitleDiv } from './style';
 
 interface Props {
@@ -22,6 +23,23 @@ function MacroCard({
   dropdownIdentifier,
 }: Props) {
   const [deleteModal, setDeleteModal] = useState(false);
+  const [macroModal, setMacroModal] = useState(false);
+
+  const onOpenMacroModal = useCallback(() => {
+    setMacroModal(true);
+  }, []);
+
+  const onCloseMacroModal = useCallback(() => {
+    setMacroModal(false);
+  }, []);
+
+  const onChange = useCallback((item: any) => {
+    if (item.isDelete) {
+      onOpenDeleteModal();
+    } else if (!item.isDelete) {
+      onOpenMacroModal();
+    }
+  }, []);
 
   const dropDownItem = [
     { name: 'Edit', icon: 'edit-icon' },
@@ -49,41 +67,40 @@ function MacroCard({
   }, []);
 
   return (
-    <CardMainDiv>
-      <LeftDiv>
-        <TitleDiv>
-          <h6>{name}</h6>
-          <p>{description}</p>
-        </TitleDiv>
-      </LeftDiv>
-      <RightDiv>
-        <div style={{ position: 'relative' }} className='tag-div'>
-          <Icon
-            onClick={() => handleDropdownClick('key')}
-            iconName='three-dot-icon'
-            iconSize='16'
-            iconViewBox='0 0 16 16'
-            size={true}
-          />
-          {currentOpenDropdown === `${dropdownIdentifier}-key` && (
-            <DropDown
-              items={dropDownItem}
-              iconSize={'12'}
-              iconViewBox={'0 0 12 12'}
-              onClose={() => {
-                setCurrentOpenDropdown(null);
-              }}
-              style={{ right: 0, minWidth: 116 }}
-              onChange={(item) => {
-                if (item.isDelete) {
-                  onOpenDeleteModal();
-                }
-              }}
+    <>
+      <CardMainDiv>
+        <LeftDiv>
+          <TitleDiv>
+            <h6>{name}</h6>
+            <p>{description}</p>
+          </TitleDiv>
+        </LeftDiv>
+        <RightDiv>
+          <div style={{ position: 'relative' }} className='tag-div'>
+            <Icon
+              onClick={() => handleDropdownClick('key')}
+              iconName='three-dot-icon'
+              iconSize='16'
+              iconViewBox='0 0 16 16'
+              size={true}
             />
-          )}
-        </div>
-      </RightDiv>
-
+            {currentOpenDropdown === `${dropdownIdentifier}-key` && (
+              <DropDown
+                items={dropDownItem}
+                iconSize={'12'}
+                iconViewBox={'0 0 12 12'}
+                onClose={() => {
+                  setCurrentOpenDropdown(null);
+                }}
+                style={{ right: 0, width: 116 }}
+                onChange={(item) => {
+                  onChange(item);
+                }}
+              />
+            )}
+          </div>
+        </RightDiv>
+      </CardMainDiv>
       <Modal open={deleteModal} onClose={onCloseDeleteModal}>
         <DeleteModal
           onclose={onCloseDeleteModal}
@@ -92,7 +109,10 @@ function MacroCard({
           description={'This action can’t be undone.'}
         />
       </Modal>
-    </CardMainDiv>
+      <Modal open={macroModal} onClose={onCloseMacroModal}>
+        <MacroModal onClose={onCloseMacroModal} />
+      </Modal>
+    </>
   );
 }
 
