@@ -32,7 +32,7 @@ export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
 // PUT /api/tickets/[ticketId]
 const UpdateTicketRequestBody = z.object({
   title: titleSchema.optional(),
-  contanctId: contactIdSchema.optional(),
+  contactId: contactIdSchema.optional(),
   assignedTo: assginToSchema.optional(),
   priority: prioritySchema.optional(),
   source: ticketSourceSchema.optional(),

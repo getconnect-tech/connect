@@ -6,10 +6,21 @@ import { labelIcons } from '@/helpers/raw';
 
 interface Props {
   onClose?: () => void;
+  // eslint-disable-next-line no-unused-vars
+  handleLabelName?: (iconName: string) => void;
 }
-function LabelIconDropdown({ onClose }: Props) {
+function LabelIconDropdown({
+  onClose,
+  handleLabelName: handleLabelName,
+}: Props) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(true);
+
+  const handleClick = (iconName: string) => {
+    setIsOpen(false);
+    if (handleLabelName) handleLabelName(iconName);
+  };
+
   useEffect(() => {
     function handleClickOutside(event: any) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -47,9 +58,7 @@ function LabelIconDropdown({ onClose }: Props) {
         {labelIcons.map((icon, index) => (
           <Icon
             key={index}
-            onClick={() => {
-              setIsOpen(false);
-            }}
+            onClick={() => handleClick(icon.iconName)}
             iconName={icon.iconName}
             iconSize={'12'}
             iconViewBox={'0 0 12 12'}

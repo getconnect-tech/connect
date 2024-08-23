@@ -25,7 +25,8 @@ import { capitalizeString } from '@/helpers/common';
 import { useStores } from '@/stores';
 import { TicketDetailsInterface } from '@/utils/appTypes';
 import {
-  updateTicketDetails,
+  updateAssignee,
+  changeTicketStatus,
   updateTicketPriority,
 } from '@/services/clientSide/ticketServices';
 import SVGIcon from '@/assets/icons/SVGIcon';
@@ -124,14 +125,14 @@ export default function InboxCard({
    * @desc Update ticket details assign user in inbox card
    */
   const onChangeAssign = useCallback(async (item: { user_id: string }) => {
-    const payload = { assignedTo: item?.user_id };
+    const payload = { assignee: item?.user_id };
     try {
       const updatedTicketDetails = {
         ...(ticketDetail || {}),
         assigned_to: item?.user_id,
       };
       ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
-      await updateTicketDetails(ticketDetail?.id, payload);
+      await updateAssignee(ticketDetail?.id, payload);
     } catch (e) {
       console.log('Error : ', e);
     }
@@ -152,7 +153,7 @@ export default function InboxCard({
           ...ticketDetail,
           status: TicketStatus.CLOSED,
         });
-        await updateTicketDetails(ticketDetail?.id, payload);
+        await changeTicketStatus(ticketDetail?.id, payload);
       }
     } catch (e) {
       console.log('Error : ', e);

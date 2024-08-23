@@ -31,11 +31,19 @@ export const Card = styled.div`
 interface Props {
   organizationName: string;
   src?: string;
+  // eslint-disable-next-line no-unused-vars
+  handleClick: (id: string) => void;
+  workSpaceId: string;
 }
 
-function WorkspaceCard({ organizationName, src = '' }: Props) {
+function WorkspaceCard({
+  organizationName,
+  src = '',
+  handleClick,
+  workSpaceId,
+}: Props) {
   return (
-    <Card>
+    <Card onClick={() => handleClick(workSpaceId)}>
       <Avatar imgSrc={src} name={''} isShowBorder />
       <p>{organizationName}</p>
     </Card>

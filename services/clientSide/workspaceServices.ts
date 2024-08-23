@@ -7,6 +7,7 @@ import { getAPIErrorMessage, isEmpty } from '@/helpers/common';
 import { CurrentWorkspace, Workspace } from '@/utils/dataTypes';
 import { UpdateRole } from '@/utils/appTypes';
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
+import { ticketStore } from '@/stores/ticketStore';
 
 /**
  * @desc Create Workspace
@@ -212,6 +213,41 @@ export const removeMemberFromWorkspace = async (userId: string) => {
       `${NEXT_PUBLIC_API_URL}/workspaces/users/${userId}`,
     );
     if (result) alert('User Deleted');
+    return true;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return false;
+  } finally {
+    workspaceStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc Change workspace
+ * @param {*} workspaceId
+ */
+export const workspaceChange = async (workspaceId: string) => {
+  try {
+    ticketStore.resetTicketData();
+    const result = getWorkspaceById(workspaceId);
+    return result;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return null;
+  }
+};
+
+/**
+ * @desc Delete invited user from workspace
+ * @param {*} userId
+ */
+export const removeInviteUsersFromWorkspace = async (userId: string) => {
+  try {
+    workspaceStore.setLoading(true);
+    const result = await axios.delete(
+      `${NEXT_PUBLIC_API_URL}/workspaces/inviteUsers/${userId}`,
+    );
+    if (result) alert('Invite User Removed');
     return true;
   } catch (err: any) {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');

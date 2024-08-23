@@ -16,9 +16,19 @@ type TicketWithPayload = Prisma.TicketGetPayload<{
   };
 }>;
 
-export const getWorkspaceTickets = async (workspaceId: string) => {
+export const getWorkspaceTickets = async (
+  workspaceId: string,
+  lastUpdated?: string,
+) => {
+  const query: Prisma.TicketWhereInput = { workspace_id: workspaceId };
+
+  if (lastUpdated) {
+    const lastUpdatedDate = new Date(lastUpdated);
+    query.updated_at = { gt: lastUpdatedDate };
+  }
+
   const tickets = await prisma.ticket.findMany({
-    where: { workspace_id: workspaceId },
+    where: query,
     orderBy: { created_at: 'desc' },
     include: {
       labels: { include: { label: true } },
@@ -86,6 +96,7 @@ export const createTicket = async ({
       title: subject,
       source: TicketSource.MAIL,
       contact_id: contact.id,
+      subject,
     },
   });
 
@@ -98,7 +109,7 @@ export const updateTicket = async (
     title?: string;
     priority?: PriorityLevels;
     source?: TicketSource;
-    contanctId?: string;
+    contactId?: string;
     assignedTo?: string;
     status?: TicketStatus;
     snoozeUntil?: string;
@@ -108,7 +119,7 @@ export const updateTicket = async (
     title: ticketUpdates.title,
     priority: ticketUpdates.priority,
     source: ticketUpdates.source,
-    contact_id: ticketUpdates.contanctId,
+    contact_id: ticketUpdates.contactId,
     assigned_to: ticketUpdates.assignedTo,
     status: ticketUpdates.status,
   };
@@ -159,6 +170,17 @@ export const updatePriority = async (
     data: { priority: newPriority },
   });
 
+  return updatedTicket;
+};
+
+export const updateStatus = async (
+  ticketId: string,
+  newStatus: TicketStatus,
+) => {
+  const updatedTicket = await prisma.ticket.update({
+    where: { id: ticketId },
+    data: { status: newStatus },
+  });
   return updatedTicket;
 };
 

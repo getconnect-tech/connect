@@ -10,7 +10,7 @@ export const getWorkspaceById = async (
   const workspace = await prisma.workspace.findUnique({
     where: { id: workspaceId, users: { some: { user_id: currentUserId } } },
     include: {
-      users: { include: { user: true } },
+      users: { include: { user: true }, orderBy: { created_at: 'asc' } },
       invited_users: true,
       tickets: true,
       ticketLabels: true,
@@ -141,12 +141,15 @@ export const updateUser = async ({
 export const getUserWorkspaces = async (userId: string) => {
   const workspaces = await prisma.userWorkspaces.findMany({
     where: { user_id: userId },
-    include: { workspace: { include: { users: { include: { user: true } } } } },
+    include: {
+      workspace: true,
+    },
   });
+
   const formattedWorkspaces = workspaces.map(({ workspace }) => ({
     ...workspace,
-    users: workspace.users.map((x) => ({ ...x.user, role: x.role })),
   }));
+
   return formattedWorkspaces;
 };
 
