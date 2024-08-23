@@ -17,7 +17,7 @@ import { labelItem, priorityItem } from '@/helpers/raw';
 import { useStores } from '@/stores';
 import { TicketDetailsInterface } from '@/utils/appTypes';
 import {
-  updateTicketDetails,
+  updateAssignee,
   updateTicketPriority,
 } from '@/services/clientSide/ticketServices';
 
@@ -91,14 +91,14 @@ export default function CustomContextMenu(props: Props) {
    * @desc Update ticket details assign user in context menu
    */
   const onChangeAssign = useCallback(async (item: { user_id: string }) => {
-    const payload = { assignedTo: item?.user_id };
+    const payload = { assignee: item?.user_id };
     try {
       const updatedTicketDetails = {
         ...(ticketDetail || {}),
         assigned_to: item?.user_id,
       };
       ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
-      await updateTicketDetails(ticketDetail?.id, payload);
+      await updateAssignee(ticketDetail?.id, payload);
     } catch (e) {
       console.log('Error : ', e);
     }
