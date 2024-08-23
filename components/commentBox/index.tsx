@@ -48,12 +48,13 @@ function RichTextBox(this: any, props: any) {
     isInternalDiscussion,
     className = '',
     placeholder = '',
+    valueContent,
+    setValueContent,
   } = props;
   const fieldsData = { text: 'display_name' };
   const mentionRef = useRef<MentionComponent>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [uploadedFiles, setUploadedFiles] = useState<any>([]);
-  const [valueContent, setValueContent] = useState<string>('');
 
   let rteObj: any = useRef(null);
 

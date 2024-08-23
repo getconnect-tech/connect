@@ -38,6 +38,7 @@ import {
   updateAssignee,
   getTicketMessages,
   updateTicketPriority,
+  sendMessage,
 } from '@/services/clientSide/ticketServices';
 import { capitalizeString, isEmpty } from '@/helpers/common';
 import Icon from '@/components/icon/icon';
@@ -59,6 +60,7 @@ function TicketDetails(props: Props) {
   const [messageModeDropdown, setMessageModeDropdown] = useState(false);
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
+  const [commentValue, setCommentValue] = useState<string>('');
   const { ticketStore, workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
@@ -234,6 +236,30 @@ function TicketDetails(props: Props) {
           };
           ticketStore.setTicketDetails(updatedTicketDetails);
           await changeTicketStatus(ticketDetails?.id, payload);
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetails],
+  );
+
+  /*
+   * @desc Send comment
+   */
+  const handleCommentSend = useCallback(
+    async (content: string, mode: string) => {
+      let type;
+      if (mode !== 'Email') {
+        type = MessageType.REGULAR;
+      } else {
+        type = MessageType.EMAIL;
+      }
+      const payload = { content: content, type };
+      try {
+        if (ticketDetails?.id) {
+          const result = await sendMessage(ticketDetails?.id, payload);
+          if (result) setCommentValue('');
         }
       } catch (e) {
         console.log('Error : ', e);
@@ -493,6 +519,8 @@ function TicketDetails(props: Props) {
                   isInternalDiscussion={modeSelectedItem.name !== 'Email'}
                   users={currentWorkspace?.users}
                   placeholder='Write a message'
+                  valueContent={commentValue}
+                  setValueContent={setCommentValue}
                 />
                 <InputIcon>
                   <DropDownWithTag
@@ -532,7 +560,9 @@ function TicketDetails(props: Props) {
                       size={true}
                     />
                     <Icon
-                      onClick={() => {}}
+                      onClick={() =>
+                        handleCommentSend(commentValue, modeSelectedItem.name)
+                      }
                       iconName='send-icon'
                       iconSize='12'
                       iconViewBox='0 0 12 12'
