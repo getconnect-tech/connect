@@ -26,7 +26,7 @@ export const sendEmailAsReply = async (ticketId: string, body: string) => {
   const res = await client.sendEmail({
     From: process.env.POSTMARK_SENDER_EMAIL!,
     To: ticket.contact.email,
-    Subject: ticket.title,
+    Subject: ticket.subject,
     HtmlBody: body,
     Headers: [
       {
