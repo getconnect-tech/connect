@@ -11,10 +11,29 @@ export const MainDiv = styled.div`
   top: 38px;
   border-radius: 12px;
   z-index: 11;
-  box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 4px 8px 0px ${colors.box_shadow},
-    0px 8px 24px 0px ${colors.box_shadow};
+  .submenu-upwards {
+    bottom: calc(100% - 100px);
+    top: auto;
+    position: absolute;
+    background-color: ${colors.bg_white};
+    box-shadow:
+      0px 0px 0px 0.5px ${colors.box_shadow},
+      0px 4px 8px 0px ${colors.box_shadow},
+      0px 8px 24px 0px ${colors.box_shadow};
+    border-radius: 12px;
+  }
+
+  .submenu-downwards {
+    top: 0;
+    bottom: auto;
+    position: absolute;
+    background-color: ${colors.bg_white};
+    box-shadow:
+      0px 0px 0px 0.5px ${colors.box_shadow},
+      0px 4px 8px 0px ${colors.box_shadow},
+      0px 8px 24px 0px ${colors.box_shadow};
+    border-radius: 12px;
+  }
 `;
 
 export const Header = styled.div`
@@ -137,5 +156,3 @@ export const Label = styled.p`
   ${Typography.body_sm_medium};
   color: ${colors.text};
 `;
-
-export const TimePickerDiv = styled.div``;

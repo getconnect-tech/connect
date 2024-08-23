@@ -11,7 +11,6 @@ import {
   Inputs,
   Label,
   MainDiv,
-  TimePickerDiv,
 } from './style';
 
 type ValuePiece = Date | null;
@@ -31,6 +30,27 @@ function DatePickerModal({ onClose }: Props) {
   const [dateInput, setDateInput] = useState<string>(
     new Date().toLocaleDateString('en-US'),
   );
+  const [submenuPosition, setSubmenuPosition] = useState<
+    'upwards' | 'downwards'
+  >('upwards');
+
+  const handleMouseEnter = (
+    e: React.MouseEvent<HTMLElement>,
+    // eslint-disable-next-line no-unused-vars
+    setPosition: (position: 'upwards' | 'downwards') => void,
+  ) => {
+    const triggerElement = e.currentTarget;
+    const rect = triggerElement.getBoundingClientRect();
+    // eslint-disable-next-line no-undef
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+
+    if (spaceBelow < 200 && spaceAbove > 200) {
+      setPosition('upwards');
+    } else {
+      setPosition('downwards');
+    }
+  };
 
   const handleDateChange = (date: Value) => {
     setValue(date);
@@ -55,39 +75,48 @@ function DatePickerModal({ onClose }: Props) {
   };
 
   return (
-    <MainDiv onClick={handleModalClick}>
-      <Header>
-        <Icon
-          onClick={onClose}
-          iconName='back-icon'
-          iconSize='12'
-          iconViewBox='0 0 16 16'
-          size={true}
-        />
-        <p>Snooze</p>
-      </Header>
-      <CalendarDiv>
-        <Calendar
-          onChange={handleDateChange}
-          value={value}
-          defaultActiveStartDate={new Date()}
-          minDate={new Date()}
-        />
-      </CalendarDiv>
-      <InputMainDiv>
-        <Inputs>
-          <div>
-            <Label>Date</Label>
-            <Input
-              placeholder={'MM/DD/YYYY'}
-              className='input'
-              value={dateInput}
-              // onClick={handleModalClick} // Prevent close on date input click
-            />
-          </div>
-          <div>
-            <Label>Time</Label>
-            <TimePickerDiv>
+    <MainDiv
+      onClick={handleModalClick}
+      onMouseEnter={(e) => handleMouseEnter(e, setSubmenuPosition)}
+    >
+      <div
+        className={
+          submenuPosition === 'upwards'
+            ? 'submenu-upwards'
+            : 'submenu-downwards'
+        }
+      >
+        <Header>
+          <Icon
+            onClick={onClose}
+            iconName='back-icon'
+            iconSize='12'
+            iconViewBox='0 0 16 16'
+            size={true}
+          />
+          <p>Snooze</p>
+        </Header>
+        <CalendarDiv>
+          <Calendar
+            onChange={handleDateChange}
+            value={value}
+            defaultActiveStartDate={new Date()}
+            minDate={new Date()}
+          />
+        </CalendarDiv>
+        <InputMainDiv>
+          <Inputs>
+            <div>
+              <Label>Date</Label>
+              <Input
+                placeholder={'MM/DD/YYYY'}
+                className='input'
+                value={dateInput}
+                // onClick={handleModalClick} // Prevent close on date input click
+              />
+            </div>
+            <div>
+              <Label>Time</Label>
               <TimePicker
                 format='h:00 A'
                 placeholder='HH:MM'
@@ -99,24 +128,24 @@ function DatePickerModal({ onClose }: Props) {
                   borderColor: '#E3E8EA',
                 }}
               />
-            </TimePickerDiv>
+            </div>
+          </Inputs>
+          <div className='buttons'>
+            <Button
+              title='Cancel'
+              secondary={true}
+              onClick={handleCancel}
+              variant='medium'
+            />
+            <Button
+              title='Snooze'
+              disabled={false}
+              onClick={handleSnooze}
+              variant='medium'
+            />
           </div>
-        </Inputs>
-        <div className='buttons'>
-          <Button
-            title='Cancel'
-            secondary={true}
-            onClick={handleCancel}
-            variant='medium'
-          />
-          <Button
-            title='Snooze'
-            disabled={false}
-            onClick={handleSnooze}
-            variant='medium'
-          />
-        </div>
-      </InputMainDiv>
+        </InputMainDiv>
+      </div>
     </MainDiv>
   );
 }
