@@ -223,3 +223,27 @@ export const updateAssignee = async (ticketId: string, payload: object) => {
     ticketStore.setLoading(false);
   }
 };
+
+/**
+ * @desc Send message
+ * @param {*} ticketId
+ * @param {*} payload { "content": "Message content", "type": "REGULAR" }
+ */
+export const sendMessage = async (ticketId: string, payload: object) => {
+  try {
+    ticketStore.setLoading(true);
+    const response = await axios.post(
+      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}/messages`,
+      payload,
+    );
+    const { data } = response;
+    // set ticket details in store
+    ticketStore.setTicketDetails(data);
+    return data;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return null;
+  } finally {
+    ticketStore.setLoading(false);
+  }
+};
