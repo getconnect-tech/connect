@@ -430,19 +430,29 @@ function TicketDetails(props: Props) {
               />
             </ButtonDiv>
             <ButtonDiv>
-              <Tag
-                title={
-                  ticketDetails?.status === TicketStatus.CLOSED
-                    ? 'Re-Open'
-                    : 'Close'
-                }
-                iconName='close-icon'
-                isActive={false}
-                onClick={() => {
-                  if (ticketDetails) handleTicketStatus(ticketDetails?.status);
-                }}
-                isName={false}
-              />
+              {ticketDetails?.status !== TicketStatus.CLOSED ? (
+                <Tag
+                  title='Close'
+                  iconName='close-icon'
+                  isActive={false}
+                  onClick={() => {
+                    if (ticketDetails)
+                      handleTicketStatus(ticketDetails?.status);
+                  }}
+                  isName={false}
+                />
+              ) : (
+                <Tag
+                  title='Re-Open'
+                  iconName='close-icon'
+                  isActive={false}
+                  onClick={() => {
+                    if (ticketDetails)
+                      handleTicketStatus(ticketDetails?.status);
+                  }}
+                  isName={false}
+                />
+              )}
               <DropDownWithTag
                 onClick={handleSnoozeTag}
                 title={'Snooze'}
