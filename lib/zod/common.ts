@@ -20,3 +20,10 @@ export const imageUrlSchema = z
     invalid_type_error: "'imageUrl' must be of type string!",
   })
   .url();
+
+export const lastUpdatedTimeSchema = z
+  .string({
+    required_error: "'last_updated' is required!",
+    invalid_type_error: "'last_updated' must be of type string!",
+  })
+  .date();
