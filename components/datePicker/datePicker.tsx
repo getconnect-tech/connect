@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Calendar from 'react-calendar';
 import { TimePicker, TimePickerProps } from 'antd';
 import Icon from '../icon/icon';
@@ -14,7 +14,6 @@ import {
 } from './style';
 
 type ValuePiece = Date | null;
-
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 const onChange: TimePickerProps['onChange'] = (time, timeString) => {
@@ -32,25 +31,30 @@ function DatePickerModal({ onClose }: Props) {
   );
   const [submenuPosition, setSubmenuPosition] = useState<
     'upwards' | 'downwards'
-  >('upwards');
+  >('downwards');
 
-  const handleMouseEnter = (
-    e: React.MouseEvent<HTMLElement>,
-    // eslint-disable-next-line no-unused-vars
-    setPosition: (position: 'upwards' | 'downwards') => void,
-  ) => {
-    const triggerElement = e.currentTarget;
-    const rect = triggerElement.getBoundingClientRect();
-    // eslint-disable-next-line no-undef
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const spaceAbove = rect.top;
+  useEffect(() => {
+    // Calculate initial position when the component mounts
+    const calculatePosition = () => {
+      // eslint-disable-next-line no-undef
+      const modalElement = document.querySelector('.modal-content');
+      const rect = modalElement?.getBoundingClientRect();
 
-    if (spaceBelow < 200 && spaceAbove > 200) {
-      setPosition('upwards');
-    } else {
-      setPosition('downwards');
-    }
-  };
+      if (rect) {
+        // eslint-disable-next-line no-undef
+        const spaceBelow = window.innerHeight - rect.bottom;
+        const spaceAbove = rect.top;
+
+        if (spaceBelow < 300 && spaceAbove > 300) {
+          setSubmenuPosition('upwards');
+        } else {
+          setSubmenuPosition('downwards');
+        }
+      }
+    };
+
+    calculatePosition();
+  }, []);
 
   const handleDateChange = (date: Value) => {
     setValue(date);
@@ -60,31 +64,25 @@ function DatePickerModal({ onClose }: Props) {
   };
 
   const handleSnooze = useCallback(() => {
-    // Only close the modal when Snooze is clicked
     onClose();
   }, [onClose]);
 
   const handleCancel = useCallback(() => {
-    // Close the modal when Cancel is clicked
     onClose();
   }, [onClose]);
 
-  // Prevent modal from closing on clicks inside the modal
   const handleModalClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
   };
 
   return (
-    <MainDiv
-      onClick={handleModalClick}
-      onMouseEnter={(e) => handleMouseEnter(e, setSubmenuPosition)}
-    >
+    <MainDiv onClick={handleModalClick}>
       <div
-        className={
+        className={`modal-content ${
           submenuPosition === 'upwards'
             ? 'submenu-upwards'
             : 'submenu-downwards'
-        }
+        }`}
       >
         <Header>
           <Icon
@@ -112,7 +110,6 @@ function DatePickerModal({ onClose }: Props) {
                 placeholder={'MM/DD/YYYY'}
                 className='input'
                 value={dateInput}
-                // onClick={handleModalClick} // Prevent close on date input click
               />
             </div>
             <div>
