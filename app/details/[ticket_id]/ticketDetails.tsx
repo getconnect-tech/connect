@@ -222,18 +222,15 @@ function TicketDetails(props: Props) {
    * @desc Close ticket
    */
   const handleTicketStatus = useCallback(
-    async (ticketCurrentStatus: string) => {
+    async (status: string) => {
       const payload = {
-        status:
-          ticketCurrentStatus === TicketStatus.CLOSED
-            ? TicketStatus.OPEN
-            : TicketStatus.CLOSED,
+        status,
       };
       try {
         if (ticketDetails?.id) {
           const updatedTicketDetails = {
             ...ticketDetails,
-            status: payload.status,
+            status,
           };
           ticketStore.setTicketDetails(updatedTicketDetails);
           await changeTicketStatus(ticketDetails?.id, payload);
@@ -435,10 +432,7 @@ function TicketDetails(props: Props) {
                   title='Close'
                   iconName='close-icon'
                   isActive={false}
-                  onClick={() => {
-                    if (ticketDetails)
-                      handleTicketStatus(ticketDetails?.status);
-                  }}
+                  onClick={() => handleTicketStatus(TicketStatus.CLOSED)}
                   isName={false}
                 />
               ) : (
@@ -446,10 +440,7 @@ function TicketDetails(props: Props) {
                   title='Re-Open'
                   iconName='close-icon'
                   isActive={false}
-                  onClick={() => {
-                    if (ticketDetails)
-                      handleTicketStatus(ticketDetails?.status);
-                  }}
+                  onClick={() => handleTicketStatus(TicketStatus.OPEN)}
                   isName={false}
                 />
               )}
