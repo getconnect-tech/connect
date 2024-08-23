@@ -26,7 +26,6 @@ function MacroModal({ onClose }: Props) {
         <TextField>
           <Label>Description</Label>
           <RichTextBox
-            placeholder={'Leave a comment...'}
             isApplyMaxHeight={412}
             isApplyMinHeight={412}
             isInlineToolbar={false}
