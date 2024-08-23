@@ -221,21 +221,29 @@ function TicketDetails(props: Props) {
   /*
    * @desc Close ticket
    */
-  const handleCloseTicket = useCallback(async () => {
-    const payload = { status: TicketStatus.CLOSED };
-    try {
-      if (ticketDetails?.id) {
-        const updatedTicketDetails = {
-          ...ticketDetails,
-          status: TicketStatus.CLOSED,
-        };
-        ticketStore.setTicketDetails(updatedTicketDetails);
-        await changeTicketStatus(ticketDetails?.id, payload);
+  const handleTicketStatus = useCallback(
+    async (ticketCurrentStatus: string) => {
+      const payload = {
+        status:
+          ticketCurrentStatus === TicketStatus.CLOSED
+            ? TicketStatus.OPEN
+            : TicketStatus.CLOSED,
+      };
+      try {
+        if (ticketDetails?.id) {
+          const updatedTicketDetails = {
+            ...ticketDetails,
+            status: TicketStatus.CLOSED,
+          };
+          ticketStore.setTicketDetails(updatedTicketDetails);
+          await changeTicketStatus(ticketDetails?.id, payload);
+        }
+      } catch (e) {
+        console.log('Error : ', e);
       }
-    } catch (e) {
-      console.log('Error : ', e);
-    }
-  }, [ticketDetails]);
+    },
+    [ticketDetails],
+  );
 
   /*
    * @desc Render message based on message type
@@ -422,15 +430,19 @@ function TicketDetails(props: Props) {
               />
             </ButtonDiv>
             <ButtonDiv>
-              {ticketDetails?.status !== TicketStatus.CLOSED && (
-                <Tag
-                  title='Close'
-                  iconName='close-icon'
-                  isActive={false}
-                  onClick={handleCloseTicket}
-                  isName={false}
-                />
-              )}
+              <Tag
+                title={
+                  ticketDetails?.status === TicketStatus.CLOSED
+                    ? 'Re-Open'
+                    : 'Close'
+                }
+                iconName='close-icon'
+                isActive={false}
+                onClick={() => {
+                  if (ticketDetails) handleTicketStatus(ticketDetails?.status);
+                }}
+                isName={false}
+              />
               <DropDownWithTag
                 onClick={handleSnoozeTag}
                 title={'Snooze'}
