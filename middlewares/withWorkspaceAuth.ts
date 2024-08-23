@@ -18,7 +18,7 @@ type RequestHandler = (
 const withWorkspaceAuth =
   (handler: RequestHandler) =>
   async (req: NextRequest, { params }: { params: Record<string, string> }) => {
-    const authorizationHeader = req.nextUrl.searchParams.get('API_KEY');
+    const authorizationHeader = req.headers.get('Authorization');
     const authorizedRequest = req as AuthorizedRequest;
 
     if (authorizationHeader) {
