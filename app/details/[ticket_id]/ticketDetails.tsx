@@ -190,7 +190,6 @@ function TicketDetails(props: Props) {
     }) => {
       const payload = { assignee: item?.user_id };
       try {
-        console.log('asfafadfsasdfsd');
         if (ticketDetails?.id) {
           const updatedTicketDetails = {
             ...ticketDetails,
