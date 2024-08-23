@@ -111,11 +111,12 @@ function RichTextBox(this: any, props: any) {
       'Italic',
       'Underline',
       'Strikethrough',
-      'UnorderedList',
+      'blockquote',
+      'sourceCode',
+      'createLink',
       'OrderedList',
-      'CreateLink',
-      'Undo',
-      'Redo',
+      'UnorderedList',
+      'clearAll',
     ],
   };
 

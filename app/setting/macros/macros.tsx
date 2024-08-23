@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import {
   Description,
@@ -16,11 +16,14 @@ import Button from '@/components/button/button';
 import EmptyState from '@/components/emptyState/emptyState';
 import { isEmpty } from '@/helpers/common';
 import MacroCard from '@/components/macroCard/macroCard';
+import Modal from '@/components/modal/modal';
+import MacroModal from '@/components/macroModal/macroModal';
 
 const Macros = () => {
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
+  const [macroModal, setMacroModal] = useState(false);
 
   const macros = [
     {
@@ -42,6 +45,14 @@ const Macros = () => {
     { name: 'Template 5', description: 'Welcome to Our Team!', id: 5 },
   ];
 
+  const onOpenMacroModal = useCallback(() => {
+    setMacroModal(true);
+  }, []);
+
+  const onCloseMacroModal = useCallback(() => {
+    setMacroModal(false);
+  }, []);
+
   return (
     <>
       <Main>
@@ -56,11 +67,11 @@ const Macros = () => {
                 <Button
                   iconName='label-plus-icon'
                   title='New Macros'
-                  onClick={() => ''}
                   iconSize='10'
                   iconViewBox='0 0 10 10'
                   iconColor='white'
                   variant='medium'
+                  onClick={onOpenMacroModal}
                 />
               )}
             </Head>
@@ -76,6 +87,7 @@ const Macros = () => {
                 buttonIconName='label-plus-icon'
                 buttonIconSize='10'
                 buttonIconViewBox='0 0 10 10'
+                onClick={onOpenMacroModal}
               />
             )}
             {!isEmpty(macros) && (
@@ -95,6 +107,9 @@ const Macros = () => {
           </RightDiv>
         </MainDiv>
       </Main>
+      <Modal open={macroModal} onClose={onCloseMacroModal}>
+        <MacroModal onClose={onCloseMacroModal} />
+      </Modal>
     </>
   );
 };
