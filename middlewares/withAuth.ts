@@ -16,7 +16,7 @@ const withAuth =
   (handler: RequestHandler) =>
   async (req: NextRequest, { params }: { params: Record<string, string> }) => {
     const authorizedRequest = req as AuthorizedRequest;
-    const authorizationHeader = req.nextUrl.searchParams.get('API_KEY');
+    const authorizationHeader = req.headers.get('Authorization');
 
     if (authorizationHeader) {
       if (!authorizationHeader.startsWith('Bearer ')) {
