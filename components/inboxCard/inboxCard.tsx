@@ -26,7 +26,7 @@ import { useStores } from '@/stores';
 import { TicketDetailsInterface } from '@/utils/appTypes';
 import {
   updateAssignee,
-  updateTicketDetails,
+  changeTicketStatus,
   updateTicketPriority,
 } from '@/services/clientSide/ticketServices';
 import SVGIcon from '@/assets/icons/SVGIcon';
@@ -153,7 +153,7 @@ export default function InboxCard({
           ...ticketDetail,
           status: TicketStatus.CLOSED,
         });
-        await updateTicketDetails(ticketDetail?.id, payload);
+        await changeTicketStatus(ticketDetail?.id, payload);
       }
     } catch (e) {
       console.log('Error : ', e);

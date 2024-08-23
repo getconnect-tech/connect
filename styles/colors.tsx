@@ -30,4 +30,5 @@ export const colors = {
   box_shadow_2: '#0000000D',
   bg_overlay: '#00000080',
   box_shadow_3: `#00000033`,
+  icon_disable: '#C4C3C1',
 };
