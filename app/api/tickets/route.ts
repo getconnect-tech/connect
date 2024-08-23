@@ -6,7 +6,8 @@ import { getWorkspaceTickets } from '@/services/serverSide/ticket';
 export const GET = withWorkspaceAuth(async (req) => {
   try {
     const workspaceId = req.workspace.id;
-    const lastUpdated = req.headers.get('last_updated') as string;
+    const searchParams = req.nextUrl.searchParams;
+    const lastUpdated = searchParams.get('last_updated') ?? undefined;
 
     lastUpdatedTimeSchema.optional().parse(lastUpdated);
 
