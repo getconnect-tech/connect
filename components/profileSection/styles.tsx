@@ -169,7 +169,7 @@ const NameDiv = styled.div`
 `;
 
 const AIText = styled.p`
-  ${Typography.body_sm_medium};
+  ${Typography.body_sm_regular};
   color: ${colors.text};
 `;
 
