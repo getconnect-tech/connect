@@ -185,7 +185,10 @@ function TicketDetails(props: Props) {
             priority: item?.value,
           };
           ticketStore.setTicketDetails(updatedTicketDetails);
-          await updateTicketPriority(ticketDetails?.id, payload);
+          const result = await updateTicketPriority(ticketDetails?.id, payload);
+          if (result) {
+            loadData();
+          }
         }
       } catch (e) {
         console.log('Error : ', e);
@@ -212,7 +215,10 @@ function TicketDetails(props: Props) {
             assigned_to: item?.user_id,
           };
           ticketStore.setTicketDetails(updatedTicketDetails);
-          await updateAssignee(ticketDetails?.id, payload);
+          const result = await updateAssignee(ticketDetails?.id, payload);
+          if (result) {
+            loadData();
+          }
         }
       } catch (e) {
         console.log('Error : ', e);
