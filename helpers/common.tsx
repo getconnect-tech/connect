@@ -142,3 +142,22 @@ export const getFirebaseUrlFromFile = async (file: any, folderName: string) => {
     alert(`Getting error for upload file ${e}`);
   }
 };
+
+export const generateApiKey = () => {
+  const alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const apiKeyParts: string[] = [];
+
+  for (let i = 0; i < 4; i++) {
+    let apiKeyPart = '';
+
+    for (let j = 0; j < 5; j++) {
+      const randomIndex = Math.floor(Math.random() * alphabets.length);
+      apiKeyPart += alphabets[randomIndex];
+    }
+
+    apiKeyParts.push(apiKeyPart);
+  }
+  const apiKey = apiKeyParts.join('-');
+
+  return apiKey;
+};
