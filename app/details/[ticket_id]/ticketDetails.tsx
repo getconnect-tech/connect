@@ -222,7 +222,7 @@ function TicketDetails(props: Props) {
    * @desc Close ticket
    */
   const handleTicketStatus = useCallback(
-    async (status: string) => {
+    async (status: TicketStatus) => {
       const payload = {
         status,
       };
