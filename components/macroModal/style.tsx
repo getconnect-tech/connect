@@ -81,6 +81,9 @@ export const TextField = styled.div`
         align-items: center;
       }
     }
+    .e-richtexteditor .e-rte-toolbar .e-toolbar-item.e-active .e-tbar-btn {
+      background-color: ${colors.bg_surface_secondary};
+    }
   }
 `;
 

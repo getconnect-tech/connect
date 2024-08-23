@@ -60,10 +60,9 @@ function LabelIconDropdown({
             key={index}
             onClick={() => handleClick(icon.iconName)}
             iconName={icon.iconName}
-            iconSize={'12'}
-            iconViewBox={'0 0 12 12'}
+            iconSize={'16'}
+            iconViewBox={'0 0 16 16'}
             labelSvg={true}
-            size={true}
           />
         ))}
       </Icons>
