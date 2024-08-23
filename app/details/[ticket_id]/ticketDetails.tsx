@@ -482,7 +482,11 @@ function TicketDetails(props: Props) {
               ))}
             </CenterDiv>
             <InputDiv>
-              <Avatar imgSrc={user?.profile_url || ''} size={20} name={''} />
+              <Avatar
+                imgSrc={user?.profile_url || ''}
+                size={20}
+                name={user?.display_name || ''}
+              />
               <Input modeSelectedItem={modeSelectedItem}>
                 <RichTextBox
                   isInternalDiscussion={modeSelectedItem.name !== 'Email'}
