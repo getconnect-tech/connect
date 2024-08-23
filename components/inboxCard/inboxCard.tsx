@@ -8,6 +8,7 @@ import moment from 'moment';
 import { PriorityLevels, TicketStatus } from '@prisma/client';
 import Avatar from '../avtar/Avtar';
 import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
+import AssigneeDropdown from '../AssigneeDropdown/dropDownWithTag';
 import {
   CardDiv,
   DesTitle,
@@ -24,6 +25,7 @@ import { capitalizeString } from '@/helpers/common';
 import { useStores } from '@/stores';
 import { TicketDetailsInterface } from '@/utils/appTypes';
 import {
+  changeTicketStatus,
   updateTicketDetails,
   updateTicketPriority,
 } from '@/services/clientSide/ticketServices';
@@ -151,7 +153,7 @@ export default function InboxCard({
           ...ticketDetail,
           status: TicketStatus.CLOSED,
         });
-        await updateTicketDetails(ticketDetail?.id, payload);
+        await changeTicketStatus(ticketDetail?.id, payload);
       }
     } catch (e) {
       console.log('Error : ', e);
@@ -221,28 +223,23 @@ export default function InboxCard({
               }
               onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
             />
-            <DropDownWithTag
+            <AssigneeDropdown
               onClick={() => handleDropdownClick('assign')}
-              title={assignedUser?.display_name || ''}
+              selectedValue={assignedUser}
               dropdownOpen={
                 currentOpenDropdown === `${dropdownIdentifier}-assign`
               }
               onClose={() => setCurrentOpenDropdown(null)}
               items={assignItem}
               onChange={onChangeAssign}
-              isTag={true}
-              isSearch={true}
               isActive={true}
-              isName={true}
               iconSize='20'
-              iconViewBox='0 0 20 20'
               className={
                 submenuPosition === 'upwards'
                   ? 'submenu-upwards'
                   : 'submenu-downwards'
               }
               onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
-              src={assignedUser?.profile_url || ''}
             />
           </div>
           {ticketDetail.status !== TicketStatus.CLOSED && (

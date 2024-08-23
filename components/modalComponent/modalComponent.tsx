@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Icon from '../icon/icon';
 import Input from '../input/input';
 import Button from '../button/button';
 import LabelIconDropdown from '../labelIcoDropdown/labelIconDropdown';
 import { BottomDiv, Header, IconDiv, Label, MainDiv, Title } from './style';
-import SVGIcon from '@/assets/icons/SVGIcon';
+import LabelSvgIcon from '@/assets/icons/labelIcons';
 
 interface Props {
   onClose: () => void;
@@ -49,6 +49,10 @@ function ModalComponent({
   onDropdownClick,
   dropdownVisible,
 }: Props) {
+  const [icon, setIcon] = useState<string>('tag-icon');
+  const handleLabelName = (iconName: string) => {
+    setIcon(iconName);
+  };
   return (
     <MainDiv>
       <Header>
@@ -66,14 +70,16 @@ function ModalComponent({
         {isDropdown && (
           <div className='label-dropdown'>
             <IconDiv onClick={onDropdownClick}>
-              <SVGIcon
-                name='label-icon'
+              <LabelSvgIcon
+                name={icon}
                 width='16'
                 height='16'
-                viewBox='0 0 20 20'
+                viewBox='0 0 12 12'
               />
             </IconDiv>
-            {dropdownVisible && <LabelIconDropdown />}
+            {dropdownVisible && (
+              <LabelIconDropdown handleLabelName={handleLabelName} />
+            )}
           </div>
         )}
         <Label>
@@ -96,9 +102,19 @@ function ModalComponent({
         )}
         <div className='button'>
           {buttonCancel && (
-            <Button title={buttonCancel} onClick={onClose} secondary={true} />
+            <Button
+              title={buttonCancel}
+              onClick={onClose}
+              secondary={true}
+              variant='medium'
+            />
           )}
-          <Button type='submit' title={buttonTitle} isLoading={loading} />
+          <Button
+            type='submit'
+            title={buttonTitle}
+            isLoading={loading}
+            variant='medium'
+          />
         </div>
       </BottomDiv>
     </MainDiv>

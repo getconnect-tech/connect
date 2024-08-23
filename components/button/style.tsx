@@ -9,6 +9,7 @@ interface WrapButton {
   isLoading?: boolean;
   width?: boolean;
   isLink?: boolean;
+  variant?: 'large' | 'medium' | 'small';
 }
 
 interface Prop {
@@ -89,6 +90,26 @@ const Buttons = styled.button<WrapButton>`
             ? colors.text_disabled
             : colors.brand_fill_hover};
         }
+      }
+    `}
+    ${(props) =>
+    props.variant === 'large' &&
+    css`
+      ${Typography.body_md_medium}
+    `}
+    ${(props) =>
+    props.variant === 'medium' &&
+    css`
+      ${Typography.body_sm_medium}
+    `}
+    ${(props) =>
+    props.isDelete &&
+    css`
+      background-color: ${colors.fill_danger};
+      color: ${colors.text_white};
+      border-color: ${colors.fill_danger};
+      &:hover {
+        background-color: ${colors.fill_danger};
       }
     `}
 `;

@@ -51,6 +51,7 @@ function EmptyState({
           iconName={buttonIconName}
           iconSize={buttonIconSize}
           iconViewBox={buttonIconViewBox}
+          variant='medium'
         />
       )}
     </MainDiv>

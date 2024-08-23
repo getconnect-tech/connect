@@ -1,10 +1,12 @@
 import { action, makeObservable, observable } from 'mobx';
 import { TicketDetailsInterface } from '@/utils/appTypes';
+import { MessageDetails } from '@/utils/dataTypes';
 
 class TicketStore {
   loading = false;
   ticketList: TicketDetailsInterface[] = [];
   ticketDetails: TicketDetailsInterface | null = null;
+  messages: MessageDetails[] = [];
 
   constructor() {
     makeObservable(this, {
@@ -23,6 +25,10 @@ class TicketStore {
 
       // Reset Ticket Data
       resetTicketData: action,
+
+      // Ticket Messages
+      messages: observable,
+      setTicketMessages: action,
     });
   }
 
@@ -48,8 +54,13 @@ class TicketStore {
   }
 
   // Ticket Details actions
-  setTicketDetails(value: TicketDetailsInterface) {
+  setTicketDetails(value: TicketDetailsInterface | null) {
     this.ticketDetails = value;
+  }
+
+  // Ticket messages actions
+  setTicketMessages(value: MessageDetails[]) {
+    this.messages = value;
   }
 }
 

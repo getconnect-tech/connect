@@ -1,3 +1,4 @@
+import { getTicketMessages } from '@/services/serverSide/message';
 import {
   getUserWorkspaces,
   getWorkspaceById,
@@ -76,3 +77,7 @@ export type Workspace = NonNullable<
 export type CurrentWorkspace = NonNullable<
   Awaited<ReturnType<typeof getWorkspaceById>>
 >;
+
+export type MessageDetails = NonNullable<
+  Awaited<ReturnType<typeof getTicketMessages>>
+>[0];

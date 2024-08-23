@@ -60,7 +60,12 @@ export default function SettingNavBar() {
           >
             Labels
           </Item>
-          <Item>Macros</Item>
+          <Item
+            onClick={() => handleItemClick('/setting/macros')}
+            active={activeItem === '/setting/macros'}
+          >
+            Macros
+          </Item>
           <Item
             onClick={() => handleItemClick('/setting/members')}
             active={activeItem === '/setting/members'}
