@@ -329,6 +329,29 @@ function TicketDetails(props: Props) {
               </Message>
             </ActivityDiv>
           );
+        case MessageType.CHANGE_STATUS:
+          return (
+            <ActivityDiv>
+              <Avatar
+                imgSrc={message?.author?.profile_url || ''}
+                name={message?.author?.display_name || ''}
+                size={20}
+              />
+              <Message>
+                {message?.author?.display_name || ''}{' '}
+                <span>changed ticket status to</span>{' '}
+                {capitalizeString(message?.reference_id)}
+                <SVGIcon
+                  name='dot-icon'
+                  width='4'
+                  height='4'
+                  fill='none'
+                  viewBox='0 0 4 4'
+                />
+                <span>{moment(message?.created_at).fromNow()}</span>
+              </Message>
+            </ActivityDiv>
+          );
         default:
           return <>{message.content}</>;
       }
