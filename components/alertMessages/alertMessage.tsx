@@ -11,29 +11,21 @@ interface Props {
   isWarning?: boolean;
 }
 
-function AlertMessage({
-  onClose,
-  isError = false,
-  isSuccess = false,
-  isWarning = false,
-}: Props) {
-  const [visible, setVisible] = useState({
-    error: isError,
-    success: isSuccess,
-    warning: isWarning,
-  });
+function AlertMessage({ onClose, isError, isSuccess, isWarning }: Props) {
+  const [showError, setShowError] = useState(isError);
+  const [showSuccess, setShowSuccess] = useState(isSuccess);
+  const [showWarning, setShowWarning] = useState(isWarning);
 
   const handleClose = (type: 'error' | 'success' | 'warning') => {
-    setVisible((prev) => ({
-      ...prev,
-      [type]: false,
-    }));
     onClose(type);
+    if (type === 'error') setShowError(false);
+    if (type === 'success') setShowSuccess(false);
+    if (type === 'warning') setShowWarning(false);
   };
 
   return (
     <AlertmessageDiv>
-      {visible.error && (
+      {showError && (
         <div className='alert-div'>
           <Alert message='Error message' type='error' showIcon />
           <Icon
@@ -45,8 +37,7 @@ function AlertMessage({
           />
         </div>
       )}
-      <br />
-      {visible.success && (
+      {showSuccess && (
         <div className='alert-div'>
           <Alert message='Success message' type='success' showIcon />
           <Icon
@@ -58,8 +49,7 @@ function AlertMessage({
           />
         </div>
       )}
-      <br />
-      {visible.warning && (
+      {showWarning && (
         <div className='alert-div'>
           <Alert message='Warning message' type='warning' showIcon />
           <Icon
@@ -71,7 +61,6 @@ function AlertMessage({
           />
         </div>
       )}
-      <br />
     </AlertmessageDiv>
   );
 }
