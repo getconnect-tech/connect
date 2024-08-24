@@ -28,7 +28,6 @@ import ProfileSection from '@/components/profileSection/profileSection';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
 import MessageCard from '@/components/messageCard/messageCard';
-import QuestionCard from '@/components/questionCard/questionCard';
 import { labelItem, modeItem, priorityItem, snoozeItem } from '@/helpers/raw';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import { useStores } from '@/stores';
@@ -48,6 +47,7 @@ import Tag from '@/components/tag/tag';
 import { MessageDetails } from '@/utils/dataTypes';
 import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
 import SnoozeDropdown from '@/components/snoozeDropdown/snoozeDropdown';
+import InternalMessageCard from '@/components/internalMessageCard/internalMessageCard';
 
 interface Props {
   ticket_id: string;
@@ -290,7 +290,7 @@ function TicketDetails(props: Props) {
                 name={message?.author?.display_name || ''}
                 size={20}
               />
-              <QuestionCard
+              <InternalMessageCard
                 title={message?.content || ''}
                 time={message?.created_at}
               />
