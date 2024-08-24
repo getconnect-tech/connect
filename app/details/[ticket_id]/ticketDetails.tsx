@@ -508,13 +508,16 @@ function TicketDetails(props: Props) {
           <BottomDiv>
             <CenterDiv ref={messagesEndRef}>
               {messages?.map((message, index) => (
-                <>
+                <div>
                   {renderActivityMessage(message)}
                   {index !== messages?.length - 1 && <LineDiv />}
-                </>
+                </div>
               ))}
             </CenterDiv>
-            <InputDiv>
+          </BottomDiv>
+          <InputDiv>
+            <div className='line' />
+            <div className='input-main-div'>
               <Avatar
                 imgSrc={user?.profile_url || ''}
                 size={20}
@@ -579,8 +582,8 @@ function TicketDetails(props: Props) {
                   </IconDiv>
                 </InputIcon>
               </Input>
-            </InputDiv>
-          </BottomDiv>
+            </div>
+          </InputDiv>
         </div>
       </MainDiv>
       <ProfileSection />

@@ -27,9 +27,8 @@ const BottomDiv = styled.div`
   max-width: 702px;
   width: 100%;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 86px);
+  height: calc(100dvh - 208px);
+  overflow: auto;
 `;
 
 const MainDiv = styled.div`
@@ -84,13 +83,21 @@ const ButtonDiv = styled.div`
 `;
 
 const InputDiv = styled.div`
-  display: flex;
-  gap: 12px;
   position: sticky;
   bottom: 0;
-  padding: 8px 0 20px;
   background-color: ${colors.bg_surface};
   z-index: 1;
+  max-width: 702px;
+  margin: 0 auto;
+  .input-main-div {
+    display: flex;
+    gap: 12px;
+  }
+  .line {
+    height: 8px;
+    border-left: 1px solid ${colors.border};
+    margin-left: 10px;
+  }
 `;
 
 const Input = styled.div<Props>`
@@ -110,12 +117,10 @@ const Input = styled.div<Props>`
 `;
 
 const CenterDiv = styled.div`
-  flex: 1;
   padding: 20px 0 0;
   display: flex;
   flex-direction: column;
   justify-content: end;
-  margin-bottom: 12px;
 `;
 
 const InputIcon = styled.div`
