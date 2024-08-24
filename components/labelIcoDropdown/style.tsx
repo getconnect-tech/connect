@@ -22,8 +22,8 @@ export const MainDiv = styled.div`
   max-height: 216px;
   width: 100%;
   overflow: auto;
-  left: 40px;
-  top: 40px;
+  left: 55px;
+  top: 92px;
 `;
 
 export const SearchDiv = styled.div`
