@@ -37,10 +37,10 @@ export default function AppProvider({
     try {
       const result = await appInit();
       if (
-        result.type === APP_INIT_RESPONSE_TYPE.REDIRECT &&
-        !isEmpty(result.path)
+        result?.type === APP_INIT_RESPONSE_TYPE.REDIRECT &&
+        !isEmpty(result?.path)
       ) {
-        router.push(result.path);
+        router.push(result?.path);
       }
     } catch (error) {
       console.log('ERROR', error);
