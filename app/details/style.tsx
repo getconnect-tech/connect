@@ -148,8 +148,8 @@ const Message = styled.p`
   ${Typography.body_md_regular};
   color: ${colors.text};
   border-left: 1px solid ${colors.border};
-  padding-left: 18px;
-  margin-left: -23px;
+  padding-left: 22px;
+  margin-left: -22px;
   span {
     ${Typography.body_md_regular};
     color: ${colors.text_text_secondary};
@@ -162,7 +162,7 @@ const Message = styled.p`
 const LineDiv = styled.div`
   border-left: 1px solid ${colors.border};
   height: 20px;
-  margin-left: 9px;
+  margin-left: 10px;
 `;
 
 const IconDiv = styled.div<Props>`
