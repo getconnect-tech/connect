@@ -20,7 +20,6 @@ import {
   Main,
   MainDiv,
   Message,
-  ScrollRef,
   StatusDiv,
   Title,
   TopDiv,
@@ -507,7 +506,7 @@ function TicketDetails(props: Props) {
         </TopDiv>
         <div style={{ padding: '0 20px' }}>
           <BottomDiv>
-            <CenterDiv>
+            <CenterDiv ref={messagesEndRef}>
               {messages?.map((message, index) => (
                 <>
                   {renderActivityMessage(message)}
@@ -515,7 +514,6 @@ function TicketDetails(props: Props) {
                 </>
               ))}
             </CenterDiv>
-            <ScrollRef ref={messagesEndRef} />
             <InputDiv>
               <Avatar
                 imgSrc={user?.profile_url || ''}
