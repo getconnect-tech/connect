@@ -32,9 +32,12 @@ const MainDiv = styled.div<Props>`
   max-width: 180px;
   max-height: 185px;
   overflow: auto;
+  .date-time-text {
+    border-top: 1px solid ${colors.border};
+  }
 `;
 
-const ItemDiv = styled.div<Props>`
+const ItemDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -43,12 +46,7 @@ const ItemDiv = styled.div<Props>`
   cursor: pointer;
   p {
     ${Typography.body_sm_regular};
-    color: ${({ isSelected, isHovered }) =>
-      isSelected
-        ? colors.text
-        : isHovered
-          ? colors.text
-          : colors.text_text_secondary};
+    color: ${colors.text_text_secondary};
     white-space: nowrap;
   }
   &:hover {
@@ -133,6 +131,26 @@ const ItemLeftDiv = styled.div<Props>`
   }
 `;
 
+const DateTimeTextDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px;
+  margin: 4px;
+  cursor: pointer;
+  p {
+    ${Typography.body_md_regular};
+    color: ${colors.text_text_secondary};
+  }
+  &:hover {
+    background-color: ${colors.bg_white_hover};
+    border-radius: 8px;
+    p {
+      color: ${colors.text};
+    }
+  }
+`;
+
 export {
   MainDiv,
   ItemDiv,
@@ -140,4 +158,5 @@ export {
   ItemMainDiv,
   StyledCheckbox,
   ItemLeftDiv,
+  DateTimeTextDiv,
 };

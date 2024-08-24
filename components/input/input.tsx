@@ -11,8 +11,9 @@ interface Props {
   error?: string;
   className?: string;
   login?: boolean;
-  value?: string;
+  value?: any;
   type?: 'email' | 'password' | 'text' | 'number';
+  variant?: 'large' | 'medium' | 'small';
   // eslint-disable-next-line no-unused-vars
   onChange?: any;
   onKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -43,6 +44,7 @@ const Input: React.FC<Props> = ({
   iconSize,
   iconViewBox,
   isIcon,
+  variant,
   ...props
 }) => {
   return (
@@ -69,6 +71,7 @@ const Input: React.FC<Props> = ({
           style={style}
           autoFocus={autoFocus}
           isIcon={isIcon}
+          variant={variant}
           {...props}
         />
       </InputDiv>

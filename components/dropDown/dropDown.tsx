@@ -1,15 +1,15 @@
-/* eslint-disable no-undef */
 import React, {
-  SyntheticEvent,
+  useState,
   useCallback,
+  SyntheticEvent,
   useEffect,
   useRef,
-  useState,
 } from 'react';
 import { observer } from 'mobx-react-lite';
 import Avatar from '../avtar/Avtar';
 import Input from '../input/input';
 import {
+  DateTimeTextDiv,
   ItemDiv,
   ItemLeftDiv,
   ItemMainDiv,
@@ -66,8 +66,10 @@ export const useOutsideClick = (callback: () => void) => {
       }
     };
 
+    // eslint-disable-next-line no-undef
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
+      // eslint-disable-next-line no-undef
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [callback]);
@@ -98,6 +100,7 @@ const DropDown = ({
   }>({});
   const [query, setQuery] = useState('');
   const [searchResult, setSearchResult] = useState<DropDownItem[]>([]);
+  // eslint-disable-next-line no-undef
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -125,7 +128,7 @@ const DropDown = ({
       }
       onClose();
     },
-    [],
+    [handleClick, handleItemClick, onChange, onClose, userId],
   );
 
   const searchQuery = useCallback(
@@ -153,6 +156,14 @@ const DropDown = ({
     },
     [searchQuery, items],
   );
+
+  const handleDateTimeClick = (e: SyntheticEvent) => {
+    e.stopPropagation();
+    if (onChange) {
+      onChange({ name: 'date&time' });
+      onClose();
+    }
+  };
 
   return (
     <MainDiv
@@ -182,8 +193,6 @@ const DropDown = ({
         {searchResult.map((item, index) => (
           <ItemDiv
             key={index}
-            isSelected={selectedItems[item.name]}
-            isHovered={hoveredItem === item.name}
             onClick={(e) => onClickItem(e, item, hoveredItem)}
             onMouseEnter={() => {
               // eslint-disable-next-line no-unused-expressions, @typescript-eslint/no-unused-expressions
@@ -226,6 +235,19 @@ const DropDown = ({
           </ItemDiv>
         ))}
       </ItemMainDiv>
+      {isSnooze && (
+        <div className='date-time-text'>
+          <DateTimeTextDiv onClick={handleDateTimeClick}>
+            <p>Date & Time</p>
+            <SVGIcon
+              name='left-arrow-icon'
+              width='10'
+              height='10'
+              viewBox='0 0 10 10'
+            />
+          </DateTimeTextDiv>
+        </div>
+      )}
     </MainDiv>
   );
 };

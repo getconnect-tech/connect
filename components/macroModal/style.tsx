@@ -38,7 +38,9 @@ export const TextField = styled.div`
   .rich-text {
     border: 1px solid ${colors.border};
     border-radius: 12px;
-
+    .e-richtexteditor .rte-placeholder {
+      padding: 8px 16px;
+    }
     .e-richtexteditor .e-rte-content .e-content {
       max-height: 160px;
       min-height: 160px;
@@ -78,6 +80,9 @@ export const TextField = styled.div`
         display: flex;
         align-items: center;
       }
+    }
+    .e-richtexteditor .e-rte-toolbar .e-toolbar-item.e-active .e-tbar-btn {
+      background-color: ${colors.bg_surface_secondary};
     }
   }
 `;

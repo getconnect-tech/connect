@@ -83,3 +83,9 @@ export const labelIcons = [
   { iconName: 'laptop-icon' },
   { iconName: 'shield-icon' },
 ];
+export const snoozeItem = [
+  { name: 'Later today', time: '3:00 AM' },
+  { name: 'This evening', time: '6:00 PM' },
+  { name: 'Tomorrow', time: 'Sat, Aug 17, 9:00 AM' },
+  { name: 'Next week', time: 'Mon, Aug 20, 9:00 AM' },
+];

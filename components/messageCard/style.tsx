@@ -23,12 +23,18 @@ const CardMessage = styled.p`
   padding: 12px;
   ${Typography.body_md_regular};
   color: ${colors.text};
+  div {
+    font-size: 14px !important;
+    color: ${colors.text} !important;
+    font-family: unset !important;
+  }
 `;
 
 const MessageCardMinDiv = styled.div`
   border-left: 1px solid ${colors.border};
   padding-left: 18px;
   margin-left: -23px;
+  width: 100%;
 `;
 
 const NameDiv = styled.div`

@@ -12,3 +12,101 @@ a {
   color: inherit;
   text-decoration: none;
 }
+.ant-picker-dropdown .ant-picker-time-panel-column {
+  scrollbar-color: #dcdcd9 transparent;
+  width: 68px;
+  overflow-y: auto;
+}
+.ant-picker-now-btn {
+  display: none;
+}
+.ant-btn .css-dev-only-do-not-override-1gwfwyx .ant-btn-primary .ant-btn-sm {
+  background-color: #282828;
+}
+.ant-picker.ant-picker-outlined {
+  border-radius: 30px;
+  border-color: #dcdcd9;
+  width: 114px;
+}
+.anticon.anticon-clock-circle {
+  display: none;
+}
+.ant-picker-dropdown .ant-picker-time-panel-column:not(:first-child) {
+  border-inline-start: 1px solid #e9e8e5;
+}
+.ant-picker-dropdown .ant-picker-footer {
+  border-top: 1px solid #e9e8e5;
+}
+.ant-picker-dropdown .ant-picker-panel > .ant-picker-time-panel {
+  padding: 0;
+}
+.ant-picker-dropdown .ant-picker-time-panel-column {
+  margin: 0;
+}
+.ant-btn-primary:disabled,
+.ant-btn-primary.ant-btn-disabled {
+  background-color: #282828;
+  border: none;
+  border-radius: 30px;
+  height: 24px;
+  width: 42px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  line-height: 16px;
+}
+.ant-picker-dropdown
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell
+  .ant-picker-time-panel-cell-inner:hover {
+  background-color: #f2f2f2;
+  border-radius: 6px;
+}
+.ant-picker-dropdown
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell-selected
+  .ant-picker-time-panel-cell-inner {
+  background-color: #f2f2f2;
+  color: #282828 !important;
+  border-radius: 6px;
+}
+.ant-picker-dropdown
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell-selected
+  .ant-picker-time-panel-cell-inner:hover,
+.ant-picker-dropdown
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell-selected
+  .ant-picker-time-panel-cell-inner:hover {
+  background-color: #f2f2f2;
+}
+.ant-picker-time-panel-cell-inner {
+  color: #7b7a79 !important;
+}
+.ant-btn-primary {
+  background-color: #282828;
+  border: none;
+  border-radius: 30px;
+  height: 24px;
+  width: 42px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  line-height: 16px;
+}
+.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  background-color: #3e3e3e;
+}
+.ant-picker-outlined:focus {
+  border-color: #282828;
+  box-shadow: none;
+}
+.ant-picker-outlined:focus-within {
+  border-color: #282828;
+  box-shadow: none;
+}
+.ant-picker:hover .ant-picker-clear {
+  display: none;
+}
