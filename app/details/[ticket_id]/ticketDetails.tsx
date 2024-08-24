@@ -268,6 +268,11 @@ function TicketDetails(props: Props) {
    */
   const handleCommentSend = useCallback(
     async (content: string, mode: string) => {
+      if (!content || content === '' || content === null) {
+        // eslint-disable-next-line no-undef
+        alert('Please add message');
+        return;
+      }
       let type;
       if (mode !== 'Email') {
         type = MessageType.REGULAR;
