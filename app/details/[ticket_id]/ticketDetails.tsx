@@ -275,7 +275,7 @@ function TicketDetails(props: Props) {
 
       try {
         if (ticket_id) {
-          ticketStore.setTicketMessages([...messages, newMessage]);
+          ticketStore.addTicketMessage(newMessage);
           const result = await sendMessage(ticket_id, payload);
           if (result) {
             setCommentValue('');
@@ -285,7 +285,7 @@ function TicketDetails(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [ticket_id],
+    [ticket_id, user],
   );
 
   /*
