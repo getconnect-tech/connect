@@ -20,7 +20,7 @@
 
 ## Introduction
 
-Connect is the open-source link management infrastructure for modern marketing teams.
+Connect is the open-source support system for B2B SaaS companies.
 
 ## Features
 
