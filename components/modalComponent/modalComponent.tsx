@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { SyntheticEvent, useState } from 'react';
 import Icon from '../icon/icon';
 import Input from '../input/input';
 import Button from '../button/button';
@@ -8,7 +8,8 @@ import LabelSvgIcon from '@/assets/icons/labelIcons';
 
 interface Props {
   onClose: () => void;
-  onSubmit: () => void;
+  // eslint-disable-next-line no-unused-vars
+  onSubmit: (e: SyntheticEvent) => void;
   onChange?: any;
   value?: any;
   value2?: any;
