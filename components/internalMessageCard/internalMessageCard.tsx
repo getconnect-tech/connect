@@ -7,7 +7,7 @@ interface Props {
   time: Date;
 }
 
-export default function QuestionCard({ time, title }: Props) {
+export default function InternalMessageCard({ time, title }: Props) {
   return (
     <MainDiv>
       <Div>

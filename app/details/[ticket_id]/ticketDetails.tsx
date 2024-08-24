@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
 import { MessageType, PriorityLevels, TicketStatus } from '@prisma/client';
@@ -28,7 +28,6 @@ import ProfileSection from '@/components/profileSection/profileSection';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
 import MessageCard from '@/components/messageCard/messageCard';
-import QuestionCard from '@/components/questionCard/questionCard';
 import { labelItem, modeItem, priorityItem, snoozeItem } from '@/helpers/raw';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import { useStores } from '@/stores';
@@ -48,6 +47,8 @@ import Tag from '@/components/tag/tag';
 import { MessageDetails } from '@/utils/dataTypes';
 import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
 import SnoozeDropdown from '@/components/snoozeDropdown/snoozeDropdown';
+import InternalMessageCard from '@/components/internalMessageCard/internalMessageCard';
+import { colors } from '@/styles/colors';
 
 interface Props {
   ticket_id: string;
@@ -62,6 +63,7 @@ function TicketDetails(props: Props) {
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const [commentValue, setCommentValue] = useState<string>('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const { ticketStore, workspaceStore, userStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
@@ -109,6 +111,18 @@ function TicketDetails(props: Props) {
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({
+        block: 'end',
+      });
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     return () => {
@@ -290,7 +304,7 @@ function TicketDetails(props: Props) {
                 name={message?.author?.display_name || ''}
                 size={20}
               />
-              <QuestionCard
+              <InternalMessageCard
                 title={message?.content || ''}
                 time={message?.created_at}
               />
@@ -493,15 +507,18 @@ function TicketDetails(props: Props) {
         </TopDiv>
         <div style={{ padding: '0 20px' }}>
           <BottomDiv>
-            <CenterDiv>
+            <CenterDiv ref={messagesEndRef}>
               {messages?.map((message, index) => (
-                <>
+                <div>
                   {renderActivityMessage(message)}
                   {index !== messages?.length - 1 && <LineDiv />}
-                </>
+                </div>
               ))}
             </CenterDiv>
-            <InputDiv>
+          </BottomDiv>
+          <InputDiv>
+            <div className='line' />
+            <div className='input-main-div'>
               <Avatar
                 imgSrc={user?.profile_url || ''}
                 size={20}
@@ -530,7 +547,7 @@ function TicketDetails(props: Props) {
                     iconName={modeSelectedItem?.icon}
                     iconSize='12'
                     iconViewBox='0 0 12 12'
-                    isActive={true}
+                    isActive={messageModeDropdown ? true : false}
                     className={
                       submenuPosition === 'upwards'
                         ? 'submenu-upwards'
@@ -541,7 +558,7 @@ function TicketDetails(props: Props) {
                     }
                     dropDownStyle={{ maxWidth: 142, width: '100%' }}
                     tagStyle={{
-                      backgroundColor: 'unset',
+                      backgroundColor: colors.bg_surface_secondary_hover,
                     }}
                   />
                   <IconDiv modeSelectedItem={modeSelectedItem}>
@@ -566,8 +583,8 @@ function TicketDetails(props: Props) {
                   </IconDiv>
                 </InputIcon>
               </Input>
-            </InputDiv>
-          </BottomDiv>
+            </div>
+          </InputDiv>
         </div>
       </MainDiv>
       <ProfileSection />
