@@ -39,7 +39,7 @@ import {
   updateTicketPriority,
   sendMessage,
 } from '@/services/clientSide/ticketServices';
-import { capitalizeString, isEmpty } from '@/helpers/common';
+import { capitalizeString, getUniqueId, isEmpty } from '@/helpers/common';
 import Icon from '@/components/icon/icon';
 import RichTextBox from '@/components/commentBox';
 import { DropDownItem } from '@/components/dropDown/dropDown';
@@ -262,7 +262,6 @@ function TicketDetails(props: Props) {
     },
     [ticketDetails],
   );
-
   /*
    * @desc Send comment
    */
@@ -280,11 +279,24 @@ function TicketDetails(props: Props) {
         type = MessageType.EMAIL;
       }
       const payload = { content: content, type };
+      const newMessage: MessageDetails = {
+        assignee: null,
+        author: user,
+        author_id: user!.id,
+        content,
+        id: getUniqueId(),
+        created_at: new Date(),
+        label: null,
+        reference_id: '',
+        ticket_id,
+        type,
+      };
+
       try {
         if (ticket_id) {
+          ticketStore.addTicketMessage(newMessage);
           const result = await sendMessage(ticket_id, payload);
           if (result) {
-            getTicketMessages(ticket_id);
             setCommentValue('');
           }
         }
@@ -292,7 +304,7 @@ function TicketDetails(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [ticket_id],
+    [ticket_id, user],
   );
 
   /*
