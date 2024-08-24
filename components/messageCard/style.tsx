@@ -27,13 +27,18 @@ const CardMessage = styled.p`
     font-size: 14px !important;
     color: ${colors.text} !important;
     font-family: unset !important;
+    p {
+      br {
+        display: none;
+      }
+    }
   }
 `;
 
 const MessageCardMinDiv = styled.div`
   border-left: 1px solid ${colors.border};
-  padding-left: 18px;
-  margin-left: -23px;
+  padding-left: 22px;
+  margin-left: -22px;
   width: 100%;
 `;
 
