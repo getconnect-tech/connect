@@ -48,6 +48,7 @@ import { MessageDetails } from '@/utils/dataTypes';
 import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
 import SnoozeDropdown from '@/components/snoozeDropdown/snoozeDropdown';
 import InternalMessageCard from '@/components/internalMessageCard/internalMessageCard';
+import { colors } from '@/styles/colors';
 
 interface Props {
   ticket_id: string;
@@ -546,7 +547,7 @@ function TicketDetails(props: Props) {
                     iconName={modeSelectedItem?.icon}
                     iconSize='12'
                     iconViewBox='0 0 12 12'
-                    isActive={true}
+                    isActive={messageModeDropdown ? true : false}
                     className={
                       submenuPosition === 'upwards'
                         ? 'submenu-upwards'
@@ -557,7 +558,7 @@ function TicketDetails(props: Props) {
                     }
                     dropDownStyle={{ maxWidth: 142, width: '100%' }}
                     tagStyle={{
-                      backgroundColor: 'unset',
+                      backgroundColor: colors.bg_surface_secondary_hover,
                     }}
                   />
                   <IconDiv modeSelectedItem={modeSelectedItem}>
