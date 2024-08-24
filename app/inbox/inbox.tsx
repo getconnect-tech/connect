@@ -1,6 +1,7 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { TicketStatus } from '@prisma/client';
 import {
   BottomDiv,
   HeaderDiv,
@@ -41,6 +42,20 @@ function Inbox() {
     }
   }, [currentWorkspace?.id]);
 
+  // Filter ticket based on activeTab
+  const filteredTicketList = ticketList?.filter((ticket) => {
+    switch (activeTab) {
+      case 'Open':
+        return ticket.status === TicketStatus.OPEN;
+      case 'Snoozed':
+        return ticket.status === TicketStatus.SNOOZE;
+      case 'Done':
+        return ticket.status === TicketStatus.CLOSED;
+      default:
+        return false;
+    }
+  });
+
   useEffect(() => {
     loadData();
   }, [loadData]);
@@ -79,8 +94,8 @@ function Inbox() {
                 description='This is where you will receive notifications for all types of tickets. Enjoy your clutter-free inbox!'
               />
             )}
-            {ticketList?.length > 0 &&
-              ticketList.map((ticket, index) => (
+            {filteredTicketList?.length > 0 &&
+              filteredTicketList.map((ticket, index) => (
                 <>
                   <CustomContextMenu
                     key={ticket.id}
