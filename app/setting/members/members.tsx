@@ -16,13 +16,14 @@ import {
 import Button from '@/components/button/button';
 import MemberCard from '@/components/memberCard/memberCard';
 import {
-  getWorkspaceList,
+  getWorkspaceById,
   removeMemberFromWorkspace,
   updateRole,
 } from '@/services/clientSide/workspaceServices';
 import { useStores } from '@/stores';
 import InviteMemberModal from '@/components/modalComponent/inviteMemberModal';
 import Modal from '@/components/modal/modal';
+import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
 
 const Members = () => {
   const [inviteModal, setInviteModal] = useState(false);
@@ -31,6 +32,25 @@ const Members = () => {
   );
   const { workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
+
+  const loadData = useCallback(async () => {
+    try {
+      workspaceStore.setLoading(true);
+      const workspaceId =
+        await UserPreferenceSingleton.getInstance().getCurrentWorkspace();
+      if (workspaceId) {
+        await getWorkspaceById(workspaceId);
+      }
+    } catch (e) {
+      console.log('Error : ', e);
+    } finally {
+      workspaceStore.setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const onOpenInviteModal = useCallback(() => {
     setInviteModal(true);
@@ -52,7 +72,7 @@ const Members = () => {
           });
 
           if (result) {
-            getWorkspaceMember();
+            loadData();
           }
         }
         workspaceStore.setLoading(false);
@@ -73,17 +93,6 @@ const Members = () => {
       }
     }
   };
-
-  const getWorkspaceMember = useCallback(async () => {
-    workspaceStore.setLoading(true);
-    // get user data from workspace object
-    await getWorkspaceList();
-    workspaceStore.setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    getWorkspaceMember();
-  }, [inviteModal]);
 
   return (
     <>
@@ -137,7 +146,7 @@ const Members = () => {
         </MainDiv>
       </Main>
       <Modal open={inviteModal} onClose={onCloseInviteModal}>
-        <InviteMemberModal onClose={onCloseInviteModal} />
+        <InviteMemberModal onClose={onCloseInviteModal} loadData={loadData} />
       </Modal>
     </>
   );

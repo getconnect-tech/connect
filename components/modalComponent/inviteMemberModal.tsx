@@ -9,9 +9,10 @@ import { useStores } from '@/stores';
 
 interface Props {
   onClose: () => void;
+  loadData: () => void;
 }
 
-const InviteMemberModal = ({ onClose }: Props) => {
+const InviteMemberModal = ({ onClose, loadData }: Props) => {
   const { workspaceStore } = useStores();
   const { inviteModalInput, loading } = workspaceStore;
 
@@ -24,6 +25,7 @@ const InviteMemberModal = ({ onClose }: Props) => {
       if (result) {
         // reset modal input
         workspaceStore.resetInviteModalInput();
+        loadData();
         onClose();
       }
     } catch (error) {
@@ -46,7 +48,7 @@ const InviteMemberModal = ({ onClose }: Props) => {
           onClick={onClose}
         />
       </Header>
-      <BottomDiv onSubmit={handleInvite}>
+      <BottomDiv onSubmit={(e) => handleInvite(e)}>
         <Label>Name</Label>
         <Input
           value={inviteModalInput.name}
