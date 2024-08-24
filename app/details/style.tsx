@@ -1,11 +1,12 @@
 /* eslint-disable indent */
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Typography } from '../../styles/typography';
 import { colors } from '@/styles/colors';
 import { DropDownItem } from '@/components/dropDown/dropDown';
 
 interface Props {
-  modeSelectedItem: DropDownItem;
+  modeSelectedItem?: DropDownItem;
+  isMargin?: boolean;
 }
 
 const Main = styled.div`
@@ -177,6 +178,14 @@ const IconDiv = styled.div<Props>`
   }
 `;
 
+const ScrollRef = styled.div<Props>`
+  ${(props) =>
+    props.isMargin &&
+    css`
+      margin-bottom: 50px;
+    `}
+`;
+
 export {
   Main,
   MainDiv,
@@ -195,4 +204,5 @@ export {
   LineDiv,
   IconDiv,
   ButtonDiv,
+  ScrollRef,
 };

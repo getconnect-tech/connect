@@ -20,6 +20,7 @@ import {
   Main,
   MainDiv,
   Message,
+  ScrollRef,
   StatusDiv,
   Title,
   TopDiv,
@@ -514,7 +515,7 @@ function TicketDetails(props: Props) {
                 </>
               ))}
             </CenterDiv>
-            <div ref={messagesEndRef}></div>
+            <ScrollRef ref={messagesEndRef} />
             <InputDiv>
               <Avatar
                 imgSrc={user?.profile_url || ''}
