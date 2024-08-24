@@ -41,6 +41,10 @@ export const BottomDiv = styled.form`
     margin-bottom: 12px;
     position: relative;
   }
+  .icon-div {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 export const Label = styled.div`

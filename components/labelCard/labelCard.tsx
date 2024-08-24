@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
 import Modal from '../modal/modal';
-import LabelModal from '../labelModal/labelModal';
+import LabelModal from '../modalComponent/labelModal';
 import { InnerDiv, ItemDiv, Name } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { colors } from '@/styles/colors';
