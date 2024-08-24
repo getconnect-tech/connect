@@ -17,7 +17,7 @@ import EmptyState from '@/components/emptyState/emptyState';
 import { isEmpty } from '@/helpers/common';
 import MacroCard from '@/components/macroCard/macroCard';
 import Modal from '@/components/modal/modal';
-import MacroModal from '@/components/macroModal/macroModal';
+import MacroModal from '@/components/modalComponent/macroModal';
 
 const Macros = () => {
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(

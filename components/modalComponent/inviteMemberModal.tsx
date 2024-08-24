@@ -64,7 +64,12 @@ const InviteMemberModal = ({ onClose }: Props) => {
           placeholder={'Enter email address'}
         />
         <div className='button'>
-          <Button type='submit' title='Invite' isLoading={loading} />
+          <Button
+            type='submit'
+            title='Invite'
+            isLoading={loading}
+            variant='medium'
+          />
         </div>
       </BottomDiv>
     </MainDiv>

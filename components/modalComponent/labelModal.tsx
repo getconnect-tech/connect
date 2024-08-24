@@ -44,8 +44,9 @@ function LabelModal({ onClose }: Props) {
             title='Cancel'
             secondary={true}
             onClick={onClose}
+            variant='medium'
           />
-          <Button type='submit' title='Create' />
+          <Button type='submit' title='Create' variant='medium' />
         </div>
       </BottomDiv>
     </MainDiv>

@@ -26,8 +26,13 @@ function CreateKeyModal({ onClose }: Props) {
         </Label>
         <Input placeholder={'Enter your key name'} className='input' />
         <div className='button'>
-          <Button type='submit' title='Cancel' secondary={true} />
-          <Button type='submit' title='Create' />
+          <Button
+            type='submit'
+            title='Cancel'
+            secondary={true}
+            variant='medium'
+          />
+          <Button type='submit' title='Create' variant='medium' />
         </div>
       </BottomDiv>
     </MainDiv>

@@ -3,7 +3,7 @@ import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
 import Modal from '../modal/modal';
 import DeleteModal from '../deleteModal/deleteModal';
-import MacroModal from '../macroModal/macroModal';
+import MacroModal from '../modalComponent/macroModal';
 import { CardMainDiv, LeftDiv, RightDiv, TitleDiv } from './style';
 
 interface Props {
