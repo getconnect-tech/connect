@@ -18,6 +18,11 @@ const Div = styled.div`
     ${Typography.body_md_regular};
     color: ${colors.text};
     border-radius: 8px;
+    div {
+      p {
+        padding: 0;
+      }
+    }
   }
   span {
     ${Typography.body_md_regular};
