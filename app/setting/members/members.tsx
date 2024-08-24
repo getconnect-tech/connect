@@ -21,7 +21,7 @@ import {
   updateRole,
 } from '@/services/clientSide/workspaceServices';
 import { useStores } from '@/stores';
-import InviteMemberModal from '@/components/inviteMemberModal/inviteMemberModal';
+import InviteMemberModal from '@/components/modalComponent/inviteMemberModal';
 import Modal from '@/components/modal/modal';
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
 

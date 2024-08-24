@@ -12,7 +12,7 @@ import {
 import Button from '@/components/button/button';
 import ApiKeyCard from '@/components/apiKeyCard/apiKeyCard';
 import Modal from '@/components/modal/modal';
-import CreateKeyModal from '@/components/createKeyModal/createKeyModal';
+import CreateKeyModal from '@/components/modalComponent/createKeyModal';
 import { isEmpty } from '@/helpers/common';
 import ApiKeyLoading from '@/components/apiKeyLoading/apiKeyLoading';
 import EmptyState from '@/components/emptyState/emptyState';
