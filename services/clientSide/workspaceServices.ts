@@ -109,15 +109,14 @@ export const getWorkspaceList = async () => {
           (workspace: Workspace) => workspace?.id === currentWorkspace,
         );
         if (isFoundWorkspace) await getWorkspaceById(currentWorkspace);
-        else {
+        else if (data?.length === 1) {
           UserPreferenceSingleton.getInstance().setCurrentWorkspace(
             data[0]?.id,
           );
           await getWorkspaceById(data[0]?.id);
+        } else if (data?.length >= 2) {
+          await getWorkspaceById(currentWorkspace);
         }
-      } else {
-        UserPreferenceSingleton.getInstance().setCurrentWorkspace(data[0]?.id);
-        await getWorkspaceById(data[0]?.id);
       }
       return data;
     }

@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import { isEmpty } from './common';
+import UserPreferenceSingleton from './userPreferenceSingleton';
 import { getSessionDetails } from '@/services/serverSide/auth/authentication';
 import { APP_INIT_RESPONSE_TYPE } from '@/global/constants';
 import { getWorkspaceList } from '@/services/clientSide/workspaceServices';
@@ -21,10 +22,18 @@ export const appInit: any = async () => {
 
     // Get user's workspace list
     const workspaceList = await getWorkspaceList();
+    const currentWorkspace =
+      UserPreferenceSingleton.getInstance().getCurrentWorkspace();
 
     // If user doesn't exist in any workspace then redirect user to onboarding page
     if (!workspaceList || workspaceList?.length === 0) {
       return { type: APP_INIT_RESPONSE_TYPE.REDIRECT, path: '/onboarding' };
+    } else if (
+      !workspaceList ||
+      workspaceList?.length === 1 ||
+      (currentWorkspace && (!workspaceList || workspaceList?.length >= 2))
+    ) {
+      return { type: APP_INIT_RESPONSE_TYPE.REDIRECT, path: '/' };
     }
 
     // User exist in any workspace
@@ -34,6 +43,12 @@ export const appInit: any = async () => {
         window.location.pathname === '/signup'
       )
         return { type: APP_INIT_RESPONSE_TYPE.REDIRECT, path: '/' };
+      else {
+        return {
+          type: APP_INIT_RESPONSE_TYPE.REDIRECT,
+          path: '/selectworkspace',
+        };
+      }
       return true;
     }
   }
