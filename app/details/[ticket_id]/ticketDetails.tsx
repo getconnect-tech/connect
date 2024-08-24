@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
 import { MessageType, PriorityLevels, TicketStatus } from '@prisma/client';
@@ -62,6 +62,7 @@ function TicketDetails(props: Props) {
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const [commentValue, setCommentValue] = useState<string>('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const { ticketStore, workspaceStore, userStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
@@ -109,6 +110,18 @@ function TicketDetails(props: Props) {
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({
+        block: 'end',
+      });
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     return () => {
@@ -501,6 +514,7 @@ function TicketDetails(props: Props) {
                 </>
               ))}
             </CenterDiv>
+            <div ref={messagesEndRef}></div>
             <InputDiv>
               <Avatar
                 imgSrc={user?.profile_url || ''}
