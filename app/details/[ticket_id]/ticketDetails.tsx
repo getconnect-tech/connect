@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
 import { MessageType, PriorityLevels, TicketStatus } from '@prisma/client';
@@ -63,6 +63,7 @@ function TicketDetails(props: Props) {
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const [commentValue, setCommentValue] = useState<string>('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const { ticketStore, workspaceStore, userStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
@@ -110,6 +111,18 @@ function TicketDetails(props: Props) {
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({
+        block: 'end',
+      });
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     return () => {
@@ -494,15 +507,18 @@ function TicketDetails(props: Props) {
         </TopDiv>
         <div style={{ padding: '0 20px' }}>
           <BottomDiv>
-            <CenterDiv>
+            <CenterDiv ref={messagesEndRef}>
               {messages?.map((message, index) => (
-                <>
+                <div>
                   {renderActivityMessage(message)}
                   {index !== messages?.length - 1 && <LineDiv />}
-                </>
+                </div>
               ))}
             </CenterDiv>
-            <InputDiv>
+          </BottomDiv>
+          <InputDiv>
+            <div className='line' />
+            <div className='input-main-div'>
               <Avatar
                 imgSrc={user?.profile_url || ''}
                 size={20}
@@ -567,8 +583,8 @@ function TicketDetails(props: Props) {
                   </IconDiv>
                 </InputIcon>
               </Input>
-            </InputDiv>
-          </BottomDiv>
+            </div>
+          </InputDiv>
         </div>
       </MainDiv>
       <ProfileSection />
