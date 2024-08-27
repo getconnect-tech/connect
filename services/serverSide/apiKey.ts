@@ -35,3 +35,11 @@ export const getApiDetails = async (apiKey: string) => {
 
   return apiDetails;
 };
+
+export const deleteApiKey = async (apiKey: string) => {
+  const deletedApiKey = await prisma.apiKeys.delete({
+    where: { api_key: apiKey },
+  });
+
+  return deletedApiKey;
+};
