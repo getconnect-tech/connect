@@ -9,6 +9,7 @@ import { PriorityLevels, TicketStatus } from '@prisma/client';
 import Avatar from '../avtar/Avtar';
 import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
 import AssigneeDropdown from '../AssigneeDropdown/dropDownWithTag';
+import Icon from '../icon/icon';
 import {
   CardDiv,
   DesTitle,
@@ -29,7 +30,6 @@ import {
   changeTicketStatus,
   updateTicketPriority,
 } from '@/services/clientSide/ticketServices';
-import SVGIcon from '@/assets/icons/SVGIcon';
 
 interface Props {
   ticketDetail: TicketDetailsInterface;
@@ -245,20 +245,24 @@ export default function InboxCard({
           {ticketDetail.status !== TicketStatus.CLOSED && (
             <TagDiv className='tagDiv'>
               <div onClick={handleCloseTicket}>
-                <SVGIcon
-                  name='close-icon'
-                  width='12'
-                  height='12'
-                  viewBox='0 0 12 12'
+                <Icon
+                  iconName='close-icon'
+                  iconSize='12'
+                  // height='12'
+                  iconViewBox='0 0 12 12'
                   className='line'
+                  onClick={() => {}}
+                  size={true}
                 />
               </div>
               <LineDiv />
-              <SVGIcon
-                name='context-snooze-icon'
-                width='12'
-                height='12'
-                viewBox='0 0 12 12'
+              <Icon
+                iconName='context-snooze-icon'
+                iconSize='12'
+                // height='12'
+                iconViewBox='0 0 12 12'
+                onClick={() => {}}
+                size={true}
               />
             </TagDiv>
           )}
