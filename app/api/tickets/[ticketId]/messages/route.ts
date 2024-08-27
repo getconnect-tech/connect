@@ -5,6 +5,7 @@ import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import { getTicketMessages, postMessage } from '@/services/serverSide/message';
 import { contentSchema, messageTypeSchema } from '@/lib/zod/message';
 import { sendEmailAsReply } from '@/helpers/emails';
+import { getWorkspaceEmailConfig } from '@/services/serverSide/workspace';
 
 export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
@@ -41,7 +42,23 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
     }
 
     if (type === MessageType.EMAIL) {
-      const mailId = await sendEmailAsReply(ticketId, content);
+      const emailConfig = await getWorkspaceEmailConfig(req.workspace.id);
+
+      if (!emailConfig) {
+        return Response.json(
+          {
+            error:
+              'Email configuration not found. Please setup a support email under the workspace settings.',
+          },
+          { status: 404 },
+        );
+      }
+
+      const mailId = await sendEmailAsReply({
+        ticketId,
+        body: content,
+        senderEmail: emailConfig.primaryEmail,
+      });
 
       if (!mailId) {
         return Response.json({ error: 'Ticket not found!' }, { status: 404 });

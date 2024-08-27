@@ -39,3 +39,7 @@ enum UserRole {
     ADMIN
     OWNER
 }
+
+enum ConfigType {
+    CHANNEL
+}
