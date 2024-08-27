@@ -2,14 +2,14 @@ import React, { useCallback } from 'react';
 import { UserRole } from '@prisma/client';
 import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
-import DropDown from '../dropDown/dropDown';
+import DropDown, { DropDownItem } from '../dropDown/dropDown';
 import { CardDiv, LeftDiv, NameDiv, RightDiv } from './style';
 import { capitalizeString } from '@/helpers/common';
 
 interface Props {
   userId: string;
   // eslint-disable-next-line no-unused-vars
-  handleClick?: (value: string | null, userId: string) => void;
+  handleClick?: (value: string | null, userId: string, status: string) => void;
   designation?: string;
   name: string;
   email: string;
@@ -31,11 +31,10 @@ function MemberCard({
   currentOpenDropdown,
   setOpenDropdown,
 }: Props) {
-  let dropDownItem;
+  let dropDownItem: DropDownItem[];
   if (designation === UserRole.OWNER) {
     dropDownItem = [];
-  }
-  if (designation === UserRole.MEMBER) {
+  } else if (designation === UserRole.MEMBER) {
     dropDownItem = [
       {
         name: 'Make Admin',
@@ -43,14 +42,22 @@ function MemberCard({
       },
       { name: 'Delete', icon: 'delete-icon', isDelete: true },
     ];
-  }
-  if (designation === UserRole.ADMIN) {
+  } else if (designation === UserRole.ADMIN) {
     dropDownItem = [
       {
         name: 'Remove Admin',
         icon: 'admin-icon',
       },
       { name: 'Delete', icon: 'delete-icon', isDelete: true },
+    ];
+  } else {
+    dropDownItem = [
+      {
+        name: 'Delete',
+        icon: 'delete-icon',
+        isDelete: true,
+        status: 'Pending',
+      },
     ];
   }
 

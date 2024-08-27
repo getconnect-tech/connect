@@ -18,6 +18,7 @@ class WorkspaceStore {
       currentWorkspace: observable,
       setCurrentWorkspace: action,
       removeUserFromWorkspace: action,
+      removeInvitedUserFromWorkspace: action,
 
       // Invite Mopdal Input
       inviteModalInput: observable,
@@ -47,6 +48,16 @@ class WorkspaceStore {
     );
     if (userIndex && userIndex !== -1) {
       this.currentWorkspace?.users?.splice(userIndex, 1);
+    }
+  }
+
+  // Remove invited user from workspace
+  removeInvitedUserFromWorkspace(userId: string) {
+    const userIndex = this.currentWorkspace?.invited_users?.findIndex(
+      (user) => user?.id === userId,
+    );
+    if (userIndex && userIndex !== -1) {
+      this.currentWorkspace?.invited_users?.splice(userIndex, 1);
     }
   }
 
