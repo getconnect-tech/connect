@@ -35,7 +35,6 @@ export const getAPIKeys = async () => {
  */
 export const createAPIKey = async (payload: { name: string }) => {
   try {
-    console.log('payload', payload);
     settingStore.setLoading(true);
     const response = await axios.post(
       `${NEXT_PUBLIC_API_URL}/workspaces/apikeys`,
