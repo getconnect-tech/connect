@@ -577,7 +577,15 @@ function TicketDetails(props: Props) {
                     }
                     dropDownStyle={{ maxWidth: 142, width: '100%' }}
                     tagStyle={{
-                      backgroundColor: colors.bg_surface_secondary_hover,
+                      backgroundColor: (() => {
+                        if (modeSelectedItem?.name === 'Email') {
+                          return `${colors.bg_surface_secondary}`;
+                        } else if (modeSelectedItem?.name === 'Internal') {
+                          return `${colors.bg_surface_secondary_hover}`;
+                        } else {
+                          return undefined;
+                        }
+                      })(),
                     }}
                   />
                   <IconDiv modeSelectedItem={modeSelectedItem}>
