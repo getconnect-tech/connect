@@ -22,7 +22,7 @@ const withAdminAuth =
     const authorizedRequest = req as AuthorizedRequest;
 
     if (authorizationHeader) {
-      return withApiAuth(handler);
+      return withApiAuth(handler)(req, { params });
     } else {
       const session = await getSessionDetails();
 

@@ -19,7 +19,7 @@ const withAuth =
     const authorizationHeader = req.headers.get('Authorization');
 
     if (authorizationHeader) {
-      return withApiAuth(handler);
+      return withApiAuth(handler)(req, { params });
     } else {
       const session = await getSessionDetails();
 
