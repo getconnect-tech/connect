@@ -534,7 +534,7 @@ function TicketDetails(props: Props) {
           <BottomDiv>
             <CenterDiv ref={messagesEndRef}>
               {messages?.map((message, index) => (
-                <div>
+                <div key={index}>
                   {renderActivityMessage(message)}
                   {index !== messages?.length - 1 && <LineDiv />}
                 </div>
