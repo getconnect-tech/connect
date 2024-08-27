@@ -31,12 +31,7 @@ function ApiKey() {
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
-      settingStore.setLoading(true);
-      try {
-        await getAPIKeys();
-      } finally {
-        settingStore.setLoading(false);
-      }
+      await getAPIKeys();
     }
   }, [currentWorkspace?.id]);
 
@@ -51,8 +46,6 @@ function ApiKey() {
   useEffect(() => {
     loadData();
   }, [loadData]);
-
-  console.log('apiKey', apiKeys);
 
   return (
     <>
@@ -89,10 +82,10 @@ function ApiKey() {
                   <ApiKeyCard
                     key={index}
                     keyName={apiKey.name || ''}
-                    keyNumber={apiKey.api_key}
+                    keyNumber={`**** **** **** ${apiKey?.api_key?.slice(-4)}`}
                     currentOpenDropdown={currentOpenDropdown}
                     setCurrentOpenDropdown={setCurrentOpenDropdown}
-                    dropdownIdentifier={`card-${apiKey.id}`}
+                    dropdownIdentifier={`card-${apiKey.api_key}`}
                   />
                 ))}
               </MainCardDiv>
