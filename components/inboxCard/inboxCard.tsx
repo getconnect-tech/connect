@@ -249,7 +249,6 @@ export default function InboxCard({
                   iconName='close-icon'
                   iconSize='12'
                   iconViewBox='0 0 12 12'
-                  className='line'
                   onClick={() => {}}
                   size={true}
                 />
