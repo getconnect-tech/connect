@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { getAPIErrorMessage } from '@/helpers/common';
-import { workspaceStore } from '@/stores/workspaceStore';
+import { settingStore } from '@/stores/settingStore';
 
 /**
  * @desc Get all API key
@@ -10,13 +10,13 @@ import { workspaceStore } from '@/stores/workspaceStore';
  */
 export const getAPIKeys = async () => {
   try {
-    workspaceStore.setLoading(true);
+    settingStore.setLoading(true);
     const response = await axios.get(
       `${NEXT_PUBLIC_API_URL}/workspaces/apikeys`,
     );
     const { data } = response;
     if (data?.length > 0) {
-      // workspaceStore.setAPIKeys(data);
+      settingStore.setAPIKeys(data);
       return data;
     }
     return data;
@@ -24,7 +24,7 @@ export const getAPIKeys = async () => {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return null;
   } finally {
-    workspaceStore.setLoading(false);
+    settingStore.setLoading(false);
   }
 };
 
@@ -55,7 +55,7 @@ export const createAPIKey = async (title: string) => {
  */
 export const createLabel = async (payload: object) => {
   try {
-    workspaceStore.setLoading(true);
+    settingStore.setLoading(true);
     const response = await axios.post(
       `${NEXT_PUBLIC_API_URL}/workspaces/labels`,
       payload,
@@ -66,7 +66,7 @@ export const createLabel = async (payload: object) => {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return null;
   } finally {
-    workspaceStore.setLoading(false);
+    settingStore.setLoading(false);
   }
 };
 
@@ -98,7 +98,7 @@ export const updateLabelDetails = async (labelId: string, payload: object) => {
  */
 export const deleteLabel = async (labelId: string) => {
   try {
-    workspaceStore.setLoading(true);
+    settingStore.setLoading(true);
     const result = await axios.delete(
       `${NEXT_PUBLIC_API_URL}/workspaces/labels/${labelId}`,
     );
@@ -108,6 +108,6 @@ export const deleteLabel = async (labelId: string) => {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return false;
   } finally {
-    workspaceStore.setLoading(false);
+    settingStore.setLoading(false);
   }
 };
