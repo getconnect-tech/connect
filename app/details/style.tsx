@@ -27,7 +27,7 @@ const BottomDiv = styled.div`
   max-width: 702px;
   width: 100%;
   margin: 0 auto;
-  height: calc(100dvh - 208px);
+  height: calc(100dvh - 204px);
   overflow: auto;
 `;
 
@@ -95,9 +95,14 @@ const InputDiv = styled.div`
     gap: 12px;
   }
   .line {
-    height: 8px;
+    height: 20px;
     border-left: 1px solid ${colors.border};
     margin-left: 10px;
+  }
+  .avtar {
+    position: absolute;
+    top: 18px;
+    z-index: 1;
   }
 `;
 
@@ -115,6 +120,8 @@ const Input = styled.div<Props>`
   box-shadow:
     0px 0px 0px 0.5px ${colors.box_shadow},
     0px 2px 4px 0px ${colors.box_shadow_2};
+  margin-left: 10px;
+  margin-top: 8px;
 `;
 
 const CenterDiv = styled.div`
@@ -122,6 +129,8 @@ const CenterDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: end;
+  gap: 20px;
+  position: relative;
 `;
 
 const InputIcon = styled.div`
@@ -149,6 +158,17 @@ const InputIcon = styled.div`
 const ActivityDiv = styled.div`
   display: flex;
   gap: 12px;
+  position: relative;
+  .avtar {
+    position: absolute;
+    top: 14px;
+    z-index: 1;
+  }
+  .avtar-internal {
+    position: absolute;
+    top: 6px;
+    z-index: 1;
+  }
 `;
 
 const Message = styled.p`
@@ -168,8 +188,10 @@ const Message = styled.p`
 
 const LineDiv = styled.div`
   border-left: 1px solid ${colors.border};
-  height: 20px;
+  height: calc(100% - 22px);
   margin-left: 10px;
+  position: absolute;
+  top: 34px;
 `;
 
 const IconDiv = styled.div<Props>`

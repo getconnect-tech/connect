@@ -3,9 +3,8 @@ import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 const MainDiv = styled.div`
-  border-left: 1px solid ${colors.border};
   padding-left: 22px;
-  margin-left: -22px;
+  margin-left: 10px;
 `;
 
 const Div = styled.div`
