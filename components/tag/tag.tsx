@@ -27,7 +27,6 @@ export default function Tag({
   style,
   src,
   svgStyle,
-  isEmail=false,
 }: Props) {
   return (
     //apply className while open drop down
@@ -37,7 +36,6 @@ export default function Tag({
       ref={ref}
       className='tag-div'
       style={style}
-      isEmail={isEmail}
     >
       {isName ? (
         <Avatar name={title || ''} imgSrc={src || ''} size={20} />

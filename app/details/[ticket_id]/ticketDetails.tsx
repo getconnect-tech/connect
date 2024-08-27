@@ -48,6 +48,7 @@ import { MessageDetails } from '@/utils/dataTypes';
 import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
 import SnoozeDropdown from '@/components/snoozeDropdown/snoozeDropdown';
 import InternalMessageCard from '@/components/internalMessageCard/internalMessageCard';
+import { colors } from '@/styles/colors';
 
 interface Props {
   ticket_id: string;
@@ -573,7 +574,17 @@ function TicketDetails(props: Props) {
                       handleMouseEnter(e, setSubmenuPosition)
                     }
                     dropDownStyle={{ maxWidth: 142, width: '100%' }}
-                    isEmail={modeSelectedItem.name === 'Email' ? true : false}
+                    tagStyle={{
+                      backgroundColor: (() => {
+                        if (modeSelectedItem?.name === 'Email') {
+                          return `${colors.bg_surface_secondary}`;
+                        } else if (modeSelectedItem?.name === 'Internal') {
+                          return `${colors.bg_surface_secondary_hover}`;
+                        } else {
+                          return undefined;
+                        }
+                      })(),
+                    }}
                   />
                   <IconDiv modeSelectedItem={modeSelectedItem}>
                     <Icon

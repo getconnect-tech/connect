@@ -30,7 +30,6 @@ interface Props {
   onMouseEnter?: any;
   tagStyle?: React.CSSProperties;
   isSnooze?: boolean;
-  isEmail?: boolean;
 }
 
 export default function DropDownWithTag({
@@ -56,7 +55,6 @@ export default function DropDownWithTag({
   onMouseEnter,
   tagStyle,
   isSnooze = false,
-  isEmail,
 }: Props) {
   return (
     <div onMouseEnter={onMouseEnter}>
@@ -73,7 +71,6 @@ export default function DropDownWithTag({
           title={selectedValue ? capitalizeString(selectedValue.name) : title}
           src={src}
           style={tagStyle}
-          isEmail={isEmail}
         />
       ) : (
         <DropBox

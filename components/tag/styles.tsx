@@ -5,8 +5,6 @@ import { Typography } from '@/styles/typography';
 
 interface Props {
   isActive?: boolean;
-  isEmail?: boolean;
-  modeSelectedItem?: { name?: string };
 }
 
 const StatusDiv = styled.div<Props>`
@@ -24,7 +22,7 @@ const StatusDiv = styled.div<Props>`
   -o-user-select: none;
   user-select: none;
   &:hover {
-    background-color: ${colors.bg_surface_secondary_hover} !important;
+    background-color: ${colors.bg_surface_secondary_hover};
     .icon {
       fill: ${colors.icon_hover};
     }
@@ -39,14 +37,6 @@ const StatusDiv = styled.div<Props>`
   p {
     color: ${({ isActive }) =>
       isActive ? colors.text : colors.text_text_secondary};
-  }
-  background-color: ${({ isEmail }) =>
-    isEmail ? colors.bg_surface_secondary : colors.bg_surface_secondary_hover};
-  &:hover {
-    background-color: ${({ isEmail }) =>
-      isEmail
-        ? colors.bg_surface_secondary
-        : colors.bg_surface_secondary_hover} !important;
   }
 `;
 
