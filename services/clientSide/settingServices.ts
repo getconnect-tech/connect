@@ -33,12 +33,13 @@ export const getAPIKeys = async () => {
  * @desc  create API key
  * @param {*} payload { "title": "" }
  */
-export const createAPIKey = async (title: string) => {
+export const createAPIKey = async (payload: { name: string }) => {
   try {
-    workspaceStore.setLoading(true);
+    console.log('payload', payload);
+    settingStore.setLoading(true);
     const response = await axios.post(
       `${NEXT_PUBLIC_API_URL}/workspaces/apikeys`,
-      { title },
+      payload,
     );
     const { data } = response;
     return data;
@@ -46,7 +47,7 @@ export const createAPIKey = async (title: string) => {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return null;
   } finally {
-    workspaceStore.setLoading(false);
+    settingStore.setLoading(false);
   }
 };
 
@@ -78,7 +79,7 @@ export const createLabel = async (payload: object) => {
  */
 export const updateLabelDetails = async (labelId: string, payload: object) => {
   try {
-    workspaceStore.setLoading(true);
+    settingStore.setLoading(true);
     const response = await axios.put(
       `${NEXT_PUBLIC_API_URL}/workspaces/labels/${labelId}`,
       payload,
@@ -89,7 +90,7 @@ export const updateLabelDetails = async (labelId: string, payload: object) => {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return null;
   } finally {
-    workspaceStore.setLoading(false);
+    settingStore.setLoading(false);
   }
 };
 

@@ -94,7 +94,7 @@ function ApiKey() {
         </MainDiv>
       </Main>
       <Modal open={keyModal} onClose={onCloseKeyModal}>
-        <CreateKeyModal onClose={onCloseKeyModal} />
+        <CreateKeyModal onClose={onCloseKeyModal} loadData={loadData} />
       </Modal>
     </>
   );
