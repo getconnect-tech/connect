@@ -1,8 +1,8 @@
 /* eslint-disable indent */
 import { User } from '@prisma/client';
 import { NextRequest } from 'next/server';
+import { withApiAuth } from './withApiAuth';
 import { getSessionDetails } from '@/services/serverSide/auth/authentication';
-import { getApiDetails } from '@/services/serverSide/apiKey';
 
 type AuthorizedRequest = NextRequest & { user: User };
 type RequestHandler = (
@@ -19,28 +19,7 @@ const withAuth =
     const authorizationHeader = req.headers.get('Authorization');
 
     if (authorizationHeader) {
-      if (!authorizationHeader.startsWith('Bearer ')) {
-        return Response.json(
-          {
-            error:
-              "Misconfigured authorization header. Did you forget to add 'Bearer '?",
-          },
-          { status: 400 },
-        );
-      }
-
-      const apiKey = authorizationHeader.slice(7);
-
-      const apiKeyDetails = await getApiDetails(apiKey);
-
-      if (!apiKeyDetails) {
-        return Response.json(
-          { error: 'Unauthorized: Invalid API key!' },
-          { status: 401 },
-        );
-      }
-
-      authorizedRequest.user = apiKeyDetails.user;
+      return withApiAuth(handler);
     } else {
       const session = await getSessionDetails();
 

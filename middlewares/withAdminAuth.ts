@@ -1,11 +1,10 @@
 /* eslint-disable indent */
 import { User, UserRole, Workspace } from '@prisma/client';
 import { NextRequest } from 'next/server';
+import { withApiAuth } from './withApiAuth';
 import { isEmpty } from '@/helpers/common';
 import { getSessionDetails } from '@/services/serverSide/auth/authentication';
 import { prisma } from '@/prisma/prisma';
-import { getApiDetails } from '@/services/serverSide/apiKey';
-import { getUserRole } from '@/services/serverSide/workspace';
 
 type AuthorizedRequest = NextRequest & { user: User; workspace: Workspace };
 // eslint-disable-next-line no-unused-vars
@@ -23,38 +22,7 @@ const withAdminAuth =
     const authorizedRequest = req as AuthorizedRequest;
 
     if (authorizationHeader) {
-      if (!authorizationHeader.startsWith('Bearer ')) {
-        return Response.json(
-          {
-            error:
-              "Misconfigured authorization header. Did you forget to add 'Bearer '?",
-          },
-          { status: 400 },
-        );
-      }
-
-      const apiKey = authorizationHeader.slice(7);
-
-      const apiKeyDetails = await getApiDetails(apiKey);
-
-      if (!apiKeyDetails) {
-        return Response.json(
-          { error: 'Unauthorized: Invalid API key!' },
-          { status: 401 },
-        );
-      }
-
-      const userRole = await getUserRole(
-        apiKeyDetails.workspace_id,
-        apiKeyDetails.created_by,
-      );
-
-      if (userRole !== UserRole.ADMIN && userRole !== UserRole.OWNER) {
-        return Response.json({ error: 'Unauthorized!' }, { status: 401 });
-      }
-
-      authorizedRequest.user = apiKeyDetails.user;
-      authorizedRequest.workspace = apiKeyDetails.workspace;
+      return withApiAuth(handler);
     } else {
       const session = await getSessionDetails();
 
