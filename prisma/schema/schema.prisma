@@ -120,6 +120,7 @@ model InvitedUser {
 
 model ApiKeys {
   api_key      String    @id
+  name         String
   workspace_id String
   created_by   String
   created_at   DateTime  @default(now())

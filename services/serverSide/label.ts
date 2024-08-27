@@ -11,6 +11,14 @@ export const getTicketLabels = async (ticketId: string) => {
   return formattedLabels;
 };
 
+export const getWorkspaceLabels = async (workspaceId: string) => {
+  const labels = await prisma.label.findMany({
+    where: { workspace_id: workspaceId },
+  });
+
+  return labels;
+};
+
 export const createLabel = async ({
   name,
   icon,

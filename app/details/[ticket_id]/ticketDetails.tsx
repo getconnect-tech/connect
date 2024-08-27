@@ -186,6 +186,7 @@ function TicketDetails(props: Props) {
    */
   const onChangePriority = useCallback(
     async (item: { name: string; icon: string; value: PriorityLevels }) => {
+      if (ticketDetails?.priority === item?.value) return;
       const payload = { priority: item?.value };
       try {
         if (ticketDetails?.id) {
@@ -448,12 +449,13 @@ function TicketDetails(props: Props) {
               />
               <Title>{ticketDetails?.title || ''}</Title>
             </LeftDiv>
-            <Icon
+            {/* Remove three dot icon from header */}
+            {/* <Icon
               onClick={() => {}}
               iconName='three-dot-icon'
               iconSize='16'
               iconViewBox='0 0 16 16'
-            />
+            /> */}
           </HeaderDiv>
           <StatusDiv>
             <ButtonDiv>
