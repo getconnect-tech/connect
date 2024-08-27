@@ -95,9 +95,14 @@ const InputDiv = styled.div`
     gap: 12px;
   }
   .line {
-    height: 8px;
+    height: 20px;
     border-left: 1px solid ${colors.border};
     margin-left: 10px;
+  }
+  .avtar {
+    position: absolute;
+    top: 18px;
+    z-index: 1;
   }
 `;
 
@@ -115,6 +120,8 @@ const Input = styled.div<Props>`
   box-shadow:
     0px 0px 0px 0.5px ${colors.box_shadow},
     0px 2px 4px 0px ${colors.box_shadow_2};
+  margin-left: 11px;
+  margin-top: 8px;
 `;
 
 const CenterDiv = styled.div`
@@ -149,6 +156,17 @@ const InputIcon = styled.div`
 const ActivityDiv = styled.div`
   display: flex;
   gap: 12px;
+  position: relative;
+  .avtar {
+    position: absolute;
+    top: 12px;
+    z-index: 1;
+  }
+  .avtar-internal {
+    position: absolute;
+    top: 6px;
+    z-index: 1;
+  }
 `;
 
 const Message = styled.p`

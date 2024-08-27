@@ -35,10 +35,10 @@ const CardMessage = styled.p`
   }
 `;
 
-const MessageCardMinDiv = styled.div`
+const MessageCardMainDiv = styled.div`
   border-left: 1px solid ${colors.border};
   padding-left: 22px;
-  margin-left: -22px;
+  margin-left: 10px;
   width: 100%;
 `;
 
@@ -61,7 +61,7 @@ export {
   MessageCardInnerDiv,
   CardTop,
   CardMessage,
-  MessageCardMinDiv,
+  MessageCardMainDiv,
   NameDiv,
   NameTitle,
 };

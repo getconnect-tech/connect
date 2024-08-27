@@ -40,6 +40,7 @@ const MentionList = styled.div`
 `;
 
 const TextMainDiv = styled.div<Props>`
+  min-height: 44px;
   h1,
   h2,
   h3,

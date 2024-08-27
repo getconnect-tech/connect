@@ -4,7 +4,7 @@ import {
   CardMessage,
   CardTop,
   MessageCardInnerDiv,
-  MessageCardMinDiv,
+  MessageCardMainDiv,
   NameDiv,
   NameTitle,
 } from './style';
@@ -19,7 +19,7 @@ interface Props {
 
 export default function MessageCard({ title, time, subTitle, message }: Props) {
   return (
-    <MessageCardMinDiv>
+    <MessageCardMainDiv>
       <MessageCardInnerDiv>
         <CardTop>
           <NameDiv>
@@ -39,6 +39,6 @@ export default function MessageCard({ title, time, subTitle, message }: Props) {
           <div dangerouslySetInnerHTML={{ __html: message }} />
         </CardMessage>
       </MessageCardInnerDiv>
-    </MessageCardMinDiv>
+    </MessageCardMainDiv>
   );
 }
