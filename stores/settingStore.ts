@@ -1,9 +1,9 @@
 import { action, makeObservable, observable } from 'mobx';
-import { GetAllApi } from '@/utils/dataTypes';
+import { ApiKey } from '@/utils/dataTypes';
 
 class SettingStore {
   loading = false;
-  apiKeys: GetAllApi[] | null = null;
+  apiKeys: ApiKey[] | null = null;
 
   constructor() {
     makeObservable(this, {
@@ -23,7 +23,7 @@ class SettingStore {
   }
 
   // set API keys
-  setAPIKeys(value: GetAllApi[]) {
+  setAPIKeys(value: ApiKey[]) {
     this.apiKeys = value;
   }
 }

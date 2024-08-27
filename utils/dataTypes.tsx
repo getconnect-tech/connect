@@ -1,3 +1,4 @@
+import { getWorkspaceApiKeys } from '@/services/serverSide/apiKey';
 import { getTicketMessages } from '@/services/serverSide/message';
 import {
   getUserWorkspaces,
@@ -82,11 +83,6 @@ export type MessageDetails = NonNullable<
   Awaited<ReturnType<typeof getTicketMessages>>
 >[0];
 
-export interface GetAllApi {
-  id: string;
-  number: string;
-  api_key: string;
-  workspace_id: string;
-  created_by: string;
-  created_at: string;
-}
+export type ApiKey = NonNullable<
+  Awaited<ReturnType<typeof getWorkspaceApiKeys>>
+>[0];

@@ -19,7 +19,6 @@ import ApiKeyLoading from '@/components/apiKeyLoading/apiKeyLoading';
 import EmptyState from '@/components/emptyState/emptyState';
 import { useStores } from '@/stores';
 import { getAPIKeys } from '@/services/clientSide/settingServices';
-import { GetAllApi } from '@/utils/dataTypes';
 
 function ApiKey() {
   const [keyModal, setKeyModal] = useState(false);
@@ -53,6 +52,8 @@ function ApiKey() {
     loadData();
   }, [loadData]);
 
+  console.log('apiKey', apiKeys);
+
   return (
     <>
       <Main>
@@ -84,18 +85,16 @@ function ApiKey() {
             )}
             {!loading && !isEmpty(apiKeys) && (
               <MainCardDiv>
-                {apiKeys?.map(
-                  (apiKey: GetAllApi, index: React.Key | null | undefined) => (
-                    <ApiKeyCard
-                      key={index}
-                      keyName={apiKey.api_key}
-                      keyNumber={apiKey.number}
-                      currentOpenDropdown={currentOpenDropdown}
-                      setCurrentOpenDropdown={setCurrentOpenDropdown}
-                      dropdownIdentifier={`card-${apiKey.id}`}
-                    />
-                  ),
-                )}
+                {apiKeys?.map((apiKey, index: React.Key | null | undefined) => (
+                  <ApiKeyCard
+                    key={index}
+                    keyName={apiKey.name || ''}
+                    keyNumber={apiKey.api_key}
+                    currentOpenDropdown={currentOpenDropdown}
+                    setCurrentOpenDropdown={setCurrentOpenDropdown}
+                    dropdownIdentifier={`card-${apiKey.id}`}
+                  />
+                ))}
               </MainCardDiv>
             )}
           </RightDiv>
