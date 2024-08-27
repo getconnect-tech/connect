@@ -14,6 +14,7 @@ interface Props {
   ref?: React.Ref<HTMLDivElement>;
   style?: React.CSSProperties;
   svgStyle?: React.CSSProperties;
+  isEmail?: boolean;
 }
 
 export default function Tag({
@@ -26,6 +27,7 @@ export default function Tag({
   style,
   src,
   svgStyle,
+  isEmail,
 }: Props) {
   return (
     //apply className while open drop down
@@ -35,6 +37,7 @@ export default function Tag({
       ref={ref}
       className='tag-div'
       style={style}
+      isEmail={isEmail}
     >
       {isName ? (
         <Avatar name={title || ''} imgSrc={src || ''} size={20} />

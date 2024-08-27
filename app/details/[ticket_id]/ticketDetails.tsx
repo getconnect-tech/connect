@@ -574,9 +574,7 @@ function TicketDetails(props: Props) {
                       handleMouseEnter(e, setSubmenuPosition)
                     }
                     dropDownStyle={{ maxWidth: 142, width: '100%' }}
-                    tagStyle={{
-                      backgroundColor: colors.bg_surface_secondary_hover,
-                    }}
+                    isEmail={modeSelectedItem.name === 'Email' ? true : false}
                   />
                   <IconDiv modeSelectedItem={modeSelectedItem}>
                     <Icon
