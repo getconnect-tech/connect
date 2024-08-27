@@ -81,3 +81,12 @@ export type CurrentWorkspace = NonNullable<
 export type MessageDetails = NonNullable<
   Awaited<ReturnType<typeof getTicketMessages>>
 >[0];
+
+export interface GetAllApi {
+  id: string;
+  number: string;
+  api_key: string;
+  workspace_id: string;
+  created_by: string;
+  created_at: string;
+}

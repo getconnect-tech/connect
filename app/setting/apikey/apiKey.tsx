@@ -1,5 +1,6 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import {
   Head,
   LeftDiv,
@@ -16,32 +17,28 @@ import CreateKeyModal from '@/components/modalComponent/createKeyModal';
 import { isEmpty } from '@/helpers/common';
 import ApiKeyLoading from '@/components/apiKeyLoading/apiKeyLoading';
 import EmptyState from '@/components/emptyState/emptyState';
+import { useStores } from '@/stores';
+import { getAPIKeys } from '@/services/clientSide/settingServices';
+import { GetAllApi } from '@/utils/dataTypes';
 
 function ApiKey() {
   const [keyModal, setKeyModal] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
-
-  // Mock API keys
-  const apiKeys = [
-    { name: 'Key name A01', number: '**** ***** **** NK38', id: 1 },
-    { name: 'Key name A02', number: '**** ***** **** DR45', id: 2 },
-    { name: 'Key name A03', number: '**** ***** **** XY56', id: 3 },
-  ];
+  const { workspaceStore } = useStores();
+  const { apiKeys, loading } = workspaceStore;
 
   const loadData = useCallback(async () => {
-    setLoading(true);
-    try {
-      // Simulate data fetching
-      if (isEmpty(apiKeys)) {
-        // Do something if API keys are empty (optional)
+    if (isEmpty(apiKeys)) {
+      workspaceStore.setLoading(true);
+      try {
+        await getAPIKeys();
+      } finally {
+        workspaceStore.setLoading(false);
       }
-    } finally {
-      setLoading(false);
     }
-  }, [apiKeys]);
+  }, [workspaceStore]);
 
   const onOpenKeyModal = useCallback(() => {
     setKeyModal(true);
@@ -86,16 +83,18 @@ function ApiKey() {
             )}
             {!loading && !isEmpty(apiKeys) && (
               <MainCardDiv>
-                {apiKeys.map((apiKey, index) => (
-                  <ApiKeyCard
-                    key={index}
-                    keyName={apiKey.name}
-                    keyNumber={apiKey.number}
-                    currentOpenDropdown={currentOpenDropdown}
-                    setCurrentOpenDropdown={setCurrentOpenDropdown}
-                    dropdownIdentifier={`card-${apiKey.id}`}
-                  />
-                ))}
+                {apiKeys?.map(
+                  (apiKey: GetAllApi, index: React.Key | null | undefined) => (
+                    <ApiKeyCard
+                      key={index}
+                      keyName={apiKey.api_key}
+                      keyNumber={apiKey.number}
+                      currentOpenDropdown={currentOpenDropdown}
+                      setCurrentOpenDropdown={setCurrentOpenDropdown}
+                      dropdownIdentifier={`card-${apiKey.id}`}
+                    />
+                  ),
+                )}
               </MainCardDiv>
             )}
           </RightDiv>
@@ -108,4 +107,4 @@ function ApiKey() {
   );
 }
 
-export default ApiKey;
+export default observer(ApiKey);

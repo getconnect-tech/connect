@@ -16,7 +16,7 @@ export const getAPIKeys = async () => {
     );
     const { data } = response;
     if (data?.length > 0) {
-      // workspaceStore.setAPIKeys(data);
+      workspaceStore.setAPIKeys(data);
       return data;
     }
     return data;
