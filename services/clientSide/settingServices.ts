@@ -29,6 +29,27 @@ export const getAPIKeys = async () => {
 };
 
 /**
+ * @desc  create API key
+ * @param {*} payload { "title": "" }
+ */
+export const createAPIKey = async (title: string) => {
+  try {
+    workspaceStore.setLoading(true);
+    const response = await axios.post(
+      `${NEXT_PUBLIC_API_URL}/workspaces/apikeys`,
+      { title },
+    );
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return null;
+  } finally {
+    workspaceStore.setLoading(false);
+  }
+};
+
+/**
  * @desc Add label
  * @param {*} payload { "name": "", "icon": "","color":"#7B7A79" }
  */
