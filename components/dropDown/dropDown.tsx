@@ -28,14 +28,21 @@ export type DropDownItem = {
   value?: any;
   time?: string;
   isDelete?: boolean;
+  status?: string;
 };
 
 interface DropDownProps {
   items: DropDownItem[];
   style?: React.CSSProperties;
   userId?: string;
-  // eslint-disable-next-line no-unused-vars
-  handleClick?: (hoveredItem: string | null, userId: string) => void;
+  handleClick?: (
+    // eslint-disable-next-line no-unused-vars
+    hoveredItem: string | null,
+    // eslint-disable-next-line no-unused-vars
+    userId: string,
+    // eslint-disable-next-line no-unused-vars
+    status: string,
+  ) => void;
   iconSize: string;
   iconViewBox: string;
   onClose: () => void;
@@ -121,7 +128,8 @@ const DropDown = ({
   const onClickItem = useCallback(
     (e: SyntheticEvent, item: DropDownItem, hoveredItem: string | null) => {
       e.stopPropagation();
-      if (handleClick) handleClick(hoveredItem, userId || '');
+      if (handleClick)
+        handleClick(hoveredItem, userId || '', item.status || '');
       handleItemClick(item.name);
       if (onChange) {
         onChange(item);

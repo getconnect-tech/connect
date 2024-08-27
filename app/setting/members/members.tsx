@@ -17,6 +17,7 @@ import Button from '@/components/button/button';
 import MemberCard from '@/components/memberCard/memberCard';
 import {
   getWorkspaceById,
+  removeInviteUsersFromWorkspace,
   removeMemberFromWorkspace,
   updateRole,
 } from '@/services/clientSide/workspaceServices';
@@ -60,7 +61,11 @@ const Members = () => {
     setInviteModal(false);
   }, []);
 
-  const handleClick = async (hoveredItem: string | null, userId: string) => {
+  const handleClick = async (
+    hoveredItem: string | null,
+    userId: string,
+    status: string,
+  ) => {
     if (hoveredItem === 'Make Admin' || hoveredItem === 'Remove Admin') {
       try {
         workspaceStore.setLoading(true);
@@ -76,6 +81,18 @@ const Members = () => {
           }
         }
         workspaceStore.setLoading(false);
+      } catch (error) {
+        console.log('error', error);
+      }
+    }
+    if (hoveredItem === 'Delete' && status === 'Pending') {
+      try {
+        if (userId) {
+          const result = await removeInviteUsersFromWorkspace(userId);
+          if (result) {
+            workspaceStore.removeUserFromWorkspace(userId);
+          }
+        }
       } catch (error) {
         console.log('error', error);
       }
