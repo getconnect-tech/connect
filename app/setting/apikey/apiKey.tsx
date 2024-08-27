@@ -26,11 +26,12 @@ function ApiKey() {
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
-  const { settingStore } = useStores();
+  const { settingStore, workspaceStore } = useStores();
+  const { currentWorkspace } = workspaceStore;
   const { apiKeys, loading } = settingStore || {};
 
   const loadData = useCallback(async () => {
-    if (isEmpty(apiKeys)) {
+    if (!isEmpty(currentWorkspace?.id)) {
       settingStore.setLoading(true);
       try {
         await getAPIKeys();
@@ -38,7 +39,7 @@ function ApiKey() {
         settingStore.setLoading(false);
       }
     }
-  }, []);
+  }, [currentWorkspace?.id]);
 
   const onOpenKeyModal = useCallback(() => {
     setKeyModal(true);
