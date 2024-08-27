@@ -29,6 +29,7 @@ class TicketStore {
       // Ticket Messages
       messages: observable,
       setTicketMessages: action,
+      addTicketMessage: action,
     });
   }
 
@@ -61,6 +62,10 @@ class TicketStore {
   // Ticket messages actions
   setTicketMessages(value: MessageDetails[]) {
     this.messages = value;
+  }
+
+  addTicketMessage(value: MessageDetails) {
+    this.messages = [...(this.messages || []), value];
   }
 }
 

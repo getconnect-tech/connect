@@ -13,9 +13,9 @@ import {
 import LabelCard from '@/components/labelCard/labelCard';
 import Button from '@/components/button/button';
 import Modal from '@/components/modal/modal';
-import LabelModal from '@/components/labelModal/labelModal';
 import { isEmpty } from '@/helpers/common';
 import EmptyState from '@/components/emptyState/emptyState';
+import LabelModal from '@/components/modalComponent/labelModal';
 
 function Labels() {
   const [labelModal, setLabelModal] = useState(false);
