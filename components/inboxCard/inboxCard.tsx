@@ -248,7 +248,6 @@ export default function InboxCard({
                 <Icon
                   iconName='close-icon'
                   iconSize='12'
-                  // height='12'
                   iconViewBox='0 0 12 12'
                   className='line'
                   onClick={() => {}}
@@ -259,7 +258,6 @@ export default function InboxCard({
               <Icon
                 iconName='context-snooze-icon'
                 iconSize='12'
-                // height='12'
                 iconViewBox='0 0 12 12'
                 onClick={() => {}}
                 size={true}
