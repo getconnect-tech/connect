@@ -186,26 +186,22 @@ function TicketDetails(props: Props) {
    */
   const onChangePriority = useCallback(
     async (item: { name: string; icon: string; value: PriorityLevels }) => {
+      if (ticketDetails?.priority === item?.value) return;
       const payload = { priority: item?.value };
-      if (ticketDetails?.priority !== item?.value) {
-        try {
-          if (ticketDetails?.id) {
-            const updatedTicketDetails = {
-              ...ticketDetails,
-              priority: item?.value,
-            };
-            ticketStore.setTicketDetails(updatedTicketDetails);
-            const result = await updateTicketPriority(
-              ticketDetails?.id,
-              payload,
-            );
-            if (result) {
-              loadData();
-            }
+      try {
+        if (ticketDetails?.id) {
+          const updatedTicketDetails = {
+            ...ticketDetails,
+            priority: item?.value,
+          };
+          ticketStore.setTicketDetails(updatedTicketDetails);
+          const result = await updateTicketPriority(ticketDetails?.id, payload);
+          if (result) {
+            loadData();
           }
-        } catch (e) {
-          console.log('Error : ', e);
         }
+      } catch (e) {
+        console.log('Error : ', e);
       }
     },
     [ticketDetails],
