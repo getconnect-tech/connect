@@ -186,6 +186,7 @@ function TicketDetails(props: Props) {
    */
   const onChangePriority = useCallback(
     async (item: { name: string; icon: string; value: PriorityLevels }) => {
+      if (ticketDetails?.priority === item?.value) return;
       const payload = { priority: item?.value };
       try {
         if (ticketDetails?.id) {
