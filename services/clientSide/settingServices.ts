@@ -48,3 +48,23 @@ export const createLabel = async (payload: object) => {
     workspaceStore.setLoading(false);
   }
 };
+
+/**
+ * @desc Delete label
+ * @param {*} labelId
+ */
+export const deleteLabel = async (labelId: string) => {
+  try {
+    workspaceStore.setLoading(true);
+    const result = await axios.delete(
+      `${NEXT_PUBLIC_API_URL}/workspaces/labels/${labelId}`,
+    );
+    if (result) alert('Label Deleted');
+    return true;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return false;
+  } finally {
+    workspaceStore.setLoading(false);
+  }
+};
