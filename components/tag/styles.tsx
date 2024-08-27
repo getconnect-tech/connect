@@ -22,7 +22,7 @@ const StatusDiv = styled.div<Props>`
   -o-user-select: none;
   user-select: none;
   &:hover {
-    background-color: ${colors.bg_surface_secondary_hover} !important;
+    background-color: ${colors.bg_surface_secondary_hover};
     .icon {
       fill: ${colors.icon_hover};
     }

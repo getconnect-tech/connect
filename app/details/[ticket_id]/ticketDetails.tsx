@@ -186,6 +186,7 @@ function TicketDetails(props: Props) {
    */
   const onChangePriority = useCallback(
     async (item: { name: string; icon: string; value: PriorityLevels }) => {
+      if (ticketDetails?.priority === item?.value) return;
       const payload = { priority: item?.value };
       try {
         if (ticketDetails?.id) {
@@ -454,12 +455,13 @@ function TicketDetails(props: Props) {
               />
               <Title>{ticketDetails?.title || ''}</Title>
             </LeftDiv>
-            <Icon
+            {/* Remove three dot icon from header */}
+            {/* <Icon
               onClick={() => {}}
               iconName='three-dot-icon'
               iconSize='16'
               iconViewBox='0 0 16 16'
-            />
+            /> */}
           </HeaderDiv>
           <StatusDiv>
             <ButtonDiv>
@@ -583,7 +585,15 @@ function TicketDetails(props: Props) {
                     }
                     dropDownStyle={{ maxWidth: 142, width: '100%' }}
                     tagStyle={{
-                      backgroundColor: colors.bg_surface_secondary_hover,
+                      backgroundColor: (() => {
+                        if (modeSelectedItem?.name === 'Email') {
+                          return `${colors.bg_surface_secondary}`;
+                        } else if (modeSelectedItem?.name === 'Internal') {
+                          return `${colors.bg_surface_secondary_hover}`;
+                        } else {
+                          return undefined;
+                        }
+                      })(),
                     }}
                   />
                   <IconDiv modeSelectedItem={modeSelectedItem}>
