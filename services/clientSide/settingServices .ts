@@ -24,3 +24,25 @@ export const createLabel = async (payload: object) => {
     workspaceStore.setLoading(false);
   }
 };
+
+/**
+ * @desc Update label details
+ * @param {*} labelId
+ * @param {*} payload { "name": "new name", "icon": "new icon","color":"new color" }
+ */
+export const updateLabelDetails = async (labelId: string, payload: object) => {
+  try {
+    workspaceStore.setLoading(true);
+    const response = await axios.put(
+      `${NEXT_PUBLIC_API_URL}/workspaces/labels/${labelId}`,
+      payload,
+    );
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return null;
+  } finally {
+    workspaceStore.setLoading(false);
+  }
+};
