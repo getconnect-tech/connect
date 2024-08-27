@@ -52,8 +52,6 @@ function ApiKey() {
     loadData();
   }, [loadData]);
 
-  console.log('apiKey', apiKeys);
-
   return (
     <>
       <Main>
@@ -101,7 +99,7 @@ function ApiKey() {
         </MainDiv>
       </Main>
       <Modal open={keyModal} onClose={onCloseKeyModal}>
-        <CreateKeyModal onClose={onCloseKeyModal} />
+        <CreateKeyModal onClose={onCloseKeyModal} loadData={loadData} />
       </Modal>
     </>
   );
