@@ -317,11 +317,13 @@ function TicketDetails(props: Props) {
         case MessageType.REGULAR:
           return (
             <ActivityDiv>
-              <Avatar
-                imgSrc={message?.author?.profile_url || ''}
-                name={message?.author?.display_name || ''}
-                size={20}
-              />
+              <div className='avtar-internal'>
+                <Avatar
+                  imgSrc={message?.author?.profile_url || ''}
+                  name={message?.author?.display_name || ''}
+                  size={20}
+                />
+              </div>
               <InternalMessageCard
                 title={message?.content || ''}
                 time={message?.created_at}
@@ -331,7 +333,9 @@ function TicketDetails(props: Props) {
         case MessageType.FROM_CONTACT:
           return (
             <ActivityDiv>
-              <Avatar imgSrc={''} name={contact?.name || ''} size={20} />
+              <div className='avtar'>
+                <Avatar imgSrc={''} name={contact?.name || ''} size={20} />
+              </div>
               <MessageCard
                 title={'Sanjay send email'}
                 time={message?.created_at}
@@ -343,11 +347,13 @@ function TicketDetails(props: Props) {
         case MessageType.EMAIL:
           return (
             <ActivityDiv>
-              <Avatar
-                imgSrc={message?.author?.profile_url || ''}
-                name={message?.author?.display_name || ''}
-                size={20}
-              />
+              <div className='avtar'>
+                <Avatar
+                  imgSrc={message?.author?.profile_url || ''}
+                  name={message?.author?.display_name || ''}
+                  size={20}
+                />
+              </div>
               <MessageCard
                 title={`${message?.author?.display_name} send email`}
                 time={message?.created_at}
@@ -528,7 +534,7 @@ function TicketDetails(props: Props) {
           <BottomDiv>
             <CenterDiv ref={messagesEndRef}>
               {messages?.map((message, index) => (
-                <div>
+                <div key={index}>
                   {renderActivityMessage(message)}
                   {index !== messages?.length - 1 && <LineDiv />}
                 </div>
@@ -536,13 +542,15 @@ function TicketDetails(props: Props) {
             </CenterDiv>
           </BottomDiv>
           <InputDiv>
-            <div className='line' />
             <div className='input-main-div'>
-              <Avatar
-                imgSrc={user?.profile_url || ''}
-                size={20}
-                name={user?.display_name || ''}
-              />
+              <div className='line' />
+              <div className='avtar'>
+                <Avatar
+                  imgSrc={user?.profile_url || ''}
+                  size={20}
+                  name={user?.display_name || ''}
+                />
+              </div>
               <Input modeSelectedItem={modeSelectedItem}>
                 <RichTextBox
                   isInternalDiscussion={modeSelectedItem.name !== 'Email'}

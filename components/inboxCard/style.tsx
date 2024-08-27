@@ -94,11 +94,8 @@ const StatusMainDiv = styled.div`
 
 const TagDiv = styled.div`
   display: none;
-  width: 52px;
   border-radius: 30px;
   background-color: ${colors.bg_surface_secondary};
-  gap: 6px;
-  padding: 0px 8px;
   align-items: center;
   svg {
     fill: ${colors.icon};
