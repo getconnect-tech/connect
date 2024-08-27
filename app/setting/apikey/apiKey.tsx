@@ -26,19 +26,19 @@ function ApiKey() {
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
-  const { workspaceStore } = useStores();
-  const { apiKeys, loading } = workspaceStore;
+  const { settingStore } = useStores();
+  const { apiKeys, loading } = settingStore || {};
 
   const loadData = useCallback(async () => {
     if (isEmpty(apiKeys)) {
-      workspaceStore.setLoading(true);
+      settingStore.setLoading(true);
       try {
         await getAPIKeys();
       } finally {
-        workspaceStore.setLoading(false);
+        settingStore.setLoading(false);
       }
     }
-  }, [workspaceStore]);
+  }, []);
 
   const onOpenKeyModal = useCallback(() => {
     setKeyModal(true);

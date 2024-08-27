@@ -3,12 +3,14 @@ import { MobXProviderContext } from 'mobx-react';
 import { userStore } from './userStore';
 import { workspaceStore } from './workspaceStore';
 import { ticketStore } from './ticketStore';
+import { settingStore } from './settingStore';
 
 // Combine all stores in one object
 const stores = {
   userStore,
   workspaceStore,
   ticketStore,
+  settingStore,
 };
 export default stores;
 
@@ -18,5 +20,6 @@ export const useStores = () => {
     userStore: typeof userStore;
     workspaceStore: typeof workspaceStore;
     ticketStore: typeof ticketStore;
+    settingStore: typeof settingStore;
   };
 };
