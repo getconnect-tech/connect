@@ -14,7 +14,6 @@ interface Props {
   ref?: React.Ref<HTMLDivElement>;
   style?: React.CSSProperties;
   svgStyle?: React.CSSProperties;
-  isEmail?: boolean;
 }
 
 export default function Tag({
