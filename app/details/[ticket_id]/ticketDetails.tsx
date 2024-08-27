@@ -448,12 +448,13 @@ function TicketDetails(props: Props) {
               />
               <Title>{ticketDetails?.title || ''}</Title>
             </LeftDiv>
-            <Icon
+            {/* Remove three dot icon from header */}
+            {/* <Icon
               onClick={() => {}}
               iconName='three-dot-icon'
               iconSize='16'
               iconViewBox='0 0 16 16'
-            />
+            /> */}
           </HeaderDiv>
           <StatusDiv>
             <ButtonDiv>
