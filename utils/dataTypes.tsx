@@ -86,3 +86,7 @@ export type MessageDetails = NonNullable<
 export type ApiKey = NonNullable<
   Awaited<ReturnType<typeof getWorkspaceApiKeys>>
 >[0];
+
+export type EmailConfig = {
+  primaryEmail: string;
+};
