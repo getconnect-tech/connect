@@ -12,14 +12,16 @@ export const getWorkspaceApiKeys = async (workspaceId: string) => {
 export const createApiKey = async ({
   userId,
   workspaceId,
+  name,
 }: {
   userId: string;
   workspaceId: string;
+  name: string;
 }) => {
   const api_key = generateApiKey();
 
   const apiKey = await prisma.apiKeys.create({
-    data: { api_key, created_by: userId, workspace_id: workspaceId },
+    data: { api_key, created_by: userId, workspace_id: workspaceId, name },
   });
 
   return apiKey;
