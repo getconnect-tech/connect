@@ -1914,6 +1914,11 @@ client-only@0.0.1:
   resolved "https://registry.yarnpkg.com/client-only/-/client-only-0.0.1.tgz#38bba5d403c41ab150bff64a95c85013cf73bca1"
   integrity sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==
 
+clipboard-copy@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/clipboard-copy/-/clipboard-copy-4.0.1.tgz#326ef9726d4ffe72d9a82a7bbe19379de692017d"
+  integrity sha512-wOlqdqziE/NNTUJsfSgXmBMIrYmfd5V0HCGsR8uAKHcg+h9NENWINcfRjtWGU77wDHC8B8ijV4hMTGYbrKovng==
+
 cliui@^8.0.1:
   version "8.0.1"
   resolved "https://registry.yarnpkg.com/cliui/-/cliui-8.0.1.tgz#0c04b075db02cbfe60dc8e6cf2f5486b1a3608aa"

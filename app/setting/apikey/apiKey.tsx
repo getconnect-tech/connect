@@ -86,6 +86,7 @@ function ApiKey() {
                     currentOpenDropdown={currentOpenDropdown}
                     setCurrentOpenDropdown={setCurrentOpenDropdown}
                     dropdownIdentifier={`card-${apiKey.api_key}`}
+                    apiKey={apiKey.api_key || ''}
                   />
                 ))}
               </MainCardDiv>
