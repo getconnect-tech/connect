@@ -19,6 +19,7 @@ import {
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { isEmpty } from '@/helpers/common';
+import LabelSvgIcon from '@/assets/icons/labelIcons';
 
 export type DropDownItem = {
   name: string;
@@ -226,14 +227,23 @@ const DropDown = ({
                   }}
                 />
               )}
-              {item.icon && (
-                <SVGIcon
-                  name={item.icon}
-                  width={iconSize}
-                  height={iconSize}
-                  viewBox={iconViewBox}
-                />
-              )}
+              {item.icon &&
+                (isCheckbox ? (
+                  <LabelSvgIcon
+                    name={item.icon}
+                    width={iconSize}
+                    height={iconSize}
+                    viewBox={iconViewBox}
+                  />
+                ) : (
+                  <SVGIcon
+                    name={item.icon}
+                    width={iconSize}
+                    height={iconSize}
+                    viewBox={iconViewBox}
+                  />
+                ))}
+
               {item.isName && (
                 <Avatar name={item.name} imgSrc={item.src || ''} size={20} />
               )}
