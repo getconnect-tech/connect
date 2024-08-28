@@ -28,7 +28,7 @@ import ProfileSection from '@/components/profileSection/profileSection';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
 import MessageCard from '@/components/messageCard/messageCard';
-import { labelItem, modeItem, priorityItem, snoozeItem } from '@/helpers/raw';
+import { modeItem, priorityItem, snoozeItem } from '@/helpers/raw';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import { useStores } from '@/stores';
 import {
@@ -64,9 +64,10 @@ function TicketDetails(props: Props) {
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const [commentValue, setCommentValue] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { ticketStore, workspaceStore, userStore } = useStores();
+  const { ticketStore, workspaceStore, userStore, settingStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
+  const { labels } = settingStore;
   const { user } = userStore || {};
   const { priority, assigned_to, contact } = ticketDetails || {};
   const [macroDropdown, setMacroDropdown] = useState(false);
@@ -184,6 +185,11 @@ function TicketDetails(props: Props) {
   const handleOutsideClick = useCallback(() => {
     setMacroDropdown(false);
   }, []);
+
+  const labelItem = (labels || [])?.map((label) => ({
+    name: label.name,
+    icon: label.icon,
+  }));
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
