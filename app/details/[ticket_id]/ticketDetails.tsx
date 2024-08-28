@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 'use client';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -64,8 +63,7 @@ function TicketDetails(props: Props) {
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const [commentValue, setCommentValue] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { ticketStore, workspaceStore, userStore, messageStore, settingStore } =
-    useStores();
+  const { ticketStore, workspaceStore, userStore, settingStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
   const { labels } = settingStore || {};
@@ -482,12 +480,12 @@ function TicketDetails(props: Props) {
               <Title>{ticketDetails?.title || ''}</Title>
             </LeftDiv>
             {/* Remove three dot icon from header */}
-            <Icon
+            {/* <Icon
               onClick={() => messageStore.setErrorMessage('hello demo')}
               iconName='three-dot-icon'
               iconSize='16'
               iconViewBox='0 0 16 16'
-            />
+            /> */}
           </HeaderDiv>
           <StatusDiv>
             <ButtonDiv>
