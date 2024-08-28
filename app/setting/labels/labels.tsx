@@ -91,6 +91,7 @@ const Labels = () => {
                     <LabelCard
                       key={label.id}
                       label={label.name}
+                      labelId={label.id}
                       iconName={label.icon}
                       currentOpenDropdown={currentOpenDropdown}
                       setOpenDropdown={setCurrentOpenDropdown}
