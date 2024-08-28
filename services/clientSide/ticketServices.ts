@@ -245,3 +245,24 @@ export const sendMessage = async (ticketId: string, payload: object) => {
     ticketStore.setLoading(false);
   }
 };
+
+/**
+ * @desc Add label into ticket
+ * @param {*} ticketId
+ * @param {*} labelId
+ */
+export const addLabelToTicket = async (ticketId: string, labelId: string) => {
+  try {
+    ticketStore.setLoading(true);
+    const response = await axios.post(
+      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}/labels/${labelId}`,
+    );
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return null;
+  } finally {
+    ticketStore.setLoading(false);
+  }
+};

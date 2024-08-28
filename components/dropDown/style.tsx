@@ -76,6 +76,9 @@ const SearchDiv = styled.div`
 `;
 
 const ItemMainDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
   margin: 4px;
 `;
 
