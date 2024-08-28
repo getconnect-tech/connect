@@ -58,6 +58,7 @@ interface DropDownProps {
   isCheckbox?: boolean;
   isContextMenu?: boolean;
   isSnooze?: boolean;
+  isMacro?: boolean;
   // eslint-disable-next-line no-unused-vars
   handleMouseEnter?: (e: any) => void;
   className?: string;
@@ -105,6 +106,7 @@ const DropDown = ({
   isCheckbox = false,
   isContextMenu = false,
   isSnooze = false,
+  isMacro = false,
   onChange,
   handleMouseEnter,
   className,
@@ -194,6 +196,14 @@ const DropDown = ({
     }
   };
 
+  const handleMacrosClick = (e: SyntheticEvent) => {
+    e.stopPropagation();
+    if (onChange) {
+      onChange({ name: 'manage-macros' });
+      onClose();
+    }
+  };
+
   return (
     <MainDiv
       ref={dropDownRef}
@@ -274,6 +284,13 @@ const DropDown = ({
               height='10'
               viewBox='0 0 10 10'
             />
+          </DateTimeTextDiv>
+        </div>
+      )}
+      {isMacro && (
+        <div className='date-time-text'>
+          <DateTimeTextDiv onClick={handleMacrosClick}>
+            <p>Manage Macros</p>
           </DateTimeTextDiv>
         </div>
       )}
