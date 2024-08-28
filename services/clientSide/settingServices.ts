@@ -3,7 +3,6 @@ import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { getAPIErrorMessage } from '@/helpers/common';
 import { settingStore } from '@/stores/settingStore';
-import { workspaceStore } from '@/stores/workspaceStore';
 
 /**
  * @desc Get all API key
