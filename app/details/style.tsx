@@ -27,7 +27,7 @@ const BottomDiv = styled.div`
   max-width: 702px;
   width: 100%;
   margin: 0 auto;
-  height: calc(100dvh - 204px);
+  height: calc(100dvh - 208px);
   overflow: auto;
 `;
 

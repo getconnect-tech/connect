@@ -64,7 +64,8 @@ function TicketDetails(props: Props) {
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const [commentValue, setCommentValue] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { ticketStore, workspaceStore, userStore, messageStore } = useStores();
+  const { ticketStore, workspaceStore, userStore, messageStore, settingStore } =
+    useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
   const { labels } = settingStore || {};
