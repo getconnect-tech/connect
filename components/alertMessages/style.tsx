@@ -6,7 +6,10 @@ export const AlertmessageDiv = styled.div`
   display: flex;
   flex-direction: column;
   z-index: 111;
-  left: calc(50% - 223px);
+  left: 50%;
+  transform: translateX(-50%);
+  top: 12px;
+  gap: 8px;
   margin: auto;
   position: absolute;
   .alert-div {
@@ -17,9 +20,8 @@ export const AlertmessageDiv = styled.div`
     .icon-class {
       display: none;
     }
-
     &:hover .icon-class {
-      display: flex;
+      display: inline-flex;
     }
   }
 

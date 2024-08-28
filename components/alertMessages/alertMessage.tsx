@@ -25,39 +25,48 @@ function AlertMessage() {
         return (
           <div className='alert-div'>
             <Alert message={message?.content} type='error' showIcon />
-            <Icon
-              iconName='cross-icon'
-              iconSize='12'
-              iconViewBox='0 0 16 16'
-              onClick={() => handleClose(message?.id)}
-              className='icon-class'
-            />
+            <div style={{ width: 24, height: 24 }}>
+              <Icon
+                iconName='cross-icon'
+                iconSize='12'
+                iconViewBox='0 0 16 16'
+                onClick={() => handleClose(message?.id)}
+                className='icon-class'
+                size={true}
+              />
+            </div>
           </div>
         );
       case 'success':
         return (
           <div className='alert-div'>
             <Alert message={message?.content} type='success' showIcon />
-            <Icon
-              iconName='cross-icon'
-              iconSize='12'
-              iconViewBox='0 0 16 16'
-              onClick={() => handleClose(message?.id)}
-              className='icon-class'
-            />
+            <div style={{ width: 24, height: 24 }}>
+              <Icon
+                iconName='cross-icon'
+                iconSize='12'
+                iconViewBox='0 0 16 16'
+                onClick={() => handleClose(message?.id)}
+                className='icon-class'
+                size={true}
+              />
+            </div>
           </div>
         );
       case 'warning':
         return (
           <div className='alert-div'>
             <Alert message={message?.content} type='warning' showIcon />
-            <Icon
-              iconName='cross-icon'
-              iconSize='12'
-              iconViewBox='0 0 16 16'
-              onClick={() => handleClose(message?.id)}
-              className='icon-class'
-            />
+            <div style={{ width: 24, height: 24 }}>
+              <Icon
+                iconName='cross-icon'
+                iconSize='12'
+                iconViewBox='0 0 16 16'
+                onClick={() => handleClose(message?.id)}
+                className='icon-class'
+                size={true}
+              />
+            </div>
           </div>
         );
       default:
