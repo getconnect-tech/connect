@@ -20,6 +20,7 @@ import {
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { isEmpty } from '@/helpers/common';
 import LabelSvgIcon from '@/assets/icons/labelIcons';
+import { LabelData } from '@/utils/dataTypes';
 
 export type DropDownItem = {
   name: string;
@@ -44,6 +45,11 @@ interface DropDownProps {
     // eslint-disable-next-line no-unused-vars
     status: string,
   ) => void;
+  // eslint-disable-next-line no-unused-vars
+  handleLabel?: (labelData: LabelData) => void;
+  // eslint-disable-next-line no-unused-vars
+  handleDeleteLabel?: (labelId: string) => void;
+  labelData?: LabelData;
   iconSize: string;
   iconViewBox: string;
   onClose: () => void;
@@ -53,6 +59,7 @@ interface DropDownProps {
   isCheckbox?: boolean;
   isContextMenu?: boolean;
   isSnooze?: boolean;
+  isMacro?: boolean;
   // eslint-disable-next-line no-unused-vars
   handleMouseEnter?: (e: any) => void;
   className?: string;
@@ -90,6 +97,9 @@ const DropDown = ({
   style,
   userId,
   handleClick,
+  handleLabel,
+  handleDeleteLabel,
+  labelData,
   iconSize,
   iconViewBox,
   onClose,
@@ -97,6 +107,7 @@ const DropDown = ({
   isCheckbox = false,
   isContextMenu = false,
   isSnooze = false,
+  isMacro = false,
   onChange,
   handleMouseEnter,
   className,
@@ -129,8 +140,20 @@ const DropDown = ({
   const onClickItem = useCallback(
     (e: SyntheticEvent, item: DropDownItem, hoveredItem: string | null) => {
       e.stopPropagation();
+
+      // for members
       if (handleClick)
         handleClick(hoveredItem, userId || '', item.status || '');
+
+      // for labels
+      if (labelData) {
+        if (hoveredItem === 'Edit' && handleLabel) {
+          handleLabel(labelData);
+        } else if (hoveredItem === 'Delete' && handleDeleteLabel) {
+          handleDeleteLabel(labelData.labelId);
+        }
+      }
+
       handleItemClick(item.name);
       if (onChange) {
         onChange(item);
@@ -170,6 +193,14 @@ const DropDown = ({
     e.stopPropagation();
     if (onChange) {
       onChange({ name: 'date&time' });
+      onClose();
+    }
+  };
+
+  const handleMacrosClick = (e: SyntheticEvent) => {
+    e.stopPropagation();
+    if (onChange) {
+      onChange({ name: 'manage-macros' });
       onClose();
     }
   };
@@ -263,6 +294,13 @@ const DropDown = ({
               height='10'
               viewBox='0 0 10 10'
             />
+          </DateTimeTextDiv>
+        </div>
+      )}
+      {isMacro && (
+        <div className='date-time-text'>
+          <DateTimeTextDiv onClick={handleMacrosClick}>
+            <p>Manage Macros</p>
           </DateTimeTextDiv>
         </div>
       )}
