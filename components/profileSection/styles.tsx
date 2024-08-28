@@ -195,7 +195,6 @@ const Actions = styled.p`
   padding: 4px 12px;
   background-color: ${colors.bg_surface_secondary};
   border-radius: 30px;
-  cursor: pointer;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
@@ -206,6 +205,48 @@ const Actions = styled.p`
     ${Typography.body_sm_medium};
     color: ${colors.text};
   }
+`;
+
+const ReplyButton = styled.button`
+  ${Typography.body_sm_regular};
+  color: ${colors.text_text_secondary};
+  padding: 4px 12px;
+  background-color: ${colors.bg_surface_secondary};
+  border-radius: 30px;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    background-color: ${colors.bg_surface_secondary_hover};
+    color: ${colors.text};
+  }
+`;
+
+const QuestionMainDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const ReplyCard = styled.div`
+  padding: 6px 12px;
+  background-color: ${colors.bg_surface_secondary};
+  ${Typography.body_sm_regular};
+  color: ${colors.text};
+  border-radius: 0 8px 8px 8px;
+  max-width: max-content;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  cursor: pointer;
 `;
 
 export {
@@ -232,4 +273,7 @@ export {
   DescriptionDiv,
   ActionsDiv,
   Actions,
+  ReplyButton,
+  QuestionMainDiv,
+  ReplyCard,
 };

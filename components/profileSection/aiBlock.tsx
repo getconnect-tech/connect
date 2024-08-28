@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Actions,
   ActionsDiv,
@@ -7,11 +7,24 @@ import {
   DescriptionDiv,
   DetailsProfileDiv,
   ProfileDiv,
+  QuestionMainDiv,
+  ReplyButton,
+  ReplyCard,
   Title,
 } from './styles';
 import SVGIcon from '@/assets/icons/SVGIcon';
 
 function AIBlock() {
+  const [generateReply, setGenerateReply] = useState(false);
+
+  const onClickReplyButton = useCallback(() => {
+    setGenerateReply(true);
+  }, []);
+
+  const onCloseReplyCard = useCallback(() => {
+    setGenerateReply(false);
+  }, []);
+
   return (
     <>
       <ProfileDiv>
@@ -39,9 +52,28 @@ function AIBlock() {
             <Actions>
               Set <span>Medium</span> Priority
             </Actions>
-            <Actions>Generate Reply</Actions>
+            <ReplyButton onClick={onClickReplyButton}>
+              Generate Reply
+            </ReplyButton>
           </ActionsDiv>
         </DescriptionDiv>
+        {generateReply && (
+          <DescriptionDiv>
+            <h6>Generated replies</h6>
+            <QuestionMainDiv>
+              <ReplyCard onClick={onCloseReplyCard}>
+                Please let me know if there’s anything specific you’d like me to
+                prepare or review beforehand.
+              </ReplyCard>
+              <ReplyCard onClick={onCloseReplyCard}>
+                We have received your application.
+              </ReplyCard>
+              <ReplyCard onClick={onCloseReplyCard}>
+                Looking forward to collaborating with you again in the future.
+              </ReplyCard>
+            </QuestionMainDiv>
+          </DescriptionDiv>
+        )}
       </DetailsProfileDiv>
     </>
   );
