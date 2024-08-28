@@ -49,7 +49,7 @@ function LabelCard({
             name={iconName}
             width='16'
             height='16'
-            viewBox='0 0 12 12'
+            viewBox='0 0 16 16'
             fill={colors.icon}
           />
           <Name>{label}</Name>
