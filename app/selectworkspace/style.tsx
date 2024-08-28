@@ -36,7 +36,7 @@ export const Head = styled.div`
   align-items: center;
 `;
 
-export const OrganizationDiv = styled.form`
+export const OrganizationDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 32px;
