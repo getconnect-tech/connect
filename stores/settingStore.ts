@@ -19,6 +19,7 @@ class SettingStore {
 
       // Labels
       labels: observable,
+      setLabels: action,
       addLabel: action,
     });
   }
@@ -33,6 +34,10 @@ class SettingStore {
     this.apiKeys = value;
   }
 
+  // set labels
+  setLabels(value: Label[]) {
+    this.labels = value;
+  }
   // add label
   addLabel(value: Label) {
     this.labels = [...(this.labels || []), value];

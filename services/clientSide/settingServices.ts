@@ -3,7 +3,6 @@ import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { getAPIErrorMessage } from '@/helpers/common';
 import { settingStore } from '@/stores/settingStore';
-import { workspaceStore } from '@/stores/workspaceStore';
 
 /**
  * @desc Get all API key
@@ -41,6 +40,30 @@ export const createAPIKey = async (payload: { name: string }) => {
       payload,
     );
     const { data } = response;
+    return data;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return null;
+  } finally {
+    settingStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc Get all labels
+ * @param {*}
+ */
+export const getLabels = async () => {
+  try {
+    settingStore.setLoading(true);
+    const response = await axios.get(
+      `${NEXT_PUBLIC_API_URL}/workspaces/labels`,
+    );
+    const { data } = response;
+    if (data?.length > 0) {
+      settingStore.setLabels(data);
+      return data;
+    }
     return data;
   } catch (err: any) {
     alert(getAPIErrorMessage(err) || 'Something went wrong!');

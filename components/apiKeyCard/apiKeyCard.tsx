@@ -1,7 +1,10 @@
-import React from 'react';
+/* eslint-disable no-undef */
+import React, { useCallback } from 'react';
+import copy from 'clipboard-copy';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
 import { CardMainDiv, LeftDiv, RightDiv, TitleDiv } from './style';
+import { getAPIErrorMessage } from '@/helpers/common';
 
 interface Props {
   keyName: string;
@@ -10,6 +13,7 @@ interface Props {
   // eslint-disable-next-line no-unused-vars
   setCurrentOpenDropdown: (dropdown: string | null) => void;
   dropdownIdentifier: string;
+  apiKey: string;
 }
 
 function ApiKeyCard({
@@ -18,6 +22,7 @@ function ApiKeyCard({
   currentOpenDropdown,
   setCurrentOpenDropdown,
   dropdownIdentifier,
+  apiKey,
 }: Props) {
   const dropDownItem = [
     { name: 'Delete', icon: 'delete-icon', isDelete: true },
@@ -29,6 +34,15 @@ function ApiKeyCard({
       currentOpenDropdown === identifier ? null : identifier,
     );
   };
+
+  const handleCopyClick = useCallback(async () => {
+    try {
+      await copy(apiKey);
+      alert('Copied successfully');
+    } catch (err: any) {
+      alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    }
+  }, []);
 
   return (
     <CardMainDiv>
@@ -43,7 +57,7 @@ function ApiKeyCard({
           iconName='apikey-copy-icon'
           iconSize='12'
           iconViewBox='0 0 12 12'
-          onClick={() => {}}
+          onClick={handleCopyClick}
           size={true}
         />
         <div style={{ position: 'relative' }} className='tag-div'>
