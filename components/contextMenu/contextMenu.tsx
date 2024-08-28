@@ -32,8 +32,8 @@ export default function CustomContextMenu(props: Props) {
   const { children, ticketDetail, ticketIndex } = props;
   const { ticketStore, workspaceStore, settingStore } = useStores();
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const { currentWorkspace } = workspaceStore;
-  const { labels } = settingStore;
+  const { currentWorkspace } = workspaceStore || {};
+  const { labels } = settingStore || {};
   const [submenuPosition, setSubmenuPosition] = useState<
     'upwards' | 'downwards'
   >('upwards');

@@ -57,8 +57,8 @@ export default function InboxCard({
     ticketDetail;
   const router = useRouter();
   const { ticketStore, workspaceStore, settingStore } = useStores();
-  const { currentWorkspace } = workspaceStore;
-  const { labels } = settingStore;
+  const { currentWorkspace } = workspaceStore || {};
+  const { labels } = settingStore || {};
 
   const handleDropdownClick = (dropdown: string) => {
     const identifier = `${dropdownIdentifier}-${dropdown}`;

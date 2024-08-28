@@ -67,7 +67,7 @@ function TicketDetails(props: Props) {
   const { ticketStore, workspaceStore, userStore, settingStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
-  const { labels } = settingStore;
+  const { labels } = settingStore || {};
   const { user } = userStore || {};
   const { priority, assigned_to, contact } = ticketDetails || {};
   const [macroDropdown, setMacroDropdown] = useState(false);

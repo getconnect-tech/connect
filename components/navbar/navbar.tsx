@@ -39,7 +39,7 @@ function Navbar() {
   const pathname = usePathname();
   const { workspaceStore, settingStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
-  const { labels } = settingStore;
+  const { labels } = settingStore || {};
   const [isOpen, setIsOpen] = useState(false);
   const [isSupportDropdown, setSupportDropdown] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
