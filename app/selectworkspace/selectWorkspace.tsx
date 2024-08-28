@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useCallback, useEffect } from 'react';
+import React, { SyntheticEvent, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CardsDiv, Content, Head, MainDiv, OrganizationDiv } from './style';
 import Icon from '@/components/icon/icon';
@@ -45,6 +45,14 @@ function SelectWorkSpace() {
     loadData();
   }, [loadData]);
 
+  const redirectToOnboarding = useCallback(
+    (e: SyntheticEvent) => {
+      e.preventDefault();
+      router.push('/onboarding');
+    },
+    [router],
+  );
+
   return (
     <MainDiv>
       <Icon
@@ -66,7 +74,7 @@ function SelectWorkSpace() {
           />
           <h6>Select Organization</h6>
         </Head>
-        <OrganizationDiv>
+        <OrganizationDiv onSubmit={redirectToOnboarding}>
           <CardsDiv>
             {workspaceList?.map(
               (item: Workspace, index: React.Key | null | undefined) => {
