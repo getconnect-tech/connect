@@ -16,6 +16,8 @@ interface Props {
   dropdownIdentifier?: string;
   // eslint-disable-next-line no-unused-vars
   setOpenDropdown: (dropdown: string | null) => void;
+  // eslint-disable-next-line no-unused-vars
+  handleDeleteLabel?: (labelId: string) => void;
 }
 function LabelCard({
   label,
@@ -24,6 +26,7 @@ function LabelCard({
   dropdownIdentifier,
   currentOpenDropdown,
   setOpenDropdown,
+  handleDeleteLabel,
 }: Props) {
   const [labelModal, setLabelModal] = useState(false);
   const [updateLabelData, setUpdateLabelData] = useState<LabelData>();
@@ -77,6 +80,7 @@ function LabelCard({
               iconViewBox={'0 0 12 12'}
               labelData={{ labelId, label, icon: iconName }}
               handleLabel={handleLabel}
+              handleDeleteLabel={handleDeleteLabel}
               onClose={() => {
                 setOpenDropdown(null);
               }}

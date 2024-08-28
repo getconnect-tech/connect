@@ -46,6 +46,8 @@ interface DropDownProps {
   ) => void;
   // eslint-disable-next-line no-unused-vars
   handleLabel?: (labelData: LabelData) => void;
+  // eslint-disable-next-line no-unused-vars
+  handleDeleteLabel?: (labelId: string) => void;
   labelData?: LabelData;
   iconSize: string;
   iconViewBox: string;
@@ -94,6 +96,7 @@ const DropDown = ({
   userId,
   handleClick,
   handleLabel,
+  handleDeleteLabel,
   labelData,
   iconSize,
   iconViewBox,
@@ -138,13 +141,17 @@ const DropDown = ({
       // for members
       if (handleClick)
         handleClick(hoveredItem, userId || '', item.status || '');
-      handleItemClick(item.name);
 
       // for labels
-      if (handleLabel && labelData) {
-        handleLabel(labelData);
+      if (labelData) {
+        if (hoveredItem === 'Edit' && handleLabel) {
+          handleLabel(labelData);
+        } else if (hoveredItem === 'Delete' && handleDeleteLabel) {
+          handleDeleteLabel(labelData.labelId);
+        }
       }
 
+      handleItemClick(item.name);
       if (onChange) {
         onChange(item);
       }

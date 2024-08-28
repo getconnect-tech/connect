@@ -17,7 +17,7 @@ import Modal from '@/components/modal/modal';
 import { isEmpty } from '@/helpers/common';
 import EmptyState from '@/components/emptyState/emptyState';
 import LabelModal from '@/components/modalComponent/labelModal';
-import { getLabels } from '@/services/clientSide/settingServices';
+import { deleteLabel, getLabels } from '@/services/clientSide/settingServices';
 import { useStores } from '@/stores';
 
 const Labels = () => {
@@ -35,6 +35,18 @@ const Labels = () => {
 
   const onCloseLabelModal = useCallback(() => {
     setLabelModal(false);
+  }, []);
+
+  // Delete label form current workspace
+  const handleDeleteLabel = useCallback(async (labelId: string) => {
+    try {
+      const result = await deleteLabel(labelId);
+      if (result) {
+        settingStore.removeLabel(labelId);
+      }
+    } catch (e) {
+      console.log('Error : ', e);
+    }
   }, []);
 
   const loadData = useCallback(async () => {
@@ -93,6 +105,7 @@ const Labels = () => {
                       label={label.name}
                       labelId={label.id}
                       iconName={label.icon}
+                      handleDeleteLabel={handleDeleteLabel}
                       currentOpenDropdown={currentOpenDropdown}
                       setOpenDropdown={setCurrentOpenDropdown}
                       dropdownIdentifier={`card-${label.id}`}
