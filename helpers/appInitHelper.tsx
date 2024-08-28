@@ -1,9 +1,14 @@
 /* eslint-disable no-undef */
 import { isEmpty } from './common';
+import UserPreferenceSingleton from './userPreferenceSingleton';
 import { getSessionDetails } from '@/services/serverSide/auth/authentication';
 import { APP_INIT_RESPONSE_TYPE } from '@/global/constants';
-import { getWorkspaceList } from '@/services/clientSide/workspaceServices';
+import {
+  getWorkspaceById,
+  getWorkspaceList,
+} from '@/services/clientSide/workspaceServices';
 import { getUserDetails } from '@/services/clientSide/userService';
+import { Workspace } from '@/utils/dataTypes';
 
 export const appInit: any = async () => {
   const session = await getSessionDetails();
@@ -25,16 +30,39 @@ export const appInit: any = async () => {
     // If user doesn't exist in any workspace then redirect user to onboarding page
     if (!workspaceList || workspaceList?.length === 0) {
       return { type: APP_INIT_RESPONSE_TYPE.REDIRECT, path: '/onboarding' };
-    }
+    } else {
+      const currentWorkspace =
+        await UserPreferenceSingleton.getInstance().getCurrentWorkspace();
+      const isFoundWorkspace = workspaceList?.find(
+        (workspace: Workspace) => workspace?.id === currentWorkspace,
+      );
 
-    // User exist in any workspace
-    if (workspaceList?.length > 0) {
+      // If workspace length is 1 AND current workspace not exist in local
       if (
-        window.location.pathname === '/login' ||
-        window.location.pathname === '/signup'
-      )
-        return { type: APP_INIT_RESPONSE_TYPE.REDIRECT, path: '/' };
-      return true;
+        (!currentWorkspace || !isFoundWorkspace) &&
+        workspaceList?.length === 1
+      ) {
+        UserPreferenceSingleton.getInstance().setCurrentWorkspace(
+          workspaceList[0]?.id,
+        );
+        await getWorkspaceById(workspaceList[0]?.id);
+        return true;
+      }
+      // If workspace length greater than 1 AND current workspace not exist in local
+      else if (
+        (!currentWorkspace || !isFoundWorkspace) &&
+        workspaceList?.length > 1
+      ) {
+        return {
+          type: APP_INIT_RESPONSE_TYPE.REDIRECT,
+          path: '/selectworkspace',
+        };
+      }
+      // Load current workspace data
+      else if (currentWorkspace && isFoundWorkspace) {
+        await getWorkspaceById(currentWorkspace);
+        return true;
+      }
     }
   }
 };

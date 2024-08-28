@@ -1,11 +1,12 @@
 import { handleApiError } from '@/helpers/errorHandler';
-import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
+import { nameSchema } from '@/lib/zod/common';
+import withAdminAuth from '@/middlewares/withAdminAuth';
 import {
   createApiKey,
   getWorkspaceApiKeys,
 } from '@/services/serverSide/apiKey';
 
-export const GET = withWorkspaceAuth(async (req) => {
+export const GET = withAdminAuth(async (req) => {
   try {
     const apiKeys = await getWorkspaceApiKeys(req.workspace.id);
 
@@ -15,12 +16,16 @@ export const GET = withWorkspaceAuth(async (req) => {
   }
 });
 
-export const POST = withWorkspaceAuth(async (req) => {
+export const POST = withAdminAuth(async (req) => {
   try {
+    const { name } = await req.json();
+
+    nameSchema.parse(name);
+
     const userId = req.user.id;
     const workspaceId = req.workspace.id;
 
-    const apiKey = await createApiKey({ userId, workspaceId });
+    const apiKey = await createApiKey({ userId, workspaceId, name });
 
     return Response.json(apiKey, { status: 201 });
   } catch (err) {

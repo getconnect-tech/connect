@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
 import { MessageType, PriorityLevels, TicketStatus } from '@prisma/client';
@@ -28,7 +28,6 @@ import ProfileSection from '@/components/profileSection/profileSection';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
 import MessageCard from '@/components/messageCard/messageCard';
-import QuestionCard from '@/components/questionCard/questionCard';
 import { labelItem, modeItem, priorityItem, snoozeItem } from '@/helpers/raw';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import { useStores } from '@/stores';
@@ -40,7 +39,7 @@ import {
   updateTicketPriority,
   sendMessage,
 } from '@/services/clientSide/ticketServices';
-import { capitalizeString, isEmpty } from '@/helpers/common';
+import { capitalizeString, getUniqueId, isEmpty } from '@/helpers/common';
 import Icon from '@/components/icon/icon';
 import RichTextBox from '@/components/commentBox';
 import { DropDownItem } from '@/components/dropDown/dropDown';
@@ -48,6 +47,8 @@ import Tag from '@/components/tag/tag';
 import { MessageDetails } from '@/utils/dataTypes';
 import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
 import SnoozeDropdown from '@/components/snoozeDropdown/snoozeDropdown';
+import InternalMessageCard from '@/components/internalMessageCard/internalMessageCard';
+import { colors } from '@/styles/colors';
 
 interface Props {
   ticket_id: string;
@@ -62,6 +63,7 @@ function TicketDetails(props: Props) {
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const [commentValue, setCommentValue] = useState<string>('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const { ticketStore, workspaceStore, userStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
@@ -109,6 +111,18 @@ function TicketDetails(props: Props) {
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({
+        block: 'end',
+      });
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     return () => {
@@ -172,6 +186,7 @@ function TicketDetails(props: Props) {
    */
   const onChangePriority = useCallback(
     async (item: { name: string; icon: string; value: PriorityLevels }) => {
+      if (ticketDetails?.priority === item?.value) return;
       const payload = { priority: item?.value };
       try {
         if (ticketDetails?.id) {
@@ -248,12 +263,16 @@ function TicketDetails(props: Props) {
     },
     [ticketDetails],
   );
-
   /*
    * @desc Send comment
    */
   const handleCommentSend = useCallback(
     async (content: string, mode: string) => {
+      if (!content || content === '' || content === null) {
+        // eslint-disable-next-line no-undef
+        alert('Please add message');
+        return;
+      }
       let type;
       if (mode !== 'Email') {
         type = MessageType.REGULAR;
@@ -261,11 +280,24 @@ function TicketDetails(props: Props) {
         type = MessageType.EMAIL;
       }
       const payload = { content: content, type };
+      const newMessage: MessageDetails = {
+        assignee: null,
+        author: user,
+        author_id: user!.id,
+        content,
+        id: getUniqueId(),
+        created_at: new Date(),
+        label: null,
+        reference_id: '',
+        ticket_id,
+        type,
+      };
+
       try {
         if (ticket_id) {
+          ticketStore.addTicketMessage(newMessage);
           const result = await sendMessage(ticket_id, payload);
           if (result) {
-            getTicketMessages(ticket_id);
             setCommentValue('');
           }
         }
@@ -273,7 +305,7 @@ function TicketDetails(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [ticket_id],
+    [ticket_id, user],
   );
 
   /*
@@ -285,12 +317,14 @@ function TicketDetails(props: Props) {
         case MessageType.REGULAR:
           return (
             <ActivityDiv>
-              <Avatar
-                imgSrc={message?.author?.profile_url || ''}
-                name={message?.author?.display_name || ''}
-                size={20}
-              />
-              <QuestionCard
+              <div className='avtar-internal'>
+                <Avatar
+                  imgSrc={message?.author?.profile_url || ''}
+                  name={message?.author?.display_name || ''}
+                  size={20}
+                />
+              </div>
+              <InternalMessageCard
                 title={message?.content || ''}
                 time={message?.created_at}
               />
@@ -299,7 +333,9 @@ function TicketDetails(props: Props) {
         case MessageType.FROM_CONTACT:
           return (
             <ActivityDiv>
-              <Avatar imgSrc={''} name={contact?.name || ''} size={20} />
+              <div className='avtar'>
+                <Avatar imgSrc={''} name={contact?.name || ''} size={20} />
+              </div>
               <MessageCard
                 title={'Sanjay send email'}
                 time={message?.created_at}
@@ -311,11 +347,13 @@ function TicketDetails(props: Props) {
         case MessageType.EMAIL:
           return (
             <ActivityDiv>
-              <Avatar
-                imgSrc={message?.author?.profile_url || ''}
-                name={message?.author?.display_name || ''}
-                size={20}
-              />
+              <div className='avtar'>
+                <Avatar
+                  imgSrc={message?.author?.profile_url || ''}
+                  name={message?.author?.display_name || ''}
+                  size={20}
+                />
+              </div>
               <MessageCard
                 title={`${message?.author?.display_name} send email`}
                 time={message?.created_at}
@@ -417,12 +455,13 @@ function TicketDetails(props: Props) {
               />
               <Title>{ticketDetails?.title || ''}</Title>
             </LeftDiv>
-            <Icon
+            {/* Remove three dot icon from header */}
+            {/* <Icon
               onClick={() => {}}
               iconName='three-dot-icon'
               iconSize='16'
               iconViewBox='0 0 16 16'
-            />
+            /> */}
           </HeaderDiv>
           <StatusDiv>
             <ButtonDiv>
@@ -493,20 +532,25 @@ function TicketDetails(props: Props) {
         </TopDiv>
         <div style={{ padding: '0 20px' }}>
           <BottomDiv>
-            <CenterDiv>
+            <CenterDiv ref={messagesEndRef}>
               {messages?.map((message, index) => (
-                <>
+                <div key={index}>
                   {renderActivityMessage(message)}
                   {index !== messages?.length - 1 && <LineDiv />}
-                </>
+                </div>
               ))}
             </CenterDiv>
-            <InputDiv>
-              <Avatar
-                imgSrc={user?.profile_url || ''}
-                size={20}
-                name={user?.display_name || ''}
-              />
+          </BottomDiv>
+          <InputDiv>
+            <div className='input-main-div'>
+              <div className='line' />
+              <div className='avtar'>
+                <Avatar
+                  imgSrc={user?.profile_url || ''}
+                  size={20}
+                  name={user?.display_name || ''}
+                />
+              </div>
               <Input modeSelectedItem={modeSelectedItem}>
                 <RichTextBox
                   isInternalDiscussion={modeSelectedItem.name !== 'Email'}
@@ -530,7 +574,7 @@ function TicketDetails(props: Props) {
                     iconName={modeSelectedItem?.icon}
                     iconSize='12'
                     iconViewBox='0 0 12 12'
-                    isActive={true}
+                    isActive={messageModeDropdown ? true : false}
                     className={
                       submenuPosition === 'upwards'
                         ? 'submenu-upwards'
@@ -541,7 +585,15 @@ function TicketDetails(props: Props) {
                     }
                     dropDownStyle={{ maxWidth: 142, width: '100%' }}
                     tagStyle={{
-                      backgroundColor: 'unset',
+                      backgroundColor: (() => {
+                        if (modeSelectedItem?.name === 'Email') {
+                          return `${colors.bg_surface_secondary}`;
+                        } else if (modeSelectedItem?.name === 'Internal') {
+                          return `${colors.bg_surface_secondary_hover}`;
+                        } else {
+                          return undefined;
+                        }
+                      })(),
                     }}
                   />
                   <IconDiv modeSelectedItem={modeSelectedItem}>
@@ -566,8 +618,8 @@ function TicketDetails(props: Props) {
                   </IconDiv>
                 </InputIcon>
               </Input>
-            </InputDiv>
-          </BottomDiv>
+            </div>
+          </InputDiv>
         </div>
       </MainDiv>
       <ProfileSection />

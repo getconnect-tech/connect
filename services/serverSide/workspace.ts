@@ -1,6 +1,7 @@
-import { TeamSize, UserRole } from '@prisma/client';
+import { ConfigType, TeamSize, UserRole } from '@prisma/client';
 import { prisma } from '@/prisma/prisma';
 import { removeNullUndefined } from '@/helpers/common';
+import { EmailConfig } from '@/utils/dataTypes';
 
 // Service to get workspace by ID
 export const getWorkspaceById = async (
@@ -190,16 +191,20 @@ export const removeInvitedUser = async (invitedUserId: string) => {
   return deletedInvitedUser;
 };
 
-export const getUserRole = async (workspaceId: string, userId: string) => {
-  const userWorkspaceRel = await prisma.userWorkspaces.findUnique({
+export const getWorkspaceEmailConfig = async (workspaceId: string) => {
+  const config = await prisma.configuration.findUnique({
     where: {
-      user_workspace_id: { user_id: userId, workspace_id: workspaceId },
+      workspace_config_id: {
+        workspace_id: workspaceId,
+        type: ConfigType.CHANNEL,
+        extra: 'email',
+      },
     },
   });
 
-  if (!userWorkspaceRel) {
+  if (!config) {
     return null;
   }
 
-  return userWorkspaceRel.role;
+  return config.value as EmailConfig;
 };

@@ -42,7 +42,7 @@ const HeaderDiv = styled.div`
 `;
 
 const Title = styled.div`
-  ${Typography.body_md_semibold}
+  ${Typography.body_md_medium}
   color: ${colors.text};
 `;
 

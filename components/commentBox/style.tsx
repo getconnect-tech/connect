@@ -40,6 +40,7 @@ const MentionList = styled.div`
 `;
 
 const TextMainDiv = styled.div<Props>`
+  min-height: 44px;
   h1,
   h2,
   h3,
@@ -64,6 +65,7 @@ const TextMainDiv = styled.div<Props>`
     background-color: transparent !important;
     max-width: 644px;
     width: 100%;
+    margin-left: 20px;
     li {
       ::marker {
         color: ${colors.text} !important;

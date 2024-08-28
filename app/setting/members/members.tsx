@@ -16,13 +16,15 @@ import {
 import Button from '@/components/button/button';
 import MemberCard from '@/components/memberCard/memberCard';
 import {
-  getWorkspaceList,
+  getWorkspaceById,
+  removeInviteUsersFromWorkspace,
   removeMemberFromWorkspace,
   updateRole,
 } from '@/services/clientSide/workspaceServices';
 import { useStores } from '@/stores';
-import InviteMemberModal from '@/components/inviteMemberModal/inviteMemberModal';
+import InviteMemberModal from '@/components/modalComponent/inviteMemberModal';
 import Modal from '@/components/modal/modal';
+import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
 
 const Members = () => {
   const [inviteModal, setInviteModal] = useState(false);
@@ -32,6 +34,25 @@ const Members = () => {
   const { workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
 
+  const loadData = useCallback(async () => {
+    try {
+      workspaceStore.setLoading(true);
+      const workspaceId =
+        await UserPreferenceSingleton.getInstance().getCurrentWorkspace();
+      if (workspaceId) {
+        await getWorkspaceById(workspaceId);
+      }
+    } catch (e) {
+      console.log('Error : ', e);
+    } finally {
+      workspaceStore.setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
   const onOpenInviteModal = useCallback(() => {
     setInviteModal(true);
   }, []);
@@ -40,50 +61,59 @@ const Members = () => {
     setInviteModal(false);
   }, []);
 
-  const handleClick = async (hoveredItem: string | null, userId: string) => {
-    if (hoveredItem === 'Make Admin' || hoveredItem === 'Remove Admin') {
-      try {
-        workspaceStore.setLoading(true);
-        if (userId) {
-          const result = await updateRole({
-            userId,
-            role:
-              hoveredItem === 'Make Admin' ? UserRole.ADMIN : UserRole.MEMBER,
-          });
+  const handleClick = useCallback(
+    async (hoveredItem: string | null, userId: string) => {
+      if (hoveredItem === 'Make Admin' || hoveredItem === 'Remove Admin') {
+        try {
+          workspaceStore.setLoading(true);
+          if (userId) {
+            const result = await updateRole({
+              userId,
+              role:
+                hoveredItem === 'Make Admin' ? UserRole.ADMIN : UserRole.MEMBER,
+            });
 
-          if (result) {
-            getWorkspaceMember();
+            if (result) {
+              loadData();
+            }
           }
+          workspaceStore.setLoading(false);
+        } catch (error) {
+          console.log('error', error);
         }
-        workspaceStore.setLoading(false);
-      } catch (error) {
-        console.log('error', error);
-      }
-    }
-    if (hoveredItem === 'Delete') {
-      try {
-        if (userId) {
-          const result = await removeMemberFromWorkspace(userId);
-          if (result) {
-            workspaceStore.removeUserFromWorkspace(userId);
+      } else if (hoveredItem === 'Delete') {
+        try {
+          if (userId) {
+            const result = await removeMemberFromWorkspace(userId);
+            if (result) {
+              workspaceStore.removeUserFromWorkspace(userId);
+            }
           }
+        } catch (error) {
+          console.log('error', error);
         }
-      } catch (error) {
-        console.log('error', error);
       }
-    }
-  };
+    },
+    [],
+  );
 
-  const getWorkspaceMember = useCallback(async () => {
-    workspaceStore.setLoading(true);
-    // get user data from workspace object
-    await getWorkspaceList();
-    workspaceStore.setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    getWorkspaceMember();
-  }, [inviteModal]);
+  const handleClickInvited = useCallback(
+    async (hoveredItem: string | null, userId: string, status: string) => {
+      if (hoveredItem === 'Delete' && status === 'Pending') {
+        try {
+          if (userId) {
+            const result = await removeInviteUsersFromWorkspace(userId);
+            if (result) {
+              workspaceStore.removeInvitedUserFromWorkspace(userId);
+            }
+          }
+        } catch (error) {
+          console.log('error', error);
+        }
+      }
+    },
+    [],
+  );
 
   return (
     <>
@@ -122,7 +152,7 @@ const Members = () => {
                 <MemberCard
                   key={member.id}
                   userId={member.id}
-                  handleClick={handleClick}
+                  handleClick={handleClickInvited}
                   name={member.name || ''}
                   email={member.email}
                   src={''}
@@ -137,7 +167,7 @@ const Members = () => {
         </MainDiv>
       </Main>
       <Modal open={inviteModal} onClose={onCloseInviteModal}>
-        <InviteMemberModal onClose={onCloseInviteModal} />
+        <InviteMemberModal onClose={onCloseInviteModal} loadData={loadData} />
       </Modal>
     </>
   );

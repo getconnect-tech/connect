@@ -3,9 +3,8 @@ import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 const MainDiv = styled.div`
-  border-left: 1px solid ${colors.border};
-  padding-left: 18px;
-  margin-left: -23px;
+  padding-left: 22px;
+  margin-left: 10px;
 `;
 
 const Div = styled.div`
@@ -18,15 +17,25 @@ const Div = styled.div`
     ${Typography.body_md_regular};
     color: ${colors.text};
     border-radius: 8px;
+    word-wrap: break-word;
+    max-width: 536px;
     div {
       p {
         padding: 0;
+        span {
+          white-space: inherit;
+          color: ${colors.text};
+        }
+        br {
+          display: none;
+        }
       }
     }
   }
   span {
     ${Typography.body_md_regular};
     color: ${colors.text_text_secondary};
+    white-space: nowrap;
   }
 `;
 

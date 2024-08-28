@@ -1,5 +1,6 @@
 'use client';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import {
   Description,
   Head,
@@ -13,15 +14,20 @@ import {
 import LabelCard from '@/components/labelCard/labelCard';
 import Button from '@/components/button/button';
 import Modal from '@/components/modal/modal';
-import LabelModal from '@/components/labelModal/labelModal';
 import { isEmpty } from '@/helpers/common';
 import EmptyState from '@/components/emptyState/emptyState';
+import LabelModal from '@/components/modalComponent/labelModal';
+import { getLabels } from '@/services/clientSide/settingServices';
+import { useStores } from '@/stores';
 
-function Labels() {
+const Labels = () => {
   const [labelModal, setLabelModal] = useState(false);
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
+  const { settingStore, workspaceStore } = useStores();
+  const { currentWorkspace } = workspaceStore;
+  const { labels } = settingStore;
 
   const onOpenLabelModal = useCallback(() => {
     setLabelModal(true);
@@ -31,11 +37,15 @@ function Labels() {
     setLabelModal(false);
   }, []);
 
-  const labelData = [
-    { id: 1, label: 'Bug', iconName: 'bug-icon' },
-    { id: 2, label: 'Questions', iconName: 'question-icon' },
-    { id: 3, label: 'Feedback', iconName: 'feedback-icon' },
-  ];
+  const loadData = useCallback(async () => {
+    if (!isEmpty(currentWorkspace?.id)) {
+      await getLabels();
+    }
+  }, [currentWorkspace?.id]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   return (
     <>
@@ -47,7 +57,7 @@ function Labels() {
                 <Title>Labels</Title>
                 <Description>Manage workspace labels</Description>
               </LeftDiv>
-              {!isEmpty(labelData) && (
+              {!isEmpty(labels) && (
                 <Button
                   title='New Label'
                   onClick={onOpenLabelModal}
@@ -58,7 +68,7 @@ function Labels() {
                 />
               )}
             </Head>
-            {isEmpty(labelData) ? (
+            {isEmpty(labels) ? (
               <EmptyState
                 iconName={'label-icon'}
                 iconSize={'20'}
@@ -76,16 +86,17 @@ function Labels() {
               />
             ) : (
               <MainCardDiv>
-                {labelData.map((label) => (
-                  <LabelCard
-                    key={label.id}
-                    label={label.label}
-                    iconName={label.iconName}
-                    currentOpenDropdown={currentOpenDropdown}
-                    setOpenDropdown={setCurrentOpenDropdown}
-                    dropdownIdentifier={`card-${label.id}`}
-                  />
-                ))}
+                {labels &&
+                  labels.map((label) => (
+                    <LabelCard
+                      key={label.id}
+                      label={label.name}
+                      iconName={label.icon}
+                      currentOpenDropdown={currentOpenDropdown}
+                      setOpenDropdown={setCurrentOpenDropdown}
+                      dropdownIdentifier={`card-${label.id}`}
+                    />
+                  ))}
               </MainCardDiv>
             )}
           </RightDiv>
@@ -96,6 +107,6 @@ function Labels() {
       </Modal>
     </>
   );
-}
+};
 
-export default Labels;
+export default observer(Labels);
