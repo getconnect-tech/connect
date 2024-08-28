@@ -50,6 +50,30 @@ export const createAPIKey = async (payload: { name: string }) => {
 };
 
 /**
+ * @desc Get all labels
+ * @param {*}
+ */
+export const getLabels = async () => {
+  try {
+    settingStore.setLoading(true);
+    const response = await axios.get(
+      `${NEXT_PUBLIC_API_URL}/workspaces/labels`,
+    );
+    const { data } = response;
+    if (data?.length > 0) {
+      settingStore.setLabels(data);
+      return data;
+    }
+    return data;
+  } catch (err: any) {
+    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    return null;
+  } finally {
+    settingStore.setLoading(false);
+  }
+};
+
+/**
  * @desc Add label
  * @param {*} payload { "name": "", "icon": "","color":"#7B7A79" }
  */

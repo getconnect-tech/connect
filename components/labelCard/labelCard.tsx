@@ -4,8 +4,8 @@ import DropDown from '../dropDown/dropDown';
 import Modal from '../modal/modal';
 import LabelModal from '../modalComponent/labelModal';
 import { InnerDiv, ItemDiv, Name } from './style';
-import SVGIcon from '@/assets/icons/SVGIcon';
 import { colors } from '@/styles/colors';
+import LabelSvgIcon from '@/assets/icons/labelIcons';
 
 interface Props {
   label: string;
@@ -45,7 +45,7 @@ function LabelCard({
     <>
       <ItemDiv>
         <InnerDiv>
-          <SVGIcon
+          <LabelSvgIcon
             name={iconName}
             width='16'
             height='16'
