@@ -32,6 +32,12 @@ const CardMessage = styled.p`
         display: none;
       }
     }
+    ul {
+      margin-left: 18px;
+    }
+    ol {
+      margin-left: 20px;
+    }
   }
 `;
 
