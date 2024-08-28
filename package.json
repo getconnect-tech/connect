@@ -20,6 +20,7 @@
     "@syncfusion/ej2-react-richtexteditor": "^26.2.8",
     "antd": "^5.20.2",
     "axios": "^1.7.3",
+    "clipboard-copy": "^4.0.1",
     "firebase": "^10.12.5",
     "mobx": "^6.13.1",
     "mobx-react": "^9.1.1",
