@@ -64,7 +64,7 @@ function SelectWorkSpace() {
             height='60'
             viewBox='0 0 20 20'
           />
-          <h6>Select Organisation</h6>
+          <h6>Select Organization</h6>
         </Head>
         <OrganizationDiv>
           <CardsDiv>
