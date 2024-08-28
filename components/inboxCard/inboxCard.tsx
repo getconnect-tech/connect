@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
 import { PriorityLevels, TicketStatus } from '@prisma/client';
@@ -22,11 +22,7 @@ import {
   TagDiv,
 } from './style';
 import { priorityItem } from '@/helpers/raw';
-import {
-  capitalizeString,
-  getAPIErrorMessage,
-  isEmpty,
-} from '@/helpers/common';
+import { capitalizeString } from '@/helpers/common';
 import { useStores } from '@/stores';
 import { TicketDetailsInterface } from '@/utils/appTypes';
 import {
@@ -34,7 +30,6 @@ import {
   changeTicketStatus,
   updateTicketPriority,
 } from '@/services/clientSide/ticketServices';
-import { getLabels } from '@/services/clientSide/settingServices';
 
 interface Props {
   ticketDetail: TicketDetailsInterface;
@@ -91,19 +86,6 @@ export default function InboxCard({
       setPosition('downwards');
     }
   };
-  const loadData = useCallback(async () => {
-    try {
-      if (!isEmpty(currentWorkspace?.id)) {
-        await getLabels();
-      }
-    } catch (err: any) {
-      alert(getAPIErrorMessage(err) || 'Something went wrong!');
-    }
-  }, [labels]);
-
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
 
   const labelItem = (labels || [])?.map((label) => ({
     name: label.name,
