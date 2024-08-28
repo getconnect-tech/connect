@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -36,8 +37,9 @@ const navbarMenu = {
 function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { workspaceStore } = useStores();
+  const { workspaceStore, settingStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
+  const { labels } = settingStore;
   const [isOpen, setIsOpen] = useState(false);
   const [isSupportDropdown, setSupportDropdown] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -80,6 +82,11 @@ function Navbar() {
   const handleSupportClick = useCallback(() => {
     setIsModalOpen(true);
   }, []);
+
+  const labelItem = (labels || [])?.map((label) => ({
+    name: label.name,
+    icon: label.icon,
+  }));
 
   return (
     <>
@@ -154,24 +161,19 @@ function Navbar() {
           </ItemMainDiv>
           <ItemMainDiv>
             <Label>Label</Label>
-            <NavbarItem
-              title='Bug'
-              icon='bug-icon'
-              isActive={activeIndex === 6}
-              onClickItem={() => handleClick(6)}
-            />
-            <NavbarItem
-              title='Question'
-              icon='question-icon'
-              isActive={activeIndex === 7}
-              onClickItem={() => handleClick(7)}
-            />
-            <NavbarItem
-              title='Feedback'
-              icon='feedback-icon'
-              isActive={activeIndex === 8}
-              onClickItem={() => handleClick(8)}
-            />
+            {labelItem.map((item, index) => (
+              <div key={index} className='label-item'>
+                {item.icon && (
+                  <NavbarItem
+                    title={item.name}
+                    icon={item.icon}
+                    isActive={activeIndex === 8}
+                    onClickItem={() => handleClick(8)}
+                    label={true}
+                  />
+                )}
+              </div>
+            ))}
           </ItemMainDiv>
         </TopDiv>
         <div className='tag-div'>
