@@ -44,7 +44,7 @@ function WorkspaceCard({
 }: Props) {
   return (
     <Card onClick={() => handleClick(workSpaceId)}>
-      <Avatar imgSrc={src} name={''} isShowBorder />
+      <Avatar imgSrc={src} name={organizationName} size={25} />
       <p>{organizationName}</p>
     </Card>
   );

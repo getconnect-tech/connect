@@ -21,7 +21,7 @@ import {
   StatusMainDiv,
   TagDiv,
 } from './style';
-import { labelItem, priorityItem } from '@/helpers/raw';
+import { priorityItem } from '@/helpers/raw';
 import { capitalizeString } from '@/helpers/common';
 import { useStores } from '@/stores';
 import { TicketDetailsInterface } from '@/utils/appTypes';
@@ -56,8 +56,9 @@ export default function InboxCard({
   const { title, created_at, source, contact, priority, assigned_to } =
     ticketDetail;
   const router = useRouter();
-  const { ticketStore, workspaceStore } = useStores();
-  const { currentWorkspace } = workspaceStore;
+  const { ticketStore, workspaceStore, settingStore } = useStores();
+  const { currentWorkspace } = workspaceStore || {};
+  const { labels } = settingStore || {};
 
   const handleDropdownClick = (dropdown: string) => {
     const identifier = `${dropdownIdentifier}-${dropdown}`;
@@ -85,6 +86,11 @@ export default function InboxCard({
       setPosition('downwards');
     }
   };
+
+  const labelItem = (labels || [])?.map((label) => ({
+    name: label.name,
+    icon: label.icon,
+  }));
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
