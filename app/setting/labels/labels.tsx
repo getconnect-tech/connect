@@ -26,8 +26,8 @@ const Labels = () => {
     null,
   );
   const { settingStore, workspaceStore } = useStores();
-  const { currentWorkspace } = workspaceStore;
-  const { labels } = settingStore;
+  const { currentWorkspace } = workspaceStore || {};
+  const { labels } = settingStore || {};
 
   const onOpenLabelModal = useCallback(() => {
     setLabelModal(true);
