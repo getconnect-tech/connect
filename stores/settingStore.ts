@@ -21,6 +21,8 @@ class SettingStore {
       labels: observable,
       setLabels: action,
       addLabel: action,
+      updateLabel: action,
+      removeLabel: action,
     });
   }
 
@@ -41,6 +43,22 @@ class SettingStore {
   // add label
   addLabel(value: Label) {
     this.labels = [...(this.labels || []), value];
+  }
+
+  // Update Label
+  updateLabel(labelId: string, value: Label) {
+    if (!this.labels) return;
+
+    this.labels = this.labels.map((label) =>
+      label.id === labelId ? { ...label, ...value } : label,
+    );
+  }
+
+  // Remove Label
+  removeLabel(labelId: string) {
+    if (!this.labels) return;
+
+    this.labels = this.labels.filter((label) => label.id !== labelId);
   }
 }
 

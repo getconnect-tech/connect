@@ -71,6 +71,12 @@ export interface InviteModal {
   email: string;
 }
 
+export interface LabelData {
+  labelId: string;
+  label: string;
+  icon: string;
+}
+
 export type Workspace = NonNullable<
   Awaited<ReturnType<typeof getUserWorkspaces>>
 >[0];

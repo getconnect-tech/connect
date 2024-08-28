@@ -14,7 +14,7 @@ import {
   ContextMenuSubTrigger,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { labelItem, priorityItem, snoozeItem } from '@/helpers/raw';
+import { priorityItem, snoozeItem } from '@/helpers/raw';
 import { useStores } from '@/stores';
 import { TicketDetailsInterface } from '@/utils/appTypes';
 import {
@@ -30,9 +30,10 @@ interface Props {
 
 export default function CustomContextMenu(props: Props) {
   const { children, ticketDetail, ticketIndex } = props;
-  const { ticketStore, workspaceStore } = useStores();
+  const { ticketStore, workspaceStore, settingStore } = useStores();
   const [showDatePicker, setShowDatePicker] = useState(false);
   const { currentWorkspace } = workspaceStore;
+  const { labels } = settingStore;
   const [submenuPosition, setSubmenuPosition] = useState<
     'upwards' | 'downwards'
   >('upwards');
@@ -52,6 +53,11 @@ export default function CustomContextMenu(props: Props) {
       setPosition('downwards');
     }
   };
+
+  const labelItem = (labels || [])?.map((label) => ({
+    name: label.name,
+    icon: label.icon,
+  }));
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },

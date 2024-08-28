@@ -28,7 +28,7 @@ import ProfileSection from '@/components/profileSection/profileSection';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
 import MessageCard from '@/components/messageCard/messageCard';
-import { labelItem, modeItem, priorityItem, snoozeItem } from '@/helpers/raw';
+import { modeItem, priorityItem, snoozeItem } from '@/helpers/raw';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import { useStores } from '@/stores';
 import {
@@ -42,7 +42,7 @@ import {
 import { capitalizeString, getUniqueId, isEmpty } from '@/helpers/common';
 import Icon from '@/components/icon/icon';
 import RichTextBox from '@/components/commentBox';
-import { DropDownItem } from '@/components/dropDown/dropDown';
+import DropDown, { DropDownItem } from '@/components/dropDown/dropDown';
 import Tag from '@/components/tag/tag';
 import { MessageDetails } from '@/utils/dataTypes';
 import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
@@ -64,11 +64,13 @@ function TicketDetails(props: Props) {
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const [commentValue, setCommentValue] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { ticketStore, workspaceStore, userStore } = useStores();
+  const { ticketStore, workspaceStore, userStore, settingStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
+  const { labels } = settingStore;
   const { user } = userStore || {};
   const { priority, assigned_to, contact } = ticketDetails || {};
+  const [macroDropdown, setMacroDropdown] = useState(false);
   const [modeSelectedItem, setModeSelectedItem] = useState<DropDownItem>({
     name: 'Email',
     icon: 'email-icon',
@@ -131,45 +133,63 @@ function TicketDetails(props: Props) {
     };
   }, []);
 
-  const handlePriorityTag = () => {
+  const handlePriorityTag = useCallback(() => {
     setPriorityDropdown((prev) => !prev);
     setAssignDropdown(false);
     setLabelDropdown(false);
     setMessageModeDropdown(false);
     setSnoozeDropdown(false);
-  };
+  }, []);
 
-  const handleSnoozeTag = () => {
+  const handleSnoozeTag = useCallback(() => {
     setSnoozeDropdown((prev) => !prev);
     setAssignDropdown(false);
     setLabelDropdown(false);
     setMessageModeDropdown(false);
     setPriorityDropdown(false);
-  };
+  }, []);
 
-  const handleMessageModeTag = () => {
+  const handleMessageModeTag = useCallback(() => {
     setMessageModeDropdown((prev) => !prev);
     setAssignDropdown(false);
     setLabelDropdown(false);
     setPriorityDropdown(false);
     setSnoozeDropdown(false);
-  };
+    setMacroDropdown(false);
+  }, []);
 
-  const handleLabelTag = () => {
+  const handleLabelTag = useCallback(() => {
     setLabelDropdown((prev) => !prev);
     setAssignDropdown(false);
     setPriorityDropdown(false);
     setMessageModeDropdown(false);
     setSnoozeDropdown(false);
-  };
+  }, []);
 
-  const handleAssignTag = () => {
+  const handleAssignTag = useCallback(() => {
     setAssignDropdown((prev) => !prev);
     setPriorityDropdown(false);
     setLabelDropdown(false);
     setMessageModeDropdown(false);
     setSnoozeDropdown(false);
-  };
+  }, []);
+
+  const handleMacroItem = useCallback(() => {
+    setMacroDropdown((prevState) => !prevState);
+    setPriorityDropdown(false);
+    setLabelDropdown(false);
+    setMessageModeDropdown(false);
+    setSnoozeDropdown(false);
+  }, []);
+
+  const handleOutsideClick = useCallback(() => {
+    setMacroDropdown(false);
+  }, []);
+
+  const labelItem = (labels || [])?.map((label) => ({
+    name: label.name,
+    icon: label.icon,
+  }));
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
@@ -180,7 +200,12 @@ function TicketDetails(props: Props) {
       user_id: user.id,
     })) || []),
   ];
-
+  const macroItem = [
+    { name: 'Template 1' },
+    { name: 'Template 2' },
+    { name: 'Template 3' },
+    { name: 'Template 4' },
+  ];
   /*
    * @desc Update ticket details priority in ticket details
    */
@@ -560,42 +585,64 @@ function TicketDetails(props: Props) {
                   setValueContent={setCommentValue}
                 />
                 <InputIcon>
-                  <DropDownWithTag
-                    onClick={handleMessageModeTag}
-                    selectedValue={modeSelectedItem}
-                    dropdownOpen={messageModeDropdown}
-                    title='Email'
-                    onClose={() => {
-                      setMessageModeDropdown(false);
-                    }}
-                    items={modeItem}
-                    onChange={handleModeItemChange}
-                    isTag={true}
-                    iconName={modeSelectedItem?.icon}
-                    iconSize='12'
-                    iconViewBox='0 0 12 12'
-                    isActive={messageModeDropdown ? true : false}
-                    className={
-                      submenuPosition === 'upwards'
-                        ? 'submenu-upwards'
-                        : 'submenu-downwards'
-                    }
-                    onMouseEnter={(e: any) =>
-                      handleMouseEnter(e, setSubmenuPosition)
-                    }
-                    dropDownStyle={{ maxWidth: 142, width: '100%' }}
-                    tagStyle={{
-                      backgroundColor: (() => {
-                        if (modeSelectedItem?.name === 'Email') {
-                          return `${colors.bg_surface_secondary}`;
-                        } else if (modeSelectedItem?.name === 'Internal') {
-                          return `${colors.bg_surface_secondary_hover}`;
-                        } else {
-                          return undefined;
-                        }
-                      })(),
-                    }}
-                  />
+                  <div className='drop-tag'>
+                    <DropDownWithTag
+                      onClick={handleMessageModeTag}
+                      selectedValue={modeSelectedItem}
+                      dropdownOpen={messageModeDropdown}
+                      title='Email'
+                      onClose={() => {
+                        setMessageModeDropdown(false);
+                      }}
+                      items={modeItem}
+                      onChange={handleModeItemChange}
+                      isTag={true}
+                      iconName={modeSelectedItem?.icon}
+                      iconSize='12'
+                      iconViewBox='0 0 12 12'
+                      isActive={messageModeDropdown ? true : false}
+                      className={
+                        submenuPosition === 'upwards'
+                          ? 'submenu-upwards'
+                          : 'submenu-downwards'
+                      }
+                      onMouseEnter={(e: any) =>
+                        handleMouseEnter(e, setSubmenuPosition)
+                      }
+                      dropDownStyle={{ maxWidth: 142, width: '100%' }}
+                      tagStyle={{
+                        backgroundColor: (() => {
+                          if (modeSelectedItem?.name === 'Email') {
+                            return `${colors.bg_surface_secondary}`;
+                          } else if (modeSelectedItem?.name === 'Internal') {
+                            return `${colors.bg_surface_secondary_hover}`;
+                          } else {
+                            return undefined;
+                          }
+                        })(),
+                      }}
+                    />
+                    <div className='tag-div'>
+                      <Icon
+                        iconName='sticky-note-icon'
+                        iconSize='12'
+                        iconViewBox='0 0 12 12'
+                        size={true}
+                        onClick={handleMacroItem}
+                        isActive={true}
+                      />
+                      {macroDropdown && (
+                        <DropDown
+                          items={macroItem}
+                          onClose={handleOutsideClick}
+                          iconSize={''}
+                          iconViewBox={''}
+                          style={{ bottom: 60, maxWidth: 146, width: '100%' }}
+                          isMacro={true}
+                        />
+                      )}
+                    </div>
+                  </div>
                   <IconDiv modeSelectedItem={modeSelectedItem}>
                     <Icon
                       onClick={() => {}}
