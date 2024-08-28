@@ -45,6 +45,10 @@ function SelectWorkSpace() {
     loadData();
   }, [loadData]);
 
+  const redirectToOnboarding = useCallback(() => {
+    router.push('/onboarding');
+  }, []);
+
   return (
     <MainDiv>
       <Icon
@@ -64,7 +68,7 @@ function SelectWorkSpace() {
             height='60'
             viewBox='0 0 20 20'
           />
-          <h6>Select Organisation</h6>
+          <h6>Select Organization</h6>
         </Head>
         <OrganizationDiv>
           <CardsDiv>
@@ -88,6 +92,7 @@ function SelectWorkSpace() {
             iconSize='12'
             iconViewBox='0 0 12 12'
             secondary={true}
+            onClick={redirectToOnboarding}
           />
         </OrganizationDiv>
       </Content>
