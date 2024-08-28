@@ -153,6 +153,10 @@ const InputIcon = styled.div`
     top: 0;
     bottom: auto;
   }
+  .drop-tag {
+    display: flex;
+    gap: 8px;
+  }
 `;
 
 const ActivityDiv = styled.div`

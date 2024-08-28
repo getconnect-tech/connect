@@ -579,7 +579,7 @@ function TicketDetails(props: Props) {
                   setValueContent={setCommentValue}
                 />
                 <InputIcon>
-                  <div style={{ display: 'flex', gap: '8px' }}>
+                  <div className='drop-tag'>
                     <DropDownWithTag
                       onClick={handleMessageModeTag}
                       selectedValue={modeSelectedItem}
