@@ -18,6 +18,7 @@ interface Props {
 }
 const LabelModal = ({ onClose, labelData }: Props) => {
   const { settingStore } = useStores();
+  const { loading } = settingStore;
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [icon, setIcon] = useState<string>(labelData?.icon || 'tag-icon');
   const [labelName, setLabelName] = useState<string>(labelData?.label || '');
@@ -35,6 +36,7 @@ const LabelModal = ({ onClose, labelData }: Props) => {
     async (e: React.SyntheticEvent, icon: string, name: string) => {
       e.preventDefault();
       const payload = { icon, name, color: '#7B7A79' };
+      settingStore.setLoading(true);
       try {
         if (labelData) {
           const result = await updateLabelDetails(labelData.labelId, payload);
@@ -50,6 +52,7 @@ const LabelModal = ({ onClose, labelData }: Props) => {
       } catch (e) {
         console.log('Error : ', e);
       } finally {
+        settingStore.setLoading(false);
         onClose();
       }
     },
@@ -97,6 +100,7 @@ const LabelModal = ({ onClose, labelData }: Props) => {
             type='submit'
             title={labelData ? 'Update' : 'Create'}
             variant='medium'
+            isLoading={loading}
           />
         </div>
       </BottomDiv>
