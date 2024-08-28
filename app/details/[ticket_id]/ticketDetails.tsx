@@ -64,7 +64,7 @@ function TicketDetails(props: Props) {
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const [commentValue, setCommentValue] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { ticketStore, workspaceStore, userStore } = useStores();
+  const { ticketStore, workspaceStore, userStore, messageStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
   const { user } = userStore || {};
@@ -456,12 +456,12 @@ function TicketDetails(props: Props) {
               <Title>{ticketDetails?.title || ''}</Title>
             </LeftDiv>
             {/* Remove three dot icon from header */}
-            {/* <Icon
-              onClick={() => {}}
+            <Icon
+              onClick={() => messageStore.setErrorMessage('hello demo')}
               iconName='three-dot-icon'
               iconSize='16'
               iconViewBox='0 0 16 16'
-            /> */}
+            />
           </HeaderDiv>
           <StatusDiv>
             <ButtonDiv>
