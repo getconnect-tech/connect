@@ -19,6 +19,7 @@ import {
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { isEmpty } from '@/helpers/common';
+import { LabelData } from '@/utils/dataTypes';
 
 export type DropDownItem = {
   name: string;
@@ -43,6 +44,9 @@ interface DropDownProps {
     // eslint-disable-next-line no-unused-vars
     status: string,
   ) => void;
+  // eslint-disable-next-line no-unused-vars
+  handleLabel?: (labelData: LabelData) => void;
+  labelData?: LabelData;
   iconSize: string;
   iconViewBox: string;
   onClose: () => void;
@@ -89,6 +93,8 @@ const DropDown = ({
   style,
   userId,
   handleClick,
+  handleLabel,
+  labelData,
   iconSize,
   iconViewBox,
   onClose,
@@ -128,9 +134,17 @@ const DropDown = ({
   const onClickItem = useCallback(
     (e: SyntheticEvent, item: DropDownItem, hoveredItem: string | null) => {
       e.stopPropagation();
+
+      // for members
       if (handleClick)
         handleClick(hoveredItem, userId || '', item.status || '');
       handleItemClick(item.name);
+
+      // for labels
+      if (handleLabel && labelData) {
+        handleLabel(labelData);
+      }
+
       if (onChange) {
         onChange(item);
       }
