@@ -8,3 +8,5 @@ export interface UpdateRole {
 export type TicketDetailsInterface = NonNullable<
   Awaited<ReturnType<typeof formatTicket>>
 >;
+
+export type Message = { id: string; type: string; content: string };

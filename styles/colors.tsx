@@ -31,4 +31,12 @@ export const colors = {
   bg_overlay: '#00000080',
   box_shadow_3: `#00000033`,
   icon_disable: '#C4C3C1',
+  fill_danger_secondary: '#F8EEED',
+  error_border: '#bc574933',
+  success_border: '#1D862333',
+  warning_border: '#E2851233',
+  fill_success_seconday: '#E8F3E9',
+  fill_warning_secondary: '#FCF3E7',
+  fill_success: '#1D8623',
+  fill_warning: '#E28512',
 };

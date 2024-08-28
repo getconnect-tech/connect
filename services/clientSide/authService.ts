@@ -1,10 +1,10 @@
-/* eslint-disable no-undef */
 import axios from 'axios';
 import { signOut } from 'next-auth/react';
 import { signInWithCode } from '../serverSide/membership/signin';
 import { getAPIErrorMessage, isValidEmail } from '@/helpers/common';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { userStore } from '@/stores/userStore';
+import { messageStore } from '@/stores/messageStore';
 
 /**
  * @desc Verify user email
@@ -25,7 +25,9 @@ export const verifyUserEmail = async (email: string) => {
       return true;
     }
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return false;
   } finally {
     userStore.setLoading(false);
@@ -51,7 +53,9 @@ export const registerUser = async (email: string, name: string) => {
       return true;
     }
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return false;
   } finally {
     userStore.setLoading(false);
@@ -69,7 +73,7 @@ export const verifyAuthCode = async (email: string, code: string) => {
     if (result) return true;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Incorrect code!');
+    messageStore.setErrorMessage(getAPIErrorMessage(err) || 'Incorrect code!');
     return false;
   } finally {
     userStore.setLoading(false);
@@ -88,10 +92,12 @@ export const resendVerificationCode = async (email: string) => {
       `${NEXT_PUBLIC_API_URL}/auth/sendVerificationCode`,
       payload,
     );
-    if (result) alert('New code sent!');
+    if (result) messageStore.setSuccessMessage('New code sent!');
     return true;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return false;
   } finally {
     userStore.setLoading(false);
@@ -109,7 +115,9 @@ export const logout = async () => {
     userStore.clearUserDetails();
     return response;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return false;
   } finally {
     userStore.setLoading(false);

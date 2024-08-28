@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 'use client';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -482,7 +481,7 @@ function TicketDetails(props: Props) {
             </LeftDiv>
             {/* Remove three dot icon from header */}
             {/* <Icon
-              onClick={() => {}}
+              onClick={() => messageStore.setErrorMessage('hello demo')}
               iconName='three-dot-icon'
               iconSize='16'
               iconViewBox='0 0 16 16'
