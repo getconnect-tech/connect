@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 /* eslint-disable max-len */
 'use client';
 import React, {
@@ -32,6 +31,7 @@ import { useStores } from '@/stores';
 import { updateWorkspaceDetails } from '@/services/clientSide/workspaceServices';
 import Avatar from '@/components/avtar/Avtar';
 import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
+import { messageStore } from '@/stores/messageStore';
 
 const WorkspaceProfile = () => {
   const { workspaceStore } = useStores();
@@ -80,12 +80,14 @@ const WorkspaceProfile = () => {
       try {
         const file = event.target.files?.[0];
         if (!file) {
-          alert('No file selected.');
+          messageStore.setErrorMessage('No file selected.');
           return;
         }
         const fileData = file.name.split('.');
         if (file.size > 500000) {
-          alert('Please upload less than 500kb photo size.');
+          messageStore.setErrorMessage(
+            'Please upload less than 500kb photo size.',
+          );
           return false;
         }
         if (
@@ -95,7 +97,7 @@ const WorkspaceProfile = () => {
         ) {
           await convertBase64(file);
         } else {
-          alert('Please upload a valid type photo.');
+          messageStore.setErrorMessage('Please upload a valid type photo.');
           return false;
         }
       } catch (e) {

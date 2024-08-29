@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import React, { SyntheticEvent, useCallback, useState } from 'react';
 import Icon from '../icon/icon';
 import Input from '../input/input';
@@ -6,6 +5,7 @@ import Button from '../button/button';
 import { BottomDiv, Header, Label, MainDiv, Title } from './style';
 import { createAPIKey } from '@/services/clientSide/settingServices';
 import { getAPIErrorMessage } from '@/helpers/common';
+import { messageStore } from '@/stores/messageStore';
 
 interface Props {
   onClose: () => void;
@@ -23,7 +23,7 @@ function CreateKeyModal({ onClose, loadData }: Props) {
     async (e: SyntheticEvent) => {
       e.preventDefault();
       if (keyName.trim() === '') {
-        alert('Please enter a valid key name.');
+        messageStore.setErrorMessage('Please enter a valid key name.');
         return;
       }
       try {
@@ -32,12 +32,14 @@ function CreateKeyModal({ onClose, loadData }: Props) {
         };
         const response = await createAPIKey(ApiName);
         if (response) {
-          alert('API Key created successfully!');
+          messageStore.setSuccessMessage('API Key created successfully!');
           loadData();
           onClose();
         }
       } catch (err: any) {
-        alert(getAPIErrorMessage(err) || 'Something went wrong!');
+        messageStore.setErrorMessage(
+          getAPIErrorMessage(err) || 'Something went wrong!',
+        );
       }
     },
     [keyName],

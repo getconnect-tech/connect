@@ -48,6 +48,7 @@ import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
 import SnoozeDropdown from '@/components/snoozeDropdown/snoozeDropdown';
 import InternalMessageCard from '@/components/internalMessageCard/internalMessageCard';
 import { colors } from '@/styles/colors';
+import { messageStore } from '@/stores/messageStore';
 
 interface Props {
   ticket_id: string;
@@ -293,8 +294,7 @@ function TicketDetails(props: Props) {
   const handleCommentSend = useCallback(
     async (content: string, mode: string) => {
       if (!content || content === '' || content === null) {
-        // eslint-disable-next-line no-undef
-        alert('Please add message');
+        messageStore.setErrorMessage('Please add message');
         return;
       }
       let type;
