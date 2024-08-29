@@ -29,7 +29,7 @@ function Inbox() {
   const [loading, setLoading] = useState(true); // Loading state added
   const { workspaceStore, ticketStore } = useStores();
   const { currentWorkspace } = workspaceStore;
-  const { ticketList, inboxTicketList } = ticketStore;
+  const { ticketList, filteredTicketList } = ticketStore;
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
@@ -45,11 +45,11 @@ function Inbox() {
   const displayTicketList = useCallback(() => {
     // Filter ticket based on activeTab
     if (activeTab === 'Open') {
-      ticketStore.setIndoxTicketList(TicketStatus.OPEN, ticketList);
+      ticketStore.setFilteredTicketList(TicketStatus.OPEN, ticketList);
     } else if (activeTab === 'Snoozed') {
-      ticketStore.setIndoxTicketList(TicketStatus.SNOOZE, ticketList);
+      ticketStore.setFilteredTicketList(TicketStatus.SNOOZE, ticketList);
     } else if (activeTab === 'Done') {
-      ticketStore.setIndoxTicketList(TicketStatus.CLOSED, ticketList);
+      ticketStore.setFilteredTicketList(TicketStatus.CLOSED, ticketList);
     }
   }, [activeTab, ticketList]);
 
@@ -95,8 +95,8 @@ function Inbox() {
                 description='This is where you will receive notifications for all types of tickets. Enjoy your clutter-free inbox!'
               />
             )}
-            {inboxTicketList?.length > 0 &&
-              inboxTicketList.map((ticket, index) => (
+            {filteredTicketList?.length > 0 &&
+              filteredTicketList.map((ticket, index) => (
                 <>
                   <CustomContextMenu
                     key={ticket.id}
