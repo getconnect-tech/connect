@@ -31,7 +31,7 @@ interface Props {
 export default function CustomContextMenu(props: Props) {
   const { children, ticketDetail, ticketIndex } = props;
   const { ticketStore, workspaceStore, settingStore } = useStores();
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  // const [showDatePicker, setShowDatePicker] = useState(false);
   const { currentWorkspace } = workspaceStore || {};
   const { labels } = settingStore || {};
   const [submenuPosition, setSubmenuPosition] = useState<
@@ -105,6 +105,19 @@ export default function CustomContextMenu(props: Props) {
       console.log('Error : ', e);
     }
   }, []);
+
+  const [showDropDown, setShowDropDown] = useState(true);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const handleDropDownChange = () => {
+    setShowDropDown(false);
+    setShowDatePicker(true);
+  };
+
+  const handleDatePickerClose = () => {
+    setShowDatePicker(false);
+    setShowDropDown(true);
+  };
 
   return (
     <ContextMenuMainDiv>
@@ -185,22 +198,22 @@ export default function CustomContextMenu(props: Props) {
                     }
                   >
                     <>
-                      <DropDown
-                        items={snoozeItem}
-                        iconSize='12'
-                        iconViewBox='0 0 12 12'
-                        onClose={() => {}}
-                        isContextMenu={true}
-                        isSnooze={true}
-                        style={{ minWidth: 260, marginTop: -4 }}
-                        onChange={() => {
-                          // onChange(item);
-                          setShowDatePicker(true);
-                        }}
-                      />
+                      {showDropDown && (
+                        <DropDown
+                          items={snoozeItem}
+                          iconSize='12'
+                          iconViewBox='0 0 12 12'
+                          onClose={() => setShowDropDown(false)}
+                          isContextMenu={true}
+                          isSnooze={true}
+                          style={{ minWidth: 260, marginTop: -4 }}
+                          onChange={handleDropDownChange}
+                        />
+                      )}
                       {showDatePicker && (
                         <DatePickerModal
-                          onClose={() => setShowDatePicker(false)}
+                          onClose={handleDatePickerClose}
+                          isContextMenu={true}
                         />
                       )}
                     </>
@@ -239,7 +252,7 @@ export default function CustomContextMenu(props: Props) {
                     <DropDown
                       items={labelItem}
                       iconSize='12'
-                      iconViewBox='0 0 12 12'
+                      iconViewBox='0 0 16 16'
                       onClose={() => {}}
                       isSearch={true}
                       isContextMenu={true}
