@@ -1,5 +1,12 @@
-import { Label, MessageType, Prisma, User } from '@prisma/client';
+import {
+  Label,
+  MessageStatus,
+  MessageType,
+  Prisma,
+  User,
+} from '@prisma/client';
 import { prisma } from '@/prisma/prisma';
+import { removeNullUndefined } from '@/helpers/common';
 
 export const postMessage = async ({
   messageContent,
@@ -23,6 +30,10 @@ export const postMessage = async ({
 
   if (authorId) {
     dataToInsert.author_id = authorId;
+  }
+
+  if (messageType === MessageType.EMAIL) {
+    dataToInsert.status = MessageStatus.SENDING;
   }
 
   const newMessage = await prisma.message.create({
@@ -98,4 +109,28 @@ export const getTicketMessages = async (ticketId: string) => {
   });
 
   return formattedMessages;
+};
+
+export const updateMessageStatus = async (
+  messageId: string,
+  ticketUpdates: {
+    newStatus: MessageStatus;
+    errMessage?: string;
+    referenceId?: string;
+  },
+) => {
+  const payload = {
+    status: ticketUpdates.newStatus,
+    error_message: ticketUpdates.errMessage,
+    reference_id: ticketUpdates.referenceId,
+  };
+
+  removeNullUndefined(payload);
+
+  const updatedMessage = await prisma.message.update({
+    where: { id: messageId },
+    data: payload,
+  });
+
+  return updatedMessage;
 };

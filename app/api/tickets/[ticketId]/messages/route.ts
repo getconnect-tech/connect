@@ -1,8 +1,12 @@
 import { z } from 'zod';
-import { MessageType } from '@prisma/client';
+import { MessageStatus, MessageType } from '@prisma/client';
 import { handleApiError } from '@/helpers/errorHandler';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
-import { getTicketMessages, postMessage } from '@/services/serverSide/message';
+import {
+  getTicketMessages,
+  postMessage,
+  updateMessageStatus,
+} from '@/services/serverSide/message';
 import { contentSchema, messageTypeSchema } from '@/lib/zod/message';
 import { sendEmailAsReply } from '@/helpers/emails';
 import { getWorkspaceEmailConfig } from '@/services/serverSide/workspace';
@@ -54,23 +58,43 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
         );
       }
 
-      const mailId = await sendEmailAsReply({
-        ticketId,
-        body: content,
-        senderEmail: emailConfig.primaryEmail,
-      });
-
-      if (!mailId) {
-        return Response.json({ error: 'Ticket not found!' }, { status: 404 });
-      }
-
-      const newMessage = await postMessage({
+      // By default new message with type 'EMAIL' will have status: SENDING.
+      let newMessage = await postMessage({
         messageContent: content,
         messageType: type,
-        referenceId: mailId,
+        referenceId: '',
         ticketId: ticketId,
         authorId: req.user.id,
       });
+
+      try {
+        const mailId = await sendEmailAsReply({
+          ticketId,
+          body: content,
+          senderEmail: emailConfig.primaryEmail,
+        });
+
+        if (!mailId) {
+          // Update message status to failed, since ticket ID was invalid.
+          await updateMessageStatus(newMessage.id, {
+            newStatus: 'FAILED',
+            errMessage: 'Invalid ticket ID!',
+          });
+          return Response.json({ error: 'Ticket not found!' }, { status: 404 });
+        }
+
+        // If email was sent successfully update status to DELIVERED
+        newMessage = await updateMessageStatus(newMessage.id, {
+          newStatus: MessageStatus.DELIVERED,
+          referenceId: mailId,
+        });
+      } catch (err: any) {
+        // Otherwise in case of an error update status to FAILED with error message
+        newMessage = await updateMessageStatus(newMessage.id, {
+          newStatus: MessageStatus.FAILED,
+          errMessage: err.message,
+        });
+      }
 
       return Response.json(newMessage, { status: 201 });
     }

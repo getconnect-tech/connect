@@ -43,3 +43,9 @@ enum UserRole {
 enum ConfigType {
     CHANNEL
 }
+
+enum MessageStatus {
+    SENDING
+    DELIVERED
+    FAILED
+}
