@@ -39,6 +39,8 @@ interface DropDownProps {
   userId?: string;
   handleClick?: (
     // eslint-disable-next-line no-unused-vars
+    value: string | null,
+    // eslint-disable-next-line no-unused-vars
     userId: string,
     // eslint-disable-next-line no-unused-vars
     status: string,
@@ -111,6 +113,7 @@ const DropDown = ({
   className,
 }: DropDownProps) => {
   const dropDownRef = useOutsideClick(onClose);
+  const [value, setValueItem] = useState<string | null>(null);
   const [selectedItems, setSelectedItems] = useState<{
     [key: string]: boolean;
   }>({});
@@ -131,17 +134,17 @@ const DropDown = ({
   }, []);
 
   const onClickItem = useCallback(
-    (e: SyntheticEvent, item: DropDownItem) => {
+    (e: SyntheticEvent, item: DropDownItem, value: string | null) => {
       e.stopPropagation();
 
       // for members
-      if (handleClick) handleClick(userId || '', item.status || '');
+      if (handleClick) handleClick(value, userId || '', item.status || '');
 
       // for labels
       if (labelData) {
-        if (handleLabel) {
+        if (value === 'Edit' && handleLabel) {
           handleLabel(labelData);
-        } else if (handleDeleteLabel) {
+        } else if (value === 'Delete' && handleDeleteLabel) {
           handleDeleteLabel(labelData.labelId);
         }
       }
@@ -225,11 +228,16 @@ const DropDown = ({
         {searchResult.map((item, index) => (
           <ItemDiv
             key={index}
-            onClick={(e) => onClickItem(e, item)}
-            onMouseEnter={handleMouseEnter}
+            onClick={(e) => onClickItem(e, item, value)}
+            onMouseEnter={() => {
+              // eslint-disable-next-line no-unused-expressions, @typescript-eslint/no-unused-expressions
+              handleMouseEnter;
+              setValueItem(item.name);
+            }}
           >
             <ItemLeftDiv
               isSelected={selectedItems[item.name]}
+              // isHovered={!item.isDelete && hoveredItem === item.name}
               isDelete={item.isDelete || false}
             >
               {isCheckbox && (
