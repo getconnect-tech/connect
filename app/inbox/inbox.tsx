@@ -19,13 +19,9 @@ import { useStores } from '@/stores';
 import { isEmpty } from '@/helpers/common';
 import EmptyState from '@/components/emptyState/emptyState';
 import InboxLoading from '@/components/inboxLoading/inboxLoading';
-import { TicketDetailsInterface } from '@/utils/appTypes';
 
 function Inbox() {
   const [activeTab, setActiveTab] = useState('Open');
-  const [filteredTicketList, setFilteredTicketList] = useState<
-    TicketDetailsInterface[]
-  >([]);
   const tabItem = ['Open', 'Snoozed', 'Done'];
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
@@ -33,7 +29,7 @@ function Inbox() {
   const [loading, setLoading] = useState(true); // Loading state added
   const { workspaceStore, ticketStore } = useStores();
   const { currentWorkspace } = workspaceStore;
-  const { ticketList } = ticketStore;
+  const { ticketList, filteredTicketList } = ticketStore;
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
@@ -48,19 +44,13 @@ function Inbox() {
 
   const displayTicketList = useCallback(() => {
     // Filter ticket based on activeTab
-    const data = ticketList?.filter((ticket) => {
-      switch (activeTab) {
-        case 'Open':
-          return ticket.status === TicketStatus.OPEN;
-        case 'Snoozed':
-          return ticket.status === TicketStatus.SNOOZE;
-        case 'Done':
-          return ticket.status === TicketStatus.CLOSED;
-        default:
-          return false;
-      }
-    });
-    setFilteredTicketList(data);
+    if (activeTab === 'Open') {
+      ticketStore.setFilteredTicketList(TicketStatus.OPEN, ticketList);
+    } else if (activeTab === 'Snoozed') {
+      ticketStore.setFilteredTicketList(TicketStatus.SNOOZE, ticketList);
+    } else if (activeTab === 'Done') {
+      ticketStore.setFilteredTicketList(TicketStatus.CLOSED, ticketList);
+    }
   }, [activeTab, ticketList]);
 
   useEffect(() => {
