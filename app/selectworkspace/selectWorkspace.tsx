@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 'use client';
 import React, { useCallback, useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
 import { CardsDiv, Content, Head, MainDiv, OrganizationDiv } from './style';
 import Icon from '@/components/icon/icon';
@@ -102,4 +103,4 @@ function SelectWorkSpace() {
   );
 }
 
-export default SelectWorkSpace;
+export default observer(SelectWorkSpace);
