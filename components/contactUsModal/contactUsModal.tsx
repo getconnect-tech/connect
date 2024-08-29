@@ -47,7 +47,7 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
   );
 
   const handleRemoveFile = useCallback((index: number) => {
-    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
+    setFiles((prevFiles) => prevFiles?.filter((_, i) => i !== index));
   }, []);
 
   const handleSendMessage = useCallback(() => {

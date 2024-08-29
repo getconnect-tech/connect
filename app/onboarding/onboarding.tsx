@@ -84,7 +84,7 @@ function OnboardingStep1() {
   }, [inputField]);
 
   const handleRemoveInputField = (index: number) => {
-    const newInputField = inputField.filter((_, i) => i !== index);
+    const newInputField = inputField?.filter((_, i) => i !== index);
     setInputField(newInputField);
   };
 
@@ -109,7 +109,7 @@ function OnboardingStep1() {
   };
 
   const handleGetStarted = async () => {
-    const usersToInvite = inputField.filter(
+    const usersToInvite = inputField?.filter(
       ({ displayName, email }) => !isEmpty(displayName) && !isEmpty(email),
     );
     const result = await inviteUsersToWorkspace(usersToInvite);
