@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import { observer } from 'mobx-react-lite';
+import { Label } from '@prisma/client';
 import Avatar from '../avtar/Avtar';
 import Input from '../input/input';
 import {
@@ -25,6 +26,7 @@ import { LabelData } from '@/utils/dataTypes';
 export type DropDownItem = {
   name: string;
   icon?: string;
+  labelId?: string;
   src?: string;
   isName?: boolean;
   value?: any;
@@ -55,6 +57,9 @@ interface DropDownProps {
   onClose: () => void;
   // eslint-disable-next-line no-unused-vars
   onChange?: (item: any) => void;
+  // eslint-disable-next-line no-unused-vars
+  handleTicketLabel?: (action: string, labelId: string) => void;
+  ticketLabelData?: Label[];
   isSearch?: boolean;
   isCheckbox?: boolean;
   isContextMenu?: boolean;
@@ -109,6 +114,8 @@ const DropDown = ({
   isSnooze = false,
   isMacro = false,
   onChange,
+  ticketLabelData,
+  handleTicketLabel,
   handleMouseEnter,
   className,
 }: DropDownProps) => {
@@ -146,6 +153,21 @@ const DropDown = ({
           handleLabel(labelData);
         } else if (value === 'Delete' && handleDeleteLabel) {
           handleDeleteLabel(labelData.labelId);
+        }
+      }
+
+      // label for tickets
+      if (ticketLabelData) {
+        const isChecked = ticketLabelData?.some(
+          (label: { id: string }) => label.id === item.labelId,
+        );
+        // isChecked true then remove label from ticket
+        if (handleTicketLabel && isChecked) {
+          handleTicketLabel('REMOVE', item.labelId || '');
+        }
+        // isChecked false then add label in ticket
+        else if (handleTicketLabel && !isChecked) {
+          handleTicketLabel('ADD', item.labelId || '');
         }
       }
 
@@ -225,57 +247,62 @@ const DropDown = ({
         </SearchDiv>
       )}
       <ItemMainDiv>
-        {searchResult.map((item, index) => (
-          <ItemDiv
-            key={index}
-            onClick={(e) => onClickItem(e, item, value)}
-            onMouseEnter={() => {
-              // eslint-disable-next-line no-unused-expressions, @typescript-eslint/no-unused-expressions
-              handleMouseEnter;
-              setValueItem(item.name);
-            }}
-          >
-            <ItemLeftDiv
-              isSelected={selectedItems[item.name]}
-              isDelete={item.isDelete || false}
+        {searchResult.map((item, index) => {
+          const isChecked = ticketLabelData?.some(
+            (label: { id: string }) => label.id === item.labelId,
+          );
+          return (
+            <ItemDiv
+              key={index}
+              onClick={(e) => onClickItem(e, item, value)}
+              onMouseEnter={() => {
+                // eslint-disable-next-line no-unused-expressions, @typescript-eslint/no-unused-expressions
+                handleMouseEnter;
+                setValueItem(item.name);
+              }}
             >
-              {isCheckbox && (
-                <StyledCheckbox
-                  checked={selectedItems[item.name] || false}
-                  onChange={() => {
-                    handleItemClick(item.name);
-                    if (onChange) {
-                      onChange(item);
-                      onClose();
-                    }
-                  }}
-                />
-              )}
-              {item.icon &&
-                (isCheckbox ? (
-                  <LabelSvgIcon
-                    name={item.icon}
-                    width={iconSize}
-                    height={iconSize}
-                    viewBox={iconViewBox}
+              <ItemLeftDiv
+                isSelected={selectedItems[item.name]}
+                isDelete={item.isDelete || false}
+              >
+                {isCheckbox && (
+                  <StyledCheckbox
+                    checked={isChecked}
+                    onChange={() => {
+                      handleItemClick(item.name);
+                      if (onChange) {
+                        onChange(item);
+                        // onClose();
+                      }
+                    }}
                   />
-                ) : (
-                  <SVGIcon
-                    name={item.icon}
-                    width={iconSize}
-                    height={iconSize}
-                    viewBox={iconViewBox}
-                  />
-                ))}
+                )}
+                {item.icon &&
+                  (isCheckbox ? (
+                    <LabelSvgIcon
+                      name={item.icon}
+                      width={iconSize}
+                      height={iconSize}
+                      viewBox={iconViewBox}
+                    />
+                  ) : (
+                    <SVGIcon
+                      name={item.icon}
+                      width={iconSize}
+                      height={iconSize}
+                      viewBox={iconViewBox}
+                    />
+                  ))}
 
-              {item.isName && (
-                <Avatar name={item.name} imgSrc={item.src || ''} size={20} />
-              )}
-              <p>{item.name}</p>
-            </ItemLeftDiv>
-            {isSnooze && <p>{item.time}</p>}
-          </ItemDiv>
-        ))}
+                {item.isName && (
+                  <Avatar name={item.name} imgSrc={item.src || ''} size={20} />
+                )}
+                <p>{item.name}</p>
+              </ItemLeftDiv>
+              {isSnooze && <p>{item.time}</p>}
+            </ItemDiv>
+          );
+        })}
       </ItemMainDiv>
       {isSnooze && (
         <div className='date-time-text'>

@@ -6,6 +6,7 @@ import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
 import { PriorityLevels, TicketStatus } from '@prisma/client';
+import { observer } from 'mobx-react-lite';
 import Avatar from '../avtar/Avtar';
 import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
 import AssigneeDropdown from '../AssigneeDropdown/dropDownWithTag';
@@ -29,6 +30,8 @@ import {
   updateAssignee,
   changeTicketStatus,
   updateTicketPriority,
+  addLabelToTicket,
+  deleteLabelFromTicket,
 } from '@/services/clientSide/ticketServices';
 
 interface Props {
@@ -43,7 +46,7 @@ interface Props {
   ticketIndex: number;
 }
 
-export default function InboxCard({
+const InboxCard = ({
   ticketDetail,
   description,
   showDotIcon = false,
@@ -52,12 +55,13 @@ export default function InboxCard({
   setCurrentOpenDropdown,
   dropdownIdentifier,
   ticketIndex,
-}: Props) {
+}: Props) => {
   const { title, created_at, source, contact, priority, assigned_to } =
     ticketDetail;
   const router = useRouter();
   const { ticketStore, workspaceStore, settingStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
+  const { ticketList } = ticketStore || {};
   const { labels } = settingStore || {};
 
   const handleDropdownClick = (dropdown: string) => {
@@ -88,6 +92,7 @@ export default function InboxCard({
   };
 
   const labelItem = (labels || [])?.map((label) => ({
+    labelId: label.id,
     name: label.name,
     icon: label.icon,
   }));
@@ -166,6 +171,46 @@ export default function InboxCard({
     }
   }, [ticketDetail]);
 
+  // add/remove label to ticket
+  const handleTicketLabel = useCallback(
+    async (action: string, labelId: string) => {
+      try {
+        if (ticketDetail?.id) {
+          if (action === 'REMOVE') {
+            const result = await deleteLabelFromTicket(
+              ticketDetail?.id,
+              labelId,
+            );
+            if (result) {
+              const newLabel =
+                ticketList[ticketIndex].labels.filter(
+                  (item) => item.id !== labelId,
+                ) || [];
+              ticketStore.updateTicketListItem(ticketIndex, {
+                ...ticketList[ticketIndex],
+                labels: newLabel,
+              });
+            }
+          } else if (action === 'ADD') {
+            const result = await addLabelToTicket(ticketDetail?.id, labelId);
+            if (result) {
+              const newLabel = labels?.find((item) => item.id === labelId);
+              const ticketLabels = ticketList[ticketIndex].labels || [];
+              if (newLabel) ticketLabels.push(newLabel);
+              ticketStore.updateTicketListItem(ticketIndex, {
+                ...ticketList[ticketIndex],
+                labels: ticketLabels,
+              });
+            }
+          }
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetail],
+  );
+
   return (
     <CardDiv onClick={onClickTicket}>
       {showDotIcon && <DotIcon />}
@@ -190,8 +235,8 @@ export default function InboxCard({
           <div className='statusDiv'>
             <DropDownWithTag
               onClick={() => handleDropdownClick('label')}
-              title={'Bug'}
-              iconName={'bug-icon'}
+              title={ticketList[ticketIndex]?.labels[0]?.name || ''}
+              iconName={ticketList[ticketIndex]?.labels[0]?.icon || ''}
               dropdownOpen={
                 currentOpenDropdown === `${dropdownIdentifier}-label`
               }
@@ -200,6 +245,8 @@ export default function InboxCard({
               onClose={() => setCurrentOpenDropdown(null)}
               items={labelItem}
               onChange={() => {}}
+              handleTicketLabel={handleTicketLabel}
+              ticketLabelData={ticketList[ticketIndex].labels}
               isTag={true}
               isSearch={true}
               isCheckbox={true}
@@ -275,4 +322,5 @@ export default function InboxCard({
       </RightDiv>
     </CardDiv>
   );
-}
+};
+export default observer(InboxCard);
