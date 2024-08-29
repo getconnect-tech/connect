@@ -39,8 +39,6 @@ interface DropDownProps {
   userId?: string;
   handleClick?: (
     // eslint-disable-next-line no-unused-vars
-    hoveredItem: string | null,
-    // eslint-disable-next-line no-unused-vars
     userId: string,
     // eslint-disable-next-line no-unused-vars
     status: string,
@@ -113,7 +111,6 @@ const DropDown = ({
   className,
 }: DropDownProps) => {
   const dropDownRef = useOutsideClick(onClose);
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [selectedItems, setSelectedItems] = useState<{
     [key: string]: boolean;
   }>({});
@@ -133,23 +130,18 @@ const DropDown = ({
     }));
   }, []);
 
-  const handleMouseLeave = () => {
-    setHoveredItem(null);
-  };
-
   const onClickItem = useCallback(
-    (e: SyntheticEvent, item: DropDownItem, hoveredItem: string | null) => {
+    (e: SyntheticEvent, item: DropDownItem) => {
       e.stopPropagation();
 
       // for members
-      if (handleClick)
-        handleClick(hoveredItem, userId || '', item.status || '');
+      if (handleClick) handleClick(userId || '', item.status || '');
 
       // for labels
       if (labelData) {
-        if (hoveredItem === 'Edit' && handleLabel) {
+        if (handleLabel) {
           handleLabel(labelData);
-        } else if (hoveredItem === 'Delete' && handleDeleteLabel) {
+        } else if (handleDeleteLabel) {
           handleDeleteLabel(labelData.labelId);
         }
       }
@@ -233,17 +225,11 @@ const DropDown = ({
         {searchResult.map((item, index) => (
           <ItemDiv
             key={index}
-            onClick={(e) => onClickItem(e, item, hoveredItem)}
-            onMouseEnter={() => {
-              // eslint-disable-next-line no-unused-expressions, @typescript-eslint/no-unused-expressions
-              handleMouseEnter;
-              setHoveredItem(item.name);
-            }}
-            onMouseLeave={handleMouseLeave}
+            onClick={(e) => onClickItem(e, item)}
+            onMouseEnter={handleMouseEnter}
           >
             <ItemLeftDiv
               isSelected={selectedItems[item.name]}
-              isHovered={!item.isDelete && hoveredItem === item.name}
               isDelete={item.isDelete || false}
             >
               {isCheckbox && (

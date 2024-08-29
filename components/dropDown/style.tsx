@@ -7,7 +7,6 @@ import { Typography } from '@/styles/typography';
 
 interface Props {
   isSelected?: boolean;
-  isHovered?: boolean;
   isContextMenu?: boolean;
   isShowSubmenu?: boolean;
   isDelete?: boolean;
@@ -52,6 +51,12 @@ const ItemDiv = styled.div`
   &:hover {
     background-color: ${colors.bg_white_hover};
     border-radius: 8px;
+    p {
+      color: ${colors.text};
+    }
+    svg {
+      fill: ${colors.icon_active};
+    }
   }
 `;
 const SearchDiv = styled.div`
@@ -115,22 +120,16 @@ const ItemLeftDiv = styled.div<Props>`
   gap: 8px;
   p {
     ${Typography.body_md_regular};
-    color: ${({ isSelected, isHovered, isDelete }) =>
+    color: ${({ isSelected, isDelete }) =>
       isSelected
         ? colors.text
-        : isHovered
-          ? colors.text
-          : isDelete
-            ? colors.fill_danger
-            : colors.text_text_secondary};
+        : isDelete
+          ? colors.fill_danger
+          : colors.text_text_secondary};
   }
   svg {
-    fill: ${({ isSelected, isHovered }) =>
-      isSelected
-        ? colors.icon_active
-        : isHovered
-          ? colors.icon_active
-          : colors.icon};
+    fill: ${({ isSelected }) =>
+      isSelected ? colors.icon_active : colors.icon};
   }
 `;
 
