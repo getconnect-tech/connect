@@ -115,7 +115,10 @@ function Navbar() {
               />
             </LogoDiv>
             {isOpen && (
-              <ProfileDropdown title='My Profile' onClose={closeDropdown} />
+              <ProfileDropdown
+                title={workspaceStore?.currentWorkspace?.name || ''}
+                onClose={closeDropdown}
+              />
             )}
           </div>
           <NavbarItem

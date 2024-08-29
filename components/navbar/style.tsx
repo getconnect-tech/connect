@@ -137,6 +137,10 @@ const OrganizationProfile = styled.div`
   p {
     ${Typography.body_md_medium};
     color: ${colors.text_text_secondary};
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
   }
   &:hover {
     cursor: pointer;
