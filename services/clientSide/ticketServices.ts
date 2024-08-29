@@ -1,8 +1,8 @@
-/* eslint-disable no-undef */
 import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { ticketStore } from '@/stores/ticketStore';
 import { getAPIErrorMessage, isEmpty } from '@/helpers/common';
+import { messageStore } from '@/stores/messageStore';
 
 /**
  * @desc Get ticket list
@@ -54,7 +54,9 @@ export const getTicketList = async () => {
     ticketStore.setTicketList(data);
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -97,7 +99,9 @@ export const getTicketDetails = async (ticketId: string) => {
     ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -121,7 +125,9 @@ export const updateTicketDetails = async (ticketId: any, payload: object) => {
     ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -145,7 +151,9 @@ export const updateTicketPriority = async (ticketId: any, payload: object) => {
     ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -170,7 +178,9 @@ export const getTicketMessages = async (ticketId: string) => {
     }
     return false;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -194,7 +204,9 @@ export const changeTicketStatus = async (ticketId: any, payload: object) => {
     ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -217,7 +229,9 @@ export const updateAssignee = async (ticketId: string, payload: object) => {
     ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -239,7 +253,9 @@ export const sendMessage = async (ticketId: string, payload: object) => {
     const { data } = response;
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -260,7 +276,9 @@ export const addLabelToTicket = async (ticketId: string, labelId: string) => {
     const { data } = response;
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -284,7 +302,9 @@ export const deleteLabelFromTicket = async (
     const { data } = response;
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     ticketStore.setLoading(false);

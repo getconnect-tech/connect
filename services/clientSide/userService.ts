@@ -1,8 +1,8 @@
-/* eslint-disable no-undef */
 import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { userStore } from '@/stores/userStore';
 import { getAPIErrorMessage } from '@/helpers/common';
+import { messageStore } from '@/stores/messageStore';
 
 /**
  * @desc Update user details
@@ -15,11 +15,12 @@ export const updateUserDetails = async (payload: {
   try {
     userStore.setLoading(true);
     const result = await axios.put(`${NEXT_PUBLIC_API_URL}/user`, payload);
-    if (result) alert('User details updated');
+    if (result) messageStore.setSuccessMessage('User details updated');
     return true;
   } catch (err: any) {
-    console.log('err', err);
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return false;
   } finally {
     userStore.setLoading(false);
@@ -39,7 +40,9 @@ export const getUserDetails = async () => {
     userStore.setUserDetails(data);
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     userStore.setLoading(false);

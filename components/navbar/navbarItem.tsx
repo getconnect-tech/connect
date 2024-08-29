@@ -26,7 +26,7 @@ function NavbarItem(props: Props) {
           width='12'
           height='12'
           fill={isActive ? colors.icon_hover : colors.icon}
-          viewBox='0 0 12 12'
+          viewBox={label ? '0 0 16 16' : '0 0 12 12'}
         />
         <Title isActive={isActive}>{title}</Title>
       </LeftDiv>

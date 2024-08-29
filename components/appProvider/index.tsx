@@ -7,6 +7,7 @@ import { Provider } from 'mobx-react';
 import { registerLicense } from '@syncfusion/ej2-base';
 import NavbarPage from '../navbar';
 import SettingAppProvider from '../settingAppProvider';
+import AlertMessage from '../alertMessages/alertMessage';
 import stores from '@/stores';
 import { appInit } from '@/helpers/appInitHelper';
 import { APP_INIT_RESPONSE_TYPE, ONBOARDING_ROUTES } from '@/global/constants';
@@ -62,6 +63,7 @@ export default function AppProvider({
       <SettingAppProvider>{children}</SettingAppProvider>
     ) : (
       <Provider {...stores}>
+        <AlertMessage />
         {NavbarComponent}
         {children}
       </Provider>
@@ -74,7 +76,10 @@ export default function AppProvider({
       ) : (
         <>
           {NavbarComponent}
-          <Provider {...stores}>{children}</Provider>
+          <Provider {...stores}>
+            <AlertMessage />
+            {children}
+          </Provider>
         </>
       )}
     </StyleSheetManager>

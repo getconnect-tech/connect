@@ -60,7 +60,10 @@ export default function SnoozeDropdown({
         />
       )}
       {showDatePicker && (
-        <DatePickerModal onClose={() => setShowDatePicker(false)} />
+        <DatePickerModal
+          onClose={() => setShowDatePicker(false)}
+          style={{ top: 4 }}
+        />
       )}
     </div>
   );

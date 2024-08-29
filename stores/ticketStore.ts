@@ -7,6 +7,7 @@ class TicketStore {
   ticketList: TicketDetailsInterface[] = [];
   ticketDetails: TicketDetailsInterface | null = null;
   messages: MessageDetails[] = [];
+  filteredTicketList: TicketDetailsInterface[] = [];
 
   constructor() {
     makeObservable(this, {
@@ -30,6 +31,10 @@ class TicketStore {
       messages: observable,
       setTicketMessages: action,
       addTicketMessage: action,
+
+      // Inbox ticket List
+      filteredTicketList: observable,
+      setFilteredTicketList: action,
     });
   }
 
@@ -66,6 +71,13 @@ class TicketStore {
 
   addTicketMessage(value: MessageDetails) {
     this.messages = [...(this.messages || []), value];
+  }
+
+  // set filtered ticket list
+  setFilteredTicketList(tab: string, ticketList: TicketDetailsInterface[]) {
+    this.filteredTicketList = ticketList.filter(
+      (ticket) => ticket.status === tab,
+    );
   }
 }
 

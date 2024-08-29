@@ -1,20 +1,26 @@
+/* eslint-disable indent */
 import styled from 'styled-components';
 import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
-export const MainDiv = styled.div`
+interface Props {
+  isContextMenu?: boolean;
+}
+
+export const MainDiv = styled.div<Props>`
   max-width: 260px;
   width: 100%;
   background-color: ${colors.bg_white};
-  position: absolute;
+  position: ${({ isContextMenu }) => (isContextMenu ? 'relative' : 'absolute')};
   right: 0;
-  top: 38px;
+  top: ${({ isContextMenu }) => (isContextMenu ? 0 : 38)};
   border-radius: 12px;
   z-index: 11;
   .submenu-upwards {
-    bottom: calc(100% - 100px);
+    bottom: calc(100% - 118px);
     top: auto;
-    position: absolute;
+    position: ${({ isContextMenu }) =>
+      isContextMenu ? 'relative' : 'absolute'};
     background-color: ${colors.bg_white};
     box-shadow:
       0px 0px 0px 0.5px ${colors.box_shadow},
@@ -24,9 +30,10 @@ export const MainDiv = styled.div`
   }
 
   .submenu-downwards {
-    top: 0;
+    top: calc(100% - 40px);
     bottom: auto;
-    position: absolute;
+    position: ${({ isContextMenu }) =>
+      isContextMenu ? 'relative' : 'absolute'};
     background-color: ${colors.bg_white};
     box-shadow:
       0px 0px 0px 0.5px ${colors.box_shadow},

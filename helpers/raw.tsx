@@ -28,11 +28,6 @@ export const priorityItem = [
   },
   { name: 'Low', icon: 'priority-LOW', value: PriorityLevels.LOW },
 ];
-export const labelItem = [
-  { name: 'Bug', icon: 'bug-icon' },
-  { name: 'Question', icon: 'question-icon' },
-  { name: 'Feedback', icon: 'feedback-icon' },
-];
 export const modeItem = [
   { name: 'Email', icon: 'email-icon' },
   { name: 'Internal', icon: 'internal-icon' },

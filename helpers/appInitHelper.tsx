@@ -23,7 +23,7 @@ export const appInit: any = async () => {
   }
 
   if (session?.user) {
-    await getUserDetails();
+    getUserDetails();
 
     // Get user's workspace list
     const workspaceList = await getWorkspaceList();

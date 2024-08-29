@@ -1,8 +1,8 @@
-/* eslint-disable no-undef */
 import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { getAPIErrorMessage } from '@/helpers/common';
 import { settingStore } from '@/stores/settingStore';
+import { messageStore } from '@/stores/messageStore';
 
 /**
  * @desc Get all API key
@@ -21,7 +21,9 @@ export const getAPIKeys = async () => {
     }
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     settingStore.setLoading(false);
@@ -42,7 +44,9 @@ export const createAPIKey = async (payload: { name: string }) => {
     const { data } = response;
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     settingStore.setLoading(false);
@@ -66,7 +70,9 @@ export const getLabels = async () => {
     }
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     settingStore.setLoading(false);
@@ -87,7 +93,9 @@ export const createLabel = async (payload: object) => {
     const { data } = response;
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     settingStore.setLoading(false);
@@ -109,7 +117,9 @@ export const updateLabelDetails = async (labelId: string, payload: object) => {
     const { data } = response;
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     settingStore.setLoading(false);
@@ -126,10 +136,12 @@ export const deleteLabel = async (labelId: string) => {
     const result = await axios.delete(
       `${NEXT_PUBLIC_API_URL}/workspaces/labels/${labelId}`,
     );
-    if (result) alert('Label Deleted');
+    if (result) messageStore.setSuccessMessage('Label Deleted');
     return true;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return false;
   } finally {
     settingStore.setLoading(false);
