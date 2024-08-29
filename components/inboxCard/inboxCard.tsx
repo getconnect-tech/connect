@@ -171,7 +171,7 @@ const InboxCard = ({
     }
   }, [ticketDetail]);
 
-  // Add label to ticket
+  // add/remove label to ticket
   const handleTicketLabel = useCallback(
     async (action: string, labelId: string) => {
       try {
