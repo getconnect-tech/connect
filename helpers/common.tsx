@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import {
   getDownloadURL,
   getStorage,
@@ -7,6 +6,7 @@ import {
 } from 'firebase/storage';
 import { app } from '@/utils/firebase';
 import { workspaceStore } from '@/stores/workspaceStore';
+import { messageStore } from '@/stores/messageStore';
 
 export function isEmpty(value: any) {
   if (
@@ -141,7 +141,7 @@ export const getFirebaseUrlFromFile = async (file: any, folderName: string) => {
           (error) => {
             myReject(error);
             console.log('error', error);
-            alert('Getting error for upload file');
+            messageStore.setErrorMessage('Getting error for upload file');
           },
           () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -157,10 +157,10 @@ export const getFirebaseUrlFromFile = async (file: any, folderName: string) => {
       await Promise.all(promises);
       return profile;
     } catch (e) {
-      alert(e);
+      messageStore.setErrorMessage(`${e}`);
     }
   } catch (e) {
-    alert(`Getting error for upload file ${e}`);
+    messageStore.setErrorMessage(`Getting error for upload file ${e}`);
   }
 };
 

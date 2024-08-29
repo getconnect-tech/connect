@@ -15,6 +15,7 @@ import { workspaceStore } from '@/stores/workspaceStore';
 import { getAPIErrorMessage } from '@/helpers/common';
 import { Workspace } from '@/utils/dataTypes';
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
+import { messageStore } from '@/stores/messageStore';
 
 function SelectWorkSpace() {
   const router = useRouter();
@@ -26,8 +27,9 @@ function SelectWorkSpace() {
       await getWorkspaceList();
     } catch (err: any) {
       workspaceStore.setLoading(false);
-      // eslint-disable-next-line no-undef
-      alert(getAPIErrorMessage(err) || 'Something went wrong!');
+      messageStore.setErrorMessage(
+        getAPIErrorMessage(err) || 'Something went wrong!',
+      );
     } finally {
       workspaceStore.setLoading(false);
     }

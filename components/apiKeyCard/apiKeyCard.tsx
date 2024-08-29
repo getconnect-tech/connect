@@ -1,10 +1,10 @@
-/* eslint-disable no-undef */
 import React, { useCallback } from 'react';
 import copy from 'clipboard-copy';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
 import { CardMainDiv, LeftDiv, RightDiv, TitleDiv } from './style';
 import { getAPIErrorMessage } from '@/helpers/common';
+import { messageStore } from '@/stores/messageStore';
 
 interface Props {
   keyName: string;
@@ -38,9 +38,12 @@ function ApiKeyCard({
   const handleCopyClick = useCallback(async () => {
     try {
       await copy(apiKey);
-      alert('Copied successfully');
+      messageStore.setSuccessMessage('Copied successfully');
     } catch (err: any) {
-      alert(getAPIErrorMessage(err) || 'Something went wrong!');
+      messageStore.setErrorMessage(
+        getAPIErrorMessage(err) || 'Something went wrong!',
+      );
+      return false;
     }
   }, []);
 
