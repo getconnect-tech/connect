@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
 import DropDown from '../dropDown/dropDown';
@@ -37,9 +37,10 @@ const navbarMenu = {
 function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { workspaceStore, settingStore } = useStores();
+  const { workspaceStore, settingStore, ticketStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { labels } = settingStore || {};
+  const { ticketList } = ticketStore || {};
   const [isOpen, setIsOpen] = useState(false);
   const [isSupportDropdown, setSupportDropdown] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -88,6 +89,10 @@ function Navbar() {
     icon: label.icon,
   }));
 
+  const openTicketCount = useMemo(() => {
+    return ticketList.filter((ticket) => ticket.status === 'OPEN').length;
+  }, [ticketList]);
+
   return (
     <>
       <MainDiv>
@@ -127,7 +132,7 @@ function Navbar() {
           <ItemMainDiv>
             <NavbarItem
               title='Inbox'
-              count={4}
+              count={openTicketCount}
               icon='inbox-icon'
               isActive={activeIndex === 1}
               onClickItem={() => handleClick(1, '/')}
