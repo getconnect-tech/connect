@@ -160,17 +160,7 @@ const DropDown = ({
       }
       onClose();
     },
-    [
-      handleClick,
-      handleItemClick,
-      onChange,
-      onClose,
-      userId,
-      labelData,
-      handleLabel,
-      handleDeleteLabel,
-      hoveredItem,
-    ],
+    [handleClick, handleItemClick, onChange, onClose, userId],
   );
 
   const searchQuery = useCallback(
