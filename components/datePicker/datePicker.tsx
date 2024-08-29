@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import { TimePicker, TimePickerProps } from 'antd';
 import Icon from '../icon/icon';
@@ -22,9 +22,11 @@ const onChange: TimePickerProps['onChange'] = (time, timeString) => {
 
 interface Props {
   onClose: () => void;
+  style?: React.CSSProperties;
+  isContextMenu?: boolean;
 }
 
-function DatePickerModal({ onClose }: Props) {
+function DatePickerModal({ onClose, style, isContextMenu = false }: Props) {
   const [value, setValue] = useState<Value>(new Date());
   const [dateInput, setDateInput] = useState<string>(
     new Date().toLocaleDateString('en-US'),
@@ -63,26 +65,19 @@ function DatePickerModal({ onClose }: Props) {
     setDateInput(formattedDate);
   };
 
-  const handleSnooze = useCallback(() => {
-    onClose();
-  }, [onClose]);
-
-  const handleCancel = useCallback(() => {
-    onClose();
-  }, [onClose]);
-
   const handleModalClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
   };
 
   return (
-    <MainDiv onClick={handleModalClick}>
+    <MainDiv onClick={handleModalClick} isContextMenu={isContextMenu}>
       <div
         className={`modal-content ${
           submenuPosition === 'upwards'
             ? 'submenu-upwards'
             : 'submenu-downwards'
         }`}
+        style={style}
       >
         <Header>
           <Icon
@@ -131,15 +126,10 @@ function DatePickerModal({ onClose }: Props) {
             <Button
               title='Cancel'
               secondary={true}
-              onClick={handleCancel}
+              onClick={onClose}
               variant='medium'
             />
-            <Button
-              title='Snooze'
-              disabled={false}
-              onClick={handleSnooze}
-              variant='medium'
-            />
+            <Button title='Snooze' disabled={false} variant='medium' />
           </div>
         </InputMainDiv>
       </div>

@@ -195,6 +195,8 @@ export default function InboxCard({
               dropdownOpen={
                 currentOpenDropdown === `${dropdownIdentifier}-label`
               }
+              iconSize='12'
+              iconViewBox='0 0 16 16'
               onClose={() => setCurrentOpenDropdown(null)}
               items={labelItem}
               onChange={() => {}}

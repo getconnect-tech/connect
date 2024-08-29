@@ -501,6 +501,8 @@ function TicketDetails(props: Props) {
                 isSearch={true}
                 isCheckbox={true}
                 isActive={true}
+                iconSize='12'
+                iconViewBox='0 0 16 16'
               />
               <DropDownWithTag
                 onClick={handlePriorityTag}
