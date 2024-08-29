@@ -73,7 +73,7 @@ class TicketStore {
     this.messages = [...(this.messages || []), value];
   }
 
-  // set inbox ticket list
+  // set filtered ticket list
   setFilteredTicketList(tab: string, ticketList: TicketDetailsInterface[]) {
     this.filteredTicketList = ticketList.filter(
       (ticket) => ticket.status === tab,
