@@ -90,7 +90,7 @@ function Navbar() {
   }));
 
   const openTicketCount = useMemo(() => {
-    return ticketList.filter((ticket) => ticket.status === 'OPEN').length;
+    return ticketList?.filter((ticket) => ticket.status === 'OPEN').length;
   }, [ticketList]);
 
   return (
