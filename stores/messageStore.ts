@@ -10,6 +10,7 @@ class MessageStore {
       //Loading variable
       messages: observable,
       setErrorMessage: action,
+      setSuccessMessage: action,
     });
   }
 

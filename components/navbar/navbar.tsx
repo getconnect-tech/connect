@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 'use client';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';

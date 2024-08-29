@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 'use client';
 import React, {
   ChangeEvent,
@@ -30,6 +29,7 @@ import Input from '@/components/input/input';
 import { useStores } from '@/stores';
 import { updateUserDetails } from '@/services/clientSide/userService';
 import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
+import { messageStore } from '@/stores/messageStore';
 
 const MyProfile = () => {
   const { userStore } = useStores();
@@ -126,12 +126,14 @@ const MyProfile = () => {
       try {
         const file = event.target.files?.[0];
         if (!file) {
-          alert('No file selected.');
+          messageStore.setErrorMessage('No file selected.');
           return;
         }
         const fileData = file.name.split('.');
         if (file.size > 500000) {
-          alert('Please upload less than 500kb photo size.');
+          messageStore.setErrorMessage(
+            'Please upload less than 500kb photo size.',
+          );
           return false;
         }
         if (
@@ -141,7 +143,7 @@ const MyProfile = () => {
         ) {
           await convertBase64(file);
         } else {
-          alert('Please upload a valid type photo.');
+          messageStore.setErrorMessage('Please upload a valid type photo.');
           return false;
         }
       } catch (e) {
