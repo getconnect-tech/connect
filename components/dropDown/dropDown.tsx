@@ -237,7 +237,6 @@ const DropDown = ({
           >
             <ItemLeftDiv
               isSelected={selectedItems[item.name]}
-              // isHovered={!item.isDelete && hoveredItem === item.name}
               isDelete={item.isDelete || false}
             >
               {isCheckbox && (
