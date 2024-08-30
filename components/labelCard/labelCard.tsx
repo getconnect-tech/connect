@@ -1,12 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import Icon from '../icon/icon';
-import DropDown, { HandleClickProps } from '../dropDown/dropDown';
+import DropDown from '../dropDown/dropDown';
 import Modal from '../modal/modal';
 import LabelModal from '../modalComponent/labelModal';
 import { InnerDiv, ItemDiv, Name } from './style';
 import { colors } from '@/styles/colors';
 import LabelSvgIcon from '@/assets/icons/labelIcons';
 import { LabelData } from '@/utils/dataTypes';
+import { HandleClickProps } from '@/utils/appTypes';
 
 interface Props {
   label: string;

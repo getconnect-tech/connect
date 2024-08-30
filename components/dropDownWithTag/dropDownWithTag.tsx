@@ -1,10 +1,11 @@
 import React from 'react';
 import { Label } from '@prisma/client';
-import DropDown, { DropDownItem, HandleClickProps } from '../dropDown/dropDown';
+import DropDown, { DropDownItem } from '../dropDown/dropDown';
 import Tag from '../tag/tag';
 import { DropBox } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { capitalizeString } from '@/helpers/common';
+import { HandleClickProps } from '@/utils/appTypes';
 
 interface Props {
   // eslint-disable-next-line no-unused-vars

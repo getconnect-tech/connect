@@ -22,6 +22,7 @@ import SVGIcon from '@/assets/icons/SVGIcon';
 import { isEmpty } from '@/helpers/common';
 import LabelSvgIcon from '@/assets/icons/labelIcons';
 import { LabelData } from '@/utils/dataTypes';
+import { HandleClickProps } from '@/utils/appTypes';
 
 export type DropDownItem = {
   name: string;
@@ -33,14 +34,6 @@ export type DropDownItem = {
   time?: string;
   isDelete?: boolean;
   status?: string;
-};
-export type HandleClickProps = {
-  value?: string | null;
-  userId?: string;
-  status?: string;
-  labelData?: LabelData;
-  labelId?: string;
-  isChecked?: boolean;
 };
 
 interface DropDownProps {

@@ -11,7 +11,6 @@ import Avatar from '../avtar/Avtar';
 import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
 import AssigneeDropdown from '../AssigneeDropdown/dropDownWithTag';
 import Icon from '../icon/icon';
-import { HandleClickProps } from '../dropDown/dropDown';
 import {
   CardDiv,
   DesTitle,
@@ -26,7 +25,7 @@ import {
 import { priorityItem } from '@/helpers/raw';
 import { capitalizeString } from '@/helpers/common';
 import { useStores } from '@/stores';
-import { TicketDetailsInterface } from '@/utils/appTypes';
+import { HandleClickProps, TicketDetailsInterface } from '@/utils/appTypes';
 import {
   updateAssignee,
   changeTicketStatus,
