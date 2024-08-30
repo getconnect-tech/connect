@@ -64,11 +64,7 @@ function Navbar() {
     setIsOpen((prev) => !prev);
   }, []);
 
-  useEffect(() => {
-    if (pathname === '/') setActiveIndex(navbarMenu.All);
-    if (pathname === '/inbox') setActiveIndex(navbarMenu.Inbox);
-    else if (pathname === '/contact') setActiveIndex(navbarMenu.Contacts);
-  }, []);
+  useEffect(() => {}, []);
 
   const handleModalClose = useCallback(() => {
     setIsModalOpen(false);
@@ -141,7 +137,7 @@ function Navbar() {
               title='Inbox'
               count={openTicketCount}
               icon='inbox-icon'
-              isActive={activeIndex === 1}
+              isActive={pathname === '/inbox'}
               onClickItem={() => handleClick(1, '/inbox')}
             />
             <NavbarItem
@@ -153,7 +149,7 @@ function Navbar() {
             <NavbarItem
               title='All'
               icon='all-icon'
-              isActive={activeIndex === 3}
+              isActive={pathname === '/' || pathname === '/tickets'}
               onClickItem={() => handleClick(3, '/tickets')}
             />
           </ItemMainDiv>
@@ -161,7 +157,7 @@ function Navbar() {
             <NavbarItem
               title='Contacts'
               icon='contact-icon'
-              isActive={activeIndex === 4}
+              isActive={pathname === '/contact'}
               onClickItem={() => handleClick(4, '/contact')}
             />
             <NavbarItem
