@@ -141,3 +141,13 @@ model Configuration {
 
   @@unique(name: "workspace_config_id", [workspace_id, type, extra])
 }
+
+model Macro {
+  id           String   @id @default(uuid())
+  workspace_id String
+  title        String
+  content      String
+  author_id    String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @default(now()) @updatedAt
+}
