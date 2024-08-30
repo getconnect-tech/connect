@@ -143,7 +143,7 @@ function Navbar() {
             <NavbarItem
               title='Unassigned'
               icon='unassign-icon'
-              isActive={activeIndex === 2}
+              isActive={pathname === '/unassigned'}
               onClickItem={() => handleClick(2, '/unassigned')}
             />
             <NavbarItem
