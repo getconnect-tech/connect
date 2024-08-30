@@ -119,9 +119,6 @@ const DropDown = ({
 }: DropDownProps) => {
   const dropDownRef = useOutsideClick(onClose);
   const [value, setValueItem] = useState<string | null>(null);
-  const [selectedItems, setSelectedItems] = useState<{
-    [key: string]: boolean;
-  }>({});
   const [query, setQuery] = useState('');
   const [searchResult, setSearchResult] = useState<DropDownItem[]>([]);
   // eslint-disable-next-line no-undef
@@ -130,13 +127,6 @@ const DropDown = ({
   useEffect(() => {
     setSearchResult(items);
   }, [items]);
-
-  const handleItemClick = useCallback((name: string) => {
-    setSelectedItems((prevState) => ({
-      ...prevState,
-      [name]: !prevState[name],
-    }));
-  }, []);
 
   const onClickItem = useCallback(
     (e: SyntheticEvent, item: DropDownItem, value: string | null) => {
@@ -159,13 +149,12 @@ const DropDown = ({
         }
       }
 
-      handleItemClick(item.name);
       if (onChange) {
         onChange(item);
       }
       onClose();
     },
-    [handleClick, handleItemClick, onChange, onClose, userId],
+    [handleClick, onChange, onClose, userId],
   );
 
   const searchQuery = useCallback(
@@ -250,17 +239,15 @@ const DropDown = ({
               }}
             >
               <ItemLeftDiv
-                isSelected={selectedItems[item.name]}
+                isSelected={isChecked}
                 isDelete={item.isDelete || false}
               >
                 {isCheckbox && (
                   <StyledCheckbox
                     checked={isChecked}
                     onChange={() => {
-                      handleItemClick(item.name);
                       if (onChange) {
                         onChange(item);
-                        // onClose();
                       }
                     }}
                   />
