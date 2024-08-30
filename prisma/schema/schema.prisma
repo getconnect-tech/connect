@@ -150,8 +150,8 @@ model Macro {
   workspace    Workspace @relation(fields: [workspace_id], references: [id])
   title        String
   content      String
-  user_id      String
-  user         User      @relation(fields: [user_id], references: [id])
+  created_by   String
+  user         User      @relation(fields: [created_by], references: [id])
   created_at   DateTime  @default(now())
   updated_at   DateTime  @default(now()) @updatedAt
 }
