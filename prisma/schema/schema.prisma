@@ -22,7 +22,7 @@ model User {
   tickets       Ticket[]
   workspaces    UserWorkspaces[]
   api_keys      ApiKeys[]
-  macro         Macro[]
+  macros        Macro[]
 }
 
 model Workspace {
