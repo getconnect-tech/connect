@@ -36,7 +36,6 @@ function Inbox({ activeNav }: InboxProps) {
   const { currentWorkspace } = workspaceStore;
   const { ticketList, filteredTicketList } = ticketStore;
   const { user } = userStore || {};
-
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
       setLoading(true); // Set loading to true before fetching data
@@ -55,6 +54,10 @@ function Inbox({ activeNav }: InboxProps) {
       // Show tickets assigned to the current user
       filteredTickets = ticketList.filter(
         (ticket) => ticket.assigned_to === user.id,
+      );
+    } else if (activeNav === NAVBAR.UNASSIGNED) {
+      filteredTickets = ticketList.filter(
+        (ticket) => ticket.assigned_to === null,
       );
     } else if (activeNav === NAVBAR.All_TICKET) {
       // Show all tickets

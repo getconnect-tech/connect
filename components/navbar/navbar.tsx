@@ -39,7 +39,7 @@ function Navbar() {
   const { workspaceStore, settingStore, ticketStore, userStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { labels } = settingStore || {};
-  const { filteredTicketList } = ticketStore || {};
+  const { ticketList } = ticketStore || {};
   const { user } = userStore || {};
   const [isOpen, setIsOpen] = useState(false);
   const [isSupportDropdown, setSupportDropdown] = useState(false);
@@ -88,10 +88,10 @@ function Navbar() {
   }));
 
   const openTicketCount = useMemo(() => {
-    return filteredTicketList?.filter(
+    return ticketList?.filter(
       (ticket) => ticket.status === 'OPEN' && ticket.assigned_to === user?.id,
     ).length;
-  }, [filteredTicketList]);
+  }, [ticketList]);
 
   return (
     <>
@@ -144,7 +144,7 @@ function Navbar() {
               title='Unassigned'
               icon='unassign-icon'
               isActive={activeIndex === 2}
-              onClickItem={() => handleClick(2)}
+              onClickItem={() => handleClick(2, '/unassigned')}
             />
             <NavbarItem
               title='All'
