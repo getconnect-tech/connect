@@ -149,22 +149,19 @@ const DropDown = ({
     (e: SyntheticEvent, item: DropDownItem, value: string | null) => {
       e.stopPropagation();
 
-      // for members
-      if (handleClick && userId && item)
-        handleClick({ value, userId, status: item.status });
+      if (handleClick) {
+        // for members
+        if (userId && item) handleClick({ value, userId, status: item.status });
 
-      // Edit/Delete labels
-      if (labelData && handleClick) {
-        handleClick({ value, labelData });
-      }
+        // Edit/Delete labels
+        if (labelData) handleClick({ value, labelData });
 
-      // label for tickets
-      if (ticketLabelData) {
-        const isChecked = ticketLabelData?.some(
-          (label: { id: string }) => label.id === item.labelId,
-        );
-        // isChecked true then remove label from ticket or isChecked false then add label in ticket
-        if (handleClick) {
+        // label for tickets
+        if (ticketLabelData) {
+          const isChecked = ticketLabelData?.some(
+            (label: { id: string }) => label.id === item.labelId,
+          );
+          // isChecked true then remove label from ticket or isChecked false then add label in ticket
           handleClick({ isChecked, labelId: item.labelId });
         }
       }
