@@ -1,8 +1,12 @@
 import { z } from 'zod';
-import { MessageType } from '@prisma/client';
+import { EmailEventType, Message, MessageType } from '@prisma/client';
 import { handleApiError } from '@/helpers/errorHandler';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
-import { getTicketMessages, postMessage } from '@/services/serverSide/message';
+import {
+  createEmailEvent,
+  getTicketMessages,
+  postMessage,
+} from '@/services/serverSide/message';
 import { contentSchema, messageTypeSchema } from '@/lib/zod/message';
 import { sendEmailAsReply } from '@/helpers/emails';
 import { getWorkspaceEmailConfig } from '@/services/serverSide/workspace';
@@ -54,23 +58,39 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
         );
       }
 
-      const mailId = await sendEmailAsReply({
-        ticketId,
-        body: content,
-        senderEmail: emailConfig.primaryEmail,
-      });
+      let newMessage: Message;
+      try {
+        const mailId = await sendEmailAsReply({
+          ticketId,
+          body: content,
+          senderEmail: emailConfig.primaryEmail,
+        });
 
-      if (!mailId) {
-        return Response.json({ error: 'Ticket not found!' }, { status: 404 });
+        if (!mailId) {
+          return Response.json({ error: 'Ticket not found!' }, { status: 404 });
+        }
+
+        newMessage = await postMessage({
+          messageContent: content,
+          messageType: type,
+          referenceId: mailId,
+          ticketId: ticketId,
+          authorId: req.user.id,
+        });
+      } catch (err: any) {
+        newMessage = await postMessage({
+          messageContent: content,
+          messageType: type,
+          referenceId: '',
+          ticketId: ticketId,
+          authorId: req.user.id,
+        });
+
+        await createEmailEvent(newMessage.id, {
+          eventType: EmailEventType.FAILED,
+          extra: err.message,
+        });
       }
-
-      const newMessage = await postMessage({
-        messageContent: content,
-        messageType: type,
-        referenceId: mailId,
-        ticketId: ticketId,
-        authorId: req.user.id,
-      });
 
       return Response.json(newMessage, { status: 201 });
     }
