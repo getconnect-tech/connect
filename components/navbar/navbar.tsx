@@ -83,6 +83,7 @@ function Navbar() {
   }, []);
 
   const labelItem = (labels || [])?.map((label) => ({
+    labelId: label.id,
     name: label.name,
     icon: label.icon,
   }));
@@ -175,8 +176,10 @@ function Navbar() {
                   <NavbarItem
                     title={item.name}
                     icon={item.icon}
-                    isActive={activeIndex === 8}
-                    onClickItem={() => handleClick(8)}
+                    isActive={pathname === `/tickets/labels/${item.labelId}`}
+                    onClickItem={() =>
+                      handleClick(8, `/tickets/labels/${item.labelId}`)
+                    }
                     label={true}
                   />
                 )}
