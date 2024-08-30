@@ -25,7 +25,7 @@ import { useStores } from '@/stores';
 import InviteMemberModal from '@/components/modalComponent/inviteMemberModal';
 import Modal from '@/components/modal/modal';
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
-import { HandleClickProps } from '@/components/dropDown/dropDown';
+import { HandleClickProps } from '@/utils/appTypes';
 
 const Members = () => {
   const [inviteModal, setInviteModal] = useState(false);
