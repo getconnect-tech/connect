@@ -65,7 +65,8 @@ function Navbar() {
   }, []);
 
   useEffect(() => {
-    if (pathname === '/') setActiveIndex(navbarMenu.Inbox);
+    if (pathname === '/') setActiveIndex(navbarMenu.All);
+    if (pathname === '/inbox') setActiveIndex(navbarMenu.Inbox);
     else if (pathname === '/contact') setActiveIndex(navbarMenu.Contacts);
   }, []);
 
@@ -141,7 +142,7 @@ function Navbar() {
               count={openTicketCount}
               icon='inbox-icon'
               isActive={activeIndex === 1}
-              onClickItem={() => handleClick(1, '/')}
+              onClickItem={() => handleClick(1, '/inbox')}
             />
             <NavbarItem
               title='Unassigned'

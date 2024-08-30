@@ -52,11 +52,15 @@ class TicketStore {
   resetTicketData() {
     this.loading = false;
     this.ticketList = [];
+    this.filteredTicketList = [];
     this.ticketDetails = null;
   }
 
   updateTicketListItem(index: number, value: TicketDetailsInterface) {
-    this.ticketList[index] = value;
+    this.filteredTicketList[index] = value;
+    this.ticketList = this.ticketList?.map((ticket) =>
+      ticket?.id === value?.id ? value : ticket,
+    );
   }
 
   // Ticket Details actions

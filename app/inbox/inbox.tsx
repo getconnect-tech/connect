@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
@@ -19,7 +20,7 @@ import { useStores } from '@/stores';
 import { isEmpty } from '@/helpers/common';
 import EmptyState from '@/components/emptyState/emptyState';
 import InboxLoading from '@/components/inboxLoading/inboxLoading';
-import { NAVBAR } from '@/global/constants';
+import { NAVBAR, TICKETS_HEADER } from '@/global/constants';
 
 interface InboxProps {
   activeNav: number;
@@ -80,7 +81,7 @@ function Inbox({ activeNav }: InboxProps) {
       <MainDiv>
         <TopDiv>
           <HeaderDiv>
-            <Title>Inbox</Title>
+            <Title>{TICKETS_HEADER[activeNav]}</Title>
             <TabDiv>
               {tabItem.map((tab) => (
                 <Tab
@@ -96,19 +97,21 @@ function Inbox({ activeNav }: InboxProps) {
         </TopDiv>
         <div style={{ padding: '0 20px' }}>
           <BottomDiv>
-            {loading && (!ticketList || ticketList?.length === 0) && (
-              <InboxLoading />
-            )}
-            {!loading && (!ticketList || ticketList?.length === 0) && (
-              <EmptyState
-                iconName='inbox-icon'
-                iconSize='20'
-                iconViewBox='0 0 12 12'
-                title='Your inbox is empty now.'
-                // eslint-disable-next-line max-len
-                description='This is where you will receive notifications for all types of tickets. Enjoy your clutter-free inbox!'
-              />
-            )}
+            {loading &&
+              (!filteredTicketList || filteredTicketList?.length === 0) && (
+                <InboxLoading />
+              )}
+            {!loading &&
+              (!filteredTicketList || filteredTicketList?.length === 0) && (
+                <EmptyState
+                  iconName='inbox-icon'
+                  iconSize='20'
+                  iconViewBox='0 0 12 12'
+                  title='Your inbox is empty now.'
+                  // eslint-disable-next-line max-len
+                  description='This is where you will receive notifications for all types of tickets. Enjoy your clutter-free inbox!'
+                />
+              )}
             {filteredTicketList?.length > 0 &&
               filteredTicketList.map((ticket, index) => (
                 <>

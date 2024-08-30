@@ -30,7 +30,7 @@ function NavbarItem(props: Props) {
         />
         <Title isActive={isActive}>{title}</Title>
       </LeftDiv>
-      {count && count > 0 && <CountText>{count}</CountText>}
+      {count !== undefined && count > 0 && <CountText>{count}</CountText>}
     </ItemDiv>
   );
 }

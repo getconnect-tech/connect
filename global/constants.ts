@@ -24,3 +24,13 @@ export const NAVBAR = {
   UNASSIGNED: 2,
   All_TICKET: 3,
 };
+
+export const TICKETS_HEADER: {
+  1: string;
+  2: string;
+  3: string;
+} = {
+  1: 'Inbox',
+  2: 'Unassigned',
+  3: 'All Tickets',
+};
