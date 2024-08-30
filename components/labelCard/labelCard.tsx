@@ -7,6 +7,7 @@ import { InnerDiv, ItemDiv, Name } from './style';
 import { colors } from '@/styles/colors';
 import LabelSvgIcon from '@/assets/icons/labelIcons';
 import { LabelData } from '@/utils/dataTypes';
+import { HandleClickProps } from '@/utils/appTypes';
 
 interface Props {
   label: string;
@@ -44,9 +45,12 @@ function LabelCard({
     setLabelModal(true);
   }, []);
 
-  const handleLabel = (labelData: LabelData) => {
-    setUpdateLabelData(labelData);
-  };
+  const handleLabel = useCallback((props: HandleClickProps) => {
+    const { labelData, value } = props;
+    if (value === 'Edit') setUpdateLabelData(labelData);
+    else if (value === 'Delete' && handleDeleteLabel && labelData)
+      handleDeleteLabel(labelData?.labelId);
+  }, []);
 
   const handleClickIcon = useCallback(() => {
     const identifier = `${dropdownIdentifier}-label`;
@@ -79,8 +83,7 @@ function LabelCard({
               iconSize={'12'}
               iconViewBox={'0 0 12 12'}
               labelData={{ labelId, label, icon: iconName }}
-              handleLabel={handleLabel}
-              handleDeleteLabel={handleDeleteLabel}
+              handleClick={handleLabel}
               onClose={() => {
                 setOpenDropdown(null);
               }}

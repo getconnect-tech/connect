@@ -5,11 +5,12 @@ import Icon from '../icon/icon';
 import DropDown, { DropDownItem } from '../dropDown/dropDown';
 import { CardDiv, LeftDiv, NameDiv, RightDiv } from './style';
 import { capitalizeString } from '@/helpers/common';
+import { HandleClickProps } from '@/utils/appTypes';
 
 interface Props {
   userId: string;
   // eslint-disable-next-line no-unused-vars
-  handleClick?: (value: string | null, userId: string, status: string) => void;
+  handleClick?: (props: HandleClickProps) => void;
   designation?: string;
   name: string;
   email: string;

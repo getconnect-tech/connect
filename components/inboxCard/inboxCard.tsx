@@ -25,7 +25,7 @@ import {
 import { priorityItem } from '@/helpers/raw';
 import { capitalizeString } from '@/helpers/common';
 import { useStores } from '@/stores';
-import { TicketDetailsInterface } from '@/utils/appTypes';
+import { HandleClickProps, TicketDetailsInterface } from '@/utils/appTypes';
 import {
   updateAssignee,
   changeTicketStatus,
@@ -173,10 +173,11 @@ const InboxCard = ({
 
   // add/remove label to ticket
   const handleTicketLabel = useCallback(
-    async (action: string, labelId: string) => {
+    async (props: HandleClickProps) => {
+      const { isChecked, labelId } = props;
       try {
-        if (ticketDetail?.id) {
-          if (action === 'REMOVE') {
+        if (ticketDetail?.id && labelId) {
+          if (isChecked) {
             const result = await deleteLabelFromTicket(
               ticketDetail?.id,
               labelId,
@@ -191,7 +192,7 @@ const InboxCard = ({
                 labels: newLabel,
               });
             }
-          } else if (action === 'ADD') {
+          } else {
             const result = await addLabelToTicket(ticketDetail?.id, labelId);
             if (result) {
               const newLabel = labels?.find((item) => item.id === labelId);

@@ -25,6 +25,7 @@ import { useStores } from '@/stores';
 import InviteMemberModal from '@/components/modalComponent/inviteMemberModal';
 import Modal from '@/components/modal/modal';
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
+import { HandleClickProps } from '@/utils/appTypes';
 
 const Members = () => {
   const [inviteModal, setInviteModal] = useState(false);
@@ -61,59 +62,54 @@ const Members = () => {
     setInviteModal(false);
   }, []);
 
-  const handleClick = useCallback(
-    async (hoveredItem: string | null, userId: string) => {
-      if (hoveredItem === 'Make Admin' || hoveredItem === 'Remove Admin') {
-        try {
-          workspaceStore.setLoading(true);
-          if (userId) {
-            const result = await updateRole({
-              userId,
-              role:
-                hoveredItem === 'Make Admin' ? UserRole.ADMIN : UserRole.MEMBER,
-            });
+  const handleClick = useCallback(async (props: HandleClickProps) => {
+    const { value, userId } = props;
+    if (value === 'Make Admin' || value === 'Remove Admin') {
+      try {
+        workspaceStore.setLoading(true);
+        if (userId) {
+          const result = await updateRole({
+            userId,
+            role: value === 'Make Admin' ? UserRole.ADMIN : UserRole.MEMBER,
+          });
 
-            if (result) {
-              loadData();
-            }
+          if (result) {
+            loadData();
           }
-          workspaceStore.setLoading(false);
-        } catch (error) {
-          console.log('error', error);
         }
-      } else if (hoveredItem === 'Delete') {
-        try {
-          if (userId) {
-            const result = await removeMemberFromWorkspace(userId);
-            if (result) {
-              workspaceStore.removeUserFromWorkspace(userId);
-            }
-          }
-        } catch (error) {
-          console.log('error', error);
-        }
+        workspaceStore.setLoading(false);
+      } catch (error) {
+        console.log('error', error);
       }
-    },
-    [],
-  );
+    } else if (value === 'Delete') {
+      try {
+        if (userId) {
+          const result = await removeMemberFromWorkspace(userId);
+          if (result) {
+            workspaceStore.removeUserFromWorkspace(userId);
+          }
+        }
+      } catch (error) {
+        console.log('error', error);
+      }
+    }
+  }, []);
 
-  const handleClickInvited = useCallback(
-    async (hoveredItem: string | null, userId: string, status: string) => {
-      if (hoveredItem === 'Delete' && status === 'Pending') {
-        try {
-          if (userId) {
-            const result = await removeInviteUsersFromWorkspace(userId);
-            if (result) {
-              workspaceStore.removeInvitedUserFromWorkspace(userId);
-            }
+  const handleClickInvited = useCallback(async (props: HandleClickProps) => {
+    const { value, userId, status } = props;
+    if (value === 'Delete' && status === 'Pending') {
+      try {
+        if (userId) {
+          const result = await removeInviteUsersFromWorkspace(userId);
+          if (result) {
+            workspaceStore.removeInvitedUserFromWorkspace(userId);
           }
-        } catch (error) {
-          console.log('error', error);
         }
+      } catch (error) {
+        console.log('error', error);
       }
-    },
-    [],
-  );
+    }
+  }, []);
 
   return (
     <>
