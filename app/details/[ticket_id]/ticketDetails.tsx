@@ -37,6 +37,8 @@ import {
   getTicketMessages,
   updateTicketPriority,
   sendMessage,
+  deleteLabelFromTicket,
+  addLabelToTicket,
 } from '@/services/clientSide/ticketServices';
 import { capitalizeString, getUniqueId, isEmpty } from '@/helpers/common';
 import Icon from '@/components/icon/icon';
@@ -49,6 +51,7 @@ import SnoozeDropdown from '@/components/snoozeDropdown/snoozeDropdown';
 import InternalMessageCard from '@/components/internalMessageCard/internalMessageCard';
 import { colors } from '@/styles/colors';
 import { messageStore } from '@/stores/messageStore';
+import { HandleClickProps } from '@/utils/appTypes';
 
 interface Props {
   ticket_id: string;
@@ -187,6 +190,7 @@ function TicketDetails(props: Props) {
   }, []);
 
   const labelItem = (labels || [])?.map((label) => ({
+    labelId: label.id,
     name: label.name,
     icon: label.icon,
   }));
@@ -330,6 +334,48 @@ function TicketDetails(props: Props) {
       }
     },
     [ticket_id, user],
+  );
+
+  /*
+   * @desc add/remove label to ticket
+   */
+  const handleTicketLabel = useCallback(
+    async (props: HandleClickProps) => {
+      const { isChecked, labelId } = props;
+      try {
+        if (ticketDetails?.id && labelId) {
+          if (isChecked) {
+            const result = await deleteLabelFromTicket(
+              ticketDetails?.id,
+              labelId,
+            );
+            if (result) {
+              const newLabel = ticketDetails.labels.filter(
+                (item) => item.id !== labelId,
+              );
+              ticketStore.setTicketDetails({
+                ...ticketDetails,
+                labels: newLabel,
+              });
+            }
+          } else {
+            const result = await addLabelToTicket(ticketDetails?.id, labelId);
+            if (result) {
+              const newLabel = labels?.find((item) => item.id === labelId);
+              const ticketLabels = ticketDetails.labels || [];
+              if (newLabel) ticketLabels.push(newLabel);
+              ticketStore.setTicketDetails({
+                ...ticketDetails,
+                labels: ticketLabels,
+              });
+            }
+          }
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetails],
   );
 
   /*
@@ -491,12 +537,14 @@ function TicketDetails(props: Props) {
             <ButtonDiv>
               <DropDownWithTag
                 onClick={handleLabelTag}
-                title={'Bug'}
-                iconName={'bug-icon'}
+                title={ticketDetails?.labels[0].name || ''}
+                iconName={ticketDetails?.labels[0].icon}
                 dropdownOpen={labelDropdown}
                 onClose={() => setLabelDropdown(false)}
                 items={labelItem}
                 onChange={() => {}}
+                handleTicketLabel={handleTicketLabel}
+                ticketLabelData={ticketDetails?.labels}
                 isTag={true}
                 isSearch={true}
                 isCheckbox={true}
