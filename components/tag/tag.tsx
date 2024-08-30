@@ -16,6 +16,8 @@ interface Props {
   style?: React.CSSProperties;
   svgStyle?: React.CSSProperties;
   isCheckbox?: boolean;
+  tagIconSize?: string;
+  tagIconViewBox?: string;
 }
 
 export default function Tag({
@@ -29,6 +31,8 @@ export default function Tag({
   src,
   svgStyle,
   isCheckbox,
+  tagIconSize = '12',
+  tagIconViewBox = '0 0 12 12',
 }: Props) {
   const IconComponent = isCheckbox ? LabelSvgIcon : SVGIcon;
 
@@ -46,10 +50,10 @@ export default function Tag({
       ) : (
         <IconComponent
           name={iconName}
-          width='12'
-          height='12'
+          width={tagIconSize}
+          height={tagIconSize}
           className='icon'
-          viewBox='0 0 12 12'
+          viewBox={tagIconViewBox}
           style={svgStyle}
         />
       )}

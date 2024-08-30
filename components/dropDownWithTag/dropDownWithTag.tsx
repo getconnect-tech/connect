@@ -79,6 +79,8 @@ export default function DropDownWithTag({
           src={src}
           style={tagStyle}
           isCheckbox={isCheckbox}
+          tagIconSize={iconSize}
+          tagIconViewBox={iconViewBox}
         />
       ) : (
         <DropBox
