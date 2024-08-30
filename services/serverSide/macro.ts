@@ -43,3 +43,17 @@ export const deleteMacro = async (macroId: string): Promise<boolean> => {
     throw e;
   }
 };
+
+export const getMacros = async (workspaceId: string): Promise<Macro[]> => {
+  try {
+    if (isEmpty(workspaceId)) throw new Error("'workspaceId' is required!");
+    const result = await prisma.macro.findMany({
+      where: { workspace_id: workspaceId },
+    });
+    if (result.length > 0) return result;
+    return [];
+  } catch (e) {
+    console.log('Error deleting Macro:', e);
+    throw e;
+  }
+};

@@ -2,7 +2,11 @@ import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
 import { createRequestBody } from '@/lib/zod/macro';
 import withAdminAuth from '@/middlewares/withAdminAuth';
-import { createOrUpdateMacro as createMacro } from '@/services/serverSide/macro';
+import {
+  createOrUpdateMacro as createMacro,
+  getMacros,
+} from '@/services/serverSide/macro';
+import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 
 export const POST = withAdminAuth(async (req) => {
   try {
@@ -15,6 +19,16 @@ export const POST = withAdminAuth(async (req) => {
       title,
       content,
     });
+    return Response.json(macro, { status: 201 });
+  } catch (err) {
+    return handleApiError(err);
+  }
+});
+
+export const GET = withWorkspaceAuth(async (req) => {
+  try {
+    const workspaceId = req.workspace.id;
+    const macro = await getMacros(workspaceId);
     return Response.json(macro, { status: 201 });
   } catch (err) {
     return handleApiError(err);
