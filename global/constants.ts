@@ -26,9 +26,7 @@ export const NAVBAR = {
 };
 
 export const TICKETS_HEADER: {
-  1: string;
-  2: string;
-  3: string;
+  [key: number]: string;
 } = {
   1: 'Inbox',
   2: 'Unassigned',
