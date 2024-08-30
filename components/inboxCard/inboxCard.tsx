@@ -61,7 +61,6 @@ const InboxCard = ({
   const router = useRouter();
   const { ticketStore, workspaceStore, settingStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
-  const { ticketList } = ticketStore || {};
   const { labels } = settingStore || {};
 
   const handleDropdownClick = (dropdown: string) => {
@@ -184,11 +183,9 @@ const InboxCard = ({
             );
             if (result) {
               const newLabel =
-                ticketList[ticketIndex].labels.filter(
-                  (item) => item.id !== labelId,
-                ) || [];
+                ticketDetail.labels.filter((item) => item.id !== labelId) || [];
               ticketStore.updateTicketListItem(ticketIndex, {
-                ...ticketList[ticketIndex],
+                ...ticketDetail,
                 labels: newLabel,
               });
             }
@@ -196,10 +193,10 @@ const InboxCard = ({
             const result = await addLabelToTicket(ticketDetail?.id, labelId);
             if (result) {
               const newLabel = labels?.find((item) => item.id === labelId);
-              const ticketLabels = ticketList[ticketIndex].labels || [];
+              const ticketLabels = ticketDetail.labels || [];
               if (newLabel) ticketLabels.push(newLabel);
               ticketStore.updateTicketListItem(ticketIndex, {
-                ...ticketList[ticketIndex],
+                ...ticketDetail,
                 labels: ticketLabels,
               });
             }
@@ -211,7 +208,6 @@ const InboxCard = ({
     },
     [ticketDetail],
   );
-
   return (
     <CardDiv onClick={onClickTicket}>
       {showDotIcon && <DotIcon />}
@@ -236,8 +232,8 @@ const InboxCard = ({
           <div className='statusDiv'>
             <DropDownWithTag
               onClick={() => handleDropdownClick('label')}
-              title={ticketList[ticketIndex]?.labels[0]?.name || ''}
-              iconName={ticketList[ticketIndex]?.labels[0]?.icon || ''}
+              title={ticketDetail?.labels[0]?.name || ''}
+              iconName={ticketDetail?.labels[0]?.icon || ''}
               dropdownOpen={
                 currentOpenDropdown === `${dropdownIdentifier}-label`
               }
@@ -247,7 +243,7 @@ const InboxCard = ({
               items={labelItem}
               onChange={() => {}}
               handleTicketLabel={handleTicketLabel}
-              ticketLabelData={ticketList[ticketIndex].labels}
+              ticketLabelData={ticketDetail.labels}
               isTag={true}
               isSearch={true}
               isCheckbox={true}

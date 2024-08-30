@@ -147,10 +147,10 @@ export const addLabel = async (ticketId: string, labelId: string) => {
 };
 
 export const removeLabel = async (ticketId: string, labelId: string) => {
-  const res = await prisma.ticketLabel.deleteMany({
-    where: { ticket_id: ticketId, label_id: labelId },
+  const deletedTicket = await prisma.ticketLabel.delete({
+    where: { ticket_label_id: { ticket_id: ticketId, label_id: labelId } },
   });
-  return res;
+  return deletedTicket;
 };
 
 export const formatTicket = (ticket: TicketWithPayload) => {
