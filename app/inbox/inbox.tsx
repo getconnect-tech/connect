@@ -19,17 +19,22 @@ import { useStores } from '@/stores';
 import { isEmpty } from '@/helpers/common';
 import EmptyState from '@/components/emptyState/emptyState';
 import InboxLoading from '@/components/inboxLoading/inboxLoading';
+import { NAVBAR } from '@/global/constants';
 
-function Inbox() {
+interface InboxProps {
+  activeNav: number;
+}
+function Inbox({ activeNav }: InboxProps) {
   const [activeTab, setActiveTab] = useState('Open');
   const tabItem = ['Open', 'Snoozed', 'Done'];
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
   const [loading, setLoading] = useState(true); // Loading state added
-  const { workspaceStore, ticketStore } = useStores();
+  const { workspaceStore, ticketStore, userStore } = useStores();
   const { currentWorkspace } = workspaceStore;
   const { ticketList, filteredTicketList } = ticketStore;
+  const { user } = userStore || {};
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
@@ -44,14 +49,23 @@ function Inbox() {
 
   const displayTicketList = useCallback(() => {
     // Filter ticket based on activeTab
-    if (activeTab === 'Open') {
-      ticketStore.setFilteredTicketList(TicketStatus.OPEN, ticketList);
-    } else if (activeTab === 'Snoozed') {
-      ticketStore.setFilteredTicketList(TicketStatus.SNOOZE, ticketList);
-    } else if (activeTab === 'Done') {
-      ticketStore.setFilteredTicketList(TicketStatus.CLOSED, ticketList);
+    let filteredTickets = ticketList;
+    if (activeNav === NAVBAR.INBOX && user) {
+      // Show tickets assigned to the current user
+      filteredTickets = ticketList.filter(
+        (ticket) => ticket.assigned_to === user.id,
+      );
+    } else if (activeNav === NAVBAR.All_TICKET) {
+      // Show all tickets
     }
-  }, [activeTab, ticketList]);
+    if (activeTab === 'Open') {
+      ticketStore.setFilteredTicketList(TicketStatus.OPEN, filteredTickets);
+    } else if (activeTab === 'Snoozed') {
+      ticketStore.setFilteredTicketList(TicketStatus.SNOOZE, filteredTickets);
+    } else if (activeTab === 'Done') {
+      ticketStore.setFilteredTicketList(TicketStatus.CLOSED, filteredTickets);
+    }
+  }, [activeTab, activeNav, ticketList, user, ticketStore]);
 
   useEffect(() => {
     displayTicketList();

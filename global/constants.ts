@@ -18,3 +18,9 @@ export const RANDOM_COLORS = [
 export const ONBOARDING_ROUTES = ['/login', '/signup', '/onboarding'];
 
 export const USER_PREFERENCES = 'user-preference-connect';
+
+export const NAVBAR = {
+  INBOX: 1,
+  UNASSIGNED: 2,
+  All_TICKET: 3,
+};

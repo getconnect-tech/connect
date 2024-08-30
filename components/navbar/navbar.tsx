@@ -36,16 +36,18 @@ const navbarMenu = {
 function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { workspaceStore, settingStore, ticketStore } = useStores();
+  const { workspaceStore, settingStore, ticketStore, userStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { labels } = settingStore || {};
-  const { ticketList } = ticketStore || {};
+  const { filteredTicketList } = ticketStore || {};
+  const { user } = userStore || {};
   const [isOpen, setIsOpen] = useState(false);
   const [isSupportDropdown, setSupportDropdown] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(
     navbarMenu.Inbox,
   );
+  // State to store the previous open ticket count
   const openSupportDropdown = useCallback(() => {
     setSupportDropdown(true);
   }, []);
@@ -89,8 +91,10 @@ function Navbar() {
   }));
 
   const openTicketCount = useMemo(() => {
-    return ticketList?.filter((ticket) => ticket.status === 'OPEN').length;
-  }, [ticketList]);
+    return filteredTicketList?.filter(
+      (ticket) => ticket.status === 'OPEN' && ticket.assigned_to === user?.id,
+    ).length;
+  }, [filteredTicketList]);
 
   return (
     <>
@@ -149,7 +153,7 @@ function Navbar() {
               title='All'
               icon='all-icon'
               isActive={activeIndex === 3}
-              onClickItem={() => handleClick(3)}
+              onClickItem={() => handleClick(3, '/tickets')}
             />
           </ItemMainDiv>
           <ItemMainDiv>

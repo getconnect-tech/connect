@@ -75,7 +75,7 @@ class TicketStore {
 
   // set filtered ticket list
   setFilteredTicketList(tab: string, ticketList: TicketDetailsInterface[]) {
-    this.filteredTicketList = ticketList.filter(
+    this.filteredTicketList = ticketList?.filter(
       (ticket) => ticket.status === tab,
     );
   }
