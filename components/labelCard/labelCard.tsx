@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Icon from '../icon/icon';
-import DropDown from '../dropDown/dropDown';
+import DropDown, { HandleClickProps } from '../dropDown/dropDown';
 import Modal from '../modal/modal';
 import LabelModal from '../modalComponent/labelModal';
 import { InnerDiv, ItemDiv, Name } from './style';
@@ -44,9 +44,12 @@ function LabelCard({
     setLabelModal(true);
   }, []);
 
-  const handleLabel = (labelData: LabelData) => {
-    setUpdateLabelData(labelData);
-  };
+  const handleLabel = useCallback((props: HandleClickProps) => {
+    const { labelData, value } = props;
+    if (value === 'Edit') setUpdateLabelData(labelData);
+    else if (value === 'Delete' && handleDeleteLabel && labelData)
+      handleDeleteLabel(labelData?.labelId);
+  }, []);
 
   const handleClickIcon = useCallback(() => {
     const identifier = `${dropdownIdentifier}-label`;
@@ -79,8 +82,7 @@ function LabelCard({
               iconSize={'12'}
               iconViewBox={'0 0 12 12'}
               labelData={{ labelId, label, icon: iconName }}
-              handleLabel={handleLabel}
-              handleDeleteLabel={handleDeleteLabel}
+              handleClick={handleLabel}
               onClose={() => {
                 setOpenDropdown(null);
               }}

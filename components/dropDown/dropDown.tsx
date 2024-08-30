@@ -34,31 +34,39 @@ export type DropDownItem = {
   isDelete?: boolean;
   status?: string;
 };
+export type HandleClickProps = {
+  value?: string | null;
+  userId?: string;
+  status?: string;
+  labelData?: LabelData;
+  labelId?: string;
+  isChecked?: boolean;
+};
 
 interface DropDownProps {
   items: DropDownItem[];
   style?: React.CSSProperties;
   userId?: string;
-  handleClick?: (
+  handleClick?: ({
     // eslint-disable-next-line no-unused-vars
-    value: string | null,
+    value,
     // eslint-disable-next-line no-unused-vars
-    userId: string,
+    userId,
     // eslint-disable-next-line no-unused-vars
-    status: string,
-  ) => void;
-  // eslint-disable-next-line no-unused-vars
-  handleLabel?: (labelData: LabelData) => void;
-  // eslint-disable-next-line no-unused-vars
-  handleDeleteLabel?: (labelId: string) => void;
+    status,
+    // eslint-disable-next-line no-unused-vars
+    labelData,
+    // eslint-disable-next-line no-unused-vars
+    labelId,
+    // eslint-disable-next-line no-unused-vars
+    isChecked,
+  }: HandleClickProps) => void;
   labelData?: LabelData;
   iconSize: string;
   iconViewBox: string;
   onClose: () => void;
   // eslint-disable-next-line no-unused-vars
   onChange?: (item: any) => void;
-  // eslint-disable-next-line no-unused-vars
-  handleTicketLabel?: (action: string, labelId: string) => void;
   ticketLabelData?: Label[];
   isSearch?: boolean;
   isCheckbox?: boolean;
@@ -102,8 +110,6 @@ const DropDown = ({
   style,
   userId,
   handleClick,
-  handleLabel,
-  handleDeleteLabel,
   labelData,
   iconSize,
   iconViewBox,
@@ -115,7 +121,6 @@ const DropDown = ({
   isMacro = false,
   onChange,
   ticketLabelData,
-  handleTicketLabel,
   handleMouseEnter,
   className,
 }: DropDownProps) => {
@@ -145,15 +150,12 @@ const DropDown = ({
       e.stopPropagation();
 
       // for members
-      if (handleClick) handleClick(value, userId || '', item.status || '');
+      if (handleClick && userId && item)
+        handleClick({ value, userId, status: item.status });
 
-      // for labels
-      if (labelData) {
-        if (value === 'Edit' && handleLabel) {
-          handleLabel(labelData);
-        } else if (value === 'Delete' && handleDeleteLabel) {
-          handleDeleteLabel(labelData.labelId);
-        }
+      // Edit/Delete labels
+      if (labelData && handleClick) {
+        handleClick({ value, labelData });
       }
 
       // label for tickets
@@ -161,13 +163,9 @@ const DropDown = ({
         const isChecked = ticketLabelData?.some(
           (label: { id: string }) => label.id === item.labelId,
         );
-        // isChecked true then remove label from ticket
-        if (handleTicketLabel && isChecked) {
-          handleTicketLabel('REMOVE', item.labelId || '');
-        }
-        // isChecked false then add label in ticket
-        else if (handleTicketLabel && !isChecked) {
-          handleTicketLabel('ADD', item.labelId || '');
+        // isChecked true then remove label from ticket or isChecked false then add label in ticket
+        if (handleClick) {
+          handleClick({ isChecked, labelId: item.labelId });
         }
       }
 

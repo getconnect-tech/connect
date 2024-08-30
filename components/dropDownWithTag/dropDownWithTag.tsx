@@ -1,6 +1,6 @@
 import React from 'react';
 import { Label } from '@prisma/client';
-import DropDown, { DropDownItem } from '../dropDown/dropDown';
+import DropDown, { DropDownItem, HandleClickProps } from '../dropDown/dropDown';
 import Tag from '../tag/tag';
 import { DropBox } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
@@ -17,7 +17,7 @@ interface Props {
   // eslint-disable-next-line no-unused-vars
   onChange: (item: any) => void;
   // eslint-disable-next-line no-unused-vars
-  handleTicketLabel?: (action: string, labelId: string) => void;
+  handleTicketLabel?: (props: HandleClickProps) => void;
   ticketLabelData?: Label[];
   style?: React.CSSProperties;
   dropDownStyle?: React.CSSProperties;
@@ -103,7 +103,7 @@ export default function DropDownWithTag({
           iconViewBox={iconViewBox}
           onClose={onClose}
           onChange={onChange}
-          handleTicketLabel={handleTicketLabel}
+          handleClick={handleTicketLabel}
           style={dropDownStyle}
           isSearch={isSearch}
           isCheckbox={isCheckbox}
