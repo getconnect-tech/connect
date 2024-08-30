@@ -78,6 +78,9 @@ export default function DropDownWithTag({
           title={selectedValue ? capitalizeString(selectedValue.name) : title}
           src={src}
           style={tagStyle}
+          isCheckbox={isCheckbox}
+          tagIconSize={iconSize}
+          tagIconViewBox={iconViewBox}
         />
       ) : (
         <DropBox

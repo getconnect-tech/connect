@@ -36,16 +36,18 @@ const navbarMenu = {
 function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { workspaceStore, settingStore, ticketStore } = useStores();
+  const { workspaceStore, settingStore, ticketStore, userStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { labels } = settingStore || {};
   const { ticketList } = ticketStore || {};
+  const { user } = userStore || {};
   const [isOpen, setIsOpen] = useState(false);
   const [isSupportDropdown, setSupportDropdown] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(
     navbarMenu.Inbox,
   );
+  // State to store the previous open ticket count
   const openSupportDropdown = useCallback(() => {
     setSupportDropdown(true);
   }, []);
@@ -62,10 +64,7 @@ function Navbar() {
     setIsOpen((prev) => !prev);
   }, []);
 
-  useEffect(() => {
-    if (pathname === '/') setActiveIndex(navbarMenu.Inbox);
-    else if (pathname === '/contact') setActiveIndex(navbarMenu.Contacts);
-  }, []);
+  useEffect(() => {}, []);
 
   const handleModalClose = useCallback(() => {
     setIsModalOpen(false);
@@ -90,7 +89,9 @@ function Navbar() {
   }));
 
   const openTicketCount = useMemo(() => {
-    return ticketList?.filter((ticket) => ticket.status === 'OPEN').length;
+    return ticketList?.filter(
+      (ticket) => ticket.status === 'OPEN' && ticket.assigned_to === user?.id,
+    ).length;
   }, [ticketList]);
 
   return (
@@ -137,27 +138,27 @@ function Navbar() {
               title='Inbox'
               count={openTicketCount}
               icon='inbox-icon'
-              isActive={activeIndex === 1}
-              onClickItem={() => handleClick(1, '/')}
+              isActive={pathname === '/inbox'}
+              onClickItem={() => handleClick(1, '/inbox')}
             />
             <NavbarItem
               title='Unassigned'
               icon='unassign-icon'
-              isActive={activeIndex === 2}
-              onClickItem={() => handleClick(2)}
+              isActive={pathname === '/unassigned'}
+              onClickItem={() => handleClick(2, '/unassigned')}
             />
             <NavbarItem
               title='All'
               icon='all-icon'
-              isActive={activeIndex === 3}
-              onClickItem={() => handleClick(3)}
+              isActive={pathname === '/' || pathname === '/tickets'}
+              onClickItem={() => handleClick(3, '/tickets')}
             />
           </ItemMainDiv>
           <ItemMainDiv>
             <NavbarItem
               title='Contacts'
               icon='contact-icon'
-              isActive={activeIndex === 4}
+              isActive={pathname === '/contact'}
               onClickItem={() => handleClick(4, '/contact')}
             />
             <NavbarItem
