@@ -22,6 +22,7 @@ model User {
   tickets       Ticket[]
   workspaces    UserWorkspaces[]
   api_keys      ApiKeys[]
+  macros        Macro[]
 }
 
 model Workspace {
@@ -38,6 +39,7 @@ model Workspace {
   ticketLabels   Label[]
   api_keys       ApiKeys[]
   configurations Configuration[]
+  macros         Macro[]
 }
 
 model Label {
@@ -140,4 +142,16 @@ model Configuration {
   updated_at   DateTime   @default(now()) @updatedAt
 
   @@unique(name: "workspace_config_id", [workspace_id, type, extra])
+}
+
+model Macro {
+  id           String    @id @default(uuid())
+  workspace_id String
+  workspace    Workspace @relation(fields: [workspace_id], references: [id])
+  title        String
+  content      String
+  created_by   String
+  user         User      @relation(fields: [created_by], references: [id])
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @default(now()) @updatedAt
 }
