@@ -2,9 +2,10 @@ import React, { useCallback } from 'react';
 import { UserRole } from '@prisma/client';
 import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
-import DropDown, { DropDownItem, HandleClickProps } from '../dropDown/dropDown';
+import DropDown, { DropDownItem } from '../dropDown/dropDown';
 import { CardDiv, LeftDiv, NameDiv, RightDiv } from './style';
 import { capitalizeString } from '@/helpers/common';
+import { HandleClickProps } from '@/utils/appTypes';
 
 interface Props {
   userId: string;
