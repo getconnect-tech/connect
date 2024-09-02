@@ -24,10 +24,19 @@ export const createOrUpdateMacro = async (
   return macro;
 };
 
-export const deleteMacro = async (macroId: string): Promise<boolean> => {
+export const deleteMacro = async (macroId: string) => {
   const result = await prisma.macro.delete({
     where: { id: macroId },
   });
   if (result) return true;
   return false;
+};
+
+export const getMacros = async (workspaceId: string) => {
+  if (isEmpty(workspaceId)) throw new Error("'workspaceId' is required!");
+  const result = await prisma.macro.findMany({
+    where: { workspace_id: workspaceId },
+  });
+  if (result.length > 0) return result;
+  return [];
 };
