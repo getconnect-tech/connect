@@ -1,7 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
-/* eslint-disable max-len */
-/* eslint-disable no-unused-vars */
 import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
@@ -11,6 +7,7 @@ import Avatar from '../avtar/Avtar';
 import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
 import AssigneeDropdown from '../AssigneeDropdown/dropDownWithTag';
 import Icon from '../icon/icon';
+import LabelDropdown from '../labelDropdown/labelDropdown';
 import {
   CardDiv,
   DesTitle,
@@ -40,6 +37,7 @@ interface Props {
   showDotIcon?: boolean;
   src: string;
   currentOpenDropdown: string | null;
+  // eslint-disable-next-line no-unused-vars
   setCurrentOpenDropdown: (dropdown: string | null) => void;
   dropdownIdentifier: string;
   loadData: () => void;
@@ -76,10 +74,12 @@ const InboxCard = ({
 
   const handleMouseEnter = (
     e: React.MouseEvent<HTMLElement>,
+    // eslint-disable-next-line no-unused-vars
     setPosition: (position: 'upwards' | 'downwards') => void,
   ) => {
     const triggerElement = e.currentTarget;
     const rect = triggerElement.getBoundingClientRect();
+    // eslint-disable-next-line no-undef
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
 
@@ -89,12 +89,6 @@ const InboxCard = ({
       setPosition('downwards');
     }
   };
-
-  const labelItem = (labels || [])?.map((label) => ({
-    labelId: label.id,
-    name: label.name,
-    icon: label.icon,
-  }));
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
@@ -185,7 +179,7 @@ const InboxCard = ({
               const newLabel =
                 ticketDetail.labels.filter((item) => item.id !== labelId) || [];
               ticketStore.updateTicketListItem(ticketIndex, {
-                ...ticketDetail,
+                ...(ticketDetail || {}),
                 labels: newLabel,
               });
             }
@@ -196,7 +190,7 @@ const InboxCard = ({
               const ticketLabels = ticketDetail.labels || [];
               if (newLabel) ticketLabels.push(newLabel);
               ticketStore.updateTicketListItem(ticketIndex, {
-                ...ticketDetail,
+                ...(ticketDetail || {}),
                 labels: ticketLabels,
               });
             }
@@ -230,24 +224,20 @@ const InboxCard = ({
         <NameText className='description'>{description}</NameText>
         <StatusMainDiv>
           <div className='statusDiv'>
-            <DropDownWithTag
+            <LabelDropdown
+              handleClick={handleTicketLabel}
+              iconTitlePairs={
+                ticketDetail?.labels?.map((label) => ({
+                  iconName: label.icon,
+                  title: label.name,
+                })) || []
+              } // Updated to pass an array of icon-title pairs
+              onClose={() => {
+                setCurrentOpenDropdown(null);
+              }}
+              dropDown={currentOpenDropdown === `${dropdownIdentifier}-label`}
               onClick={() => handleDropdownClick('label')}
-              title={ticketDetail?.labels[0]?.name || ''}
-              iconName={ticketDetail?.labels[0]?.icon || ''}
-              dropdownOpen={
-                currentOpenDropdown === `${dropdownIdentifier}-label`
-              }
-              iconSize='12'
-              iconViewBox='0 0 16 16'
-              onClose={() => setCurrentOpenDropdown(null)}
-              items={labelItem}
-              onChange={() => {}}
-              handleTicketLabel={handleTicketLabel}
-              ticketLabelData={ticketDetail.labels}
-              isTag={true}
-              isSearch={true}
-              isCheckbox={true}
-              isActive={true}
+              ticketLabelData={ticketDetail?.labels}
               className={
                 submenuPosition === 'upwards'
                   ? 'submenu-upwards'

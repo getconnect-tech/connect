@@ -77,15 +77,16 @@ model Ticket {
 }
 
 model Message {
-  id           String      @id @default(uuid())
+  id           String       @id @default(uuid())
   reference_id String
   content      String
-  created_at   DateTime    @default(now())
+  created_at   DateTime     @default(now())
   ticket_id    String
   author_id    String?
   type         MessageType
-  author       User?       @relation(fields: [author_id], references: [id])
-  ticket       Ticket      @relation(fields: [ticket_id], references: [id])
+  author       User?        @relation(fields: [author_id], references: [id])
+  ticket       Ticket       @relation(fields: [ticket_id], references: [id])
+  email_events EmailEvent[]
 }
 
 model Contact {
@@ -154,4 +155,13 @@ model Macro {
   user         User      @relation(fields: [created_by], references: [id])
   created_at   DateTime  @default(now())
   updated_at   DateTime  @default(now()) @updatedAt
+}
+
+model EmailEvent {
+  id         String         @id @default(uuid())
+  message_id String
+  message    Message        @relation(fields: [message_id], references: [id])
+  event      EmailEventType
+  extra      String
+  created_at DateTime       @default(now())
 }
