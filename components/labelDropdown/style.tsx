@@ -15,6 +15,7 @@ const StatusDiv = styled.div<Props>`
   align-items: center;
   gap: 6px;
   cursor: pointer;
+  height: 24px;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
