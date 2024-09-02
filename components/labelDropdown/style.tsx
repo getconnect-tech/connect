@@ -5,6 +5,7 @@ import { Typography } from '@/styles/typography';
 
 interface Props {
   isActive?: boolean;
+  dropDownOpen?: boolean; // New prop to handle dropdown state
 }
 
 const StatusDiv = styled.div<Props>`
@@ -52,9 +53,8 @@ const StatusDiv = styled.div<Props>`
       display: none;
     }
   }
-  &:last-child {
-    padding-right: 12px;
-  }
+  /* Conditionally apply padding based on whether the dropdown is open */
+  padding-right: ${({ dropDownOpen }) => (dropDownOpen ? '0' : '12px')};
 `;
 
 const StatusTitle = styled.p`
