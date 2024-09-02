@@ -122,7 +122,7 @@ export default function CustomContextMenu(props: Props) {
               const newLabel =
                 ticketDetail.labels.filter((item) => item.id !== labelId) || [];
               ticketStore.updateTicketListItem(ticketIndex, {
-                ...ticketDetail,
+                ...(ticketDetail || {}),
                 labels: newLabel,
               });
             }
@@ -133,7 +133,7 @@ export default function CustomContextMenu(props: Props) {
               const ticketLabels = ticketDetail.labels || [];
               if (newLabel) ticketLabels.push(newLabel);
               ticketStore.updateTicketListItem(ticketIndex, {
-                ...ticketDetail,
+                ...(ticketDetail || {}),
                 labels: ticketLabels,
               });
             }

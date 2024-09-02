@@ -52,6 +52,7 @@ import InternalMessageCard from '@/components/internalMessageCard/internalMessag
 import { colors } from '@/styles/colors';
 import { messageStore } from '@/stores/messageStore';
 import { HandleClickProps } from '@/utils/appTypes';
+import LabelDropdown from '@/components/labelDropdown/labelDropdown';
 
 interface Props {
   ticket_id: string;
@@ -188,12 +189,6 @@ function TicketDetails(props: Props) {
   const handleOutsideClick = useCallback(() => {
     setMacroDropdown(false);
   }, []);
-
-  const labelItem = (labels || [])?.map((label) => ({
-    labelId: label.id,
-    name: label.name,
-    icon: label.icon,
-  }));
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
@@ -354,7 +349,7 @@ function TicketDetails(props: Props) {
                 (item) => item.id !== labelId,
               );
               ticketStore.setTicketDetails({
-                ...ticketDetails,
+                ...(ticketDetails || {}),
                 labels: newLabel,
               });
             }
@@ -365,7 +360,7 @@ function TicketDetails(props: Props) {
               const ticketLabels = ticketDetails.labels || [];
               if (newLabel) ticketLabels.push(newLabel);
               ticketStore.setTicketDetails({
-                ...ticketDetails,
+                ...(ticketDetails || {}),
                 labels: ticketLabels,
               });
             }
@@ -535,22 +530,23 @@ function TicketDetails(props: Props) {
           </HeaderDiv>
           <StatusDiv>
             <ButtonDiv>
-              <DropDownWithTag
+              <LabelDropdown
+                handleClick={handleTicketLabel}
+                iconTitlePairs={
+                  ticketDetails?.labels?.map((label) => ({
+                    iconName: label.icon,
+                    title: label.name,
+                  })) || []
+                } // Updated to pass an array of icon-title pairs
+                onClose={() => {
+                  setLabelDropdown(false);
+                }}
+                dropDown={labelDropdown}
                 onClick={handleLabelTag}
-                title={ticketDetails?.labels[0].name || ''}
-                iconName={ticketDetails?.labels[0].icon}
-                dropdownOpen={labelDropdown}
-                onClose={() => setLabelDropdown(false)}
-                items={labelItem}
-                onChange={() => {}}
-                handleTicketLabel={handleTicketLabel}
                 ticketLabelData={ticketDetails?.labels}
-                isTag={true}
-                isSearch={true}
-                isCheckbox={true}
-                isActive={true}
-                iconSize='12'
-                iconViewBox='0 0 16 16'
+                onMouseEnter={(e: any) =>
+                  handleMouseEnter(e, setSubmenuPosition)
+                }
               />
               <DropDownWithTag
                 onClick={handlePriorityTag}
