@@ -1,4 +1,5 @@
 import { prisma } from '@/prisma/prisma';
+import { isEmpty } from '@/helpers/common';
 
 export const createOrUpdateMacro = async (
   user_id: string,
@@ -21,4 +22,12 @@ export const createOrUpdateMacro = async (
     create: payload,
   });
   return macro;
+};
+
+export const deleteMacro = async (macroId: string): Promise<boolean> => {
+  const result = await prisma.macro.delete({
+    where: { id: macroId },
+  });
+  if (result) return true;
+  return false;
 };
