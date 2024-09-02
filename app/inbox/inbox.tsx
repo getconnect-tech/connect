@@ -23,19 +23,23 @@ import InboxLoading from '@/components/inboxLoading/inboxLoading';
 import { NAVBAR, TICKETS_HEADER } from '@/global/constants';
 
 interface InboxProps {
-  activeNav: number;
+  activeNav?: number;
+  labelId?: string;
 }
-function Inbox({ activeNav }: InboxProps) {
+function Inbox({ activeNav, labelId }: InboxProps) {
   const [activeTab, setActiveTab] = useState('Open');
   const tabItem = ['Open', 'Snoozed', 'Done'];
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
   const [loading, setLoading] = useState(true); // Loading state added
-  const { workspaceStore, ticketStore, userStore } = useStores();
+  const { workspaceStore, ticketStore, userStore, settingStore } = useStores();
   const { currentWorkspace } = workspaceStore;
   const { ticketList, filteredTicketList } = ticketStore;
   const { user } = userStore || {};
+  const { labels } = settingStore || {};
+  const currentLabel = labels?.find((label) => label.id === labelId);
+
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
       setLoading(true); // Set loading to true before fetching data
@@ -61,7 +65,16 @@ function Inbox({ activeNav }: InboxProps) {
       );
     } else if (activeNav === NAVBAR.All_TICKET) {
       // Show all tickets
+    } else if (labelId) {
+      // Show ticket based on label
+      filteredTickets = ticketList.filter((ticket) => {
+        if (ticket.labels && ticket.labels.length > 0) {
+          return ticket.labels.some((label) => label.id === labelId);
+        }
+        return false;
+      });
     }
+
     if (activeTab === 'Open') {
       ticketStore.setFilteredTicketList(TicketStatus.OPEN, filteredTickets);
     } else if (activeTab === 'Snoozed') {
@@ -84,7 +97,9 @@ function Inbox({ activeNav }: InboxProps) {
       <MainDiv>
         <TopDiv>
           <HeaderDiv>
-            <Title>{TICKETS_HEADER[activeNav]}</Title>
+            <Title>
+              {activeNav ? TICKETS_HEADER[activeNav] : currentLabel?.name}
+            </Title>
             <TabDiv>
               {tabItem.map((tab) => (
                 <Tab
