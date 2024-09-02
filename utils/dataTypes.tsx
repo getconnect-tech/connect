@@ -1,5 +1,6 @@
 import { getWorkspaceApiKeys } from '@/services/serverSide/apiKey';
 import { getWorkspaceContacts } from '@/services/serverSide/contact';
+import { getMacros } from '@/services/serverSide/macro';
 import { getTicketMessages } from '@/services/serverSide/message';
 import {
   getUserWorkspaces,
@@ -40,3 +41,5 @@ export type Contact = NonNullable<
 export type EmailConfig = {
   primaryEmail: string;
 };
+
+export type Macros = NonNullable<Awaited<ReturnType<typeof getMacros>>>[0];

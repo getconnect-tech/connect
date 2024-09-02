@@ -1,11 +1,12 @@
 import { action, makeObservable, observable } from 'mobx';
 import { Label } from '@prisma/client';
-import { ApiKey } from '@/utils/dataTypes';
+import { ApiKey, Macros } from '@/utils/dataTypes';
 
 class SettingStore {
   loading = false;
   apiKeys: ApiKey[] | null = null;
   labels: Label[] | null = null;
+  macros: Macros[] = [];
 
   constructor() {
     makeObservable(this, {
@@ -23,6 +24,11 @@ class SettingStore {
       addLabel: action,
       updateLabel: action,
       removeLabel: action,
+
+      //macros
+      macros: observable,
+      setMacros: action,
+      addMacros: action,
     });
   }
 
@@ -59,6 +65,15 @@ class SettingStore {
     if (!this.labels) return;
 
     this.labels = this.labels.filter((label) => label.id !== labelId);
+  }
+  // set macros
+  setMacros(value: Macros[]) {
+    this.macros = value;
+  }
+
+  //add Macros
+  addMacros(value: Macros) {
+    this.macros = [...(this.macros || []), value];
   }
 }
 
