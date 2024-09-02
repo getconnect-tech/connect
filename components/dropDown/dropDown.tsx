@@ -151,8 +151,8 @@ const DropDown = ({
 
       if (onChange) {
         onChange(item);
+        onClose();
       }
-      onClose();
     },
     [handleClick, onChange, onClose, userId],
   );
