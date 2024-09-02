@@ -179,7 +179,7 @@ const InboxCard = ({
               const newLabel =
                 ticketDetail.labels.filter((item) => item.id !== labelId) || [];
               ticketStore.updateTicketListItem(ticketIndex, {
-                ...ticketDetail,
+                ...(ticketDetail || {}),
                 labels: newLabel,
               });
             }
@@ -190,7 +190,7 @@ const InboxCard = ({
               const ticketLabels = ticketDetail.labels || [];
               if (newLabel) ticketLabels.push(newLabel);
               ticketStore.updateTicketListItem(ticketIndex, {
-                ...ticketDetail,
+                ...(ticketDetail || {}),
                 labels: ticketLabels,
               });
             }
@@ -237,7 +237,7 @@ const InboxCard = ({
               }}
               dropDown={currentOpenDropdown === `${dropdownIdentifier}-label`}
               onClick={() => handleDropdownClick('label')}
-              ticketLabelData={ticketDetail.labels}
+              ticketLabelData={ticketDetail?.labels}
               className={
                 submenuPosition === 'upwards'
                   ? 'submenu-upwards'
