@@ -1,48 +1,105 @@
 import { NextRequest } from 'next/server';
-import { MessageType } from '@prisma/client';
-import { InboundEmailPayload } from '@/utils/dataTypes';
+import { EmailEventType, MessageType } from '@prisma/client';
 import { handleApiError } from '@/helpers/errorHandler';
 import { createTicket, getTicketByMailId } from '@/services/serverSide/ticket';
-import { postMessage } from '@/services/serverSide/message';
+import { createEmailEvent, postMessage } from '@/services/serverSide/message';
 import { hasWorkspace } from '@/services/serverSide/workspace';
+import {
+  isBounceOutbound,
+  isDeliveryOutbound,
+  isInbound,
+  isLinkClickOutbound,
+  isOpenOutbound,
+  isOutbound,
+  isSpamComplaintOutbound,
+  PostmarkWebhookPayload,
+} from '@/utils/webhookPayloadType';
+import { prisma } from '@/prisma/prisma';
 
 export const POST = async (req: NextRequest) => {
   try {
-    const emailPayload = (await req.json()) as InboundEmailPayload;
-    const referencesHeader = emailPayload.Headers.find(
-      (header) => header.Name === 'References',
-    );
-    const references = referencesHeader?.Value?.split(' ') || [];
-    const mailId = emailPayload.Headers.find(
-      (header) => header.Name === 'Message-ID',
-    )!.Value;
-    const referenceId = references[0] || mailId;
+    const postmarkPayload = (await req.json()) as PostmarkWebhookPayload;
 
-    const workspaceId = emailPayload.OriginalRecipient.split('@')[0]!;
+    if (isInbound(postmarkPayload)) {
+      const referencesHeader = postmarkPayload.Headers.find(
+        (header) => header.Name === 'References',
+      );
+      const references = referencesHeader?.Value?.split(' ') || [];
+      const mailId = postmarkPayload.Headers.find(
+        (header) => header.Name === 'Message-ID',
+      )!.Value;
+      const referenceId = references[0] || mailId;
 
-    const isWorkspaceExsits = await hasWorkspace(workspaceId);
+      const workspaceId = postmarkPayload.OriginalRecipient.split('@')[0]!;
 
-    if (!isWorkspaceExsits) {
-      return new Response('Workspace not found!', { status: 200 });
-    }
+      const isWorkspaceExists = await hasWorkspace(workspaceId);
 
-    let ticket = await getTicketByMailId(referenceId);
-    if (!ticket) {
-      ticket = await createTicket({
-        mailId: referenceId,
-        subject: emailPayload.Subject,
-        workspaceId: workspaceId,
-        senderEmail: emailPayload.From,
-        senderName: emailPayload.FromName,
+      if (!isWorkspaceExists) {
+        return new Response('Workspace not found!', { status: 200 });
+      }
+
+      let ticket = await getTicketByMailId(referenceId);
+      if (!ticket) {
+        ticket = await createTicket({
+          mailId: referenceId,
+          subject: postmarkPayload.Subject,
+          workspaceId: workspaceId,
+          senderEmail: postmarkPayload.From,
+          senderName: postmarkPayload.FromName,
+        });
+      }
+
+      await postMessage({
+        messageContent: postmarkPayload.HtmlBody,
+        messageType: MessageType.FROM_CONTACT,
+        referenceId: mailId,
+        ticketId: ticket.id,
       });
     }
 
-    await postMessage({
-      messageContent: emailPayload.HtmlBody,
-      messageType: MessageType.FROM_CONTACT,
-      referenceId: mailId,
-      ticketId: ticket.id,
-    });
+    if (isOutbound(postmarkPayload)) {
+      const mailId = postmarkPayload.MessageID;
+
+      const message = await prisma.message.findFirst({
+        where: { reference_id: mailId, type: MessageType.EMAIL },
+        select: { id: true },
+      });
+
+      if (!message) {
+        return new Response('Message not found!', { status: 200 });
+      }
+
+      const messageId = message.id;
+      let eventType: EmailEventType;
+      let extra: string = '';
+
+      if (isOpenOutbound(postmarkPayload)) {
+        eventType = EmailEventType.OPENED;
+        extra = postmarkPayload.Tag;
+      }
+
+      if (isDeliveryOutbound(postmarkPayload)) {
+        eventType = EmailEventType.DELIVERED;
+        extra = postmarkPayload.Details;
+      }
+
+      if (isSpamComplaintOutbound(postmarkPayload)) {
+        eventType = EmailEventType.SPAMED;
+        extra = postmarkPayload.Tag;
+      }
+
+      if (isBounceOutbound(postmarkPayload)) {
+        eventType = EmailEventType.BOUNCED;
+        extra = postmarkPayload.Description;
+      }
+
+      if (isLinkClickOutbound(postmarkPayload)) {
+        eventType = EmailEventType.LINK_CLICKED;
+        extra = postmarkPayload.OriginalLink;
+      }
+
+      await createEmailEvent(messageId, { eventType: eventType!, extra });
+    }
 
     return new Response('Received!', { status: 200 });
   } catch (err) {

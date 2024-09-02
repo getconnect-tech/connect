@@ -16,8 +16,10 @@ import {
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { priorityItem, snoozeItem } from '@/helpers/raw';
 import { useStores } from '@/stores';
-import { TicketDetailsInterface } from '@/utils/appTypes';
+import { HandleClickProps, TicketDetailsInterface } from '@/utils/appTypes';
 import {
+  addLabelToTicket,
+  deleteLabelFromTicket,
   updateAssignee,
   updateTicketPriority,
 } from '@/services/clientSide/ticketServices';
@@ -37,7 +39,6 @@ export default function CustomContextMenu(props: Props) {
   const [submenuPosition, setSubmenuPosition] = useState<
     'upwards' | 'downwards'
   >('upwards');
-
   const handleMouseEnter = (
     e: React.MouseEvent<HTMLElement>,
     setPosition: (position: 'upwards' | 'downwards') => void,
@@ -55,6 +56,7 @@ export default function CustomContextMenu(props: Props) {
   };
 
   const labelItem = (labels || [])?.map((label) => ({
+    labelId: label.id,
     name: label.name,
     icon: label.icon,
   }));
@@ -105,6 +107,44 @@ export default function CustomContextMenu(props: Props) {
       console.log('Error : ', e);
     }
   }, []);
+
+  const handleTicketLabel = useCallback(
+    async (props: HandleClickProps) => {
+      const { isChecked, labelId } = props;
+      try {
+        if (ticketDetail?.id && labelId) {
+          if (isChecked) {
+            const result = await deleteLabelFromTicket(
+              ticketDetail?.id,
+              labelId,
+            );
+            if (result) {
+              const newLabel =
+                ticketDetail.labels.filter((item) => item.id !== labelId) || [];
+              ticketStore.updateTicketListItem(ticketIndex, {
+                ...ticketDetail,
+                labels: newLabel,
+              });
+            }
+          } else {
+            const result = await addLabelToTicket(ticketDetail?.id, labelId);
+            if (result) {
+              const newLabel = labels?.find((item) => item.id === labelId);
+              const ticketLabels = ticketDetail.labels || [];
+              if (newLabel) ticketLabels.push(newLabel);
+              ticketStore.updateTicketListItem(ticketIndex, {
+                ...ticketDetail,
+                labels: ticketLabels,
+              });
+            }
+          }
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetail],
+  );
 
   const [showDropDown, setShowDropDown] = useState(true);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -254,6 +294,8 @@ export default function CustomContextMenu(props: Props) {
                       iconSize='12'
                       iconViewBox='0 0 16 16'
                       onClose={() => {}}
+                      handleClick={handleTicketLabel}
+                      ticketLabelData={ticketDetail?.labels}
                       isSearch={true}
                       isContextMenu={true}
                       isCheckbox={true}
