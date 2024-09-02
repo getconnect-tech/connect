@@ -176,11 +176,24 @@ export const updatePriority = async (
 export const updateStatus = async (
   ticketId: string,
   newStatus: TicketStatus,
+  snoozeUntil?: string,
 ) => {
+  if (newStatus === TicketStatus.SNOOZE && !snoozeUntil) {
+    throw new Error('snoozeUntil is required for status type SNOOZE');
+  }
+
+  const payload = {
+    status: newStatus,
+    snoozeUntil: snoozeUntil,
+  };
+
+  removeNullUndefined(payload);
+
   const updatedTicket = await prisma.ticket.update({
     where: { id: ticketId },
-    data: { status: newStatus },
+    data: payload,
   });
+
   return updatedTicket;
 };
 
