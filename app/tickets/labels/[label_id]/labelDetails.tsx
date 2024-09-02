@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Inbox from '@/app/inbox/inbox';
 
 interface Props {
   label_id: string;
@@ -8,7 +9,7 @@ interface Props {
 
 const labelDetails = (props: Props) => {
   const { label_id } = props;
-  return <div>{label_id}</div>;
+  return <Inbox labelId={label_id} />;
 };
 
 export default labelDetails;
