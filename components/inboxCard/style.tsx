@@ -74,12 +74,15 @@ const DesTitle = styled.div`
 const StatusMainDiv = styled.div`
   display: flex;
   gap: 8px;
-  align-items: center;
+  align-items: flex-end;
   padding-top: 4px;
   justify-content: space-between;
   .statusDiv {
     display: flex;
     gap: 8px;
+    flex-wrap: wrap;
+    max-width: 530px;
+    width: 100%;
   }
   .submenu-upwards {
     bottom: calc(100% - 83px);
@@ -87,7 +90,7 @@ const StatusMainDiv = styled.div`
   }
 
   .submenu-downwards {
-    top: calc(100% - 12px);
+    /* top: calc(100% - 12px); */
     bottom: auto;
   }
 `;
