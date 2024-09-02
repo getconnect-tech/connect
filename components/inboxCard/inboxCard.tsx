@@ -196,7 +196,6 @@ const InboxCard = ({
             }
           }
         }
-        setCurrentOpenDropdown('label');
       } catch (e) {
         console.log('Error : ', e);
       }
