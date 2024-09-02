@@ -157,6 +157,10 @@ export const getMacros = async () => {
     settingStore.setLoading(true);
     const response = await axios.get(`${NEXT_PUBLIC_API_URL}/macros`);
     const { data } = response;
+    if (data?.length > 0) {
+      settingStore.setMacros(data);
+      return data;
+    }
     return data;
   } catch (err: any) {
     messageStore.setErrorMessage(

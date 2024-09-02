@@ -66,13 +66,18 @@ function MacroCard({
     setDeleteModal(false);
   }, []);
 
+  const stripHtmlTags = (html: string): string => {
+    return html.replace(/<[^>]*>/g, '');
+  };
+  const cleanedDescription = stripHtmlTags(description);
+
   return (
     <>
       <CardMainDiv>
         <LeftDiv>
           <TitleDiv>
             <h6>{name}</h6>
-            <p>{description}</p>
+            <p>{cleanedDescription}</p>
           </TitleDiv>
         </LeftDiv>
         <RightDiv>
