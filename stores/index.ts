@@ -14,6 +14,7 @@ const stores = {
   ticketStore,
   settingStore,
   messageStore,
+  contactStore,
 };
 export default stores;
 
