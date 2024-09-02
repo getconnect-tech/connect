@@ -43,3 +43,12 @@ enum UserRole {
 enum ConfigType {
     CHANNEL
 }
+
+enum EmailEventType {
+    OPENED
+    BOUNCED
+    DELIVERED
+    LINK_CLICKED
+    SPAMED
+    FAILED
+}
