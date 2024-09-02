@@ -22,8 +22,12 @@ export const PUT = withAdminAuth(async (req, { macroId }) => {
 });
 
 export const DELETE = withAdminAuth(async (req, { macroId }) => {
-  const result = await deleteMacro(macroId);
-  if (result)
-    return Response.json('Macro successfully deleted.', { status: 201 });
-  else throw new Error('Failed to delete macro.');
+  try {
+    const result = await deleteMacro(macroId);
+    if (result)
+      return Response.json('Macro successfully deleted.', { status: 201 });
+    else throw new Error('Failed to delete macro.');
+  } catch (err) {
+    return handleApiError(err);
+  }
 });

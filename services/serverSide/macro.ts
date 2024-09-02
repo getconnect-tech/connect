@@ -25,15 +25,9 @@ export const createOrUpdateMacro = async (
 };
 
 export const deleteMacro = async (macroId: string): Promise<boolean> => {
-  try {
-    if (isEmpty(macroId)) throw new Error("'macroId' is required!");
-    const result = await prisma.macro.delete({
-      where: { id: macroId },
-    });
-    if (result) return true;
-    return false;
-  } catch (e) {
-    console.log('Error deleting Macro:', e);
-    throw e;
-  }
+  const result = await prisma.macro.delete({
+    where: { id: macroId },
+  });
+  if (result) return true;
+  return false;
 };
