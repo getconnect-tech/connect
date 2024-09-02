@@ -1,8 +1,14 @@
 import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
-import { createRequestBody } from '@/lib/zod/macro';
+import { titleSchema } from '@/lib/zod/macro';
 import withAdminAuth from '@/middlewares/withAdminAuth';
 import { createMacro } from '@/services/serverSide/macro';
+import { contentSchema } from '@/lib/zod/message';
+
+const createRequestBody = z.object({
+  title: titleSchema,
+  content: contentSchema,
+});
 
 export const POST = withAdminAuth(async (req) => {
   try {

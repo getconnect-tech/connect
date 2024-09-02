@@ -1,4 +1,3 @@
-import { Macro } from '@prisma/client';
 import { prisma } from '@/prisma/prisma';
 
 export const createMacro = async (
@@ -8,19 +7,14 @@ export const createMacro = async (
     title: string;
     content: string;
   },
-): Promise<Macro> => {
-  try {
-    const payload = {
-      ...model,
-      workspace_id,
-      created_by: user_id,
-    };
-    const macro = await prisma.macro.create({
-      data: payload,
-    });
-    return macro;
-  } catch (e) {
-    console.log('Error create Macro:', e);
-    throw e;
-  }
+) => {
+  const payload = {
+    ...model,
+    workspace_id,
+    created_by: user_id,
+  };
+  const macro = await prisma.macro.create({
+    data: payload,
+  });
+  return macro;
 };
