@@ -1,4 +1,10 @@
-import { Label, MessageType, Prisma, User } from '@prisma/client';
+import {
+  EmailEventType,
+  Label,
+  MessageType,
+  Prisma,
+  User,
+} from '@prisma/client';
 import { prisma } from '@/prisma/prisma';
 
 export const postMessage = async ({
@@ -98,4 +104,23 @@ export const getTicketMessages = async (ticketId: string) => {
   });
 
   return formattedMessages;
+};
+
+export const createEmailEvent = async (
+  messageId: string,
+  { eventType, extra }: { eventType: EmailEventType; extra: string },
+) => {
+  const newEvent = await prisma.emailEvent.create({
+    data: { event: eventType, extra, message_id: messageId },
+  });
+
+  return newEvent;
+};
+
+export const getTicketEmailEvents = async (ticketId: string) => {
+  const emailEvents = await prisma.emailEvent.findMany({
+    where: { message: { ticket_id: ticketId } },
+  });
+
+  return emailEvents;
 };
