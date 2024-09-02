@@ -111,6 +111,7 @@ const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;
+    border: none;
   }
 `;
 

@@ -147,3 +147,23 @@ export const deleteLabel = async (labelId: string) => {
     settingStore.setLoading(false);
   }
 };
+
+/**
+ * @desc  create macros
+ * @param {*} payload { "title" , "content"}
+ */
+export const createMacros = async (payload: object) => {
+  try {
+    settingStore.setLoading(true);
+    const response = await axios.post(`${NEXT_PUBLIC_API_URL}/macros`, payload);
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    settingStore.setLoading(false);
+  }
+};
