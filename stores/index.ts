@@ -5,6 +5,7 @@ import { workspaceStore } from './workspaceStore';
 import { ticketStore } from './ticketStore';
 import { settingStore } from './settingStore';
 import { messageStore } from './messageStore';
+import { contactStore } from './contactStore';
 
 // Combine all stores in one object
 const stores = {
@@ -13,6 +14,7 @@ const stores = {
   ticketStore,
   settingStore,
   messageStore,
+  contactStore,
 };
 export default stores;
 
@@ -24,5 +26,6 @@ export const useStores = () => {
     ticketStore: typeof ticketStore;
     settingStore: typeof settingStore;
     messageStore: typeof messageStore;
+    contactStore: typeof contactStore;
   };
 };
