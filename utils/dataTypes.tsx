@@ -1,4 +1,5 @@
 import { getWorkspaceApiKeys } from '@/services/serverSide/apiKey';
+import { getWorkspaceContacts } from '@/services/serverSide/contact';
 import { getTicketMessages } from '@/services/serverSide/message';
 import {
   getUserWorkspaces,
@@ -30,6 +31,10 @@ export type MessageDetails = NonNullable<
 
 export type ApiKey = NonNullable<
   Awaited<ReturnType<typeof getWorkspaceApiKeys>>
+>[0];
+
+export type Contact = NonNullable<
+  Awaited<ReturnType<typeof getWorkspaceContacts>>
 >[0];
 
 export type EmailConfig = {
