@@ -147,3 +147,25 @@ export const deleteLabel = async (labelId: string) => {
     settingStore.setLoading(false);
   }
 };
+
+/**
+ * @desc  Delete macros
+ * @param {*} macrosId
+ */
+export const deleteMacros = async (macrosId: string) => {
+  try {
+    settingStore.setLoading(true);
+    const response = await axios.delete(
+      `${NEXT_PUBLIC_API_URL}/macros/${macrosId}`,
+    );
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    settingStore.setLoading(false);
+  }
+};
