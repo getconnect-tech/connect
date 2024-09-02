@@ -152,7 +152,7 @@ export const deleteLabel = async (labelId: string) => {
  * @desc  update macros
  * @param {*} payload { "title" , "content"}
  */
-export const createMacros = async (macrosId: string, payload: object) => {
+export const updateMacros = async (macrosId: string, payload: object) => {
   try {
     settingStore.setLoading(true);
     const response = await axios.put(
