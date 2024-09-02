@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import {
   Description,
@@ -12,38 +12,37 @@ import {
   RightDiv,
   Title,
 } from '../style';
+import { getMacros } from '../../../services/clientSide/settingServices';
 import Button from '@/components/button/button';
 import EmptyState from '@/components/emptyState/emptyState';
 import { isEmpty } from '@/helpers/common';
 import MacroCard from '@/components/macroCard/macroCard';
 import Modal from '@/components/modal/modal';
 import MacroModal from '@/components/modalComponent/macroModal';
+import { useStores } from '@/stores';
 
 const Macros = () => {
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
   const [macroModal, setMacroModal] = useState(false);
+  const { settingStore, workspaceStore } = useStores();
+  const { currentWorkspace } = workspaceStore || {};
+  const { macros } = settingStore || {};
 
-  const macros = [
-    {
-      name: 'Template 1',
-      description: 'Urgent: Immediate Attention Needed',
-      id: 1,
-    },
-    { name: 'Template 2', description: 'Thank You for Your Support', id: 2 },
-    {
-      name: 'Template 3',
-      description: 'Follow-Up on Previous Conversation',
-      id: 3,
-    },
-    {
-      name: 'Template 4',
-      description: 'Request for Feedback on Connect.',
-      id: 4,
-    },
-    { name: 'Template 5', description: 'Welcome to Our Team!', id: 5 },
-  ];
+  const loadData = useCallback(async () => {
+    if (!isEmpty(currentWorkspace?.id)) {
+      try {
+        await getMacros();
+      } catch (err: any) {
+        console.log('error', err);
+      }
+    }
+  }, [currentWorkspace?.id]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const onOpenMacroModal = useCallback(() => {
     setMacroModal(true);
@@ -95,8 +94,8 @@ const Macros = () => {
                 {macros.map((macros, index) => (
                   <MacroCard
                     key={index}
-                    name={macros.name}
-                    description={macros.description}
+                    name={macros.title}
+                    description={macros.content}
                     currentOpenDropdown={currentOpenDropdown}
                     setCurrentOpenDropdown={setCurrentOpenDropdown}
                     dropdownIdentifier={`card-${macros.id}`}
