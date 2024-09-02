@@ -39,7 +39,7 @@ export default function ContactCard({
       <LeftDiv>
         <Avatar
           imgSrc={imgSrc}
-          name={''}
+          name={name}
           size={28}
           isShowBorder={!isCompany && true}
         />

@@ -1,10 +1,11 @@
 'use client';
 import React, { useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import { HeaderDiv, Main, MainDiv, Tab, TabDiv, Title, TopDiv } from './style';
 import PersonList from './personList';
 import CompanyList from './companyList';
 
-export default function Contact() {
+const Contact = () => {
   const [activeTab, setActiveTab] = useState('People');
   const tabItem = ['People', 'Company'];
   return (
@@ -33,4 +34,5 @@ export default function Contact() {
       </MainDiv>
     </Main>
   );
-}
+};
+export default observer(Contact);
