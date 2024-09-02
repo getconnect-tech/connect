@@ -149,6 +149,26 @@ export const deleteLabel = async (labelId: string) => {
 };
 
 /**
+ * @desc  get macros
+ * @param {*} payload
+ */
+export const getMacros = async () => {
+  try {
+    settingStore.setLoading(true);
+    const response = await axios.get(`${NEXT_PUBLIC_API_URL}/macros`);
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    settingStore.setLoading(false);
+  }
+};
+
+/**
  * @desc  create macros
  * @param {*} payload { "title" , "content"}
  */
