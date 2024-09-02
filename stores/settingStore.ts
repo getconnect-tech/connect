@@ -6,6 +6,7 @@ class SettingStore {
   loading = false;
   apiKeys: ApiKey[] | null = null;
   labels: Label[] | null = null;
+  macros: any[] = [];
 
   constructor() {
     makeObservable(this, {
@@ -23,6 +24,11 @@ class SettingStore {
       addLabel: action,
       updateLabel: action,
       removeLabel: action,
+
+      //macros
+      macros: observable,
+      setMacros: action,
+      addMacros: action,
     });
   }
 
@@ -59,6 +65,15 @@ class SettingStore {
     if (!this.labels) return;
 
     this.labels = this.labels.filter((label) => label.id !== labelId);
+  }
+  // set macros
+  setMacros(value: any[]) {
+    this.macros = value;
+  }
+
+  //add Macros
+  addMacros(value: any) {
+    this.macros = [...(this.macros || []), value];
   }
 }
 
