@@ -349,7 +349,7 @@ function TicketDetails(props: Props) {
                 (item) => item.id !== labelId,
               );
               ticketStore.setTicketDetails({
-                ...ticketDetails,
+                ...(ticketDetails || {}),
                 labels: newLabel,
               });
             }
@@ -360,7 +360,7 @@ function TicketDetails(props: Props) {
               const ticketLabels = ticketDetails.labels || [];
               if (newLabel) ticketLabels.push(newLabel);
               ticketStore.setTicketDetails({
-                ...ticketDetails,
+                ...(ticketDetails || {}),
                 labels: ticketLabels,
               });
             }
