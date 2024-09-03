@@ -81,9 +81,6 @@ class SettingStore {
   //update macro
   updateMacros(index: number, updatedMacro: Macros) {
     this.macros[index] = updatedMacro;
-    this.macros = this.macros.map((macro) =>
-      macro.id === updatedMacro.id ? updatedMacro : macro,
-    );
   }
 
   // Delete Macro

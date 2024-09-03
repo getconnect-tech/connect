@@ -93,6 +93,7 @@ const Macros = () => {
               <MainCardDiv>
                 {macros.map((macros, index) => (
                   <MacroCard
+                    key={index}
                     index={index}
                     name={macros.title}
                     description={macros.content}
