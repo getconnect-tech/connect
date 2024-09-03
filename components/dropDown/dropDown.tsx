@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Label } from '@prisma/client';
+import moment from 'moment';
 import Avatar from '../avtar/Avtar';
 import Input from '../input/input';
 import {
@@ -274,7 +275,13 @@ const DropDown = ({
                 )}
                 <p>{item.name}</p>
               </ItemLeftDiv>
-              {isSnooze && <p>{item.time}</p>}
+              {isSnooze && (
+                <p>
+                  {item.name === 'Later today' || item.name === 'This evening'
+                    ? moment(item.time).format('h:mm A')
+                    : moment(item.time).format('ddd, MMM D, h:mm A')}
+                </p>
+              )}
             </ItemDiv>
           );
         })}

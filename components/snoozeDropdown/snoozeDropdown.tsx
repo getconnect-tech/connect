@@ -31,6 +31,7 @@ export default function SnoozeDropdown({
   onMouseEnter,
 }: Props) {
   const [showDatePicker, setShowDatePicker] = useState(false);
+
   return (
     <div onMouseEnter={onMouseEnter}>
       <Tag
@@ -50,8 +51,8 @@ export default function SnoozeDropdown({
           iconViewBox={`0 0 ${iconSize} ${iconSize}`}
           onClose={onClose}
           onChange={(item) => {
-            onChange(item);
-            setShowDatePicker(true);
+            if (item?.name === 'date&time') setShowDatePicker(true);
+            else onChange(item);
           }}
           isSearch={true}
           className={className}

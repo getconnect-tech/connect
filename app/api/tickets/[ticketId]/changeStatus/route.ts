@@ -16,7 +16,7 @@ export const PUT = withWorkspaceAuth(async (req, { ticketId }) => {
       snoozeUntilSchema.parse(snoozeUntil);
     }
 
-    const updatedTicket = await updateStatus(ticketId, status);
+    const updatedTicket = await updateStatus(ticketId, status, snoozeUntil);
 
     const userId = req.user.id;
     await postMessage({

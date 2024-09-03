@@ -184,7 +184,7 @@ export const updateStatus = async (
 
   const payload = {
     status: newStatus,
-    snoozeUntil: snoozeUntil,
+    snooze_until: snoozeUntil,
   };
 
   removeNullUndefined(payload);
