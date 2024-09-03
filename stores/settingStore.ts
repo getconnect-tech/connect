@@ -75,6 +75,18 @@ class SettingStore {
   addMacros(value: Macros) {
     this.macros = [...(this.macros || []), value];
   }
+
+  //update macro
+  updateMacros(macroId: string, updatedMacro: Partial<Macros>) {
+    this.macros = this.macros.map((macro) =>
+      macro.id === macroId ? { ...macro, ...updatedMacro } : macro,
+    );
+  }
+
+  // Delete Macro
+  deleteMacros(macroId: string) {
+    this.macros = this.macros.filter((macro) => macro.id !== macroId);
+  }
 }
 
 export const settingStore = new SettingStore();

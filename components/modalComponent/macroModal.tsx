@@ -4,17 +4,28 @@ import RichTextBox from '../commentBox';
 import Button from '../button/button';
 import { BottomDiv, Header, Label, MainDiv } from './style';
 import { useStores } from '@/stores';
-import { createMacros } from '@/services/clientSide/settingServices';
+import {
+  createMacros,
+  updateMacros,
+} from '@/services/clientSide/settingServices';
 
+interface MacroData {
+  id: string;
+  title: string;
+  description: string;
+}
 interface Props {
   onClose: () => void;
+  macroData?: MacroData;
 }
-function MacroModal({ onClose }: Props) {
+function MacroModal({ onClose, macroData }: Props) {
   // Create new label and update label
   const { settingStore } = useStores();
   const { loading } = settingStore;
-  const [title, setTitle] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
+  const [title, setTitle] = useState<string>(macroData?.title || '');
+  const [description, setDescription] = useState<string>(
+    macroData?.description || '',
+  );
 
   const handleMacrosSubmit = useCallback(
     async (e: React.SyntheticEvent, title: string, description: string) => {
@@ -22,9 +33,18 @@ function MacroModal({ onClose }: Props) {
       const payload = { content: description, title };
       settingStore.setLoading(true);
       try {
-        const result = await createMacros(payload);
-        if (result) {
-          settingStore.addMacros(result);
+        if (macroData) {
+          // Update existing macro
+          const result = await updateMacros(macroData.id, payload);
+          if (result) {
+            settingStore.updateMacros(macroData.id, payload);
+          }
+        } else {
+          // Create new macro
+          const result = await createMacros(payload);
+          if (result) {
+            settingStore.addMacros(result);
+          }
         }
       } catch (e) {
         console.log('Error : ', e);
