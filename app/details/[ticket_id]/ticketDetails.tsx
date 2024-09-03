@@ -53,6 +53,7 @@ import { colors } from '@/styles/colors';
 import { messageStore } from '@/stores/messageStore';
 import { HandleClickProps } from '@/utils/appTypes';
 import LabelDropdown from '@/components/labelDropdown/labelDropdown';
+import { getMacros } from '@/services/clientSide/settingServices';
 
 interface Props {
   ticket_id: string;
@@ -71,7 +72,7 @@ function TicketDetails(props: Props) {
   const { ticketStore, workspaceStore, userStore, settingStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
-  const { labels } = settingStore || {};
+  const { labels, macros } = settingStore || {};
   const { user } = userStore || {};
   const { priority, assigned_to, contact } = ticketDetails || {};
   const [macroDropdown, setMacroDropdown] = useState(false);
@@ -111,6 +112,7 @@ function TicketDetails(props: Props) {
         getTicketDetails(ticket_id),
         getTicketMessages(ticket_id),
       ]);
+      await getMacros();
     }
   }, [ticket_id, currentWorkspace?.id]);
 
@@ -199,12 +201,12 @@ function TicketDetails(props: Props) {
       user_id: user.id,
     })) || []),
   ];
-  const macroItem = [
-    { name: 'Template 1' },
-    { name: 'Template 2' },
-    { name: 'Template 3' },
-    { name: 'Template 4' },
-  ];
+
+  const macroItem =
+    macros?.map((macro) => ({
+      name: macro.title,
+    })) || [];
+
   /*
    * @desc Update ticket details priority in ticket details
    */
