@@ -29,13 +29,29 @@ export const getWorkspaceTickets = async (
 
   const tickets = await prisma.ticket.findMany({
     where: query,
-    orderBy: { created_at: 'desc' },
     include: {
       labels: { include: { label: true } },
       contact: true,
       assigned_user: true,
+      messages: {
+        select: { created_at: true },
+        take: 1,
+        orderBy: { created_at: 'desc' },
+      },
     },
   });
+
+  tickets.sort(
+    (a, b) =>
+      new Date(
+        b.messages.length > 0 ? b.messages[0].created_at : b.created_at,
+      ).getTime() -
+      new Date(
+        a.messages.length > 0 ? a.messages[0].created_at : a.created_at,
+      ).getTime(),
+  );
+
+  tickets.forEach((t) => delete (t as any).messages);
 
   const formattedTickets = tickets.map(formatTicket);
 
