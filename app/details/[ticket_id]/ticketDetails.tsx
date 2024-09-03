@@ -372,32 +372,6 @@ function TicketDetails(props: Props) {
   );
 
   /*
-   * @desc update ticket snooze
-   */
-  const onChangeSnooze = useCallback(
-    async (item: { name: string; time: string }) => {
-      const payload = { status: TicketStatus.SNOOZE, snoozeUntil: item.time };
-      try {
-        if (ticketDetails?.id) {
-          const updatedTicketDetails = {
-            ...(ticketDetails || {}),
-            status: TicketStatus.SNOOZE,
-            snooze_until: new Date(item.time),
-          };
-          ticketStore.setTicketDetails(updatedTicketDetails);
-          const result = await changeTicketStatus(ticketDetails?.id, payload);
-          if (result) {
-            loadData();
-          }
-        }
-      } catch (e) {
-        console.log('Error : ', e);
-      }
-    },
-    [ticketDetails],
-  );
-
-  /*
    * @desc Render message based on message type
    */
   const renderActivityMessage = useCallback(
@@ -618,7 +592,8 @@ function TicketDetails(props: Props) {
                 dropdownOpen={snoozeDropdown}
                 onClose={() => setSnoozeDropdown(false)}
                 items={snoozeItem}
-                onChange={onChangeSnooze}
+                user={user}
+                ticketDetails={ticketDetails}
                 isActive={snoozeDropdown ? true : false}
               />
             </ButtonDiv>

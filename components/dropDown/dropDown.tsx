@@ -148,6 +148,11 @@ const DropDown = ({
           // isChecked true then remove label from ticket or isChecked false then add label in ticket
           handleClick({ isChecked, labelId: item.labelId });
         }
+
+        // set ticket snooze
+        if (isSnooze) {
+          handleClick({ value: item.time });
+        }
       }
 
       if (onChange) {
