@@ -2,6 +2,7 @@
 import styled, { css, keyframes } from 'styled-components';
 import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
+import { Borders } from '@/styles/borderVariable';
 
 interface WrapButton {
   secondary: boolean;
@@ -26,7 +27,7 @@ const Buttons = styled.button<WrapButton>`
   padding: 8px 16px;
   border-radius: 20px;
   background-color: ${colors.brand};
-  border: 1px solid ${colors.brand};
+  ${Borders.border_primary};
   color: ${colors.text_white};
   white-space: nowrap;
   align-items: center;
@@ -39,7 +40,7 @@ const Buttons = styled.button<WrapButton>`
     css`
       background-color: transparent;
       color: ${colors.text};
-      border: 1px solid ${colors.border_input_border};
+      ${Borders.border_secondary};
       &:hover {
         background-color: ${colors.bg_surface_hover};
       }
@@ -53,7 +54,7 @@ const Buttons = styled.button<WrapButton>`
     props.disabled &&
     css`
       color: ${colors.text_disabled};
-      border: 1px solid ${colors.brand_disabled};
+      ${Borders.border_disable};
       background-color: ${props.secondary
         ? 'transparent'
         : props.isLoading
@@ -104,7 +105,7 @@ const Buttons = styled.button<WrapButton>`
     css`
       background-color: ${colors.fill_danger};
       color: ${colors.text_white};
-      border-color: ${colors.fill_danger};
+      ${Borders.border_delete};
       &:hover {
         background-color: ${colors.fill_danger};
       }

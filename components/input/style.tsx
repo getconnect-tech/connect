@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
+import { Borders } from '@/styles/borderVariable';
 interface Props {
   hasError?: boolean;
   login?: boolean;
@@ -22,7 +23,7 @@ const InputBox = styled.input<Props>`
   width: 100%;
   border-radius: 20px;
   padding: 8px 16px;
-  border: 1px solid ${colors.border_input_border};
+  ${Borders.border_secondary};
   background: transparent;
   color: ${colors.text};
   ${Typography.body_md_medium};
@@ -46,15 +47,15 @@ const InputBox = styled.input<Props>`
     color: ${colors.text_text_secondary};
   }
   &:focus {
-    border: 1px solid ${colors.border_brand};
+    ${Borders.border_primary};
   }
   ${(props) =>
     props.hasError &&
     css`
       &:focus {
-        border: 1px solid ${colors.fill_danger};
+        ${Borders.border_delete};
       }
-      border: 1px solid ${colors.fill_danger};
+      ${Borders.border_delete};
       color: ${colors.text};
       &::placeholder {
         color: ${colors.text_text_secondary};
@@ -66,7 +67,7 @@ const InputBox = styled.input<Props>`
       &::placeholder {
         color: ${colors.text_disabled};
       }
-      border: 1px solid ${colors.border_disabled};
+      ${Borders.border_disable};
     `}
   ${(props) =>
     props.isIcon &&
