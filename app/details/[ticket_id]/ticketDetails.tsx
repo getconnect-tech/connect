@@ -202,11 +202,6 @@ function TicketDetails(props: Props) {
     })) || []),
   ];
 
-  const macroItem =
-    macros?.map((macro) => ({
-      name: macro.title,
-    })) || [];
-
   /*
    * @desc Update ticket details priority in ticket details
    */
@@ -678,7 +673,8 @@ function TicketDetails(props: Props) {
                       />
                       {macroDropdown && (
                         <DropDown
-                          items={macroItem}
+                          items={macros}
+                          labelField='title'
                           onClose={handleOutsideClick}
                           iconSize={''}
                           iconViewBox={''}
