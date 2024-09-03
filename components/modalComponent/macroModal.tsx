@@ -8,6 +8,7 @@ import {
   createMacros,
   updateMacros,
 } from '@/services/clientSide/settingServices';
+import { messageStore } from '@/stores/messageStore';
 
 interface MacroData {
   index: number;
@@ -30,6 +31,12 @@ function MacroModal({ onClose, macroData }: Props) {
   const handleMacrosSubmit = useCallback(
     async (e: React.SyntheticEvent) => {
       e.preventDefault();
+      if (description.trim() === '' || title.trim() === '') {
+        messageStore.setErrorMessage(
+          'Both title and description are required.',
+        );
+        return;
+      }
       const payload = { content: description, title };
       settingStore.setLoading(true);
       try {
