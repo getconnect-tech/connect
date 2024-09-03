@@ -15,10 +15,12 @@ interface Props {
   // eslint-disable-next-line no-unused-vars
   setCurrentOpenDropdown: (dropdown: string | null) => void;
   dropdownIdentifier: string;
+  id: string;
 }
 
 function MacroCard({
   index,
+  id,
   name,
   description,
   currentOpenDropdown,
