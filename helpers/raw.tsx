@@ -84,10 +84,17 @@ export const snoozeItem = [
   { name: 'This evening', time: '6:00 PM' },
   {
     name: 'Tomorrow',
-    time: moment().add(1, 'days').format('ddd, MMM D, h:mm A'),
+    time: moment()
+      .add(1, 'days')
+      .set({ hour: 9, minute: 0, second: 0 })
+      .format('ddd, MMM D, h:mm A'),
   },
   {
     name: 'Next week',
-    time: moment().clone().day(8).format('ddd, MMM D, h:mm A'),
+    time: moment()
+      .clone()
+      .day(8)
+      .set({ hour: 9, minute: 0, second: 0 })
+      .format('ddd, MMM D, h:mm A'),
   },
 ];
