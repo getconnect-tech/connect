@@ -7,8 +7,15 @@ interface Props {
   title: string;
   description: string;
   onclose: () => void;
+  onDelete: () => void;
 }
-function DeleteModal({ headTitle, title, description, onclose }: Props) {
+function DeleteModal({
+  headTitle,
+  title,
+  description,
+  onclose,
+  onDelete,
+}: Props) {
   return (
     <MainDiv>
       <Header>{headTitle}</Header>
@@ -23,7 +30,12 @@ function DeleteModal({ headTitle, title, description, onclose }: Props) {
           onClick={onclose}
           variant='medium'
         />
-        <Button title='Delete' isDelete={true} variant='medium' />
+        <Button
+          title='Delete'
+          isDelete={true}
+          variant='medium'
+          onClick={onDelete}
+        />
       </BottomDiv>
     </MainDiv>
   );
