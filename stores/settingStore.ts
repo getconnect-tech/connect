@@ -29,6 +29,8 @@ class SettingStore {
       macros: observable,
       setMacros: action,
       addMacros: action,
+      updateMacros: action,
+      deleteMacros: action,
     });
   }
 
@@ -77,15 +79,17 @@ class SettingStore {
   }
 
   //update macro
-  updateMacros(macroId: string, updatedMacro: Partial<Macros>) {
+  updateMacros(index: number, updatedMacro: Macros) {
+    this.macros[index] = updatedMacro;
     this.macros = this.macros.map((macro) =>
-      macro.id === macroId ? { ...macro, ...updatedMacro } : macro,
+      macro.id === updatedMacro.id ? updatedMacro : macro,
     );
   }
 
   // Delete Macro
   deleteMacros(macroId: string) {
-    this.macros = this.macros.filter((macro) => macro.id !== macroId);
+    const index = this.macros.findIndex((macro) => macro.id === macroId);
+    if (index !== -1) this.macros.splice(index, 1);
   }
 }
 
