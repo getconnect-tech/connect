@@ -5,6 +5,8 @@ import Modal from '../modal/modal';
 import DeleteModal from '../deleteModal/deleteModal';
 import MacroModal from '../modalComponent/macroModal';
 import { CardMainDiv, LeftDiv, RightDiv, TitleDiv } from './style';
+import { deleteMacros } from '@/services/clientSide/settingServices';
+import { useStores } from '@/stores';
 interface Props {
   index: number;
   name: string;
@@ -13,10 +15,12 @@ interface Props {
   // eslint-disable-next-line no-unused-vars
   setCurrentOpenDropdown: (dropdown: string | null) => void;
   dropdownIdentifier: string;
+  id: string;
 }
 
 function MacroCard({
   index,
+  id,
   name,
   description,
   currentOpenDropdown,
@@ -25,6 +29,7 @@ function MacroCard({
 }: Props) {
   const [deleteModal, setDeleteModal] = useState(false);
   const [macroModal, setMacroModal] = useState(false);
+  const { settingStore } = useStores();
 
   const onOpenMacroModal = useCallback(() => {
     setMacroModal(true);
@@ -51,6 +56,19 @@ function MacroCard({
     },
   ];
 
+  const handleDelete = useCallback(async () => {
+    try {
+      const result = await deleteMacros(id);
+      if (result) {
+        settingStore.deleteMacros(id);
+      }
+    } catch (e) {
+      console.log('Error : ', e);
+    } finally {
+      onCloseDeleteModal();
+    }
+  }, [id]);
+
   const handleDropdownClick = (dropdown: string) => {
     const identifier = `${dropdownIdentifier}-${dropdown}`;
     setCurrentOpenDropdown(
@@ -68,7 +86,8 @@ function MacroCard({
   }, []);
 
   const stripHtmlTags = (html: string): string => {
-    return html.replace(/<[^>]*>/g, '');
+    const withSpaces = html.replace(/&nbsp;/g, ' ');
+    return withSpaces.replace(/<[^>]*>/g, '');
   };
   const cleanedDescription = stripHtmlTags(description);
 
@@ -113,6 +132,7 @@ function MacroCard({
           headTitle={'Delete Macro'}
           title={'Are you sure you want to delete this macro?'}
           description={'This action can’t be undone.'}
+          onDelete={handleDelete}
         />
       </Modal>
       <Modal open={macroModal} onClose={onCloseMacroModal}>

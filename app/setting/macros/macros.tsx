@@ -95,6 +95,7 @@ const Macros = () => {
                   <MacroCard
                     key={index}
                     index={index}
+                    id={macros?.id}
                     name={macros.title}
                     description={macros.content}
                     currentOpenDropdown={currentOpenDropdown}
