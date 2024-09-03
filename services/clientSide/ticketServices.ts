@@ -200,8 +200,6 @@ export const changeTicketStatus = async (ticketId: any, payload: object) => {
     );
     const { data } = response;
 
-    // set ticket details in store
-    ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
     messageStore.setErrorMessage(

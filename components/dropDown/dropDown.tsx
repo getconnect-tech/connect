@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Label } from '@prisma/client';
+import moment from 'moment';
 import Avatar from '../avtar/Avtar';
 import Input from '../input/input';
 import {
@@ -161,6 +162,11 @@ const DropDown = ({
           // isChecked true then remove label from ticket or isChecked false then add label in ticket
           handleClick({ isChecked, labelId: item.labelId });
         }
+
+        // set ticket snooze
+        if (isSnooze) {
+          handleClick({ item });
+        }
       }
 
       if (onChange) {
@@ -285,7 +291,13 @@ const DropDown = ({
                 )}
                 <p>{item.name}</p>
               </ItemLeftDiv>
-              {isSnooze && <p>{item.time}</p>}
+              {isSnooze && (
+                <p>
+                  {item.name === 'Later today' || item.name === 'This evening'
+                    ? moment(item.value).format('h:mm A')
+                    : moment(item.value).format('ddd, MMM D, h:mm A')}
+                </p>
+              )}
             </ItemDiv>
           );
         })}

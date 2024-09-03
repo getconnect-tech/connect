@@ -27,7 +27,7 @@ import ProfileSection from '@/components/profileSection/profileSection';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
 import MessageCard from '@/components/messageCard/messageCard';
-import { modeItem, priorityItem, snoozeItem } from '@/helpers/raw';
+import { modeItem, priorityItem } from '@/helpers/raw';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import { useStores } from '@/stores';
 import {
@@ -588,8 +588,8 @@ function TicketDetails(props: Props) {
                 onClick={handleSnoozeTag}
                 dropdownOpen={snoozeDropdown}
                 onClose={() => setSnoozeDropdown(false)}
-                items={snoozeItem}
-                onChange={() => {}}
+                user={user}
+                ticketDetails={ticketDetails}
                 isActive={snoozeDropdown ? true : false}
               />
             </ButtonDiv>
