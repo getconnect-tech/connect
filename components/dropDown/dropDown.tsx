@@ -37,7 +37,7 @@ export type DropDownItem = {
 };
 
 interface DropDownProps {
-  items: DropDownItem[];
+  items: DropDownItem[] | any;
   style?: React.CSSProperties;
   userId?: string;
   handleClick?: ({
@@ -69,6 +69,7 @@ interface DropDownProps {
   // eslint-disable-next-line no-unused-vars
   handleMouseEnter?: (e: any) => void;
   className?: string;
+  labelField?: string;
 }
 
 // Hook to handle outside clicks
@@ -116,6 +117,7 @@ const DropDown = ({
   ticketLabelData,
   handleMouseEnter,
   className,
+  labelField = 'name',
 }: DropDownProps) => {
   const dropDownRef = useOutsideClick(onClose);
   const [value, setValueItem] = useState<string | null>(null);
@@ -124,9 +126,21 @@ const DropDown = ({
   // eslint-disable-next-line no-undef
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const getItemsList = useCallback(() => {
+    if (labelField !== 'name' && !isEmpty(labelField)) {
+      const updatedItems = items?.map((item: any) => {
+        return { ...(item || {}), name: item[labelField] };
+      });
+      return updatedItems;
+    } else {
+      return items;
+    }
+  }, []);
+
   useEffect(() => {
-    setSearchResult(items);
-  }, [items]);
+    const itemsList = getItemsList();
+    setSearchResult(itemsList);
+  }, []);
 
   const onClickItem = useCallback(
     (e: SyntheticEvent, item: DropDownItem, value: string | null) => {
@@ -157,16 +171,13 @@ const DropDown = ({
     [handleClick, onChange, onClose, userId],
   );
 
-  const searchQuery = useCallback(
-    (value: string) => {
-      const result =
-        items?.filter((item) =>
-          item?.name?.toLowerCase().includes(value?.toLowerCase()),
-        ) || [];
-      setSearchResult(result);
-    },
-    [items],
-  );
+  const searchQuery = useCallback((value: string) => {
+    const result =
+      getItemsList()?.filter((item: any) =>
+        item?.name?.toLowerCase().includes(value?.toLowerCase()),
+      ) || [];
+    setSearchResult(result);
+  }, []);
 
   const onChangeSearch = useCallback(
     (value: string) => {
@@ -177,10 +188,10 @@ const DropDown = ({
         searchQuery(value);
       }, 300);
       if (isEmpty(value)) {
-        setSearchResult(items);
+        setSearchResult(getItemsList);
       }
     },
-    [searchQuery, items],
+    [searchQuery],
   );
 
   const handleDateTimeClick = (e: SyntheticEvent) => {
