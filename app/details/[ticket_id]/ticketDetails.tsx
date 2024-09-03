@@ -318,11 +318,9 @@ function TicketDetails(props: Props) {
 
       try {
         if (ticket_id) {
+          setCommentValue('');
           ticketStore.addTicketMessage(newMessage);
-          const result = await sendMessage(ticket_id, payload);
-          if (result) {
-            setCommentValue('');
-          }
+          await sendMessage(ticket_id, payload);
         }
       } catch (e) {
         console.log('Error : ', e);
