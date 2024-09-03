@@ -5,8 +5,8 @@ import Modal from '../modal/modal';
 import DeleteModal from '../deleteModal/deleteModal';
 import MacroModal from '../modalComponent/macroModal';
 import { CardMainDiv, LeftDiv, RightDiv, TitleDiv } from './style';
-
 interface Props {
+  index: number;
   name: string;
   description: string;
   currentOpenDropdown: string | null;
@@ -16,6 +16,7 @@ interface Props {
 }
 
 function MacroCard({
+  index,
   name,
   description,
   currentOpenDropdown,
@@ -115,7 +116,10 @@ function MacroCard({
         />
       </Modal>
       <Modal open={macroModal} onClose={onCloseMacroModal}>
-        <MacroModal onClose={onCloseMacroModal} />
+        <MacroModal
+          macroData={{ index, title: name, description }}
+          onClose={onCloseMacroModal}
+        />
       </Modal>
     </>
   );
