@@ -1,4 +1,5 @@
 import { PriorityLevels, TeamSize } from '@prisma/client';
+import moment from 'moment';
 
 export const industryItems = [
   { name: 'Technology and Software' },
@@ -81,6 +82,19 @@ export const labelIcons = [
 export const snoozeItem = [
   { name: 'Later today', time: '3:00 AM' },
   { name: 'This evening', time: '6:00 PM' },
-  { name: 'Tomorrow', time: 'Sat, Aug 17, 9:00 AM' },
-  { name: 'Next week', time: 'Mon, Aug 20, 9:00 AM' },
+  {
+    name: 'Tomorrow',
+    time: moment()
+      .add(1, 'days')
+      .set({ hour: 9, minute: 0, second: 0 })
+      .format('ddd, MMM D, h:mm A'),
+  },
+  {
+    name: 'Next week',
+    time: moment()
+      .clone()
+      .day(8)
+      .set({ hour: 9, minute: 0, second: 0 })
+      .format('ddd, MMM D, h:mm A'),
+  },
 ];

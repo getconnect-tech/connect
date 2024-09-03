@@ -8,9 +8,10 @@ import {
   createMacros,
   updateMacros,
 } from '@/services/clientSide/settingServices';
+import { messageStore } from '@/stores/messageStore';
 
 interface MacroData {
-  id: string;
+  index: number;
   title: string;
   description: string;
 }
@@ -28,16 +29,22 @@ function MacroModal({ onClose, macroData }: Props) {
   );
 
   const handleMacrosSubmit = useCallback(
-    async (e: React.SyntheticEvent, title: string, description: string) => {
+    async (e: React.SyntheticEvent) => {
       e.preventDefault();
+      if (description.trim() === '' || title.trim() === '') {
+        messageStore.setErrorMessage(
+          'Both title and description are required.',
+        );
+        return;
+      }
       const payload = { content: description, title };
       settingStore.setLoading(true);
       try {
         if (macroData) {
           // Update existing macro
-          const result = await updateMacros(macroData.id, payload);
+          const result = await updateMacros(macroData?.index, payload);
           if (result) {
-            settingStore.updateMacros(macroData.id, payload);
+            settingStore.updateMacros(macroData?.index, result);
           }
         } else {
           // Create new macro
@@ -59,11 +66,7 @@ function MacroModal({ onClose, macroData }: Props) {
   return (
     <MainDiv className='macro-main-div'>
       <Header>Edit Macro</Header>
-      <BottomDiv
-        onSubmit={(e: React.SyntheticEvent) =>
-          handleMacrosSubmit(e, title, description)
-        }
-      >
+      <BottomDiv onSubmit={handleMacrosSubmit}>
         <div className='content'>
           <div>
             <Label>Title</Label>
