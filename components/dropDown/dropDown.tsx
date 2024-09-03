@@ -165,7 +165,7 @@ const DropDown = ({
 
         // set ticket snooze
         if (isSnooze) {
-          handleClick({ value: item.time });
+          handleClick({ item });
         }
       }
 
@@ -294,8 +294,8 @@ const DropDown = ({
               {isSnooze && (
                 <p>
                   {item.name === 'Later today' || item.name === 'This evening'
-                    ? moment(item.time).format('h:mm A')
-                    : moment(item.time).format('ddd, MMM D, h:mm A')}
+                    ? moment(item.value).format('h:mm A')
+                    : moment(item.value).format('ddd, MMM D, h:mm A')}
                 </p>
               )}
             </ItemDiv>

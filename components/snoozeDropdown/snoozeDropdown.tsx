@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { MessageType, TicketStatus, User } from '@prisma/client';
 import { observer } from 'mobx-react-lite';
-import DropDown, { DropDownItem } from '../dropDown/dropDown';
+import DropDown from '../dropDown/dropDown';
 import Tag from '../tag/tag';
 import DatePickerModal from '../datePicker/datePicker';
 import { HandleClickProps, TicketDetailsInterface } from '@/utils/appTypes';
@@ -9,12 +9,12 @@ import { changeTicketStatus } from '@/services/clientSide/ticketServices';
 import { getUniqueId } from '@/helpers/common';
 import { MessageDetails } from '@/utils/dataTypes';
 import { ticketStore } from '@/stores/ticketStore';
+import { snoozeItem } from '@/helpers/raw';
 
 interface Props {
   onClick: () => void;
   dropdownOpen: boolean;
   onClose: () => void;
-  items: DropDownItem[];
   isActive?: boolean;
   iconSize?: string;
   selectedValue?: User;
@@ -29,7 +29,6 @@ const SnoozeDropdown = ({
   onClick,
   dropdownOpen,
   onClose,
-  items,
   isActive = false,
   iconSize = '12',
   className,
@@ -44,8 +43,8 @@ const SnoozeDropdown = ({
    */
   const handleChangeSnooze = useCallback(
     async (props: HandleClickProps) => {
-      const { value } = props;
-      const payload = { status: TicketStatus.SNOOZE, snoozeUntil: value };
+      const { item } = props;
+      const payload = { status: TicketStatus.SNOOZE, snoozeUntil: item?.value };
       const newMessage = {
         assignee: null,
         author: user,
@@ -63,7 +62,7 @@ const SnoozeDropdown = ({
           const updatedTicketDetails = {
             ...(ticketDetails || {}),
             status: TicketStatus.SNOOZE,
-            snooze_until: new Date(value || ''),
+            snooze_until: new Date(item?.value || ''),
           };
           // add data in mobX store
           ticketStore.addTicketMessage(newMessage);
@@ -92,7 +91,7 @@ const SnoozeDropdown = ({
       />
       {dropdownOpen && (
         <DropDown
-          items={items}
+          items={snoozeItem}
           iconSize={iconSize}
           iconViewBox={`0 0 ${iconSize} ${iconSize}`}
           onClose={onClose}
