@@ -380,7 +380,7 @@ function TicketDetails(props: Props) {
       try {
         if (ticketDetails?.id) {
           const updatedTicketDetails = {
-            ...ticketDetails,
+            ...(ticketDetails || {}),
             status: TicketStatus.SNOOZE,
             snooze_until: new Date(item.time),
           };
