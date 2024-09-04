@@ -3,7 +3,7 @@
 /* eslint-disable max-len */
 import React, { useCallback, useState } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
-import { PriorityLevels } from '@prisma/client';
+import { PriorityLevels, TicketStatus } from '@prisma/client';
 import DropDown from '../dropDown/dropDown';
 import DatePickerModal from '../datePicker/datePicker';
 import {
@@ -19,6 +19,7 @@ import { useStores } from '@/stores';
 import { HandleClickProps, TicketDetailsInterface } from '@/utils/appTypes';
 import {
   addLabelToTicket,
+  changeTicketStatus,
   deleteLabelFromTicket,
   updateAssignee,
   updateTicketPriority,
@@ -138,6 +139,30 @@ export default function CustomContextMenu(props: Props) {
               });
             }
           }
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetail],
+  );
+
+  /*
+   * @desc update ticket status
+   */
+  const handleTicketStatus = useCallback(
+    async (status: TicketStatus) => {
+      const payload = {
+        status,
+      };
+      try {
+        if (ticketDetail?.id) {
+          const updatedTicketDetails = {
+            ...(ticketDetail || {}),
+            status,
+          };
+          ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
+          await changeTicketStatus(ticketDetail?.id, payload);
         }
       } catch (e) {
         console.log('Error : ', e);
@@ -346,18 +371,33 @@ export default function CustomContextMenu(props: Props) {
                 </ContextMenu.Portal>
               </ContextMenu.Sub>
             </div>
-            <ContextMenuItem>
-              <div>
-                <SVGIcon
-                  name='close-icon'
-                  width='12'
-                  height='12'
-                  viewBox='0 0 12 12'
-                  className='svg-icon'
-                />
-                Close
-              </div>
-            </ContextMenuItem>
+            {ticketDetail?.status !== TicketStatus.CLOSED ? (
+              <ContextMenuItem>
+                <div onClick={() => handleTicketStatus(TicketStatus.CLOSED)}>
+                  <SVGIcon
+                    name='close-icon'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
+                    className='svg-icon'
+                  />
+                  Close
+                </div>
+              </ContextMenuItem>
+            ) : (
+              <ContextMenuItem>
+                <div onClick={() => handleTicketStatus(TicketStatus.OPEN)}>
+                  <SVGIcon
+                    name='close-icon'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
+                    className='svg-icon'
+                  />
+                  Re-open
+                </div>
+              </ContextMenuItem>
+            )}
           </ContextMenuContent>
         </ContextMenu.Portal>
       </ContextMenu.Root>
