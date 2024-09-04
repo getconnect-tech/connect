@@ -8,6 +8,7 @@ interface Props {
   description: string;
   onclose: () => void;
   onDelete: () => void;
+  loading?: boolean;
 }
 function DeleteModal({
   headTitle,
@@ -15,6 +16,7 @@ function DeleteModal({
   description,
   onclose,
   onDelete,
+  loading,
 }: Props) {
   return (
     <MainDiv>
@@ -35,6 +37,7 @@ function DeleteModal({
           isDelete={true}
           variant='medium'
           onClick={onDelete}
+          isLoading={loading}
         />
       </BottomDiv>
     </MainDiv>
