@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import Input from '../input/input';
 import Button from '../button/button';
 import {
@@ -23,7 +23,8 @@ interface Props {
   label?: string;
   isOpen: boolean;
   currentStep: number;
-  onSaveAndContinue: () => void;
+  // eslint-disable-next-line no-unused-vars
+  onSaveAndContinue: (inputValue?: string) => void;
 }
 export function EmailChannelCard({
   stepName,
@@ -35,9 +36,13 @@ export function EmailChannelCard({
   onSaveAndContinue,
 }: Props) {
   const [isChecked, setIsChecked] = useState(false);
+  const [inputValue, setInputValue] = useState('');
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
+  };
+  const handleSave = () => {
+    onSaveAndContinue(inputValue);
   };
   return (
     <div>
@@ -50,7 +55,21 @@ export function EmailChannelCard({
           <Div>
             <Description>{description}</Description>
             {currentStep === 1 && (
-              <Input placeholder='e.g. support@pixer.io' className='input' />
+              <>
+                <Input
+                  placeholder='e.g. support@pixer.io'
+                  className='input'
+                  value={inputValue}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setInputValue(e.target.value)
+                  }
+                />
+                <Button
+                  title='Save and Continue'
+                  onClick={handleSave}
+                  variant='medium'
+                />
+              </>
             )}
             {currentStep === 2 && (
               <>
@@ -141,13 +160,13 @@ export function EmailChannelCard({
                 <Button title='Verify DNS and continue' variant='medium' />
               </>
             )}
-            {currentStep === 1 && (
+            {/* {currentStep === 1 && (
               <Button
                 title='Save and Continue'
-                onClick={onSaveAndContinue}
+                onClick={handleSave}
                 variant='medium'
               />
-            )}
+            )} */}
           </Div>
         )}
       </ProfileDetail>

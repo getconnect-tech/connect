@@ -111,7 +111,7 @@ function DatePickerModal({
           const isoString = formattedDate.toISOString();
 
           const payload = {
-            status: TicketStatus.SNOOZE,
+            status: TicketStatus.OPEN,
             snoozeUntil: isoString,
           };
           const newMessage = {
@@ -122,14 +122,14 @@ function DatePickerModal({
             id: getUniqueId(),
             created_at: new Date(),
             label: null,
-            reference_id: TicketStatus.SNOOZE,
+            reference_id: TicketStatus.OPEN,
             ticket_id: ticketDetails?.id,
             type: MessageType.CHANGE_STATUS,
           } as MessageDetails;
           if (ticketDetails?.id) {
             const updatedTicketDetails = {
               ...(ticketDetails || {}),
-              status: TicketStatus.SNOOZE,
+              status: TicketStatus.OPEN,
               snooze_until: new Date(isoString || ''),
             };
             // add data in mobX store
