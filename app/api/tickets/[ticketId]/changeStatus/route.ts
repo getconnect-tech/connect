@@ -12,11 +12,13 @@ export const PUT = withWorkspaceAuth(async (req, { ticketId }) => {
 
     statusSchema.parse(status);
 
-    if (status === TicketStatus.SNOOZE) {
+    let snoozeUntilTime: string | undefined = undefined;
+    if (status === TicketStatus.OPEN && snoozeUntil) {
       snoozeUntilSchema.parse(snoozeUntil);
+      snoozeUntilTime = snoozeUntil as string;
     }
 
-    const updatedTicket = await updateStatus(ticketId, status, snoozeUntil);
+    const updatedTicket = await updateStatus(ticketId, status, snoozeUntilTime);
 
     const userId = req.user.id;
     await postMessage({
