@@ -12,6 +12,7 @@ export type HandleClickProps = {
   labelData?: LabelData;
   labelId?: string;
   isChecked?: boolean;
+  item?: any;
 };
 
 export type TicketDetailsInterface = NonNullable<

@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Label } from '@prisma/client';
+import moment from 'moment';
 import Avatar from '../avtar/Avtar';
 import Input from '../input/input';
 import {
@@ -21,7 +22,6 @@ import {
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { isEmpty } from '@/helpers/common';
 import LabelSvgIcon from '@/assets/icons/labelIcons';
-import { LabelData } from '@/utils/dataTypes';
 import { HandleClickProps } from '@/utils/appTypes';
 
 export type DropDownItem = {
@@ -37,7 +37,7 @@ export type DropDownItem = {
 };
 
 interface DropDownProps {
-  items: DropDownItem[];
+  items: DropDownItem[] | any;
   style?: React.CSSProperties;
   userId?: string;
   handleClick?: ({
@@ -54,7 +54,6 @@ interface DropDownProps {
     // eslint-disable-next-line no-unused-vars
     isChecked,
   }: HandleClickProps) => void;
-  labelData?: LabelData;
   iconSize: string;
   iconViewBox: string;
   onClose: () => void;
@@ -69,6 +68,7 @@ interface DropDownProps {
   // eslint-disable-next-line no-unused-vars
   handleMouseEnter?: (e: any) => void;
   className?: string;
+  labelField?: string;
 }
 
 // Hook to handle outside clicks
@@ -103,7 +103,6 @@ const DropDown = ({
   style,
   userId,
   handleClick,
-  labelData,
   iconSize,
   iconViewBox,
   onClose,
@@ -116,6 +115,7 @@ const DropDown = ({
   ticketLabelData,
   handleMouseEnter,
   className,
+  labelField = 'name',
 }: DropDownProps) => {
   const dropDownRef = useOutsideClick(onClose);
   const [value, setValueItem] = useState<string | null>(null);
@@ -124,9 +124,21 @@ const DropDown = ({
   // eslint-disable-next-line no-undef
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const getItemsList = useCallback(() => {
+    if (labelField !== 'name' && !isEmpty(labelField)) {
+      const updatedItems = items?.map((item: any) => {
+        return { ...(item || {}), name: item[labelField] };
+      });
+      return updatedItems;
+    } else {
+      return items;
+    }
+  }, []);
+
   useEffect(() => {
-    setSearchResult(items);
-  }, [items]);
+    const itemsList = getItemsList();
+    setSearchResult(itemsList);
+  }, []);
 
   const onClickItem = useCallback(
     (e: SyntheticEvent, item: DropDownItem, value: string | null) => {
@@ -135,18 +147,14 @@ const DropDown = ({
       if (handleClick) {
         // for members
         if (userId && item) handleClick({ value, userId, status: item.status });
-
-        // Edit/Delete labels
-        if (labelData) handleClick({ value, labelData });
-
         // label for tickets
-        if (ticketLabelData) {
+        else if (ticketLabelData) {
           const isChecked = ticketLabelData?.some(
             (label: { id: string }) => label.id === item.labelId,
           );
           // isChecked true then remove label from ticket or isChecked false then add label in ticket
           handleClick({ isChecked, labelId: item.labelId });
-        }
+        } else handleClick({ value, item });
       }
 
       if (onChange) {
@@ -157,16 +165,13 @@ const DropDown = ({
     [handleClick, onChange, onClose, userId],
   );
 
-  const searchQuery = useCallback(
-    (value: string) => {
-      const result =
-        items?.filter((item) =>
-          item?.name?.toLowerCase().includes(value?.toLowerCase()),
-        ) || [];
-      setSearchResult(result);
-    },
-    [items],
-  );
+  const searchQuery = useCallback((value: string) => {
+    const result =
+      getItemsList()?.filter((item: any) =>
+        item?.name?.toLowerCase().includes(value?.toLowerCase()),
+      ) || [];
+    setSearchResult(result);
+  }, []);
 
   const onChangeSearch = useCallback(
     (value: string) => {
@@ -177,10 +182,10 @@ const DropDown = ({
         searchQuery(value);
       }, 300);
       if (isEmpty(value)) {
-        setSearchResult(items);
+        setSearchResult(getItemsList);
       }
     },
-    [searchQuery, items],
+    [searchQuery],
   );
 
   const handleDateTimeClick = (e: SyntheticEvent) => {
@@ -274,7 +279,13 @@ const DropDown = ({
                 )}
                 <p>{item.name}</p>
               </ItemLeftDiv>
-              {isSnooze && <p>{item.time}</p>}
+              {isSnooze && (
+                <p>
+                  {item.name === 'Later today' || item.name === 'This evening'
+                    ? moment(item.value).format('h:mm A')
+                    : moment(item.value).format('ddd, MMM D, h:mm A')}
+                </p>
+              )}
             </ItemDiv>
           );
         })}

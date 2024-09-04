@@ -442,7 +442,7 @@ const Mentioncomponent = styled(MentionComponent)<Props>`
     position: absolute;
   }
   .e-active {
-    background-color: ${colors.bg_white};
+    background-color: ${colors.bg_surface_active};
     cursor: pointer;
   }
   ${(props) =>

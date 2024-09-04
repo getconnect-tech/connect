@@ -1,36 +1,82 @@
-import React, { useState } from 'react';
-import { User } from '@prisma/client';
-import DropDown, { DropDownItem } from '../dropDown/dropDown';
+import React, { useCallback, useState } from 'react';
+import { MessageType, TicketStatus, User } from '@prisma/client';
+import { observer } from 'mobx-react-lite';
+import DropDown from '../dropDown/dropDown';
 import Tag from '../tag/tag';
 import DatePickerModal from '../datePicker/datePicker';
+import { HandleClickProps, TicketDetailsInterface } from '@/utils/appTypes';
+import { changeTicketStatus } from '@/services/clientSide/ticketServices';
+import { getUniqueId } from '@/helpers/common';
+import { MessageDetails } from '@/utils/dataTypes';
+import { ticketStore } from '@/stores/ticketStore';
+import { snoozeItem } from '@/helpers/raw';
 
 interface Props {
   onClick: () => void;
   dropdownOpen: boolean;
   onClose: () => void;
-  items: DropDownItem[];
-  // eslint-disable-next-line no-unused-vars
-  onChange: (item: any) => void;
   isActive?: boolean;
   iconSize?: string;
   selectedValue?: User;
   className?: string;
   onMouseEnter?: any;
   tagStyle?: React.CSSProperties;
+  ticketDetails: TicketDetailsInterface | null;
+  user: User | null;
 }
 
-export default function SnoozeDropdown({
+const SnoozeDropdown = ({
   onClick,
   dropdownOpen,
   onClose,
-  onChange,
-  items,
   isActive = false,
   iconSize = '12',
   className,
   onMouseEnter,
-}: Props) {
+  ticketDetails,
+  user,
+}: Props) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  /*
+   * @desc update ticket snooze
+   */
+  const handleChangeSnooze = useCallback(
+    async (props: HandleClickProps) => {
+      const { item } = props;
+      const payload = { status: TicketStatus.SNOOZE, snoozeUntil: item?.value };
+      const newMessage = {
+        assignee: null,
+        author: user,
+        author_id: user!.id,
+        content: '',
+        id: getUniqueId(),
+        created_at: new Date(),
+        label: null,
+        reference_id: TicketStatus.SNOOZE,
+        ticket_id: ticketDetails?.id,
+        type: MessageType.CHANGE_STATUS,
+      } as MessageDetails;
+      try {
+        if (ticketDetails?.id) {
+          const updatedTicketDetails = {
+            ...(ticketDetails || {}),
+            status: TicketStatus.SNOOZE,
+            snooze_until: new Date(item?.value || ''),
+          };
+          // add data in mobX store
+          ticketStore.addTicketMessage(newMessage);
+          ticketStore.setTicketDetails(updatedTicketDetails);
+          // api call for change ticket status
+          await changeTicketStatus(ticketDetails?.id, payload);
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetails],
+  );
+
   return (
     <div onMouseEnter={onMouseEnter}>
       <Tag
@@ -45,13 +91,13 @@ export default function SnoozeDropdown({
       />
       {dropdownOpen && (
         <DropDown
-          items={items}
+          items={snoozeItem}
           iconSize={iconSize}
           iconViewBox={`0 0 ${iconSize} ${iconSize}`}
           onClose={onClose}
+          handleClick={handleChangeSnooze}
           onChange={(item) => {
-            onChange(item);
-            setShowDatePicker(true);
+            if (item?.name === 'date&time') setShowDatePicker(true);
           }}
           isSearch={true}
           className={className}
@@ -61,10 +107,12 @@ export default function SnoozeDropdown({
       )}
       {showDatePicker && (
         <DatePickerModal
+          ticketDetails={ticketDetails}
           onClose={() => setShowDatePicker(false)}
           style={{ top: 4 }}
         />
       )}
     </div>
   );
-}
+};
+export default observer(SnoozeDropdown);

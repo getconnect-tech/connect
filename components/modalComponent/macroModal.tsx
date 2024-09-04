@@ -1,35 +1,60 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import Input from '../input/input';
 import RichTextBox from '../commentBox';
 import Button from '../button/button';
 import { BottomDiv, Header, Label, MainDiv } from './style';
 import { useStores } from '@/stores';
-import { createMacros } from '@/services/clientSide/settingServices';
+import {
+  createMacros,
+  updateMacros,
+} from '@/services/clientSide/settingServices';
+import { messageStore } from '@/stores/messageStore';
 
+interface MacroData {
+  index: number;
+  title: string;
+  description: string;
+}
 interface Props {
   onClose: () => void;
+  macroData?: MacroData;
 }
-function MacroModal({ onClose }: Props) {
+function MacroModal({ onClose, macroData }: Props) {
   // Create new label and update label
   const { settingStore } = useStores();
-  const { loading } = settingStore;
-  const [title, setTitle] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
-
+  const { loading } = settingStore || {};
+  const [title, setTitle] = useState<string>(macroData?.title || '');
+  const [description, setDescription] = useState<string>(
+    macroData?.description || '',
+  );
   const handleMacrosSubmit = useCallback(
-    async (e: React.SyntheticEvent, title: string, description: string) => {
+    async (e: React.SyntheticEvent) => {
       e.preventDefault();
+      if (description.trim() === '' || title.trim() === '') {
+        messageStore.setErrorMessage(
+          'Both title and description are required.',
+        );
+        return;
+      }
       const payload = { content: description, title };
-      settingStore.setLoading(true);
       try {
-        const result = await createMacros(payload);
-        if (result) {
-          settingStore.addMacros(result);
+        if (macroData) {
+          // Update existing macro
+          const result = await updateMacros(macroData?.index, payload);
+          if (result) {
+            settingStore.updateMacros(macroData?.index, result);
+          }
+        } else {
+          // Create new macro
+          const result = await createMacros(payload);
+          if (result) {
+            settingStore.addMacros(result);
+          }
         }
       } catch (e) {
         console.log('Error : ', e);
       } finally {
-        settingStore.setLoading(false);
         onClose();
       }
     },
@@ -39,11 +64,7 @@ function MacroModal({ onClose }: Props) {
   return (
     <MainDiv className='macro-main-div'>
       <Header>Edit Macro</Header>
-      <BottomDiv
-        onSubmit={(e: React.SyntheticEvent) =>
-          handleMacrosSubmit(e, title, description)
-        }
-      >
+      <BottomDiv onSubmit={handleMacrosSubmit}>
         <div className='content'>
           <div>
             <Label>Title</Label>
@@ -75,13 +96,12 @@ function MacroModal({ onClose }: Props) {
             secondary={true}
             onClick={onClose}
             variant='medium'
-            isLoading={loading}
           />
-          <Button title='Save' variant='medium' />
+          <Button title='Save' variant='medium' isLoading={loading} />
         </div>
       </BottomDiv>
     </MainDiv>
   );
 }
 
-export default MacroModal;
+export default observer(MacroModal);

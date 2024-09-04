@@ -27,7 +27,7 @@ import ProfileSection from '@/components/profileSection/profileSection';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
 import MessageCard from '@/components/messageCard/messageCard';
-import { modeItem, priorityItem, snoozeItem } from '@/helpers/raw';
+import { modeItem, priorityItem } from '@/helpers/raw';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import { useStores } from '@/stores';
 import {
@@ -53,6 +53,7 @@ import { colors } from '@/styles/colors';
 import { messageStore } from '@/stores/messageStore';
 import { HandleClickProps } from '@/utils/appTypes';
 import LabelDropdown from '@/components/labelDropdown/labelDropdown';
+import { getMacros } from '@/services/clientSide/settingServices';
 
 interface Props {
   ticket_id: string;
@@ -71,7 +72,7 @@ function TicketDetails(props: Props) {
   const { ticketStore, workspaceStore, userStore, settingStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
-  const { labels } = settingStore || {};
+  const { labels, macros } = settingStore || {};
   const { user } = userStore || {};
   const { priority, assigned_to, contact } = ticketDetails || {};
   const [macroDropdown, setMacroDropdown] = useState(false);
@@ -111,6 +112,7 @@ function TicketDetails(props: Props) {
         getTicketDetails(ticket_id),
         getTicketMessages(ticket_id),
       ]);
+      await getMacros();
     }
   }, [ticket_id, currentWorkspace?.id]);
 
@@ -199,12 +201,7 @@ function TicketDetails(props: Props) {
       user_id: user.id,
     })) || []),
   ];
-  const macroItem = [
-    { name: 'Template 1' },
-    { name: 'Template 2' },
-    { name: 'Template 3' },
-    { name: 'Template 4' },
-  ];
+
   /*
    * @desc Update ticket details priority in ticket details
    */
@@ -591,8 +588,8 @@ function TicketDetails(props: Props) {
                 onClick={handleSnoozeTag}
                 dropdownOpen={snoozeDropdown}
                 onClose={() => setSnoozeDropdown(false)}
-                items={snoozeItem}
-                onChange={() => {}}
+                user={user}
+                ticketDetails={ticketDetails}
                 isActive={snoozeDropdown ? true : false}
               />
             </ButtonDiv>
@@ -676,7 +673,8 @@ function TicketDetails(props: Props) {
                       />
                       {macroDropdown && (
                         <DropDown
-                          items={macroItem}
+                          items={macros}
+                          labelField='title'
                           onClose={handleOutsideClick}
                           iconSize={''}
                           iconViewBox={''}
