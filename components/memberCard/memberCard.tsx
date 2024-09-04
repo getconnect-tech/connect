@@ -98,7 +98,7 @@ function MemberCard({
               onClose={() => {
                 setOpenDropdown(null);
               }}
-              style={{ right: 0, zIndex: 1 }}
+              style={{ right: 0, zIndex: 1, minWidth: 143 }}
             />
           )}
         </div>
