@@ -6,6 +6,7 @@ import { Typography } from '@/styles/typography';
 interface Props {
   isActive?: boolean;
   dropDownOpen?: boolean; // New prop to handle dropdown state
+  hasIconTitlePairs?: boolean;
 }
 
 const StatusDiv = styled.div<Props>`
@@ -22,6 +23,9 @@ const StatusDiv = styled.div<Props>`
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
+  padding: ${({ hasIconTitlePairs }) =>
+    hasIconTitlePairs ? '0 12px 0 0' : '6px'};
+
   &:hover {
     background-color: ${colors.bg_surface_secondary_hover};
     .icon {
@@ -34,6 +38,7 @@ const StatusDiv = styled.div<Props>`
       background-color: ${colors.border_hover};
     }
   }
+
   .icon {
     fill: ${({ isActive }) => (isActive ? colors.icon_hover : colors.icon)};
     margin: 4px 0 4px;
@@ -41,10 +46,12 @@ const StatusDiv = styled.div<Props>`
       margin: 4px 0 4px 10px;
     }
   }
+
   p {
     color: ${({ isActive }) =>
       isActive ? colors.text : colors.text_text_secondary};
   }
+
   .line {
     width: 1px;
     background-color: ${colors.border_input_border};
@@ -54,8 +61,6 @@ const StatusDiv = styled.div<Props>`
       display: none;
     }
   }
-  /* Conditionally apply padding based on whether the dropdown is open */
-  padding-right: ${({ dropDownOpen }) => (dropDownOpen ? '0' : '12px')};
 `;
 
 const StatusTitle = styled.p`
