@@ -194,10 +194,6 @@ export const updateStatus = async (
   newStatus: TicketStatus,
   snoozeUntil?: string,
 ) => {
-  if (newStatus === TicketStatus.SNOOZE && !snoozeUntil) {
-    throw new Error('snoozeUntil is required for status type SNOOZE');
-  }
-
   const payload = {
     status: newStatus,
     snooze_until: snoozeUntil,
