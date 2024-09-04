@@ -112,9 +112,10 @@ a {
 }
 :root {
   --border-width: 1px;
-  --border-color: #cccccc;
+  --border-color: #e9e8e5;
   --border-style: solid;
-  --border: 1px solid #c9c9c9;
+  --border: 1px solid #e9e8e5;
+  --border_retina: 0.5px solid #484849;
 }
 
 /* Dark theme */
@@ -131,4 +132,7 @@ a {
   only screen and (min-device-pixel-ratio: 2),
   only screen and (min-resolution: 192dpi),
   only screen and (min-resolution: 2dppx) {
+  :root {
+    border: 0.5px solid #484849;
+  }
 }
