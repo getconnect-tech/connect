@@ -3,14 +3,14 @@ import { colors } from './colors';
 
 export const Borders = {
   border_primary: css`
-    border: 1px solid ${colors.border_brand};
+    border: var(--border-width) var(--border-style) var(--border-color);
     /* Border properties for retina displays */
     @media (-webkit-min-device-pixel-ratio: 2) {
       border: 0.5px solid ${colors.border_brand};
     }
   `,
   border_secondary: css`
-    border: 1px solid ${colors.border_input_border};
+    border: var(--border);
     /* Border properties for retina displays */
     @media (-webkit-min-device-pixel-ratio: 2) {
       border: 0.5px solid ${colors.border_input_border};
@@ -24,7 +24,7 @@ export const Borders = {
     }
   `,
   border_disable: css`
-    border: 1px solid ${colors.border_disabled};
+    border: 1px solid var(--);
     /* Border properties for retina displays */
     @media (-webkit-min-device-pixel-ratio: 2) {
       border: 0.5px solid ${colors.border_disabled};

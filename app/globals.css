@@ -110,3 +110,25 @@ a {
 .ant-picker:hover .ant-picker-clear {
   display: none;
 }
+:root {
+  --border-width: 1px;
+  --border-color: #cccccc;
+  --border-style: solid;
+  --border: 1px solid #c9c9c9;
+}
+
+/* Dark theme */
+[data-theme='dark'] {
+  --background-color: #000000;
+  --text-color: #ffffff;
+  --border-color: #444444;
+}
+
+/* Retina display */
+@media only screen and (-webkit-min-device-pixel-ratio: 2),
+  only screen and (min--moz-device-pixel-ratio: 2),
+  only screen and (-o-min-device-pixel-ratio: 2/1),
+  only screen and (min-device-pixel-ratio: 2),
+  only screen and (min-resolution: 192dpi),
+  only screen and (min-resolution: 2dppx) {
+}
