@@ -136,7 +136,7 @@ export const CalendarDiv = styled.div`
   }
 `;
 
-export const InputMainDiv = styled.div`
+export const InputMainDiv = styled.form`
   border-top: 1px solid ${colors.border};
   margin-top: 12px;
   padding: 12px;
