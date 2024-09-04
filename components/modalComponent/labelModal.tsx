@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
+import { Label as PrismaLabel } from '@prisma/client';
 import { observer } from 'mobx-react-lite';
 import Button from '../button/button';
 import Input from '../input/input';
@@ -10,19 +11,17 @@ import {
   updateLabelDetails,
 } from '@/services/clientSide/settingServices';
 import { useStores } from '@/stores';
-import { LabelData } from '@/utils/dataTypes';
 
 interface Props {
   onClose: () => void;
-  labelData?: LabelData;
+  labelData?: PrismaLabel;
 }
 const LabelModal = ({ onClose, labelData }: Props) => {
   const { settingStore } = useStores();
   const { loading } = settingStore;
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [icon, setIcon] = useState<string>(labelData?.icon || 'tag-icon');
-  const [labelName, setLabelName] = useState<string>(labelData?.label || '');
-
+  const [labelName, setLabelName] = useState<string>(labelData?.name || '');
   const handleLabelName = (iconName: string) => {
     setIcon(iconName);
   };
@@ -39,9 +38,9 @@ const LabelModal = ({ onClose, labelData }: Props) => {
       settingStore.setLoading(true);
       try {
         if (labelData) {
-          const result = await updateLabelDetails(labelData.labelId, payload);
+          const result = await updateLabelDetails(labelData?.id, payload);
           if (result) {
-            settingStore.updateLabel(labelData.labelId, result);
+            settingStore.updateLabel(labelData?.id, result);
           }
         } else {
           const result = await createLabel(payload);

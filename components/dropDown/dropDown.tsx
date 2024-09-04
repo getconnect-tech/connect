@@ -21,7 +21,6 @@ import {
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { isEmpty } from '@/helpers/common';
 import LabelSvgIcon from '@/assets/icons/labelIcons';
-import { LabelData } from '@/utils/dataTypes';
 import { HandleClickProps } from '@/utils/appTypes';
 
 export type DropDownItem = {
@@ -54,7 +53,6 @@ interface DropDownProps {
     // eslint-disable-next-line no-unused-vars
     isChecked,
   }: HandleClickProps) => void;
-  labelData?: LabelData;
   iconSize: string;
   iconViewBox: string;
   onClose: () => void;
@@ -104,7 +102,6 @@ const DropDown = ({
   style,
   userId,
   handleClick,
-  labelData,
   iconSize,
   iconViewBox,
   onClose,
@@ -150,9 +147,6 @@ const DropDown = ({
         // for members
         if (userId && item) handleClick({ value, userId, status: item.status });
 
-        // Edit/Delete labels
-        if (labelData) handleClick({ value, labelData });
-
         // label for tickets
         if (ticketLabelData) {
           const isChecked = ticketLabelData?.some(
@@ -161,6 +155,7 @@ const DropDown = ({
           // isChecked true then remove label from ticket or isChecked false then add label in ticket
           handleClick({ isChecked, labelId: item.labelId });
         }
+        handleClick({ value });
       }
 
       if (onChange) {
