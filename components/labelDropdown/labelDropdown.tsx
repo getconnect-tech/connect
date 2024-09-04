@@ -65,6 +65,7 @@ function LabelDropdown({
             width='12'
             height='12'
             viewBox='0 0 16 16'
+            className='tag-icon'
           />
         ) : (
           iconTitlePairs.map((item, index) => (

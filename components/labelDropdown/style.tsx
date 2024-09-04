@@ -25,6 +25,9 @@ const StatusDiv = styled.div<Props>`
   user-select: none;
   padding: ${({ hasIconTitlePairs }) =>
     hasIconTitlePairs ? '0 12px 0 0' : '6px'};
+  .tag-icon {
+    fill: ${colors.icon};
+  }
 
   &:hover {
     background-color: ${colors.bg_surface_secondary_hover};
@@ -36,6 +39,9 @@ const StatusDiv = styled.div<Props>`
     }
     .line {
       background-color: ${colors.border_hover};
+    }
+    .tag-icon {
+      fill: ${colors.icon_hover};
     }
   }
 
