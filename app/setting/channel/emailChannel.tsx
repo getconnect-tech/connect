@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   Description,
   EmailCardDiv,
@@ -18,13 +18,17 @@ function Channel() {
   const [openCard, setOpenCard] = useState<string | null>('Step1');
   const [emailAddress, setEmailAddress] = useState<string | null>(null);
 
-  const handleSaveAndContinue = (currentStep: number, inputValue?: string) => {
-    if (currentStep === 1 && inputValue) {
-      setEmailAddress(inputValue);
-    }
-    const nextStep = `Step${currentStep + 1}`;
-    setOpenCard(nextStep);
-  };
+  const handleSaveAndContinue = useCallback(
+    (currentStep: number, inputValue?: string) => {
+      console.log('emailAddress', emailAddress);
+      if (currentStep === 1 && inputValue) {
+        setEmailAddress(inputValue);
+      }
+      const nextStep = `Step${currentStep + 1}`;
+      setOpenCard(nextStep);
+    },
+    [emailAddress, setEmailAddress, setOpenCard],
+  );
 
   return (
     <Main>
