@@ -3,7 +3,7 @@
 /* eslint-disable max-len */
 import React, { useCallback, useState } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
-import { PriorityLevels } from '@prisma/client';
+import { PriorityLevels, TicketStatus } from '@prisma/client';
 import DropDown from '../dropDown/dropDown';
 import DatePickerModal from '../datePicker/datePicker';
 import {
@@ -19,6 +19,7 @@ import { useStores } from '@/stores';
 import { HandleClickProps, TicketDetailsInterface } from '@/utils/appTypes';
 import {
   addLabelToTicket,
+  changeTicketStatus,
   deleteLabelFromTicket,
   updateAssignee,
   updateTicketPriority,
@@ -114,30 +115,47 @@ export default function CustomContextMenu(props: Props) {
       try {
         if (ticketDetail?.id && labelId) {
           if (isChecked) {
-            const result = await deleteLabelFromTicket(
-              ticketDetail?.id,
-              labelId,
-            );
-            if (result) {
-              const newLabel =
-                ticketDetail.labels.filter((item) => item.id !== labelId) || [];
-              ticketStore.updateTicketListItem(ticketIndex, {
-                ...(ticketDetail || {}),
-                labels: newLabel,
-              });
-            }
+            const newLabel =
+              ticketDetail.labels.filter((item) => item.id !== labelId) || [];
+            ticketStore.updateTicketListItem(ticketIndex, {
+              ...(ticketDetail || {}),
+              labels: newLabel,
+            });
+            await deleteLabelFromTicket(ticketDetail?.id, labelId);
           } else {
-            const result = await addLabelToTicket(ticketDetail?.id, labelId);
-            if (result) {
-              const newLabel = labels?.find((item) => item.id === labelId);
-              const ticketLabels = ticketDetail.labels || [];
-              if (newLabel) ticketLabels.push(newLabel);
-              ticketStore.updateTicketListItem(ticketIndex, {
-                ...(ticketDetail || {}),
-                labels: ticketLabels,
-              });
-            }
+            const newLabel = labels?.find((item) => item.id === labelId);
+            const ticketLabels = ticketDetail.labels || [];
+            if (newLabel) ticketLabels.push(newLabel);
+            ticketStore.updateTicketListItem(ticketIndex, {
+              ...(ticketDetail || {}),
+              labels: ticketLabels,
+            });
+            await addLabelToTicket(ticketDetail?.id, labelId);
           }
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetail],
+  );
+
+  /*
+   * @desc update ticket status
+   */
+  const handleTicketStatus = useCallback(
+    async (status: TicketStatus) => {
+      const payload = {
+        status,
+      };
+      try {
+        if (ticketDetail?.id) {
+          const updatedTicketDetails = {
+            ...(ticketDetail || {}),
+            status,
+          };
+          ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
+          await changeTicketStatus(ticketDetail?.id, payload);
         }
       } catch (e) {
         console.log('Error : ', e);
@@ -346,18 +364,33 @@ export default function CustomContextMenu(props: Props) {
                 </ContextMenu.Portal>
               </ContextMenu.Sub>
             </div>
-            <ContextMenuItem>
-              <div>
-                <SVGIcon
-                  name='close-icon'
-                  width='12'
-                  height='12'
-                  viewBox='0 0 12 12'
-                  className='svg-icon'
-                />
-                Close
-              </div>
-            </ContextMenuItem>
+            {ticketDetail?.status !== TicketStatus.CLOSED ? (
+              <ContextMenuItem>
+                <div onClick={() => handleTicketStatus(TicketStatus.CLOSED)}>
+                  <SVGIcon
+                    name='close-icon'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
+                    className='svg-icon'
+                  />
+                  Close
+                </div>
+              </ContextMenuItem>
+            ) : (
+              <ContextMenuItem>
+                <div onClick={() => handleTicketStatus(TicketStatus.OPEN)}>
+                  <SVGIcon
+                    name='close-icon'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
+                    className='svg-icon'
+                  />
+                  Re-open
+                </div>
+              </ContextMenuItem>
+            )}
           </ContextMenuContent>
         </ContextMenu.Portal>
       </ContextMenu.Root>
