@@ -44,7 +44,7 @@ const SnoozeDropdown = ({
   const handleChangeSnooze = useCallback(
     async (props: HandleClickProps) => {
       const { item } = props;
-      const payload = { status: TicketStatus.SNOOZE, snoozeUntil: item?.value };
+      const payload = { status: TicketStatus.OPEN, snoozeUntil: item?.value };
       const newMessage = {
         assignee: null,
         author: user,
@@ -53,7 +53,7 @@ const SnoozeDropdown = ({
         id: getUniqueId(),
         created_at: new Date(),
         label: null,
-        reference_id: TicketStatus.SNOOZE,
+        reference_id: TicketStatus.OPEN,
         ticket_id: ticketDetails?.id,
         type: MessageType.CHANGE_STATUS,
       } as MessageDetails;
@@ -61,7 +61,7 @@ const SnoozeDropdown = ({
         if (ticketDetails?.id) {
           const updatedTicketDetails = {
             ...(ticketDetails || {}),
-            status: TicketStatus.SNOOZE,
+            status: TicketStatus.OPEN,
             snooze_until: new Date(item?.value || ''),
           };
           // add data in mobX store

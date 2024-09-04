@@ -78,7 +78,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
     if (activeTab === 'Open') {
       ticketStore.setFilteredTicketList(TicketStatus.OPEN, filteredTickets);
     } else if (activeTab === 'Snoozed') {
-      ticketStore.setFilteredTicketList(TicketStatus.SNOOZE, filteredTickets);
+      ticketStore.setFilteredTicketList(TicketStatus.OPEN, filteredTickets);
     } else if (activeTab === 'Done') {
       ticketStore.setFilteredTicketList(TicketStatus.CLOSED, filteredTickets);
     }
