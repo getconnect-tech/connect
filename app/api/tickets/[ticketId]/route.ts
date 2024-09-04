@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import {
-  assginToSchema,
+  assignToSchema,
   contactIdSchema,
   prioritySchema,
   snoozeUntilSchema,
@@ -33,7 +33,7 @@ export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
 const UpdateTicketRequestBody = z.object({
   title: titleSchema.optional(),
   contactId: contactIdSchema.optional(),
-  assignedTo: assginToSchema.optional(),
+  assignedTo: assignToSchema.optional(),
   priority: prioritySchema.optional(),
   source: ticketSourceSchema.optional(),
   status: statusSchema.optional(),
