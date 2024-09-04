@@ -54,6 +54,28 @@ export const createAPIKey = async (payload: { name: string }) => {
 };
 
 /**
+ * @desc Delete API key
+ * @param {*}
+ */
+export const deleteAPIKey = async (APIKey: string) => {
+  try {
+    settingStore.setLoading(true);
+    const result = await axios.delete(
+      `${NEXT_PUBLIC_API_URL}/workspaces/apiKeys/${APIKey}`,
+    );
+    if (result) messageStore.setSuccessMessage('API Deleted');
+    return true;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    settingStore.setLoading(false);
+  }
+};
+
+/**
  * @desc Get all labels
  * @param {*}
  */
