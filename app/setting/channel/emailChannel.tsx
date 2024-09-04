@@ -17,7 +17,6 @@ function Channel() {
   // Initialize the openCard state with 'Step1' to keep the first step open by default
   const [openCard, setOpenCard] = useState<string | null>('Step1');
   const [emailAddress, setEmailAddress] = useState<string | null>(null);
-  console.log('emailAddress', emailAddress);
 
   const handleSaveAndContinue = (currentStep: number, inputValue?: string) => {
     if (currentStep === 1 && inputValue) {
