@@ -149,20 +149,24 @@ const InboxCard = ({
   /*
    * @desc Close ticket
    */
-  const handleCloseTicket = useCallback(async () => {
-    const payload = { status: TicketStatus.CLOSED };
-    try {
-      if (ticketDetail?.id) {
-        ticketStore.updateTicketListItem(ticketIndex, {
-          ...ticketDetail,
-          status: TicketStatus.CLOSED,
-        });
-        await changeTicketStatus(ticketDetail?.id, payload);
+  const handleCloseTicket = useCallback(
+    async (e: React.MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation();
+      const payload = { status: TicketStatus.CLOSED };
+      try {
+        if (ticketDetail?.id) {
+          ticketStore.updateTicketListItem(ticketIndex, {
+            ...ticketDetail,
+            status: TicketStatus.CLOSED,
+          });
+          await changeTicketStatus(ticketDetail?.id, payload);
+        }
+      } catch (e) {
+        console.log('Error : ', e);
       }
-    } catch (e) {
-      console.log('Error : ', e);
-    }
-  }, [ticketDetail]);
+    },
+    [ticketDetail],
+  );
 
   // add/remove label to ticket
   const handleTicketLabel = useCallback(
