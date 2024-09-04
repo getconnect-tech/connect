@@ -78,10 +78,6 @@ const RightDiv = styled.div`
   display: flex;
   align-items: center;
   gap: 6px;
-  p {
-    ${Typography.body_sm_regular};
-    color: ${colors.text_text_secondary};
-  }
 `;
 
 export {
