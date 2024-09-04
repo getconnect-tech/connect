@@ -80,21 +80,27 @@ export const labelIcons = [
   { iconName: 'shield-icon' },
 ];
 export const snoozeItem = [
-  { name: 'Later today', time: '3:00 AM' },
-  { name: 'This evening', time: '6:00 PM' },
+  {
+    name: 'Later today',
+    value: moment().set({ hour: 15, minute: 0, second: 0 }).toISOString(),
+  },
+  {
+    name: 'This evening',
+    value: moment().set({ hour: 18, minute: 0, second: 0 }).toISOString(),
+  },
   {
     name: 'Tomorrow',
-    time: moment()
+    value: moment()
       .add(1, 'days')
       .set({ hour: 9, minute: 0, second: 0 })
-      .format('ddd, MMM D, h:mm A'),
+      .toISOString(),
   },
   {
     name: 'Next week',
-    time: moment()
+    value: moment()
       .clone()
       .day(8)
       .set({ hour: 9, minute: 0, second: 0 })
-      .format('ddd, MMM D, h:mm A'),
+      .toISOString(),
   },
 ];
