@@ -15,6 +15,7 @@ import {
   ItemDiv,
   ItemLeftDiv,
   ItemMainDiv,
+  ItemName,
   MainDiv,
   SearchDiv,
   StyledCheckbox,
@@ -242,6 +243,8 @@ const DropDown = ({
                 handleMouseEnter;
                 setValueItem(item.name);
               }}
+              isSelected={isChecked}
+              isDelete={item.isDelete}
             >
               <ItemLeftDiv
                 isSelected={isChecked}
@@ -280,11 +283,11 @@ const DropDown = ({
                 <p>{item.name}</p>
               </ItemLeftDiv>
               {isSnooze && (
-                <p>
+                <ItemName>
                   {item.name === 'Later today' || item.name === 'This evening'
                     ? moment(item.value).format('h:mm A')
                     : moment(item.value).format('ddd, MMM D, h:mm A')}
-                </p>
+                </ItemName>
               )}
             </ItemDiv>
           );
