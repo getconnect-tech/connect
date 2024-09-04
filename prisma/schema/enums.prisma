@@ -31,7 +31,6 @@ enum TicketSource {
 enum TicketStatus {
     OPEN
     CLOSED
-    SNOOZE
 }
 
 enum UserRole {
