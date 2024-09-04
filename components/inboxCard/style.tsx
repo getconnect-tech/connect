@@ -2,7 +2,6 @@
 import styled from 'styled-components';
 import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
-import { Borders } from '@/styles/borderVariable';
 
 const CardDiv = styled.div`
   background-color: ${colors.bg_white};
@@ -10,10 +9,6 @@ const CardDiv = styled.div`
   margin: 12px 0;
   border-radius: 12px;
   cursor: pointer;
-  ${Borders.border_secondary}
-  /* border-color: var(--border-width);
-  border-width: var(--border-width);
-  border-style: var(--border-style); */
   position: relative;
   gap: 12px;
   box-shadow:

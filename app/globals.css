@@ -111,20 +111,32 @@ a {
   display: none;
 }
 :root {
+  --text_white: #ffffff;
+  --brand: #282828;
+  --border: #e9e8e5;
+  --border_hover: #c4c3c1;
+  --border_selected: #7b7a79;
+  --border_input_border: #dcdcd9;
+  --border_brand: #282828;
+  --error_border: #bc574933;
+  --success_border: #1d862333;
+  --warning_border: #e2851233;
+  --border_disabled: #e7e7e4;
+  --fill_danger: #bc5749;
   --border-width: 1px;
-  --border-color: #e9e8e5;
+  --border--loading-width: 2px;
   --border-style: solid;
-  --border: 1px solid #e9e8e5;
+  --border-main: var(--border-width) var(--border-style) var(--border);
+  --border-primary: var(--border-width) var(--border-style) var(--border_brand);
+  --border-secondary: var(--border-width) var(--border-style)
+    var(--border_input_border);
+  --border-disable: var(--border-width) var(--border-style)
+    var(--border_disabled);
+  --border-danger: var(--border-width) var(--border-style) var(--fill_danger);
+  --border-loading: var(--border--loading-width) var(--border-style)
+    var(--text_white);
 }
 
-/* Dark theme */
-[data-theme='dark'] {
-  --background-color: #000000;
-  --text-color: #ffffff;
-  --border-color: #444444;
-}
-
-/* Retina display */
 @media only screen and (-webkit-min-device-pixel-ratio: 2),
   only screen and (min--moz-device-pixel-ratio: 2),
   only screen and (-o-min-device-pixel-ratio: 2/1),
@@ -132,6 +144,6 @@ a {
   only screen and (min-resolution: 192dpi),
   only screen and (min-resolution: 2dppx) {
   :root {
-    --border: 0.5px solid #e9e8e5;
+    --border-width: 0.5px;
   }
 }

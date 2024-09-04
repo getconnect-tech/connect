@@ -2,7 +2,6 @@
 import styled, { css, keyframes } from 'styled-components';
 import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
-import { Borders } from '@/styles/borderVariable';
 
 interface WrapButton {
   secondary: boolean;
@@ -27,7 +26,7 @@ const Buttons = styled.button<WrapButton>`
   padding: 8px 16px;
   border-radius: 20px;
   background-color: ${colors.brand};
-  ${Borders.border_primary};
+  border: var(--border-primary);
   color: ${colors.text_white};
   white-space: nowrap;
   align-items: center;
@@ -40,7 +39,7 @@ const Buttons = styled.button<WrapButton>`
     css`
       background-color: transparent;
       color: ${colors.text};
-      ${Borders.border_secondary};
+      border: var(--border-secondary);
       &:hover {
         background-color: ${colors.bg_surface_hover};
       }
@@ -54,7 +53,7 @@ const Buttons = styled.button<WrapButton>`
     props.disabled &&
     css`
       color: ${colors.text_disabled};
-      ${Borders.border_disable};
+      border: var(--border-disabled);
       background-color: ${props.secondary
         ? 'transparent'
         : props.isLoading
@@ -105,7 +104,7 @@ const Buttons = styled.button<WrapButton>`
     css`
       background-color: ${colors.fill_danger};
       color: ${colors.text_white};
-      ${Borders.border_delete};
+      border: var(--border-danger);
       &:hover {
         background-color: ${colors.fill_danger};
       }
@@ -126,7 +125,7 @@ const ButtonWrap = styled.div<Prop>`
           content: '';
           width: 20px;
           height: 20px;
-          border: 2px solid ${colors.text_white};
+          border: var(--border-loading);
           border-top: 2px solid transparent;
           border-radius: 50%;
           animation: ${spin} 1s linear infinite;

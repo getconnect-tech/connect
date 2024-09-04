@@ -14,7 +14,7 @@ const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-right: 1px solid ${colors.border};
+  border-right: var(--border-main);
   position: fixed;
 `;
 
@@ -121,7 +121,7 @@ const Frame1 = styled.div`
   display: flex;
   flex-direction: column;
   padding: 4px;
-  border-bottom: 0.5px solid ${colors.border};
+  border-bottom: 0.5px solid var(--border);
 `;
 const Frame2 = styled.div`
   display: flex;
