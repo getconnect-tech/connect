@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import Input from '../input/input';
 import RichTextBox from '../commentBox';
 import Button from '../button/button';
@@ -22,12 +23,11 @@ interface Props {
 function MacroModal({ onClose, macroData }: Props) {
   // Create new label and update label
   const { settingStore } = useStores();
-  const { loading } = settingStore;
+  const { loading } = settingStore || {};
   const [title, setTitle] = useState<string>(macroData?.title || '');
   const [description, setDescription] = useState<string>(
     macroData?.description || '',
   );
-
   const handleMacrosSubmit = useCallback(
     async (e: React.SyntheticEvent) => {
       e.preventDefault();
@@ -38,7 +38,6 @@ function MacroModal({ onClose, macroData }: Props) {
         return;
       }
       const payload = { content: description, title };
-      settingStore.setLoading(true);
       try {
         if (macroData) {
           // Update existing macro
@@ -56,7 +55,6 @@ function MacroModal({ onClose, macroData }: Props) {
       } catch (e) {
         console.log('Error : ', e);
       } finally {
-        settingStore.setLoading(false);
         onClose();
       }
     },
@@ -98,13 +96,12 @@ function MacroModal({ onClose, macroData }: Props) {
             secondary={true}
             onClick={onClose}
             variant='medium'
-            isLoading={loading}
           />
-          <Button title='Save' variant='medium' />
+          <Button title='Save' variant='medium' isLoading={loading} />
         </div>
       </BottomDiv>
     </MainDiv>
   );
 }
 
-export default MacroModal;
+export default observer(MacroModal);

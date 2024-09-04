@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
 import Modal from '../modal/modal';
@@ -30,7 +31,7 @@ function MacroCard({
   const [deleteModal, setDeleteModal] = useState(false);
   const [macroModal, setMacroModal] = useState(false);
   const { settingStore } = useStores();
-
+  const { loading } = settingStore || {};
   const onOpenMacroModal = useCallback(() => {
     setMacroModal(true);
   }, []);
@@ -133,6 +134,7 @@ function MacroCard({
           title={'Are you sure you want to delete this macro?'}
           description={'This action can’t be undone.'}
           onDelete={handleDelete}
+          loading={loading}
         />
       </Modal>
       <Modal open={macroModal} onClose={onCloseMacroModal}>
@@ -145,4 +147,4 @@ function MacroCard({
   );
 }
 
-export default MacroCard;
+export default observer(MacroCard);
