@@ -44,15 +44,20 @@ const ItemDiv = styled.div<Props>`
   padding: 4px 8px;
   cursor: pointer;
   p {
-    ${Typography.body_sm_regular};
-    color: ${colors.text_text_secondary};
-    white-space: nowrap;
+    ${Typography.body_md_regular};
+    color: ${({ isSelected, isDelete }) =>
+      isSelected
+        ? colors.text
+        : isDelete
+          ? colors.fill_danger
+          : colors.text_text_secondary};
   }
   &:hover {
     background-color: ${colors.bg_white_hover};
     border-radius: 8px;
     p {
-      color: ${colors.text};
+      color: ${({ isSelected, isDelete }) =>
+        isSelected ? colors.text : isDelete ? colors.fill_danger : colors.text};
     }
     svg {
       fill: ${colors.icon_active};
@@ -127,6 +132,7 @@ const ItemLeftDiv = styled.div<Props>`
         : isDelete
           ? colors.fill_danger
           : colors.text_text_secondary};
+    white-space: nowrap;
   }
   svg {
     fill: ${({ isSelected }) =>
@@ -160,6 +166,12 @@ const DateTimeTextDiv = styled.div`
   }
 `;
 
+const ItemName = styled.div`
+  ${Typography.body_sm_regular};
+  color: ${colors.text_text_secondary};
+  white-space: nowrap;
+`;
+
 export {
   MainDiv,
   ItemDiv,
@@ -168,4 +180,5 @@ export {
   StyledCheckbox,
   ItemLeftDiv,
   DateTimeTextDiv,
+  ItemName,
 };
