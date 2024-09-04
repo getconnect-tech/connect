@@ -57,20 +57,31 @@ function LabelDropdown({
         className='tag-div'
         style={style}
         isActive={true}
+        hasIconTitlePairs={iconTitlePairs?.length > 0}
       >
-        {iconTitlePairs.map((item, index) => (
-          <React.Fragment key={index}>
-            <LabelSvgIcon
-              name={item.iconName}
-              width='12'
-              height='12'
-              className='icon'
-              viewBox='0 0 16 16'
-            />
-            <StatusTitle>{item.title}</StatusTitle>
-            <div className='line' />
-          </React.Fragment>
-        ))}
+        {!iconTitlePairs || iconTitlePairs?.length === 0 ? (
+          <LabelSvgIcon
+            name={'tag-icon'}
+            width='12'
+            height='12'
+            viewBox='0 0 16 16'
+            className='tag-icon'
+          />
+        ) : (
+          iconTitlePairs.map((item, index) => (
+            <React.Fragment key={index}>
+              <LabelSvgIcon
+                name={item.iconName}
+                width='12'
+                height='12'
+                className='icon'
+                viewBox='0 0 16 16'
+              />
+              <StatusTitle>{item.title}</StatusTitle>
+              <div className='line' />
+            </React.Fragment>
+          ))
+        )}
       </StatusDiv>
       {dropDown && (
         <DropDown
