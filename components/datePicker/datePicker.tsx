@@ -30,7 +30,7 @@ interface Props {
   isContextMenu?: boolean;
   // eslint-disable-next-line no-unused-vars
   handleChangeSnooze?: ({ item }: any) => void;
-  ticketDetails: TicketDetailsInterface | null;
+  ticketDetails?: TicketDetailsInterface | null;
 }
 
 function DatePickerModal({
