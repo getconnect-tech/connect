@@ -60,7 +60,10 @@ export default function AppProvider({
 
   if (typeof window !== 'undefined')
     return pathname.startsWith('/setting') ? (
-      <SettingAppProvider>{children}</SettingAppProvider>
+      <SettingAppProvider>
+        <AlertMessage />
+        {children}
+      </SettingAppProvider>
     ) : (
       <Provider {...stores}>
         <AlertMessage />
@@ -72,7 +75,10 @@ export default function AppProvider({
   return (
     <StyleSheetManager sheet={styledComponentsStyleSheet.instance}>
       {pathname.startsWith('/setting') ? (
-        <SettingAppProvider>{children}</SettingAppProvider>
+        <SettingAppProvider>
+          <AlertMessage />
+          {children}
+        </SettingAppProvider>
       ) : (
         <>
           {NavbarComponent}

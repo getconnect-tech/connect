@@ -36,7 +36,7 @@ const MainDiv = styled.div<Props>`
   }
 `;
 
-const ItemDiv = styled.div`
+const ItemDiv = styled.div<Props>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -131,6 +131,12 @@ const ItemLeftDiv = styled.div<Props>`
   svg {
     fill: ${({ isSelected }) =>
       isSelected ? colors.icon_active : colors.icon};
+  }
+  &:hover {
+    p {
+      color: ${({ isSelected, isDelete }) =>
+        isSelected ? colors.text : isDelete ? colors.fill_danger : colors.text};
+    }
   }
 `;
 
