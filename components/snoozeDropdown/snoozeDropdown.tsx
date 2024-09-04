@@ -107,6 +107,7 @@ const SnoozeDropdown = ({
       )}
       {showDatePicker && (
         <DatePickerModal
+          ticketDetails={ticketDetails}
           onClose={() => setShowDatePicker(false)}
           style={{ top: 4 }}
         />
