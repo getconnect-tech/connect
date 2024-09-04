@@ -82,7 +82,6 @@ function MacroCard({
   }, []);
 
   const onCloseDeleteModal = useCallback(() => {
-    console.log('Closing delete modal');
     setDeleteModal(false);
   }, []);
 
