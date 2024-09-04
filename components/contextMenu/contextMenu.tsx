@@ -115,29 +115,22 @@ export default function CustomContextMenu(props: Props) {
       try {
         if (ticketDetail?.id && labelId) {
           if (isChecked) {
-            const result = await deleteLabelFromTicket(
-              ticketDetail?.id,
-              labelId,
-            );
-            if (result) {
-              const newLabel =
-                ticketDetail.labels.filter((item) => item.id !== labelId) || [];
-              ticketStore.updateTicketListItem(ticketIndex, {
-                ...(ticketDetail || {}),
-                labels: newLabel,
-              });
-            }
+            const newLabel =
+              ticketDetail.labels.filter((item) => item.id !== labelId) || [];
+            ticketStore.updateTicketListItem(ticketIndex, {
+              ...(ticketDetail || {}),
+              labels: newLabel,
+            });
+            await deleteLabelFromTicket(ticketDetail?.id, labelId);
           } else {
-            const result = await addLabelToTicket(ticketDetail?.id, labelId);
-            if (result) {
-              const newLabel = labels?.find((item) => item.id === labelId);
-              const ticketLabels = ticketDetail.labels || [];
-              if (newLabel) ticketLabels.push(newLabel);
-              ticketStore.updateTicketListItem(ticketIndex, {
-                ...(ticketDetail || {}),
-                labels: ticketLabels,
-              });
-            }
+            const newLabel = labels?.find((item) => item.id === labelId);
+            const ticketLabels = ticketDetail.labels || [];
+            if (newLabel) ticketLabels.push(newLabel);
+            ticketStore.updateTicketListItem(ticketIndex, {
+              ...(ticketDetail || {}),
+              labels: ticketLabels,
+            });
+            await addLabelToTicket(ticketDetail?.id, labelId);
           }
         }
       } catch (e) {
