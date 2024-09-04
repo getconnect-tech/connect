@@ -1,15 +1,17 @@
 import React, { useCallback, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import { Label } from '@prisma/client';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
 import Modal from '../modal/modal';
 import LabelModal from '../modalComponent/labelModal';
+import DeleteModal from '../deleteModal/deleteModal';
 import { InnerDiv, ItemDiv, Name } from './style';
 import { colors } from '@/styles/colors';
 import LabelSvgIcon from '@/assets/icons/labelIcons';
 import { deleteLabel } from '@/services/clientSide/settingServices';
-import { settingStore } from '@/stores/settingStore';
 import { messageStore } from '@/stores/messageStore';
+import { useStores } from '@/stores';
 interface Props {
   currentOpenDropdown?: string | null;
   dropdownIdentifier?: string;
@@ -25,7 +27,12 @@ function LabelCard({
   setOpenDropdown,
   labelDetails,
 }: Props) {
+  const { settingStore } = useStores();
+  const { loading } = settingStore || {};
+
   const [labelModal, setLabelModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+
   const dropDownItem = [
     { name: 'Edit', icon: 'edit-icon' },
     { name: 'Delete', icon: 'delete-icon', isDelete: true },
@@ -43,6 +50,14 @@ function LabelCard({
     const identifier = `${dropdownIdentifier}-label`;
     setOpenDropdown(currentOpenDropdown === identifier ? null : identifier);
   }, [dropdownIdentifier, currentOpenDropdown, setOpenDropdown]);
+
+  const onOpenDeleteModal = useCallback(() => {
+    setDeleteModal(true);
+  }, []);
+
+  const onCloseDeleteModal = useCallback(() => {
+    setDeleteModal(false);
+  }, []);
 
   const handleDelete = useCallback(async () => {
     if (!labelDetails?.id) {
@@ -91,7 +106,7 @@ function LabelCard({
               style={{ right: 0, width: 116, zIndex: 1 }}
               onChange={(item) => {
                 if (item.isDelete) {
-                  handleDelete();
+                  onOpenDeleteModal();
                 } else {
                   onOpenLabelModal();
                 }
@@ -100,6 +115,16 @@ function LabelCard({
           )}
         </div>
       </ItemDiv>
+      <Modal open={deleteModal} onClose={onCloseDeleteModal}>
+        <DeleteModal
+          onclose={onCloseDeleteModal}
+          headTitle={'Delete Label'}
+          title={'Are you sure you want to delete this label?'}
+          description={'This action can’t be undone.'}
+          onDelete={handleDelete}
+          loading={loading}
+        />
+      </Modal>
       <Modal open={labelModal} onClose={onCloseLabelModal}>
         <LabelModal labelData={labelDetails} onClose={onCloseLabelModal} />
       </Modal>
@@ -107,4 +132,4 @@ function LabelCard({
   );
 }
 
-export default LabelCard;
+export default observer(LabelCard);
