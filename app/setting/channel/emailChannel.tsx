@@ -16,8 +16,13 @@ import { EmailChannelCard } from '@/components/emailChannelCard/emailChannelCard
 function Channel() {
   // Initialize the openCard state with 'Step1' to keep the first step open by default
   const [openCard, setOpenCard] = useState<string | null>('Step1');
+  const [emailAddress, setEmailAddress] = useState<string | null>(null);
+  console.log('emailAddress', emailAddress);
 
-  const handleSaveAndContinue = (currentStep: number) => {
+  const handleSaveAndContinue = (currentStep: number, inputValue?: string) => {
+    if (currentStep === 1 && inputValue) {
+      setEmailAddress(inputValue);
+    }
     const nextStep = `Step${currentStep + 1}`;
     setOpenCard(nextStep);
   };
@@ -41,7 +46,9 @@ function Channel() {
               description='Choose the email address where you want customers to contact your company. Outgoing emails to customers will also be sent from this email address.'
               isOpen={openCard === 'Step1'}
               currentStep={1}
-              onSaveAndContinue={() => handleSaveAndContinue(1)}
+              onSaveAndContinue={(inputValue) =>
+                handleSaveAndContinue(1, inputValue)
+              }
             />
             {openCard !== 'Step2' && openCard !== 'Step1' && (
               <div className='line-div' />
