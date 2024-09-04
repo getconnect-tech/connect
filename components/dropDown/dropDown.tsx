@@ -147,20 +147,14 @@ const DropDown = ({
       if (handleClick) {
         // for members
         if (userId && item) handleClick({ value, userId, status: item.status });
-
         // label for tickets
-        if (ticketLabelData) {
+        else if (ticketLabelData) {
           const isChecked = ticketLabelData?.some(
             (label: { id: string }) => label.id === item.labelId,
           );
           // isChecked true then remove label from ticket or isChecked false then add label in ticket
           handleClick({ isChecked, labelId: item.labelId });
-        }
-        // set ticket snooze
-        if (isSnooze) {
-          handleClick({ item });
-        }
-        handleClick({ value });
+        } else handleClick({ value, item });
       }
 
       if (onChange) {
