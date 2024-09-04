@@ -58,7 +58,10 @@ function LabelDropdown({
         style={style}
         isActive={true}
       >
-        {iconTitlePairs.map((item, index) => (
+        {(iconTitlePairs.length > 0
+          ? iconTitlePairs
+          : [{ iconName: 'tag-icon', title: '' }]
+        ).map((item, index) => (
           <React.Fragment key={index}>
             <LabelSvgIcon
               name={item.iconName}
