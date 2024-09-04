@@ -6,14 +6,14 @@ export const Borders = {
     border: var(--border-width) var(--border-style) var(--border-color);
     /* Border properties for retina displays */
     @media (-webkit-min-device-pixel-ratio: 2) {
-      border: 0.5px solid ${colors.border_brand};
+      /* border: 0.5px solid ${colors.border_brand}; */
     }
   `,
   border_secondary: css`
     border: var(--border);
     /* Border properties for retina displays */
     @media (-webkit-min-device-pixel-ratio: 2) {
-      border: 0.5px solid ${colors.border_input_border};
+      /* border: 0.5px solid ${colors.border_input_border}; */
     }
   `,
   border_delete: css`
