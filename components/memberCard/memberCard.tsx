@@ -84,7 +84,6 @@ function MemberCard({
         // Handle invited users' actions
         if (value === 'Delete') {
           try {
-            console.log('userId?????', userId);
             if (userId) {
               const result = await removeInviteUsersFromWorkspace(userId);
               if (result) {
