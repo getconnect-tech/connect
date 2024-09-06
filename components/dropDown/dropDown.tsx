@@ -40,12 +40,9 @@ export type DropDownItem = {
 interface DropDownProps {
   items: DropDownItem[] | any;
   style?: React.CSSProperties;
-  userId?: string;
   handleClick?: ({
     // eslint-disable-next-line no-unused-vars
     value,
-    // eslint-disable-next-line no-unused-vars
-    userId,
     // eslint-disable-next-line no-unused-vars
     status,
     // eslint-disable-next-line no-unused-vars
@@ -102,7 +99,6 @@ export const useOutsideClick = (callback: () => void) => {
 const DropDown = ({
   items,
   style,
-  userId,
   handleClick,
   iconSize,
   iconViewBox,
@@ -146,10 +142,8 @@ const DropDown = ({
       e.stopPropagation();
 
       if (handleClick) {
-        // for members
-        if (userId && item) handleClick({ value, userId, status: item.status });
         // label for tickets
-        else if (ticketLabelData) {
+        if (ticketLabelData) {
           const isChecked = ticketLabelData?.some(
             (label: { id: string }) => label.id === item.labelId,
           );
@@ -163,7 +157,7 @@ const DropDown = ({
         onClose();
       }
     },
-    [handleClick, onChange, onClose, userId],
+    [handleClick, onChange, onClose],
   );
 
   const searchQuery = useCallback((value: string) => {
