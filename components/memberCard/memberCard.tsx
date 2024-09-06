@@ -143,27 +143,29 @@ function MemberCard({
         {designation && designation !== UserRole.MEMBER && (
           <h6>{capitalizeString(designation)}</h6>
         )}
-        <div style={{ position: 'relative' }} className='tag-div'>
-          <Icon
-            onClick={handleClickIcon}
-            iconName='three-dot-icon'
-            iconSize='16'
-            iconViewBox='0 0 16 16'
-            size={true}
-          />
-          {currentOpenDropdown === `${dropdownIdentifier}-member` && (
-            <DropDown
-              items={dropDownItem || []}
-              iconSize={'12'}
-              iconViewBox={'0 0 12 12'}
-              handleClick={handleClick}
-              onClose={() => {
-                setOpenDropdown(null);
-              }}
-              style={{ right: 0, zIndex: 1 }}
+        {designation !== UserRole.OWNER && (
+          <div style={{ position: 'relative' }} className='tag-div'>
+            <Icon
+              onClick={handleClickIcon}
+              iconName='three-dot-icon'
+              iconSize='16'
+              iconViewBox='0 0 16 16'
+              size={true}
             />
-          )}
-        </div>
+            {currentOpenDropdown === `${dropdownIdentifier}-member` && (
+              <DropDown
+                items={dropDownItem || []}
+                iconSize={'12'}
+                iconViewBox={'0 0 12 12'}
+                handleClick={handleClick}
+                onClose={() => {
+                  setOpenDropdown(null);
+                }}
+                style={{ right: 0, zIndex: 1, minWidth: 143 }}
+              />
+            )}
+          </div>
+        )}
       </RightDiv>
     </CardDiv>
   );
