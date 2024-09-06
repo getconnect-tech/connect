@@ -164,12 +164,43 @@ export default function CustomContextMenu(props: Props) {
     [ticketDetail],
   );
 
+  /*
+   * @desc update ticket snooze
+   */
+  const handleChangeSnooze = useCallback(
+    async (props: HandleClickProps) => {
+      const { item } = props;
+      const payload = { status: TicketStatus.OPEN, snoozeUntil: item?.value };
+      try {
+        if (ticketDetail?.id) {
+          const updatedTicketDetails = {
+            ...(ticketDetail || {}),
+            status: TicketStatus.OPEN,
+            snooze_until: new Date(item?.value || ''),
+          };
+          // add data in mobX store
+          ticketStore.setTicketDetails(updatedTicketDetails);
+          // api call for change ticket status
+          await changeTicketStatus(ticketDetail?.id, payload);
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetail],
+  );
+
   const [showDropDown, setShowDropDown] = useState(true);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const handleDropDownChange = () => {
-    setShowDropDown(false);
-    setShowDatePicker(true);
+  const handleDropDownChange = (item: { name: string }) => {
+    if (item?.name === 'date&time') {
+      setShowDropDown(false);
+      setShowDatePicker(true);
+    } else {
+      setShowDropDown(true);
+      setShowDatePicker(false);
+    }
   };
 
   const handleDatePickerClose = () => {
@@ -218,7 +249,6 @@ export default function CustomContextMenu(props: Props) {
                       onChange={onChangeAssign}
                       iconSize='20'
                       iconViewBox='0 0 20 20'
-                      onClose={() => {}}
                       isSearch={true}
                       isContextMenu={true}
                       style={{ marginTop: -4 }}
@@ -261,15 +291,16 @@ export default function CustomContextMenu(props: Props) {
                           items={snoozeItem}
                           iconSize='12'
                           iconViewBox='0 0 12 12'
-                          onClose={() => setShowDropDown(false)}
                           isContextMenu={true}
                           isSnooze={true}
                           style={{ minWidth: 260, marginTop: -4 }}
                           onChange={handleDropDownChange}
+                          handleClick={handleChangeSnooze}
                         />
                       )}
                       {showDatePicker && (
                         <DatePickerModal
+                          ticketDetails={ticketDetail}
                           onClose={handleDatePickerClose}
                           isContextMenu={true}
                         />
@@ -311,7 +342,6 @@ export default function CustomContextMenu(props: Props) {
                       items={labelItem}
                       iconSize='12'
                       iconViewBox='0 0 16 16'
-                      onClose={() => {}}
                       handleClick={handleTicketLabel}
                       ticketLabelData={ticketDetail?.labels}
                       isSearch={true}
@@ -356,7 +386,6 @@ export default function CustomContextMenu(props: Props) {
                       onChange={onChangePriority}
                       iconSize='12'
                       iconViewBox='0 0 12 12'
-                      onClose={() => {}}
                       isContextMenu={true}
                       style={{ marginTop: -4 }}
                     />
