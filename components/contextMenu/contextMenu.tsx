@@ -96,11 +96,11 @@ export default function CustomContextMenu(props: Props) {
    * @desc Update ticket details assign user in context menu
    */
   const onChangeAssign = useCallback(async (item: { user_id: string }) => {
-    const payload = { assignee: item?.user_id };
+    const payload = { assignee: item?.user_id || null };
     try {
       const updatedTicketDetails = {
         ...(ticketDetail || {}),
-        assigned_to: item?.user_id,
+        assigned_to: item?.user_id || null,
       };
       ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
       await updateAssignee(ticketDetail?.id, payload);

@@ -238,12 +238,12 @@ function TicketDetails(props: Props) {
       value: PriorityLevels;
       user_id: string;
     }) => {
-      const payload = { assignee: item?.user_id };
+      const payload = { assignee: item?.user_id || null };
       try {
         if (ticketDetails?.id) {
           const updatedTicketDetails = {
             ...ticketDetails,
-            assigned_to: item?.user_id,
+            assigned_to: item?.user_id || null,
           };
           ticketStore.setTicketDetails(updatedTicketDetails);
           const result = await updateAssignee(ticketDetails?.id, payload);
