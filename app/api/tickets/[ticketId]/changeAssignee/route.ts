@@ -17,7 +17,7 @@ export const PUT = withWorkspaceAuth(async (req, { ticketId }) => {
     const userId = req.user.id;
     await postMessage({
       messageContent: '',
-      referenceId: assignee || req.user.id,
+      referenceId: assignee || '',
       messageType: MessageType.CHANGE_ASSIGNEE,
       ticketId,
       authorId: userId,
