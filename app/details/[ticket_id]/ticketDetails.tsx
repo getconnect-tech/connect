@@ -88,6 +88,18 @@ function TicketDetails(props: Props) {
     setModeSelectedItem(item);
   };
 
+  const handleMacroSelect = useCallback(
+    (selectedMacro: { content: string }) => {
+      setCommentValue((prevValue) => {
+        return prevValue
+          ? `${prevValue}\n${selectedMacro.content}`
+          : selectedMacro.content;
+      });
+      setMacroDropdown(false);
+    },
+    [],
+  );
+
   const handleMouseEnter = (
     e: React.MouseEvent<HTMLElement>,
     // eslint-disable-next-line no-unused-vars
@@ -676,6 +688,7 @@ function TicketDetails(props: Props) {
                           items={macros}
                           labelField='title'
                           onClose={handleOutsideClick}
+                          onChange={handleMacroSelect}
                           iconSize={''}
                           iconViewBox={''}
                           style={{ bottom: 60, maxWidth: 146, width: '100%' }}
