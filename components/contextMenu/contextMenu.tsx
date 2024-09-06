@@ -193,7 +193,7 @@ export default function CustomContextMenu(props: Props) {
   const [showDropDown, setShowDropDown] = useState(true);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const handleDropDownChange = (item: any) => {
+  const handleDropDownChange = (item: { name: string }) => {
     if (item?.name === 'date&time') {
       setShowDropDown(false);
       setShowDatePicker(true);
@@ -249,7 +249,6 @@ export default function CustomContextMenu(props: Props) {
                       onChange={onChangeAssign}
                       iconSize='20'
                       iconViewBox='0 0 20 20'
-                      onClose={() => {}}
                       isSearch={true}
                       isContextMenu={true}
                       style={{ marginTop: -4 }}
@@ -292,7 +291,6 @@ export default function CustomContextMenu(props: Props) {
                           items={snoozeItem}
                           iconSize='12'
                           iconViewBox='0 0 12 12'
-                          onClose={() => {}}
                           isContextMenu={true}
                           isSnooze={true}
                           style={{ minWidth: 260, marginTop: -4 }}
@@ -344,7 +342,6 @@ export default function CustomContextMenu(props: Props) {
                       items={labelItem}
                       iconSize='12'
                       iconViewBox='0 0 16 16'
-                      onClose={() => {}}
                       handleClick={handleTicketLabel}
                       ticketLabelData={ticketDetail?.labels}
                       isSearch={true}
@@ -389,7 +386,6 @@ export default function CustomContextMenu(props: Props) {
                       onChange={onChangePriority}
                       iconSize='12'
                       iconViewBox='0 0 12 12'
-                      onClose={() => {}}
                       isContextMenu={true}
                       style={{ marginTop: -4 }}
                     />

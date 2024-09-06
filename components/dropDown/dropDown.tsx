@@ -57,7 +57,7 @@ interface DropDownProps {
   }: HandleClickProps) => void;
   iconSize: string;
   iconViewBox: string;
-  onClose: () => void;
+  onClose?: () => void;
   // eslint-disable-next-line no-unused-vars
   onChange?: (item: any) => void;
   ticketLabelData?: Label[];
@@ -118,7 +118,7 @@ const DropDown = ({
   className,
   labelField = 'name',
 }: DropDownProps) => {
-  const dropDownRef = useOutsideClick(onClose);
+  const dropDownRef = useOutsideClick(onClose!);
   const [value, setValueItem] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [searchResult, setSearchResult] = useState<DropDownItem[]>([]);
@@ -160,7 +160,7 @@ const DropDown = ({
 
       if (onChange) {
         onChange(item);
-        onClose();
+        if (onClose) onClose();
       }
     },
     [handleClick, onChange, onClose, userId],
@@ -193,7 +193,7 @@ const DropDown = ({
     e.stopPropagation();
     if (onChange) {
       onChange({ name: 'date&time' });
-      onClose();
+      if (onClose) onClose();
     }
   };
 
@@ -201,7 +201,7 @@ const DropDown = ({
     e.stopPropagation();
     if (onChange) {
       onChange({ name: 'manage-macros' });
-      onClose();
+      if (onClose) onClose();
     }
   };
 
