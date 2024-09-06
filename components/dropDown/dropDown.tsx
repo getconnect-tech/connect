@@ -141,10 +141,8 @@ const DropDown = ({
       e.stopPropagation();
 
       if (handleClick) {
-        // for members
-        if (value && item) handleClick({ value, item });
         // label for tickets
-        else if (ticketLabelData) {
+        if (ticketLabelData) {
           const isChecked = ticketLabelData?.some(
             (label: { id: string }) => label.id === item.labelId,
           );
