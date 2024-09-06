@@ -6,12 +6,13 @@ export const titleSchema = z.string({
   invalid_type_error: "'title' must be of type string!",
 });
 
-export const assginToSchema = z
+export const assignToSchema = z
   .string({
     required_error: "'assignedTo' is required!",
     invalid_type_error: "'assignedTo' must be of type string!",
   })
-  .uuid("'assignedTo' must an uuid of the user!");
+  .uuid("'assignedTo' must an uuid of the user!")
+  .or(z.null());
 
 export const contactIdSchema = z
   .string({
