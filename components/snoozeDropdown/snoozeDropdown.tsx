@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { MessageType, TicketStatus, User } from '@prisma/client';
 import { observer } from 'mobx-react-lite';
+import moment from 'moment';
 import DropDown from '../dropDown/dropDown';
 import Tag from '../tag/tag';
 import DatePickerModal from '../datePicker/datePicker';
 import { HandleClickProps, TicketDetailsInterface } from '@/utils/appTypes';
-import { changeTicketStatus } from '@/services/clientSide/ticketServices';
+import { snoozeTicket } from '@/services/clientSide/ticketServices';
 import { getUniqueId } from '@/helpers/common';
 import { MessageDetails } from '@/utils/dataTypes';
 import { ticketStore } from '@/stores/ticketStore';
@@ -44,16 +45,16 @@ const SnoozeDropdown = ({
   const handleChangeSnooze = useCallback(
     async (props: HandleClickProps) => {
       const { item } = props;
-      const payload = { status: TicketStatus.OPEN, snoozeUntil: item?.value };
+      const payload = { snoozeUntil: item?.value };
       const newMessage = {
         assignee: null,
         author: user,
         author_id: user!.id,
-        content: '',
+        content: moment(item?.value).format('DD MMMM LT'),
         id: getUniqueId(),
         created_at: new Date(),
         label: null,
-        reference_id: TicketStatus.OPEN,
+        reference_id: 'SNOOZE',
         ticket_id: ticketDetails?.id,
         type: MessageType.CHANGE_STATUS,
       } as MessageDetails;
@@ -68,7 +69,7 @@ const SnoozeDropdown = ({
           ticketStore.addTicketMessage(newMessage);
           ticketStore.setTicketDetails(updatedTicketDetails);
           // api call for change ticket status
-          await changeTicketStatus(ticketDetails?.id, payload);
+          await snoozeTicket(ticketDetails?.id, payload);
         }
       } catch (e) {
         console.log('Error : ', e);

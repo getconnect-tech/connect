@@ -21,6 +21,7 @@ import {
   addLabelToTicket,
   changeTicketStatus,
   deleteLabelFromTicket,
+  snoozeTicket,
   updateAssignee,
   updateTicketPriority,
 } from '@/services/clientSide/ticketServices';
@@ -170,7 +171,7 @@ export default function CustomContextMenu(props: Props) {
   const handleChangeSnooze = useCallback(
     async (props: HandleClickProps) => {
       const { item } = props;
-      const payload = { status: TicketStatus.OPEN, snoozeUntil: item?.value };
+      const payload = { snoozeUntil: item?.value };
       try {
         if (ticketDetail?.id) {
           const updatedTicketDetails = {
@@ -181,7 +182,7 @@ export default function CustomContextMenu(props: Props) {
           // add data in mobX store
           ticketStore.setTicketDetails(updatedTicketDetails);
           // api call for change ticket status
-          await changeTicketStatus(ticketDetail?.id, payload);
+          await snoozeTicket(ticketDetail?.id, payload);
         }
       } catch (e) {
         console.log('Error : ', e);
