@@ -467,7 +467,11 @@ function TicketDetails(props: Props) {
               />
               <Message>
                 {message?.author?.display_name || ''}{' '}
-                <span>assigned this ticket to</span>{' '}
+                <span>
+                  {message?.assignee?.display_name
+                    ? 'assigned this ticket to'
+                    : 'unassigned this ticket'}
+                </span>{' '}
                 {message?.assignee?.display_name || ''}
                 <SVGIcon
                   name='dot-icon'
