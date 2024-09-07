@@ -494,8 +494,14 @@ function TicketDetails(props: Props) {
               />
               <Message>
                 {message?.author?.display_name || ''}{' '}
-                <span>changed ticket status to</span>{' '}
-                {capitalizeString(message?.reference_id)}
+                <span>
+                  {message?.reference_id === 'SNOOZE'
+                    ? 'snooze this ticket till'
+                    : 'changed ticket status to '}
+                </span>{' '}
+                {message?.reference_id === 'SNOOZE'
+                  ? `${message?.content}`
+                  : capitalizeString(message.reference_id)}
                 <SVGIcon
                   name='dot-icon'
                   width='4'
