@@ -219,7 +219,7 @@ export const snoozeTicket = async (ticketId: any, payload: object) => {
   try {
     ticketStore.setLoading(true);
     const response = await axios.put(
-      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}/snoooze`,
+      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}/snooze`,
       payload,
     );
     const { data } = response;
