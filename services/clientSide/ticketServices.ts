@@ -212,6 +212,29 @@ export const changeTicketStatus = async (ticketId: any, payload: object) => {
 };
 
 /**
+ * @desc Snooze ticket
+ * @param {*} ticketId
+ */
+export const snoozeTicket = async (ticketId: any, payload: object) => {
+  try {
+    ticketStore.setLoading(true);
+    const response = await axios.put(
+      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}/snoooze`,
+      payload,
+    );
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    ticketStore.setLoading(false);
+  }
+};
+
+/**
  * @desc Update Assignee
  * @param {*} ticketId
  */
