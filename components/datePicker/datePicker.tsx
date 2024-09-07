@@ -115,11 +115,11 @@ function DatePickerModal({
             assignee: null,
             author: user,
             author_id: user!.id,
-            content: '',
+            content: moment(isoString).format('DD MMMM LT'),
             id: getUniqueId(),
             created_at: new Date(),
             label: null,
-            reference_id: TicketStatus.OPEN,
+            reference_id: 'SNOOZE',
             ticket_id: ticketDetails?.id,
             type: MessageType.CHANGE_STATUS,
           } as MessageDetails;

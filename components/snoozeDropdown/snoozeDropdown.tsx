@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { MessageType, TicketStatus, User } from '@prisma/client';
 import { observer } from 'mobx-react-lite';
+import moment from 'moment';
 import DropDown from '../dropDown/dropDown';
 import Tag from '../tag/tag';
 import DatePickerModal from '../datePicker/datePicker';
@@ -49,11 +50,11 @@ const SnoozeDropdown = ({
         assignee: null,
         author: user,
         author_id: user!.id,
-        content: '',
+        content: moment(item?.value).format('DD MMMM LT'),
         id: getUniqueId(),
         created_at: new Date(),
         label: null,
-        reference_id: TicketStatus.OPEN,
+        reference_id: 'SNOOZE',
         ticket_id: ticketDetails?.id,
         type: MessageType.CHANGE_STATUS,
       } as MessageDetails;
