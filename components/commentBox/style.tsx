@@ -15,7 +15,7 @@ interface Props {
 }
 const MentionTable = styled.div`
   :hover {
-    background-color: ${colors.bg_surface_secondary};
+    background-color: var(--bg-surface-secondary);
     cursor: pointer;
   }
   .mentionEmpImage {
@@ -34,7 +34,7 @@ const MentionList = styled.div`
   }
   p {
     margin: 0;
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
     white-space: nowrap;
   }
 `;
@@ -48,45 +48,45 @@ const TextMainDiv = styled.div<Props>`
   h5,
   h6 {
     background-color: transparent !important;
-    color: ${colors.text} !important;
+    color: var(--text) !important;
     max-width: 644px;
     width: 100%;
   }
   p {
     margin: 0;
-    color: ${colors.text} !important;
+    color: var(--text) !important;
     background-color: transparent !important;
     max-width: 644px;
     width: 100%;
   }
   ul,
   ol {
-    color: ${colors.text} !important;
+    color: var(--text) !important;
     background-color: transparent !important;
     max-width: 644px;
     width: 100%;
     margin-left: 20px;
     li {
       ::marker {
-        color: ${colors.text} !important;
+        color: var(--text) !important;
         background-color: transparent !important;
       }
     }
   }
   p > span {
-    color: ${colors.text} !important;
+    color: var(--text) !important;
     background-color: transparent !important;
     max-width: 644px;
     width: 100%;
   }
   a {
-    color: ${colors.text};
+    color: var(--text);
     max-width: 644px;
     width: 100%;
   }
   #inlineRTE_rte-edit-view_options {
-    border: ${colors.border};
-    background: ${colors.bg_white};
+    border: var(--border);
+    background: var(--bg-white);
   }
   position: relative;
   ${(props) =>
@@ -106,29 +106,29 @@ const TextMainDiv = styled.div<Props>`
   > div > div > span {
     position: absolute;
     pointer-events: none;
-    color: ${colors.text} !important;
+    color: var(--text) !important;
     ${Typography.body_md_regular}
     ${(props) =>
       props.isApplyMsgModel &&
       css`
         padding-top: 6px;
-        color: ${colors.text_text_secondary};
+        color: var(--text-text-secondary);
       `}
   }
   ${(props) =>
     props.isPlaceholdercolor &&
     css`
       > div > div > span {
-        color: ${colors.text_text_secondary} !important;
+        color: var(--text-text-secondary) !important;
         ${Typography.body_md_regular} !important;
         opacity: 1 !important;
       }
     `}
   .name {
-    color: ${colors.text};
+    color: var(--text);
   }
   .time {
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
   .text {
     width: 100%;
@@ -173,18 +173,18 @@ const TextMainDiv = styled.div<Props>`
     overflow: auto;
   }
   .e-richtexteditor .e-rte-content .e-content pre {
-    color: ${colors.text};
+    color: var(--text);
     margin: 0;
   }
   .e-rte-table td,
   .e-rte-table th {
-    border: 1px solid ${colors.border};
+    border: 1px solid var(--border);
   }
 `;
 
 const Main = styled.div<Props>`
   #inlineRTE_rte-edit-view {
-    color: ${colors.text};
+    color: var(--text);
     :focus-visible {
       outline: none;
     }
@@ -205,7 +205,7 @@ const Main = styled.div<Props>`
   .e-richtexteditor.e-rte-tb-expand .e-rte-content,
   .e-richtexteditor.e-rte-tb-expand .e-source-content {
     border-bottom: none;
-    border-top-color: ${colors.border};
+    border-top-color: var(--border);
   }
   .e-richtexteditor .e-rte-content,
   .e-richtexteditor .e-source-content {
@@ -245,9 +245,9 @@ const Main = styled.div<Props>`
   }
 
   .e-toolbar .e-toolbar-item .e-tbar-btn .e-icons {
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
     :hover {
-      color: ${colors.text};
+      color: var(--text);
     }
   }
   .e-richtexteditor.e-rte-tb-expand .e-rte-content,
@@ -257,27 +257,27 @@ const Main = styled.div<Props>`
   .e-richtexteditor .e-rte-toolbar {
     border-style: none none solid;
     border-width: 1px;
-    border-color: ${colors.border};
+    border-color: var(--border);
   }
   .e-richtexteditor .e-rte-toolbar .e-toolbar-item .e-tbar-btn:hover .e-icons {
-    color: ${colors.text};
+    color: var(--text);
   }
   .e-richtexteditor
     .e-rte-toolbar
     .e-toolbar-item.e-active
     .e-tbar-btn
     .e-icons {
-    color: ${colors.text};
+    color: var(--text);
   }
   .e-richtexteditor .e-rte-toolbar .e-toolbar-item.e-active .e-tbar-btn {
-    background: ${colors.bg_surface_secondary_hover};
+    background: var(--bg-surface-secondary-hover);
   }
   .e-toolbar .e-toolbar-item .e-tbar-btn {
     min-height: unset;
     min-width: unset;
     padding: 2px !important;
     :hover {
-      background: ${colors.bg_surface_secondary_hover};
+      background: var(--bg-surface-secondary-hover);
     }
   }
   .e-toolbar .e-toolbar-item:not(.e-separator) {
@@ -307,30 +307,30 @@ const Main = styled.div<Props>`
     height: 20px !important;
   }
   .e-dialog {
-    background: ${colors.bg_surface_secondary_hover};
-    border: 1px solid ${colors.border};
+    background: var(--bg-surface-secondary-hover);
+    border: 1px solid var(--border);
     top: 34px !important;
   }
   .e-dialog .e-dlg-header-content {
-    border-bottom: 1px solid ${colors.border};
+    border-bottom: 1px solid var(--border);
   }
   .e-dialog .e-footer-content {
-    border-top: 1px solid ${colors.border};
+    border-top: 1px solid var(--border);
   }
   .e-dlg-content {
-    color: ${colors.text};
+    color: var(--text);
   }
   .e-rte-linkcontent .e-rte-label {
     margin-bottom: 6px !important;
   }
   .e-dlg-header {
-    color: ${colors.text};
+    color: var(--text);
   }
   input.e-input {
-    color: ${colors.text};
+    color: var(--text);
     border: none;
     ::placeholder {
-      color: ${colors.text_text_secondary};
+      color: var(--text-text-secondary);
     }
   }
   .e-input:focus:not(.e-success):not(.e-warning):not(.e-error) {
@@ -338,56 +338,56 @@ const Main = styled.div<Props>`
     border: none;
   }
   .e-checkbox-wrapper .e-label {
-    color: ${colors.text};
+    color: var(--text);
   }
   .e-checkbox-wrapper .e-checkbox:focus + .e-frame.e-check {
     box-shadow: unset;
-    background-color: ${colors.brand};
-    border-color: ${colors.border};
+    background-color: var(--brand);
+    border-color: var(--border);
   }
   .e-checkbox-wrapper .e-checkbox:focus + .e-frame {
-    border-color: ${colors.border};
+    border-color: var(--border);
     box-shadow: unset;
-    background-color: ${colors.brand};
+    background-color: var(--brand);
   }
   .e-checkbox-wrapper:hover .e-frame {
-    background-color: ${colors.bg_surface};
+    background-color: var(--bg-surface);
   }
   .e-checkbox-wrapper .e-frame {
-    background-color: ${colors.brand};
-    border-color: ${colors.border};
+    background-color: var(--brand);
+    border-color: var(--border);
   }
   .e-richtexteditor .e-rte-content .e-content a {
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
     text-decoration: underline;
   }
   .e-richtexteditor .e-rte-content .e-content a:hover {
     text-decoration: underline;
   }
   .e-icon-dlg-close {
-    color: ${colors.text};
+    color: var(--text);
   }
   .e-dialog .e-btn.e-dlg-closeicon-btn:hover span {
-    color: ${colors.text};
+    color: var(--text);
   }
   .e-checkbox-wrapper .e-frame.e-check {
-    background-color: ${colors.brand};
-    border-color: ${colors.border};
+    background-color: var(--brand);
+    border-color: var(--border);
   }
   .e-footer-content .e-btn.e-primary.e-flat:not([DISABLED]) {
-    background-color: ${colors.brand};
+    background-color: var(--brand);
     border-radius: 36px;
-    color: ${colors.text_white};
-    border: 1px solid ${colors.border};
+    color: var(--text-white);
+    border: 1px solid var(--border);
     :hover {
-      border: 1px solid ${colors.border};
+      border: 1px solid var(--border);
     }
   }
   .e-checkbox-wrapper .e-checkbox:active + .e-frame.e-check {
-    background-color: ${colors.brand};
+    background-color: var(--brand);
     box-shadow: unset;
-    border-color: ${colors.brand};
-    color: ${colors.text};
+    border-color: var(--brand);
+    color: var(--text);
   }
   ${(props) =>
     props.isplaceholder &&
@@ -407,7 +407,7 @@ const Mentioncomponent = styled(MentionComponent)<Props>`
     margin: 0 0 10px;
     padding: 6px 0;
     border-radius: 8px;
-    background-color: ${colors.bg_white};
+    background-color: var(--bg-white);
     box-shadow:
       0px 0px 0px 0.5px ${colors.box_shadow},
       0px 2px 4px 0px ${colors.box_shadow_2};
@@ -426,8 +426,8 @@ const Mentioncomponent = styled(MentionComponent)<Props>`
   }
   .e-nodata {
     white-space: nowrap;
-    color: ${colors.text};
-    background: ${colors.bg_white};
+    color: var(--text);
+    background: var(--bg-white);
     border-radius: 8px;
     ${Typography.body_sm_regular};
     padding: 0 12px;
@@ -442,7 +442,7 @@ const Mentioncomponent = styled(MentionComponent)<Props>`
     position: absolute;
   }
   .e-active {
-    background-color: ${colors.bg_surface_active};
+    background-color: var(--bg-surface-active);
     cursor: pointer;
   }
   ${(props) =>

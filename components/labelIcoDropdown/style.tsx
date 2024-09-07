@@ -3,7 +3,7 @@ import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const MainDiv = styled.div`
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   border-radius: 12px;
   box-shadow:
     0px 0px 0px 0.5px ${colors.box_shadow},
@@ -28,10 +28,10 @@ export const MainDiv = styled.div`
 
 export const SearchDiv = styled.div`
   padding: 0 0 0 12px;
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
-  background: ${colors.bg_white};
+  background: var(--bg-white);
   z-index: 2;
   .input {
     border: none;

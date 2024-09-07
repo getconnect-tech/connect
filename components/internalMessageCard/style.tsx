@@ -12,10 +12,10 @@ const Div = styled.div`
   align-items: center;
   gap: 8px;
   p {
-    background-color: ${colors.bg_surface_secondary};
+    background-color: var(--bg-surface-secondary);
     padding: 6px 12px;
     ${Typography.body_md_regular};
-    color: ${colors.text};
+    color: var(--text);
     border-radius: 8px;
     word-wrap: break-word;
     max-width: 536px;
@@ -24,7 +24,7 @@ const Div = styled.div`
         padding: 0;
         span {
           white-space: inherit;
-          color: ${colors.text};
+          color: var(--text);
         }
         br {
           display: none;
@@ -34,7 +34,7 @@ const Div = styled.div`
   }
   span {
     ${Typography.body_md_regular};
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
     white-space: nowrap;
   }
 `;

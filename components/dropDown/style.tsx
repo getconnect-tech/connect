@@ -13,7 +13,7 @@ interface Props {
 }
 
 const MainDiv = styled.div<Props>`
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   border-radius: 12px;
   box-shadow:
     0px 0px 0px 0.5px ${colors.box_shadow},
@@ -32,7 +32,7 @@ const MainDiv = styled.div<Props>`
   max-height: 185px;
   overflow: auto;
   .date-time-text {
-    border-top: 1px solid ${colors.border};
+    border-top: 1px solid var(--border);
   }
 `;
 
@@ -66,10 +66,10 @@ const ItemDiv = styled.div<Props>`
 `;
 const SearchDiv = styled.div`
   padding: 0 0 0 12px;
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
-  background: ${colors.bg_white};
+  background: var(--bg-white);
   z-index: 2;
   .input {
     border: none;
@@ -102,8 +102,8 @@ const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   appearance: none;
   width: 16px;
   height: 16px;
-  background-color: ${colors.bg_white};
-  border: 1px solid ${colors.border_input_border};
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-input_border);
   border-radius: 4px;
   display: inline-block;
   position: relative;
@@ -111,8 +111,10 @@ const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   cursor: pointer;
 
   &:checked {
-    background-color: ${colors.brand};
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
+    background-color: var(--brand);
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(
+      checkmarkSVG,
+    )}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;
@@ -155,20 +157,20 @@ const DateTimeTextDiv = styled.div`
   cursor: pointer;
   p {
     ${Typography.body_md_regular};
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
   &:hover {
     background-color: ${colors.bg_white_hover};
     border-radius: 8px;
     p {
-      color: ${colors.text};
+      color: var(--text);
     }
   }
 `;
 
 const ItemName = styled.div`
   ${Typography.body_sm_regular};
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
   white-space: nowrap;
 `;
 

@@ -18,7 +18,7 @@ export const Div = styled.div`
 `;
 
 export const MainDiv = styled.div`
-  background-color: ${colors.bg_surface};
+  background-color: var(--bg-surface);
   height: 100vh;
   overflow: auto;
   .icon {

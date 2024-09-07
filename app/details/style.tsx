@@ -11,16 +11,16 @@ interface Props {
 
 const Main = styled.div`
   display: flex;
-  background-color: ${colors.bg_surface};
+  background-color: var(--bg-surface);
   height: 100vh;
 `;
 
 const TopDiv = styled.div`
   position: sticky;
   top: 0;
-  background-color: ${colors.bg_surface};
+  background-color: var(--bg-surface);
   z-index: 99;
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: 1px solid var(--border);
 `;
 
 const BottomDiv = styled.div`
@@ -35,7 +35,7 @@ const MainDiv = styled.div`
   width: 100%;
   margin-left: 223px;
   overflow: auto;
-  border-right: 1px solid ${colors.border};
+  border-right: 1px solid var(--border);
 `;
 
 const HeaderDiv = styled.div`
@@ -54,7 +54,7 @@ const LeftDiv = styled.div`
 
 const Title = styled.div`
   ${Typography.body_md_medium}
-  color: ${colors.text};
+  color: var(--text);
 `;
 
 const StatusDiv = styled.div`
@@ -63,7 +63,7 @@ const StatusDiv = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 9px 20px;
-  border-top: 1px solid ${colors.border};
+  border-top: 1px solid var(--border);
   position: relative;
 `;
 
@@ -85,7 +85,7 @@ const ButtonDiv = styled.div`
 const InputDiv = styled.div`
   position: sticky;
   bottom: 0;
-  background-color: ${colors.bg_surface};
+  background-color: var(--bg-surface);
   z-index: 1;
   max-width: 702px;
   margin: 0 auto;
@@ -96,7 +96,7 @@ const InputDiv = styled.div`
   }
   .line {
     height: 20px;
-    border-left: 1px solid ${colors.border};
+    border-left: 1px solid var(--border);
     margin-left: 10px;
   }
   .avtar {
@@ -139,10 +139,10 @@ const InputIcon = styled.div`
   align-items: center;
   gap: 8px;
   .send-icon {
-    background-color: ${colors.bg_surface_secondary};
+    background-color: var(--bg-surface-secondary);
     border-radius: 50%;
     &:hover {
-      background-color: ${colors.bg_surface_secondary_hover};
+      background-color: var(--bg-surface-secondary-hover);
     }
   }
   .submenu-upwards {
@@ -177,13 +177,13 @@ const ActivityDiv = styled.div`
 
 const Message = styled.p`
   ${Typography.body_md_regular};
-  color: ${colors.text};
-  border-left: 1px solid ${colors.border};
+  color: var(--text);
+  border-left: 1px solid var(--border);
   padding-left: 22px;
   margin-left: -22px;
   span {
     ${Typography.body_md_regular};
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
   svg {
     margin: 0 8px 3px;
@@ -191,7 +191,7 @@ const Message = styled.p`
 `;
 
 const LineDiv = styled.div`
-  border-left: 1px solid ${colors.border};
+  border-left: 1px solid var(--border);
   height: calc(100% - 22px);
   margin-left: 10px;
   position: absolute;

@@ -25,9 +25,9 @@ const Buttons = styled.button<WrapButton>`
   ${Typography.body_md_medium}
   padding: 8px 16px;
   border-radius: 20px;
-  background-color: ${colors.brand};
+  background-color: var(--brand);
   border: var(--border-primary);
-  color: ${colors.text_white};
+  color: var(--text-white);
   white-space: nowrap;
   align-items: center;
   cursor: pointer;
@@ -38,10 +38,10 @@ const Buttons = styled.button<WrapButton>`
     props.secondary &&
     css`
       background-color: transparent;
-      color: ${colors.text};
+      color: var(--text);
       border: var(--border-secondary);
       &:hover {
-        background-color: ${colors.bg_surface_hover};
+        background-color: var(--bg-surface-hover);
       }
     `}
   ${(props) =>
@@ -103,7 +103,7 @@ const Buttons = styled.button<WrapButton>`
     props.isDelete &&
     css`
       background-color: ${colors.fill_danger};
-      color: ${colors.text_white};
+      color: var(--text-white);
       border: var(--border-danger);
       &:hover {
         background-color: ${colors.fill_danger};

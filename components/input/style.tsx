@@ -24,7 +24,7 @@ const InputBox = styled.input<Props>`
   padding: 8px 16px;
   border: var(--border-secondary);
   background: transparent;
-  color: ${colors.text};
+  color: var(--text);
   ${Typography.body_md_medium};
   ${(props) =>
     props.variant === 'large' &&
@@ -43,7 +43,7 @@ const InputBox = styled.input<Props>`
     outline: none;
   }
   &::placeholder {
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
   &:focus {
     border: var(--border-primary);
@@ -55,9 +55,9 @@ const InputBox = styled.input<Props>`
         border: var(--border-danger);
       }
       border: var(--border-danger);
-      color: ${colors.text};
+      color: var(--text);
       &::placeholder {
-        color: ${colors.text_text_secondary};
+        color: var(--text-text-secondary);
       }
     `}
   ${(props) =>

@@ -4,7 +4,7 @@ import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 const CardDiv = styled.div`
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   padding: 12px 12px 12px 8px;
   margin: 12px 0;
   border-radius: 12px;
@@ -12,12 +12,12 @@ const CardDiv = styled.div`
   position: relative;
   gap: 12px;
   box-shadow:
-    0px 0px 0px 0.5px ${colors.bg_surface_secondary_hover},
-    0px 2px 4px 0px ${colors.bg_surface_active};
+    0px 0px 0px 0.5px var(--bg-surface-secondary-hover),
+    0px 2px 4px 0px var(--bg-surface-active);
   &:hover {
     box-shadow:
-      0px 0px 0px 0.5px ${colors.border_hover},
-      0px 2px 4px 0px ${colors.bg_surface_active};
+      0px 0px 0px 0.5px var(--border-hover),
+      0px 2px 4px 0px var(--bg-surface-active);
   }
   &:hover .tagDiv {
     display: flex;
@@ -62,12 +62,12 @@ const RightDiv = styled.div`
 
 const NameText = styled.div`
   ${Typography.body_md_regular};
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
 `;
 
 const DesTitle = styled.div`
   ${Typography.body_md_medium};
-  color: ${colors.text};
+  color: var(--text);
   word-wrap: break-word;
 `;
 
@@ -98,7 +98,7 @@ const StatusMainDiv = styled.div`
 const TagDiv = styled.div`
   display: none;
   border-radius: 30px;
-  background-color: ${colors.bg_surface_secondary};
+  background-color: var(--bg-surface-secondary);
   align-items: center;
   svg {
     fill: ${colors.icon};
@@ -111,11 +111,11 @@ const TagDiv = styled.div`
 const LineDiv = styled.div`
   width: 1px;
   height: 24px;
-  background-color: ${colors.border_input_border};
+  background-color: var(--border-input_border);
 `;
 const StatusTitle = styled.p`
   ${Typography.body_sm_medium}
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
 `;
 
 export {

@@ -3,7 +3,7 @@ import { colors } from '@/styles/colors';
 
 const Main = styled.div`
   padding: 4px 0;
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   box-shadow:
     0px 0px 0px 0.5px ${colors.box_shadow},
     0px 2px 4px 0px ${colors.box_shadow_2};
@@ -30,7 +30,7 @@ const Main = styled.div`
     background: linear-gradient(
       to right,
       transparent,
-      ${colors.bg_surface_secondary_hover},
+      var(--bg-surface-secondary-hover),
       transparent
     );
   }
@@ -54,7 +54,7 @@ const Firstblock = styled.div`
   gap: 12px;
   z-index: 11111;
   opacity: 90%;
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: 1px solid var(--border);
   &:last-child {
     border-bottom: none;
   }
@@ -88,7 +88,7 @@ const Top = styled.div`
   width: 141px;
   height: 8px;
   border-radius: 6px;
-  background-color: ${colors.bg_surface_secondary};
+  background-color: var(--bg-surface-secondary);
   &.center {
     width: 95px;
     height: 12px;
@@ -100,7 +100,7 @@ const Leftside = styled.div`
   height: 16px;
   border-radius: 50%;
   margin: 4px;
-  background-color: ${colors.bg_surface_secondary};
+  background-color: var(--bg-surface-secondary);
 `;
 
 export { Main, Firstblock, Rightside, Top, Subdiv, Leftside, TopDiv };

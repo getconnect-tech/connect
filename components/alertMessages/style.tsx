@@ -69,6 +69,6 @@ export const AlertmessageDiv = styled.div`
 
   .ant-alert-message {
     ${Typography.body_md_medium}
-    color: ${colors.text};
+    color: var(--text);
   }
 `;

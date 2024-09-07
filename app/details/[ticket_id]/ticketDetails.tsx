@@ -653,9 +653,9 @@ function TicketDetails(props: Props) {
                       tagStyle={{
                         backgroundColor: (() => {
                           if (modeSelectedItem?.name === 'Email') {
-                            return `${colors.bg_surface_secondary}`;
+                            return `var(--bg-surface-secondary)`;
                           } else if (modeSelectedItem?.name === 'Internal') {
-                            return `${colors.bg_surface_secondary_hover}`;
+                            return `var(--bg-surface-secondary-hover)`;
                           } else {
                             return undefined;
                           }

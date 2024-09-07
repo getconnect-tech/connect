@@ -19,7 +19,7 @@ export const IconDiv = styled.div<Props>`
   &:hover {
     cursor: pointer;
     border-radius: 50px;
-    background-color: ${colors.bg_surface_secondary_hover};
+    background-color: var(--bg-surface-secondary-hover);
     svg {
       fill: ${colors.icon_hover};
     }
@@ -27,7 +27,7 @@ export const IconDiv = styled.div<Props>`
   ${(props) =>
     props.isActive &&
     css`
-      background-color: ${colors.bg_surface_secondary};
+      background-color: var(--bg-surface-secondary);
       border-radius: 50%;
     `}
 `;

@@ -9,7 +9,7 @@ interface Props {
 const MainDiv = styled.div`
   padding: 20px 16px;
   height: 100vh;
-  background-color: ${colors.bg_surface};
+  background-color: var(--bg-surface);
   width: 223px;
   display: flex;
   flex-direction: column;
@@ -44,7 +44,7 @@ const OrganizationNameDiv = styled.div`
   padding: 4px;
   p {
     ${Typography.body_md_medium}
-    color: ${colors.text};
+    color: var(--text);
     margin-right: 8px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -53,7 +53,7 @@ const OrganizationNameDiv = styled.div`
   }
   &:hover {
     cursor: pointer;
-    background-color: ${colors.bg_surface_hover};
+    background-color: var(--bg-surface-hover);
     border-radius: 30px;
   }
 `;
@@ -73,7 +73,7 @@ const ItemDiv = styled.div<Props>`
   background-color: ${({ isActive }) => isActive && colors.bg_surface_active};
   border-radius: ${({ isActive }) => isActive && '30px'};
   &:hover {
-    background-color: ${colors.bg_surface_hover};
+    background-color: var(--bg-surface-hover);
     border-radius: 30px;
   }
 `;
@@ -86,14 +86,14 @@ const Title = styled.p<Props>`
 
 const Label = styled.p`
   ${Typography.body_sm_medium}
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
   padding: 0 12px;
 `;
 
 const CountText = styled.p`
   ${Typography.body_sm_regular}
-  color: ${colors.text_text_secondary};
-  background-color: ${colors.bg_surface_secondary};
+  color: var(--text-text-secondary);
+  background-color: var(--bg-surface-secondary);
   padding: 2px 8px;
   border-radius: 50%;
 `;
@@ -111,7 +111,7 @@ const ProfileDrop = styled.div`
   max-width: 191px;
   width: 100%;
   border-radius: 12px;
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   box-shadow:
     0px 0px 0px 0.5px ${colors.box_shadow},
     0px 4px 8px 0px ${colors.box_shadow},
@@ -136,7 +136,7 @@ const OrganizationProfile = styled.div`
   padding: 4px 8px;
   p {
     ${Typography.body_md_medium};
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
@@ -147,13 +147,13 @@ const OrganizationProfile = styled.div`
     background-color: ${colors.bg_white_hover};
     border-radius: 8px;
     p {
-      color: ${colors.text};
+      color: var(--text);
     }
   }
 `;
 const Description = styled.div`
   ${Typography.body_sm_regular};
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
 `;
 const ProfileItemDiv = styled.div`
   display: flex;
@@ -163,7 +163,7 @@ const ProfileItemDiv = styled.div`
   fill: ${colors.icon};
   p {
     ${Typography.body_md_regular}
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
   &:hover {
     fill: ${colors.icon_hover};
@@ -171,7 +171,7 @@ const ProfileItemDiv = styled.div`
     background-color: ${colors.bg_white_hover};
     border-radius: 8px;
     p {
-      color: ${colors.text};
+      color: var(--text);
     }
   }
 `;

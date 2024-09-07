@@ -29,7 +29,7 @@ const Main = styled.div`
     background: linear-gradient(
       to right,
       transparent,
-      ${colors.bg_surface_secondary_hover},
+      var(--bg-surface-secondary-hover),
       transparent
     );
   }
@@ -46,7 +46,7 @@ const Main = styled.div`
 
 const Firstblock = styled.div`
   padding: 12px 21px;
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   border-radius: 12px;
   box-shadow:
     0px 0px 0px 0.5px ${colors.box_shadow},
@@ -68,7 +68,7 @@ const Profile = styled.div`
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background-color: ${colors.bg_surface_secondary};
+  background-color: var(--bg-surface-secondary);
 `;
 
 const Rightside = styled.div`
@@ -94,7 +94,7 @@ const DotIcon = styled.div`
   border-radius: 50%;
   left: 12px;
   top: 22px;
-  background-color: ${colors.bg_surface_secondary};
+  background-color: var(--bg-surface-secondary);
 `;
 
 const Subdiv = styled.div`
@@ -109,7 +109,7 @@ const Top = styled.div`
   width: 177px;
   height: 8px;
   border-radius: 6px;
-  background-color: ${colors.bg_surface_secondary};
+  background-color: var(--bg-surface-secondary);
   &.center {
     width: 333px;
     height: 12px;
@@ -124,7 +124,7 @@ const Bottom = styled.div`
   width: 65px;
   height: 24px;
   border-radius: 30px;
-  background-color: ${colors.bg_surface_secondary};
+  background-color: var(--bg-surface-secondary);
   &.first {
     width: 99px;
   }
@@ -136,7 +136,7 @@ const Leftside = styled.div`
   width: 66px;
   height: 8px;
   border-radius: 30px;
-  background-color: ${colors.bg_surface_secondary};
+  background-color: var(--bg-surface-secondary);
 `;
 
 export {

@@ -19,11 +19,11 @@ export const MainDiv = styled.div`
   }
   h6 {
     ${Typography.body_md_semibold};
-    color: ${colors.text};
+    color: var(--text);
   }
   p {
     ${Typography.body_md_regular};
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
     text-align: center;
   }
 `;
@@ -34,7 +34,7 @@ export const IconDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   border-radius: 50%;
   box-shadow:
     0px 0px 0px 0.5px ${colors.box_shadow},

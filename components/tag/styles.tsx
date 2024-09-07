@@ -9,7 +9,7 @@ interface Props {
 
 const StatusDiv = styled.div<Props>`
   padding: 2px 12px 2px 2px;
-  background-color: ${colors.bg_surface_secondary};
+  background-color: var(--bg-surface-secondary);
   border-radius: 30px;
   display: flex;
   align-items: center;
@@ -22,12 +22,12 @@ const StatusDiv = styled.div<Props>`
   -o-user-select: none;
   user-select: none;
   &:hover {
-    background-color: ${colors.bg_surface_secondary_hover};
+    background-color: var(--bg-surface-secondary-hover);
     .icon {
       fill: ${colors.icon_hover};
     }
     p {
-      color: ${colors.text};
+      color: var(--text);
     }
   }
   .icon {
@@ -42,7 +42,7 @@ const StatusDiv = styled.div<Props>`
 
 const StatusTitle = styled.p`
   ${Typography.body_sm_regular}
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
 `;
 
 export { StatusDiv, StatusTitle };
