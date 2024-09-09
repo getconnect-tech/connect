@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-import { colors } from '@/styles/colors';
 
 const getViewBox = (name: string) => {
   switch (name) {
@@ -387,7 +386,7 @@ const LabelSvgIcon = ({
   bgfill = 'none',
   stroke = '',
   stopColor = '',
-  iconprimary = colors.icon,
+  iconprimary = '',
 }) => (
   <svg
     stroke={stroke}

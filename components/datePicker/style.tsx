@@ -1,6 +1,5 @@
 /* eslint-disable indent */
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 interface Props {
@@ -10,7 +9,7 @@ interface Props {
 export const MainDiv = styled.div<Props>`
   max-width: 260px;
   width: 100%;
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   position: ${({ isContextMenu }) => (isContextMenu ? 'relative' : 'absolute')};
   right: 0;
   top: ${({ isContextMenu }) => (isContextMenu ? 0 : 38)};
@@ -21,11 +20,11 @@ export const MainDiv = styled.div<Props>`
     top: auto;
     position: ${({ isContextMenu }) =>
       isContextMenu ? 'relative' : 'absolute'};
-    background-color: ${colors.bg_white};
+    background-color: var(--bg-white);
     box-shadow:
-      0px 0px 0px 0.5px ${colors.box_shadow},
-      0px 4px 8px 0px ${colors.box_shadow},
-      0px 8px 24px 0px ${colors.box_shadow};
+      0px 0px 0px 0.5px var(--box-shadow),
+      0px 4px 8px 0px var(--box-shadow),
+      0px 8px 24px 0px var(--box-shadow);
     border-radius: 12px;
   }
 
@@ -34,23 +33,23 @@ export const MainDiv = styled.div<Props>`
     bottom: auto;
     position: ${({ isContextMenu }) =>
       isContextMenu ? 'relative' : 'absolute'};
-    background-color: ${colors.bg_white};
+    background-color: var(--bg-white);
     box-shadow:
-      0px 0px 0px 0.5px ${colors.box_shadow},
-      0px 4px 8px 0px ${colors.box_shadow},
-      0px 8px 24px 0px ${colors.box_shadow};
+      0px 0px 0px 0.5px var(--box-shadow),
+      0px 4px 8px 0px var(--box-shadow),
+      0px 8px 24px 0px var(--box-shadow);
     border-radius: 12px;
   }
 `;
 
 export const Header = styled.div`
   padding: 8px 12px;
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   p {
     ${Typography.body_md_medium};
-    color: ${colors.text};
+    color: var(--text);
     text-align: center;
     margin-left: 69px;
   }
@@ -66,7 +65,7 @@ export const CalendarDiv = styled.div`
     background-color: unset;
     border: none;
     ${Typography.body_md_medium};
-    color: ${colors.text};
+    color: var(--text);
   }
   .react-calendar__navigation {
     display: flex;
@@ -91,7 +90,7 @@ export const CalendarDiv = styled.div`
   }
   .react-calendar__month-view__weekdays__weekday {
     ${Typography.body_sm_regular};
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
     padding: 8px 6px;
     text-align: center;
     abbr {
@@ -105,7 +104,7 @@ export const CalendarDiv = styled.div`
     cursor: pointer;
   }
   .react-calendar__tile.react-calendar__month-view__days__day:hover {
-    background-color: ${colors.bg_white_hover};
+    background-color: var(--bg-white-hover);
     border-radius: 50%;
   }
   .react-calendar__month-view__days {
@@ -114,30 +113,30 @@ export const CalendarDiv = styled.div`
   }
   .react-calendar__navigation__arrow.react-calendar__navigation__next-button {
     font-size: 22px;
-    color: ${colors.icon};
+    color: var(--icon);
     cursor: pointer;
     margin-top: -4px;
   }
   .react-calendar__navigation__arrow.react-calendar__navigation__prev-button {
     font-size: 22px;
-    color: ${colors.icon};
+    color: var(--icon);
     cursor: pointer;
     margin-top: -4px;
   }
   .react-calendar__tile--active:enabled {
-    background: ${colors.brand};
-    color: ${colors.text_white};
+    background: var(--brand);
+    color: var(--text-white);
     border-radius: 50%;
   }
   .react-calendar__tile--active:enabled:hover {
-    background: ${colors.brand};
-    color: ${colors.text_white};
+    background: var(--brand);
+    color: var(--text-white);
     border-radius: 50%;
   }
 `;
 
 export const InputMainDiv = styled.form`
-  border-top: 1px solid ${colors.border};
+  border-top: 1px solid var(--border);
   margin-top: 12px;
   padding: 12px;
   .buttons {
@@ -161,5 +160,5 @@ export const Inputs = styled.div`
 
 export const Label = styled.p`
   ${Typography.body_sm_medium};
-  color: ${colors.text};
+  color: var(--text);
 `;

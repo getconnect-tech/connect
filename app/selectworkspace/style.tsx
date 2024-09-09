@@ -1,12 +1,11 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const MainDiv = styled.div`
   display: flex;
   justify-content: center;
   padding-top: 80px;
-  background-color: ${colors.bg_surface};
+  background-color: var(--bg-surface);
   height: 100vh;
   position: relative;
   .icon {
@@ -24,7 +23,7 @@ export const Content = styled.div`
   gap: 48px;
   h6 {
     ${Typography.heading_heading_semibold}
-    color: ${colors.text};
+    color: var(--text);
   }
 `;
 

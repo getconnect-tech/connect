@@ -1,6 +1,5 @@
 /* eslint-disable indent */
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 interface Props {
@@ -10,7 +9,7 @@ interface Props {
 }
 
 const StatusDiv = styled.div<Props>`
-  background-color: ${colors.bg_surface_secondary};
+  background-color: var(--bg-surface-secondary);
   border-radius: 30px;
   display: flex;
   align-items: center;
@@ -26,27 +25,27 @@ const StatusDiv = styled.div<Props>`
   padding: ${({ hasIconTitlePairs }) =>
     hasIconTitlePairs ? '0 12px 0 0' : '6px'};
   .tag-icon {
-    fill: ${colors.icon};
+    fill: var(--icon);
   }
 
   &:hover {
-    background-color: ${colors.bg_surface_secondary_hover};
+    background-color: var(--bg-surface-secondary-hover);
     .icon {
-      fill: ${colors.icon_hover};
+      fill: var(--icon-hover);
     }
     p {
-      color: ${colors.text};
+      color: var(--text);
     }
     .line {
-      background-color: ${colors.border_hover};
+      background-color: var(--border-hover);
     }
     .tag-icon {
-      fill: ${colors.icon_hover};
+      fill: var(--icon-hover);
     }
   }
 
   .icon {
-    fill: ${({ isActive }) => (isActive ? colors.icon_hover : colors.icon)};
+    fill: var(${({ isActive }) => (isActive ? '--icon-hover' : '--icon')});
     margin: 4px 0 4px;
     &:first-child {
       margin: 4px 0 4px 10px;
@@ -54,13 +53,14 @@ const StatusDiv = styled.div<Props>`
   }
 
   p {
-    color: ${({ isActive }) =>
-      isActive ? colors.text : colors.text_text_secondary};
+    color: var(
+      ${({ isActive }) => (isActive ? '--text' : '--text-text-secondary')}
+    );
   }
 
   .line {
     width: 1px;
-    background-color: ${colors.border_input_border};
+    background-color: var(--border-input_border);
     height: 24px;
     margin: 0 2px;
     &:last-child {
@@ -71,7 +71,7 @@ const StatusDiv = styled.div<Props>`
 
 const StatusTitle = styled.p`
   ${Typography.body_sm_regular}
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
 `;
 
 export { StatusDiv, StatusTitle };

@@ -49,7 +49,6 @@ import { MessageDetails } from '@/utils/dataTypes';
 import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
 import SnoozeDropdown from '@/components/snoozeDropdown/snoozeDropdown';
 import InternalMessageCard from '@/components/internalMessageCard/internalMessageCard';
-import { colors } from '@/styles/colors';
 import { messageStore } from '@/stores/messageStore';
 import { HandleClickProps } from '@/utils/appTypes';
 import LabelDropdown from '@/components/labelDropdown/labelDropdown';
@@ -675,9 +674,9 @@ function TicketDetails(props: Props) {
                       tagStyle={{
                         backgroundColor: (() => {
                           if (modeSelectedItem?.name === 'Email') {
-                            return `${colors.bg_surface_secondary}`;
+                            return `var(--bg-surface-secondary)`;
                           } else if (modeSelectedItem?.name === 'Internal') {
-                            return `${colors.bg_surface_secondary_hover}`;
+                            return `var(--bg-surface-secondary-hover)`;
                           } else {
                             return undefined;
                           }

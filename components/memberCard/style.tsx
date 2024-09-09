@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const CardDiv = styled.div`
@@ -7,7 +6,7 @@ export const CardDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 0.5px solid ${colors.border};
+  border-bottom: 0.5px solid var(--border);
   &:last-child {
     border-bottom: none;
   }
@@ -25,11 +24,11 @@ export const NameDiv = styled.div`
   gap: 1px;
   h6 {
     ${Typography.body_md_medium};
-    color: ${colors.text};
+    color: var(--text);
   }
   p {
     ${Typography.body_md_regular};
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
 `;
 
@@ -39,9 +38,9 @@ export const RightDiv = styled.div`
   align-items: center;
   h6 {
     ${Typography.body_sm_regular};
-    color: ${colors.text};
+    color: var(--text);
     padding: 4px 12px;
-    background-color: ${colors.bg_surface_secondary};
+    background-color: var(--bg-surface-secondary);
     border-radius: 30px;
   }
 `;

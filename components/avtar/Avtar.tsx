@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import styled, { css } from 'styled-components';
 import { isEmpty } from '@/helpers/common';
-import { colors } from '@/styles/colors';
 import { RANDOM_COLORS } from '@/global/constants';
 
 const UserLogoWrapper = styled.div`
@@ -25,7 +24,7 @@ const UserLogo: any = styled.img`
   ${(props: any) =>
     props.isShowBorder &&
     css`
-      border: 1px solid ${colors.border};
+      border: 1px solid var(--border);
       border-radius: 50%;
     `}
 `;

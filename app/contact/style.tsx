@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 import { Typography } from '../../styles/typography';
-import { colors } from '../../styles/colors';
 
 interface Props {
   active?: boolean;
@@ -8,14 +7,14 @@ interface Props {
 
 const Main = styled.div`
   display: flex;
-  background-color: ${colors.bg_surface};
+  background-color: var(--bg-surface);
   height: 100vh;
 `;
 
 const TopDiv = styled.div`
   position: sticky;
   top: 0;
-  background-color: ${colors.bg_surface};
+  background-color: var(--bg-surface);
   z-index: 99;
   margin-bottom: 12px;
   padding: 0 20px;
@@ -43,7 +42,7 @@ const HeaderDiv = styled.div`
 
 const Title = styled.div`
   ${Typography.body_md_semibold}
-  color: ${colors.text};
+  color: var(--text);
 `;
 
 const TabDiv = styled.div`
@@ -51,30 +50,30 @@ const TabDiv = styled.div`
   align-items: center;
   padding: 2px;
   border-radius: 30px;
-  background-color: ${colors.bg_surface_secondary};
+  background-color: var(--bg-surface-secondary);
 `;
 
 const Tab = styled.p<Props>`
   padding: 4px 8px;
   ${Typography.body_sm_regular}
   cursor: pointer;
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
   ${(props) =>
     props.active &&
     css`
-      background-color: ${colors.bg_white};
+      background-color: var(--bg-white);
       border-radius: 30px;
-      box-shadow: 0px 1px 1px 0px ${colors.box_shadow};
-      color: ${colors.text};
+      box-shadow: 0px 1px 1px 0px var(--box-shadow);
+      color: var(--text);
     `}
 `;
 
 const ListMainDiv = styled.div`
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   padding: 4px 0;
   box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow_2};
+    0px 0px 0px 0.5px var(--box-shadow),
+    0px 2px 4px 0px var(--box-shadow-2);
   border-radius: 12px;
   max-width: 662px;
   margin: 4px auto 0;

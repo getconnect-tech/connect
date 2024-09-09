@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const AlertmessageDiv = styled.div`
@@ -35,26 +34,26 @@ export const AlertmessageDiv = styled.div`
   }
 
   .ant-alert-error {
-    border: 1px solid ${colors.error_border};
-    background-color: ${colors.fill_danger_secondary};
+    border: 1px solid var(--error-border);
+    background-color: var(--fill-danger-secondary);
     .ant-alert-icon {
-      color: ${colors.fill_danger};
+      color: var(--fill-danger);
     }
   }
 
   .ant-alert-success {
-    border: 1px solid ${colors.success_border};
-    background-color: ${colors.fill_success_seconday};
+    border: 1px solid var(--success-border);
+    background-color: var(--fill-success-secondary);
     .ant-alert-icon {
-      color: ${colors.fill_success};
+      color: var(--text-success);
     }
   }
 
   .ant-alert-warning {
-    border: 1px solid ${colors.warning_border};
-    background-color: ${colors.fill_warning_secondary};
+    border: 1px solid var(--warning-border);
+    background-color: var(--fill-warning-secondary);
     .ant-alert-icon {
-      color: ${colors.fill_warning};
+      color: var(--text-warning);
     }
   }
   .ant-alert .ant-alert-icon {
@@ -69,6 +68,6 @@ export const AlertmessageDiv = styled.div`
 
   .ant-alert-message {
     ${Typography.body_md_medium}
-    color: ${colors.text};
+    color: var(--text);
   }
 `;

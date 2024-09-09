@@ -1,14 +1,12 @@
 'use client';
-
 import parse from 'html-react-parser';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { isEmpty } from '@/helpers/common';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { colors } from '@/styles/colors';
 
 export const DotIcon = styled.div`
-  border: 1px solid ${colors.border};
+  border: var(--border-main);
   width: 36px;
   height: 18px;
   display: flex;
@@ -18,7 +16,7 @@ export const DotIcon = styled.div`
   margin-top: 10px;
   margin-bottom: 10px;
   cursor: pointer;
-  box-shadow: 0px 1px 2px 0px ${colors.box_shadow_2};
+  box-shadow: 0px 1px 2px 0px var(--box-shadow-2);
 `;
 
 const RenderHtml = ({ htmlstring }: { htmlstring: string }) => {

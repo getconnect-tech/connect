@@ -1,12 +1,11 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const DropBox = styled.div`
   display: flex;
   gap: 8px;
   padding: 8px 16px;
-  border: 1px solid ${colors.border_input_border};
+  border: 1px solid var(--border-input_border);
   border-radius: 20px;
   align-items: center;
   justify-content: space-between;
@@ -18,5 +17,5 @@ export const DropBox = styled.div`
   -o-user-select: none;
   user-select: none;
   ${Typography.body_md_medium}
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
 `;

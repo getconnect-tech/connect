@@ -110,3 +110,79 @@ a {
 .ant-picker:hover .ant-picker-clear {
   display: none;
 }
+
+:root {
+  /* common color */
+  --black: #000000;
+  --white: #ffffff;
+  --fill-danger: #bc5749;
+  /* brand color */
+  --brand: #282828;
+  --brand-fill-hover: #3e3e3e;
+  --brand-disabled: #ebeae7;
+  /* background color */
+  --bg-surface: #f5f4f1;
+  --bg-surface-hover: #e9e8e5;
+  --bg-surface-active: #e9e8e5;
+  --bg-white: #ffffff;
+  --bg-surface-secondary: #e9e8e5;
+  --bg-surface-secondary-hover: #dcdcd9;
+  --bg-white-hover: #f2f2f2;
+  --bg-overlay: #00000080;
+  /* text color */
+  --text: #313130;
+  --text-link: #282828;
+  --text-white: #ffffff;
+  --text-text-secondary: #7b7a79;
+  --text-text-secondary-hover: #313130;
+  --text-disabled: #c4c3c1;
+  /* icon color */
+  --icon: #7b7a79;
+  --icon-hover: #313130;
+  --icon-active: #313130;
+  --icon-disabled: #c4c3c1;
+  /* box shadow color */
+  --box-shadow: #0000001a;
+  --box-shadow-2: #0000000d;
+  --box-shadow-3: #00000033;
+  /* alert message colors */
+  --fill-danger-secondary: #f8eeed;
+  --fill-success-secondary: #e8f3e9;
+  --fill-warning-secondary: #fcf3e7;
+  --text-success: #1d8623;
+  --text-warning: #e28512;
+  --error-border: #bc574933;
+  --success-border: #1d862333;
+  --warning-border: #e2851233;
+  /* border colors */
+  --border: #e9e8e5;
+  --border-hover: #c4c3c1;
+  --border-selected: #7b7a79;
+  --border-input_border: #dcdcd9;
+  --border-brand: #282828;
+  --border-disabled: #e7e7e4;
+  /* All type of borders */
+  --border-width: 1px;
+  --border-loading-width: 2px;
+  --border-style: solid;
+  --border-main: var(--border-width) var(--border-style) var(--border);
+  --border-primary: var(--border-width) var(--border-style) var(--border-brand);
+  --border-secondary: var(--border-width) var(--border-style)
+    var(--border-input_border);
+  --border-disable: var(--border-width) var(--border-style)
+    var(--border-disabled);
+  --border-danger: var(--border-width) var(--border-style) var(--fill-danger);
+  --border-loading: var(--border-loading-width) var(--border-style)
+    var(--text-white);
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2),
+  only screen and (min--moz-device-pixel-ratio: 2),
+  only screen and (-o-min-device-pixel-ratio: 2/1),
+  only screen and (min-device-pixel-ratio: 2),
+  only screen and (min-resolution: 192dpi),
+  only screen and (min-resolution: 2dppx) {
+  :root {
+    --border-width: 0.5px;
+  }
+}

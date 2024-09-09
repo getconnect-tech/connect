@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const MainDiv = styled.div`
@@ -8,7 +7,7 @@ export const MainDiv = styled.div`
   min-width: 360px;
   width: 100%;
   border-radius: 12px;
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   gap: 12px;
   flex-direction: column;
 `;
@@ -16,9 +15,9 @@ export const MainDiv = styled.div`
 export const Header = styled.div`
   display: flex;
   padding: 14px 16px;
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: 1px solid var(--border);
   ${Typography.body_md_semibold}
-  color: ${colors.text};
+  color: var(--text);
 `;
 
 export const Content = styled.div`
@@ -28,11 +27,11 @@ export const Content = styled.div`
   gap: 4px;
   h2 {
     ${Typography.body_md_medium}
-    color: ${colors.text};
+    color: var(--text);
   }
   p {
     ${Typography.body_md_regular}
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
 `;
 

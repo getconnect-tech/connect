@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const ModalDiv = styled.div`
@@ -8,7 +7,7 @@ export const ModalDiv = styled.div`
   border-radius: 12px;
   min-width: 500px;
   min-height: 437px;
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   position: relative;
   overflow: auto;
   .richtext {
@@ -24,30 +23,30 @@ export const ModalDiv = styled.div`
 export const ModalHeader = styled.div`
   position: sticky;
   top: 0;
-  background-color: ${colors.bg_white};
-  border-bottom: 1px solid ${colors.border};
+  background-color: var(--bg-white);
+  border-bottom: 1px solid var(--border);
   padding: 12px 16px;
   z-index: 11;
 `;
 
 export const ModalTitle = styled.div`
   ${Typography.body_md_semibold}
-  color: ${colors.text};
+  color: var(--text);
 `;
 
 export const ModalDescription = styled.div`
   ${Typography.body_md_regular}
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
 `;
 export const ModalBottom = styled.div`
   display: flex;
   padding: 8px 16px 12px 16px;
-  border-top: 1px solid ${colors.border};
+  border-top: 1px solid var(--border);
   justify-content: space-between;
   align-items: center;
   position: sticky;
   bottom: 0;
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
 `;
 
 export const RightDiv = styled.div`
@@ -67,12 +66,12 @@ export const RemoveIcon = styled.div`
   justify-content: center;
   border-radius: 50%;
   svg {
-    fill: ${colors.icon};
+    fill: var(--icon);
   }
   &:hover {
-    background: ${colors.bg_surface_hover};
+    background: var(--bg-surface-hover);
     svg {
-      fill: ${colors.icon_hover};
+      fill: var(--icon-hover);
     }
   }
 `;
@@ -85,10 +84,10 @@ export const FileCard = styled.div`
   padding: 8px;
   border-radius: 8px;
   gap: 8px;
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow_2};
+    0px 0px 0px 0.5px var(--box-shadow),
+    0px 2px 4px 0px var(--box-shadow-2);
   align-items: center;
   position: relative;
   &:hover ${RemoveIcon} {
@@ -103,7 +102,7 @@ export const FileCardRight = styled.div`
   width: 100%;
   h2 {
     ${Typography.body_sm_medium}
-    color: ${colors.text};
+    color: var(--text);
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
@@ -112,7 +111,7 @@ export const FileCardRight = styled.div`
   }
   p {
     ${Typography.body_sm_regular}
-    color: ${colors.text_text_secondary}
+    color: var(--text-text-secondary)
   }
 `;
 
@@ -127,7 +126,7 @@ export const FileCardContainer = styled.div`
   flex-wrap: wrap;
   gap: 12px;
   padding: 12px 16px;
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   position: sticky;
   bottom: 0;
   z-index: 1;
@@ -154,7 +153,7 @@ export const IllustrationDiv = styled.div`
   height: 56px;
   padding: 16px;
   border-radius: 50%;
-  background-color: ${colors.bg_white_hover};
+  background-color: var(--bg-white-hover);
 `;
 
 export const Content = styled.div`
@@ -164,11 +163,11 @@ export const Content = styled.div`
   gap: 4px;
   h2 {
     ${Typography.body_md_semibold}
-    color: ${colors.text};
+    color: var(--text);
   }
   p {
     ${Typography.body_md_regular}
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
 `;
 

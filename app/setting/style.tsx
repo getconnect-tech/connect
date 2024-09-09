@@ -1,12 +1,11 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable max-len */
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const Main = styled.div`
   display: flex;
-  background-color: ${colors.bg_surface};
+  background-color: var(--bg-surface);
   width: 100%;
   margin-left: 254px;
 `;
@@ -34,7 +33,7 @@ export const Head = styled.div`
   justify-content: space-between;
   position: sticky;
   top: 0;
-  background-color: ${colors.bg_surface};
+  background-color: var(--bg-surface);
   z-index: 2;
   margin: 0 -4px;
   padding: 50px 5px 10px;
@@ -42,12 +41,12 @@ export const Head = styled.div`
 
 export const Description = styled.div`
   ${Typography.body_md_regular}
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
 `;
 
 export const Title = styled.div`
   ${Typography.heading_lg_regular}
-  color: ${colors.text};
+  color: var(--text);
 `;
 
 export const ProfileDetail = styled.form`
@@ -56,10 +55,10 @@ export const ProfileDetail = styled.form`
   border-radius: 12px;
   padding: 16px;
   gap: 16px;
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow};
+    0px 0px 0px 0.5px var(--box-shadow),
+    0px 2px 4px 0px var(--box-shadow);
 `;
 
 export const ProfileImage = styled.div`
@@ -73,14 +72,14 @@ export const Frame = styled.div`
   gap: 2px;
   p {
     ${Typography.body_md_regular};
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
 `;
 
 export const Link = styled.a`
   padding: 4px 0;
   ${Typography.body_md_medium};
-  color: ${colors.text_link};
+  color: var(--text-link);
   cursor: pointer;
 `;
 
@@ -99,7 +98,7 @@ export const TextField = styled.div`
 
 export const Label = styled.div`
   ${Typography.body_md_medium}
-  color: ${colors.text};
+  color: var(--text);
 `;
 
 export const PasswordInputs = styled.div`
@@ -118,8 +117,8 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   appearance: none;
   width: 16px;
   height: 16px;
-  background-color: ${colors.bg_white};
-  border: 1px solid ${colors.border_input_border};
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-input_border);
   border-radius: 4px;
   display: inline-block;
   position: relative;
@@ -127,7 +126,7 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   cursor: pointer;
 
   &:checked {
-    background-color: ${colors.brand};
+    background-color: var(--brand);
     background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
@@ -140,22 +139,22 @@ export const NotificationCard = styled.div`
   flex-direction: column;
   border-radius: 12px;
   padding: 0 16px;
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow};
+    0px 0px 0px 0.5px var(--box-shadow),
+    0px 2px 4px 0px var(--box-shadow);
   padding: 0 16px;
 `;
 
 export const NotificationItem = styled.div`
   display: flex;
-  border-bottom: 0.5px solid ${colors.border};
+  border-bottom: 0.5px solid var(--border);
   padding: 12px 0;
   gap: 10px;
   align-items: center;
   p {
     ${Typography.body_md_medium};
-    color: ${colors.text_link};
+    color: var(--text-link);
   }
 `;
 
@@ -167,22 +166,22 @@ export const LeftDiv = styled.div`
 
 export const MainCardDiv = styled.div`
   padding: 4px 0;
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow_2};
+    0px 0px 0px 0.5px var(--box-shadow),
+    0px 2px 4px 0px var(--box-shadow-2);
   border-radius: 12px;
   margin-bottom: 16px;
 `;
 export const EmailCardDiv = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${colors.bg_surface_secondary};
+  background-color: var(--bg-surface-secondary);
   border-radius: 12px;
   .line-div {
     height: 0.4px;
     margin: 0 16px;
-    background: ${colors.border_hover};
+    background: var(--border-hover);
   }
 `;
 
