@@ -669,6 +669,18 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
+    case 'message-three-dot-icon':
+      return (
+        <>
+          <path
+            stroke='#7C7C7F'
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            strokeWidth={1.5}
+            d='M19.002 9.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0M13 9.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0M6.997 9.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0'
+          />
+        </>
+      );
   }
 };
 
