@@ -3,7 +3,7 @@ import { Typography } from '@/styles/typography';
 
 export const ItemDiv = styled.div`
   display: flex;
-  border-bottom: 0.5px solid var(--border);
+  border-bottom: var(--border-light);
   padding: 8px 12px;
   gap: 16px;
   justify-content: space-between;

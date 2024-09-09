@@ -6,7 +6,7 @@ export const CardDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 0.5px solid var(--border);
+  border-bottom: var(--border-light);
   &:last-child {
     border-bottom: none;
   }

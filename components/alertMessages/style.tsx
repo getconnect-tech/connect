@@ -34,7 +34,7 @@ export const AlertmessageDiv = styled.div`
   }
 
   .ant-alert-error {
-    border: 1px solid var(--error-border);
+    border: var(--border-error);
     background-color: var(--fill-danger-secondary);
     .ant-alert-icon {
       color: var(--fill-danger);
@@ -42,7 +42,7 @@ export const AlertmessageDiv = styled.div`
   }
 
   .ant-alert-success {
-    border: 1px solid var(--success-border);
+    border: var(--border-success);
     background-color: var(--fill-success-secondary);
     .ant-alert-icon {
       color: var(--text-success);
@@ -50,7 +50,7 @@ export const AlertmessageDiv = styled.div`
   }
 
   .ant-alert-warning {
-    border: 1px solid var(--warning-border);
+    border: var(--border-warning);
     background-color: var(--fill-warning-secondary);
     .ant-alert-icon {
       color: var(--text-warning);

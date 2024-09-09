@@ -125,16 +125,13 @@ const ProfileDrop = styled.div`
   width: 100%;
   border-radius: 12px;
   background-color: var(--bg-white);
-  box-shadow:
-    0px 0px 0px 0.5px var(--box-shadow),
-    0px 4px 8px 0px var(--box-shadow),
-    0px 8px 24px 0px var(--box-shadow);
+  box-shadow: var(--shadow-dropdown);
 `;
 const Frame1 = styled.div`
   display: flex;
   flex-direction: column;
   padding: 4px;
-  border-bottom: 0.5px solid var(--border);
+  border-bottom: var(--border-light);
 `;
 const Frame2 = styled.div`
   display: flex;

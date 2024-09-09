@@ -3,14 +3,14 @@ import { Typography } from '@/styles/typography';
 
 const MessageCardInnerDiv = styled.div`
   background-color: var(--bg-white);
-  border: 1px solid var(--border);
+  border: var(--border-main);
   border-radius: 12px;
   word-break: break-word;
 `;
 
 const CardTop = styled.div`
   padding: 12px 12px 8px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border-main);
   p {
     ${Typography.body_md_regular};
     color: var(--text-text-secondary);

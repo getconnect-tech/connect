@@ -5,10 +5,7 @@ const ContextMenuMainDiv = styled.div``;
 
 const ContextMenuContent = styled(ContextMenu.Content)`
   background-color: var(--bg-white);
-  box-shadow:
-    0px 0px 0px 0.5px var(--box-shadow),
-    0px 4px 8px 0px var(--box-shadow),
-    0px 8px 24px 0px var(--box-shadow);
+  box-shadow: var(--shadow-dropdown);
   border-radius: 12px;
   z-index: 1;
   min-width: 180px;
@@ -17,7 +14,7 @@ const ContextMenuContent = styled(ContextMenu.Content)`
   display: flex;
   flex-direction: column;
   .sub-menu {
-    border-bottom: 1px solid var(--border);
+    border-bottom: var(--border-main);
     padding: 4px;
   }
 `;

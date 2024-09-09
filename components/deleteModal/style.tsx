@@ -15,7 +15,7 @@ export const MainDiv = styled.div`
 export const Header = styled.div`
   display: flex;
   padding: 14px 16px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border-main);
   ${Typography.body_md_semibold}
   color: var(--text);
 `;

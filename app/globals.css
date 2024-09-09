@@ -163,6 +163,7 @@ a {
   --border-disabled: #e7e7e4;
   /* All type of borders */
   --border-width: 1px;
+  --border-light-width: 0.5px;
   --border-loading-width: 2px;
   --border-style: solid;
   --border-main: var(--border-width) var(--border-style) var(--border);
@@ -174,6 +175,22 @@ a {
   --border-danger: var(--border-width) var(--border-style) var(--fill-danger);
   --border-loading: var(--border-loading-width) var(--border-style)
     var(--text-white);
+  --border-light: var(--border-light-width) var(--border-style) var(--border);
+  --border-light-hover: var(--border-light-width) var(--border-style)
+    var(--border-hover);
+  --border-error: var(--border-width) var(--border-style) var(--error-border);
+  --border-success: var(--border-width) var(--border-style)
+    var(--success-border);
+  --border-warning: var(--border-width) var(--border-style)
+    var(--warning-border);
+  /* All box Shadow */
+  --shadow-tab: 0px 1px 1px 0px var(--box-shadow);
+  --shadow-card: 0px 0px 0px 0.5px var(--box-shadow),
+    0px 2px 4px 0px var(--box-shadow-2);
+  --shadow-card-hover: 0px 0px 0px 0.5px var(--box-shadow-3),
+    0px 2px 4px 0px var(--box-shadow-2);
+  --shadow-dropdown: 0px 0px 0px 0.5px var(--box-shadow),
+    0px 4px 8px 0px var(--box-shadow), 0px 8px 24px 0px var(--box-shadow);
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2),

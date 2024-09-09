@@ -34,7 +34,7 @@ export const IconDiv = styled.div`
 export const TopBlock = styled.div`
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border-main);
   gap: 1px;
   padding-bottom: 12px;
 `;

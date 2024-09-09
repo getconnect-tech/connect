@@ -10,13 +10,9 @@ const CardDiv = styled.div`
   cursor: pointer;
   position: relative;
   gap: 12px;
-  box-shadow:
-    0px 0px 0px 0.5px var(--bg-surface-secondary-hover),
-    0px 2px 4px 0px var(--bg-surface-active);
+  box-shadow: var(--shadow-card);
   &:hover {
-    box-shadow:
-      0px 0px 0px 0.5px var(--border-hover),
-      0px 2px 4px 0px var(--bg-surface-active);
+    box-shadow: var(--shadow-card-hover);
   }
   &:hover .tagDiv {
     display: flex;

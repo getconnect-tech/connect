@@ -47,9 +47,7 @@ const Firstblock = styled.div`
   padding: 12px 21px;
   background-color: var(--bg-white);
   border-radius: 12px;
-  box-shadow:
-    0px 0px 0px 0.5px var(--box-shadow),
-    0px 2px 4px 0px var(--box-shadow-2);
+  box-shadow: var(--shadow-card);
   display: flex;
   justify-content: space-between;
   position: relative;

@@ -35,9 +35,7 @@ export const IconDiv = styled.div`
   align-items: center;
   background-color: var(--bg-white);
   border-radius: 50%;
-  box-shadow:
-    0px 0px 0px 0.5px var(--box-shadow),
-    0px 2px 4px 0px var(--box-shadow-2);
+  box-shadow: var(--shadow-card);
   svg {
     fill: var(--icon);
   }

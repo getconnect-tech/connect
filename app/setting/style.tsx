@@ -56,9 +56,7 @@ export const ProfileDetail = styled.form`
   padding: 16px;
   gap: 16px;
   background-color: var(--bg-white);
-  box-shadow:
-    0px 0px 0px 0.5px var(--box-shadow),
-    0px 2px 4px 0px var(--box-shadow);
+  box-shadow: var(--shadow-card);
 `;
 
 export const ProfileImage = styled.div`
@@ -118,7 +116,7 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   width: 16px;
   height: 16px;
   background-color: var(--bg-white);
-  border: 1px solid var(--border-input_border);
+  border: var(--border-secondary);
   border-radius: 4px;
   display: inline-block;
   position: relative;
@@ -127,7 +125,7 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
 
   &:checked {
     background-color: var(--brand);
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG,)}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;
@@ -140,15 +138,13 @@ export const NotificationCard = styled.div`
   border-radius: 12px;
   padding: 0 16px;
   background-color: var(--bg-white);
-  box-shadow:
-    0px 0px 0px 0.5px var(--box-shadow),
-    0px 2px 4px 0px var(--box-shadow);
+  box-shadow: var(--shadow-card);
   padding: 0 16px;
 `;
 
 export const NotificationItem = styled.div`
   display: flex;
-  border-bottom: 0.5px solid var(--border);
+  border-bottom: var(--border-light);
   padding: 12px 0;
   gap: 10px;
   align-items: center;
@@ -167,9 +163,7 @@ export const LeftDiv = styled.div`
 export const MainCardDiv = styled.div`
   padding: 4px 0;
   background-color: var(--bg-white);
-  box-shadow:
-    0px 0px 0px 0.5px var(--box-shadow),
-    0px 2px 4px 0px var(--box-shadow-2);
+  box-shadow: var(--shadow-card);
   border-radius: 12px;
   margin-bottom: 16px;
 `;
