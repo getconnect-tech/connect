@@ -78,10 +78,34 @@ class TicketStore {
   }
 
   // set filtered ticket list
-  setFilteredTicketList(tab: string, ticketList: TicketDetailsInterface[]) {
-    this.filteredTicketList = ticketList?.filter(
-      (ticket) => ticket.status === tab,
-    );
+  setFilteredTicketList(tab: string) {
+    // Get the current time
+    const currentTime = new Date();
+
+    // Initialize arrays to hold filtered tickets
+    const closedTickets: TicketDetailsInterface[] = [];
+    const snoozeTicket: TicketDetailsInterface[] = [];
+    const openTickets: TicketDetailsInterface[] = [];
+
+    // Iterate through ticketList and categorize tickets
+    this.ticketList.forEach((ticket: TicketDetailsInterface) => {
+      if (ticket.status === 'CLOSED') {
+        closedTickets.push(ticket);
+      } else if (ticket.status === 'OPEN') {
+        if (
+          ticket.snooze_until &&
+          new Date(ticket.snooze_until) > currentTime
+        ) {
+          snoozeTicket.push(ticket);
+        } else {
+          openTickets.push(ticket);
+        }
+      }
+    });
+
+    if (tab === 'Open') this.filteredTicketList = openTickets;
+    else if (tab === 'Snoozed') this.filteredTicketList = snoozeTicket;
+    else if (tab === 'Done') this.filteredTicketList = closedTickets;
   }
 }
 

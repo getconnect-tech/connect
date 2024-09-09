@@ -75,13 +75,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
       });
     }
 
-    if (activeTab === 'Open') {
-      ticketStore.setFilteredTicketList(TicketStatus.OPEN, filteredTickets);
-    } else if (activeTab === 'Snoozed') {
-      ticketStore.setFilteredTicketList(TicketStatus.OPEN, filteredTickets);
-    } else if (activeTab === 'Done') {
-      ticketStore.setFilteredTicketList(TicketStatus.CLOSED, filteredTickets);
-    }
+    ticketStore.setFilteredTicketList(activeTab, filteredTickets);
   }, [activeTab, activeNav, ticketList, user, ticketStore]);
 
   useEffect(() => {
