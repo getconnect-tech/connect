@@ -180,7 +180,7 @@ export default function CustomContextMenu(props: Props) {
             snooze_until: new Date(item?.value || ''),
           };
           // add data in mobX store
-          ticketStore.setTicketDetails(updatedTicketDetails);
+          ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
           // api call for change ticket status
           await snoozeTicket(ticketDetail?.id, payload);
         }
