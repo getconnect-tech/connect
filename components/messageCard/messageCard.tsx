@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import RenderHtml from '../renderHtml';
 import {
   CardMessage,
   CardTop,
@@ -36,7 +37,7 @@ export default function MessageCard({ title, time, subTitle, message }: Props) {
           <p>{subTitle}</p>
         </CardTop>
         <CardMessage>
-          <div dangerouslySetInnerHTML={{ __html: message }} />
+          <RenderHtml htmlstring={message} />
         </CardMessage>
       </MessageCardInnerDiv>
     </MessageCardMainDiv>
