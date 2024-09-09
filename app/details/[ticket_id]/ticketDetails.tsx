@@ -88,6 +88,18 @@ function TicketDetails(props: Props) {
     setModeSelectedItem(item);
   };
 
+  const handleMacroSelect = useCallback(
+    (selectedMacro: { content: string }) => {
+      setCommentValue((prevValue) => {
+        return prevValue
+          ? `${prevValue}\n${selectedMacro.content}`
+          : selectedMacro.content;
+      });
+      setMacroDropdown(false);
+    },
+    [],
+  );
+
   const handleMouseEnter = (
     e: React.MouseEvent<HTMLElement>,
     // eslint-disable-next-line no-unused-vars
@@ -238,12 +250,12 @@ function TicketDetails(props: Props) {
       value: PriorityLevels;
       user_id: string;
     }) => {
-      const payload = { assignee: item?.user_id };
+      const payload = { assignee: item?.user_id || null };
       try {
         if (ticketDetails?.id) {
           const updatedTicketDetails = {
             ...ticketDetails,
-            assigned_to: item?.user_id,
+            assigned_to: item?.user_id || null,
           };
           ticketStore.setTicketDetails(updatedTicketDetails);
           const result = await updateAssignee(ticketDetails?.id, payload);
@@ -455,7 +467,11 @@ function TicketDetails(props: Props) {
               />
               <Message>
                 {message?.author?.display_name || ''}{' '}
-                <span>assigned this ticket to</span>{' '}
+                <span>
+                  {message?.assignee?.display_name
+                    ? 'assigned this ticket to'
+                    : 'unassigned this ticket'}
+                </span>{' '}
                 {message?.assignee?.display_name || ''}
                 <SVGIcon
                   name='dot-icon'
@@ -478,8 +494,14 @@ function TicketDetails(props: Props) {
               />
               <Message>
                 {message?.author?.display_name || ''}{' '}
-                <span>changed ticket status to</span>{' '}
-                {capitalizeString(message?.reference_id)}
+                <span>
+                  {message?.reference_id === 'SNOOZE'
+                    ? 'snooze this ticket till'
+                    : 'changed ticket status to '}
+                </span>{' '}
+                {message?.reference_id === 'SNOOZE'
+                  ? `${message?.content}`
+                  : capitalizeString(message.reference_id)}
                 <SVGIcon
                   name='dot-icon'
                   width='4'
@@ -676,6 +698,7 @@ function TicketDetails(props: Props) {
                           items={macros}
                           labelField='title'
                           onClose={handleOutsideClick}
+                          onChange={handleMacroSelect}
                           iconSize={''}
                           iconViewBox={''}
                           style={{ bottom: 60, maxWidth: 146, width: '100%' }}

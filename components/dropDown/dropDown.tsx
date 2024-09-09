@@ -40,12 +40,9 @@ export type DropDownItem = {
 interface DropDownProps {
   items: DropDownItem[] | any;
   style?: React.CSSProperties;
-  userId?: string;
   handleClick?: ({
     // eslint-disable-next-line no-unused-vars
     value,
-    // eslint-disable-next-line no-unused-vars
-    userId,
     // eslint-disable-next-line no-unused-vars
     status,
     // eslint-disable-next-line no-unused-vars
@@ -57,7 +54,7 @@ interface DropDownProps {
   }: HandleClickProps) => void;
   iconSize: string;
   iconViewBox: string;
-  onClose: () => void;
+  onClose?: () => void;
   // eslint-disable-next-line no-unused-vars
   onChange?: (item: any) => void;
   ticketLabelData?: Label[];
@@ -102,7 +99,6 @@ export const useOutsideClick = (callback: () => void) => {
 const DropDown = ({
   items,
   style,
-  userId,
   handleClick,
   iconSize,
   iconViewBox,
@@ -118,7 +114,7 @@ const DropDown = ({
   className,
   labelField = 'name',
 }: DropDownProps) => {
-  const dropDownRef = useOutsideClick(onClose);
+  const dropDownRef = useOutsideClick(onClose!);
   const [value, setValueItem] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [searchResult, setSearchResult] = useState<DropDownItem[]>([]);
@@ -146,10 +142,8 @@ const DropDown = ({
       e.stopPropagation();
 
       if (handleClick) {
-        // for members
-        if (userId && item) handleClick({ value, userId, status: item.status });
         // label for tickets
-        else if (ticketLabelData) {
+        if (ticketLabelData) {
           const isChecked = ticketLabelData?.some(
             (label: { id: string }) => label.id === item.labelId,
           );
@@ -160,10 +154,10 @@ const DropDown = ({
 
       if (onChange) {
         onChange(item);
-        onClose();
+        if (onClose) onClose();
       }
     },
-    [handleClick, onChange, onClose, userId],
+    [handleClick, onChange, onClose],
   );
 
   const searchQuery = useCallback((value: string) => {
@@ -193,7 +187,7 @@ const DropDown = ({
     e.stopPropagation();
     if (onChange) {
       onChange({ name: 'date&time' });
-      onClose();
+      if (onClose) onClose();
     }
   };
 
@@ -201,7 +195,7 @@ const DropDown = ({
     e.stopPropagation();
     if (onChange) {
       onChange({ name: 'manage-macros' });
-      onClose();
+      if (onClose) onClose();
     }
   };
 

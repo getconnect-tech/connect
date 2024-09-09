@@ -6,11 +6,16 @@ import DropDown, { DropDownItem } from '../dropDown/dropDown';
 import { CardDiv, LeftDiv, NameDiv, RightDiv } from './style';
 import { capitalizeString } from '@/helpers/common';
 import { HandleClickProps } from '@/utils/appTypes';
+import { useStores } from '@/stores';
+import {
+  removeInviteUsersFromWorkspace,
+  removeMemberFromWorkspace,
+  updateRole,
+} from '@/services/clientSide/workspaceServices';
 
 interface Props {
   userId: string;
   // eslint-disable-next-line no-unused-vars
-  handleClick?: (props: HandleClickProps) => void;
   designation?: string;
   name: string;
   email: string;
@@ -19,11 +24,11 @@ interface Props {
   dropdownIdentifier?: string;
   // eslint-disable-next-line no-unused-vars
   setOpenDropdown: (dropdown: string | null) => void;
+  loadData: () => void;
+  isInvited: boolean;
 }
 
 function MemberCard({
-  userId,
-  handleClick,
   designation,
   name,
   email,
@@ -31,7 +36,11 @@ function MemberCard({
   dropdownIdentifier,
   currentOpenDropdown,
   setOpenDropdown,
+  userId,
+  loadData,
+  isInvited,
 }: Props) {
+  const { workspaceStore } = useStores();
   let dropDownItem: DropDownItem[];
   if (designation === UserRole.OWNER) {
     dropDownItem = [];
@@ -67,6 +76,59 @@ function MemberCard({
     setOpenDropdown(currentOpenDropdown === identifier ? null : identifier);
   }, [dropdownIdentifier, currentOpenDropdown, setOpenDropdown]);
 
+  const handleClick = useCallback(
+    async (props: HandleClickProps) => {
+      const { value } = props;
+
+      if (isInvited) {
+        // Handle invited users' actions
+        if (value === 'Delete') {
+          try {
+            if (userId) {
+              const result = await removeInviteUsersFromWorkspace(userId);
+              if (result) {
+                workspaceStore.removeInvitedUserFromWorkspace(userId);
+              }
+            }
+          } catch (error) {
+            console.log('error', error);
+          }
+        }
+      } else {
+        // Handle regular members' actions
+        if (value === 'Make Admin' || value === 'Remove Admin') {
+          try {
+            workspaceStore.setLoading(true);
+            if (userId) {
+              const result = await updateRole({
+                userId,
+                role: value === 'Make Admin' ? UserRole.ADMIN : UserRole.MEMBER,
+              });
+              if (result) {
+                loadData();
+              }
+            }
+            workspaceStore.setLoading(false);
+          } catch (error) {
+            console.log('error', error);
+          }
+        } else if (value === 'Delete') {
+          try {
+            if (userId) {
+              const result = await removeMemberFromWorkspace(userId);
+              if (result) {
+                workspaceStore.removeUserFromWorkspace(userId);
+              }
+            }
+          } catch (error) {
+            console.log('error', error);
+          }
+        }
+      }
+    },
+    [isInvited, userId, workspaceStore, loadData],
+  );
+
   return (
     <CardDiv>
       <LeftDiv>
@@ -94,7 +156,6 @@ function MemberCard({
                 items={dropDownItem || []}
                 iconSize={'12'}
                 iconViewBox={'0 0 12 12'}
-                userId={userId}
                 handleClick={handleClick}
                 onClose={() => {
                   setOpenDropdown(null);

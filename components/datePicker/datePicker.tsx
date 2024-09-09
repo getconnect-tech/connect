@@ -18,7 +18,7 @@ import { ticketStore } from '@/stores/ticketStore';
 import { TicketDetailsInterface } from '@/utils/appTypes';
 import { getUniqueId } from '@/helpers/common';
 import { MessageDetails } from '@/utils/dataTypes';
-import { changeTicketStatus } from '@/services/clientSide/ticketServices';
+import { snoozeTicket } from '@/services/clientSide/ticketServices';
 import { useStores } from '@/stores';
 
 type ValuePiece = Date | null;
@@ -110,19 +110,16 @@ function DatePickerModal({
 
           const isoString = formattedDate.toISOString();
 
-          const payload = {
-            status: TicketStatus.OPEN,
-            snoozeUntil: isoString,
-          };
+          const payload = { snoozeUntil: isoString };
           const newMessage = {
             assignee: null,
             author: user,
             author_id: user!.id,
-            content: '',
+            content: moment(isoString).format('DD MMMM LT'),
             id: getUniqueId(),
             created_at: new Date(),
             label: null,
-            reference_id: TicketStatus.OPEN,
+            reference_id: 'SNOOZE',
             ticket_id: ticketDetails?.id,
             type: MessageType.CHANGE_STATUS,
           } as MessageDetails;
@@ -136,7 +133,7 @@ function DatePickerModal({
             ticketStore.addTicketMessage(newMessage);
             ticketStore.setTicketDetails(updatedTicketDetails);
             // api call for change ticket status
-            await changeTicketStatus(ticketDetails?.id, payload);
+            await snoozeTicket(ticketDetails?.id, payload);
             onClose();
           }
         } catch (e) {

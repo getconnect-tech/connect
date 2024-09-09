@@ -21,6 +21,7 @@ import {
   addLabelToTicket,
   changeTicketStatus,
   deleteLabelFromTicket,
+  snoozeTicket,
   updateAssignee,
   updateTicketPriority,
 } from '@/services/clientSide/ticketServices';
@@ -96,11 +97,11 @@ export default function CustomContextMenu(props: Props) {
    * @desc Update ticket details assign user in context menu
    */
   const onChangeAssign = useCallback(async (item: { user_id: string }) => {
-    const payload = { assignee: item?.user_id };
+    const payload = { assignee: item?.user_id || null };
     try {
       const updatedTicketDetails = {
         ...(ticketDetail || {}),
-        assigned_to: item?.user_id,
+        assigned_to: item?.user_id || null,
       };
       ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
       await updateAssignee(ticketDetail?.id, payload);
@@ -164,12 +165,43 @@ export default function CustomContextMenu(props: Props) {
     [ticketDetail],
   );
 
+  /*
+   * @desc update ticket snooze
+   */
+  const handleChangeSnooze = useCallback(
+    async (props: HandleClickProps) => {
+      const { item } = props;
+      const payload = { snoozeUntil: item?.value };
+      try {
+        if (ticketDetail?.id) {
+          const updatedTicketDetails = {
+            ...(ticketDetail || {}),
+            status: TicketStatus.OPEN,
+            snooze_until: new Date(item?.value || ''),
+          };
+          // add data in mobX store
+          ticketStore.setTicketDetails(updatedTicketDetails);
+          // api call for change ticket status
+          await snoozeTicket(ticketDetail?.id, payload);
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetail],
+  );
+
   const [showDropDown, setShowDropDown] = useState(true);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const handleDropDownChange = () => {
-    setShowDropDown(false);
-    setShowDatePicker(true);
+  const handleDropDownChange = (item: { name: string }) => {
+    if (item?.name === 'date&time') {
+      setShowDropDown(false);
+      setShowDatePicker(true);
+    } else {
+      setShowDropDown(true);
+      setShowDatePicker(false);
+    }
   };
 
   const handleDatePickerClose = () => {
@@ -218,7 +250,6 @@ export default function CustomContextMenu(props: Props) {
                       onChange={onChangeAssign}
                       iconSize='20'
                       iconViewBox='0 0 20 20'
-                      onClose={() => {}}
                       isSearch={true}
                       isContextMenu={true}
                       style={{ marginTop: -4 }}
@@ -261,15 +292,16 @@ export default function CustomContextMenu(props: Props) {
                           items={snoozeItem}
                           iconSize='12'
                           iconViewBox='0 0 12 12'
-                          onClose={() => setShowDropDown(false)}
                           isContextMenu={true}
                           isSnooze={true}
                           style={{ minWidth: 260, marginTop: -4 }}
                           onChange={handleDropDownChange}
+                          handleClick={handleChangeSnooze}
                         />
                       )}
                       {showDatePicker && (
                         <DatePickerModal
+                          ticketDetails={ticketDetail}
                           onClose={handleDatePickerClose}
                           isContextMenu={true}
                         />
@@ -311,7 +343,6 @@ export default function CustomContextMenu(props: Props) {
                       items={labelItem}
                       iconSize='12'
                       iconViewBox='0 0 16 16'
-                      onClose={() => {}}
                       handleClick={handleTicketLabel}
                       ticketLabelData={ticketDetail?.labels}
                       isSearch={true}
@@ -356,7 +387,6 @@ export default function CustomContextMenu(props: Props) {
                       onChange={onChangePriority}
                       iconSize='12'
                       iconViewBox='0 0 12 12'
-                      onClose={() => {}}
                       isContextMenu={true}
                       style={{ marginTop: -4 }}
                     />
