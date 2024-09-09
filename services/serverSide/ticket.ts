@@ -1,4 +1,5 @@
 import {
+  MessageType,
   PriorityLevels,
   Prisma,
   TicketSource,
@@ -34,26 +35,49 @@ export const getWorkspaceTickets = async (
       contact: true,
       assigned_user: true,
       messages: {
-        select: { created_at: true },
+        where: {
+          type: {
+            in: [
+              MessageType.FROM_CONTACT,
+              MessageType.EMAIL,
+              MessageType.REGULAR,
+            ],
+          },
+        },
+        select: {
+          created_at: true,
+          author: {
+            select: { id: true, email: true, display_name: true },
+          },
+          content: true,
+          type: true,
+        },
         take: 1,
         orderBy: { created_at: 'desc' },
       },
     },
   });
 
-  tickets.sort(
+  const ticketsWithLastMessage = tickets.map((ticket) => {
+    const { messages, ...rest } = ticket;
+    const newTicket = { ...rest, last_message: messages[0] };
+
+    return newTicket;
+  });
+
+  ticketsWithLastMessage.sort(
     (a, b) =>
       new Date(
-        b.messages.length > 0 ? b.messages[0].created_at : b.created_at,
+        b.last_message ? b.last_message.created_at : b.created_at,
       ).getTime() -
       new Date(
-        a.messages.length > 0 ? a.messages[0].created_at : a.created_at,
+        a.last_message ? a.last_message.created_at : a.created_at,
       ).getTime(),
   );
 
-  tickets.forEach((t) => delete (t as any).messages);
-
-  const formattedTickets = tickets.map(formatTicket);
+  const formattedTickets = ticketsWithLastMessage.map(
+    formatTicket,
+  ) as any as (typeof ticketsWithLastMessage)[0][];
 
   return formattedTickets;
 };

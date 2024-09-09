@@ -35,7 +35,7 @@ export const GET = withWorkspaceAuth(async (req) => {
   try {
     const workspaceId = req.workspace.id;
     const macro = await getMacros(workspaceId);
-    return Response.json(macro, { status: 201 });
+    return Response.json(macro, { status: 200 });
   } catch (err) {
     return handleApiError(err);
   }
