@@ -19,7 +19,7 @@ const TopDiv = styled.div`
   top: 0;
   background-color: var(--bg-surface);
   z-index: 99;
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border-main);
 `;
 
 const BottomDiv = styled.div`
@@ -34,7 +34,7 @@ const MainDiv = styled.div`
   width: 100%;
   margin-left: 223px;
   overflow: auto;
-  border-right: 1px solid var(--border);
+  border-right: var(--border-main);
 `;
 
 const HeaderDiv = styled.div`
@@ -62,7 +62,7 @@ const StatusDiv = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 9px 20px;
-  border-top: 1px solid var(--border);
+  border-top: var(--border-main);
   position: relative;
 `;
 
@@ -95,7 +95,7 @@ const InputDiv = styled.div`
   }
   .line {
     height: 20px;
-    border-left: 1px solid var(--border);
+    border-left: var(--border-main);
     margin-left: 10px;
   }
   .avtar {
@@ -116,9 +116,7 @@ const Input = styled.div<Props>`
   display: flex;
   flex-direction: column;
   gap: 2px;
-  box-shadow:
-    0px 0px 0px 0.5px var(--box-shadow),
-    0px 2px 4px 0px var(--box-shadow-2);
+  box-shadow: var(--shadow-card);
   margin-left: 10px;
   margin-top: 8px;
 `;
@@ -177,7 +175,7 @@ const ActivityDiv = styled.div`
 const Message = styled.p`
   ${Typography.body_md_regular};
   color: var(--text);
-  border-left: 1px solid var(--border);
+  border-left: var(--border-main);
   padding-left: 22px;
   margin-left: -22px;
   span {
@@ -190,7 +188,7 @@ const Message = styled.p`
 `;
 
 const LineDiv = styled.div`
-  border-left: 1px solid var(--border);
+  border-left: var(--border-main);
   height: calc(100% - 22px);
   margin-left: 10px;
   position: absolute;

@@ -14,10 +14,7 @@ interface Props {
 const MainDiv = styled.div<Props>`
   background-color: var(--bg-white);
   border-radius: 12px;
-  box-shadow:
-    0px 0px 0px 0.5px var(--box-shadow),
-    0px 4px 8px 0px var(--box-shadow),
-    0px 8px 24px 0px var(--box-shadow);
+  box-shadow: var(--shadow-dropdown);
   position: ${({ isContextMenu }) => (isContextMenu ? 'relative' : 'absolute')};
   margin-top: 4px;
   z-index: 2;
@@ -31,7 +28,7 @@ const MainDiv = styled.div<Props>`
   max-height: 185px;
   overflow: auto;
   .date-time-text {
-    border-top: 1px solid var(--border);
+    border-top: var(--border-main);
   }
 `;
 
@@ -69,7 +66,7 @@ const ItemDiv = styled.div<Props>`
 `;
 const SearchDiv = styled.div`
   padding: 0 0 0 12px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border-main);
   position: sticky;
   top: 0;
   background: var(--bg-white);
@@ -106,7 +103,7 @@ const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   width: 16px;
   height: 16px;
   background-color: var(--bg-white);
-  border: 1px solid var(--border-input_border);
+  border: var(--border-secondary);
   border-radius: 4px;
   display: inline-block;
   position: relative;

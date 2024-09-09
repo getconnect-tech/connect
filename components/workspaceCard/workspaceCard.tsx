@@ -9,9 +9,7 @@ export const Card = styled.div`
   width: 100%;
   padding: 12px;
   gap: 12px;
-  box-shadow:
-    0px 0px 0px 0.5px var(--box-shadow),
-    0px 2px 4px 0px var(--box-shadow-2);
+  box-shadow: var(--shadow-card);
   background-color: var(--bg-white);
   border-radius: 8px;
   align-items: center;
@@ -21,9 +19,7 @@ export const Card = styled.div`
     color: var(--text);
   }
   &:hover {
-    box-shadow:
-      0px 0px 0px 0.5px var(--box-shadow-3),
-      0px 2px 4px 0px var(--box-shadow-2);
+    box-shadow: var(--shadow-card-hover);
   }
 `;
 

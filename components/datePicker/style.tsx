@@ -21,10 +21,7 @@ export const MainDiv = styled.div<Props>`
     position: ${({ isContextMenu }) =>
       isContextMenu ? 'relative' : 'absolute'};
     background-color: var(--bg-white);
-    box-shadow:
-      0px 0px 0px 0.5px var(--box-shadow),
-      0px 4px 8px 0px var(--box-shadow),
-      0px 8px 24px 0px var(--box-shadow);
+    box-shadow: var(--shadow-dropdown);
     border-radius: 12px;
   }
 
@@ -34,17 +31,14 @@ export const MainDiv = styled.div<Props>`
     position: ${({ isContextMenu }) =>
       isContextMenu ? 'relative' : 'absolute'};
     background-color: var(--bg-white);
-    box-shadow:
-      0px 0px 0px 0.5px var(--box-shadow),
-      0px 4px 8px 0px var(--box-shadow),
-      0px 8px 24px 0px var(--box-shadow);
+    box-shadow: var(--shadow-dropdown);
     border-radius: 12px;
   }
 `;
 
 export const Header = styled.div`
   padding: 8px 12px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border-main);
   display: flex;
   align-items: center;
   p {
@@ -136,7 +130,7 @@ export const CalendarDiv = styled.div`
 `;
 
 export const InputMainDiv = styled.form`
-  border-top: 1px solid var(--border);
+  border-top: var(--border-main);
   margin-top: 12px;
   padding: 12px;
   .buttons {

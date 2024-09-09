@@ -5,7 +5,7 @@ export const DropBox = styled.div`
   display: flex;
   gap: 8px;
   padding: 8px 16px;
-  border: 1px solid var(--border-input_border);
+  border: var(--border-secondary);
   border-radius: 20px;
   align-items: center;
   justify-content: space-between;

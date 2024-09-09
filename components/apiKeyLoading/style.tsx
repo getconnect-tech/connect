@@ -3,9 +3,7 @@ import styled from 'styled-components';
 const Main = styled.div`
   padding: 4px 0;
   background-color: var(--bg-white);
-  box-shadow:
-    0px 0px 0px 0.5px var(--box-shadow),
-    0px 2px 4px 0px var(--box-shadow-2);
+  box-shadow: var(--shadow-card);
   border-radius: 12px;
   margin-bottom: 16px;
   .second-block {
@@ -53,7 +51,7 @@ const Firstblock = styled.div`
   gap: 12px;
   z-index: 11111;
   opacity: 90%;
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border-main);
   &:last-child {
     border-bottom: none;
   }

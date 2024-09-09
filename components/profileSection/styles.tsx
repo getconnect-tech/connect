@@ -38,7 +38,7 @@ const DetailsProfileDiv = styled.div`
   flex-direction: column;
   gap: 16px;
   padding: 0 20px 12px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border-main);
 `;
 
 const DetailsDiv = styled.div`
@@ -74,11 +74,11 @@ const LeftDiv = styled.div`
 `;
 
 const WorkDetailMainDiv = styled.div`
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border-main);
 `;
 
 const EventMainDiv = styled.div`
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border-main);
 `;
 
 const TitleDiv = styled.div`
@@ -132,7 +132,7 @@ const Dot = styled.div`
 `;
 
 const Line = styled.div`
-  border-left: 1px solid var(--border);
+  border-left: var(--border-main);
   height: 100%;
   position: absolute;
   top: 0;
@@ -148,7 +148,7 @@ const Line = styled.div`
 const LineDiv = styled.div`
   height: 16px;
   margin-left: 28px;
-  border-left: 1px solid var(--border);
+  border-left: var(--border-main);
 `;
 
 const AIIcon = styled.div`

@@ -63,7 +63,7 @@ const Tab = styled.p<Props>`
     css`
       background-color: var(--bg-white);
       border-radius: 30px;
-      box-shadow: 0px 1px 1px 0px var(--box-shadow);
+      box-shadow: var(--shadow-tab);
       color: var(--text);
     `}
 `;
@@ -71,9 +71,7 @@ const Tab = styled.p<Props>`
 const ListMainDiv = styled.div`
   background-color: var(--bg-white);
   padding: 4px 0;
-  box-shadow:
-    0px 0px 0px 0.5px var(--box-shadow),
-    0px 2px 4px 0px var(--box-shadow-2);
+  box-shadow: var(--shadow-card);
   border-radius: 12px;
   max-width: 662px;
   margin: 4px auto 0;

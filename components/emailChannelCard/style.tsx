@@ -24,9 +24,7 @@ export const ProfileDetail = styled.div<Props>`
     css`
       background-color: var(--bg-white);
       border-radius: 12px;
-      box-shadow:
-        0px 0px 0px 0.5px var(--box-shadow),
-        0px 2px 4px 0px var(--box-shadow-2);
+      box-shadow: var(--shadow-card);
     `}
 `;
 
@@ -34,7 +32,7 @@ export const Head = styled.div`
   display: flex;
   flex-direction: column;
   padding: 12px 0px;
-  border-bottom: 0.5px solid var(--border-hover);
+  border-bottom: var(--border-light-hover);
   gap: 1px;
   &:last-child {
     border: none;
@@ -110,7 +108,7 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   width: 16px;
   height: 16px;
   background-color: var(--bg-white);
-  border: 1px solid var(--border-input_border);
+  border: var(--border-secondary);
   border-radius: 4px;
   display: inline-block;
   position: relative;
@@ -159,7 +157,7 @@ export const Table = styled.table`
 
   thead {
     background-color: var(--bg-white);
-    border-bottom: 1px solid var(--border);
+    border-bottom: var(--border-main);
   }
 
   th,
@@ -180,7 +178,7 @@ export const Table = styled.table`
   }
 
   tr {
-    border-bottom: 1px solid var(--border);
+    border-bottom: var(--border-main);
 
     &:last-child {
       border-bottom: none;
@@ -190,7 +188,7 @@ export const Table = styled.table`
 export const TableWrapper = styled.div`
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: var(--border-main);
 `;
 
 export const EmailAddressDiv = styled.div`
@@ -202,7 +200,7 @@ export const EmailAddressDiv = styled.div`
   max-width: 519px;
   width: 100%;
   height: 36px;
-  border: 1px solid var(--border-input_border);
+  border: var(--border-secondary);
   p {
     display: -webkit-box;
     -webkit-box-orient: vertical;
