@@ -24,7 +24,7 @@ const UserLogo: any = styled.img`
   ${(props: any) =>
     props.isShowBorder &&
     css`
-      border: 1px solid var(--border);
+      border: var(--border-main);
       border-radius: 50%;
     `}
 `;

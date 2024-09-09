@@ -18,7 +18,7 @@ export const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px 16px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border-main);
 `;
 
 export const Title = styled.div`
@@ -58,7 +58,7 @@ export const BottomDiv = styled.form`
       padding: 8px 16px;
     }
     .rich-text {
-      border: 1px solid var(--border);
+      border: var(--border-main);
       border-radius: 12px;
       .e-richtexteditor .rte-placeholder {
         padding: 8px 16px;

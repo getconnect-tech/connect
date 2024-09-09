@@ -24,7 +24,7 @@ export const ModalHeader = styled.div`
   position: sticky;
   top: 0;
   background-color: var(--bg-white);
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--border-main);
   padding: 12px 16px;
   z-index: 11;
 `;
@@ -41,7 +41,7 @@ export const ModalDescription = styled.div`
 export const ModalBottom = styled.div`
   display: flex;
   padding: 8px 16px 12px 16px;
-  border-top: 1px solid var(--border);
+  border-top: var(--border-main);
   justify-content: space-between;
   align-items: center;
   position: sticky;
@@ -85,9 +85,7 @@ export const FileCard = styled.div`
   border-radius: 8px;
   gap: 8px;
   background-color: var(--bg-white);
-  box-shadow:
-    0px 0px 0px 0.5px var(--box-shadow),
-    0px 2px 4px 0px var(--box-shadow-2);
+  box-shadow: var(--shadow-card);
   align-items: center;
   position: relative;
   &:hover ${RemoveIcon} {

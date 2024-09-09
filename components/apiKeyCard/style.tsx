@@ -6,7 +6,7 @@ const CardMainDiv = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 0.5px solid var(--border);
+  border-bottom: var(--border-light);
   &:last-child {
     border-bottom: none;
   }

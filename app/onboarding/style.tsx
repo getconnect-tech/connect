@@ -52,9 +52,7 @@ export const CenterCard = styled.div`
   padding: 20px;
   gap: 20px;
   background-color: var(--bg-white);
-  box-shadow:
-    0px 0px 0px 0.5px var(--box-shadow),
-    0px 2px 4px 0px var(--box-shadow-2);
+  box-shadow: var(--shadow-card);
   border-radius: 12px;
   width: 100%;
 `;
@@ -121,9 +119,7 @@ export const CenterCardNext = styled.div`
   padding: 20px;
   border-radius: 12px;
   background-color: var(--bg-white);
-  box-shadow:
-    0px 0px 0px 0.5px rgba(0, 0, 0, 0.1),
-    0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-card);
 `;
 export const NextProfile = styled.div`
   display: flex;

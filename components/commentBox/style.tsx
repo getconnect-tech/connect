@@ -177,7 +177,7 @@ const TextMainDiv = styled.div<Props>`
   }
   .e-rte-table td,
   .e-rte-table th {
-    border: 1px solid var(--border);
+    border: var(--border-main);
   }
 `;
 
@@ -254,9 +254,7 @@ const Main = styled.div<Props>`
     border-top: none;
   }
   .e-richtexteditor .e-rte-toolbar {
-    border-style: none none solid;
-    border-width: 1px;
-    border-color: var(--border);
+    border-bottom: var(--border-main);
   }
   .e-richtexteditor .e-rte-toolbar .e-toolbar-item .e-tbar-btn:hover .e-icons {
     color: var(--text);
@@ -307,14 +305,14 @@ const Main = styled.div<Props>`
   }
   .e-dialog {
     background: var(--bg-surface-secondary-hover);
-    border: 1px solid var(--border);
+    border: var(--border-main);
     top: 34px !important;
   }
   .e-dialog .e-dlg-header-content {
-    border-bottom: 1px solid var(--border);
+    border-bottom: var(--border-main);
   }
   .e-dialog .e-footer-content {
-    border-top: 1px solid var(--border);
+    border-top: var(--border-main);
   }
   .e-dlg-content {
     color: var(--text);
@@ -377,9 +375,9 @@ const Main = styled.div<Props>`
     background-color: var(--brand);
     border-radius: 36px;
     color: var(--text-white);
-    border: 1px solid var(--border);
+    border: var(--border-main);
     :hover {
-      border: 1px solid var(--border);
+      border: var(--border-main);
     }
   }
   .e-checkbox-wrapper .e-checkbox:active + .e-frame.e-check {
@@ -407,9 +405,7 @@ const Mentioncomponent = styled(MentionComponent)<Props>`
     padding: 6px 0;
     border-radius: 8px;
     background-color: var(--bg-white);
-    box-shadow:
-      0px 0px 0px 0.5px var(--box-shadow),
-      0px 2px 4px 0px var(--box-shadow-2);
+    box-shadow: var(--shadow-card);
     max-height: 198px;
     overflow: auto;
     ::-webkit-scrollbar {
@@ -435,9 +431,7 @@ const Mentioncomponent = styled(MentionComponent)<Props>`
     height: 44px;
     display: flex;
     align-items: center;
-    box-shadow:
-      0px 0px 0px 0.5px var(--box-shadow),
-      0px 2px 4px 0px var(--box-shadow-2);
+    box-shadow: var(--shadow-card);
     position: absolute;
   }
   .e-active {
