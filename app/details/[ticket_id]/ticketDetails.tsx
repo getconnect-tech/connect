@@ -409,7 +409,7 @@ function TicketDetails(props: Props) {
                 <Avatar imgSrc={''} name={contact?.name || ''} size={20} />
               </div>
               <MessageCard
-                title={'Sanjay send email'}
+                title={`${contact?.name} send email`}
                 time={message?.created_at}
                 subTitle={'To Teamcamp Support '}
                 message={message.content || ''}
