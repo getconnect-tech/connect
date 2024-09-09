@@ -2,7 +2,6 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { TicketStatus } from '@prisma/client';
 import {
   BottomDiv,
   HeaderDiv,

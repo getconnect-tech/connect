@@ -78,7 +78,7 @@ class TicketStore {
   }
 
   // set filtered ticket list
-  setFilteredTicketList(tab: string) {
+  setFilteredTicketList(tab: string, ticketList: TicketDetailsInterface[]) {
     // Get the current time
     const currentTime = new Date();
 
@@ -88,7 +88,7 @@ class TicketStore {
     const openTickets: TicketDetailsInterface[] = [];
 
     // Iterate through ticketList and categorize tickets
-    this.ticketList.forEach((ticket: TicketDetailsInterface) => {
+    ticketList.forEach((ticket: TicketDetailsInterface) => {
       if (ticket.status === 'CLOSED') {
         closedTickets.push(ticket);
       } else if (ticket.status === 'OPEN') {
