@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 import { Typography } from '../../styles/typography';
-import { colors } from '@/styles/colors';
 
 interface Props {
   active?: boolean;

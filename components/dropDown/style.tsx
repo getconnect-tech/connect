@@ -50,15 +50,17 @@ const ItemDiv = styled.div<Props>`
           ? '--text'
           : isDelete
             ? '--fill-danger'
-            : ' --text-text-secondary'}
+            : '--text-text-secondary'}
     );
   }
   &:hover {
     background-color: var(--bg-white-hover);
     border-radius: 8px;
     p {
-      color: ${({ isSelected, isDelete }) =>
-        isSelected ? '--text' : isDelete ? '--fill-danger' : ' --text'};
+      color: var(
+        ${({ isSelected, isDelete }) =>
+          isSelected ? '--text' : isDelete ? '--fill-danger' : '--text'}
+      );
     }
     svg {
       fill: var(--icon-active);
