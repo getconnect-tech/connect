@@ -17,6 +17,7 @@ export const DotIcon = styled.div`
   border-radius: 11px;
   margin-top: 10px;
   margin-bottom: 10px;
+  cursor: pointer;
   box-shadow: 0px 1px 2px 0px ${colors.box_shadow_2};
 `;
 
