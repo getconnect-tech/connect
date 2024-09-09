@@ -7,7 +7,6 @@ import Modal from '../modal/modal';
 import LabelModal from '../modalComponent/labelModal';
 import DeleteModal from '../deleteModal/deleteModal';
 import { InnerDiv, ItemDiv, Name } from './style';
-import { colors } from '@/styles/colors';
 import LabelSvgIcon from '@/assets/icons/labelIcons';
 import { deleteLabel } from '@/services/clientSide/settingServices';
 import { messageStore } from '@/stores/messageStore';
@@ -83,7 +82,6 @@ function LabelCard({
             width='16'
             height='16'
             viewBox='0 0 16 16'
-            fill={colors.icon}
           />
           <Name>{labelDetails?.name}</Name>
         </InnerDiv>

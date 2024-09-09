@@ -2,7 +2,6 @@
 /* eslint-disable max-len */
 import { MentionComponent } from '@syncfusion/ej2-react-dropdowns';
 import styled, { css } from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 interface Props {
   isApplyMsgModel?: boolean;
@@ -409,8 +408,8 @@ const Mentioncomponent = styled(MentionComponent)<Props>`
     border-radius: 8px;
     background-color: var(--bg-white);
     box-shadow:
-      0px 0px 0px 0.5px ${colors.box_shadow},
-      0px 2px 4px 0px ${colors.box_shadow_2};
+      0px 0px 0px 0.5px var(--box-shadow),
+      0px 2px 4px 0px var(--box-shadow-2);
     max-height: 198px;
     overflow: auto;
     ::-webkit-scrollbar {
@@ -437,8 +436,8 @@ const Mentioncomponent = styled(MentionComponent)<Props>`
     display: flex;
     align-items: center;
     box-shadow:
-      0px 0px 0px 0.5px ${colors.box_shadow},
-      0px 2px 4px 0px ${colors.box_shadow_2};
+      0px 0px 0px 0.5px var(--box-shadow),
+      0px 2px 4px 0px var(--box-shadow-2);
     position: absolute;
   }
   .e-active {

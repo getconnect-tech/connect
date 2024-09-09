@@ -1,6 +1,5 @@
 /* eslint-disable indent */
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 const CardDiv = styled.div`
@@ -28,7 +27,7 @@ const DotIcon = styled.div`
   position: absolute;
   width: 5px;
   height: 5px;
-  background: ${colors.black};
+  background: var(--black);
   left: 12px;
   top: 23px;
   border-radius: 100%;
@@ -101,10 +100,10 @@ const TagDiv = styled.div`
   background-color: var(--bg-surface-secondary);
   align-items: center;
   svg {
-    fill: ${colors.icon};
+    fill: var(--icon);
 
     &:hover {
-      fill: ${colors.icon_hover};
+      fill: var(--icon-hover);
     }
   }
 `;

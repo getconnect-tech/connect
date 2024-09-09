@@ -7,7 +7,6 @@ import { Provider } from 'mobx-react';
 import SettingNavBar from '../settingNavBar/settingNavBar';
 import Icon from '../icon/icon';
 import stores from '@/stores';
-import { colors } from '@/styles/colors';
 
 export const Div = styled.div`
   display: flex;

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const ModalDiv = styled.div`
@@ -67,12 +66,12 @@ export const RemoveIcon = styled.div`
   justify-content: center;
   border-radius: 50%;
   svg {
-    fill: ${colors.icon};
+    fill: var(--icon);
   }
   &:hover {
     background: var(--bg-surface-hover);
     svg {
-      fill: ${colors.icon_hover};
+      fill: var(--icon-hover);
     }
   }
 `;
@@ -87,8 +86,8 @@ export const FileCard = styled.div`
   gap: 8px;
   background-color: var(--bg-white);
   box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow_2};
+    0px 0px 0px 0.5px var(--box-shadow),
+    0px 2px 4px 0px var(--box-shadow-2);
   align-items: center;
   position: relative;
   &:hover ${RemoveIcon} {
@@ -154,7 +153,7 @@ export const IllustrationDiv = styled.div`
   height: 56px;
   padding: 16px;
   border-radius: 50%;
-  background-color: ${colors.bg_white_hover};
+  background-color: var(--bg-white-hover);
 `;
 
 export const Content = styled.div`

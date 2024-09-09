@@ -49,7 +49,6 @@ import { MessageDetails } from '@/utils/dataTypes';
 import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
 import SnoozeDropdown from '@/components/snoozeDropdown/snoozeDropdown';
 import InternalMessageCard from '@/components/internalMessageCard/internalMessageCard';
-import { colors } from '@/styles/colors';
 import { messageStore } from '@/stores/messageStore';
 import { HandleClickProps } from '@/utils/appTypes';
 import LabelDropdown from '@/components/labelDropdown/labelDropdown';

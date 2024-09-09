@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import Avatar from '../avtar/Avtar';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const Card = styled.div`
@@ -11,8 +10,8 @@ export const Card = styled.div`
   padding: 12px;
   gap: 12px;
   box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow_2};
+    0px 0px 0px 0.5px var(--box-shadow),
+    0px 2px 4px 0px var(--box-shadow-2);
   background-color: var(--bg-white);
   border-radius: 8px;
   align-items: center;
@@ -23,8 +22,8 @@ export const Card = styled.div`
   }
   &:hover {
     box-shadow:
-      0px 0px 0px 0.5px ${colors.box_shadow_3},
-      0px 2px 4px 0px ${colors.box_shadow_2};
+      0px 0px 0px 0.5px var(--box-shadow-3),
+      0px 2px 4px 0px var(--box-shadow-2);
   }
 `;
 

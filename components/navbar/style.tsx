@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { colors } from '@/styles/colors';
+/* eslint-disable indent */
+import styled, { css } from 'styled-components';
 import { Typography } from '@/styles/typography';
 
 interface Props {
@@ -70,18 +70,23 @@ const ItemDiv = styled.div<Props>`
   padding: 4px 4px 4px 12px;
   justify-content: space-between;
   cursor: pointer;
-  background-color: ${({ isActive }) => isActive && colors.bg_surface_active};
-  border-radius: ${({ isActive }) => isActive && '30px'};
+
   &:hover {
     background-color: var(--bg-surface-hover);
     border-radius: 30px;
   }
+  ${(props) =>
+    props.isActive &&
+    css`
+      background-color: var(--bg-surface-active);
+      border-radius: 30px;
+    `}
 `;
 
 const Title = styled.p<Props>`
   ${Typography.body_md_regular}
-  color: ${({ isActive }) =>
-    isActive ? colors.text : colors.text_text_secondary};
+  color: var(${({ isActive }) =>
+    isActive ? '--text' : '--text-text-secondary'});
 `;
 
 const Label = styled.p`
@@ -98,10 +103,18 @@ const CountText = styled.p`
   border-radius: 50%;
 `;
 
-const LeftDiv = styled.div`
+const LeftDiv = styled.div<Props>`
   display: flex;
   align-items: center;
   gap: 8px;
+  svg {
+    fill: var(--icon);
+    ${(props) =>
+      props.isActive &&
+      css`
+        fill: var(--icon-hover);
+      `}
+  }
 `;
 const ProfileDrop = styled.div`
   display: flex;
@@ -113,9 +126,9 @@ const ProfileDrop = styled.div`
   border-radius: 12px;
   background-color: var(--bg-white);
   box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 4px 8px 0px ${colors.box_shadow},
-    0px 8px 24px 0px ${colors.box_shadow};
+    0px 0px 0px 0.5px var(--box-shadow),
+    0px 4px 8px 0px var(--box-shadow),
+    0px 8px 24px 0px var(--box-shadow);
 `;
 const Frame1 = styled.div`
   display: flex;
@@ -144,7 +157,7 @@ const OrganizationProfile = styled.div`
   }
   &:hover {
     cursor: pointer;
-    background-color: ${colors.bg_white_hover};
+    background-color: var(--bg-white-hover);
     border-radius: 8px;
     p {
       color: var(--text);
@@ -160,15 +173,15 @@ const ProfileItemDiv = styled.div`
   padding: 4px 8px;
   gap: 8px;
   align-items: center;
-  fill: ${colors.icon};
+  fill: var(--icon);
   p {
     ${Typography.body_md_regular}
     color: var(--text-text-secondary);
   }
   &:hover {
-    fill: ${colors.icon_hover};
+    fill: var(--icon-hover);
     cursor: pointer;
-    background-color: ${colors.bg_white_hover};
+    background-color: var(--bg-white-hover);
     border-radius: 8px;
     p {
       color: var(--text);

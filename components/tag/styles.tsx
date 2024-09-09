@@ -1,6 +1,5 @@
 /* eslint-disable indent */
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 interface Props {
@@ -24,19 +23,20 @@ const StatusDiv = styled.div<Props>`
   &:hover {
     background-color: var(--bg-surface-secondary-hover);
     .icon {
-      fill: ${colors.icon_hover};
+      fill: var(--icon-hover);
     }
     p {
       color: var(--text);
     }
   }
   .icon {
-    fill: ${({ isActive }) => (isActive ? colors.icon_hover : colors.icon)};
+    fill: var(${({ isActive }) => (isActive ? '--icon-hover' : '--icon')});
     margin: 4px 0 4px 10px;
   }
   p {
-    color: ${({ isActive }) =>
-      isActive ? colors.text : colors.text_text_secondary};
+    color: var(
+      ${({ isActive }) => (isActive ? '--text' : '--text-text-secondary')}
+    );
   }
 `;
 

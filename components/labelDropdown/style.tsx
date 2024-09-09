@@ -1,6 +1,5 @@
 /* eslint-disable indent */
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 interface Props {
@@ -26,13 +25,13 @@ const StatusDiv = styled.div<Props>`
   padding: ${({ hasIconTitlePairs }) =>
     hasIconTitlePairs ? '0 12px 0 0' : '6px'};
   .tag-icon {
-    fill: ${colors.icon};
+    fill: var(--icon);
   }
 
   &:hover {
     background-color: var(--bg-surface-secondary-hover);
     .icon {
-      fill: ${colors.icon_hover};
+      fill: var(--icon-hover);
     }
     p {
       color: var(--text);
@@ -41,12 +40,12 @@ const StatusDiv = styled.div<Props>`
       background-color: var(--border-hover);
     }
     .tag-icon {
-      fill: ${colors.icon_hover};
+      fill: var(--icon-hover);
     }
   }
 
   .icon {
-    fill: ${({ isActive }) => (isActive ? colors.icon_hover : colors.icon)};
+    fill: var(${({ isActive }) => (isActive ? '--icon-hover' : '--icon')});
     margin: 4px 0 4px;
     &:first-child {
       margin: 4px 0 4px 10px;
@@ -54,8 +53,9 @@ const StatusDiv = styled.div<Props>`
   }
 
   p {
-    color: ${({ isActive }) =>
-      isActive ? colors.text : colors.text_text_secondary};
+    color: var(
+      ${({ isActive }) => (isActive ? '--text' : '--text-text-secondary')}
+    );
   }
 
   .line {

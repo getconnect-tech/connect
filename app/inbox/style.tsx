@@ -64,7 +64,7 @@ const Tab = styled.p<Props>`
     css`
       background-color: var(--bg-white);
       border-radius: 30px;
-      box-shadow: 0px 1px 1px 0px ${colors.box_shadow};
+      box-shadow: 0px 1px 1px 0px var(--box-shadow);
       color: var(--text);
     `}
 `;

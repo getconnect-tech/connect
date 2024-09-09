@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable max-len */
 import styled, { css } from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 interface Props {
@@ -25,8 +24,8 @@ export const ProfileDetail = styled.div<Props>`
       background-color: var(--bg-white);
       border-radius: 12px;
       box-shadow:
-        0px 0px 0px 0.5px ${colors.box_shadow},
-        0px 2px 4px 0px ${colors.box_shadow_2};
+        0px 0px 0px 0.5px var(--box-shadow),
+        0px 2px 4px 0px var(--box-shadow-2);
     `}
 `;
 
@@ -64,7 +63,7 @@ export const Div = styled.div`
   padding-bottom: 16px;
   p {
     ${Typography.body_md_medium}
-    color: ${colors.brand_fill_hover};
+    color:var(--brand-fill-hover);
   }
   .input {
     max-width: 320px;
@@ -77,9 +76,9 @@ export const InputDiv = styled.div`
   flex-direction: column;
   gap: 12px;
   svg {
-    fill: ${colors.icon_disable};
+    fill: var(--icon-disabled);
     :hover {
-      fill: ${colors.icon_active};
+      fill: var(--icon-active);
       cursor: pointer;
     }
   }
@@ -148,13 +147,13 @@ export const Table = styled.table`
     right: 12px;
     svg {
       cursor: pointer;
-      fill: ${colors.icon_disable};
+      fill: var(--icon-disabled);
     }
     &:hover {
       background-color: var(--bg-surface-secondary);
       border-radius: 50%;
       svg {
-        fill: ${colors.icon_active};
+        fill: var(--icon-active);
       }
     }
   }

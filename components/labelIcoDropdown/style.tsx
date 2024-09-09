@@ -1,14 +1,13 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const MainDiv = styled.div`
   background-color: var(--bg-white);
   border-radius: 12px;
   box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 4px 8px 0px ${colors.box_shadow},
-    0px 8px 24px 0px ${colors.box_shadow};
+    0px 0px 0px 0.5px var(--box-shadow),
+    0px 4px 8px 0px var(--box-shadow),
+    0px 8px 24px 0px var(--box-shadow);
   position: absolute;
   margin-top: 4px;
   z-index: 2;

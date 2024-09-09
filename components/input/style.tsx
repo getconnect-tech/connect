@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 interface Props {
   hasError?: boolean;
@@ -64,7 +63,7 @@ const InputBox = styled.input<Props>`
     props.disabled &&
     css`
       &::placeholder {
-        color: ${colors.text_disabled};
+        color: var(--text-disabled);
       }
       border: var(--border-disabled);
     `}
@@ -80,7 +79,7 @@ const Errormessage = styled.div`
   align-items: center;
   p {
     margin: 0;
-    color: ${colors.fill_danger};
+    color: var(--fill-danger);
     ${Typography.body_md_regular};
   }
 `;

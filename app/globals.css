@@ -123,7 +123,7 @@ a {
   /* background color */
   --bg-surface: #f5f4f1;
   --bg-surface-hover: #e9e8e5;
-  --bg-surface-active: '#E9E8E5';
+  --bg-surface-active: #e9e8e5;
   --bg-white: #ffffff;
   --bg-surface-secondary: #e9e8e5;
   --bg-surface-secondary-hover: #dcdcd9;
@@ -140,9 +140,9 @@ a {
   --icon: #7b7a79;
   --icon-hover: #313130;
   --icon-active: #313130;
-  --icon-disable: #c4c3c1;
+  --icon-disabled: #c4c3c1;
   /* box shadow color */
-  --box_shadow: #0000001a;
+  --box-shadow: #0000001a;
   --box-shadow-2: #0000000d;
   --box-shadow-3: #00000033;
   /* alert message colors */

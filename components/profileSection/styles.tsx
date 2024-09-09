@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 const MainDiv = styled.div`

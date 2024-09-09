@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 interface Props {
   isOpen?: boolean;
 }
@@ -11,7 +10,7 @@ const ModalOverlay = styled.div<Props>`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: ${colors.bg_overlay};
+  background-color: var(--bg-overlay);
   align-items: center;
   justify-content: center;
   z-index: 999;

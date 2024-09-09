@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const MainDiv = styled.div`
@@ -76,7 +75,7 @@ export const TimeText = styled.div<{ isActive?: boolean }>`
   gap: 8px;
 
   a {
-    color: ${({ isActive }) => (isActive ? colors.text : colors.text_disabled)};
+    color: var(${({ isActive }) => (isActive ? '--text' : '--text-disabled')});
     cursor: pointer;
   }
 `;

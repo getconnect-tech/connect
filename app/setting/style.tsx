@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable max-len */
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const Main = styled.div`
@@ -58,8 +57,8 @@ export const ProfileDetail = styled.form`
   gap: 16px;
   background-color: var(--bg-white);
   box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow};
+    0px 0px 0px 0.5px var(--box-shadow),
+    0px 2px 4px 0px var(--box-shadow);
 `;
 
 export const ProfileImage = styled.div`
@@ -144,8 +143,8 @@ export const NotificationCard = styled.div`
   padding: 0 16px;
   background-color: var(--bg-white);
   box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow};
+    0px 0px 0px 0.5px var(--box-shadow),
+    0px 2px 4px 0px var(--box-shadow);
   padding: 0 16px;
 `;
 
@@ -171,8 +170,8 @@ export const MainCardDiv = styled.div`
   padding: 4px 0;
   background-color: var(--bg-white);
   box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow_2};
+    0px 0px 0px 0.5px var(--box-shadow),
+    0px 2px 4px 0px var(--box-shadow-2);
   border-radius: 12px;
   margin-bottom: 16px;
 `;

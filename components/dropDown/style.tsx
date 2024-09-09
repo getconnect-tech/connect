@@ -2,7 +2,6 @@
 /* eslint-disable max-len */
 /* eslint-disable indent */
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 interface Props {
@@ -16,9 +15,9 @@ const MainDiv = styled.div<Props>`
   background-color: var(--bg-white);
   border-radius: 12px;
   box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 4px 8px 0px ${colors.box_shadow},
-    0px 8px 24px 0px ${colors.box_shadow};
+    0px 0px 0px 0.5px var(--box-shadow),
+    0px 4px 8px 0px var(--box-shadow),
+    0px 8px 24px 0px var(--box-shadow);
   position: ${({ isContextMenu }) => (isContextMenu ? 'relative' : 'absolute')};
   margin-top: 4px;
   z-index: 2;
@@ -45,22 +44,24 @@ const ItemDiv = styled.div<Props>`
   cursor: pointer;
   p {
     ${Typography.body_md_regular};
-    color: ${({ isSelected, isDelete }) =>
-      isSelected
-        ? colors.text
-        : isDelete
-          ? colors.fill_danger
-          : colors.text_text_secondary};
+    color: var(
+      ${({ isSelected, isDelete }) =>
+        isSelected
+          ? '--text'
+          : isDelete
+            ? '--fill-danger'
+            : ' --text-text-secondary'}
+    );
   }
   &:hover {
-    background-color: ${colors.bg_white_hover};
+    background-color: var(--bg-white-hover);
     border-radius: 8px;
     p {
       color: ${({ isSelected, isDelete }) =>
-        isSelected ? colors.text : isDelete ? colors.fill_danger : colors.text};
+        isSelected ? '--text' : isDelete ? '--fill-danger' : ' --text'};
     }
     svg {
-      fill: ${colors.icon_active};
+      fill: var(--icon-active);
     }
   }
 `;
@@ -112,9 +113,7 @@ const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
 
   &:checked {
     background-color: var(--brand);
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(
-      checkmarkSVG,
-    )}');
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;
@@ -128,22 +127,25 @@ const ItemLeftDiv = styled.div<Props>`
   gap: 8px;
   p {
     ${Typography.body_md_regular};
-    color: ${({ isSelected, isDelete }) =>
-      isSelected
-        ? colors.text
-        : isDelete
-          ? colors.fill_danger
-          : colors.text_text_secondary};
+    color: var(
+      ${({ isSelected, isDelete }) =>
+        isSelected
+          ? '--text'
+          : isDelete
+            ? '--fill-danger'
+            : '--text-text-secondary'}
+    );
     white-space: nowrap;
   }
   svg {
-    fill: ${({ isSelected }) =>
-      isSelected ? colors.icon_active : colors.icon};
+    fill: var(${({ isSelected }) => (isSelected ? '--icon-active' : '--icon')});
   }
   &:hover {
     p {
-      color: ${({ isSelected, isDelete }) =>
-        isSelected ? colors.text : isDelete ? colors.fill_danger : colors.text};
+      color: var(
+        ${({ isSelected, isDelete }) =>
+          isSelected ? '--text' : isDelete ? '--fill-danger' : '--text'}
+      );
     }
   }
 `;
@@ -160,7 +162,7 @@ const DateTimeTextDiv = styled.div`
     color: var(--text-text-secondary);
   }
   &:hover {
-    background-color: ${colors.bg_white_hover};
+    background-color: var(--bg-white-hover);
     border-radius: 8px;
     p {
       color: var(--text);

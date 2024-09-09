@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const ItemDiv = styled.div`
@@ -18,6 +17,9 @@ export const InnerDiv = styled.div`
   display: flex;
   gap: 12px;
   align-items: center;
+  svg {
+    fill: var(--icon);
+  }
 `;
 
 export const Name = styled.div`

@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { Typography } from '@/styles/typography';
-import { colors } from '@/styles/colors';
 
 const CardMainDiv = styled.div`
   padding: 8px 12px;
@@ -65,7 +64,7 @@ const CompanyNameDiv = styled.div`
     margin-right: 10px;
   }
   &:hover {
-    background-color: ${colors.bg_white_hover};
+    background-color: var(--bg-white-hover);
     border-radius: 30px;
     cursor: pointer;
     p {

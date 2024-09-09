@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 interface Props {
   isNext: boolean;
@@ -54,8 +53,8 @@ export const CenterCard = styled.div`
   gap: 20px;
   background-color: var(--bg-white);
   box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow_2};
+    0px 0px 0px 0.5px var(--box-shadow),
+    0px 2px 4px 0px var(--box-shadow-2);
   border-radius: 12px;
   width: 100%;
 `;

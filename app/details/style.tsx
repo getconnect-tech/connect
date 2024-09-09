@@ -1,7 +1,6 @@
 /* eslint-disable indent */
 import styled from 'styled-components';
 import { Typography } from '../../styles/typography';
-import { colors } from '@/styles/colors';
 import { DropDownItem } from '@/components/dropDown/dropDown';
 
 interface Props {
@@ -107,10 +106,10 @@ const InputDiv = styled.div`
 `;
 
 const Input = styled.div<Props>`
-  background-color: ${({ modeSelectedItem }) =>
-    modeSelectedItem?.name === 'Internal'
-      ? colors.brand_disabled
-      : colors.bg_white};
+  background-color: var(
+    ${({ modeSelectedItem }) =>
+      modeSelectedItem?.name === 'Internal' ? '--brand-disabled' : '--bg-white'}
+  );
   border-radius: 12px;
   width: 100%;
   padding: 12px;
@@ -118,8 +117,8 @@ const Input = styled.div<Props>`
   flex-direction: column;
   gap: 2px;
   box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow_2};
+    0px 0px 0px 0.5px var(--box-shadow),
+    0px 2px 4px 0px var(--box-shadow-2);
   margin-left: 10px;
   margin-top: 8px;
 `;
@@ -203,10 +202,12 @@ const IconDiv = styled.div<Props>`
   align-items: center;
   gap: 8px;
   .icon {
-    background-color: ${({ modeSelectedItem }) =>
-      modeSelectedItem?.name === 'Internal'
-        ? colors.bg_surface_secondary_hover
-        : colors.bg_surface_secondary};
+    background-color: var(
+      ${({ modeSelectedItem }) =>
+        modeSelectedItem?.name === 'Internal'
+          ? '--bg-surface-secondary-hover'
+          : '--bg-surface-secondary'}
+    );
   }
 `;
 

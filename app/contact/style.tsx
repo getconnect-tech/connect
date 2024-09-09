@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 import { Typography } from '../../styles/typography';
-import { colors } from '../../styles/colors';
 
 interface Props {
   active?: boolean;
@@ -64,7 +63,7 @@ const Tab = styled.p<Props>`
     css`
       background-color: var(--bg-white);
       border-radius: 30px;
-      box-shadow: 0px 1px 1px 0px ${colors.box_shadow};
+      box-shadow: 0px 1px 1px 0px var(--box-shadow);
       color: var(--text);
     `}
 `;
@@ -73,8 +72,8 @@ const ListMainDiv = styled.div`
   background-color: var(--bg-white);
   padding: 4px 0;
   box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow_2};
+    0px 0px 0px 0.5px var(--box-shadow),
+    0px 2px 4px 0px var(--box-shadow-2);
   border-radius: 12px;
   max-width: 662px;
   margin: 4px auto 0;

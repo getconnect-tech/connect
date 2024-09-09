@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import styled, { css } from 'styled-components';
 import { isEmpty } from '@/helpers/common';
-import { colors } from '@/styles/colors';
 import { RANDOM_COLORS } from '@/global/constants';
 
 const UserLogoWrapper = styled.div`

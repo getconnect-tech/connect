@@ -1,6 +1,5 @@
 /* eslint-disable indent */
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 interface Props {
@@ -23,9 +22,9 @@ export const MainDiv = styled.div<Props>`
       isContextMenu ? 'relative' : 'absolute'};
     background-color: var(--bg-white);
     box-shadow:
-      0px 0px 0px 0.5px ${colors.box_shadow},
-      0px 4px 8px 0px ${colors.box_shadow},
-      0px 8px 24px 0px ${colors.box_shadow};
+      0px 0px 0px 0.5px var(--box-shadow),
+      0px 4px 8px 0px var(--box-shadow),
+      0px 8px 24px 0px var(--box-shadow);
     border-radius: 12px;
   }
 
@@ -36,9 +35,9 @@ export const MainDiv = styled.div<Props>`
       isContextMenu ? 'relative' : 'absolute'};
     background-color: var(--bg-white);
     box-shadow:
-      0px 0px 0px 0.5px ${colors.box_shadow},
-      0px 4px 8px 0px ${colors.box_shadow},
-      0px 8px 24px 0px ${colors.box_shadow};
+      0px 0px 0px 0.5px var(--box-shadow),
+      0px 4px 8px 0px var(--box-shadow),
+      0px 8px 24px 0px var(--box-shadow);
     border-radius: 12px;
   }
 `;
@@ -105,7 +104,7 @@ export const CalendarDiv = styled.div`
     cursor: pointer;
   }
   .react-calendar__tile.react-calendar__month-view__days__day:hover {
-    background-color: ${colors.bg_white_hover};
+    background-color: var(--bg-white-hover);
     border-radius: 50%;
   }
   .react-calendar__month-view__days {
@@ -114,13 +113,13 @@ export const CalendarDiv = styled.div`
   }
   .react-calendar__navigation__arrow.react-calendar__navigation__next-button {
     font-size: 22px;
-    color: ${colors.icon};
+    color: var(--icon);
     cursor: pointer;
     margin-top: -4px;
   }
   .react-calendar__navigation__arrow.react-calendar__navigation__prev-button {
     font-size: 22px;
-    color: ${colors.icon};
+    color: var(--icon);
     cursor: pointer;
     margin-top: -4px;
   }
