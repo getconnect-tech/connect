@@ -4,7 +4,8 @@ import SVGIcon from '@/assets/icons/SVGIcon';
 import LabelSvgIcon from '@/assets/icons/labelIcons';
 
 interface Props {
-  onClick: () => void;
+  // eslint-disable-next-line no-unused-vars
+  onClick: (e: React.SyntheticEvent) => void;
   iconName: string;
   iconSize: string;
   iconViewBox: string;
