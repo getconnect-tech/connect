@@ -1,8 +1,12 @@
 /* eslint-disable indent */
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Typography } from '@/styles/typography';
 
-const CardDiv = styled.div`
+interface Props {
+  isShowHoverItems: boolean;
+}
+
+const CardDiv = styled.div<Props>`
   background-color: var(--bg-white);
   padding: 12px 12px 12px 8px;
   margin: 12px 0;
@@ -17,6 +21,15 @@ const CardDiv = styled.div`
   &:hover .tagDiv {
     display: flex;
   }
+
+  ${(props) =>
+    props.isShowHoverItems &&
+    css`
+      box-shadow: var(--shadow-card-hover);
+      .tagDiv {
+        display: flex;
+      }
+    `}
 `;
 
 const DotIcon = styled.div`

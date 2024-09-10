@@ -32,6 +32,7 @@ interface Props {
   handleChangeSnooze?: ({ item }: any) => void;
   ticketDetails?: TicketDetailsInterface | null;
   className?: string;
+  ticketIndex?: number;
 }
 
 function DatePickerModal({
@@ -40,6 +41,7 @@ function DatePickerModal({
   isContextMenu = false,
   ticketDetails,
   className,
+  ticketIndex,
 }: Props) {
   const [dateValue, setDateValue] = useState<Value>(new Date());
   const [dateInput, setDateInput] = useState<string>(
@@ -132,6 +134,12 @@ function DatePickerModal({
               snooze_until: new Date(isoString || ''),
             };
             // add data in mobX store
+            if (typeof ticketIndex === 'number') {
+              ticketStore.updateTicketListItem(
+                ticketIndex,
+                updatedTicketDetails,
+              );
+            }
             ticketStore.addTicketMessage(newMessage);
             ticketStore.setTicketDetails(updatedTicketDetails);
             // api call for change ticket status
