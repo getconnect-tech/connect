@@ -9,12 +9,26 @@ const MessageCardInnerDiv = styled.div`
 `;
 
 const CardTop = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 12px 12px 8px;
   border-bottom: var(--border-main);
   p {
     ${Typography.body_md_regular};
     color: var(--text-text-secondary);
-    margin-top: 4px;
+  }
+`;
+
+const TagDiv = styled.div`
+  padding: 4px 12px;
+  ${Typography.body_sm_regular}
+  color: var(--text-text-secondary);
+  background-color: var(--bg-surface-secondary);
+  border-radius: 30px;
+  &:hover {
+    cursor: pointer;
+    color: var(--text);
   }
 `;
 
@@ -61,6 +75,11 @@ const NameTitle = styled.h6`
   color: var(--text);
 `;
 
+const CardHead = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
 export {
   MessageCardInnerDiv,
   CardTop,
@@ -68,4 +87,6 @@ export {
   MessageCardMainDiv,
   NameDiv,
   NameTitle,
+  TagDiv,
+  CardHead,
 };
