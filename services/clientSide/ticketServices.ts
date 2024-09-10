@@ -146,9 +146,6 @@ export const updateTicketPriority = async (ticketId: any, payload: object) => {
       payload,
     );
     const { data } = response;
-
-    // set ticket details in store
-    ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
     messageStore.setErrorMessage(
@@ -246,8 +243,6 @@ export const updateAssignee = async (ticketId: string, payload: object) => {
       payload,
     );
     const { data } = response;
-    // set ticket details in store
-    ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
     messageStore.setErrorMessage(
