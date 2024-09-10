@@ -226,13 +226,13 @@ const InboxCard = ({
         created_at: new Date(),
         label: null,
         reference_id: 'SNOOZE',
-        ticket_id: ticketDetails?.id,
+        ticket_id: ticketDetail?.id,
         type: MessageType.CHANGE_STATUS,
       } as MessageDetails;
       try {
-        if (ticketDetails?.id) {
+        if (ticketDetail?.id) {
           const updatedTicketDetails = {
-            ...(ticketDetails || {}),
+            ...(ticketDetail || {}),
             status: TicketStatus.OPEN,
             snooze_until: new Date(item?.value || ''),
           };
@@ -240,13 +240,13 @@ const InboxCard = ({
           ticketStore.addTicketMessage(newMessage);
           ticketStore.setTicketDetails(updatedTicketDetails);
           // api call for change ticket status
-          await snoozeTicket(ticketDetails?.id, payload);
+          await snoozeTicket(ticketDetail?.id, payload);
         }
       } catch (e) {
         console.log('Error : ', e);
       }
     },
-    [ticketDetails],
+    [ticketDetail],
   );
 
   return (
