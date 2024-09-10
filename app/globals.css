@@ -200,6 +200,6 @@ a {
   only screen and (min-resolution: 192dpi),
   only screen and (min-resolution: 2dppx) {
   :root {
-    --border-width: 0.5px;
+    --border-width: 1px;
   }
 }
