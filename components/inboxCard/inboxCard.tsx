@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
-import { MessageType, PriorityLevels, TicketStatus } from '@prisma/client';
+import { PriorityLevels, TicketStatus } from '@prisma/client';
 import { observer } from 'mobx-react-lite';
 import Avatar from '../avtar/Avtar';
 import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
@@ -22,7 +22,7 @@ import {
   TagDiv,
 } from './style';
 import { priorityItem, snoozeItem } from '@/helpers/raw';
-import { capitalizeString, getUniqueId } from '@/helpers/common';
+import { capitalizeString } from '@/helpers/common';
 import { useStores } from '@/stores';
 import { HandleClickProps, TicketDetailsInterface } from '@/utils/appTypes';
 import {
@@ -33,7 +33,6 @@ import {
   deleteLabelFromTicket,
   snoozeTicket,
 } from '@/services/clientSide/ticketServices';
-import { MessageDetails } from '@/utils/dataTypes';
 
 interface Props {
   ticketDetail: TicketDetailsInterface;
@@ -61,8 +60,7 @@ const InboxCard = ({
   const { title, created_at, source, contact, priority, assigned_to } =
     ticketDetail;
   const router = useRouter();
-  const { ticketStore, workspaceStore, settingStore, userStore } = useStores();
-  const { user } = userStore || {};
+  const { ticketStore, workspaceStore, settingStore } = useStores();
   const { ticketDetails } = ticketStore || {};
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -217,18 +215,6 @@ const InboxCard = ({
     async (props: HandleClickProps) => {
       const { item } = props;
       const payload = { snoozeUntil: item?.value };
-      const newMessage = {
-        assignee: null,
-        author: user,
-        author_id: user!.id,
-        content: moment(item?.value).format('DD MMMM LT'),
-        id: getUniqueId(),
-        created_at: new Date(),
-        label: null,
-        reference_id: 'SNOOZE',
-        ticket_id: ticketDetail?.id,
-        type: MessageType.CHANGE_STATUS,
-      } as MessageDetails;
       try {
         if (ticketDetail?.id) {
           const updatedTicketDetails = {
@@ -237,8 +223,7 @@ const InboxCard = ({
             snooze_until: new Date(item?.value || ''),
           };
           // add data in mobX store
-          ticketStore.addTicketMessage(newMessage);
-          ticketStore.setTicketDetails(updatedTicketDetails);
+          ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
           // api call for change ticket status
           await snoozeTicket(ticketDetail?.id, payload);
         }
