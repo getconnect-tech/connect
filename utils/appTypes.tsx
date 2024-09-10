@@ -1,3 +1,4 @@
+import { User } from '@prisma/client';
 import { LabelData } from './dataTypes';
 import { formatTicket } from '@/services/serverSide/ticket';
 
@@ -15,8 +16,19 @@ export type HandleClickProps = {
   item?: any;
 };
 
+// Assuming this is the formatTicket function return type
 export type TicketDetailsInterface = NonNullable<
   Awaited<ReturnType<typeof formatTicket>>
->;
+> & {
+  last_message?: LastMessage; // Make the last_message field optional
+};
+
+// Define the LastMessage structure
+interface LastMessage {
+  author: User;
+  content: string;
+  created_at: string;
+  type: string;
+}
 
 export type Message = { id: string; type: string; content: string };
