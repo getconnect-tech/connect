@@ -61,7 +61,6 @@ const InboxCard = ({
     ticketDetail;
   const router = useRouter();
   const { ticketStore, workspaceStore, settingStore } = useStores();
-  const { ticketDetails } = ticketStore || {};
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const { currentWorkspace } = workspaceStore || {};
@@ -235,7 +234,10 @@ const InboxCard = ({
   );
 
   return (
-    <CardDiv onClick={onClickTicket}>
+    <CardDiv
+      isShowHoverItems={snoozeDropdown || showDatePicker}
+      onClick={onClickTicket}
+    >
       {showDotIcon && <DotIcon />}
       <LeftDiv>
         <div>
@@ -361,7 +363,8 @@ const InboxCard = ({
                 )}
                 {showDatePicker && (
                   <DatePickerModal
-                    ticketDetails={ticketDetails}
+                    ticketIndex={ticketIndex}
+                    ticketDetails={ticketDetail}
                     onClose={() => setShowDatePicker(false)}
                     style={{ right: 10, top: 4, position: 'relative' }}
                   />
