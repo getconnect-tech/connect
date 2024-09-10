@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useCallback, useEffect, useState } from 'react';
+import React, { SyntheticEvent, useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
 import { MessageType, PriorityLevels, TicketStatus } from '@prisma/client';
@@ -248,46 +248,6 @@ const InboxCard = ({
     },
     [ticketDetails],
   );
-
-  useEffect(() => {
-    const calculatePosition = () => {
-      // eslint-disable-next-line no-undef
-      const modalElement = document.querySelector('.modal-content');
-      const rect = modalElement?.getBoundingClientRect();
-
-      if (rect) {
-        // eslint-disable-next-line no-undef
-        const spaceBelow = window.innerHeight - rect.bottom;
-        const spaceAbove = rect.top;
-
-        if (spaceBelow < 300 && spaceAbove > 300) {
-          setSubmenuPosition('upwards');
-        } else {
-          setSubmenuPosition('downwards');
-        }
-      }
-    };
-
-    // Calculate position when the dropdown is opened
-    if (snoozeDropdown || showDatePicker) {
-      calculatePosition();
-    }
-
-    // Optional: Add event listener for window resize
-    const handleResize = () => {
-      if (snoozeDropdown || showDatePicker) {
-        calculatePosition();
-      }
-    };
-
-    // eslint-disable-next-line no-undef
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      // eslint-disable-next-line no-undef
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [snoozeDropdown, showDatePicker]); // Trigger recalculation when dropdown visibility changes
 
   return (
     <CardDiv onClick={onClickTicket}>
