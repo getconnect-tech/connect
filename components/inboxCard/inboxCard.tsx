@@ -54,7 +54,7 @@ const InboxCard = ({
   dropdownIdentifier,
   ticketIndex,
 }: Props) => {
-  const { title, created_at, source, contact, priority, assigned_to } =
+  const { title, source, contact, priority, assigned_to, last_message } =
     ticketDetail;
   const router = useRouter();
   const { ticketStore, workspaceStore, settingStore } = useStores();
@@ -214,7 +214,9 @@ const InboxCard = ({
             {contact?.name} from {capitalizeString(source)}
           </NameText>
         </div>
-        <NameText>{moment(created_at).fromNow()}</NameText>
+        <NameText>
+          {moment(last_message && last_message.created_at).fromNow()}
+        </NameText>
       </LeftDiv>
       <RightDiv>
         <DesTitle>{title}</DesTitle>
