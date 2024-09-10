@@ -301,6 +301,7 @@ export default function CustomContextMenu(props: Props) {
                       )}
                       {showDatePicker && (
                         <DatePickerModal
+                          ticketIndex={ticketIndex}
                           ticketDetails={ticketDetail}
                           onClose={handleDatePickerClose}
                           isContextMenu={true}

@@ -277,15 +277,28 @@ function TicketDetails(props: Props) {
    */
   const handleTicketStatus = useCallback(
     async (status: TicketStatus) => {
-      const payload = {
-        status,
-      };
       try {
+        const payload = {
+          status,
+        };
+        const newMessage = {
+          assignee: null,
+          author: user,
+          author_id: user!.id,
+          content: '',
+          created_at: new Date(),
+          id: getUniqueId(),
+          label: null,
+          reference_id: status,
+          ticket_id: ticketDetails?.id,
+          type: MessageType.CHANGE_STATUS,
+        } as MessageDetails;
         if (ticketDetails?.id) {
           const updatedTicketDetails = {
             ...ticketDetails,
             status,
           };
+          ticketStore.addTicketMessage(newMessage);
           ticketStore.setTicketDetails(updatedTicketDetails);
           await changeTicketStatus(ticketDetails?.id, payload);
         }

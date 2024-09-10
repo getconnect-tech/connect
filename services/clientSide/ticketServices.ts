@@ -109,32 +109,6 @@ export const getTicketDetails = async (ticketId: string) => {
 };
 
 /**
- * @desc Update ticket details
- * @param {*} ticketId
- */
-export const updateTicketDetails = async (ticketId: any, payload: object) => {
-  try {
-    ticketStore.setLoading(true);
-    const response = await axios.put(
-      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}`,
-      payload,
-    );
-    const { data } = response;
-
-    // set ticket details in store
-    ticketStore.setTicketDetails(data);
-    return data;
-  } catch (err: any) {
-    messageStore.setErrorMessage(
-      getAPIErrorMessage(err) || 'Something went wrong!',
-    );
-    return null;
-  } finally {
-    ticketStore.setLoading(false);
-  }
-};
-
-/**
  * @desc Update ticket Priority
  * @param {*} ticketId
  */
@@ -146,9 +120,6 @@ export const updateTicketPriority = async (ticketId: any, payload: object) => {
       payload,
     );
     const { data } = response;
-
-    // set ticket details in store
-    ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
     messageStore.setErrorMessage(
@@ -246,8 +217,6 @@ export const updateAssignee = async (ticketId: string, payload: object) => {
       payload,
     );
     const { data } = response;
-    // set ticket details in store
-    ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
     messageStore.setErrorMessage(

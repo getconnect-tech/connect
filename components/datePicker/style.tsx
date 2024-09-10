@@ -9,10 +9,8 @@ interface Props {
 export const MainDiv = styled.div<Props>`
   max-width: 260px;
   width: 100%;
-  background-color: var(--bg-white);
   position: ${({ isContextMenu }) => (isContextMenu ? 'relative' : 'absolute')};
   right: 0;
-  top: ${({ isContextMenu }) => (isContextMenu ? 0 : 38)};
   border-radius: 12px;
   z-index: 11;
   .submenu-upwards {

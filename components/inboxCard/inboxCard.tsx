@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { SyntheticEvent, useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
 import { PriorityLevels, TicketStatus } from '@prisma/client';
@@ -8,6 +8,8 @@ import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
 import AssigneeDropdown from '../AssigneeDropdown/dropDownWithTag';
 import Icon from '../icon/icon';
 import LabelDropdown from '../labelDropdown/labelDropdown';
+import DropDown from '../dropDown/dropDown';
+import DatePickerModal from '../datePicker/datePicker';
 import {
   CardDiv,
   DesTitle,
@@ -19,7 +21,7 @@ import {
   StatusMainDiv,
   TagDiv,
 } from './style';
-import { priorityItem } from '@/helpers/raw';
+import { priorityItem, snoozeItem } from '@/helpers/raw';
 import { capitalizeString } from '@/helpers/common';
 import { useStores } from '@/stores';
 import { HandleClickProps, TicketDetailsInterface } from '@/utils/appTypes';
@@ -29,6 +31,7 @@ import {
   updateTicketPriority,
   addLabelToTicket,
   deleteLabelFromTicket,
+  snoozeTicket,
 } from '@/services/clientSide/ticketServices';
 
 interface Props {
@@ -54,10 +57,12 @@ const InboxCard = ({
   dropdownIdentifier,
   ticketIndex,
 }: Props) => {
-  const { title, created_at, source, contact, priority, assigned_to } =
+  const { title, source, contact, priority, assigned_to, last_message } =
     ticketDetail;
   const router = useRouter();
   const { ticketStore, workspaceStore, settingStore } = useStores();
+  const [snoozeDropdown, setSnoozeDropdown] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const { currentWorkspace } = workspaceStore || {};
   const { labels } = settingStore || {};
 
@@ -199,8 +204,40 @@ const InboxCard = ({
     },
     [ticketDetail],
   );
+
+  const onSnoozeIconClick = useCallback((e: SyntheticEvent) => {
+    e.stopPropagation();
+    setSnoozeDropdown(true);
+  }, []);
+
+  const handleChangeSnooze = useCallback(
+    async (props: HandleClickProps) => {
+      const { item } = props;
+      const payload = { snoozeUntil: item?.value };
+      try {
+        if (ticketDetail?.id) {
+          const updatedTicketDetails = {
+            ...(ticketDetail || {}),
+            status: TicketStatus.OPEN,
+            snooze_until: new Date(item?.value || ''),
+          };
+          // add data in mobX store
+          ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
+          // api call for change ticket status
+          await snoozeTicket(ticketDetail?.id, payload);
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetail],
+  );
+
   return (
-    <CardDiv onClick={onClickTicket}>
+    <CardDiv
+      isShowHoverItems={snoozeDropdown || showDatePicker}
+      onClick={onClickTicket}
+    >
       {showDotIcon && <DotIcon />}
       <LeftDiv>
         <div>
@@ -214,7 +251,9 @@ const InboxCard = ({
             {contact?.name} from {capitalizeString(source)}
           </NameText>
         </div>
-        <NameText>{moment(created_at).fromNow()}</NameText>
+        <NameText>
+          {moment(last_message && last_message.created_at).fromNow()}
+        </NameText>
       </LeftDiv>
       <RightDiv>
         <DesTitle>{title}</DesTitle>
@@ -293,13 +332,44 @@ const InboxCard = ({
                 />
               </div>
               <LineDiv />
-              <Icon
-                iconName='context-snooze-icon'
-                iconSize='12'
-                iconViewBox='0 0 12 12'
-                onClick={() => {}}
-                size={true}
-              />
+              <div>
+                <Icon
+                  iconName='context-snooze-icon'
+                  iconSize='12'
+                  iconViewBox='0 0 12 12'
+                  onClick={onSnoozeIconClick}
+                  size={true}
+                />
+                {snoozeDropdown && (
+                  <DropDown
+                    isSnooze={true}
+                    items={snoozeItem}
+                    iconSize={''}
+                    iconViewBox={''}
+                    handleClick={handleChangeSnooze}
+                    onChange={(item) => {
+                      if (item?.name === 'date&time') setShowDatePicker(true);
+                    }}
+                    onClose={() => {
+                      setSnoozeDropdown(false);
+                    }}
+                    style={{
+                      right: 10,
+                      maxWidth: 260,
+                      width: '100%',
+                      maxHeight: 'none',
+                    }}
+                  />
+                )}
+                {showDatePicker && (
+                  <DatePickerModal
+                    ticketIndex={ticketIndex}
+                    ticketDetails={ticketDetail}
+                    onClose={() => setShowDatePicker(false)}
+                    style={{ right: 10, top: 4, position: 'relative' }}
+                  />
+                )}
+              </div>
             </TagDiv>
           )}
         </StatusMainDiv>
