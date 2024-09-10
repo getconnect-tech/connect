@@ -410,11 +410,6 @@ const InboxCard = ({
                       width: '100%',
                       maxHeight: 'none',
                     }}
-                    // className={`modal-content ${
-                    //   submenuPosition === 'upwards'
-                    //     ? 'submenu-upwards'
-                    //     : 'submenu-downwards'
-                    // }`}
                   />
                 )}
                 {showDatePicker && (
@@ -422,11 +417,6 @@ const InboxCard = ({
                     ticketDetails={ticketDetails}
                     onClose={() => setShowDatePicker(false)}
                     style={{ right: 10, top: 4, position: 'relative' }}
-                    // className={`modal-content ${
-                    //   submenuPosition === 'upwards'
-                    //     ? 'submenu-date-upwards'
-                    //     : 'submenu-date-downwards'
-                    // }`}
                   />
                 )}
               </div>
