@@ -16,14 +16,12 @@ export type HandleClickProps = {
   item?: any;
 };
 
-// Assuming this is the formatTicket function return type
 export type TicketDetailsInterface = NonNullable<
   Awaited<ReturnType<typeof formatTicket>>
 > & {
   last_message?: LastMessage; // Make the last_message field optional
 };
 
-// Define the LastMessage structure
 interface LastMessage {
   author: User;
   content: string;
