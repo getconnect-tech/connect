@@ -102,6 +102,23 @@ const TagDiv = styled.div`
       fill: var(--icon-hover);
     }
   }
+  .submenu-upwards {
+    bottom: calc(100% - 84px);
+    top: auto;
+    position: absolute;
+    background-color: var(--bg-white);
+    box-shadow: var(--shadow-dropdown);
+    border-radius: 12px;
+  }
+
+  .submenu-downwards {
+    top: calc(100% - 12px);
+    bottom: auto;
+    position: absolute;
+    background-color: var(--bg-white);
+    box-shadow: var(--shadow-dropdown);
+    border-radius: 12px;
+  }
 `;
 const LineDiv = styled.div`
   width: 1px;
