@@ -11,6 +11,7 @@ import Icon from '../icon/icon';
 import LabelDropdown from '../labelDropdown/labelDropdown';
 import DropDown from '../dropDown/dropDown';
 import DatePickerModal from '../datePicker/datePicker';
+import RenderHtml from '../renderHtml';
 import {
   CardDiv,
   Description,
@@ -262,17 +263,21 @@ const InboxCard = ({
         <DesTitle>{title}</DesTitle>
         {last_message?.type === MessageType.EMAIL ||
         last_message?.type === MessageType.FROM_CONTACT ? (
-          <NameText className='description'>{description}</NameText>
+          <NameText className='description'>
+            <RenderHtml htmlstring={description} />
+          </NameText>
         ) : (
           <InternalMessageDiv>
             <Avatar
               // eslint-disable-next-line max-len
-              imgSrc='https://firebasestorage.googleapis.com/v0/b/getconnect-tech.appspot.com/o/UserProfilesimage_1724413524555.png?alt=media&token=d0e3fb58-3ab6-4042-8d89-5256ab68d8ec'
-              name={''}
+              imgSrc={last_message?.author?.profile_url || ''}
+              name={last_message?.author.display_name || ''}
               size={24}
             />
             <Description>
-              <p>{description}</p>
+              <p>
+                <RenderHtml htmlstring={description} />
+              </p>
             </Description>
           </InternalMessageDiv>
         )}
