@@ -256,3 +256,25 @@ export const removeInviteUsersFromWorkspace = async (userId: string) => {
     workspaceStore.setLoading(false);
   }
 };
+
+/**
+ * @desc Re invited user from workspace
+ * @param {*} userId
+ */
+export const reInviteUsersFromWorkspace = async (userId: string) => {
+  try {
+    workspaceStore.setLoading(true);
+    const result = await axios.post(
+      `${NEXT_PUBLIC_API_URL}/workspaces/inviteUsers/${userId}/reinvite`,
+    );
+    if (result) messageStore.setSuccessMessage('User Reinvited');
+    return true;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    workspaceStore.setLoading(false);
+  }
+};
