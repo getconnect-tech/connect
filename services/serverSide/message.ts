@@ -57,6 +57,7 @@ export const getTicketMessages = async (ticketId: string) => {
   // Fetch data of all assignees in a single batch
   const usersData = await prisma.user.findMany({
     where: { id: { in: allAssigneeIds } },
+    include: { tickets_rel: true },
   });
 
   // Create map with assignee id -> user object
@@ -85,21 +86,39 @@ export const getTicketMessages = async (ticketId: string) => {
     labelsMap.set(label.id, label);
   }
 
+  // Get last seen of users
+  const lastSeenData = await prisma.ticketUser.findMany({
+    where: { ticket_id: ticketId },
+    select: {
+      user: { select: { id: true, display_name: true } },
+      last_seen: true,
+    },
+  });
+
   // Format messages by injecting respective data
   const formattedMessages = messages.map((message) => {
+    // Message is ready by users whose last_seen is greater than message created time
+    const read_by = lastSeenData
+      .filter(
+        (x) =>
+          new Date(x.last_seen).getTime() >=
+          new Date(message.created_at).getTime(),
+      )
+      .map((x) => ({ ...x.user, last_seen: x.last_seen }));
+
     switch (message.type) {
       case MessageType.CHANGE_ASSIGNEE: {
         const assignee = message.reference_id
           ? usersMap.get(message.reference_id)!
           : null;
-        return { ...message, assignee, label: null };
+        return { ...message, read_by, assignee, label: null };
       }
       case MessageType.CHANGE_LABEL: {
         const label = labelsMap.get(message.reference_id)!;
-        return { ...message, label, assignee: null };
+        return { ...message, read_by, label, assignee: null };
       }
       default:
-        return { ...message, label: null, assignee: null };
+        return { ...message, read_by, label: null, assignee: null };
     }
   });
 
@@ -123,4 +142,14 @@ export const getTicketEmailEvents = async (ticketId: string) => {
   });
 
   return emailEvents;
+};
+
+export const updateUserLastSeen = async (ticketId: string, userId: string) => {
+  const updatedLastSeen = await prisma.ticketUser.upsert({
+    where: { ticket_user_id: { ticket_id: ticketId, user_id: userId } },
+    create: { ticket_id: ticketId, user_id: userId },
+    update: { last_seen: new Date() },
+  });
+
+  return updatedLastSeen;
 };

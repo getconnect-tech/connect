@@ -6,6 +6,7 @@ import {
   createEmailEvent,
   getTicketMessages,
   postMessage,
+  updateUserLastSeen,
 } from '@/services/serverSide/message';
 import { contentSchema, messageTypeSchema } from '@/lib/zod/message';
 import { sendEmailAsReply } from '@/helpers/emails';
@@ -13,6 +14,8 @@ import { getWorkspaceEmailConfig } from '@/services/serverSide/workspace';
 
 export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
+    await updateUserLastSeen(ticketId, req.user.id);
+
     const messages = await getTicketMessages(ticketId);
 
     return Response.json(messages, { status: 200 });

@@ -1,53 +1,53 @@
 enum TeamSize {
-    SMALL
-    MEDIUM
-    LARGE
-    ENTERPRISE
+  SMALL
+  MEDIUM
+  LARGE
+  ENTERPRISE
 }
 
 enum PriorityLevels {
-    NONE
-    LOW
-    MEDIUM
-    HIGH
-    URGENT
+  NONE
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
 }
 
 enum MessageType {
-    REGULAR
-    EMAIL
-    CHANGE_PRIORITY
-    CHANGE_ASSIGNEE
-    CHANGE_LABEL
-    CHANGE_STATUS
-    FROM_CONTACT
+  REGULAR
+  EMAIL
+  CHANGE_PRIORITY
+  CHANGE_ASSIGNEE
+  CHANGE_LABEL
+  CHANGE_STATUS
+  FROM_CONTACT
 }
 
 enum TicketSource {
-    MAIL
-    WEB
+  MAIL
+  WEB
 }
 
 enum TicketStatus {
-    OPEN
-    CLOSED
+  OPEN
+  CLOSED
 }
 
 enum UserRole {
-    MEMBER
-    ADMIN
-    OWNER
+  MEMBER
+  ADMIN
+  OWNER
 }
 
 enum ConfigType {
-    CHANNEL
+  CHANNEL
 }
 
 enum EmailEventType {
-    OPENED
-    BOUNCED
-    DELIVERED
-    LINK_CLICKED
-    SPAMED
-    FAILED
+  OPENED
+  BOUNCED
+  DELIVERED
+  LINK_CLICKED
+  SPAMED
+  FAILED
 }
