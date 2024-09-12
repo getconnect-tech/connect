@@ -1,7 +1,8 @@
+/* eslint-disable indent */
 import React, { SyntheticEvent, useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
-import { PriorityLevels, TicketStatus } from '@prisma/client';
+import { MessageType, PriorityLevels, TicketStatus } from '@prisma/client';
 import { observer } from 'mobx-react-lite';
 import Avatar from '../avtar/Avtar';
 import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
@@ -12,8 +13,10 @@ import DropDown from '../dropDown/dropDown';
 import DatePickerModal from '../datePicker/datePicker';
 import {
   CardDiv,
+  Description,
   DesTitle,
   DotIcon,
+  InternalMessageDiv,
   LeftDiv,
   LineDiv,
   NameText,
@@ -257,7 +260,23 @@ const InboxCard = ({
       </LeftDiv>
       <RightDiv>
         <DesTitle>{title}</DesTitle>
-        <NameText className='description'>{description}</NameText>
+        {last_message?.type === MessageType.EMAIL ||
+        last_message?.type === MessageType.FROM_CONTACT ? (
+          <NameText className='description'>{description}</NameText>
+        ) : (
+          <InternalMessageDiv>
+            <Avatar
+              // eslint-disable-next-line max-len
+              imgSrc='https://firebasestorage.googleapis.com/v0/b/getconnect-tech.appspot.com/o/UserProfilesimage_1724413524555.png?alt=media&token=d0e3fb58-3ab6-4042-8d89-5256ab68d8ec'
+              name={''}
+              size={24}
+            />
+            <Description>
+              <p>{description}</p>
+            </Description>
+          </InternalMessageDiv>
+        )}
+
         <StatusMainDiv>
           <div className='statusDiv'>
             <LabelDropdown

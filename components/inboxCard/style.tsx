@@ -143,6 +143,26 @@ const StatusTitle = styled.p`
   color: var(--text-text-secondary);
 `;
 
+const InternalMessageDiv = styled.div`
+  display: flex;
+  gap: 4px;
+`;
+
+const Description = styled.div`
+  display: flex;
+  padding: 2px 8px;
+  background-color: var(--bg-surface);
+  border-radius: 30px;
+  align-items: center;
+  p {
+    ${Typography.body_md_regular};
+    color: var(--text-text-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+`;
 export {
   DesTitle,
   NameText,
@@ -154,4 +174,6 @@ export {
   StatusTitle,
   TagDiv,
   LineDiv,
+  InternalMessageDiv,
+  Description,
 };
