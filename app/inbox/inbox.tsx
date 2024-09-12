@@ -134,7 +134,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
                     <div>
                       <InboxCard
                         ticketDetail={ticket}
-                        description='Complete your registration...'
+                        description={ticket.last_message?.content || ''}
                         showDotIcon={true}
                         src=''
                         currentOpenDropdown={currentOpenDropdown}
