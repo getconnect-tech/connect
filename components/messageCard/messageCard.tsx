@@ -13,16 +13,43 @@ import {
   TagDiv,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { LastSeen } from '@/utils/dataTypes';
 
 interface Props {
   title: string;
   time: Date;
   subTitle: string;
   message: string;
+  readBy?: LastSeen[];
 }
 
-export default function MessageCard({ title, time, subTitle, message }: Props) {
+export default function MessageCard({
+  title,
+  time,
+  subTitle,
+  message,
+  readBy,
+}: Props) {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+
+  const getDuration = (lastSeen: Date) => {
+    const lastSeenMoment = moment(lastSeen);
+    const now = moment();
+    const diffInMinutes = now.diff(lastSeenMoment, 'minutes');
+
+    if (diffInMinutes < 60) {
+      // If difference is less than 60 minutes, return in minutes
+      return `${diffInMinutes}m`;
+    } else if (diffInMinutes < 1440) {
+      // If difference is less than 24 hours, return in hours
+      const diffInHours = now.diff(lastSeenMoment, 'hours');
+      return `${diffInHours}h`;
+    } else {
+      // If difference is more than or equal to 24 hours, return in days
+      const diffInDays = now.diff(lastSeenMoment, 'days');
+      return `${diffInDays}d`;
+    }
+  };
 
   const handleMouseEnter = () => {
     setIsDropdownVisible(true);
@@ -32,11 +59,10 @@ export default function MessageCard({ title, time, subTitle, message }: Props) {
     setIsDropdownVisible(false);
   };
 
-  const dropdownItems = [
-    { name: 'Mohit', duration: '2d' },
-    { name: 'Aniket', duration: '2d' },
-    { name: 'Pinal', duration: '16h' },
-  ];
+  const dropdownItems = readBy?.map((item: LastSeen) => ({
+    name: item.display_name,
+    duration: getDuration(item.last_seen),
+  }));
   return (
     <MessageCardMainDiv>
       <MessageCardInnerDiv>
@@ -55,22 +81,24 @@ export default function MessageCard({ title, time, subTitle, message }: Props) {
             </NameDiv>
             <p>{subTitle}</p>
           </CardHead>
-          <TagDiv
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            Seen
-            {isDropdownVisible && (
-              <DropDown
-                items={dropdownItems}
-                iconSize={''}
-                iconViewBox={''}
-                onMouseLeave={handleMouseLeave} // Ensure dropdown also hides when mouse leaves the dropdown area
-                style={{ right: 12, maxWidth: 146, width: '100%' }}
-                onChange={(item) => console.log('Item changed:', item)}
-              />
-            )}
-          </TagDiv>
+          {dropdownItems && dropdownItems.length > 0 && (
+            <TagDiv
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              Seen
+              {isDropdownVisible && (
+                <DropDown
+                  items={dropdownItems}
+                  iconSize={''}
+                  iconViewBox={''}
+                  onMouseLeave={handleMouseLeave} // Ensure dropdown also hides when mouse leaves the dropdown area
+                  style={{ right: 12, maxWidth: 146, width: '100%' }}
+                  onChange={(item) => console.log('Item changed:', item)}
+                />
+              )}
+            </TagDiv>
+          )}
         </CardTop>
         <CardMessage>
           <RenderHtml htmlstring={message} />

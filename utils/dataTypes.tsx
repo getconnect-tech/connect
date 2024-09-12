@@ -18,6 +18,12 @@ export interface LabelData {
   icon: string;
 }
 
+export interface LastSeen {
+  display_name: string | null;
+  last_seen: Date;
+  id: string;
+}
+
 export type Workspace = NonNullable<
   Awaited<ReturnType<typeof getUserWorkspaces>>
 >[0];
