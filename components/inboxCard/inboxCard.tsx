@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, { SyntheticEvent, useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
@@ -259,7 +260,8 @@ const InboxCard = ({
       </LeftDiv>
       <RightDiv>
         <DesTitle>{title}</DesTitle>
-        {MessageType.EMAIL ? (
+        {last_message?.type === MessageType.EMAIL ||
+        last_message?.type === MessageType.FROM_CONTACT ? (
           <NameText className='description'>{description}</NameText>
         ) : (
           <InternalMessageDiv>
