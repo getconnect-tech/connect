@@ -19,7 +19,12 @@ export const DotIcon = styled.div`
   box-shadow: 0px 1px 2px 0px var(--box-shadow-2);
 `;
 
-const RenderHtml = ({ htmlstring }: { htmlstring: string }) => {
+interface RenderHtmlProps {
+  htmlstring: string;
+  isSpreadIcon?: boolean;
+}
+
+const RenderHtml = ({ htmlstring, isSpreadIcon = true }: RenderHtmlProps) => {
   const [htmlAboveHr, htmlBelowHr] = htmlstring.split(/<hr[^>]*>/i) || [];
   const [showQuotedText, setShowQuotedText] = useState(false);
 
@@ -27,7 +32,7 @@ const RenderHtml = ({ htmlstring }: { htmlstring: string }) => {
     <div>
       <div>{parse(`<div>${htmlAboveHr}</div>`, {})}</div>
 
-      {!isEmpty(htmlBelowHr) && (
+      {!isEmpty(htmlBelowHr) && isSpreadIcon && (
         <DotIcon onClick={() => setShowQuotedText(!showQuotedText)}>
           <SVGIcon
             name='message-three-dot-icon'
