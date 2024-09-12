@@ -2,6 +2,7 @@ import { ConfigType, TeamSize, UserRole } from '@prisma/client';
 import { prisma } from '@/prisma/prisma';
 import { removeNullUndefined } from '@/helpers/common';
 import { EmailConfig } from '@/utils/dataTypes';
+import { sendInvitationEmail } from '@/helpers/emails';
 
 // Service to get workspace by ID
 export const getWorkspaceById = async (
@@ -87,6 +88,17 @@ export const inviteUsers = async (
   const result = await prisma.invitedUser.createMany({ data: usersToInvite });
 
   // TODO: send invitation mail to each user
+  const workspaceDetails = (await prisma.workspace.findUnique({
+    where: { id: workspaceId },
+    select: {
+      name: true,
+    },
+  }))!;
+
+  // Send invitation email to each invited user
+  for (const user of usersToInvite) {
+    await sendInvitationEmail(user.email, workspaceDetails.name);
+  }
 
   return result;
 };
