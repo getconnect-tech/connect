@@ -48,7 +48,12 @@ export const getWorkspaceTickets = async (
         select: {
           created_at: true,
           author: {
-            select: { id: true, email: true, display_name: true },
+            select: {
+              id: true,
+              email: true,
+              display_name: true,
+              profile_url: true,
+            },
           },
           content: true,
           type: true,
