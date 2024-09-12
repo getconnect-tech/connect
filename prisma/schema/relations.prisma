@@ -17,3 +17,15 @@ model TicketLabel {
 
     @@id(name: "ticket_label_id", [label_id, ticket_id])
 }
+
+model TicketUser {
+    ticket_id String
+    user_id   String
+
+    user   User   @relation(fields: [user_id], references: [id])
+    ticket Ticket @relation(fields: [ticket_id], references: [id])
+
+    last_seen DateTime @default(now())
+
+    @@id(name: "ticket_user_id", [ticket_id, user_id])
+}

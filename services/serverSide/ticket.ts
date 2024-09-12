@@ -19,6 +19,7 @@ type TicketWithPayload = Prisma.TicketGetPayload<{
 
 export const getWorkspaceTickets = async (
   workspaceId: string,
+  userId: string,
   lastUpdated?: string,
 ) => {
   const query: Prisma.TicketWhereInput = { workspace_id: workspaceId };
@@ -58,9 +59,30 @@ export const getWorkspaceTickets = async (
     },
   });
 
+  const ticketIds = tickets.map((t) => t.id);
+
+  const ticketLastSeen = await prisma.ticketUser.findMany({
+    where: { ticket_id: { in: ticketIds }, user_id: userId },
+    select: { last_seen: true, ticket_id: true },
+  });
+
+  const ticketLastSeenMap = new Map<string, Date>();
+  ticketLastSeen.forEach((t) =>
+    ticketLastSeenMap.set(t.ticket_id, new Date(t.last_seen)),
+  );
+
   const ticketsWithLastMessage = tickets.map((ticket) => {
     const { messages, ...rest } = ticket;
-    const newTicket = { ...rest, last_message: messages[0] };
+    const last_message = messages[0];
+
+    let has_read = false;
+    if (ticketLastSeenMap.has(ticket.id)) {
+      has_read =
+        ticketLastSeenMap.get(ticket.id)!.getTime() >=
+        new Date(last_message.created_at).getTime();
+    }
+
+    const newTicket = { ...rest, last_message, has_read };
 
     return newTicket;
   });

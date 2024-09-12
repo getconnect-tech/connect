@@ -324,7 +324,7 @@ function TicketDetails(props: Props) {
         type = MessageType.EMAIL;
       }
       const payload = { content: content, type };
-      const newMessage: MessageDetails = {
+      const newMessage = {
         assignee: null,
         author: user,
         author_id: user!.id,
@@ -335,7 +335,8 @@ function TicketDetails(props: Props) {
         reference_id: '',
         ticket_id,
         type,
-      };
+        // add default ready_by field
+      } as MessageDetails;
 
       try {
         if (ticket_id) {
