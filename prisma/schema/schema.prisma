@@ -23,6 +23,7 @@ model User {
   workspaces    UserWorkspaces[]
   api_keys      ApiKeys[]
   macros        Macro[]
+  tickets_rel   TicketUser[]
 }
 
 model Workspace {
@@ -74,6 +75,7 @@ model Ticket {
   labels        TicketLabel[]
   status        TicketStatus   @default(OPEN)
   snooze_until  DateTime?
+  users         TicketUser[]
 }
 
 model Message {

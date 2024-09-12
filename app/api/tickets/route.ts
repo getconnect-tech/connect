@@ -11,7 +11,11 @@ export const GET = withWorkspaceAuth(async (req) => {
 
     lastUpdatedTimeSchema.optional().parse(lastUpdated);
 
-    const tickets = await getWorkspaceTickets(workspaceId, lastUpdated);
+    const tickets = await getWorkspaceTickets(
+      workspaceId,
+      req.user.id,
+      lastUpdated,
+    );
 
     return Response.json(tickets, { status: 200 });
   } catch (err) {
