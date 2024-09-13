@@ -54,7 +54,7 @@ interface Props {
 const InboxCard = ({
   ticketDetail,
   description,
-  showDotIcon = false,
+  showDotIcon,
   src,
   currentOpenDropdown,
   setCurrentOpenDropdown,
