@@ -8,6 +8,7 @@ import { capitalizeString } from '@/helpers/common';
 import { HandleClickProps } from '@/utils/appTypes';
 import { useStores } from '@/stores';
 import {
+  reInviteUsersFromWorkspace,
   removeInviteUsersFromWorkspace,
   removeMemberFromWorkspace,
   updateRole,
@@ -63,11 +64,10 @@ function MemberCard({
   } else {
     dropDownItem = [
       {
-        name: 'Delete',
-        icon: 'delete-icon',
-        isDelete: true,
-        status: 'Pending',
+        name: 'Re Invite',
+        icon: 'admin-icon',
       },
+      { name: 'Delete', icon: 'delete-icon', isDelete: true },
     ];
   }
 
@@ -89,6 +89,14 @@ function MemberCard({
               if (result) {
                 workspaceStore.removeInvitedUserFromWorkspace(userId);
               }
+            }
+          } catch (error) {
+            console.log('error', error);
+          }
+        } else if (value === 'Re Invite') {
+          try {
+            if (userId) {
+              await reInviteUsersFromWorkspace(userId);
             }
           } catch (error) {
             console.log('error', error);
