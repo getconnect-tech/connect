@@ -75,12 +75,12 @@ export const POST = async (req: NextRequest) => {
 
       if (isOpenOutbound(postmarkPayload)) {
         eventType = EmailEventType.OPENED;
-        extra = postmarkPayload.Tag;
+        extra = postmarkPayload.Recipient;
       }
 
       if (isDeliveryOutbound(postmarkPayload)) {
         eventType = EmailEventType.DELIVERED;
-        extra = postmarkPayload.Details;
+        extra = postmarkPayload.Recipient;
       }
 
       if (isSpamComplaintOutbound(postmarkPayload)) {
