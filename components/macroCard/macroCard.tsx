@@ -128,7 +128,7 @@ function MacroCard({
       </CardMainDiv>
       <Modal open={deleteModal} onClose={onCloseDeleteModal}>
         <DeleteModal
-          onclose={onCloseDeleteModal}
+          onClose={onCloseDeleteModal}
           headTitle={'Delete Macro'}
           title={'Are you sure you want to delete this macro?'}
           description={'This action can’t be undone.'}

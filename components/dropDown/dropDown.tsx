@@ -152,10 +152,8 @@ const DropDown = ({
         } else handleClick({ value, item });
       }
 
-      if (onChange) {
-        onChange(item);
-        if (onClose) onClose();
-      }
+      if (onChange) onChange(item);
+      if (onClose) onClose();
     },
     [handleClick, onChange, onClose],
   );
