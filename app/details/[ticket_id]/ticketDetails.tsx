@@ -9,6 +9,7 @@ import {
   BottomDiv,
   ButtonDiv,
   CenterDiv,
+  CenterMainDiv,
   HeaderDiv,
   IconDiv,
   Input,
@@ -630,7 +631,7 @@ function TicketDetails(props: Props) {
             </ButtonDiv>
           </StatusDiv>
         </TopDiv>
-        <div style={{ padding: '0 20px' }}>
+        <CenterMainDiv>
           <BottomDiv>
             <CenterDiv ref={messagesEndRef}>
               {messages?.map((message, index) => (
@@ -744,7 +745,7 @@ function TicketDetails(props: Props) {
               </Input>
             </div>
           </InputDiv>
-        </div>
+        </CenterMainDiv>
       </MainDiv>
       <ProfileSection />
     </Main>

@@ -26,7 +26,7 @@ const BottomDiv = styled.div`
   max-width: 702px;
   width: 100%;
   margin: 0 auto;
-  height: calc(100dvh - 208px);
+  height: calc(100% - 120px);
   overflow: auto;
 `;
 
@@ -89,6 +89,7 @@ const InputDiv = styled.div`
   max-width: 702px;
   margin: 0 auto;
   padding: 0 0 20px;
+  width: 100%;
   .input-main-div {
     display: flex;
     gap: 12px;
@@ -209,6 +210,12 @@ const IconDiv = styled.div<Props>`
   }
 `;
 
+const CenterMainDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+  height: calc(100% - 82px);
+`;
 export {
   Main,
   MainDiv,
@@ -227,4 +234,5 @@ export {
   LineDiv,
   IconDiv,
   ButtonDiv,
+  CenterMainDiv,
 };
