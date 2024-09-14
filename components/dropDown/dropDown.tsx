@@ -35,6 +35,7 @@ export type DropDownItem = {
   time?: string;
   isDelete?: boolean;
   status?: string;
+  duration?: string;
 };
 
 interface DropDownProps {
@@ -67,6 +68,7 @@ interface DropDownProps {
   handleMouseEnter?: (e: any) => void;
   className?: string;
   labelField?: string;
+  onMouseLeave?: () => void;
 }
 
 // Hook to handle outside clicks
@@ -112,6 +114,7 @@ const DropDown = ({
   ticketLabelData,
   handleMouseEnter,
   className,
+  onMouseLeave,
   labelField = 'name',
 }: DropDownProps) => {
   const dropDownRef = useOutsideClick(onClose!);
@@ -203,6 +206,7 @@ const DropDown = ({
       style={style}
       isContextMenu={isContextMenu}
       className={className}
+      onMouseLeave={onMouseLeave}
     >
       {isSearch && (
         <SearchDiv>
@@ -274,6 +278,7 @@ const DropDown = ({
                 )}
                 <p>{item.name}</p>
               </ItemLeftDiv>
+              <ItemName>{item.duration}</ItemName>
               {isSnooze && (
                 <ItemName>
                   {item.name === 'Later today' || item.name === 'This evening'
