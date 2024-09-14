@@ -1,17 +1,21 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { UserRole } from '@prisma/client';
 import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import DropDown, { DropDownItem } from '../dropDown/dropDown';
+import Modal from '../modal/modal';
+import DeleteModal from '../deleteModal/deleteModal';
 import { CardDiv, LeftDiv, NameDiv, RightDiv } from './style';
 import { capitalizeString } from '@/helpers/common';
 import { HandleClickProps } from '@/utils/appTypes';
 import { useStores } from '@/stores';
 import {
+  reInviteUsersFromWorkspace,
   removeInviteUsersFromWorkspace,
   removeMemberFromWorkspace,
   updateRole,
 } from '@/services/clientSide/workspaceServices';
+import { settingStore } from '@/stores/settingStore';
 
 interface Props {
   userId: string;
@@ -41,6 +45,9 @@ function MemberCard({
   isInvited,
 }: Props) {
   const { workspaceStore } = useStores();
+  const [deleteModal, setDeleteModal] = useState(false);
+  const { loading } = settingStore || {};
+
   let dropDownItem: DropDownItem[];
   if (designation === UserRole.OWNER) {
     dropDownItem = [];
@@ -63,11 +70,10 @@ function MemberCard({
   } else {
     dropDownItem = [
       {
-        name: 'Delete',
-        icon: 'delete-icon',
-        isDelete: true,
-        status: 'Pending',
+        name: 'Re Invite',
+        icon: 'admin-icon',
       },
+      { name: 'Delete', icon: 'delete-icon', isDelete: true },
     ];
   }
 
@@ -76,6 +82,40 @@ function MemberCard({
     setOpenDropdown(currentOpenDropdown === identifier ? null : identifier);
   }, [dropdownIdentifier, currentOpenDropdown, setOpenDropdown]);
 
+  const onCloseDeleteModal = useCallback(() => {
+    setDeleteModal(false);
+  }, []);
+
+  const handleDelete = useCallback(async () => {
+    try {
+      if (isInvited) {
+        try {
+          if (userId) {
+            const result = await removeInviteUsersFromWorkspace(userId);
+            if (result) {
+              workspaceStore.removeInvitedUserFromWorkspace(userId);
+            }
+          }
+        } catch (error) {
+          console.log('error', error);
+        }
+      } else {
+        try {
+          if (userId) {
+            const result = await removeMemberFromWorkspace(userId);
+            if (result) {
+              workspaceStore.removeUserFromWorkspace(userId);
+            }
+          }
+        } catch (error) {
+          console.log('error', error);
+        }
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
+  }, [userId, workspaceStore]);
+
   const handleClick = useCallback(
     async (props: HandleClickProps) => {
       const { value } = props;
@@ -83,12 +123,11 @@ function MemberCard({
       if (isInvited) {
         // Handle invited users' actions
         if (value === 'Delete') {
+          setDeleteModal(true); // Open delete modal
+        } else if (value === 'Re Invite') {
           try {
             if (userId) {
-              const result = await removeInviteUsersFromWorkspace(userId);
-              if (result) {
-                workspaceStore.removeInvitedUserFromWorkspace(userId);
-              }
+              await reInviteUsersFromWorkspace(userId);
             }
           } catch (error) {
             console.log('error', error);
@@ -113,16 +152,7 @@ function MemberCard({
             console.log('error', error);
           }
         } else if (value === 'Delete') {
-          try {
-            if (userId) {
-              const result = await removeMemberFromWorkspace(userId);
-              if (result) {
-                workspaceStore.removeUserFromWorkspace(userId);
-              }
-            }
-          } catch (error) {
-            console.log('error', error);
-          }
+          setDeleteModal(true); // Open delete modal
         }
       }
     },
@@ -166,6 +196,16 @@ function MemberCard({
           </div>
         )}
       </RightDiv>
+      <Modal open={deleteModal} onClose={onCloseDeleteModal}>
+        <DeleteModal
+          onClose={onCloseDeleteModal}
+          headTitle={'Delete Member'}
+          title={'Are you sure you want to delete this member?'}
+          description={'This action can’t be undone.'}
+          onDelete={handleDelete}
+          loading={loading}
+        />
+      </Modal>
     </CardDiv>
   );
 }

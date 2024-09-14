@@ -182,8 +182,8 @@ export const updateRole = async (payload: UpdateRole) => {
     if (result) {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       payload.role === UserRole.ADMIN
-        ? messageStore.setSuccessMessage('Make Admin')
-        : messageStore.setSuccessMessage('Remove from admin');
+        ? messageStore.setSuccessMessage('Updated admin role successfully.')
+        : messageStore.setSuccessMessage('Admin role removed successfully.');
     }
     return true;
   } catch (err: any) {
@@ -246,6 +246,28 @@ export const removeInviteUsersFromWorkspace = async (userId: string) => {
       `${NEXT_PUBLIC_API_URL}/workspaces/inviteUsers/${userId}`,
     );
     if (result) messageStore.setSuccessMessage('Invite User Removed');
+    return true;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    workspaceStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc Re invited user from workspace
+ * @param {*} userId
+ */
+export const reInviteUsersFromWorkspace = async (userId: string) => {
+  try {
+    workspaceStore.setLoading(true);
+    const result = await axios.post(
+      `${NEXT_PUBLIC_API_URL}/workspaces/inviteUsers/${userId}/reinvite`,
+    );
+    if (result) messageStore.setSuccessMessage('User Reinvited');
     return true;
   } catch (err: any) {
     messageStore.setErrorMessage(

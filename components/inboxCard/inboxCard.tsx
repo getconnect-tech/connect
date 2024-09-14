@@ -54,7 +54,7 @@ interface Props {
 const InboxCard = ({
   ticketDetail,
   description,
-  showDotIcon = false,
+  showDotIcon,
   src,
   currentOpenDropdown,
   setCurrentOpenDropdown,
@@ -264,7 +264,7 @@ const InboxCard = ({
         {last_message?.type === MessageType.EMAIL ||
         last_message?.type === MessageType.FROM_CONTACT ? (
           <NameText className='description'>
-            <RenderHtml htmlstring={description} />
+            <RenderHtml isSpreadIcon={false} htmlstring={description} />
           </NameText>
         ) : (
           <InternalMessageDiv>
@@ -276,7 +276,7 @@ const InboxCard = ({
             />
             <Description>
               <p>
-                <RenderHtml htmlstring={description} />
+                <RenderHtml isSpreadIcon={false} htmlstring={description} />
               </p>
             </Description>
           </InternalMessageDiv>
