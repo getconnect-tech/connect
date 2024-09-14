@@ -41,7 +41,13 @@ export const postMessage = async ({
 export const getTicketMessages = async (ticketId: string) => {
   const messages = await prisma.message.findMany({
     where: { ticket_id: ticketId },
-    include: { author: true },
+    include: {
+      author: true,
+      email_events: {
+        where: { event: EmailEventType.OPENED },
+        select: { created_at: true, extra: true },
+      },
+    },
     orderBy: { created_at: 'asc' },
   });
 
@@ -86,25 +92,35 @@ export const getTicketMessages = async (ticketId: string) => {
     labelsMap.set(label.id, label);
   }
 
-  // Get last seen of users
-  const lastSeenData = await prisma.ticketUser.findMany({
-    where: { ticket_id: ticketId },
-    select: {
-      user: { select: { id: true, display_name: true } },
-      last_seen: true,
-    },
+  // Collect email Ids of all distinct Contact emails
+  const allContactEmails = Array.from(
+    new Set(messages.map((x) => x.email_events.map((y) => y.extra)).flat()),
+  );
+
+  // Fetch all Contacts by emails
+  const contactsData = await prisma.contact.findMany({
+    where: { email: { in: allContactEmails } },
+    select: { email: true, name: true, id: true },
   });
 
+  // Create map with email id -> contact object
+  const contactsMap = new Map<string, (typeof contactsData)[number]>();
+  for (const contact of contactsData) {
+    contactsMap.set(contact.email, contact);
+  }
+
   // Format messages by injecting respective data
-  const formattedMessages = messages.map((message) => {
-    // Message is ready by users whose last_seen is greater than message created time
-    const read_by = lastSeenData
-      .filter(
-        (x) =>
-          new Date(x.last_seen).getTime() >=
-          new Date(message.created_at).getTime(),
-      )
-      .map((x) => ({ ...x.user, last_seen: x.last_seen }));
+  const formattedMessages = messages.map((m) => {
+    const { email_events, ...message } = m;
+    const read_by = email_events.map((event) => {
+      const email = event.extra;
+      const contact = contactsMap.get(email)!;
+
+      return {
+        ...contact,
+        seen_at: event.created_at,
+      };
+    });
 
     switch (message.type) {
       case MessageType.CHANGE_ASSIGNEE: {

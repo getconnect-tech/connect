@@ -135,7 +135,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
                       <InboxCard
                         ticketDetail={ticket}
                         description={ticket.last_message?.content || ''}
-                        showDotIcon={true}
+                        showDotIcon={!ticket?.has_read}
                         src=''
                         currentOpenDropdown={currentOpenDropdown}
                         setCurrentOpenDropdown={setCurrentOpenDropdown}

@@ -20,6 +20,7 @@ export type TicketDetailsInterface = NonNullable<
   Awaited<ReturnType<typeof formatTicket>>
 > & {
   last_message?: LastMessage; // Make the last_message field optional
+  has_read: boolean;
 };
 
 interface LastMessage {

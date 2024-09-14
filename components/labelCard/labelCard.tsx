@@ -115,7 +115,7 @@ function LabelCard({
       </ItemDiv>
       <Modal open={deleteModal} onClose={onCloseDeleteModal}>
         <DeleteModal
-          onclose={onCloseDeleteModal}
+          onClose={onCloseDeleteModal}
           headTitle={'Delete Label'}
           title={'Are you sure you want to delete this label?'}
           description={'This action can’t be undone.'}
