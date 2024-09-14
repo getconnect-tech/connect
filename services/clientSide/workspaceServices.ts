@@ -182,8 +182,8 @@ export const updateRole = async (payload: UpdateRole) => {
     if (result) {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       payload.role === UserRole.ADMIN
-        ? messageStore.setSuccessMessage('Make Admin')
-        : messageStore.setSuccessMessage('Remove from admin');
+        ? messageStore.setSuccessMessage('Updated admin role successfully.')
+        : messageStore.setSuccessMessage('Admin role removed successfully.');
     }
     return true;
   } catch (err: any) {
