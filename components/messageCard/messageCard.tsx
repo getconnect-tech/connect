@@ -13,14 +13,14 @@ import {
   TagDiv,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { LastSeen } from '@/utils/dataTypes';
+import { ReadBy } from '@/utils/dataTypes';
 
 interface Props {
   title: string;
   time: Date;
   subTitle: string;
   message: string;
-  readBy?: LastSeen[];
+  readBy?: ReadBy[];
 }
 
 export default function MessageCard({
@@ -59,9 +59,9 @@ export default function MessageCard({
     setIsDropdownVisible(false);
   };
 
-  const dropdownItems = readBy?.map((item: LastSeen) => ({
-    name: item.display_name,
-    duration: getDuration(item.last_seen),
+  const dropdownItems = readBy?.map((item: ReadBy) => ({
+    name: item.name,
+    duration: getDuration(item.seen_at),
   }));
   return (
     <MessageCardMainDiv>

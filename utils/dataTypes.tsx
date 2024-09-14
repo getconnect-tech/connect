@@ -18,9 +18,10 @@ export interface LabelData {
   icon: string;
 }
 
-export interface LastSeen {
-  display_name: string | null;
-  last_seen: Date;
+export interface ReadBy {
+  name: string | null;
+  email: string;
+  seen_at: Date;
   id: string;
 }
 
