@@ -69,6 +69,7 @@ interface DropDownProps {
   className?: string;
   labelField?: string;
   onMouseLeave?: () => void;
+  isSeen?: boolean;
 }
 
 // Hook to handle outside clicks
@@ -116,6 +117,7 @@ const DropDown = ({
   className,
   onMouseLeave,
   labelField = 'name',
+  isSeen,
 }: DropDownProps) => {
   const dropDownRef = useOutsideClick(onClose!);
   const [value, setValueItem] = useState<string | null>(null);
@@ -244,6 +246,7 @@ const DropDown = ({
             >
               <ItemLeftDiv
                 isSelected={isChecked}
+                isSeen={isSeen}
                 isDelete={item.isDelete || false}
               >
                 {isCheckbox && (

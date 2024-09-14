@@ -9,6 +9,7 @@ interface Props {
   isContextMenu?: boolean;
   isShowSubmenu?: boolean;
   isDelete?: boolean;
+  isSeen?:boolean
 }
 
 const MainDiv = styled.div<Props>`
@@ -112,7 +113,9 @@ const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
 
   &:checked {
     background-color: var(--brand);
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(
+      checkmarkSVG,
+    )}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;
@@ -135,6 +138,11 @@ const ItemLeftDiv = styled.div<Props>`
             : '--text-text-secondary'}
     );
     white-space: nowrap;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: ${({isSeen}) => isSeen ? '96px' : 'unset'};
   }
   svg {
     fill: var(${({ isSelected }) => (isSelected ? '--icon-active' : '--icon')});
