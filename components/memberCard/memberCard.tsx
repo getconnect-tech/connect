@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { UserRole } from '@prisma/client';
+import { observer } from 'mobx-react-lite';
 import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import DropDown, { DropDownItem } from '../dropDown/dropDown';
@@ -15,7 +16,6 @@ import {
   removeMemberFromWorkspace,
   updateRole,
 } from '@/services/clientSide/workspaceServices';
-import { settingStore } from '@/stores/settingStore';
 
 interface Props {
   userId: string;
@@ -31,8 +31,7 @@ interface Props {
   loadData: () => void;
   isInvited: boolean;
 }
-
-function MemberCard({
+const MemberCard = ({
   designation,
   name,
   email,
@@ -43,10 +42,10 @@ function MemberCard({
   userId,
   loadData,
   isInvited,
-}: Props) {
+}: Props) => {
   const { workspaceStore } = useStores();
   const [deleteModal, setDeleteModal] = useState(false);
-  const { loading } = settingStore || {};
+  const { loading } = workspaceStore || {};
 
   let dropDownItem: DropDownItem[];
   if (designation === UserRole.OWNER) {
@@ -87,34 +86,31 @@ function MemberCard({
   }, []);
 
   const handleDelete = useCallback(async () => {
-    try {
-      if (isInvited) {
-        try {
-          if (userId) {
-            const result = await removeInviteUsersFromWorkspace(userId);
-            if (result) {
-              workspaceStore.removeInvitedUserFromWorkspace(userId);
-            }
+    if (isInvited) {
+      try {
+        if (userId) {
+          const result = await removeInviteUsersFromWorkspace(userId);
+          if (result) {
+            workspaceStore.removeInvitedUserFromWorkspace(userId);
           }
-        } catch (error) {
-          console.log('error', error);
         }
-      } else {
-        try {
-          if (userId) {
-            const result = await removeMemberFromWorkspace(userId);
-            if (result) {
-              workspaceStore.removeUserFromWorkspace(userId);
-            }
-          }
-        } catch (error) {
-          console.log('error', error);
-        }
+      } catch (error) {
+        console.log('error', error);
       }
-    } catch (error) {
-      console.log('error', error);
+    } else {
+      try {
+        if (userId) {
+          const result = await removeMemberFromWorkspace(userId);
+          if (result) {
+            workspaceStore.removeUserFromWorkspace(userId);
+          }
+        }
+      } catch (error) {
+        console.log('error', error);
+      }
     }
-  }, [userId, workspaceStore]);
+    setDeleteModal(false);
+  }, [userId]);
 
   const handleClick = useCallback(
     async (props: HandleClickProps) => {
@@ -208,6 +204,6 @@ function MemberCard({
       </Modal>
     </CardDiv>
   );
-}
+};
 
-export default MemberCard;
+export default observer(MemberCard);
