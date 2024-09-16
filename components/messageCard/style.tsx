@@ -52,11 +52,11 @@ const CardMessage = styled.p`
     ol {
       margin-left: 20px;
     }
-  }
-  hr {
-    border-bottom: var(--border-main) !important;
-    border: none;
-    margin-bottom: 5px;
+    hr {
+      border-bottom: var(--border-main) !important;
+      border: none;
+      margin-bottom: 5px;
+    }
   }
 `;
 
