@@ -15,7 +15,6 @@ import ApiKeyCard from '@/components/apiKeyCard/apiKeyCard';
 import Modal from '@/components/modal/modal';
 import CreateKeyModal from '@/components/modalComponent/createKeyModal';
 import { isEmpty } from '@/helpers/common';
-import ApiKeyLoading from '@/components/apiKeyLoading/apiKeyLoading';
 import EmptyState from '@/components/emptyState/emptyState';
 import { useStores } from '@/stores';
 import { getAPIKeys } from '@/services/clientSide/settingServices';
@@ -27,7 +26,7 @@ function ApiKey() {
   );
   const { settingStore, workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
-  const { apiKeys, loading } = settingStore || {};
+  const { apiKeys } = settingStore || {};
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
@@ -64,8 +63,7 @@ function ApiKey() {
                 />
               )}
             </Head>
-            {loading && <ApiKeyLoading />}
-            {!loading && isEmpty(apiKeys) && (
+            {isEmpty(apiKeys) && (
               <EmptyState
                 iconName='empty-apikey-icon'
                 iconSize='20'
@@ -76,7 +74,7 @@ function ApiKey() {
                 onClick={onOpenKeyModal}
               />
             )}
-            {!loading && !isEmpty(apiKeys) && (
+            {!isEmpty(apiKeys) && (
               <MainCardDiv>
                 {apiKeys?.map((apiKey, index: React.Key | null | undefined) => (
                   <ApiKeyCard

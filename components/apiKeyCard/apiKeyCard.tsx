@@ -69,7 +69,7 @@ const ApiKeyCard = ({
       if (res) {
         settingStore.removeAPIKey(apiKey);
       }
-      setDeleteModal(false);
+      onCloseDeleteModal();
     } catch (err: any) {
       messageStore.setErrorMessage(
         getAPIErrorMessage(err) || 'Something went wrong!',
