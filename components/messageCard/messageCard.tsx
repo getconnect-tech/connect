@@ -2,15 +2,21 @@ import React, { useState } from 'react';
 import moment from 'moment';
 import RenderHtml from '../renderHtml';
 import DropDown from '../dropDown/dropDown';
+import FileCard from '../fileCard/fileCard';
 import {
+  AttachmentMainDiv,
   CardHead,
   CardMessage,
   CardTop,
+  DownloadButton,
+  FileCardMainDiv,
   MessageCardInnerDiv,
   MessageCardMainDiv,
   NameDiv,
   NameTitle,
   TagDiv,
+  Title,
+  TitleDiv,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { ReadBy } from '@/utils/dataTypes';
@@ -126,6 +132,15 @@ export default function MessageCard({
         <CardMessage>
           <RenderHtml htmlstring={message} />
         </CardMessage>
+        <AttachmentMainDiv>
+          <TitleDiv>
+            <Title>4 Attachments</Title>
+            <DownloadButton>Download All</DownloadButton>
+          </TitleDiv>
+          <FileCardMainDiv>
+            <FileCard />
+          </FileCardMainDiv>
+        </AttachmentMainDiv>
       </MessageCardInnerDiv>
     </MessageCardMainDiv>
   );
