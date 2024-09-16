@@ -25,12 +25,15 @@ interface RenderHtmlProps {
 }
 
 const RenderHtml = ({ htmlstring, isSpreadIcon = true }: RenderHtmlProps) => {
-  const [htmlAboveHr, htmlBelowHr] = htmlstring.split(/<hr[^>]*>/i) || [];
+  const [htmlAboveHr, htmlBelowHr] =
+    (htmlstring || '')
+      ?.replace(/https?:\/\/[^\s"]*pstmrk\.it[^\s"]*/g, '')
+      ?.split(/<hr[^>]*>/i) || [];
   const [showQuotedText, setShowQuotedText] = useState(false);
 
   return (
     <div>
-      <div>{parse(`<div>${htmlAboveHr}</div>`, {})}</div>
+      <div>{parse(`<div>${htmlAboveHr || ''}</div>`, {})}</div>
 
       {!isEmpty(htmlBelowHr) && isSpreadIcon && (
         <DotIcon onClick={() => setShowQuotedText(!showQuotedText)}>
