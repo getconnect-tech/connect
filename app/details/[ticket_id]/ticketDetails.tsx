@@ -445,6 +445,7 @@ function TicketDetails(props: Props) {
                 time={message?.created_at}
                 subTitle={`To ${contact?.email}`}
                 message={message.content || ''}
+                readBy={message.read_by}
               />
             </ActivityDiv>
           );

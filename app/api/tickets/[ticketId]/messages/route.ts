@@ -35,6 +35,7 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
     RequestBody.parse(requestBody);
 
     const { content, type } = requestBody as z.infer<typeof RequestBody>;
+    const userId = req.user.id;
 
     if (type === MessageType.REGULAR) {
       const newMessage = await postMessage({
@@ -42,8 +43,10 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
         messageType: type,
         referenceId: '',
         ticketId,
-        authorId: req.user.id,
+        authorId: userId,
       });
+
+      await updateUserLastSeen(ticketId, userId);
 
       return Response.json(newMessage, { status: 201 });
     }
@@ -94,6 +97,8 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
           extra: err.message,
         });
       }
+
+      await updateUserLastSeen(ticketId, userId);
 
       return Response.json(newMessage, { status: 201 });
     }

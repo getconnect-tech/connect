@@ -46,7 +46,7 @@ class WorkspaceStore {
     const userIndex = this.currentWorkspace?.users?.findIndex(
       (user) => user?.id === userId,
     );
-    if (userIndex && userIndex !== -1) {
+    if (userIndex !== undefined && userIndex !== -1) {
       this.currentWorkspace?.users?.splice(userIndex, 1);
     }
   }
@@ -56,7 +56,7 @@ class WorkspaceStore {
     const userIndex = this.currentWorkspace?.invited_users?.findIndex(
       (user) => user?.id === userId,
     );
-    if (userIndex && userIndex !== -1) {
+    if (userIndex !== undefined && userIndex !== -1) {
       this.currentWorkspace?.invited_users?.splice(userIndex, 1);
     }
   }

@@ -18,6 +18,13 @@ export interface LabelData {
   icon: string;
 }
 
+export interface ReadBy {
+  name: string | null;
+  email: string;
+  seen_at: Date;
+  id: string;
+}
+
 export type Workspace = NonNullable<
   Awaited<ReturnType<typeof getUserWorkspaces>>
 >[0];

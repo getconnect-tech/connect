@@ -101,7 +101,7 @@ const InputDiv = styled.div`
   }
   .avtar {
     position: absolute;
-    top: 18px;
+    top: 20px;
     z-index: 1;
   }
 `;
