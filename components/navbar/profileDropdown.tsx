@@ -11,6 +11,7 @@ import {
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { logout } from '@/services/clientSide/authService';
+import { useStores } from '@/stores';
 interface Props {
   title: string;
   onClose: () => void;
@@ -41,6 +42,14 @@ export const useOutsideClick = (callback: () => void) => {
 export default function ProfileDropdown({ title, onClose }: Props) {
   const router = useRouter();
   const dropDownRef = useOutsideClick(onClose);
+  const { userStore, workspaceStore } = useStores();
+  const { user } = userStore;
+  const { currentWorkspace } = workspaceStore;
+  const isSetting = currentWorkspace?.users.find((item) => {
+    if (item.id === user?.id)
+      return item.role === 'ADMIN' || item.role === 'OWNER';
+    else return false;
+  });
 
   const onClickLogout = useCallback(async () => {
     await logout();
@@ -61,19 +70,21 @@ export default function ProfileDropdown({ title, onClose }: Props) {
           </OrganizationProfile>
         </Frame1>
         <Frame2>
-          <ProfileItemDiv
-            onClick={() => {
-              router.push('/setting');
-            }}
-          >
-            <SVGIcon
-              name='setting-icon'
-              width='12px'
-              height='12px'
-              viewBox='0 0 12 12'
-            />
-            <p>Settings</p>
-          </ProfileItemDiv>
+          {isSetting && (
+            <ProfileItemDiv
+              onClick={() => {
+                router.push('/setting');
+              }}
+            >
+              <SVGIcon
+                name='setting-icon'
+                width='12px'
+                height='12px'
+                viewBox='0 0 12 12'
+              />
+              <p>Settings</p>
+            </ProfileItemDiv>
+          )}
           <ProfileItemDiv onClick={onClickLogout}>
             <SVGIcon
               name='logout-icon'
