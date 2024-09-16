@@ -19,6 +19,7 @@ const Div = styled.div`
     word-wrap: break-word;
     max-width: 536px;
     div {
+      white-space: normal;
       p {
         padding: 0;
         span {
