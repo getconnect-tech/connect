@@ -4,7 +4,7 @@ import { ApiKey, Macros } from '@/utils/dataTypes';
 
 class SettingStore {
   loading = false;
-  apiKeys: ApiKey[] | null = null;
+  apiKeys: ApiKey[] = [];
   labels: Label[] | null = null;
   macros: Macros[] = [];
 
@@ -17,6 +17,7 @@ class SettingStore {
       // API Keys
       apiKeys: observable,
       setAPIKeys: action,
+      removeAPIKey: action,
 
       // Labels
       labels: observable,
@@ -42,6 +43,13 @@ class SettingStore {
   // set API keys
   setAPIKeys(value: ApiKey[]) {
     this.apiKeys = value;
+  }
+
+  removeAPIKey(value: string) {
+    const index = this.apiKeys.findIndex(
+      (apiKeys) => apiKeys.api_key === value,
+    );
+    if (index !== undefined && index !== -1) this.apiKeys.splice(index, 1);
   }
 
   // set labels
