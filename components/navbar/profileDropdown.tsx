@@ -42,14 +42,8 @@ export const useOutsideClick = (callback: () => void) => {
 export default function ProfileDropdown({ title, onClose }: Props) {
   const router = useRouter();
   const dropDownRef = useOutsideClick(onClose);
-  const { userStore, workspaceStore } = useStores();
-  const { user } = userStore;
+  const { workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
-  const isSetting = currentWorkspace?.users.find((item) => {
-    if (item.id === user?.id)
-      return item.role === 'ADMIN' || item.role === 'OWNER';
-    else return false;
-  });
 
   const onClickLogout = useCallback(async () => {
     await logout();
@@ -70,7 +64,7 @@ export default function ProfileDropdown({ title, onClose }: Props) {
           </OrganizationProfile>
         </Frame1>
         <Frame2>
-          {isSetting && (
+          {currentWorkspace?.role !== 'MEMBER' && (
             <ProfileItemDiv
               onClick={() => {
                 router.push('/setting');
