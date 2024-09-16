@@ -1,4 +1,5 @@
 import React, { SyntheticEvent, useCallback, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import Icon from '../icon/icon';
 import Input from '../input/input';
 import Button from '../button/button';
@@ -6,13 +7,16 @@ import { BottomDiv, Header, Label, MainDiv, Title } from './style';
 import { createAPIKey } from '@/services/clientSide/settingServices';
 import { getAPIErrorMessage } from '@/helpers/common';
 import { messageStore } from '@/stores/messageStore';
+import { useStores } from '@/stores';
 
 interface Props {
   onClose: () => void;
   loadData: () => void;
 }
 
-function CreateKeyModal({ onClose, loadData }: Props) {
+const CreateKeyModal = ({ onClose, loadData }: Props) => {
+  const { settingStore } = useStores();
+  const { loading } = settingStore || {};
   const [keyName, setKeyName] = useState<string>('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,11 +78,16 @@ function CreateKeyModal({ onClose, loadData }: Props) {
             variant='medium'
             onClick={onClose}
           />
-          <Button type='submit' title='Create' variant='medium' />
+          <Button
+            type='submit'
+            title='Create'
+            variant='medium'
+            isLoading={loading}
+          />
         </div>
       </BottomDiv>
     </MainDiv>
   );
-}
+};
 
-export default CreateKeyModal;
+export default observer(CreateKeyModal);
