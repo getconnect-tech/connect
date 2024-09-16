@@ -33,12 +33,10 @@ const TagDiv = styled.div`
   .submenu-upwards {
     bottom: calc(100% - 20px);
     top: auto;
-    background-color: red;
   }
 
   .submenu-downwards {
     bottom: auto;
-    background-color: yellow;
   }
 `;
 
