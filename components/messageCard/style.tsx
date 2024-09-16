@@ -40,6 +40,7 @@ const CardMessage = styled.p`
     font-size: 14px !important;
     color: var(--text) !important;
     font-family: unset !important;
+    white-space: normal;
     p {
       br {
         display: none;
@@ -51,6 +52,11 @@ const CardMessage = styled.p`
     ol {
       margin-left: 20px;
     }
+  }
+  hr {
+    border-bottom: var(--border-main) !important;
+    border: none;
+    margin-bottom: 5px;
   }
 `;
 
