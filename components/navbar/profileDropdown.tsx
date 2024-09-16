@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { UserRole } from '@prisma/client';
 import {
   Description,
   Frame1,
@@ -64,7 +65,8 @@ export default function ProfileDropdown({ title, onClose }: Props) {
           </OrganizationProfile>
         </Frame1>
         <Frame2>
-          {currentWorkspace?.role !== 'MEMBER' && (
+          {(currentWorkspace?.role === UserRole.ADMIN ||
+            currentWorkspace?.role === UserRole.OWNER) && (
             <ProfileItemDiv
               onClick={() => {
                 router.push('/setting');
