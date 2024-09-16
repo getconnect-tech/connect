@@ -56,6 +56,7 @@ export const TextPreviewDiv = styled.div`
 
 export const Content = styled.div`
   display: flex;
+  align-items: center;
   gap: 6px;
   position: absolute;
   bottom: 8px;
@@ -87,4 +88,5 @@ export const FileDetail = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2px;
+  justify-content: center;
 `;
