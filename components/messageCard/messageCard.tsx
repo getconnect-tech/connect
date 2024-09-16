@@ -94,6 +94,7 @@ export default function MessageCard({
                   iconViewBox={''}
                   onMouseLeave={handleMouseLeave} // Ensure dropdown also hides when mouse leaves the dropdown area
                   style={{ right: 12, maxWidth: 146, width: '100%' }}
+                  isSeen={true}
                 />
               )}
             </TagDiv>

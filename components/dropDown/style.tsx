@@ -9,6 +9,7 @@ interface Props {
   isContextMenu?: boolean;
   isShowSubmenu?: boolean;
   isDelete?: boolean;
+  isSeen?:boolean
 }
 
 const MainDiv = styled.div<Props>`
@@ -135,6 +136,11 @@ const ItemLeftDiv = styled.div<Props>`
             : '--text-text-secondary'}
     );
     white-space: nowrap;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: ${({isSeen}) => isSeen ? '96px' : 'unset'};
   }
   svg {
     fill: var(${({ isSelected }) => (isSelected ? '--icon-active' : '--icon')});
