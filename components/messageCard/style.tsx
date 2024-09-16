@@ -30,6 +30,14 @@ const TagDiv = styled.div`
     cursor: pointer;
     color: var(--text);
   }
+  .submenu-upwards {
+    bottom: calc(100% - 20px);
+    top: auto;
+  }
+
+  .submenu-downwards {
+    bottom: auto;
+  }
 `;
 
 const CardMessage = styled.p`
