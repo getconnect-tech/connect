@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useState } from 'react';
 import moment from 'moment';
 import RenderHtml from '../renderHtml';
@@ -21,12 +22,19 @@ import {
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { ReadBy } from '@/utils/dataTypes';
 
+interface Attachment {
+  documentText: string;
+  fileSize: string;
+  fileName: string;
+}
+
 interface Props {
   title: string;
   time: Date;
   subTitle: string;
   message: string;
   readBy?: ReadBy[];
+  attachments?: Attachment[];
 }
 
 export default function MessageCard({
@@ -35,6 +43,14 @@ export default function MessageCard({
   subTitle,
   message,
   readBy,
+  attachments = [
+    {
+      documentText: '',
+      fileSize: '236kb',
+      fileName: 'Demo Attachment',
+    },
+    // Add more dummy attachments if needed
+  ],
 }: Props) {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [submenuPosition, setSubmenuPosition] = useState<
@@ -132,15 +148,24 @@ export default function MessageCard({
         <CardMessage>
           <RenderHtml htmlstring={message} />
         </CardMessage>
-        <AttachmentMainDiv>
-          <TitleDiv>
-            <Title>4 Attachments</Title>
-            <DownloadButton>Download All</DownloadButton>
-          </TitleDiv>
-          <FileCardMainDiv>
-            <FileCard />
-          </FileCardMainDiv>
-        </AttachmentMainDiv>
+        {attachments.length > 0 && ( // Render attachments section only if there are attachments
+          <AttachmentMainDiv>
+            <TitleDiv>
+              <Title>{`${attachments.length} Attachment${attachments.length > 1 ? 's' : ''}`}</Title>
+              <DownloadButton>Download All</DownloadButton>
+            </TitleDiv>
+            <FileCardMainDiv>
+              {attachments.map((attachment, index) => (
+                <FileCard
+                  key={index}
+                  documentText={attachment.documentText}
+                  fileSize={attachment.fileSize}
+                  fileName={attachment.fileName}
+                />
+              ))}
+            </FileCardMainDiv>
+          </AttachmentMainDiv>
+        )}
       </MessageCardInnerDiv>
     </MessageCardMainDiv>
   );
