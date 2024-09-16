@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { UserRole } from '@prisma/client';
 import {
   Description,
   Frame1,
@@ -11,6 +12,7 @@ import {
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { logout } from '@/services/clientSide/authService';
+import { useStores } from '@/stores';
 interface Props {
   title: string;
   onClose: () => void;
@@ -41,6 +43,8 @@ export const useOutsideClick = (callback: () => void) => {
 export default function ProfileDropdown({ title, onClose }: Props) {
   const router = useRouter();
   const dropDownRef = useOutsideClick(onClose);
+  const { workspaceStore } = useStores();
+  const { currentWorkspace } = workspaceStore;
 
   const onClickLogout = useCallback(async () => {
     await logout();
@@ -61,19 +65,22 @@ export default function ProfileDropdown({ title, onClose }: Props) {
           </OrganizationProfile>
         </Frame1>
         <Frame2>
-          <ProfileItemDiv
-            onClick={() => {
-              router.push('/setting');
-            }}
-          >
-            <SVGIcon
-              name='setting-icon'
-              width='12px'
-              height='12px'
-              viewBox='0 0 12 12'
-            />
-            <p>Settings</p>
-          </ProfileItemDiv>
+          {(currentWorkspace?.role === UserRole.ADMIN ||
+            currentWorkspace?.role === UserRole.OWNER) && (
+            <ProfileItemDiv
+              onClick={() => {
+                router.push('/setting');
+              }}
+            >
+              <SVGIcon
+                name='setting-icon'
+                width='12px'
+                height='12px'
+                viewBox='0 0 12 12'
+              />
+              <p>Settings</p>
+            </ProfileItemDiv>
+          )}
           <ProfileItemDiv onClick={onClickLogout}>
             <SVGIcon
               name='logout-icon'
