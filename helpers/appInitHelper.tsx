@@ -48,7 +48,7 @@ export const appInit: any = async () => {
         );
         await getWorkspaceById(workspaceList[0]?.id);
         await getLabels();
-        return true;
+        return { type: APP_INIT_RESPONSE_TYPE.REDIRECT, path: '/inbox' };
       }
       // If workspace length greater than 1 AND current workspace not exist in local
       else if (
@@ -64,7 +64,7 @@ export const appInit: any = async () => {
       else if (currentWorkspace && isFoundWorkspace) {
         await getWorkspaceById(currentWorkspace);
         await getLabels();
-        return true;
+        return { type: APP_INIT_RESPONSE_TYPE.REDIRECT, path: '/inbox' };
       }
     }
   }
