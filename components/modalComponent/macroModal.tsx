@@ -1,21 +1,81 @@
-import React from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import Input from '../input/input';
 import RichTextBox from '../commentBox';
 import Button from '../button/button';
 import { BottomDiv, Header, Label, MainDiv } from './style';
+import { useStores } from '@/stores';
+import {
+  createMacros,
+  updateMacros,
+} from '@/services/clientSide/settingServices';
+import { messageStore } from '@/stores/messageStore';
 
+interface MacroData {
+  index: number;
+  title: string;
+  description: string;
+}
 interface Props {
   onClose: () => void;
+  macroData?: MacroData;
 }
-function MacroModal({ onClose }: Props) {
+function MacroModal({ onClose, macroData }: Props) {
+  // Create new label and update label
+  const { settingStore } = useStores();
+  const { loading } = settingStore || {};
+  const [title, setTitle] = useState<string>(macroData?.title || '');
+  const [description, setDescription] = useState<string>(
+    macroData?.description || '',
+  );
+  const handleMacrosSubmit = useCallback(
+    async (e: React.SyntheticEvent) => {
+      e.preventDefault();
+      if (description.trim() === '' || title.trim() === '') {
+        messageStore.setErrorMessage(
+          'Both title and description are required.',
+        );
+        return;
+      }
+      const payload = { content: description, title };
+      try {
+        if (macroData) {
+          // Update existing macro
+          const result = await updateMacros(macroData?.index, payload);
+          if (result) {
+            settingStore.updateMacros(macroData?.index, result);
+          }
+        } else {
+          // Create new macro
+          const result = await createMacros(payload);
+          if (result) {
+            settingStore.addMacros(result);
+          }
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      } finally {
+        onClose();
+      }
+    },
+    [title, description, settingStore, onClose],
+  );
+
   return (
     <MainDiv className='macro-main-div'>
       <Header>Edit Macro</Header>
-      <BottomDiv>
+      <BottomDiv onSubmit={handleMacrosSubmit}>
         <div className='content'>
           <div>
             <Label>Title</Label>
-            <Input placeholder={'Enter the title'} className='input' />
+            <Input
+              placeholder={'Enter the title'}
+              className='input'
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setTitle(e.target.value)
+              }
+              value={title}
+            />
           </div>
           <div className='text-field'>
             <Label>Description</Label>
@@ -25,6 +85,8 @@ function MacroModal({ onClose }: Props) {
               isInlineToolbar={false}
               className='rich-text'
               placeholder='Enter description'
+              valueContent={description}
+              setValueContent={setDescription}
             />
           </div>
         </div>
@@ -35,11 +97,11 @@ function MacroModal({ onClose }: Props) {
             onClick={onClose}
             variant='medium'
           />
-          <Button title='Save' variant='medium' />
+          <Button title='Save' variant='medium' isLoading={loading} />
         </div>
       </BottomDiv>
     </MainDiv>
   );
 }
 
-export default MacroModal;
+export default observer(MacroModal);

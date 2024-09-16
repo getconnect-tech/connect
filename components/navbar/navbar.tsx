@@ -1,12 +1,11 @@
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
 import DropDown from '../dropDown/dropDown';
 import Modal from '../modal/modal';
 import ContactUsModal from '../contactUsModal/contactUsModal';
 import Avatar from '../avtar/Avtar';
-import Icon from '../icon/icon';
 import {
   ItemMainDiv,
   Label,
@@ -36,14 +35,18 @@ const navbarMenu = {
 function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { workspaceStore } = useStores();
+  const { workspaceStore, settingStore, ticketStore, userStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
+  const { labels } = settingStore || {};
+  const { ticketList } = ticketStore || {};
+  const { user } = userStore || {};
   const [isOpen, setIsOpen] = useState(false);
   const [isSupportDropdown, setSupportDropdown] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(
     navbarMenu.Inbox,
   );
+  // State to store the previous open ticket count
   const openSupportDropdown = useCallback(() => {
     setSupportDropdown(true);
   }, []);
@@ -60,10 +63,7 @@ function Navbar() {
     setIsOpen((prev) => !prev);
   }, []);
 
-  useEffect(() => {
-    if (pathname === '/') setActiveIndex(navbarMenu.Inbox);
-    else if (pathname === '/contact') setActiveIndex(navbarMenu.Contacts);
-  }, []);
+  useEffect(() => {}, []);
 
   const handleModalClose = useCallback(() => {
     setIsModalOpen(false);
@@ -80,6 +80,18 @@ function Navbar() {
   const handleSupportClick = useCallback(() => {
     setIsModalOpen(true);
   }, []);
+
+  const labelItem = (labels || [])?.map((label) => ({
+    labelId: label.id,
+    name: label.name,
+    icon: label.icon,
+  }));
+
+  const openTicketCount = useMemo(() => {
+    return ticketList?.filter(
+      (ticket) => ticket.status === 'OPEN' && ticket.assigned_to === user?.id,
+    ).length;
+  }, [ticketList]);
 
   return (
     <>
@@ -99,50 +111,53 @@ function Navbar() {
                 />
                 <p>{workspaceStore?.currentWorkspace?.name || ''}</p>
               </OrganizationNameDiv>
-              <Icon
+              {/* <Icon
                 onClick={() => {}}
                 iconName={'sidebar-icon'}
                 iconSize={'16'}
                 iconViewBox={'0 0 16 16'}
                 className='icon'
-              />
+              /> */}
             </LogoDiv>
             {isOpen && (
-              <ProfileDropdown title='My Profile' onClose={closeDropdown} />
+              <ProfileDropdown
+                title={workspaceStore?.currentWorkspace?.name || ''}
+                onClose={closeDropdown}
+              />
             )}
           </div>
-          <NavbarItem
+          {/* <NavbarItem
             title='Getting started'
             icon='started-icon'
             isActive={activeIndex === 0}
             onClickItem={() => handleClick(0)}
-          />
+          /> */}
           <ItemMainDiv>
             <NavbarItem
               title='Inbox'
-              count={4}
+              count={openTicketCount}
               icon='inbox-icon'
-              isActive={activeIndex === 1}
-              onClickItem={() => handleClick(1, '/')}
+              isActive={pathname === '/inbox'}
+              onClickItem={() => handleClick(1, '/inbox')}
             />
             <NavbarItem
               title='Unassigned'
               icon='unassign-icon'
-              isActive={activeIndex === 2}
-              onClickItem={() => handleClick(2)}
+              isActive={pathname === '/unassigned'}
+              onClickItem={() => handleClick(2, '/unassigned')}
             />
             <NavbarItem
               title='All'
               icon='all-icon'
-              isActive={activeIndex === 3}
-              onClickItem={() => handleClick(3)}
+              isActive={pathname === '/' || pathname === '/tickets'}
+              onClickItem={() => handleClick(3, '/tickets')}
             />
           </ItemMainDiv>
           <ItemMainDiv>
             <NavbarItem
               title='Contacts'
               icon='contact-icon'
-              isActive={activeIndex === 4}
+              isActive={pathname === '/contact'}
               onClickItem={() => handleClick(4, '/contact')}
             />
             <NavbarItem
@@ -154,24 +169,21 @@ function Navbar() {
           </ItemMainDiv>
           <ItemMainDiv>
             <Label>Label</Label>
-            <NavbarItem
-              title='Bug'
-              icon='bug-icon'
-              isActive={activeIndex === 6}
-              onClickItem={() => handleClick(6)}
-            />
-            <NavbarItem
-              title='Question'
-              icon='question-icon'
-              isActive={activeIndex === 7}
-              onClickItem={() => handleClick(7)}
-            />
-            <NavbarItem
-              title='Feedback'
-              icon='feedback-icon'
-              isActive={activeIndex === 8}
-              onClickItem={() => handleClick(8)}
-            />
+            {labelItem.map((item, index) => (
+              <div key={index} className='label-item'>
+                {item.icon && (
+                  <NavbarItem
+                    title={item.name}
+                    icon={item.icon}
+                    isActive={pathname === `/tickets/labels/${item.labelId}`}
+                    onClickItem={() =>
+                      handleClick(8, `/tickets/labels/${item.labelId}`)
+                    }
+                    label={true}
+                  />
+                )}
+              </div>
+            ))}
           </ItemMainDiv>
         </TopDiv>
         <div className='tag-div'>

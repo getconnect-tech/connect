@@ -36,7 +36,7 @@ import {
   inviteUsersToWorkspace,
 } from '@/services/clientSide/workspaceServices';
 import { isEmpty } from '@/helpers/common';
-import { colors } from '@/styles/colors';
+
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import Icon from '@/components/icon/icon';
 
@@ -84,7 +84,7 @@ function OnboardingStep1() {
   }, [inputField]);
 
   const handleRemoveInputField = (index: number) => {
-    const newInputField = inputField.filter((_, i) => i !== index);
+    const newInputField = inputField?.filter((_, i) => i !== index);
     setInputField(newInputField);
   };
 
@@ -109,7 +109,7 @@ function OnboardingStep1() {
   };
 
   const handleGetStarted = async () => {
-    const usersToInvite = inputField.filter(
+    const usersToInvite = inputField?.filter(
       ({ displayName, email }) => !isEmpty(displayName) && !isEmpty(email),
     );
     const result = await inviteUsersToWorkspace(usersToInvite);
@@ -167,7 +167,7 @@ function OnboardingStep1() {
                     title={'Select a Team Size'}
                     selectedValue={workspaceTeamSize}
                     style={{
-                      color: workspaceTeamSize && colors.text,
+                      color: workspaceTeamSize && 'var(--text)', // Use CSS variable for color
                     }}
                     iconName={
                       teamDropdownOpen ? 'up-arrow-icon' : 'down-arrow-icon'
@@ -187,7 +187,7 @@ function OnboardingStep1() {
                     title={'Select a Industry'}
                     selectedValue={workspaceIndustry}
                     style={{
-                      color: workspaceIndustry && colors.text,
+                      color: workspaceIndustry && 'var(--text)',
                     }}
                     iconName={
                       industryDropdownOpen ? 'up-arrow-icon' : 'down-arrow-icon'

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const MainDiv = styled.div`
@@ -19,11 +18,11 @@ export const MainDiv = styled.div`
   }
   h6 {
     ${Typography.body_md_semibold};
-    color: ${colors.text};
+    color: var(--text);
   }
   p {
     ${Typography.body_md_regular};
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
     text-align: center;
   }
 `;
@@ -34,12 +33,10 @@ export const IconDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   border-radius: 50%;
-  box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow_2};
+  box-shadow: var(--shadow-card);
   svg {
-    fill: ${colors.icon};
+    fill: var(--icon);
   }
 `;

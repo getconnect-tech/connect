@@ -1,7 +1,7 @@
+/* eslint-disable indent */
 /* eslint-disable prettier/prettier */
 /* eslint-disable max-len */
 import styled, { css } from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 interface Props {
@@ -22,11 +22,9 @@ export const ProfileDetail = styled.div<Props>`
   ${(props) =>
     props.isOpen &&
     css`
-      background-color: ${colors.bg_white};
+      background-color: var(--bg-white);
       border-radius: 12px;
-      box-shadow:
-        0px 0px 0px 0.5px ${colors.box_shadow},
-        0px 2px 4px 0px ${colors.box_shadow_2};
+      box-shadow: var(--shadow-card);
     `}
 `;
 
@@ -34,7 +32,7 @@ export const Head = styled.div`
   display: flex;
   flex-direction: column;
   padding: 12px 0px;
-  border-bottom: 0.5px solid ${colors.border_hover};
+  border-bottom: var(--border-light-hover);
   gap: 1px;
   &:last-child {
     border: none;
@@ -43,18 +41,18 @@ export const Head = styled.div`
 
 export const StepName = styled.div`
   ${Typography.body_sm_regular}
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
   cursor: pointer;
 `;
 
 export const StepContent = styled.div`
   ${Typography.body_md_medium}
-  color: ${colors.text};
+  color: var(--text);
 `;
 
 export const Description = styled.div`
   ${Typography.body_md_regular}
-  color: ${colors.text};
+  color: var(--text);
 `;
 
 export const Div = styled.div`
@@ -64,7 +62,7 @@ export const Div = styled.div`
   padding-bottom: 16px;
   p {
     ${Typography.body_md_medium}
-    color: ${colors.brand_fill_hover};
+    color:var(--brand-fill-hover);
   }
   .input {
     max-width: 320px;
@@ -77,9 +75,9 @@ export const InputDiv = styled.div`
   flex-direction: column;
   gap: 12px;
   svg {
-    fill: ${colors.icon_disable};
+    fill: var(--icon-disabled);
     :hover {
-      fill: ${colors.icon_active};
+      fill: var(--icon-active);
       cursor: pointer;
     }
   }
@@ -91,11 +89,11 @@ export const CheckBox = styled.div<Props>`
   margin-top: 4px;
   p {
     ${Typography.body_md_regular}
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
     ${(props) =>
-    props.isChecked &&
+      props.isChecked &&
       css`
-        color: ${colors.text};
+        color: var(--text);
       `}
   }
 `;
@@ -109,8 +107,8 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   appearance: none;
   width: 16px;
   height: 16px;
-  background-color: ${colors.bg_white};
-  border: 1px solid ${colors.border_input_border};
+  background-color: var(--bg-white);
+  border: var(--border-secondary);
   border-radius: 4px;
   display: inline-block;
   position: relative;
@@ -118,7 +116,7 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   cursor: pointer;
 
   &:checked {
-    background-color: ${colors.brand};
+    background-color: var(--brand);
     // eslint-disable-next-line prettier/prettier
     background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
     background-size: 10px 10px;
@@ -146,20 +144,20 @@ export const Table = styled.table`
     right: 12px;
     svg {
       cursor: pointer;
-      fill: ${colors.icon_disable};
+      fill: var(--icon-disabled);
     }
     &:hover {
-      background-color: ${colors.bg_surface_secondary};
+      background-color: var(--bg-surface-secondary);
       border-radius: 50%;
       svg {
-        fill: ${colors.icon_active};
+        fill: var(--icon-active);
       }
     }
   }
 
   thead {
-    background-color: ${colors.bg_white};
-    border-bottom: 1px solid ${colors.border};
+    background-color: var(--bg-white);
+    border-bottom: var(--border-main);
   }
 
   th,
@@ -170,17 +168,17 @@ export const Table = styled.table`
 
   th {
     ${Typography.body_md_medium}
-    color: ${colors.text};
+    color: var(--text);
   }
 
   td {
     ${Typography.body_md_regular}
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
     position: relative;
   }
 
   tr {
-    border-bottom: 1px solid ${colors.border};
+    border-bottom: var(--border-main);
 
     &:last-child {
       border-bottom: none;
@@ -190,7 +188,7 @@ export const Table = styled.table`
 export const TableWrapper = styled.div`
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid ${colors.border};
+  border: var(--border-main);
 `;
 
 export const EmailAddressDiv = styled.div`
@@ -202,7 +200,7 @@ export const EmailAddressDiv = styled.div`
   max-width: 519px;
   width: 100%;
   height: 36px;
-  border: 1px solid ${colors.border_input_border};
+  border: var(--border-secondary);
   p {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -210,6 +208,6 @@ export const EmailAddressDiv = styled.div`
     overflow: hidden;
     word-break: break-all;
     ${Typography.body_md_medium};
-    color: ${colors.text};
+    color: var(--text);
   }
 `;

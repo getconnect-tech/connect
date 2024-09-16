@@ -1,4 +1,10 @@
-import { Label, MessageType, Prisma, User } from '@prisma/client';
+import {
+  EmailEventType,
+  Label,
+  MessageType,
+  Prisma,
+  User,
+} from '@prisma/client';
 import { prisma } from '@/prisma/prisma';
 
 export const postMessage = async ({
@@ -35,7 +41,13 @@ export const postMessage = async ({
 export const getTicketMessages = async (ticketId: string) => {
   const messages = await prisma.message.findMany({
     where: { ticket_id: ticketId },
-    include: { author: true },
+    include: {
+      author: true,
+      email_events: {
+        where: { event: EmailEventType.OPENED },
+        select: { created_at: true, extra: true },
+      },
+    },
     orderBy: { created_at: 'asc' },
   });
 
@@ -51,6 +63,7 @@ export const getTicketMessages = async (ticketId: string) => {
   // Fetch data of all assignees in a single batch
   const usersData = await prisma.user.findMany({
     where: { id: { in: allAssigneeIds } },
+    include: { tickets_rel: true },
   });
 
   // Create map with assignee id -> user object
@@ -79,23 +92,80 @@ export const getTicketMessages = async (ticketId: string) => {
     labelsMap.set(label.id, label);
   }
 
+  // Collect email Ids of all distinct Contact emails
+  const allContactEmails = Array.from(
+    new Set(messages.map((x) => x.email_events.map((y) => y.extra)).flat()),
+  );
+
+  // Fetch all Contacts by emails
+  const contactsData = await prisma.contact.findMany({
+    where: { email: { in: allContactEmails } },
+    select: { email: true, name: true, id: true },
+  });
+
+  // Create map with email id -> contact object
+  const contactsMap = new Map<string, (typeof contactsData)[number]>();
+  for (const contact of contactsData) {
+    contactsMap.set(contact.email, contact);
+  }
+
   // Format messages by injecting respective data
-  const formattedMessages = messages.map((message) => {
+  const formattedMessages = messages.map((m) => {
+    const { email_events, ...message } = m;
+    const read_by = email_events.map((event) => {
+      const email = event.extra;
+      const contact = contactsMap.get(email)!;
+
+      return {
+        ...contact,
+        seen_at: event.created_at,
+      };
+    });
+
     switch (message.type) {
       case MessageType.CHANGE_ASSIGNEE: {
         const assignee = message.reference_id
           ? usersMap.get(message.reference_id)!
           : null;
-        return { ...message, assignee, label: null };
+        return { ...message, read_by, assignee, label: null };
       }
       case MessageType.CHANGE_LABEL: {
         const label = labelsMap.get(message.reference_id)!;
-        return { ...message, label, assignee: null };
+        return { ...message, read_by, label, assignee: null };
       }
       default:
-        return { ...message, label: null, assignee: null };
+        return { ...message, read_by, label: null, assignee: null };
     }
   });
 
   return formattedMessages;
+};
+
+export const createEmailEvent = async (
+  messageId: string,
+  { eventType, extra }: { eventType: EmailEventType; extra: string },
+) => {
+  const newEvent = await prisma.emailEvent.create({
+    data: { event: eventType, extra, message_id: messageId },
+  });
+
+  return newEvent;
+};
+
+export const getTicketEmailEvents = async (ticketId: string) => {
+  const emailEvents = await prisma.emailEvent.findMany({
+    where: { message: { ticket_id: ticketId } },
+  });
+
+  return emailEvents;
+};
+
+export const updateUserLastSeen = async (ticketId: string, userId: string) => {
+  const updatedLastSeen = await prisma.ticketUser.upsert({
+    where: { ticket_user_id: { ticket_id: ticketId, user_id: userId } },
+    create: { ticket_id: ticketId, user_id: userId },
+    update: { last_seen: new Date() },
+  });
+
+  return updatedLastSeen;
 };

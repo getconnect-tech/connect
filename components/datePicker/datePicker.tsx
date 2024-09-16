@@ -1,6 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import { TimePicker, TimePickerProps } from 'antd';
+import moment from 'moment';
+import { MessageType, TicketStatus } from '@prisma/client';
 import Icon from '../icon/icon';
 import Input from '../input/input';
 import Button from '../button/button';
@@ -12,26 +14,45 @@ import {
   Label,
   MainDiv,
 } from './style';
+import { ticketStore } from '@/stores/ticketStore';
+import { TicketDetailsInterface } from '@/utils/appTypes';
+import { getUniqueId } from '@/helpers/common';
+import { MessageDetails } from '@/utils/dataTypes';
+import { snoozeTicket } from '@/services/clientSide/ticketServices';
+import { useStores } from '@/stores';
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
-const onChange: TimePickerProps['onChange'] = (time, timeString) => {
-  console.log(time, timeString);
-};
-
 interface Props {
   onClose: () => void;
+  style?: React.CSSProperties;
+  isContextMenu?: boolean;
+  // eslint-disable-next-line no-unused-vars
+  handleChangeSnooze?: ({ item }: any) => void;
+  ticketDetails?: TicketDetailsInterface | null;
+  className?: string;
+  ticketIndex?: number;
 }
 
-function DatePickerModal({ onClose }: Props) {
-  const [value, setValue] = useState<Value>(new Date());
+function DatePickerModal({
+  onClose,
+  style,
+  isContextMenu = false,
+  ticketDetails,
+  className,
+  ticketIndex,
+}: Props) {
+  const [dateValue, setDateValue] = useState<Value>(new Date());
   const [dateInput, setDateInput] = useState<string>(
     new Date().toLocaleDateString('en-US'),
   );
+  const [timeValue, setTimeValue] = useState<string | null>(null);
   const [submenuPosition, setSubmenuPosition] = useState<
     'upwards' | 'downwards'
   >('downwards');
+  const { userStore } = useStores();
+  const { user } = userStore || {};
 
   useEffect(() => {
     // Calculate initial position when the component mounts
@@ -57,32 +78,93 @@ function DatePickerModal({ onClose }: Props) {
   }, []);
 
   const handleDateChange = (date: Value) => {
-    setValue(date);
+    setDateValue(date);
     const formattedDate =
       date instanceof Date ? date.toLocaleDateString('en-US') : '';
     setDateInput(formattedDate);
   };
 
-  const handleSnooze = useCallback(() => {
-    onClose();
-  }, [onClose]);
-
-  const handleCancel = useCallback(() => {
-    onClose();
-  }, [onClose]);
+  const onChange: TimePickerProps['onChange'] = (time, timeString) => {
+    if (typeof timeString === 'string') {
+      setTimeValue(timeString);
+    } else {
+      setTimeValue(null);
+    }
+  };
 
   const handleModalClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
   };
 
+  const handleSubmit = useCallback(
+    async (e: React.SyntheticEvent) => {
+      e.preventDefault();
+      if (dateValue instanceof Date && timeValue) {
+        try {
+          //handle AM/PM
+          const timeMoment = moment(timeValue, ['h:mm A']);
+
+          if (!timeMoment.isValid()) {
+            console.error('Invalid time format');
+            return;
+          }
+          // handle date formate
+          const formattedDate = new Date(dateValue);
+          formattedDate.setHours(timeMoment.hours(), timeMoment.minutes());
+
+          const isoString = formattedDate.toISOString();
+
+          const payload = { snoozeUntil: isoString };
+          const newMessage = {
+            assignee: null,
+            author: user,
+            author_id: user!.id,
+            content: moment(isoString).format('DD MMMM LT'),
+            id: getUniqueId(),
+            created_at: new Date(),
+            label: null,
+            reference_id: 'SNOOZE',
+            ticket_id: ticketDetails?.id,
+            type: MessageType.CHANGE_STATUS,
+          } as MessageDetails;
+          if (ticketDetails?.id) {
+            const updatedTicketDetails = {
+              ...(ticketDetails || {}),
+              status: TicketStatus.OPEN,
+              snooze_until: new Date(isoString || ''),
+            };
+            // add data in mobX store
+            if (typeof ticketIndex === 'number') {
+              ticketStore.updateTicketListItem(
+                ticketIndex,
+                updatedTicketDetails,
+              );
+            }
+            ticketStore.addTicketMessage(newMessage);
+            ticketStore.setTicketDetails(updatedTicketDetails);
+            // api call for change ticket status
+            await snoozeTicket(ticketDetails?.id, payload);
+            onClose();
+          }
+        } catch (e) {
+          console.log('Error : ', e);
+        }
+      } else {
+        console.error('Invalid date or time');
+      }
+    },
+    [ticketDetails, timeValue, dateValue],
+  );
+
   return (
-    <MainDiv onClick={handleModalClick}>
+    <MainDiv onClick={handleModalClick} isContextMenu={isContextMenu}>
       <div
         className={`modal-content ${
           submenuPosition === 'upwards'
             ? 'submenu-upwards'
             : 'submenu-downwards'
-        }`}
+        } ${className || ''}`}
+        style={style}
       >
         <Header>
           <Icon
@@ -97,12 +179,12 @@ function DatePickerModal({ onClose }: Props) {
         <CalendarDiv>
           <Calendar
             onChange={handleDateChange}
-            value={value}
+            value={dateValue}
             defaultActiveStartDate={new Date()}
             minDate={new Date()}
           />
         </CalendarDiv>
-        <InputMainDiv>
+        <InputMainDiv onSubmit={handleSubmit}>
           <Inputs>
             <div>
               <Label>Date</Label>
@@ -131,13 +213,13 @@ function DatePickerModal({ onClose }: Props) {
             <Button
               title='Cancel'
               secondary={true}
-              onClick={handleCancel}
+              onClick={onClose}
               variant='medium'
             />
             <Button
+              type='submit'
               title='Snooze'
               disabled={false}
-              onClick={handleSnooze}
               variant='medium'
             />
           </div>

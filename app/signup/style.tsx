@@ -1,11 +1,10 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const MainDiv = styled.div`
   display: flex;
   justify-content: center;
-  background-color: ${colors.bg_surface};
+  background-color: var(--bg-surface);
   height: 100vh;
   align-items: center;
 `;
@@ -48,12 +47,12 @@ export const Bottom = styled.div`
   gap: 4px;
   p {
     ${Typography.body_md_regular}
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
     text-align: center;
   }
   a {
     ${Typography.body_md_medium}
-    color: ${colors.text_link};
+    color:var(--text-link);
     cursor: pointer;
   }
 `;
@@ -66,7 +65,7 @@ export const CodeSection = styled.form`
   text-align: center;
   p {
     margin-top: -24px;
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
     ${Typography.body_md_regular};
   }
   span {
@@ -79,11 +78,11 @@ export const CodeSection = styled.form`
 export const TimeText = styled.div<{ isActive?: boolean }>`
   display: flex;
   ${Typography.body_md_medium};
-  color: ${colors.text};
+  color: var(--text);
   gap: 8px;
 
   a {
-    color: ${({ isActive }) => (isActive ? colors.text : colors.text_disabled)};
+    color: var(${({ isActive }) => (isActive ? '--text' : '--text-disabled')});
     cursor: pointer;
   }
 `;

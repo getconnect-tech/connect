@@ -37,9 +37,9 @@ export const getApiDetails = async (apiKey: string) => {
 };
 
 export const deleteApiKey = async (apiKey: string) => {
-  const deletedApiKey = await prisma.apiKeys.delete({
+  const deletedKey = await prisma.apiKeys.delete({
     where: { api_key: apiKey },
   });
 
-  return deletedApiKey;
+  return deletedKey;
 };

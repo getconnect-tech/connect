@@ -2,6 +2,7 @@ import React from 'react';
 import Avatar from '../avtar/Avtar';
 import { StatusDiv, StatusTitle } from './styles';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import LabelSvgIcon from '@/assets/icons/labelIcons';
 
 interface Props {
   isActive: boolean;
@@ -14,6 +15,9 @@ interface Props {
   ref?: React.Ref<HTMLDivElement>;
   style?: React.CSSProperties;
   svgStyle?: React.CSSProperties;
+  isCheckbox?: boolean;
+  tagIconSize?: string;
+  tagIconViewBox?: string;
 }
 
 export default function Tag({
@@ -26,7 +30,12 @@ export default function Tag({
   style,
   src,
   svgStyle,
+  isCheckbox,
+  tagIconSize = '12',
+  tagIconViewBox = '0 0 12 12',
 }: Props) {
+  const IconComponent = isCheckbox ? LabelSvgIcon : SVGIcon;
+
   return (
     //apply className while open drop down
     <StatusDiv
@@ -39,12 +48,12 @@ export default function Tag({
       {isName ? (
         <Avatar name={title || ''} imgSrc={src || ''} size={20} />
       ) : (
-        <SVGIcon
+        <IconComponent
           name={iconName}
-          width='12'
-          height='12'
+          width={tagIconSize}
+          height={tagIconSize}
           className='icon'
-          viewBox='0 0 12 12'
+          viewBox={tagIconViewBox}
           style={svgStyle}
         />
       )}

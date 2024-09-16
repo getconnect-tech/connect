@@ -1,14 +1,21 @@
 import { z } from 'zod';
-import { MessageType } from '@prisma/client';
+import { EmailEventType, Message, MessageType } from '@prisma/client';
 import { handleApiError } from '@/helpers/errorHandler';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
-import { getTicketMessages, postMessage } from '@/services/serverSide/message';
+import {
+  createEmailEvent,
+  getTicketMessages,
+  postMessage,
+  updateUserLastSeen,
+} from '@/services/serverSide/message';
 import { contentSchema, messageTypeSchema } from '@/lib/zod/message';
 import { sendEmailAsReply } from '@/helpers/emails';
 import { getWorkspaceEmailConfig } from '@/services/serverSide/workspace';
 
 export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
+    await updateUserLastSeen(ticketId, req.user.id);
+
     const messages = await getTicketMessages(ticketId);
 
     return Response.json(messages, { status: 200 });
@@ -28,6 +35,7 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
     RequestBody.parse(requestBody);
 
     const { content, type } = requestBody as z.infer<typeof RequestBody>;
+    const userId = req.user.id;
 
     if (type === MessageType.REGULAR) {
       const newMessage = await postMessage({
@@ -35,8 +43,10 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
         messageType: type,
         referenceId: '',
         ticketId,
-        authorId: req.user.id,
+        authorId: userId,
       });
+
+      await updateUserLastSeen(ticketId, userId);
 
       return Response.json(newMessage, { status: 201 });
     }
@@ -54,23 +64,41 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
         );
       }
 
-      const mailId = await sendEmailAsReply({
-        ticketId,
-        body: content,
-        senderEmail: emailConfig.primaryEmail,
-      });
+      let newMessage: Message;
+      try {
+        const mailId = await sendEmailAsReply({
+          ticketId,
+          body: content,
+          senderEmail: emailConfig.primaryEmail,
+        });
 
-      if (!mailId) {
-        return Response.json({ error: 'Ticket not found!' }, { status: 404 });
+        if (!mailId) {
+          return Response.json({ error: 'Ticket not found!' }, { status: 404 });
+        }
+
+        newMessage = await postMessage({
+          messageContent: content,
+          messageType: type,
+          referenceId: mailId,
+          ticketId: ticketId,
+          authorId: req.user.id,
+        });
+      } catch (err: any) {
+        newMessage = await postMessage({
+          messageContent: content,
+          messageType: type,
+          referenceId: '',
+          ticketId: ticketId,
+          authorId: req.user.id,
+        });
+
+        await createEmailEvent(newMessage.id, {
+          eventType: EmailEventType.FAILED,
+          extra: err.message,
+        });
       }
 
-      const newMessage = await postMessage({
-        messageContent: content,
-        messageType: type,
-        referenceId: mailId,
-        ticketId: ticketId,
-        authorId: req.user.id,
-      });
+      await updateUserLastSeen(ticketId, userId);
 
       return Response.json(newMessage, { status: 201 });
     }

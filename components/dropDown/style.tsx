@@ -2,24 +2,20 @@
 /* eslint-disable max-len */
 /* eslint-disable indent */
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 interface Props {
   isSelected?: boolean;
-  isHovered?: boolean;
   isContextMenu?: boolean;
   isShowSubmenu?: boolean;
   isDelete?: boolean;
+  isSeen?:boolean
 }
 
 const MainDiv = styled.div<Props>`
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   border-radius: 12px;
-  box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 4px 8px 0px ${colors.box_shadow},
-    0px 8px 24px 0px ${colors.box_shadow};
+  box-shadow: var(--shadow-dropdown);
   position: ${({ isContextMenu }) => (isContextMenu ? 'relative' : 'absolute')};
   margin-top: 4px;
   z-index: 2;
@@ -33,11 +29,11 @@ const MainDiv = styled.div<Props>`
   max-height: 185px;
   overflow: auto;
   .date-time-text {
-    border-top: 1px solid ${colors.border};
+    border-top: var(--border-main);
   }
 `;
 
-const ItemDiv = styled.div`
+const ItemDiv = styled.div<Props>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -45,21 +41,36 @@ const ItemDiv = styled.div`
   padding: 4px 8px;
   cursor: pointer;
   p {
-    ${Typography.body_sm_regular};
-    color: ${colors.text_text_secondary};
-    white-space: nowrap;
+    ${Typography.body_md_regular};
+    color: var(
+      ${({ isSelected, isDelete }) =>
+        isSelected
+          ? '--text'
+          : isDelete
+            ? '--fill-danger'
+            : '--text-text-secondary'}
+    );
   }
   &:hover {
-    background-color: ${colors.bg_white_hover};
+    background-color: var(--bg-white-hover);
     border-radius: 8px;
+    p {
+      color: var(
+        ${({ isSelected, isDelete }) =>
+          isSelected ? '--text' : isDelete ? '--fill-danger' : '--text'}
+      );
+    }
+    svg {
+      fill: var(--icon-active);
+    }
   }
 `;
 const SearchDiv = styled.div`
   padding: 0 0 0 12px;
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: var(--border-main);
   position: sticky;
   top: 0;
-  background: ${colors.bg_white};
+  background: var(--bg-white);
   z-index: 2;
   .input {
     border: none;
@@ -76,6 +87,9 @@ const SearchDiv = styled.div`
 `;
 
 const ItemMainDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
   margin: 4px;
 `;
 
@@ -89,8 +103,8 @@ const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   appearance: none;
   width: 16px;
   height: 16px;
-  background-color: ${colors.bg_white};
-  border: 1px solid ${colors.border_input_border};
+  background-color: var(--bg-white);
+  border: var(--border-secondary);
   border-radius: 4px;
   display: inline-block;
   position: relative;
@@ -98,11 +112,12 @@ const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   cursor: pointer;
 
   &:checked {
-    background-color: ${colors.brand};
+    background-color: var(--brand);
     background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;
+    border: none;
   }
 `;
 
@@ -112,22 +127,31 @@ const ItemLeftDiv = styled.div<Props>`
   gap: 8px;
   p {
     ${Typography.body_md_regular};
-    color: ${({ isSelected, isHovered, isDelete }) =>
-      isSelected
-        ? colors.text
-        : isHovered
-          ? colors.text
+    color: var(
+      ${({ isSelected, isDelete }) =>
+        isSelected
+          ? '--text'
           : isDelete
-            ? colors.fill_danger
-            : colors.text_text_secondary};
+            ? '--fill-danger'
+            : '--text-text-secondary'}
+    );
+    white-space: nowrap;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: ${({isSeen}) => isSeen ? '96px' : 'unset'};
   }
   svg {
-    fill: ${({ isSelected, isHovered }) =>
-      isSelected
-        ? colors.icon_active
-        : isHovered
-          ? colors.icon_active
-          : colors.icon};
+    fill: var(${({ isSelected }) => (isSelected ? '--icon-active' : '--icon')});
+  }
+  &:hover {
+    p {
+      color: var(
+        ${({ isSelected, isDelete }) =>
+          isSelected ? '--text' : isDelete ? '--fill-danger' : '--text'}
+      );
+    }
   }
 `;
 
@@ -140,15 +164,21 @@ const DateTimeTextDiv = styled.div`
   cursor: pointer;
   p {
     ${Typography.body_md_regular};
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
   &:hover {
-    background-color: ${colors.bg_white_hover};
+    background-color: var(--bg-white-hover);
     border-radius: 8px;
     p {
-      color: ${colors.text};
+      color: var(--text);
     }
   }
+`;
+
+const ItemName = styled.div`
+  ${Typography.body_sm_regular};
+  color: var(--text-text-secondary);
+  white-space: nowrap;
 `;
 
 export {
@@ -159,4 +189,5 @@ export {
   StyledCheckbox,
   ItemLeftDiv,
   DateTimeTextDiv,
+  ItemName,
 };

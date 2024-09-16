@@ -86,6 +86,7 @@ function ApiKey() {
                     currentOpenDropdown={currentOpenDropdown}
                     setCurrentOpenDropdown={setCurrentOpenDropdown}
                     dropdownIdentifier={`card-${apiKey.api_key}`}
+                    apiKey={apiKey.api_key || ''}
                   />
                 ))}
               </MainCardDiv>
@@ -94,7 +95,7 @@ function ApiKey() {
         </MainDiv>
       </Main>
       <Modal open={keyModal} onClose={onCloseKeyModal}>
-        <CreateKeyModal onClose={onCloseKeyModal} />
+        <CreateKeyModal onClose={onCloseKeyModal} loadData={loadData} />
       </Modal>
     </>
   );

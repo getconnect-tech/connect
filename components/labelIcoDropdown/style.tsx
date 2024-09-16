@@ -1,14 +1,10 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const MainDiv = styled.div`
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   border-radius: 12px;
-  box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 4px 8px 0px ${colors.box_shadow},
-    0px 8px 24px 0px ${colors.box_shadow};
+  box-shadow: var(--shadow-dropdown);
   position: absolute;
   margin-top: 4px;
   z-index: 2;
@@ -28,10 +24,10 @@ export const MainDiv = styled.div`
 
 export const SearchDiv = styled.div`
   padding: 0 0 0 12px;
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: var(--border-main);
   position: sticky;
   top: 0;
-  background: ${colors.bg_white};
+  background: var(--bg-white);
   z-index: 2;
   .input {
     border: none;

@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 interface Props {
   active?: boolean;
@@ -21,28 +20,28 @@ export const IconDiv = styled.div`
   right: 20px;
   padding: 6px;
   svg {
-    fill: ${colors.icon};
+    fill: var(--icon);
   }
   &:hover {
     cursor: pointer;
     border-radius: 50px;
-    background-color: ${colors.bg_surface_secondary_hover};
+    background-color: var(--bg-surface-secondary-hover);
     svg {
-      fill: ${colors.icon_hover};
+      fill: var(--icon-hover);
     }
   }
 `;
 export const TopBlock = styled.div`
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: var(--border-main);
   gap: 1px;
   padding-bottom: 12px;
 `;
 export const Title = styled.div`
   padding: 4px 12px;
   ${Typography.body_sm_semibold}
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
   margin-bottom: 5px;
 `;
 export const NavItems = styled.div`
@@ -54,19 +53,19 @@ export const Item = styled.div<Props>`
   display: flex;
   padding: 4px 12px;
   ${Typography.body_md_regular}
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
   &:hover {
     cursor: pointer;
     border-radius: 50px;
-    color: ${colors.text};
-    background-color: ${colors.bg_surface_active};
+    color: var(--text);
+    background-color: var(--bg-surface-active);
   }
   ${({ active }) =>
     active &&
     css`
       border-radius: 50px;
-      color: ${colors.text};
-      background-color: ${colors.bg_surface_active};
+      color: var(--text);
+      background-color: var(--bg-surface-active);
     `}
 `;
 export const BottomBlock = styled.div`

@@ -7,6 +7,7 @@ class TicketStore {
   ticketList: TicketDetailsInterface[] = [];
   ticketDetails: TicketDetailsInterface | null = null;
   messages: MessageDetails[] = [];
+  filteredTicketList: TicketDetailsInterface[] = [];
 
   constructor() {
     makeObservable(this, {
@@ -30,6 +31,10 @@ class TicketStore {
       messages: observable,
       setTicketMessages: action,
       addTicketMessage: action,
+
+      // Inbox ticket List
+      filteredTicketList: observable,
+      setFilteredTicketList: action,
     });
   }
 
@@ -47,11 +52,15 @@ class TicketStore {
   resetTicketData() {
     this.loading = false;
     this.ticketList = [];
+    this.filteredTicketList = [];
     this.ticketDetails = null;
   }
 
   updateTicketListItem(index: number, value: TicketDetailsInterface) {
-    this.ticketList[index] = value;
+    this.filteredTicketList[index] = value;
+    this.ticketList = this.ticketList?.map((ticket) =>
+      ticket?.id === value?.id ? value : ticket,
+    );
   }
 
   // Ticket Details actions
@@ -66,6 +75,37 @@ class TicketStore {
 
   addTicketMessage(value: MessageDetails) {
     this.messages = [...(this.messages || []), value];
+  }
+
+  // set filtered ticket list
+  setFilteredTicketList(tab: string, ticketList: TicketDetailsInterface[]) {
+    // Get the current time
+    const currentTime = new Date();
+
+    // Initialize arrays to hold filtered tickets
+    const closedTickets: TicketDetailsInterface[] = [];
+    const snoozeTicket: TicketDetailsInterface[] = [];
+    const openTickets: TicketDetailsInterface[] = [];
+
+    // Iterate through ticketList and categorize tickets
+    ticketList.forEach((ticket: TicketDetailsInterface) => {
+      if (ticket.status === 'CLOSED') {
+        closedTickets.push(ticket);
+      } else if (ticket.status === 'OPEN') {
+        if (
+          ticket.snooze_until &&
+          new Date(ticket.snooze_until) > currentTime
+        ) {
+          snoozeTicket.push(ticket);
+        } else {
+          openTickets.push(ticket);
+        }
+      }
+    });
+
+    if (tab === 'Open') this.filteredTicketList = openTickets;
+    else if (tab === 'Snoozed') this.filteredTicketList = snoozeTicket;
+    else if (tab === 'Done') this.filteredTicketList = closedTickets;
   }
 }
 

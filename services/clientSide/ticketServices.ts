@@ -1,8 +1,8 @@
-/* eslint-disable no-undef */
 import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { ticketStore } from '@/stores/ticketStore';
 import { getAPIErrorMessage, isEmpty } from '@/helpers/common';
+import { messageStore } from '@/stores/messageStore';
 
 /**
  * @desc Get ticket list
@@ -54,7 +54,9 @@ export const getTicketList = async () => {
     ticketStore.setTicketList(data);
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -97,31 +99,9 @@ export const getTicketDetails = async (ticketId: string) => {
     ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
-    return null;
-  } finally {
-    ticketStore.setLoading(false);
-  }
-};
-
-/**
- * @desc Update ticket details
- * @param {*} ticketId
- */
-export const updateTicketDetails = async (ticketId: any, payload: object) => {
-  try {
-    ticketStore.setLoading(true);
-    const response = await axios.put(
-      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}`,
-      payload,
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
     );
-    const { data } = response;
-
-    // set ticket details in store
-    ticketStore.setTicketDetails(data);
-    return data;
-  } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -140,12 +120,11 @@ export const updateTicketPriority = async (ticketId: any, payload: object) => {
       payload,
     );
     const { data } = response;
-
-    // set ticket details in store
-    ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -170,7 +149,9 @@ export const getTicketMessages = async (ticketId: string) => {
     }
     return false;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -190,11 +171,34 @@ export const changeTicketStatus = async (ticketId: any, payload: object) => {
     );
     const { data } = response;
 
-    // set ticket details in store
-    ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    ticketStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc Snooze ticket
+ * @param {*} ticketId
+ */
+export const snoozeTicket = async (ticketId: any, payload: object) => {
+  try {
+    ticketStore.setLoading(true);
+    const response = await axios.put(
+      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}/snooze`,
+      payload,
+    );
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -213,11 +217,11 @@ export const updateAssignee = async (ticketId: string, payload: object) => {
       payload,
     );
     const { data } = response;
-    // set ticket details in store
-    ticketStore.setTicketDetails(data);
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     ticketStore.setLoading(false);
@@ -239,7 +243,58 @@ export const sendMessage = async (ticketId: string, payload: object) => {
     const { data } = response;
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    ticketStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc Add label into ticket
+ * @param {*} ticketId
+ * @param {*} labelId
+ */
+export const addLabelToTicket = async (ticketId: string, labelId: string) => {
+  try {
+    ticketStore.setLoading(true);
+    const response = await axios.post(
+      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}/labels/${labelId}`,
+    );
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    ticketStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc Delete label from ticket
+ * @param {*} ticketId
+ * @param {*} labelId
+ */
+export const deleteLabelFromTicket = async (
+  ticketId: string,
+  labelId: string,
+) => {
+  try {
+    ticketStore.setLoading(true);
+    const response = await axios.delete(
+      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}/labels/${labelId}`,
+    );
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     ticketStore.setLoading(false);

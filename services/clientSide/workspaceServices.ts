@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { TeamSize, UserRole } from '@prisma/client';
 import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
@@ -7,6 +6,7 @@ import { getAPIErrorMessage, isEmpty } from '@/helpers/common';
 import { CurrentWorkspace } from '@/utils/dataTypes';
 import { UpdateRole } from '@/utils/appTypes';
 import { ticketStore } from '@/stores/ticketStore';
+import { messageStore } from '@/stores/messageStore';
 
 /**
  * @desc Create Workspace
@@ -38,7 +38,9 @@ export const createWorkspace = async (
 
     return newWorkspace;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     workspaceStore.setLoading(false);
@@ -58,11 +60,12 @@ export const inviteUsersToWorkspace = async (
     // Check for empty displayName or email in usersToInvite array
     for (const user of usersToInvite) {
       if (isEmpty(user.displayName)) {
-        alert('Name is required for user.');
+        messageStore.setErrorMessage('Name is required for user.');
         return false;
       }
       if (isEmpty(user.email)) {
-        alert('Email is required for user.');
+        messageStore.setErrorMessage('Email is required for user.');
+
         return false;
       }
     }
@@ -79,10 +82,12 @@ export const inviteUsersToWorkspace = async (
         },
       },
     );
-    if (data) alert('User invited succesfully');
+    if (data) messageStore.setSuccessMessage('User invited succesfully');
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     workspaceStore.setLoading(false);
@@ -103,7 +108,9 @@ export const getWorkspaceList = async () => {
       return data;
     }
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     workspaceStore.setLoading(false);
@@ -126,7 +133,9 @@ export const getWorkspaceById = async (workspaceId: string) => {
       return data;
     }
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     workspaceStore.setLoading(false);
@@ -147,11 +156,13 @@ export const updateWorkspaceDetails = async (payload: {
       `${NEXT_PUBLIC_API_URL}/workspaces`,
       payload,
     );
-    if (result) alert('Workspace details updated');
+    if (result) messageStore.setSuccessMessage('Workspace details updated');
     return true;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
-    return false;
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
   } finally {
     workspaceStore.setLoading(false);
   }
@@ -171,13 +182,15 @@ export const updateRole = async (payload: UpdateRole) => {
     if (result) {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       payload.role === UserRole.ADMIN
-        ? alert('Make Admin')
-        : alert('Remove from admin');
+        ? messageStore.setSuccessMessage('Updated admin role successfully.')
+        : messageStore.setSuccessMessage('Admin role removed successfully.');
     }
     return true;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
-    return false;
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
   } finally {
     workspaceStore.setLoading(false);
   }
@@ -193,11 +206,13 @@ export const removeMemberFromWorkspace = async (userId: string) => {
     const result = await axios.delete(
       `${NEXT_PUBLIC_API_URL}/workspaces/users/${userId}`,
     );
-    if (result) alert('User Deleted');
+    if (result) messageStore.setSuccessMessage('User Deleted');
     return true;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
-    return false;
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
   } finally {
     workspaceStore.setLoading(false);
   }
@@ -213,7 +228,9 @@ export const workspaceChange = async (workspaceId: string) => {
     const result = getWorkspaceById(workspaceId);
     return result;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   }
 };
@@ -228,11 +245,35 @@ export const removeInviteUsersFromWorkspace = async (userId: string) => {
     const result = await axios.delete(
       `${NEXT_PUBLIC_API_URL}/workspaces/inviteUsers/${userId}`,
     );
-    if (result) alert('Invite User Removed');
+    if (result) messageStore.setSuccessMessage('Invite User Removed');
     return true;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
-    return false;
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    workspaceStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc Re invited user from workspace
+ * @param {*} userId
+ */
+export const reInviteUsersFromWorkspace = async (userId: string) => {
+  try {
+    workspaceStore.setLoading(true);
+    const result = await axios.post(
+      `${NEXT_PUBLIC_API_URL}/workspaces/inviteUsers/${userId}/reinvite`,
+    );
+    if (result) messageStore.setSuccessMessage('User Reinvited');
+    return true;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
   } finally {
     workspaceStore.setLoading(false);
   }

@@ -1,4 +1,5 @@
 import { PriorityLevels, TeamSize } from '@prisma/client';
+import moment from 'moment';
 
 export const industryItems = [
   { name: 'Technology and Software' },
@@ -27,11 +28,6 @@ export const priorityItem = [
     value: PriorityLevels.MEDIUM,
   },
   { name: 'Low', icon: 'priority-LOW', value: PriorityLevels.LOW },
-];
-export const labelItem = [
-  { name: 'Bug', icon: 'bug-icon' },
-  { name: 'Question', icon: 'question-icon' },
-  { name: 'Feedback', icon: 'feedback-icon' },
 ];
 export const modeItem = [
   { name: 'Email', icon: 'email-icon' },
@@ -84,8 +80,27 @@ export const labelIcons = [
   { iconName: 'shield-icon' },
 ];
 export const snoozeItem = [
-  { name: 'Later today', time: '3:00 AM' },
-  { name: 'This evening', time: '6:00 PM' },
-  { name: 'Tomorrow', time: 'Sat, Aug 17, 9:00 AM' },
-  { name: 'Next week', time: 'Mon, Aug 20, 9:00 AM' },
+  {
+    name: 'Later today',
+    value: moment().set({ hour: 15, minute: 0, second: 0 }).toISOString(),
+  },
+  {
+    name: 'This evening',
+    value: moment().set({ hour: 18, minute: 0, second: 0 }).toISOString(),
+  },
+  {
+    name: 'Tomorrow',
+    value: moment()
+      .add(1, 'days')
+      .set({ hour: 9, minute: 0, second: 0 })
+      .toISOString(),
+  },
+  {
+    name: 'Next week',
+    value: moment()
+      .clone()
+      .day(8)
+      .set({ hour: 9, minute: 0, second: 0 })
+      .toISOString(),
+  },
 ];

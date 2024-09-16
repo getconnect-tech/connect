@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
 import { CountText, ItemDiv, LeftDiv, Title } from './style';
+import LabelSvgIcon from '@/assets/icons/labelIcons';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { colors } from '@/styles/colors';
 
 interface Props {
   title: string;
@@ -10,24 +10,25 @@ interface Props {
   icon: string;
   isActive?: boolean;
   onClickItem: () => void;
+  label?: boolean;
 }
 
 function NavbarItem(props: Props) {
-  const { title, isActive, count, icon, onClickItem } = props;
+  const { title, isActive, count, icon, onClickItem, label } = props;
+  const IconComponent = label ? LabelSvgIcon : SVGIcon;
 
   return (
     <ItemDiv isActive={isActive} onClick={onClickItem}>
-      <LeftDiv>
-        <SVGIcon
+      <LeftDiv isActive={isActive}>
+        <IconComponent
           name={icon}
           width='12'
           height='12'
-          fill={isActive ? colors.icon_hover : colors.icon}
-          viewBox='0 0 12 12'
+          viewBox={label ? '0 0 16 16' : '0 0 12 12'}
         />
         <Title isActive={isActive}>{title}</Title>
       </LeftDiv>
-      {count && count > 0 && <CountText>{count}</CountText>}
+      {count !== undefined && count > 0 && <CountText>{count}</CountText>}
     </ItemDiv>
   );
 }

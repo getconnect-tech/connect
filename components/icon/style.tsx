@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import { colors } from '@/styles/colors';
 
 interface Props {
   size?: boolean;
@@ -14,20 +13,20 @@ export const IconDiv = styled.div<Props>`
   align-items: center;
   justify-content: center;
   svg {
-    fill: ${colors.icon};
+    fill: var(--icon);
   }
   &:hover {
     cursor: pointer;
     border-radius: 50px;
-    background-color: ${colors.bg_surface_secondary_hover};
+    background-color: var(--bg-surface-secondary-hover);
     svg {
-      fill: ${colors.icon_hover};
+      fill: var(--icon-hover);
     }
   }
   ${(props) =>
     props.isActive &&
     css`
-      background-color: ${colors.bg_surface_secondary};
+      background-color: var(--bg-surface-secondary);
       border-radius: 50%;
     `}
 `;

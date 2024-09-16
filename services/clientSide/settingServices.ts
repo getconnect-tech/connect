@@ -1,9 +1,8 @@
-/* eslint-disable no-undef */
 import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { getAPIErrorMessage } from '@/helpers/common';
 import { settingStore } from '@/stores/settingStore';
-import { workspaceStore } from '@/stores/workspaceStore';
+import { messageStore } from '@/stores/messageStore';
 
 /**
  * @desc Get all API key
@@ -22,7 +21,9 @@ export const getAPIKeys = async () => {
     }
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     settingStore.setLoading(false);
@@ -33,20 +34,70 @@ export const getAPIKeys = async () => {
  * @desc  create API key
  * @param {*} payload { "title": "" }
  */
-export const createAPIKey = async (title: string) => {
+export const createAPIKey = async (payload: { name: string }) => {
   try {
-    workspaceStore.setLoading(true);
+    settingStore.setLoading(true);
     const response = await axios.post(
       `${NEXT_PUBLIC_API_URL}/workspaces/apikeys`,
-      { title },
+      payload,
     );
     const { data } = response;
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
-    workspaceStore.setLoading(false);
+    settingStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc Delete API key
+ * @param {*}
+ */
+export const deleteAPIKey = async (APIKey: string) => {
+  try {
+    settingStore.setLoading(true);
+    const result = await axios.delete(
+      `${NEXT_PUBLIC_API_URL}/workspaces/apiKeys/${APIKey}`,
+    );
+    if (result) messageStore.setSuccessMessage('API Deleted');
+    return true;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    settingStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc Get all labels
+ * @param {*}
+ */
+export const getLabels = async () => {
+  try {
+    settingStore.setLoading(true);
+    const response = await axios.get(
+      `${NEXT_PUBLIC_API_URL}/workspaces/labels`,
+    );
+    const { data } = response;
+    if (data?.length > 0) {
+      settingStore.setLabels(data);
+      return data;
+    }
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    settingStore.setLoading(false);
   }
 };
 
@@ -64,7 +115,9 @@ export const createLabel = async (payload: object) => {
     const { data } = response;
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
     settingStore.setLoading(false);
@@ -78,7 +131,7 @@ export const createLabel = async (payload: object) => {
  */
 export const updateLabelDetails = async (labelId: string, payload: object) => {
   try {
-    workspaceStore.setLoading(true);
+    settingStore.setLoading(true);
     const response = await axios.put(
       `${NEXT_PUBLIC_API_URL}/workspaces/labels/${labelId}`,
       payload,
@@ -86,10 +139,12 @@ export const updateLabelDetails = async (labelId: string, payload: object) => {
     const { data } = response;
     return data;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return null;
   } finally {
-    workspaceStore.setLoading(false);
+    settingStore.setLoading(false);
   }
 };
 
@@ -103,11 +158,102 @@ export const deleteLabel = async (labelId: string) => {
     const result = await axios.delete(
       `${NEXT_PUBLIC_API_URL}/workspaces/labels/${labelId}`,
     );
-    if (result) alert('Label Deleted');
+    if (result) messageStore.setSuccessMessage('Label Deleted');
     return true;
   } catch (err: any) {
-    alert(getAPIErrorMessage(err) || 'Something went wrong!');
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
     return false;
+  } finally {
+    settingStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc  get macros
+ * @param {*} payload
+ */
+export const getMacros = async () => {
+  try {
+    settingStore.setLoading(true);
+    const response = await axios.get(`${NEXT_PUBLIC_API_URL}/macros`);
+    const { data } = response;
+    if (data?.length > 0) {
+      settingStore.setMacros(data);
+      return data;
+    }
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    settingStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc  create macros
+ * @param {*} payload { "title" , "content"}
+ */
+export const createMacros = async (payload: object) => {
+  try {
+    settingStore.setLoading(true);
+    const response = await axios.post(`${NEXT_PUBLIC_API_URL}/macros`, payload);
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    settingStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc  update macros
+ * @param {*} payload { "title" , "content"}
+ */
+export const updateMacros = async (macrosId: number, payload: object) => {
+  try {
+    settingStore.setLoading(true);
+    const response = await axios.put(
+      `${NEXT_PUBLIC_API_URL}/macros/${macrosId}`,
+      payload,
+    );
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    settingStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc  Delete macros
+ * @param {*} macrosId
+ */
+export const deleteMacros = async (macrosId: string) => {
+  try {
+    settingStore.setLoading(true);
+    const response = await axios.delete(
+      `${NEXT_PUBLIC_API_URL}/macros/${macrosId}`,
+    );
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
   } finally {
     settingStore.setLoading(false);
   }

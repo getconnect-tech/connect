@@ -1,15 +1,25 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { UserRole } from '@prisma/client';
+import { observer } from 'mobx-react-lite';
 import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import DropDown, { DropDownItem } from '../dropDown/dropDown';
+import Modal from '../modal/modal';
+import DeleteModal from '../deleteModal/deleteModal';
 import { CardDiv, LeftDiv, NameDiv, RightDiv } from './style';
 import { capitalizeString } from '@/helpers/common';
+import { HandleClickProps } from '@/utils/appTypes';
+import { useStores } from '@/stores';
+import {
+  reInviteUsersFromWorkspace,
+  removeInviteUsersFromWorkspace,
+  removeMemberFromWorkspace,
+  updateRole,
+} from '@/services/clientSide/workspaceServices';
 
 interface Props {
   userId: string;
   // eslint-disable-next-line no-unused-vars
-  handleClick?: (value: string | null, userId: string, status: string) => void;
   designation?: string;
   name: string;
   email: string;
@@ -18,11 +28,10 @@ interface Props {
   dropdownIdentifier?: string;
   // eslint-disable-next-line no-unused-vars
   setOpenDropdown: (dropdown: string | null) => void;
+  loadData: () => void;
+  isInvited: boolean;
 }
-
-function MemberCard({
-  userId,
-  handleClick,
+const MemberCard = ({
   designation,
   name,
   email,
@@ -30,7 +39,14 @@ function MemberCard({
   dropdownIdentifier,
   currentOpenDropdown,
   setOpenDropdown,
-}: Props) {
+  userId,
+  loadData,
+  isInvited,
+}: Props) => {
+  const { workspaceStore } = useStores();
+  const [deleteModal, setDeleteModal] = useState(false);
+  const { loading } = workspaceStore || {};
+
   let dropDownItem: DropDownItem[];
   if (designation === UserRole.OWNER) {
     dropDownItem = [];
@@ -53,11 +69,10 @@ function MemberCard({
   } else {
     dropDownItem = [
       {
-        name: 'Delete',
-        icon: 'delete-icon',
-        isDelete: true,
-        status: 'Pending',
+        name: 'Re Invite',
+        icon: 'admin-icon',
       },
+      { name: 'Delete', icon: 'delete-icon', isDelete: true },
     ];
   }
 
@@ -65,6 +80,80 @@ function MemberCard({
     const identifier = `${dropdownIdentifier}-member`;
     setOpenDropdown(currentOpenDropdown === identifier ? null : identifier);
   }, [dropdownIdentifier, currentOpenDropdown, setOpenDropdown]);
+
+  const onCloseDeleteModal = useCallback(() => {
+    setDeleteModal(false);
+  }, []);
+
+  const handleDelete = useCallback(async () => {
+    if (isInvited) {
+      try {
+        if (userId) {
+          const result = await removeInviteUsersFromWorkspace(userId);
+          if (result) {
+            workspaceStore.removeInvitedUserFromWorkspace(userId);
+          }
+        }
+      } catch (error) {
+        console.log('error', error);
+      }
+    } else {
+      try {
+        if (userId) {
+          const result = await removeMemberFromWorkspace(userId);
+          if (result) {
+            workspaceStore.removeUserFromWorkspace(userId);
+          }
+        }
+      } catch (error) {
+        console.log('error', error);
+      }
+    }
+    setDeleteModal(false);
+  }, [userId]);
+
+  const handleClick = useCallback(
+    async (props: HandleClickProps) => {
+      const { value } = props;
+
+      if (isInvited) {
+        // Handle invited users' actions
+        if (value === 'Delete') {
+          setDeleteModal(true); // Open delete modal
+        } else if (value === 'Re Invite') {
+          try {
+            if (userId) {
+              await reInviteUsersFromWorkspace(userId);
+            }
+          } catch (error) {
+            console.log('error', error);
+          }
+        }
+      } else {
+        // Handle regular members' actions
+        if (value === 'Make Admin' || value === 'Remove Admin') {
+          try {
+            workspaceStore.setLoading(true);
+            if (userId) {
+              const result = await updateRole({
+                userId,
+                role: value === 'Make Admin' ? UserRole.ADMIN : UserRole.MEMBER,
+              });
+              if (result) {
+                loadData();
+              }
+            }
+            workspaceStore.setLoading(false);
+          } catch (error) {
+            console.log('error', error);
+          }
+        } else if (value === 'Delete') {
+          setDeleteModal(true); // Open delete modal
+        }
+      }
+    },
+    [isInvited, userId, workspaceStore, loadData],
+  );
 
   return (
     <CardDiv>
@@ -79,31 +168,42 @@ function MemberCard({
         {designation && designation !== UserRole.MEMBER && (
           <h6>{capitalizeString(designation)}</h6>
         )}
-        <div style={{ position: 'relative' }} className='tag-div'>
-          <Icon
-            onClick={handleClickIcon}
-            iconName='three-dot-icon'
-            iconSize='16'
-            iconViewBox='0 0 16 16'
-            size={true}
-          />
-          {currentOpenDropdown === `${dropdownIdentifier}-member` && (
-            <DropDown
-              items={dropDownItem || []}
-              iconSize={'12'}
-              iconViewBox={'0 0 12 12'}
-              userId={userId}
-              handleClick={handleClick}
-              onClose={() => {
-                setOpenDropdown(null);
-              }}
-              style={{ right: 0, zIndex: 1 }}
+        {designation !== UserRole.OWNER && (
+          <div style={{ position: 'relative' }} className='tag-div'>
+            <Icon
+              onClick={handleClickIcon}
+              iconName='three-dot-icon'
+              iconSize='16'
+              iconViewBox='0 0 16 16'
+              size={true}
             />
-          )}
-        </div>
+            {currentOpenDropdown === `${dropdownIdentifier}-member` && (
+              <DropDown
+                items={dropDownItem || []}
+                iconSize={'12'}
+                iconViewBox={'0 0 12 12'}
+                handleClick={handleClick}
+                onClose={() => {
+                  setOpenDropdown(null);
+                }}
+                style={{ right: 0, zIndex: 1, minWidth: 143 }}
+              />
+            )}
+          </div>
+        )}
       </RightDiv>
+      <Modal open={deleteModal} onClose={onCloseDeleteModal}>
+        <DeleteModal
+          onClose={onCloseDeleteModal}
+          headTitle={'Delete Member'}
+          title={'Are you sure you want to delete this member?'}
+          description={'This action can’t be undone.'}
+          onDelete={handleDelete}
+          loading={loading}
+        />
+      </Modal>
     </CardDiv>
   );
-}
+};
 
-export default MemberCard;
+export default observer(MemberCard);

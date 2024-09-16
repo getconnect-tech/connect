@@ -1,36 +1,55 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 const MessageCardInnerDiv = styled.div`
-  background-color: ${colors.bg_white};
-  border: 1px solid ${colors.border};
+  background-color: var(--bg-white);
+  border: var(--border-main);
   border-radius: 12px;
   word-break: break-word;
 `;
 
 const CardTop = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 12px 12px 8px;
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: var(--border-main);
   p {
     ${Typography.body_md_regular};
-    color: ${colors.text_text_secondary};
-    margin-top: 4px;
+    color: var(--text-text-secondary);
+  }
+`;
+
+const TagDiv = styled.div`
+  padding: 4px 12px;
+  ${Typography.body_sm_regular}
+  color: var(--text-text-secondary);
+  background-color: var(--bg-surface-secondary);
+  border-radius: 30px;
+  &:hover {
+    cursor: pointer;
+    color: var(--text);
   }
 `;
 
 const CardMessage = styled.p`
   padding: 12px;
   ${Typography.body_md_regular};
-  color: ${colors.text};
+  color: var(--text);
   div {
     font-size: 14px !important;
-    color: ${colors.text} !important;
+    color: var(--text) !important;
     font-family: unset !important;
     p {
       br {
         display: none;
       }
+    }
+    ul {
+      margin-left: 18px;
+    }
+    ol {
+      margin-left: 20px;
     }
   }
 `;
@@ -47,15 +66,20 @@ const NameDiv = styled.div`
   align-items: center;
   span {
     ${Typography.body_md_regular}
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
 `;
 
 const NameTitle = styled.h6`
   ${Typography.body_md_regular}
-  color: ${colors.text};
+  color: var(--text);
 `;
 
+const CardHead = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
 export {
   MessageCardInnerDiv,
   CardTop,
@@ -63,4 +87,6 @@ export {
   MessageCardMainDiv,
   NameDiv,
   NameTitle,
+  TagDiv,
+  CardHead,
 };

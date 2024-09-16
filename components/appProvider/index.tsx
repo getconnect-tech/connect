@@ -7,6 +7,7 @@ import { Provider } from 'mobx-react';
 import { registerLicense } from '@syncfusion/ej2-base';
 import NavbarPage from '../navbar';
 import SettingAppProvider from '../settingAppProvider';
+import AlertMessage from '../alertMessages/alertMessage';
 import stores from '@/stores';
 import { appInit } from '@/helpers/appInitHelper';
 import { APP_INIT_RESPONSE_TYPE, ONBOARDING_ROUTES } from '@/global/constants';
@@ -59,9 +60,13 @@ export default function AppProvider({
 
   if (typeof window !== 'undefined')
     return pathname.startsWith('/setting') ? (
-      <SettingAppProvider>{children}</SettingAppProvider>
+      <SettingAppProvider>
+        <AlertMessage />
+        {children}
+      </SettingAppProvider>
     ) : (
       <Provider {...stores}>
+        <AlertMessage />
         {NavbarComponent}
         {children}
       </Provider>
@@ -70,11 +75,17 @@ export default function AppProvider({
   return (
     <StyleSheetManager sheet={styledComponentsStyleSheet.instance}>
       {pathname.startsWith('/setting') ? (
-        <SettingAppProvider>{children}</SettingAppProvider>
+        <SettingAppProvider>
+          <AlertMessage />
+          {children}
+        </SettingAppProvider>
       ) : (
         <>
           {NavbarComponent}
-          <Provider {...stores}>{children}</Provider>
+          <Provider {...stores}>
+            <AlertMessage />
+            {children}
+          </Provider>
         </>
       )}
     </StyleSheetManager>

@@ -1,19 +1,23 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
-/* eslint-disable max-len */
-/* eslint-disable no-unused-vars */
-import React, { useCallback, useState } from 'react';
+/* eslint-disable indent */
+import React, { SyntheticEvent, useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import moment from 'moment';
-import { PriorityLevels, TicketStatus } from '@prisma/client';
+import { MessageType, PriorityLevels, TicketStatus } from '@prisma/client';
+import { observer } from 'mobx-react-lite';
 import Avatar from '../avtar/Avtar';
 import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
 import AssigneeDropdown from '../AssigneeDropdown/dropDownWithTag';
 import Icon from '../icon/icon';
+import LabelDropdown from '../labelDropdown/labelDropdown';
+import DropDown from '../dropDown/dropDown';
+import DatePickerModal from '../datePicker/datePicker';
+import RenderHtml from '../renderHtml';
 import {
   CardDiv,
+  Description,
   DesTitle,
   DotIcon,
+  InternalMessageDiv,
   LeftDiv,
   LineDiv,
   NameText,
@@ -21,14 +25,17 @@ import {
   StatusMainDiv,
   TagDiv,
 } from './style';
-import { labelItem, priorityItem } from '@/helpers/raw';
+import { priorityItem, snoozeItem } from '@/helpers/raw';
 import { capitalizeString } from '@/helpers/common';
 import { useStores } from '@/stores';
-import { TicketDetailsInterface } from '@/utils/appTypes';
+import { HandleClickProps, TicketDetailsInterface } from '@/utils/appTypes';
 import {
   updateAssignee,
   changeTicketStatus,
   updateTicketPriority,
+  addLabelToTicket,
+  deleteLabelFromTicket,
+  snoozeTicket,
 } from '@/services/clientSide/ticketServices';
 
 interface Props {
@@ -37,27 +44,31 @@ interface Props {
   showDotIcon?: boolean;
   src: string;
   currentOpenDropdown: string | null;
+  // eslint-disable-next-line no-unused-vars
   setCurrentOpenDropdown: (dropdown: string | null) => void;
   dropdownIdentifier: string;
   loadData: () => void;
   ticketIndex: number;
 }
 
-export default function InboxCard({
+const InboxCard = ({
   ticketDetail,
   description,
-  showDotIcon = false,
+  showDotIcon,
   src,
   currentOpenDropdown,
   setCurrentOpenDropdown,
   dropdownIdentifier,
   ticketIndex,
-}: Props) {
-  const { title, created_at, source, contact, priority, assigned_to } =
+}: Props) => {
+  const { title, source, contact, priority, assigned_to, last_message } =
     ticketDetail;
   const router = useRouter();
-  const { ticketStore, workspaceStore } = useStores();
-  const { currentWorkspace } = workspaceStore;
+  const { ticketStore, workspaceStore, settingStore } = useStores();
+  const [snoozeDropdown, setSnoozeDropdown] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const { currentWorkspace } = workspaceStore || {};
+  const { labels } = settingStore || {};
 
   const handleDropdownClick = (dropdown: string) => {
     const identifier = `${dropdownIdentifier}-${dropdown}`;
@@ -72,10 +83,12 @@ export default function InboxCard({
 
   const handleMouseEnter = (
     e: React.MouseEvent<HTMLElement>,
+    // eslint-disable-next-line no-unused-vars
     setPosition: (position: 'upwards' | 'downwards') => void,
   ) => {
     const triggerElement = e.currentTarget;
     const rect = triggerElement.getBoundingClientRect();
+    // eslint-disable-next-line no-undef
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
 
@@ -125,11 +138,11 @@ export default function InboxCard({
    * @desc Update ticket details assign user in inbox card
    */
   const onChangeAssign = useCallback(async (item: { user_id: string }) => {
-    const payload = { assignee: item?.user_id };
+    const payload = { assignee: item?.user_id || null };
     try {
       const updatedTicketDetails = {
         ...(ticketDetail || {}),
-        assigned_to: item?.user_id,
+        assigned_to: item?.user_id || null,
       };
       ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
       await updateAssignee(ticketDetail?.id, payload);
@@ -145,23 +158,90 @@ export default function InboxCard({
   /*
    * @desc Close ticket
    */
-  const handleCloseTicket = useCallback(async () => {
-    const payload = { status: TicketStatus.CLOSED };
-    try {
-      if (ticketDetail?.id) {
-        ticketStore.updateTicketListItem(ticketIndex, {
-          ...ticketDetail,
-          status: TicketStatus.CLOSED,
-        });
-        await changeTicketStatus(ticketDetail?.id, payload);
+  const handleCloseTicket = useCallback(
+    async (e: React.MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation();
+      const payload = { status: TicketStatus.CLOSED };
+      try {
+        if (ticketDetail?.id) {
+          ticketStore.updateTicketListItem(ticketIndex, {
+            ...ticketDetail,
+            status: TicketStatus.CLOSED,
+          });
+          await changeTicketStatus(ticketDetail?.id, payload);
+        }
+      } catch (e) {
+        console.log('Error : ', e);
       }
-    } catch (e) {
-      console.log('Error : ', e);
-    }
-  }, [ticketDetail]);
+    },
+    [ticketDetail],
+  );
+
+  // add/remove label to ticket
+  const handleTicketLabel = useCallback(
+    async (props: HandleClickProps) => {
+      const { isChecked, labelId } = props;
+      try {
+        if (ticketDetail?.id && labelId) {
+          if (isChecked) {
+            const newLabel =
+              ticketDetail.labels.filter((item) => item.id !== labelId) || [];
+            ticketStore.updateTicketListItem(ticketIndex, {
+              ...(ticketDetail || {}),
+              labels: newLabel,
+            });
+            await deleteLabelFromTicket(ticketDetail?.id, labelId);
+          } else {
+            const newLabel = labels?.find((item) => item.id === labelId);
+            const ticketLabels = ticketDetail.labels || [];
+            if (newLabel) ticketLabels.push(newLabel);
+            ticketStore.updateTicketListItem(ticketIndex, {
+              ...(ticketDetail || {}),
+              labels: ticketLabels,
+            });
+            await addLabelToTicket(ticketDetail?.id, labelId);
+          }
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetail],
+  );
+
+  const onSnoozeIconClick = useCallback((e: SyntheticEvent) => {
+    e.stopPropagation();
+    setSnoozeDropdown(true);
+  }, []);
+
+  const handleChangeSnooze = useCallback(
+    async (props: HandleClickProps) => {
+      const { item } = props;
+      const payload = { snoozeUntil: item?.value };
+      try {
+        if (ticketDetail?.id) {
+          const updatedTicketDetails = {
+            ...(ticketDetail || {}),
+            status: TicketStatus.OPEN,
+            snooze_until: new Date(item?.value || ''),
+          };
+          // add data in mobX store
+          ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
+          // api call for change ticket status
+          await snoozeTicket(ticketDetail?.id, payload);
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetail],
+  );
 
   return (
-    <CardDiv onClick={onClickTicket}>
+    <CardDiv
+      isShowHoverItems={snoozeDropdown || showDatePicker}
+      onClick={onClickTicket}
+    >
       {showDotIcon && <DotIcon />}
       <LeftDiv>
         <div>
@@ -175,27 +255,49 @@ export default function InboxCard({
             {contact?.name} from {capitalizeString(source)}
           </NameText>
         </div>
-        <NameText>{moment(created_at).fromNow()}</NameText>
+        <NameText>
+          {moment(last_message && last_message.created_at).fromNow()}
+        </NameText>
       </LeftDiv>
       <RightDiv>
         <DesTitle>{title}</DesTitle>
-        <NameText className='description'>{description}</NameText>
+        {last_message?.type === MessageType.EMAIL ||
+        last_message?.type === MessageType.FROM_CONTACT ? (
+          <NameText className='description'>
+            <RenderHtml isSpreadIcon={false} htmlstring={description} />
+          </NameText>
+        ) : (
+          <InternalMessageDiv>
+            <Avatar
+              // eslint-disable-next-line max-len
+              imgSrc={last_message?.author?.profile_url || ''}
+              name={last_message?.author.display_name || ''}
+              size={24}
+            />
+            <Description>
+              <p>
+                <RenderHtml isSpreadIcon={false} htmlstring={description} />
+              </p>
+            </Description>
+          </InternalMessageDiv>
+        )}
+
         <StatusMainDiv>
           <div className='statusDiv'>
-            <DropDownWithTag
+            <LabelDropdown
+              handleClick={handleTicketLabel}
+              iconTitlePairs={
+                ticketDetail?.labels?.map((label) => ({
+                  iconName: label.icon,
+                  title: label.name,
+                })) || []
+              } // Updated to pass an array of icon-title pairs
+              onClose={() => {
+                setCurrentOpenDropdown(null);
+              }}
+              dropDown={currentOpenDropdown === `${dropdownIdentifier}-label`}
               onClick={() => handleDropdownClick('label')}
-              title={'Bug'}
-              iconName={'bug-icon'}
-              dropdownOpen={
-                currentOpenDropdown === `${dropdownIdentifier}-label`
-              }
-              onClose={() => setCurrentOpenDropdown(null)}
-              items={labelItem}
-              onChange={() => {}}
-              isTag={true}
-              isSearch={true}
-              isCheckbox={true}
-              isActive={true}
+              ticketLabelData={ticketDetail?.labels}
               className={
                 submenuPosition === 'upwards'
                   ? 'submenu-upwards'
@@ -254,17 +356,49 @@ export default function InboxCard({
                 />
               </div>
               <LineDiv />
-              <Icon
-                iconName='context-snooze-icon'
-                iconSize='12'
-                iconViewBox='0 0 12 12'
-                onClick={() => {}}
-                size={true}
-              />
+              <div>
+                <Icon
+                  iconName='context-snooze-icon'
+                  iconSize='12'
+                  iconViewBox='0 0 12 12'
+                  onClick={onSnoozeIconClick}
+                  size={true}
+                />
+                {snoozeDropdown && (
+                  <DropDown
+                    isSnooze={true}
+                    items={snoozeItem}
+                    iconSize={''}
+                    iconViewBox={''}
+                    handleClick={handleChangeSnooze}
+                    onChange={(item) => {
+                      if (item?.name === 'date&time') setShowDatePicker(true);
+                    }}
+                    onClose={() => {
+                      setSnoozeDropdown(false);
+                    }}
+                    style={{
+                      right: 10,
+                      maxWidth: 260,
+                      width: '100%',
+                      maxHeight: 'none',
+                    }}
+                  />
+                )}
+                {showDatePicker && (
+                  <DatePickerModal
+                    ticketIndex={ticketIndex}
+                    ticketDetails={ticketDetail}
+                    onClose={() => setShowDatePicker(false)}
+                    style={{ right: 10, top: 4, position: 'relative' }}
+                  />
+                )}
+              </div>
             </TagDiv>
           )}
         </StatusMainDiv>
       </RightDiv>
     </CardDiv>
   );
-}
+};
+export default observer(InboxCard);

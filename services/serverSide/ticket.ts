@@ -1,4 +1,5 @@
 import {
+  MessageType,
   PriorityLevels,
   Prisma,
   TicketSource,
@@ -18,6 +19,7 @@ type TicketWithPayload = Prisma.TicketGetPayload<{
 
 export const getWorkspaceTickets = async (
   workspaceId: string,
+  userId: string,
   lastUpdated?: string,
 ) => {
   const query: Prisma.TicketWhereInput = { workspace_id: workspaceId };
@@ -29,15 +31,80 @@ export const getWorkspaceTickets = async (
 
   const tickets = await prisma.ticket.findMany({
     where: query,
-    orderBy: { created_at: 'desc' },
     include: {
       labels: { include: { label: true } },
       contact: true,
       assigned_user: true,
+      messages: {
+        where: {
+          type: {
+            in: [
+              MessageType.FROM_CONTACT,
+              MessageType.EMAIL,
+              MessageType.REGULAR,
+            ],
+          },
+        },
+        select: {
+          created_at: true,
+          author: {
+            select: {
+              id: true,
+              email: true,
+              display_name: true,
+              profile_url: true,
+            },
+          },
+          content: true,
+          type: true,
+        },
+        take: 1,
+        orderBy: { created_at: 'desc' },
+      },
     },
   });
 
-  const formattedTickets = tickets.map(formatTicket);
+  const ticketIds = tickets.map((t) => t.id);
+
+  const ticketLastSeen = await prisma.ticketUser.findMany({
+    where: { ticket_id: { in: ticketIds }, user_id: userId },
+    select: { last_seen: true, ticket_id: true },
+  });
+
+  const ticketLastSeenMap = new Map<string, Date>();
+  ticketLastSeen.forEach((t) =>
+    ticketLastSeenMap.set(t.ticket_id, new Date(t.last_seen)),
+  );
+
+  const ticketsWithLastMessage = tickets.map((ticket) => {
+    const { messages, ...rest } = ticket;
+    const last_message = messages[0];
+
+    let has_read = false;
+    if (ticketLastSeenMap.has(ticket.id)) {
+      has_read =
+        ticketLastSeenMap.get(ticket.id)!.getTime() >=
+        new Date(last_message.created_at).getTime();
+    }
+
+    const newTicket = { ...rest, last_message, has_read };
+
+    return newTicket;
+  });
+
+  ticketsWithLastMessage.sort(
+    (a, b) =>
+      new Date(
+        b.last_message ? b.last_message.created_at : b.created_at,
+      ).getTime() -
+      new Date(
+        a.last_message ? a.last_message.created_at : a.created_at,
+      ).getTime(),
+  );
+
+  const formattedTickets = ticketsWithLastMessage.map(
+    formatTicket,
+  ) as any as (typeof ticketsWithLastMessage)[0][];
 
   return formattedTickets;
 };
@@ -147,10 +214,10 @@ export const addLabel = async (ticketId: string, labelId: string) => {
 };
 
 export const removeLabel = async (ticketId: string, labelId: string) => {
-  const res = await prisma.ticketLabel.deleteMany({
-    where: { ticket_id: ticketId, label_id: labelId },
+  const deletedTicket = await prisma.ticketLabel.delete({
+    where: { ticket_label_id: { ticket_id: ticketId, label_id: labelId } },
   });
-  return res;
+  return deletedTicket;
 };
 
 export const formatTicket = (ticket: TicketWithPayload) => {
@@ -176,11 +243,20 @@ export const updatePriority = async (
 export const updateStatus = async (
   ticketId: string,
   newStatus: TicketStatus,
+  snoozeUntil?: string,
 ) => {
+  const payload = {
+    status: newStatus,
+    snooze_until: snoozeUntil,
+  };
+
+  removeNullUndefined(payload);
+
   const updatedTicket = await prisma.ticket.update({
     where: { id: ticketId },
-    data: { status: newStatus },
+    data: payload,
   });
+
   return updatedTicket;
 };
 

@@ -3,7 +3,7 @@
 /* eslint-disable max-len */
 import React, { useCallback, useState } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
-import { PriorityLevels } from '@prisma/client';
+import { PriorityLevels, TicketStatus } from '@prisma/client';
 import DropDown from '../dropDown/dropDown';
 import DatePickerModal from '../datePicker/datePicker';
 import {
@@ -14,10 +14,14 @@ import {
   ContextMenuSubTrigger,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { labelItem, priorityItem, snoozeItem } from '@/helpers/raw';
+import { priorityItem, snoozeItem } from '@/helpers/raw';
 import { useStores } from '@/stores';
-import { TicketDetailsInterface } from '@/utils/appTypes';
+import { HandleClickProps, TicketDetailsInterface } from '@/utils/appTypes';
 import {
+  addLabelToTicket,
+  changeTicketStatus,
+  deleteLabelFromTicket,
+  snoozeTicket,
   updateAssignee,
   updateTicketPriority,
 } from '@/services/clientSide/ticketServices';
@@ -30,13 +34,13 @@ interface Props {
 
 export default function CustomContextMenu(props: Props) {
   const { children, ticketDetail, ticketIndex } = props;
-  const { ticketStore, workspaceStore } = useStores();
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const { currentWorkspace } = workspaceStore;
+  const { ticketStore, workspaceStore, settingStore } = useStores();
+  // const [showDatePicker, setShowDatePicker] = useState(false);
+  const { currentWorkspace } = workspaceStore || {};
+  const { labels } = settingStore || {};
   const [submenuPosition, setSubmenuPosition] = useState<
     'upwards' | 'downwards'
   >('upwards');
-
   const handleMouseEnter = (
     e: React.MouseEvent<HTMLElement>,
     setPosition: (position: 'upwards' | 'downwards') => void,
@@ -52,6 +56,12 @@ export default function CustomContextMenu(props: Props) {
       setPosition('downwards');
     }
   };
+
+  const labelItem = (labels || [])?.map((label) => ({
+    labelId: label.id,
+    name: label.name,
+    icon: label.icon,
+  }));
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
@@ -87,11 +97,11 @@ export default function CustomContextMenu(props: Props) {
    * @desc Update ticket details assign user in context menu
    */
   const onChangeAssign = useCallback(async (item: { user_id: string }) => {
-    const payload = { assignee: item?.user_id };
+    const payload = { assignee: item?.user_id || null };
     try {
       const updatedTicketDetails = {
         ...(ticketDetail || {}),
-        assigned_to: item?.user_id,
+        assigned_to: item?.user_id || null,
       };
       ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
       await updateAssignee(ticketDetail?.id, payload);
@@ -99,6 +109,105 @@ export default function CustomContextMenu(props: Props) {
       console.log('Error : ', e);
     }
   }, []);
+
+  const handleTicketLabel = useCallback(
+    async (props: HandleClickProps) => {
+      const { isChecked, labelId } = props;
+      try {
+        if (ticketDetail?.id && labelId) {
+          if (isChecked) {
+            const newLabel =
+              ticketDetail.labels.filter((item) => item.id !== labelId) || [];
+            ticketStore.updateTicketListItem(ticketIndex, {
+              ...(ticketDetail || {}),
+              labels: newLabel,
+            });
+            await deleteLabelFromTicket(ticketDetail?.id, labelId);
+          } else {
+            const newLabel = labels?.find((item) => item.id === labelId);
+            const ticketLabels = ticketDetail.labels || [];
+            if (newLabel) ticketLabels.push(newLabel);
+            ticketStore.updateTicketListItem(ticketIndex, {
+              ...(ticketDetail || {}),
+              labels: ticketLabels,
+            });
+            await addLabelToTicket(ticketDetail?.id, labelId);
+          }
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetail],
+  );
+
+  /*
+   * @desc update ticket status
+   */
+  const handleTicketStatus = useCallback(
+    async (status: TicketStatus) => {
+      const payload = {
+        status,
+      };
+      try {
+        if (ticketDetail?.id) {
+          const updatedTicketDetails = {
+            ...(ticketDetail || {}),
+            status,
+          };
+          ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
+          await changeTicketStatus(ticketDetail?.id, payload);
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetail],
+  );
+
+  /*
+   * @desc update ticket snooze
+   */
+  const handleChangeSnooze = useCallback(
+    async (props: HandleClickProps) => {
+      const { item } = props;
+      const payload = { snoozeUntil: item?.value };
+      try {
+        if (ticketDetail?.id) {
+          const updatedTicketDetails = {
+            ...(ticketDetail || {}),
+            status: TicketStatus.OPEN,
+            snooze_until: new Date(item?.value || ''),
+          };
+          // add data in mobX store
+          ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
+          // api call for change ticket status
+          await snoozeTicket(ticketDetail?.id, payload);
+        }
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetail],
+  );
+
+  const [showDropDown, setShowDropDown] = useState(true);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const handleDropDownChange = (item: { name: string }) => {
+    if (item?.name === 'date&time') {
+      setShowDropDown(false);
+      setShowDatePicker(true);
+    } else {
+      setShowDropDown(true);
+      setShowDatePicker(false);
+    }
+  };
+
+  const handleDatePickerClose = () => {
+    setShowDatePicker(false);
+    setShowDropDown(true);
+  };
 
   return (
     <ContextMenuMainDiv>
@@ -141,7 +250,6 @@ export default function CustomContextMenu(props: Props) {
                       onChange={onChangeAssign}
                       iconSize='20'
                       iconViewBox='0 0 20 20'
-                      onClose={() => {}}
                       isSearch={true}
                       isContextMenu={true}
                       style={{ marginTop: -4 }}
@@ -179,22 +287,24 @@ export default function CustomContextMenu(props: Props) {
                     }
                   >
                     <>
-                      <DropDown
-                        items={snoozeItem}
-                        iconSize='12'
-                        iconViewBox='0 0 12 12'
-                        onClose={() => {}}
-                        isContextMenu={true}
-                        isSnooze={true}
-                        style={{ minWidth: 260, marginTop: -4 }}
-                        onChange={() => {
-                          // onChange(item);
-                          setShowDatePicker(true);
-                        }}
-                      />
+                      {showDropDown && (
+                        <DropDown
+                          items={snoozeItem}
+                          iconSize='12'
+                          iconViewBox='0 0 12 12'
+                          isContextMenu={true}
+                          isSnooze={true}
+                          style={{ minWidth: 260, marginTop: -4 }}
+                          onChange={handleDropDownChange}
+                          handleClick={handleChangeSnooze}
+                        />
+                      )}
                       {showDatePicker && (
                         <DatePickerModal
-                          onClose={() => setShowDatePicker(false)}
+                          ticketIndex={ticketIndex}
+                          ticketDetails={ticketDetail}
+                          onClose={handleDatePickerClose}
+                          isContextMenu={true}
                         />
                       )}
                     </>
@@ -233,8 +343,9 @@ export default function CustomContextMenu(props: Props) {
                     <DropDown
                       items={labelItem}
                       iconSize='12'
-                      iconViewBox='0 0 12 12'
-                      onClose={() => {}}
+                      iconViewBox='0 0 16 16'
+                      handleClick={handleTicketLabel}
+                      ticketLabelData={ticketDetail?.labels}
                       isSearch={true}
                       isContextMenu={true}
                       isCheckbox={true}
@@ -277,7 +388,6 @@ export default function CustomContextMenu(props: Props) {
                       onChange={onChangePriority}
                       iconSize='12'
                       iconViewBox='0 0 12 12'
-                      onClose={() => {}}
                       isContextMenu={true}
                       style={{ marginTop: -4 }}
                     />
@@ -285,18 +395,33 @@ export default function CustomContextMenu(props: Props) {
                 </ContextMenu.Portal>
               </ContextMenu.Sub>
             </div>
-            <ContextMenuItem>
-              <div>
-                <SVGIcon
-                  name='close-icon'
-                  width='12'
-                  height='12'
-                  viewBox='0 0 12 12'
-                  className='svg-icon'
-                />
-                Close
-              </div>
-            </ContextMenuItem>
+            {ticketDetail?.status !== TicketStatus.CLOSED ? (
+              <ContextMenuItem>
+                <div onClick={() => handleTicketStatus(TicketStatus.CLOSED)}>
+                  <SVGIcon
+                    name='close-icon'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
+                    className='svg-icon'
+                  />
+                  Close
+                </div>
+              </ContextMenuItem>
+            ) : (
+              <ContextMenuItem>
+                <div onClick={() => handleTicketStatus(TicketStatus.OPEN)}>
+                  <SVGIcon
+                    name='close-icon'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
+                    className='svg-icon'
+                  />
+                  Re-open
+                </div>
+              </ContextMenuItem>
+            )}
           </ContextMenuContent>
         </ContextMenu.Portal>
       </ContextMenu.Root>

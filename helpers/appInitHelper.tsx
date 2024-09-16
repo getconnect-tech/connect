@@ -9,6 +9,7 @@ import {
 } from '@/services/clientSide/workspaceServices';
 import { getUserDetails } from '@/services/clientSide/userService';
 import { Workspace } from '@/utils/dataTypes';
+import { getLabels } from '@/services/clientSide/settingServices';
 
 export const appInit: any = async () => {
   const session = await getSessionDetails();
@@ -22,7 +23,7 @@ export const appInit: any = async () => {
   }
 
   if (session?.user) {
-    await getUserDetails();
+    getUserDetails();
 
     // Get user's workspace list
     const workspaceList = await getWorkspaceList();
@@ -46,6 +47,7 @@ export const appInit: any = async () => {
           workspaceList[0]?.id,
         );
         await getWorkspaceById(workspaceList[0]?.id);
+        await getLabels();
         return true;
       }
       // If workspace length greater than 1 AND current workspace not exist in local
@@ -61,6 +63,7 @@ export const appInit: any = async () => {
       // Load current workspace data
       else if (currentWorkspace && isFoundWorkspace) {
         await getWorkspaceById(currentWorkspace);
+        await getLabels();
         return true;
       }
     }

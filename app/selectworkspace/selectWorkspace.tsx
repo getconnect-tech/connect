@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 'use client';
 import React, { useCallback, useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
 import { CardsDiv, Content, Head, MainDiv, OrganizationDiv } from './style';
 import Icon from '@/components/icon/icon';
@@ -15,6 +16,7 @@ import { workspaceStore } from '@/stores/workspaceStore';
 import { getAPIErrorMessage } from '@/helpers/common';
 import { Workspace } from '@/utils/dataTypes';
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
+import { messageStore } from '@/stores/messageStore';
 
 function SelectWorkSpace() {
   const router = useRouter();
@@ -26,8 +28,9 @@ function SelectWorkSpace() {
       await getWorkspaceList();
     } catch (err: any) {
       workspaceStore.setLoading(false);
-      // eslint-disable-next-line no-undef
-      alert(getAPIErrorMessage(err) || 'Something went wrong!');
+      messageStore.setErrorMessage(
+        getAPIErrorMessage(err) || 'Something went wrong!',
+      );
     } finally {
       workspaceStore.setLoading(false);
     }
@@ -44,6 +47,10 @@ function SelectWorkSpace() {
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  const redirectToOnboarding = useCallback(() => {
+    router.push('/onboarding');
+  }, []);
 
   return (
     <MainDiv>
@@ -64,7 +71,7 @@ function SelectWorkSpace() {
             height='60'
             viewBox='0 0 20 20'
           />
-          <h6>Select Organisation</h6>
+          <h6>Select Organization</h6>
         </Head>
         <OrganizationDiv>
           <CardsDiv>
@@ -88,6 +95,7 @@ function SelectWorkSpace() {
             iconSize='12'
             iconViewBox='0 0 12 12'
             secondary={true}
+            onClick={redirectToOnboarding}
           />
         </OrganizationDiv>
       </Content>
@@ -95,4 +103,4 @@ function SelectWorkSpace() {
   );
 }
 
-export default SelectWorkSpace;
+export default observer(SelectWorkSpace);

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 const MainDiv = styled.div`
@@ -17,12 +16,12 @@ const ProfileDiv = styled.div`
 
 const Title = styled.p`
   ${Typography.body_md_medium}
-  color: ${colors.text};
+  color: var(--text);
 `;
 
 const CompanyName = styled.p`
   ${Typography.body_sm_regular}
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
   text-align: center;
   margin-top: 2px;
 `;
@@ -39,7 +38,7 @@ const DetailsProfileDiv = styled.div`
   flex-direction: column;
   gap: 16px;
   padding: 0 20px 12px;
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: var(--border-main);
 `;
 
 const DetailsDiv = styled.div`
@@ -48,7 +47,7 @@ const DetailsDiv = styled.div`
   gap: 20px;
   p {
     ${Typography.body_sm_medium}
-    color: ${colors.text};
+    color: var(--text);
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
@@ -65,7 +64,7 @@ const LeftDiv = styled.div`
   width: 100px;
   p {
     ${Typography.body_sm_medium}
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
@@ -75,11 +74,11 @@ const LeftDiv = styled.div`
 `;
 
 const WorkDetailMainDiv = styled.div`
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: var(--border-main);
 `;
 
 const EventMainDiv = styled.div`
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: var(--border-main);
 `;
 
 const TitleDiv = styled.div`
@@ -113,11 +112,11 @@ const EventDiv = styled.div`
   position: relative;
   p {
     ${Typography.body_sm_medium};
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
   h6 {
     ${Typography.body_sm_medium};
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
     width: 20px;
     text-align: right;
   }
@@ -127,13 +126,13 @@ const Dot = styled.div`
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background-color: ${colors.border_hover};
+  background-color: var(--border-hover);
   z-index: 1;
   position: relative;
 `;
 
 const Line = styled.div`
-  border-left: 1px solid ${colors.border};
+  border-left: var(--border-main);
   height: 100%;
   position: absolute;
   top: 0;
@@ -149,7 +148,7 @@ const Line = styled.div`
 const LineDiv = styled.div`
   height: 16px;
   margin-left: 28px;
-  border-left: 1px solid ${colors.border};
+  border-left: var(--border-main);
 `;
 
 const AIIcon = styled.div`
@@ -158,7 +157,7 @@ const AIIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${colors.brand};
+  background-color: var(--brand);
   border-radius: 50%;
 `;
 
@@ -170,7 +169,7 @@ const NameDiv = styled.div`
 
 const AIText = styled.p`
   ${Typography.body_sm_regular};
-  color: ${colors.text};
+  color: var(--text);
 `;
 
 const DescriptionDiv = styled.div`
@@ -179,7 +178,7 @@ const DescriptionDiv = styled.div`
   gap: 12px;
   h6 {
     ${Typography.body_sm_medium};
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
 `;
 
@@ -191,11 +190,10 @@ const ActionsDiv = styled.div`
 
 const Actions = styled.p`
   ${Typography.body_sm_regular};
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
   padding: 4px 12px;
-  background-color: ${colors.bg_surface_secondary};
+  background-color: var(--bg-surface-secondary);
   border-radius: 30px;
-  cursor: pointer;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
@@ -204,8 +202,50 @@ const Actions = styled.p`
   user-select: none;
   span {
     ${Typography.body_sm_medium};
-    color: ${colors.text};
+    color: var(--text);
   }
+`;
+
+const ReplyButton = styled.button`
+  ${Typography.body_sm_regular};
+  color: var(--text-text-secondary);
+  padding: 4px 12px;
+  background-color: var(--bg-surface-secondary);
+  border-radius: 30px;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--bg-surface-secondary-hover);
+    color: var(--text);
+  }
+`;
+
+const QuestionMainDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const ReplyCard = styled.div`
+  padding: 6px 12px;
+  background-color: var(--bg-surface-secondary);
+  ${Typography.body_sm_regular};
+  color: var(--text);
+  border-radius: 0 8px 8px 8px;
+  max-width: max-content;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  cursor: pointer;
 `;
 
 export {
@@ -232,4 +272,7 @@ export {
   DescriptionDiv,
   ActionsDiv,
   Actions,
+  ReplyButton,
+  QuestionMainDiv,
+  ReplyCard,
 };

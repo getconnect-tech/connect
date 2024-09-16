@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const MainDiv = styled.div`
-  background-color: ${colors.bg_white};
+  background-color: var(--bg-white);
   min-width: 400px;
   width: 100%;
   max-width: 400px;
@@ -19,12 +18,12 @@ export const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 10px 16px;
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: var(--border-main);
 `;
 
 export const Title = styled.div`
   ${Typography.body_md_semibold};
-  color: ${colors.text};
+  color: var(--text);
 `;
 
 export const BottomDiv = styled.form`
@@ -59,7 +58,7 @@ export const BottomDiv = styled.form`
       padding: 8px 16px;
     }
     .rich-text {
-      border: 1px solid ${colors.border};
+      border: var(--border-main);
       border-radius: 12px;
       .e-richtexteditor .rte-placeholder {
         padding: 8px 16px;
@@ -81,7 +80,7 @@ export const BottomDiv = styled.form`
         justify-content: center;
         border-radius: 50%;
         &:hover {
-          background-color: ${colors.bg_surface_secondary};
+          background-color: var(--bg-surface-secondary);
         }
       }
       .e-toolbar .e-toolbar-item:not(.e-separator) {
@@ -105,7 +104,7 @@ export const BottomDiv = styled.form`
         }
       }
       .e-richtexteditor .e-rte-toolbar .e-toolbar-item.e-active .e-tbar-btn {
-        background-color: ${colors.bg_surface_secondary};
+        background-color: var(--bg-surface-secondary);
       }
     }
   }
@@ -113,16 +112,16 @@ export const BottomDiv = styled.form`
 
 export const Label = styled.div`
   ${Typography.body_md_medium};
-  color: ${colors.text};
+  color: var(--text);
   margin-bottom: 4px;
   span {
     ${Typography.body_md_regular};
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
 `;
 
 export const IconDiv = styled.div`
-  background-color: ${colors.bg_surface_secondary};
+  background-color: var(--bg-surface-secondary);
   padding: 12px;
   border-radius: 50%;
   display: flex;

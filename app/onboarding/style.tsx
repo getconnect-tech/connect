@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 interface Props {
   isNext: boolean;
@@ -8,7 +7,7 @@ export const MainDiv = styled.div`
   display: flex;
   height: 100vh;
   justify-content: center;
-  background-color: ${colors.bg_surface};
+  background-color: var(--bg-surface);
   overflow: auto;
 `;
 export const OnBoardScreen = styled.div<Props>`
@@ -34,7 +33,7 @@ export const Heading = styled.div`
 `;
 export const Title = styled.div<Props>`
   ${Typography.heading_heading_semibold};
-  color: ${colors.text};
+  color: var(--text);
   ${(props) =>
     props.isNext &&
     css`
@@ -52,10 +51,8 @@ export const CenterCard = styled.div`
   flex-direction: column;
   padding: 20px;
   gap: 20px;
-  background-color: ${colors.bg_white};
-  box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow_2};
+  background-color: var(--bg-white);
+  box-shadow: var(--shadow-card);
   border-radius: 12px;
   width: 100%;
 `;
@@ -73,11 +70,11 @@ export const Description = styled.div`
   align-items: center;
   h2 {
     ${Typography.body_md_semibold}
-    color: ${colors.text};
+    color: var(--text);
   }
   p {
     ${Typography.body_md_regular}
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
 `;
 export const Form = styled.div`
@@ -100,7 +97,7 @@ export const TextField = styled.div<Props>`
 `;
 export const Label = styled.div`
   ${Typography.body_md_medium}
-  color: ${colors.text};
+  color: var(--text);
   width: 100%;
 `;
 
@@ -112,7 +109,7 @@ export const Bottom = styled.div`
 export const Steps = styled.div`
   padding: 8px 0;
   ${Typography.body_md_regular}
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
 `;
 export const CenterCardNext = styled.div`
   display: flex;
@@ -121,10 +118,8 @@ export const CenterCardNext = styled.div`
   width: 100%;
   padding: 20px;
   border-radius: 12px;
-  background-color: ${colors.bg_white};
-  box-shadow:
-    0px 0px 0px 0.5px rgba(0, 0, 0, 0.1),
-    0px 2px 4px 0px rgba(0, 0, 0, 0.05);
+  background-color: var(--bg-white);
+  box-shadow: var(--shadow-card);
 `;
 export const NextProfile = styled.div`
   display: flex;
@@ -146,7 +141,7 @@ export const Icon = styled.div`
   justify-content: center;
   &:hover {
     cursor: pointer;
-    background-color: ${colors.bg_surface_hover};
+    background-color: var(--bg-surface-hover);
     border-radius: 50px;
   }
 `;
@@ -159,10 +154,10 @@ export const LabelDiv = styled.div`
 export const BottomFrame = styled.div`
   display: flex;
   ${Typography.body_md_medium}
-  color: ${colors.text_link};
+  color:var(--text-link);
   align-items: center;
   span {
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
     margin-right: 4px;
   }
 `;

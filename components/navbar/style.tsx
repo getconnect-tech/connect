@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { colors } from '@/styles/colors';
+/* eslint-disable indent */
+import styled, { css } from 'styled-components';
 import { Typography } from '@/styles/typography';
 
 interface Props {
@@ -9,12 +9,12 @@ interface Props {
 const MainDiv = styled.div`
   padding: 20px 16px;
   height: 100vh;
-  background-color: ${colors.bg_surface};
+  background-color: var(--bg-surface);
   width: 223px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-right: 1px solid ${colors.border};
+  border-right: var(--border-main);
   position: fixed;
 `;
 
@@ -44,7 +44,7 @@ const OrganizationNameDiv = styled.div`
   padding: 4px;
   p {
     ${Typography.body_md_medium}
-    color: ${colors.text};
+    color: var(--text);
     margin-right: 8px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -53,7 +53,7 @@ const OrganizationNameDiv = styled.div`
   }
   &:hover {
     cursor: pointer;
-    background-color: ${colors.bg_surface_hover};
+    background-color: var(--bg-surface-hover);
     border-radius: 30px;
   }
 `;
@@ -70,38 +70,51 @@ const ItemDiv = styled.div<Props>`
   padding: 4px 4px 4px 12px;
   justify-content: space-between;
   cursor: pointer;
-  background-color: ${({ isActive }) => isActive && colors.bg_surface_active};
-  border-radius: ${({ isActive }) => isActive && '30px'};
+
   &:hover {
-    background-color: ${colors.bg_surface_hover};
+    background-color: var(--bg-surface-hover);
     border-radius: 30px;
   }
+  ${(props) =>
+    props.isActive &&
+    css`
+      background-color: var(--bg-surface-active);
+      border-radius: 30px;
+    `}
 `;
 
 const Title = styled.p<Props>`
   ${Typography.body_md_regular}
-  color: ${({ isActive }) =>
-    isActive ? colors.text : colors.text_text_secondary};
+  color: var(${({ isActive }) =>
+    isActive ? '--text' : '--text-text-secondary'});
 `;
 
 const Label = styled.p`
   ${Typography.body_sm_medium}
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
   padding: 0 12px;
 `;
 
 const CountText = styled.p`
   ${Typography.body_sm_regular}
-  color: ${colors.text_text_secondary};
-  background-color: ${colors.bg_surface_secondary};
+  color: var(--text-text-secondary);
+  background-color: var(--bg-surface-secondary);
   padding: 2px 8px;
   border-radius: 50%;
 `;
 
-const LeftDiv = styled.div`
+const LeftDiv = styled.div<Props>`
   display: flex;
   align-items: center;
   gap: 8px;
+  svg {
+    fill: var(--icon);
+    ${(props) =>
+      props.isActive &&
+      css`
+        fill: var(--icon-hover);
+      `}
+  }
 `;
 const ProfileDrop = styled.div`
   display: flex;
@@ -111,17 +124,14 @@ const ProfileDrop = styled.div`
   max-width: 191px;
   width: 100%;
   border-radius: 12px;
-  background-color: ${colors.bg_white};
-  box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 4px 8px 0px ${colors.box_shadow},
-    0px 8px 24px 0px ${colors.box_shadow};
+  background-color: var(--bg-white);
+  box-shadow: var(--shadow-dropdown);
 `;
 const Frame1 = styled.div`
   display: flex;
   flex-direction: column;
   padding: 4px;
-  border-bottom: 0.5px solid ${colors.border};
+  border-bottom: var(--border-light);
 `;
 const Frame2 = styled.div`
   display: flex;
@@ -136,38 +146,42 @@ const OrganizationProfile = styled.div`
   padding: 4px 8px;
   p {
     ${Typography.body_md_medium};
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
   }
   &:hover {
     cursor: pointer;
-    background-color: ${colors.bg_white_hover};
+    background-color: var(--bg-white-hover);
     border-radius: 8px;
     p {
-      color: ${colors.text};
+      color: var(--text);
     }
   }
 `;
 const Description = styled.div`
   ${Typography.body_sm_regular};
-  color: ${colors.text_text_secondary};
+  color: var(--text-text-secondary);
 `;
 const ProfileItemDiv = styled.div`
   display: flex;
   padding: 4px 8px;
   gap: 8px;
   align-items: center;
-  fill: ${colors.icon};
+  fill: var(--icon);
   p {
     ${Typography.body_md_regular}
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
   &:hover {
-    fill: ${colors.icon_hover};
+    fill: var(--icon-hover);
     cursor: pointer;
-    background-color: ${colors.bg_white_hover};
+    background-color: var(--bg-white-hover);
     border-radius: 8px;
     p {
-      color: ${colors.text};
+      color: var(--text);
     }
   }
 `;

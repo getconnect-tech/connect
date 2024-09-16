@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import Avatar from '../avtar/Avtar';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 
 export const Card = styled.div`
@@ -10,21 +9,17 @@ export const Card = styled.div`
   width: 100%;
   padding: 12px;
   gap: 12px;
-  box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow_2};
-  background-color: ${colors.bg_white};
+  box-shadow: var(--shadow-card);
+  background-color: var(--bg-white);
   border-radius: 8px;
   align-items: center;
   cursor: pointer;
   p {
     ${Typography.body_md_medium}
-    color: ${colors.text};
+    color: var(--text);
   }
   &:hover {
-    box-shadow:
-      0px 0px 0px 0.5px ${colors.box_shadow_3},
-      0px 2px 4px 0px ${colors.box_shadow_2};
+    box-shadow: var(--shadow-card-hover);
   }
 `;
 
@@ -44,7 +39,7 @@ function WorkspaceCard({
 }: Props) {
   return (
     <Card onClick={() => handleClick(workSpaceId)}>
-      <Avatar imgSrc={src} name={''} isShowBorder />
+      <Avatar imgSrc={src} name={organizationName} size={25} />
       <p>{organizationName}</p>
     </Card>
   );

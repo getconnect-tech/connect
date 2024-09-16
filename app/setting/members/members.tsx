@@ -2,7 +2,6 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { UserRole } from '@prisma/client';
 import {
   Description,
   Head,
@@ -15,12 +14,7 @@ import {
 } from '../style';
 import Button from '@/components/button/button';
 import MemberCard from '@/components/memberCard/memberCard';
-import {
-  getWorkspaceById,
-  removeInviteUsersFromWorkspace,
-  removeMemberFromWorkspace,
-  updateRole,
-} from '@/services/clientSide/workspaceServices';
+import { getWorkspaceById } from '@/services/clientSide/workspaceServices';
 import { useStores } from '@/stores';
 import InviteMemberModal from '@/components/modalComponent/inviteMemberModal';
 import Modal from '@/components/modal/modal';
@@ -33,7 +27,6 @@ const Members = () => {
   );
   const { workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
-
   const loadData = useCallback(async () => {
     try {
       workspaceStore.setLoading(true);
@@ -61,60 +54,6 @@ const Members = () => {
     setInviteModal(false);
   }, []);
 
-  const handleClick = useCallback(
-    async (hoveredItem: string | null, userId: string) => {
-      if (hoveredItem === 'Make Admin' || hoveredItem === 'Remove Admin') {
-        try {
-          workspaceStore.setLoading(true);
-          if (userId) {
-            const result = await updateRole({
-              userId,
-              role:
-                hoveredItem === 'Make Admin' ? UserRole.ADMIN : UserRole.MEMBER,
-            });
-
-            if (result) {
-              loadData();
-            }
-          }
-          workspaceStore.setLoading(false);
-        } catch (error) {
-          console.log('error', error);
-        }
-      } else if (hoveredItem === 'Delete') {
-        try {
-          if (userId) {
-            const result = await removeMemberFromWorkspace(userId);
-            if (result) {
-              workspaceStore.removeUserFromWorkspace(userId);
-            }
-          }
-        } catch (error) {
-          console.log('error', error);
-        }
-      }
-    },
-    [],
-  );
-
-  const handleClickInvited = useCallback(
-    async (hoveredItem: string | null, userId: string, status: string) => {
-      if (hoveredItem === 'Delete' && status === 'Pending') {
-        try {
-          if (userId) {
-            const result = await removeInviteUsersFromWorkspace(userId);
-            if (result) {
-              workspaceStore.removeInvitedUserFromWorkspace(userId);
-            }
-          }
-        } catch (error) {
-          console.log('error', error);
-        }
-      }
-    },
-    [],
-  );
-
   return (
     <>
       <Main>
@@ -138,7 +77,6 @@ const Members = () => {
                 <MemberCard
                   key={member.id}
                   userId={member.id}
-                  handleClick={handleClick}
                   name={member.display_name || ''}
                   email={member.email}
                   src={member.profile_url || ''}
@@ -146,13 +84,14 @@ const Members = () => {
                   currentOpenDropdown={currentOpenDropdown}
                   setOpenDropdown={setCurrentOpenDropdown}
                   dropdownIdentifier={`card-${member.id}`}
+                  loadData={loadData}
+                  isInvited={false}
                 />
               ))}
               {currentWorkspace?.invited_users?.map((member) => (
                 <MemberCard
                   key={member.id}
                   userId={member.id}
-                  handleClick={handleClickInvited}
                   name={member.name || ''}
                   email={member.email}
                   src={''}
@@ -160,6 +99,8 @@ const Members = () => {
                   currentOpenDropdown={currentOpenDropdown}
                   setOpenDropdown={setCurrentOpenDropdown}
                   dropdownIdentifier={`card-${member.id}`}
+                  loadData={loadData}
+                  isInvited={true}
                 />
               ))}
             </MainCardDiv>

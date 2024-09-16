@@ -1,7 +1,6 @@
 /* eslint-disable indent */
 import styled from 'styled-components';
 import { Typography } from '../../styles/typography';
-import { colors } from '@/styles/colors';
 import { DropDownItem } from '@/components/dropDown/dropDown';
 
 interface Props {
@@ -11,23 +10,23 @@ interface Props {
 
 const Main = styled.div`
   display: flex;
-  background-color: ${colors.bg_surface};
+  background-color: var(--bg-surface);
   height: 100vh;
 `;
 
 const TopDiv = styled.div`
   position: sticky;
   top: 0;
-  background-color: ${colors.bg_surface};
+  background-color: var(--bg-surface);
   z-index: 99;
-  border-bottom: 1px solid ${colors.border};
+  border-bottom: var(--border-main);
 `;
 
 const BottomDiv = styled.div`
   max-width: 702px;
   width: 100%;
   margin: 0 auto;
-  height: calc(100dvh - 204px);
+  height: calc(100dvh - 208px);
   overflow: auto;
 `;
 
@@ -35,7 +34,7 @@ const MainDiv = styled.div`
   width: 100%;
   margin-left: 223px;
   overflow: auto;
-  border-right: 1px solid ${colors.border};
+  border-right: var(--border-main);
 `;
 
 const HeaderDiv = styled.div`
@@ -54,7 +53,7 @@ const LeftDiv = styled.div`
 
 const Title = styled.div`
   ${Typography.body_md_medium}
-  color: ${colors.text};
+  color: var(--text);
 `;
 
 const StatusDiv = styled.div`
@@ -63,7 +62,7 @@ const StatusDiv = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 9px 20px;
-  border-top: 1px solid ${colors.border};
+  border-top: var(--border-main);
   position: relative;
 `;
 
@@ -85,7 +84,7 @@ const ButtonDiv = styled.div`
 const InputDiv = styled.div`
   position: sticky;
   bottom: 0;
-  background-color: ${colors.bg_surface};
+  background-color: var(--bg-surface);
   z-index: 1;
   max-width: 702px;
   margin: 0 auto;
@@ -96,30 +95,28 @@ const InputDiv = styled.div`
   }
   .line {
     height: 20px;
-    border-left: 1px solid ${colors.border};
+    border-left: var(--border-main);
     margin-left: 10px;
   }
   .avtar {
     position: absolute;
-    top: 18px;
+    top: 20px;
     z-index: 1;
   }
 `;
 
 const Input = styled.div<Props>`
-  background-color: ${({ modeSelectedItem }) =>
-    modeSelectedItem?.name === 'Internal'
-      ? colors.brand_disabled
-      : colors.bg_white};
+  background-color: var(
+    ${({ modeSelectedItem }) =>
+      modeSelectedItem?.name === 'Internal' ? '--brand-disabled' : '--bg-white'}
+  );
   border-radius: 12px;
   width: 100%;
   padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  box-shadow:
-    0px 0px 0px 0.5px ${colors.box_shadow},
-    0px 2px 4px 0px ${colors.box_shadow_2};
+  box-shadow: var(--shadow-card);
   margin-left: 10px;
   margin-top: 8px;
 `;
@@ -139,10 +136,10 @@ const InputIcon = styled.div`
   align-items: center;
   gap: 8px;
   .send-icon {
-    background-color: ${colors.bg_surface_secondary};
+    background-color: var(--bg-surface-secondary);
     border-radius: 50%;
     &:hover {
-      background-color: ${colors.bg_surface_secondary_hover};
+      background-color: var(--bg-surface-secondary-hover);
     }
   }
   .submenu-upwards {
@@ -152,6 +149,10 @@ const InputIcon = styled.div`
   .submenu-downwards {
     top: 0;
     bottom: auto;
+  }
+  .drop-tag {
+    display: flex;
+    gap: 8px;
   }
 `;
 
@@ -173,13 +174,13 @@ const ActivityDiv = styled.div`
 
 const Message = styled.p`
   ${Typography.body_md_regular};
-  color: ${colors.text};
-  border-left: 1px solid ${colors.border};
+  color: var(--text);
+  border-left: var(--border-main);
   padding-left: 22px;
   margin-left: -22px;
   span {
     ${Typography.body_md_regular};
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
   svg {
     margin: 0 8px 3px;
@@ -187,7 +188,7 @@ const Message = styled.p`
 `;
 
 const LineDiv = styled.div`
-  border-left: 1px solid ${colors.border};
+  border-left: var(--border-main);
   height: calc(100% - 22px);
   margin-left: 10px;
   position: absolute;
@@ -199,10 +200,12 @@ const IconDiv = styled.div<Props>`
   align-items: center;
   gap: 8px;
   .icon {
-    background-color: ${({ modeSelectedItem }) =>
-      modeSelectedItem?.name === 'Internal'
-        ? colors.bg_surface_secondary_hover
-        : colors.bg_surface_secondary};
+    background-color: var(
+      ${({ modeSelectedItem }) =>
+        modeSelectedItem?.name === 'Internal'
+          ? '--bg-surface-secondary-hover'
+          : '--bg-surface-secondary'}
+    );
   }
 `;
 

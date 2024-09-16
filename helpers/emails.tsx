@@ -80,3 +80,19 @@ export const sendVerificationCode = async (email: string) => {
   });
   return messageId;
 };
+
+export const sendInvitationEmail = async (
+  email: string,
+  workspaceName: string,
+) => {
+  const signupUrl = 'https://app.getconnect.tech/signup';
+
+  const messageId = await sendEmail({
+    email: email,
+    subject: 'Workspace Invitation!',
+    // eslint-disable-next-line max-len
+    body: `<p>You have been invited to [${workspaceName}] workspace!</p><br /><a href="${signupUrl}" target="_blank">Sign Up!</a>`,
+  });
+
+  return messageId;
+};

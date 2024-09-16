@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import { colors } from '@/styles/colors';
 import { Typography } from '@/styles/typography';
 interface Props {
   hasError?: boolean;
@@ -22,9 +21,9 @@ const InputBox = styled.input<Props>`
   width: 100%;
   border-radius: 20px;
   padding: 8px 16px;
-  border: 1px solid ${colors.border_input_border};
+  border: var(--border-secondary);
   background: transparent;
-  color: ${colors.text};
+  color: var(--text);
   ${Typography.body_md_medium};
   ${(props) =>
     props.variant === 'large' &&
@@ -43,30 +42,30 @@ const InputBox = styled.input<Props>`
     outline: none;
   }
   &::placeholder {
-    color: ${colors.text_text_secondary};
+    color: var(--text-text-secondary);
   }
   &:focus {
-    border: 1px solid ${colors.border_brand};
+    border: var(--border-primary);
   }
   ${(props) =>
     props.hasError &&
     css`
       &:focus {
-        border: 1px solid ${colors.fill_danger};
+        border: var(--border-danger);
       }
-      border: 1px solid ${colors.fill_danger};
-      color: ${colors.text};
+      border: var(--border-danger);
+      color: var(--text);
       &::placeholder {
-        color: ${colors.text_text_secondary};
+        color: var(--text-text-secondary);
       }
     `}
   ${(props) =>
     props.disabled &&
     css`
       &::placeholder {
-        color: ${colors.text_disabled};
+        color: var(--text-disabled);
       }
-      border: 1px solid ${colors.border_disabled};
+      border: var(--border-disabled);
     `}
   ${(props) =>
     props.isIcon &&
@@ -80,7 +79,7 @@ const Errormessage = styled.div`
   align-items: center;
   p {
     margin: 0;
-    color: ${colors.fill_danger};
+    color: var(--fill-danger);
     ${Typography.body_md_regular};
   }
 `;
