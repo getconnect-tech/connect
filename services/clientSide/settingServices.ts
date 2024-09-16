@@ -61,7 +61,7 @@ export const deleteAPIKey = async (APIKey: string) => {
   try {
     settingStore.setLoading(true);
     const result = await axios.delete(
-      `${NEXT_PUBLIC_API_URL}/workspaces/apiKeys/${APIKey}`,
+      `${NEXT_PUBLIC_API_URL}/workspaces/apikeys/${APIKey}`,
     );
     if (result) messageStore.setSuccessMessage('API Deleted');
     return true;
