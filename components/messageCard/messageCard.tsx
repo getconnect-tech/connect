@@ -44,12 +44,7 @@ export default function MessageCard({
   message,
   readBy,
   attachments = [
-    {
-      documentText: '',
-      fileSize: '236kb',
-      fileName: 'Demo Attachment',
-    },
-    // Add more dummy attachments if needed
+    // Add attachments
   ],
 }: Props) {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
