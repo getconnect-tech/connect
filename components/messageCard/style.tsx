@@ -30,6 +30,16 @@ const TagDiv = styled.div`
     cursor: pointer;
     color: var(--text);
   }
+  .submenu-upwards {
+    bottom: calc(100% - 20px);
+    top: auto;
+    background-color: red;
+  }
+
+  .submenu-downwards {
+    bottom: auto;
+    background-color: yellow;
+  }
 `;
 
 const CardMessage = styled.p`
