@@ -76,7 +76,7 @@ const ApiKeyCard = ({
       );
       return false;
     }
-  }, []);
+  }, [apiKey]);
 
   return (
     <CardMainDiv>
