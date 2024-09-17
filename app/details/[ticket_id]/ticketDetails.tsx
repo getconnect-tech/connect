@@ -343,7 +343,11 @@ function TicketDetails(props: Props) {
       } else {
         type = MessageType.EMAIL;
       }
-      const payload = { content: content, type };
+      const payload = {
+        content: content,
+        type,
+        attachmentToken: attachFile?.length > 0 ? messageRefId : undefined,
+      };
       const newMessage = {
         assignee: null,
         author: user,
@@ -369,7 +373,7 @@ function TicketDetails(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [ticket_id, user],
+    [ticket_id, user, messageRefId, attachFile],
   );
 
   /*
