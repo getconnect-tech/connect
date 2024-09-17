@@ -94,7 +94,6 @@ export const getTicketAttachments = async (
   const bucket = storage.bucket();
   const folderPath = `workspaces/${workspaceId}/tickets/${ticketId}/messages`;
 
-  console.log(folderPath);
   const [files] = await bucket.getFiles({
     prefix: folderPath,
     autoPaginate: false,
