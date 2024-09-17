@@ -31,11 +31,12 @@ export const uploadFile = async ({
 };
 
 export const uploadAttachments = async (
+  workspaceId: string,
   ticketId: string,
   messageId: string,
   attachments: Attachment[],
 ) => {
-  const filePath = `tickets/${ticketId}/messages/${messageId}/attachments/`;
+  const filePath = `workspaces/${workspaceId}/tickets/${ticketId}/messages/${messageId}/attachments/`;
   const filesPromises = [];
 
   for (const attachment of attachments) {
@@ -55,4 +56,31 @@ export const uploadAttachments = async (
   const files = await Promise.all(filesPromises);
 
   return files;
+};
+
+export const moveAttachments = async (
+  workspaceId: string,
+  ticketId: string,
+  messageId: string,
+  attachmentToken: string,
+) => {
+  const tempFolder = `workspaces/${workspaceId}/tickets/${ticketId}/temp/${attachmentToken}`;
+  const tempFolderPath = tempFolder + `/attachments/`;
+  const destinationPath = `workspaces/${workspaceId}/tickets/${ticketId}/messages/${messageId}/attachments/`;
+
+  const bucket = storage.bucket();
+
+  const [files] = await bucket.getFiles({ prefix: tempFolderPath });
+
+  const filesPromises = [];
+  for (const file of files) {
+    const fileName = file.name.split('/').pop();
+    filesPromises.push(file.move(destinationPath + fileName));
+  }
+
+  const movedResponses = await Promise.all(filesPromises);
+
+  await bucket.deleteFiles({ prefix: tempFolder });
+
+  return movedResponses;
 };
