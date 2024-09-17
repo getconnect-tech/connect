@@ -64,8 +64,10 @@ function ApiKey() {
                 />
               )}
             </Head>
-            {loading && <ApiKeyLoading />}
-            {!loading && isEmpty(apiKeys) && (
+            {loading && (!apiKeys || apiKeys?.length === 0) && (
+              <ApiKeyLoading />
+            )}
+            {!loading && (!apiKeys || apiKeys?.length === 0) && (
               <EmptyState
                 iconName='empty-apikey-icon'
                 iconSize='20'
@@ -76,7 +78,7 @@ function ApiKey() {
                 onClick={onOpenKeyModal}
               />
             )}
-            {!loading && !isEmpty(apiKeys) && (
+            {apiKeys?.length > 0 && (
               <MainCardDiv>
                 {apiKeys?.map((apiKey, index: React.Key | null | undefined) => (
                   <ApiKeyCard
