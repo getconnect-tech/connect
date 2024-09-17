@@ -35,7 +35,7 @@ export const uploadAttachments = async (
   messageId: string,
   attachments: Attachment[],
 ) => {
-  const filePath = `/tickets/${ticketId}/messages/${messageId}/attachments/`;
+  const filePath = `tickets/${ticketId}/messages/${messageId}/attachments/`;
   const filesPromises = [];
 
   for (const attachment of attachments) {

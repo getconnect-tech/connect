@@ -1,3 +1,5 @@
+import { Attachment } from 'postmark';
+
 export interface PostmarkWebhookPayload {
   MessageStream: string;
   MessageID: string;
@@ -87,13 +89,6 @@ export interface BccFull {
 export interface Header {
   Name: string;
   Value: string;
-}
-
-export interface Attachment {
-  Name: string;
-  Content: string;
-  ContentType: string;
-  ContentLength: number;
 }
 
 export interface OutboundPayload extends PostmarkWebhookPayload {
