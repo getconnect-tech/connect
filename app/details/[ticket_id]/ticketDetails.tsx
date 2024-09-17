@@ -88,7 +88,11 @@ function TicketDetails(props: Props) {
   };
 
   const handleMacroSelect = useCallback(
-    (selectedMacro: { content: string }) => {
+    (selectedMacro: { content: string; name: string }) => {
+      if (selectedMacro.name === 'manage-macros') {
+        router.push('/setting/macros');
+        return;
+      }
       setCommentValue((prevValue) => {
         return prevValue
           ? `${prevValue}\n${selectedMacro.content}`
