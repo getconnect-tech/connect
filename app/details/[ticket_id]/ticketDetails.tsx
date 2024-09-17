@@ -709,17 +709,17 @@ function TicketDetails(props: Props) {
                     />
                     {macros.length > 0 && (
                       <div className='tag-div'>
-                        {currentWorkspace?.role === UserRole.OWNER ||
-                          (currentWorkspace?.role === UserRole.ADMIN && (
-                            <Icon
-                              iconName='sticky-note-icon'
-                              iconSize='12'
-                              iconViewBox='0 0 12 12'
-                              size={true}
-                              onClick={handleMacroItem}
-                              isActive={true}
-                            />
-                          ))}
+                        {(currentWorkspace?.role === UserRole.OWNER ||
+                          currentWorkspace?.role === UserRole.ADMIN) && (
+                          <Icon
+                            iconName='sticky-note-icon'
+                            iconSize='12'
+                            iconViewBox='0 0 12 12'
+                            size={true}
+                            onClick={handleMacroItem}
+                            isActive={true}
+                          />
+                        )}
                         {macroDropdown && (
                           <DropDown
                             items={macros}
