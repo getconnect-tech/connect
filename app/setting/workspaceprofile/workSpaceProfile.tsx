@@ -114,7 +114,10 @@ const WorkspaceProfile = () => {
         workspaceStore.setLoading(true);
         let profile;
         if (image) {
-          profile = await getFirebaseUrlFromFile(image?.file, 'UserProfiles');
+          profile = await getFirebaseUrlFromFile(
+            image?.file,
+            'workspace_profile',
+          );
         }
         const updatedImage =
           !isEmpty(image?.profile) && profile
