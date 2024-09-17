@@ -10,3 +10,8 @@ export const messageTypeSchema = z.enum(
   [MessageType.REGULAR, MessageType.EMAIL],
   { required_error: "'type' is required!" },
 );
+
+export const attachmentTokenSchema = z.string({
+  required_error: "'attachmentToken' is required!",
+  invalid_type_error: "'attachmentToken' must be of type string!",
+});

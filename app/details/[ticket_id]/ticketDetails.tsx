@@ -2,7 +2,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
-import { MessageType, PriorityLevels, TicketStatus } from '@prisma/client';
+import {
+  MessageType,
+  PriorityLevels,
+  TicketStatus,
+  UserRole,
+} from '@prisma/client';
 import moment from 'moment';
 import {
   ActivityDiv,
@@ -98,7 +103,11 @@ function TicketDetails(props: Props) {
   };
 
   const handleMacroSelect = useCallback(
-    (selectedMacro: { content: string }) => {
+    (selectedMacro: { content: string; name: string }) => {
+      if (selectedMacro.name === 'manage-macros') {
+        router.push('/setting/macros');
+        return;
+      }
       setCommentValue((prevValue) => {
         return prevValue
           ? `${prevValue}\n${selectedMacro.content}`
@@ -817,7 +826,10 @@ function TicketDetails(props: Props) {
                           iconSize={''}
                           iconViewBox={''}
                           style={{ bottom: 60, maxWidth: 146, width: '100%' }}
-                          isMacro={true}
+                          isMacro={
+                            currentWorkspace?.role === UserRole.OWNER ||
+                            currentWorkspace?.role === UserRole.ADMIN
+                          }
                         />
                       )}
                     </div>
