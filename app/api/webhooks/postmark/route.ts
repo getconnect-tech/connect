@@ -15,6 +15,7 @@ import {
   PostmarkWebhookPayload,
 } from '@/utils/webhookPayloadType';
 import { prisma } from '@/prisma/prisma';
+import { uploadAttachments } from '@/services/serverSide/firebaseServices';
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -49,12 +50,18 @@ export const POST = async (req: NextRequest) => {
         });
       }
 
-      await postMessage({
+      const message = await postMessage({
         messageContent: postmarkPayload.HtmlBody,
         messageType: MessageType.FROM_CONTACT,
         referenceId: mailId,
         ticketId: ticket.id,
       });
+
+      await uploadAttachments(
+        ticket.id,
+        message.id,
+        postmarkPayload.Attachments,
+      );
     }
 
     if (isOutbound(postmarkPayload)) {
