@@ -34,7 +34,6 @@ export const IconDiv = styled.div`
 export const TopBlock = styled.div`
   display: flex;
   flex-direction: column;
-  border-bottom: var(--border-main);
   gap: 1px;
   padding-bottom: 12px;
 `;
@@ -71,6 +70,7 @@ export const Item = styled.div<Props>`
 export const BottomBlock = styled.div`
   display: flex;
   flex-direction: column;
+  border-top: var(--border-main);
   padding: 12px 0;
   gap: 1px;
 `;
