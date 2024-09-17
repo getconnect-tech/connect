@@ -58,6 +58,7 @@ export const POST = async (req: NextRequest) => {
       });
 
       await uploadAttachments(
+        workspaceId,
         ticket.id,
         message.id,
         postmarkPayload.Attachments,

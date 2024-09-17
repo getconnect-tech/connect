@@ -8,9 +8,14 @@ import {
   postMessage,
   updateUserLastSeen,
 } from '@/services/serverSide/message';
-import { contentSchema, messageTypeSchema } from '@/lib/zod/message';
+import {
+  attachmentTokenSchema,
+  contentSchema,
+  messageTypeSchema,
+} from '@/lib/zod/message';
 import { sendEmailAsReply } from '@/helpers/emails';
 import { getWorkspaceEmailConfig } from '@/services/serverSide/workspace';
+import { moveAttachments } from '@/services/serverSide/firebaseServices';
 
 export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
@@ -27,6 +32,7 @@ export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
 const RequestBody = z.object({
   content: contentSchema,
   type: messageTypeSchema,
+  attachmentToken: attachmentTokenSchema.optional(),
 });
 export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
@@ -34,7 +40,10 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
 
     RequestBody.parse(requestBody);
 
-    const { content, type } = requestBody as z.infer<typeof RequestBody>;
+    const { content, type, attachmentToken } = requestBody as z.infer<
+      typeof RequestBody
+    >;
+    const workspaceId = req.workspace.id;
     const userId = req.user.id;
 
     if (type === MessageType.REGULAR) {
@@ -47,6 +56,15 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
       });
 
       await updateUserLastSeen(ticketId, userId);
+
+      if (attachmentToken) {
+        await moveAttachments(
+          workspaceId,
+          ticketId,
+          newMessage.id,
+          attachmentToken,
+        );
+      }
 
       return Response.json(newMessage, { status: 201 });
     }
@@ -96,9 +114,18 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
           eventType: EmailEventType.FAILED,
           extra: err.message,
         });
-      }
+      } finally {
+        await updateUserLastSeen(ticketId, userId);
 
-      await updateUserLastSeen(ticketId, userId);
+        if (attachmentToken) {
+          await moveAttachments(
+            workspaceId,
+            ticketId,
+            newMessage!.id,
+            attachmentToken,
+          );
+        }
+      }
 
       return Response.json(newMessage, { status: 201 });
     }
