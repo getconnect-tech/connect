@@ -4,6 +4,8 @@ import { storage } from '@/lib/firebaseAdmin';
 import { createStreamFromBuffer } from '@/helpers/common';
 import { MessageAttachment } from '@/utils/dataTypes';
 
+const bucket = storage.bucket();
+
 export const uploadFile = async ({
   fileName,
   filePath,
@@ -14,8 +16,6 @@ export const uploadFile = async ({
   content: string;
   contentType: string;
 }) => {
-  const bucket = storage.bucket();
-
   const targetFile = bucket.file(filePath + fileName);
 
   const passthroughStream = createStreamFromBuffer(content);
@@ -70,8 +70,6 @@ export const moveAttachments = async (
   const tempFolderPath = tempFolder + `/attachments/`;
   const destinationPath = `workspaces/${workspaceId}/tickets/${ticketId}/messages/${messageId}/attachments/`;
 
-  const bucket = storage.bucket();
-
   const [files] = await bucket.getFiles({ prefix: tempFolderPath });
 
   const filesPromises = [];
@@ -91,7 +89,6 @@ export const getTicketAttachments = async (
   workspaceId: string,
   ticketId: string,
 ) => {
-  const bucket = storage.bucket();
   const folderPath = `workspaces/${workspaceId}/tickets/${ticketId}/messages`;
 
   const [files] = await bucket.getFiles({
@@ -147,4 +144,38 @@ export const getTicketAttachments = async (
   }
 
   return messageAttachmentsMap;
+};
+
+export const getAttachmentsFromToken = async (
+  workspaceId: string,
+  ticketId: string,
+  attachmentToken: string,
+) => {
+  const attachmentsFolder = `workspaces/${workspaceId}/tickets/${ticketId}/temp/${attachmentToken}/attachments/`;
+
+  const [files] = await bucket.getFiles({ prefix: attachmentsFolder });
+
+  const attachments: Attachment[] = [];
+
+  for (const file of files) {
+    const fileNameFull = file.name.split('/').at(-1)!.split('+');
+    const contentId = fileNameFull.length > 1 ? fileNameFull.shift()! : '';
+    const fileName = fileNameFull.join('+');
+
+    const contents = await file.download();
+    const fileString = Buffer.from(contents[0]).toString('base64');
+
+    const attachment: Attachment = {
+      ContentID: contentId,
+      Content: fileString,
+      Name: fileName,
+      ContentType: file.metadata.contentType!,
+    };
+
+    if (attachment.Content.length > 0) {
+      attachments.push(attachment);
+    }
+  }
+
+  return attachments;
 };
