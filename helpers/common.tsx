@@ -1,3 +1,4 @@
+import stream from 'stream';
 import {
   getDownloadURL,
   getStorage,
@@ -181,4 +182,18 @@ export const generateApiKey = () => {
   const apiKey = apiKeyParts.join('-');
 
   return apiKey;
+};
+
+/**
+ * @desc Convert base64 file contents into passthrough stream
+ * @param {stream} contents base64 file contents
+ */
+export const createStreamFromBuffer = (contents: string) => {
+  const fileBuffer = Buffer.from(contents, 'base64');
+
+  const passthroughStream = new stream.PassThrough();
+  passthroughStream.write(fileBuffer);
+  passthroughStream.end();
+
+  return passthroughStream;
 };
