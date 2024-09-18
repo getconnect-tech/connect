@@ -707,19 +707,18 @@ function TicketDetails(props: Props) {
                         })(),
                       }}
                     />
-                    {macros.length > 0 && (
+                    {(macros.length > 0 ||
+                      currentWorkspace?.role === UserRole.OWNER ||
+                      currentWorkspace?.role === UserRole.ADMIN) && (
                       <div className='tag-div'>
-                        {(currentWorkspace?.role === UserRole.OWNER ||
-                          currentWorkspace?.role === UserRole.ADMIN) && (
-                          <Icon
-                            iconName='sticky-note-icon'
-                            iconSize='12'
-                            iconViewBox='0 0 12 12'
-                            size={true}
-                            onClick={handleMacroItem}
-                            isActive={true}
-                          />
-                        )}
+                        <Icon
+                          iconName='sticky-note-icon'
+                          iconSize='12'
+                          iconViewBox='0 0 12 12'
+                          size={true}
+                          onClick={handleMacroItem}
+                          isActive={true}
+                        />
                         {macroDropdown && (
                           <DropDown
                             items={macros}
@@ -728,7 +727,11 @@ function TicketDetails(props: Props) {
                             onChange={handleMacroSelect}
                             iconSize={''}
                             iconViewBox={''}
-                            style={{ bottom: 60, maxWidth: 146, width: '100%' }}
+                            style={{
+                              bottom: 60,
+                              maxWidth: 146,
+                              width: '100%',
+                            }}
                             isMacro={
                               currentWorkspace?.role === UserRole.OWNER ||
                               currentWorkspace?.role === UserRole.ADMIN
