@@ -1,5 +1,6 @@
+/* eslint-disable no-undef */
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import moment from 'moment';
 import RenderHtml from '../renderHtml';
 import DropDown from '../dropDown/dropDown';
@@ -20,7 +21,7 @@ import {
   TitleDiv,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { ReadBy } from '@/utils/dataTypes';
+import { MessageAttachment, ReadBy } from '@/utils/dataTypes';
 
 interface Props {
   title: string;
@@ -28,7 +29,7 @@ interface Props {
   subTitle: string;
   message: string;
   readBy?: ReadBy[];
-  attachments?: any[];
+  attachments?: MessageAttachment[];
 }
 
 export default function MessageCard({
@@ -43,7 +44,6 @@ export default function MessageCard({
   const [submenuPosition, setSubmenuPosition] = useState<
     'upwards' | 'downwards'
   >('upwards');
-  console.log('attachments', attachments);
 
   const getDuration = (lastSeen: Date) => {
     const lastSeenMoment = moment(lastSeen);
@@ -100,6 +100,13 @@ export default function MessageCard({
     name: item.name,
     duration: getDuration(item.seen_at),
   }));
+
+  const onClickDownloadAll = useCallback(() => {
+    attachments.forEach((item) => {
+      if (item?.downloadUrl) window.open(item?.downloadUrl, '_blank');
+    });
+  }, [attachments]);
+
   return (
     <MessageCardMainDiv>
       <MessageCardInnerDiv>
@@ -150,19 +157,22 @@ export default function MessageCard({
         <CardMessage>
           <RenderHtml htmlstring={message} />
         </CardMessage>
-        {attachments?.length > 0 && ( // Render attachments section only if there are attachments
+        {attachments?.length > 0 && (
           <AttachmentMainDiv>
             <TitleDiv>
               <Title>{`${attachments?.length} Attachment${attachments?.length > 1 ? 's' : ''}`}</Title>
-              <DownloadButton>Download All</DownloadButton>
+              <DownloadButton onClick={onClickDownloadAll}>
+                Download All
+              </DownloadButton>
             </TitleDiv>
             <FileCardMainDiv>
               {attachments?.map((attachment, index) => (
                 <FileCard
                   key={index}
-                  documentText={attachment.contentType}
+                  documentText={attachment.fileName}
                   fileSize={attachment.size}
                   fileName={attachment.fileName}
+                  url={attachment.downloadUrl}
                 />
               ))}
             </FileCardMainDiv>

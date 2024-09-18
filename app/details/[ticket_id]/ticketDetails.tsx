@@ -437,6 +437,7 @@ function TicketDetails(props: Props) {
               <InternalMessageCard
                 title={message?.content || ''}
                 time={message?.created_at}
+                attachments={message?.attachments}
               />
             </ActivityDiv>
           );
@@ -770,7 +771,7 @@ function TicketDetails(props: Props) {
                   {attachFile?.map((fileData, index: number) => (
                     <FileCard
                       key={index}
-                      documentText={fileData?.contentType || 'Uploaded file'}
+                      documentText={fileData?.fileName || 'Uploaded file'}
                       fileSize={`${fileData?.size}`}
                       fileName={fileData?.fileName}
                     />

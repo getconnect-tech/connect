@@ -9,12 +9,20 @@ import {
   TextPreviewDiv,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { formatFileSize } from '@/helpers/common';
+
 interface Props {
   documentText: string;
   fileSize: string;
   fileName: string;
+  url?: string;
 }
-export default function FileCard({ documentText, fileSize, fileName }: Props) {
+export default function FileCard({
+  documentText,
+  fileSize,
+  fileName,
+  url,
+}: Props) {
   return (
     <FileCardDiv>
       <Content>
@@ -27,19 +35,22 @@ export default function FileCard({ documentText, fileSize, fileName }: Props) {
         />
         <FileDetail>
           <FileName>{fileName}</FileName>
-          <FileSize className='file-size'>{fileSize}</FileSize>
+          <FileSize className='file-size'>
+            {formatFileSize(Number(fileSize))}
+          </FileSize>
         </FileDetail>
       </Content>
       <div className='overlay'></div>
       {/* Always display the internal text of the document */}
       <TextPreviewDiv className='text-preview'>{documentText}</TextPreviewDiv>
       <div className='download-icon'>
-        <Icon
-          onClick={() => {}}
-          iconName={'download-alt-icon'}
-          iconSize={'12'}
-          iconViewBox={'0 0 12 12'}
-        />
+        <a href={url} target='_blank' download={fileName}>
+          <Icon
+            iconName={'download-alt-icon'}
+            iconSize={'12'}
+            iconViewBox={'0 0 12 12'}
+          />
+        </a>
       </div>
     </FileCardDiv>
   );
