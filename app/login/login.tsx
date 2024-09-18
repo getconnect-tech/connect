@@ -160,7 +160,7 @@ function Login() {
             />
             <TitleDiv>
               <LoginText>
-                {showBottomSection ? 'Check your email' : 'Create an account'}
+                {showBottomSection ? 'Check your email' : 'Login'}
               </LoginText>
               {showBottomSection && (
                 <p>
