@@ -19,6 +19,7 @@ import {
   LoginText,
   MainDiv,
   TimeText,
+  TitleDiv,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Input from '@/components/input/input';
@@ -157,9 +158,16 @@ function Login() {
               height='60px'
               viewBox='0 0 20 20'
             />
-            <LoginText>
-              {showBottomSection ? 'Check your email' : 'Login'}
-            </LoginText>
+            <TitleDiv>
+              <LoginText>
+                {showBottomSection ? 'Check your email' : 'Create an account'}
+              </LoginText>
+              {showBottomSection && (
+                <p>
+                  We have sent a temporary code to <span>{email}</span>
+                </p>
+              )}
+            </TitleDiv>
           </Heading>
           {!showBottomSection ? (
             // Login first step
@@ -191,9 +199,6 @@ function Login() {
           ) : (
             // Login second step
             <CodeSection onSubmit={onVerifyAuthCode}>
-              <p>
-                We have sent a temporary code to <span>{email}</span>
-              </p>
               <Input
                 placeholder={'Enter Code'}
                 type={'number'}
