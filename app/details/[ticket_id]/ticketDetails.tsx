@@ -765,17 +765,17 @@ function TicketDetails(props: Props) {
                   valueContent={commentValue}
                   setValueContent={setCommentValue}
                 />
-
-                {/* Attached Files render */}
-                {attachFile?.map((fileData, index: number) => (
-                  <FileCard
-                    key={index}
-                    documentText={fileData?.contentType || 'Uploaded file'}
-                    fileSize={`${fileData?.size}`}
-                    fileName={fileData?.fileName}
-                  />
-                ))}
-
+                <div className='attach-file-div'>
+                  {/* Attached Files render */}
+                  {attachFile?.map((fileData, index: number) => (
+                    <FileCard
+                      key={index}
+                      documentText={fileData?.contentType || 'Uploaded file'}
+                      fileSize={`${fileData?.size}`}
+                      fileName={fileData?.fileName}
+                    />
+                  ))}
+                </div>
                 <InputIcon>
                   <div className='drop-tag'>
                     <DropDownWithTag
