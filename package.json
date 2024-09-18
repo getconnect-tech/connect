@@ -30,6 +30,7 @@
     "moment": "^2.30.1",
     "next": "14.2.5",
     "next-auth": "^4.24.7",
+    "openai": "^4.62.0",
     "postmark": "^4.0.4",
     "react": "^18",
     "react-calendar": "^5.0.0",
