@@ -22,19 +22,13 @@ import {
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { ReadBy } from '@/utils/dataTypes';
 
-interface Attachment {
-  documentText: string;
-  fileSize: string;
-  fileName: string;
-}
-
 interface Props {
   title: string;
   time: Date;
   subTitle: string;
   message: string;
   readBy?: ReadBy[];
-  attachments?: Attachment[];
+  attachments?: any[];
 }
 
 export default function MessageCard({
@@ -43,14 +37,13 @@ export default function MessageCard({
   subTitle,
   message,
   readBy,
-  attachments = [
-    // Add attachments
-  ],
+  attachments = [],
 }: Props) {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [submenuPosition, setSubmenuPosition] = useState<
     'upwards' | 'downwards'
   >('upwards');
+  console.log('attachments', attachments);
 
   const getDuration = (lastSeen: Date) => {
     const lastSeenMoment = moment(lastSeen);
@@ -143,18 +136,18 @@ export default function MessageCard({
         <CardMessage>
           <RenderHtml htmlstring={message} />
         </CardMessage>
-        {attachments.length > 0 && ( // Render attachments section only if there are attachments
+        {attachments?.length > 0 && ( // Render attachments section only if there are attachments
           <AttachmentMainDiv>
             <TitleDiv>
-              <Title>{`${attachments.length} Attachment${attachments.length > 1 ? 's' : ''}`}</Title>
+              <Title>{`${attachments?.length} Attachment${attachments?.length > 1 ? 's' : ''}`}</Title>
               <DownloadButton>Download All</DownloadButton>
             </TitleDiv>
             <FileCardMainDiv>
-              {attachments.map((attachment, index) => (
+              {attachments?.map((attachment, index) => (
                 <FileCard
                   key={index}
-                  documentText={attachment.documentText}
-                  fileSize={attachment.fileSize}
+                  documentText={attachment.contentType}
+                  fileSize={attachment.size}
                   fileName={attachment.fileName}
                 />
               ))}
