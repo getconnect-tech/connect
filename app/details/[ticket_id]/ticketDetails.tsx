@@ -421,6 +421,11 @@ function TicketDetails(props: Props) {
               <InternalMessageCard
                 title={message?.content || ''}
                 time={message?.created_at}
+                reactions={[
+                  { emoji: '👍', count: 4 },
+                  { emoji: '👌', count: 1 },
+                ]}
+                showReactions={true}
               />
             </ActivityDiv>
           );
