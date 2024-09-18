@@ -37,6 +37,7 @@ const TagDiv = styled.div`
 
   .submenu-downwards {
     bottom: auto;
+    margin-top: 7px;
   }
 `;
 

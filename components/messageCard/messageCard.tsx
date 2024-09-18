@@ -71,15 +71,24 @@ export default function MessageCard({
   ) => {
     const triggerElement = e.currentTarget;
     const rect = triggerElement.getBoundingClientRect();
+
+    // Height of the sticky input (122px)
+    const stickyInputHeight = 122;
+
+    // Available space above and below the trigger element
     // eslint-disable-next-line no-undef
-    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceBelow = window.innerHeight - rect.bottom - stickyInputHeight;
     const spaceAbove = rect.top;
 
+    // Adjust dropdown position based on available space
     if (spaceBelow < 200 && spaceAbove > 200) {
+      // Set dropdown to appear upwards
       setPosition('upwards');
     } else {
+      // Set dropdown to appear downwards
       setPosition('downwards');
     }
+
     setIsDropdownVisible(true);
   };
 
@@ -121,7 +130,12 @@ export default function MessageCard({
                   iconSize={''}
                   iconViewBox={''}
                   onMouseLeave={handleMouseLeave} // Ensure dropdown also hides when mouse leaves the dropdown area
-                  style={{ right: 12, maxWidth: 146, width: '100%' }}
+                  style={{
+                    right: 12,
+                    maxWidth: 146,
+                    width: '100%',
+                    zIndex: 9999999,
+                  }}
                   isSeen={true}
                   className={
                     submenuPosition === 'upwards'
