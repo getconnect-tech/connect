@@ -56,14 +56,6 @@ export const CodeSection = styled.form`
   width: 100%;
   align-items: center;
   text-align: center;
-  p {
-    margin-top: -24px;
-    color: var(--text-text-secondary);
-    ${Typography.body_md_regular};
-  }
-  span {
-    ${Typography.body_md_medium};
-  }
   .button {
     width: 100%;
   }
@@ -77,5 +69,16 @@ export const TimeText = styled.div<{ isActive?: boolean }>`
   a {
     color: var(${({ isActive }) => (isActive ? '--text' : '--text-disabled')});
     cursor: pointer;
+  }
+`;
+export const TitleDiv = styled.div`
+  text-align: center;
+  p {
+    color: var(--text-text-secondary);
+    ${Typography.body_md_regular};
+    margin-top: 8px;
+  }
+  span {
+    ${Typography.body_md_medium};
   }
 `;

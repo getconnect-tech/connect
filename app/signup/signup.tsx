@@ -19,6 +19,7 @@ import {
   LoginText,
   MainDiv,
   TimeText,
+  TitleDiv,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Input from '@/components/input/input';
@@ -163,9 +164,16 @@ function Signup() {
               height='60px'
               viewBox='0 0 20 20'
             />
-            <LoginText>
-              {showBottomSection ? 'Check your email' : 'Create an account'}
-            </LoginText>
+            <TitleDiv>
+              <LoginText>
+                {showBottomSection ? 'Check your email' : 'Create an account'}
+              </LoginText>
+              {showBottomSection && (
+                <p>
+                  We have sent a temporary code to <span>{userEmail}</span>
+                </p>
+              )}
+            </TitleDiv>
           </Heading>
           {!showBottomSection ? (
             // Second Step for signup process
@@ -196,38 +204,46 @@ function Signup() {
                   isLoading={loading}
                   type='submit'
                 />
-              </Form>
-              <Bottom>
-                <p>
+                <Bottom>
                   <a href='/login'>Back to Login</a>
-                </p>
-              </Bottom>
+                </Bottom>
+              </Form>
               <Bottom>
                 <p>By continuing, you are indicating that you have</p>
                 <p>
-                  read and agree to the <a>Terms of Use</a> and
+                  read and agree to the{' '}
+                  <a href='https://www.getconnect.tech/terms' target='_blank'>
+                    Terms of Use
+                  </a>{' '}
+                  and
                 </p>
                 <p>
-                  <a>Privacy Policy</a>
+                  <a href='https://www.getconnect.tech/privacy' target='_blank'>
+                    Privacy Policy
+                  </a>
                 </p>
               </Bottom>
             </>
           ) : (
             // Second Step for signup process
-            <CodeSection onSubmit={handleSignUpClick}>
-              <p>
-                We have sent a temporary code to <span>{userEmail}</span>
-              </p>
-              <Input
-                placeholder={'Enter Code'}
-                type={'number'}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setCode(e.target.value)
-                }
-              />
-              <Button title='Sign up' type='submit' width isLoading={loading} />
-              {Counter}
-            </CodeSection>
+            <>
+              <CodeSection onSubmit={handleSignUpClick}>
+                <Input
+                  placeholder={'Enter Code'}
+                  type={'number'}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setCode(e.target.value)
+                  }
+                />
+                <Button
+                  title='Sign up'
+                  type='submit'
+                  width
+                  isLoading={loading}
+                />
+                {Counter}
+              </CodeSection>
+            </>
           )}
         </LoginSection>
       </MainDiv>
