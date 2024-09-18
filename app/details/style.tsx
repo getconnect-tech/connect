@@ -119,6 +119,13 @@ const Input = styled.div<Props>`
   box-shadow: var(--shadow-card);
   margin-left: 10px;
   margin-top: 8px;
+  .attach-file-div {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 8px;
+  }
 `;
 
 const CenterDiv = styled.div`

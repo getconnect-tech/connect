@@ -81,7 +81,7 @@ export default function ProfileDropdown({ title, onClose }: Props) {
               height='12px'
               viewBox='0 0 12 12'
             />
-            <p>Logout</p>
+            <p>Log out</p>
           </ProfileItemDiv>
         </Frame2>
       </ProfileDrop>

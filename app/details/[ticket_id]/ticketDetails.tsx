@@ -45,7 +45,13 @@ import {
   deleteLabelFromTicket,
   addLabelToTicket,
 } from '@/services/clientSide/ticketServices';
-import { capitalizeString, getUniqueId, isEmpty } from '@/helpers/common';
+import {
+  capitalizeString,
+  generateRandomFilename,
+  getFirebaseUrlFromFile,
+  getUniqueId,
+  isEmpty,
+} from '@/helpers/common';
 import Icon from '@/components/icon/icon';
 import RichTextBox from '@/components/commentBox';
 import DropDown, { DropDownItem } from '@/components/dropDown/dropDown';
@@ -55,9 +61,10 @@ import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
 import SnoozeDropdown from '@/components/snoozeDropdown/snoozeDropdown';
 import InternalMessageCard from '@/components/internalMessageCard/internalMessageCard';
 import { messageStore } from '@/stores/messageStore';
-import { HandleClickProps } from '@/utils/appTypes';
+import { HandleClickProps, MessageAttachment } from '@/utils/appTypes';
 import LabelDropdown from '@/components/labelDropdown/labelDropdown';
 import { getMacros } from '@/services/clientSide/settingServices';
+import FileCard from '@/components/fileCard/fileCard';
 
 interface Props {
   ticket_id: string;
@@ -71,7 +78,9 @@ function TicketDetails(props: Props) {
   const [messageModeDropdown, setMessageModeDropdown] = useState(false);
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
+  const [messageRefId, setMessageRefId] = useState('');
   const [commentValue, setCommentValue] = useState<string>('');
+  const [attachFile, setAttachFiels] = useState<MessageAttachment[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { ticketStore, workspaceStore, userStore, settingStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
@@ -79,6 +88,7 @@ function TicketDetails(props: Props) {
   const { labels, macros } = settingStore || {};
   const { user } = userStore || {};
   const { priority, assigned_to, contact } = ticketDetails || {};
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [macroDropdown, setMacroDropdown] = useState(false);
   const [modeSelectedItem, setModeSelectedItem] = useState<DropDownItem>({
     name: 'Email',
@@ -128,6 +138,7 @@ function TicketDetails(props: Props) {
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
+      setMessageRefId(`${generateRandomFilename()}`);
       await Promise.all([
         getTicketDetails(ticket_id),
         getTicketMessages(ticket_id),
@@ -332,7 +343,11 @@ function TicketDetails(props: Props) {
       } else {
         type = MessageType.EMAIL;
       }
-      const payload = { content: content, type };
+      const payload = {
+        content: content,
+        type,
+        attachmentToken: attachFile?.length > 0 ? messageRefId : undefined,
+      };
       const newMessage = {
         assignee: null,
         author: user,
@@ -350,6 +365,7 @@ function TicketDetails(props: Props) {
       try {
         if (ticket_id) {
           setCommentValue('');
+          setAttachFiels([]);
           ticketStore.addTicketMessage(newMessage);
           await sendMessage(ticket_id, payload);
         }
@@ -357,7 +373,7 @@ function TicketDetails(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [ticket_id, user],
+    [ticket_id, user, messageRefId, attachFile],
   );
 
   /*
@@ -421,6 +437,7 @@ function TicketDetails(props: Props) {
               <InternalMessageCard
                 title={message?.content || ''}
                 time={message?.created_at}
+                attachments={message?.attachments}
               />
             </ActivityDiv>
           );
@@ -435,6 +452,7 @@ function TicketDetails(props: Props) {
                 time={message?.created_at}
                 subTitle={'To Teamcamp Support '}
                 message={message.content || ''}
+                attachments={message?.attachments}
               />
             </ActivityDiv>
           );
@@ -454,6 +472,7 @@ function TicketDetails(props: Props) {
                 subTitle={`To ${contact?.email}`}
                 message={message.content || ''}
                 readBy={message.read_by}
+                attachments={message?.attachments}
               />
             </ActivityDiv>
           );
@@ -541,6 +560,84 @@ function TicketDetails(props: Props) {
       }
     },
     [contact?.name, contact?.email],
+  );
+
+  const handleFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const convertBase64 = useCallback((file: File) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      const dynamicFilename = `cid:${generateRandomFilename()}+${file?.name}`;
+      fileReader.onload = () => {
+        const item = {
+          fileContent: fileReader.result,
+          fileType: file?.type,
+          name: dynamicFilename,
+          size: file?.size,
+          file: file,
+        };
+        resolve(item);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  }, []);
+
+  const handleFileRead = useCallback(
+    async (file: File) => {
+      const newPromise = convertBase64(file);
+      try {
+        const value = await Promise.all([newPromise]);
+        return value[0];
+      } catch (error) {
+        console.log('error', error);
+      }
+    },
+    [convertBase64],
+  );
+
+  const onFileUpload = useCallback(
+    async (event: { target: { files: FileList | null } }) => {
+      try {
+        if (event.target.files && event.target.files?.length > 0) {
+          const fileObj = event.target.files[0];
+          if (fileObj?.size > 2.5e8) {
+            messageStore.setErrorMessage(
+              'Please upload a file smaller than 250 MB.',
+            );
+            return false;
+          }
+          const fileData: any = await handleFileRead(fileObj);
+          if (!isEmpty(fileData?.fileContent)) {
+            const fileUrl = await getFirebaseUrlFromFile(
+              fileData?.file,
+              `tickets/${ticket_id}/temp/${messageRefId}/attachments`,
+              fileData?.name,
+            );
+            if (fileUrl) {
+              setAttachFiels([
+                ...(attachFile || []),
+                {
+                  fileName: fileData?.file?.name,
+                  contentType: fileData?.fileType,
+                  size: fileData?.size,
+                  downloadUrl: fileUrl,
+                },
+              ]);
+            }
+          }
+        }
+      } catch (e) {
+        console.log('Error while uploading file : ', e);
+      }
+    },
+    [messageRefId, ticket_id, attachFile],
   );
 
   return (
@@ -669,6 +766,17 @@ function TicketDetails(props: Props) {
                   valueContent={commentValue}
                   setValueContent={setCommentValue}
                 />
+                <div className='attach-file-div'>
+                  {/* Attached Files render */}
+                  {attachFile?.map((fileData, index: number) => (
+                    <FileCard
+                      key={index}
+                      documentText={fileData?.fileName || 'Uploaded file'}
+                      fileSize={`${fileData?.size}`}
+                      fileName={fileData?.fileName}
+                    />
+                  ))}
+                </div>
                 <InputIcon>
                   <div className='drop-tag'>
                     <DropDownWithTag
@@ -743,11 +851,11 @@ function TicketDetails(props: Props) {
                   </div>
                   <IconDiv modeSelectedItem={modeSelectedItem}>
                     <Icon
-                      onClick={() => {}}
                       iconName='attach-icon'
                       iconSize='12'
                       iconViewBox='0 0 12 12'
                       size={true}
+                      onClick={handleFileInput}
                     />
                     <Icon
                       onClick={() =>
@@ -762,6 +870,13 @@ function TicketDetails(props: Props) {
                     />
                   </IconDiv>
                 </InputIcon>
+                <input
+                  type='file'
+                  ref={fileInputRef}
+                  style={{ display: 'none' }}
+                  onChange={onFileUpload}
+                  multiple
+                />
               </Input>
             </div>
           </InputDiv>

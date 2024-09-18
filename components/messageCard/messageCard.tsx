@@ -1,19 +1,27 @@
-import React, { useState } from 'react';
+/* eslint-disable no-undef */
+/* eslint-disable max-len */
+import React, { useCallback, useState } from 'react';
 import moment from 'moment';
 import RenderHtml from '../renderHtml';
 import DropDown from '../dropDown/dropDown';
+import FileCard from '../fileCard/fileCard';
 import {
+  AttachmentMainDiv,
   CardHead,
   CardMessage,
   CardTop,
+  DownloadButton,
+  FileCardMainDiv,
   MessageCardInnerDiv,
   MessageCardMainDiv,
   NameDiv,
   NameTitle,
   TagDiv,
+  Title,
+  TitleDiv,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { ReadBy } from '@/utils/dataTypes';
+import { MessageAttachment, ReadBy } from '@/utils/dataTypes';
 
 interface Props {
   title: string;
@@ -21,6 +29,7 @@ interface Props {
   subTitle: string;
   message: string;
   readBy?: ReadBy[];
+  attachments?: MessageAttachment[];
 }
 
 export default function MessageCard({
@@ -29,6 +38,7 @@ export default function MessageCard({
   subTitle,
   message,
   readBy,
+  attachments = [],
 }: Props) {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [submenuPosition, setSubmenuPosition] = useState<
@@ -61,15 +71,24 @@ export default function MessageCard({
   ) => {
     const triggerElement = e.currentTarget;
     const rect = triggerElement.getBoundingClientRect();
+
+    // Height of the sticky input (122px)
+    const stickyInputHeight = 122;
+
+    // Available space above and below the trigger element
     // eslint-disable-next-line no-undef
-    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceBelow = window.innerHeight - rect.bottom - stickyInputHeight;
     const spaceAbove = rect.top;
 
+    // Adjust dropdown position based on available space
     if (spaceBelow < 200 && spaceAbove > 200) {
+      // Set dropdown to appear upwards
       setPosition('upwards');
     } else {
+      // Set dropdown to appear downwards
       setPosition('downwards');
     }
+
     setIsDropdownVisible(true);
   };
 
@@ -81,6 +100,13 @@ export default function MessageCard({
     name: item.name,
     duration: getDuration(item.seen_at),
   }));
+
+  const onClickDownloadAll = useCallback(() => {
+    attachments.forEach((item) => {
+      if (item?.downloadUrl) window.open(item?.downloadUrl, '_blank');
+    });
+  }, [attachments]);
+
   return (
     <MessageCardMainDiv>
       <MessageCardInnerDiv>
@@ -111,7 +137,12 @@ export default function MessageCard({
                   iconSize={''}
                   iconViewBox={''}
                   onMouseLeave={handleMouseLeave} // Ensure dropdown also hides when mouse leaves the dropdown area
-                  style={{ right: 12, maxWidth: 146, width: '100%' }}
+                  style={{
+                    right: 12,
+                    maxWidth: 146,
+                    width: '100%',
+                    zIndex: 9999999,
+                  }}
                   isSeen={true}
                   className={
                     submenuPosition === 'upwards'
@@ -126,6 +157,27 @@ export default function MessageCard({
         <CardMessage>
           <RenderHtml htmlstring={message} />
         </CardMessage>
+        {attachments?.length > 0 && (
+          <AttachmentMainDiv>
+            <TitleDiv>
+              <Title>{`${attachments?.length} Attachment${attachments?.length > 1 ? 's' : ''}`}</Title>
+              <DownloadButton onClick={onClickDownloadAll}>
+                Download All
+              </DownloadButton>
+            </TitleDiv>
+            <FileCardMainDiv>
+              {attachments?.map((attachment, index) => (
+                <FileCard
+                  key={index}
+                  documentText={attachment.fileName}
+                  fileSize={attachment.size}
+                  fileName={attachment.fileName}
+                  url={attachment.downloadUrl}
+                />
+              ))}
+            </FileCardMainDiv>
+          </AttachmentMainDiv>
+        )}
       </MessageCardInnerDiv>
     </MessageCardMainDiv>
   );
