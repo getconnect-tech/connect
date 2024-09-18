@@ -5,6 +5,7 @@ import {
   Prisma,
   User,
 } from '@prisma/client';
+import { getTicketAttachments } from './firebaseServices';
 import { prisma } from '@/prisma/prisma';
 
 export const postMessage = async ({
@@ -39,6 +40,19 @@ export const postMessage = async ({
 };
 
 export const getTicketMessages = async (ticketId: string) => {
+  // get workspace
+  const ticket = await prisma.ticket.findUnique({
+    where: { id: ticketId },
+    select: { workspace_id: true },
+  });
+
+  if (!ticket) {
+    throw new Error('Invalid ticket id!');
+  }
+
+  // const workspaceId = ticket.workspace_id;
+
+  // fetch raw messages data
   const messages = await prisma.message.findMany({
     where: { ticket_id: ticketId },
     include: {
@@ -109,6 +123,12 @@ export const getTicketMessages = async (ticketId: string) => {
     contactsMap.set(contact.email, contact);
   }
 
+  // get Message attachments
+  const messageAttachmentsMap = await getTicketAttachments(
+    ticket.workspace_id,
+    ticketId,
+  );
+
   // Format messages by injecting respective data
   const formattedMessages = messages.map((m) => {
     const { email_events, ...message } = m;
@@ -121,6 +141,7 @@ export const getTicketMessages = async (ticketId: string) => {
         seen_at: event.created_at,
       };
     });
+    const attachments = messageAttachmentsMap[message.id] || [];
 
     switch (message.type) {
       case MessageType.CHANGE_ASSIGNEE: {
@@ -132,6 +153,33 @@ export const getTicketMessages = async (ticketId: string) => {
       case MessageType.CHANGE_LABEL: {
         const label = labelsMap.get(message.reference_id)!;
         return { ...message, read_by, label, assignee: null };
+      }
+      case MessageType.REGULAR: {
+        return {
+          ...message,
+          read_by,
+          label: null,
+          assignee: null,
+          attachments,
+        };
+      }
+      case MessageType.EMAIL: {
+        return {
+          ...message,
+          read_by,
+          label: null,
+          assignee: null,
+          attachments,
+        };
+      }
+      case MessageType.FROM_CONTACT: {
+        return {
+          ...message,
+          read_by,
+          label: null,
+          assignee: null,
+          attachments,
+        };
       }
       default:
         return { ...message, read_by, label: null, assignee: null };

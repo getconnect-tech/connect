@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { EmailEventType, Message, MessageType } from '@prisma/client';
+import { Attachment } from 'postmark';
 import { handleApiError } from '@/helpers/errorHandler';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import {
@@ -15,7 +16,10 @@ import {
 } from '@/lib/zod/message';
 import { sendEmailAsReply } from '@/helpers/emails';
 import { getWorkspaceEmailConfig } from '@/services/serverSide/workspace';
-import { moveAttachments } from '@/services/serverSide/firebaseServices';
+import {
+  getAttachmentsFromToken,
+  moveAttachments,
+} from '@/services/serverSide/firebaseServices';
 
 export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
@@ -84,10 +88,19 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
 
       let newMessage: Message;
       try {
+        let attachments: Attachment[] = [];
+        if (attachmentToken) {
+          attachments = await getAttachmentsFromToken(
+            workspaceId,
+            ticketId,
+            attachmentToken,
+          );
+        }
         const mailId = await sendEmailAsReply({
           ticketId,
           body: content,
           senderEmail: emailConfig.primaryEmail,
+          attachments,
         });
 
         if (!mailId) {
