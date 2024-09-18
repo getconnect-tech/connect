@@ -623,10 +623,10 @@ function TicketDetails(props: Props) {
               setAttachFiels([
                 ...(attachFile || []),
                 {
-                  name: fileData?.file?.name,
-                  fileType: fileData?.fileType,
+                  fileName: fileData?.file?.name,
+                  contentType: fileData?.fileType,
                   size: fileData?.size,
-                  url: fileUrl,
+                  downloadUrl: fileUrl,
                 },
               ]);
             }
@@ -770,9 +770,9 @@ function TicketDetails(props: Props) {
                 {attachFile?.map((fileData, index: number) => (
                   <FileCard
                     key={index}
-                    documentText={fileData?.fileType || 'Uploaded file'}
+                    documentText={fileData?.contentType || 'Uploaded file'}
                     fileSize={`${fileData?.size}`}
-                    fileName={fileData?.name}
+                    fileName={fileData?.fileName}
                   />
                 ))}
 
