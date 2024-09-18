@@ -64,7 +64,7 @@ export const appInit: any = async () => {
       else if (currentWorkspace && isFoundWorkspace) {
         await getWorkspaceById(currentWorkspace);
         await getLabels();
-        return { type: APP_INIT_RESPONSE_TYPE.REDIRECT, path: '/inbox' };
+        return true;
       }
     }
   }

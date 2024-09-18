@@ -31,6 +31,9 @@ export default function MessageCard({
   readBy,
 }: Props) {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [submenuPosition, setSubmenuPosition] = useState<
+    'upwards' | 'downwards'
+  >('upwards');
 
   const getDuration = (lastSeen: Date) => {
     const lastSeenMoment = moment(lastSeen);
@@ -51,7 +54,22 @@ export default function MessageCard({
     }
   };
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = (
+    e: React.MouseEvent<HTMLElement>,
+    // eslint-disable-next-line no-unused-vars
+    setPosition: (position: 'upwards' | 'downwards') => void,
+  ) => {
+    const triggerElement = e.currentTarget;
+    const rect = triggerElement.getBoundingClientRect();
+    // eslint-disable-next-line no-undef
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+
+    if (spaceBelow < 200 && spaceAbove > 200) {
+      setPosition('upwards');
+    } else {
+      setPosition('downwards');
+    }
     setIsDropdownVisible(true);
   };
 
@@ -83,7 +101,7 @@ export default function MessageCard({
           </CardHead>
           {dropdownItems && dropdownItems.length > 0 && (
             <TagDiv
-              onMouseEnter={handleMouseEnter}
+              onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
               onMouseLeave={handleMouseLeave}
             >
               Seen
@@ -95,6 +113,11 @@ export default function MessageCard({
                   onMouseLeave={handleMouseLeave} // Ensure dropdown also hides when mouse leaves the dropdown area
                   style={{ right: 12, maxWidth: 146, width: '100%' }}
                   isSeen={true}
+                  className={
+                    submenuPosition === 'upwards'
+                      ? 'submenu-upwards'
+                      : 'submenu-downwards'
+                  }
                 />
               )}
             </TagDiv>

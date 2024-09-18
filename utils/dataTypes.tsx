@@ -50,3 +50,11 @@ export type EmailConfig = {
 };
 
 export type Macros = NonNullable<Awaited<ReturnType<typeof getMacros>>>[0];
+
+export type MessageAttachment = {
+  fileName: string;
+  contentId: string;
+  size: string;
+  contentType: string;
+  downloadUrl: string;
+};

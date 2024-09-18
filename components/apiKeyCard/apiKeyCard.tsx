@@ -1,10 +1,15 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import copy from 'clipboard-copy';
+import { observer } from 'mobx-react-lite';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
+import Modal from '../modal/modal';
+import DeleteModal from '../deleteModal/deleteModal';
 import { CardMainDiv, LeftDiv, RightDiv, TitleDiv } from './style';
 import { getAPIErrorMessage } from '@/helpers/common';
 import { messageStore } from '@/stores/messageStore';
+import { deleteAPIKey } from '@/services/clientSide/settingServices';
+import { useStores } from '@/stores';
 
 interface Props {
   keyName: string;
@@ -16,17 +21,20 @@ interface Props {
   apiKey: string;
 }
 
-function ApiKeyCard({
+const ApiKeyCard = ({
   keyName,
   keyNumber,
   currentOpenDropdown,
   setCurrentOpenDropdown,
   dropdownIdentifier,
   apiKey,
-}: Props) {
+}: Props) => {
   const dropDownItem = [
     { name: 'Delete', icon: 'delete-icon', isDelete: true },
   ];
+  const [deleteModal, setDeleteModal] = useState(false);
+  const { settingStore } = useStores();
+  const { loading } = settingStore || {};
 
   const handleDropdownClick = (dropdown: string) => {
     const identifier = `${dropdownIdentifier}-${dropdown}`;
@@ -34,6 +42,14 @@ function ApiKeyCard({
       currentOpenDropdown === identifier ? null : identifier,
     );
   };
+
+  const onOpenDeleteModal = useCallback(() => {
+    setDeleteModal(true);
+  }, []);
+
+  const onCloseDeleteModal = useCallback(() => {
+    setDeleteModal(false);
+  }, []);
 
   const handleCopyClick = useCallback(async () => {
     try {
@@ -46,6 +62,21 @@ function ApiKeyCard({
       return false;
     }
   }, []);
+
+  const handleDeleteAPIKey = useCallback(async () => {
+    try {
+      const res = await deleteAPIKey(apiKey);
+      if (res) {
+        settingStore.removeAPIKey(apiKey);
+      }
+      onCloseDeleteModal();
+    } catch (err: any) {
+      messageStore.setErrorMessage(
+        getAPIErrorMessage(err) || 'Something went wrong!',
+      );
+      return false;
+    }
+  }, [apiKey]);
 
   return (
     <CardMainDiv>
@@ -80,12 +111,23 @@ function ApiKeyCard({
                 setCurrentOpenDropdown(null);
               }}
               style={{ right: 0, minWidth: 116 }}
+              onChange={onOpenDeleteModal}
             />
           )}
         </div>
       </RightDiv>
+      <Modal open={deleteModal} onClose={onCloseDeleteModal}>
+        <DeleteModal
+          onClose={onCloseDeleteModal}
+          headTitle={'Delete API Key'}
+          title={'Are you sure you want to delete this API Key?'}
+          description={'This action can’t be undone.'}
+          onDelete={handleDeleteAPIKey}
+          loading={loading}
+        />
+      </Modal>
     </CardMainDiv>
   );
-}
+};
 
-export default ApiKeyCard;
+export default observer(ApiKeyCard);

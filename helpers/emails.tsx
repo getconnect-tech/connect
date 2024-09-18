@@ -1,4 +1,4 @@
-import { ServerClient } from 'postmark';
+import { Attachment, ServerClient } from 'postmark';
 import moment from 'moment';
 import { generateVerificationCode } from './common';
 import { prisma } from '@/prisma/prisma';
@@ -32,10 +32,12 @@ export const sendEmailAsReply = async ({
   ticketId,
   body,
   senderEmail,
+  attachments = [],
 }: {
   ticketId: string;
   body: string;
   senderEmail?: string;
+  attachments?: Attachment[];
 }) => {
   const ticket = await getTicketById(ticketId);
 
@@ -56,6 +58,7 @@ export const sendEmailAsReply = async ({
         Value: ticket.mail_id,
       },
     ],
+    Attachments: attachments,
   });
 
   return res.MessageID;
