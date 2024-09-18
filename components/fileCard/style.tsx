@@ -50,8 +50,9 @@ export const FileCardDiv = styled.div`
 `;
 
 export const TextPreviewDiv = styled.div`
-  font-size: 12px;
-  color: var(--text-color);
+  ${Typography.body_md_regular};
+  color: var(--text);
+  margin: 4px;
 `;
 
 export const Content = styled.div`
@@ -75,7 +76,7 @@ export const FileName = styled.div`
   text-overflow: ellipsis;
 `;
 export const FileSize = styled.div`
-  ${Typography.body_sm_regular};
+  ${Typography.body_xs_regular};
   color: var(--text-disabled);
   display: none;
 
