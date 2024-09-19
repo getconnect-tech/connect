@@ -8,6 +8,7 @@ import {
 import { app } from '@/utils/firebase';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { messageStore } from '@/stores/messageStore';
+import { appStore } from '@/stores/appStore';
 
 export function isEmpty(value: any) {
   if (
@@ -142,9 +143,10 @@ export const getFirebaseUrlFromFile = async (
         const uploadTask = uploadBytesResumable(storageRef, file, metadata);
         uploadTask.on(
           'state_changed',
-          () => {
-            // const progress =
-            //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            appStore.setUploadLoading(progress);
           },
           (error) => {
             myReject(error);
