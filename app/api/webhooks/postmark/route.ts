@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { EmailEventType, MessageType } from '@prisma/client';
+import { EmailEventType, MessageType, TicketStatus } from '@prisma/client';
 import { handleApiError } from '@/helpers/errorHandler';
 import { createTicket, getTicketByMailId } from '@/services/serverSide/ticket';
 import { createEmailEvent, postMessage } from '@/services/serverSide/message';
@@ -50,6 +50,13 @@ export const POST = async (req: NextRequest) => {
         });
       }
 
+      if (ticket.status === TicketStatus.CLOSED) {
+        await prisma.ticket.update({
+          where: { id: ticket.id },
+          data: { status: TicketStatus.OPEN },
+        });
+      }
+
       const message = await postMessage({
         messageContent: postmarkPayload.HtmlBody,
         messageType: MessageType.FROM_CONTACT,
@@ -57,12 +64,14 @@ export const POST = async (req: NextRequest) => {
         ticketId: ticket.id,
       });
 
-      await uploadAttachments(
-        workspaceId,
-        ticket.id,
-        message.id,
-        postmarkPayload.Attachments,
-      );
+      if (postmarkPayload.Attachments.length > 0) {
+        await uploadAttachments(
+          workspaceId,
+          ticket.id,
+          message.id,
+          postmarkPayload.Attachments,
+        );
+      }
     }
 
     if (isOutbound(postmarkPayload)) {
