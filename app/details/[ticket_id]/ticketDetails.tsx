@@ -443,7 +443,7 @@ function TicketDetails(props: Props) {
                   { emoji: '👍', count: 4 },
                   { emoji: '👌', count: 1 },
                 ]}
-                showReactions={true}
+                // showReactions={true}
                 attachments={message?.attachments}
               />
             </ActivityDiv>

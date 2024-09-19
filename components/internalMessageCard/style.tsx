@@ -158,6 +158,109 @@ const FileCardMainDiv = styled.div`
   flex-wrap: wrap;
 `;
 
+const EmojiPickerDiv = styled.div`
+  .submenu-upwards {
+    position: absolute;
+    bottom: calc(100% + 33px);
+    top: auto;
+  }
+
+  .submenu-downwards {
+    position: absolute;
+    top: 100%;
+    bottom: auto;
+  }
+  .reaction-button-div {
+    position: absolute;
+    z-index: 11;
+    margin-top: 4px;
+  }
+  .reaction-icon-div {
+    position: absolute;
+    z-index: 11;
+    margin-top: 20px;
+    margin-left: 12px;
+  }
+  .epr_-kg0voo {
+    display: none;
+  }
+  .epr_rco1ad {
+    display: none;
+  }
+  .epr_-bbny0t > button {
+    display: none;
+  }
+  .epr_qyh4cg {
+    display: none;
+  }
+  .epr_-4ueg5a {
+    width: 236px !important;
+    height: 255px !important;
+    box-shadow: var(--shadow-dropdown);
+    border: none;
+    border-radius: 12px;
+  }
+  .epr_-u8wwnq {
+    height: 16px;
+    min-height: unset;
+  }
+  .epr_xfdx0l {
+    width: 16px;
+    min-width: unset;
+  }
+  .epr_dkrjwv {
+    padding: unset;
+  }
+  .epr_-tul3d0 {
+    max-height: unset;
+  }
+  .epr_-a3ewa5 {
+    max-width: unset;
+  }
+  .epr_-nv0gqw {
+    height: 24px;
+  }
+  .epr_-5bhgbt {
+    width: 24px;
+  }
+  .epr_llv3nn {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 0 8px;
+    justify-content: flex-start;
+  }
+  .epr_-8ygbw8 {
+    padding: unset;
+    border-bottom: var(--border-main);
+  }
+  .epr_-6fvrrw {
+    border-radius: 50%;
+  }
+  .epr_-8623pq {
+    background-color: unset;
+    border: none;
+    height: 36px;
+  }
+  .epr_x558go:focus {
+    border: none;
+    background-color: unset;
+  }
+  .epr_jkst5z:focus {
+    background-color: var(--bg-surface-hover);
+    border-radius: 50%;
+  }
+  .epr_jkst5z:hover {
+    background-color: var(--bg-surface-hover);
+    border-radius: 50%;
+  }
+  .epr_gd8l4g {
+    ${Typography.body_sm_medium};
+    height: unset;
+    padding: 4px 12px;
+  }
+`;
+
 export {
   MainDiv,
   Div,
@@ -171,4 +274,5 @@ export {
   Title,
   DownloadButton,
   FileCardMainDiv,
+  EmojiPickerDiv,
 };
