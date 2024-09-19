@@ -137,6 +137,7 @@ const CenterDiv = styled.div`
   justify-content: end;
   gap: 20px;
   position: relative;
+  flex-grow: 1;
 `;
 
 const InputIcon = styled.div`

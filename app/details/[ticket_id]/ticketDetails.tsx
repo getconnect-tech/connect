@@ -1,5 +1,11 @@
 'use client';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
 import {
@@ -158,12 +164,35 @@ function TicketDetails(props: Props) {
       element.scrollTop = element.scrollHeight;
     }
   };
+
   useEffect(() => {
-    setTimeout(() => {
+    const element = messagesEndRef.current?.parentElement;
+
+    // Observer to detect changes in the DOM
+    const observer = new MutationObserver(() => {
+      scrollToBottom(); // Scroll to bottom on every DOM change
+    });
+
+    if (element) {
+      observer.observe(element, {
+        childList: true,
+        subtree: true,
+      });
+
+      // Initial scroll on mount
       scrollToBottom();
-    }, 0);
+    }
+
+    return () => {
+      if (element) {
+        observer.disconnect();
+      }
+    };
   }, [messages]);
 
+  useLayoutEffect(() => {
+    scrollToBottom(); // Ensure scroll happens immediately after layout recalculations
+  }, [messages]);
   useEffect(() => {
     return () => {
       ticketStore.setTicketDetails(null);
