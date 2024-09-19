@@ -346,7 +346,7 @@ function TicketDetails(props: Props) {
         type = MessageType.EMAIL;
       }
       const updatedAttachments = attachFile?.map((file, index) => ({
-        ...file,
+        ...(file || {}),
         contentId: `cid:${Date.now() + index}`, // Generating a unique contentId
         size: file.size.toString(),
         contentType: file.contentType ?? '',
