@@ -28,12 +28,13 @@ const BottomDiv = styled.div`
   margin: 0 auto;
   height: calc(100% - 120px);
   overflow: auto;
+  scroll-padding-bottom: 15px;
+  padding-bottom: 10px;
 `;
 
 const MainDiv = styled.div`
   width: 100%;
   margin-left: 223px;
-  overflow: auto;
   border-right: var(--border-main);
 `;
 

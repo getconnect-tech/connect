@@ -153,15 +153,15 @@ function TicketDetails(props: Props) {
   }, [loadData]);
 
   const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({
-        block: 'end',
-      });
+    const element = messagesEndRef.current?.parentElement;
+    if (element) {
+      element.scrollTop = element.scrollHeight;
     }
   };
-
   useEffect(() => {
-    scrollToBottom();
+    setTimeout(() => {
+      scrollToBottom();
+    }, 0);
   }, [messages]);
 
   useEffect(() => {
