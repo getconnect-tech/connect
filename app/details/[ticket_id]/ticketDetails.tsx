@@ -348,8 +348,8 @@ function TicketDetails(props: Props) {
       const updatedAttachments = attachFile?.map((file, index) => ({
         ...(file || {}),
         contentId: `cid:${Date.now() + index}`, // Generating a unique contentId
-        size: file.size.toString(),
-        contentType: file.contentType ?? '',
+        size: file.size?.toString(),
+        contentType: file?.contentType ?? '',
       }));
       const payload = {
         content: content,
