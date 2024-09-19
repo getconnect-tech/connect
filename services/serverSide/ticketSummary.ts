@@ -3,14 +3,14 @@ import { prisma } from '@/prisma/prisma';
 import { MessageSummary } from '@/utils/dataTypes';
 import { chatWithOpenAi } from '@/lib/openAi';
 
-const formateData = (item: MessageSummary) => {
-  const displayName =
-    item.author && item.author.display_name
-      ? item.author.display_name
-      : 'Anonymous';
+const formatMessageData = (message: MessageSummary) => {
+  const displayName = message.author.display_name
+    ? message.author.display_name +
+      (message.type === MessageType.FROM_CONTACT ? ` [CONTACT]` : '')
+    : 'Anonymous';
 
   // Remove HTML tags, inline styles, and class/id attributes, then replace &nbsp; with a regular space
-  const content = item.content
+  const content = message.content
     .replace(/<[^>]+(?:style="[^"]*"|class="[^"]*"|id="[^"]*")?[^>]*>/g, '') // Remove tags with style, class, or id
     .replace(/<\/?[^>]+(>|$)/g, '') // Remove remaining HTML tags
     .replace(/&nbsp;/g, ' ')
@@ -25,44 +25,80 @@ const formateData = (item: MessageSummary) => {
   return `${displayName}: ${content}`;
 };
 
-const getContent = async (ticketId: string) => {
-  const messages = await prisma.message.findMany({
-    where: {
-      ticket_id: ticketId,
-      type: {
-        in: [MessageType.REGULAR, MessageType.EMAIL, MessageType.FROM_CONTACT],
-      },
-    },
+const getTicketContent = async (ticketId: string) => {
+  const ticketData = await prisma.ticket.findUnique({
+    where: { id: ticketId },
     select: {
-      content: true,
-      author: { select: { email: true, display_name: true } },
+      messages: {
+        where: {
+          type: {
+            in: [
+              MessageType.REGULAR,
+              MessageType.EMAIL,
+              MessageType.FROM_CONTACT,
+            ],
+          },
+        },
+        select: {
+          content: true,
+          type: true,
+          author: {
+            select: {
+              email: true,
+              display_name: true,
+            },
+          },
+        },
+      },
+      contact: {
+        select: {
+          name: true,
+          email: true,
+        },
+      },
     },
   });
 
-  return messages
-    .map(formateData)
-    .filter((item: any) => item !== null) // Filter out null values
-    .join('\n\n'); // Join the array into a single string with newline as separator
+  if (!ticketData) {
+    throw new Error("'ticketId' is invalid!");
+  }
+
+  const processedMessages = ticketData.messages.map((message) => {
+    if (message.type === MessageType.FROM_CONTACT) {
+      return {
+        ...message,
+        author: {
+          email: ticketData.contact.email,
+          display_name: ticketData.contact.name, // Use contact name
+        },
+      };
+    }
+    return { ...message, author: message.author! };
+  });
+
+  return processedMessages
+    .map(formatMessageData)
+    .filter((item) => !!item)
+    .join('\n\n');
 };
 
 // Get ticket summary based on message data
 export const getTicketSummary = async (ticketId: string) => {
-  const ticketContent = await getContent(ticketId);
+  const ticketContent = await getTicketContent(ticketId);
 
-  const summary = await chatWithOpenAi(
-    `${ticketContent} \n\n\n Now give summary for above content in 1-2 lines.`,
-  );
+  const prompt = `${ticketContent}\n\n\nNow give summary for above content in 1-2 lines.`;
+  const summary = await chatWithOpenAi(prompt);
 
-  return { summary: summary.choices[0].message.content };
+  return summary.choices[0].message.content!;
 };
 
 // Get ticket sentiment based on message data
 export const getTicketSentiment = async (ticketId: string) => {
-  const ticketContent = await getContent(ticketId);
+  const ticketContent = await getTicketContent(ticketId);
 
-  const sentiment = await chatWithOpenAi(
-    `${ticketContent} \n\n\n Now give sentiment for above content in 1 line`,
-  );
+  // eslint-disable-next-line max-len
+  const prompt = `${ticketContent}\n\n\nNow give what is the sentiment of person tagged CONTACT in 1 line with an facial expression emoji. Format Example: Sanjay’s sentiment is slightly sad 😔`;
+  const sentiment = await chatWithOpenAi(prompt);
 
-  return { sentiment: sentiment.choices[0].message.content };
+  return sentiment.choices[0].message.content!;
 };
