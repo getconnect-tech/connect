@@ -39,4 +39,44 @@ const Div = styled.div`
   }
 `;
 
-export { MainDiv, Div };
+const AttachmentMainDiv = styled.div`
+  border-top: var(--border-main);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const TitleDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const Title = styled.div`
+  ${Typography.body_md_medium};
+  color: var(--text);
+`;
+
+const DownloadButton = styled.div`
+  ${Typography.body_md_medium};
+  color: var(--text);
+  cursor: pointer;
+`;
+
+const FileCardMainDiv = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+`;
+
+export {
+  MainDiv,
+  Div,
+  AttachmentMainDiv,
+  TitleDiv,
+  Title,
+  DownloadButton,
+  FileCardMainDiv,
+};

@@ -31,3 +31,10 @@ interface LastMessage {
 }
 
 export type Message = { id: string; type: string; content: string };
+
+export type MessageAttachment = {
+  fileName: string;
+  contentType?: string;
+  size: number;
+  downloadUrl: string;
+};
