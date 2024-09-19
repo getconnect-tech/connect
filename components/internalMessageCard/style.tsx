@@ -164,11 +164,16 @@ const EmojiPickerDiv = styled.div`
     bottom: calc(100% + 33px);
     top: auto;
   }
-
   .submenu-downwards {
     position: absolute;
     top: 100%;
     bottom: auto;
+  }
+  .epr_-7mgpwf:hover {
+    background-color: var(--bg-surface-hover);
+  }
+  .epr_1544oe:hover {
+    background-position-y: unset;
   }
   .reaction-button-div {
     position: absolute;
