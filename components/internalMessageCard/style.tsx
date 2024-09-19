@@ -63,6 +63,7 @@ const IconDiv = styled.div`
   align-items: center;
   justify-content: center;
   left: 35px;
+  cursor: pointer;
   svg {
     fill: var(--icon);
   }
