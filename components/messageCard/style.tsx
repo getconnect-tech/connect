@@ -65,6 +65,7 @@ const CardMessage = styled.p`
       border-bottom: var(--border-main) !important;
       border: none;
       margin-bottom: 5px;
+      margin-top: 10px;
     }
   }
 `;
