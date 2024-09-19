@@ -89,11 +89,13 @@ function TicketDetails(props: Props) {
   const [commentValue, setCommentValue] = useState<string>('');
   const [attachFile, setAttachFiels] = useState<MessageAttachment[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { ticketStore, workspaceStore, userStore, settingStore } = useStores();
+  const { ticketStore, workspaceStore, userStore, settingStore, appStore } =
+    useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
   const { labels, macros } = settingStore || {};
   const { user } = userStore || {};
+  const { uploadLoading } = appStore || {};
   const { priority, assigned_to, contact } = ticketDetails || {};
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [macroDropdown, setMacroDropdown] = useState(false);
@@ -373,6 +375,12 @@ function TicketDetails(props: Props) {
       } else {
         type = MessageType.EMAIL;
       }
+      const updatedAttachments = attachFile?.map((file, index) => ({
+        ...(file || {}),
+        contentId: `cid:${Date.now() + index}`, // Generating a unique contentId
+        size: file.size?.toString(),
+        contentType: file?.contentType ?? '',
+      }));
       const payload = {
         content: content,
         type,
@@ -381,6 +389,7 @@ function TicketDetails(props: Props) {
       const newMessage = {
         assignee: null,
         author: user,
+        attachments: updatedAttachments,
         author_id: user!.id,
         content,
         id: getUniqueId(),
@@ -879,6 +888,9 @@ function TicketDetails(props: Props) {
                       </div>
                     )}
                   </div>
+                  {uploadLoading !== null && (
+                    <p>Loading...({Math.floor(uploadLoading)}%)</p>
+                  )}
                   <IconDiv modeSelectedItem={modeSelectedItem}>
                     <Icon
                       iconName='attach-icon'
