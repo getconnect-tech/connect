@@ -58,3 +58,11 @@ export type MessageAttachment = {
   contentType: string;
   downloadUrl: string;
 };
+
+export type MessageSummary = {
+  content: string;
+  author: {
+    email: string;
+    display_name: string | null;
+  } | null;
+};
