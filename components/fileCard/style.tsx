@@ -71,7 +71,7 @@ export const FileName = styled.div`
   ${Typography.body_sm_medium};
   color: var(--text-white);
   max-width: 113px;
-  white-space: nowrap;
+  white-space: nowrap !important;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
