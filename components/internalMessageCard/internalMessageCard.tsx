@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import moment from 'moment';
+import FileCard from '../fileCard/fileCard';
 import {
   AddReactionButton,
+  AttachmentMainDiv,
   Div,
+  DownloadButton,
   Emoji,
+  FileCardMainDiv,
   IconDiv,
   MainDiv,
   ReactionCard,
   ReactionsMainDiv,
+  Title,
+  TitleDiv,
 } from './style';
+import { MessageAttachment } from '@/utils/dataTypes';
 import SVGIcon from '@/assets/icons/SVGIcon';
 
 interface ReactionProps {
@@ -20,6 +27,7 @@ interface Props {
   time: Date;
   showReactions?: boolean;
   reactions: ReactionProps[];
+  attachments?: MessageAttachment[];
 }
 
 export default function InternalMessageCard({
@@ -27,13 +35,41 @@ export default function InternalMessageCard({
   title,
   showReactions,
   reactions,
+  attachments = [],
 }: Props) {
+  const onClickDownloadAll = useCallback(() => {
+    attachments.forEach((item) => {
+      // eslint-disable-next-line no-undef
+      if (item?.downloadUrl) window.open(item?.downloadUrl, '_blank');
+    });
+  }, [attachments]);
   return (
     <div>
       <MainDiv>
         <Div>
           <p>
             <div dangerouslySetInnerHTML={{ __html: title }} />
+            {attachments && attachments?.length > 0 && (
+              <AttachmentMainDiv>
+                <TitleDiv>
+                  <Title>{`${attachments?.length} Attachment${attachments?.length > 1 ? 's' : ''}`}</Title>
+                  <DownloadButton onClick={onClickDownloadAll}>
+                    Download All
+                  </DownloadButton>
+                </TitleDiv>
+                <FileCardMainDiv>
+                  {attachments?.map((attachment, index) => (
+                    <FileCard
+                      key={index}
+                      documentText={attachment.fileName}
+                      fileSize={attachment.size}
+                      fileName={attachment.fileName}
+                      url={attachment.downloadUrl}
+                    />
+                  ))}
+                </FileCardMainDiv>
+              </AttachmentMainDiv>
+            )}
           </p>
           <span>{moment(time).fromNow()}</span>
         </Div>

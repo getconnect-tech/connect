@@ -148,41 +148,20 @@ export const getTicketMessages = async (ticketId: string) => {
         const assignee = message.reference_id
           ? usersMap.get(message.reference_id)!
           : null;
-        return { ...message, read_by, assignee, label: null };
+        return { ...message, read_by, assignee, label: null, attachments };
       }
       case MessageType.CHANGE_LABEL: {
         const label = labelsMap.get(message.reference_id)!;
-        return { ...message, read_by, label, assignee: null };
-      }
-      case MessageType.REGULAR: {
-        return {
-          ...message,
-          read_by,
-          label: null,
-          assignee: null,
-          attachments,
-        };
-      }
-      case MessageType.EMAIL: {
-        return {
-          ...message,
-          read_by,
-          label: null,
-          assignee: null,
-          attachments,
-        };
-      }
-      case MessageType.FROM_CONTACT: {
-        return {
-          ...message,
-          read_by,
-          label: null,
-          assignee: null,
-          attachments,
-        };
+        return { ...message, read_by, label, assignee: null, attachments };
       }
       default:
-        return { ...message, read_by, label: null, assignee: null };
+        return {
+          ...message,
+          read_by,
+          label: null,
+          assignee: null,
+          attachments,
+        };
     }
   });
 

@@ -161,6 +161,9 @@ a {
   --border-input_border: #dcdcd9;
   --border-brand: #282828;
   --border-disabled: #e7e7e4;
+  /* file card color */
+  --bg-overlay-color: #282828cc;
+  --overlay-color: rgba(40, 40, 40, 0);
   /* All type of borders */
   --border-width: 1px;
   --border-light-width: 0.5px;

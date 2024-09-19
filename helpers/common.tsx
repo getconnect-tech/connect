@@ -111,7 +111,11 @@ export const generateRandomFilename = () => {
  * @desc Convert file data to firebase URL
  * @param {Record<string, any>} file folderName
  */
-export const getFirebaseUrlFromFile = async (file: any, folderName: string) => {
+export const getFirebaseUrlFromFile = async (
+  file: any,
+  folderName: string,
+  fileName?: string,
+) => {
   try {
     const promises = [];
     let profile;
@@ -125,13 +129,16 @@ export const getFirebaseUrlFromFile = async (file: any, folderName: string) => {
         const uniqueFilename = generateRandomFilename();
         const fullFilename = `${file?.name.replace(/\.[^/.]+$/, '')}_${uniqueFilename}.${fileExtension}`;
         let pathName = '';
-        if (folderName !== 'UserProfiles') {
+        if (!folderName?.startsWith('UserProfiles')) {
           const workspace = workspaceStore.currentWorkspace;
           pathName = `workspaces/${workspace?.id}/${folderName}`;
         } else {
           pathName = folderName;
         }
-        const storageRef = ref(storage, pathName + fullFilename);
+        const storageRef = ref(
+          storage,
+          `${pathName}/${fileName ? fileName : fullFilename}`,
+        );
         const uploadTask = uploadBytesResumable(storageRef, file, metadata);
         uploadTask.on(
           'state_changed',
@@ -196,4 +203,20 @@ export const createStreamFromBuffer = (contents: string) => {
   passthroughStream.end();
 
   return passthroughStream;
+};
+
+export const formatFileSize = (sizeInBytes: number): string => {
+  const kb = 1024;
+  const mb = kb * 1024;
+  const gb = mb * 1024;
+
+  if (sizeInBytes >= gb) {
+    return (sizeInBytes / gb).toFixed(2) + ' GB';
+  } else if (sizeInBytes >= mb) {
+    return (sizeInBytes / mb).toFixed(2) + ' MB';
+  } else if (sizeInBytes >= kb) {
+    return (sizeInBytes / kb).toFixed(2) + ' KB';
+  } else {
+    return sizeInBytes + ' Bytes';
+  }
 };

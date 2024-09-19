@@ -66,7 +66,10 @@ const MyProfile = () => {
         userStore.setLoading(true);
         let profile;
         if (image) {
-          profile = await getFirebaseUrlFromFile(image?.file, 'UserProfiles');
+          profile = await getFirebaseUrlFromFile(
+            image?.file,
+            `UserProfiles/${user?.id}`,
+          );
         }
         const updatedImege =
           !isEmpty(image?.profile) && profile
