@@ -345,6 +345,12 @@ function TicketDetails(props: Props) {
       } else {
         type = MessageType.EMAIL;
       }
+      const updatedAttachments = attachFile?.map((file, index) => ({
+        ...file,
+        contentId: `cid:${Date.now() + index}`, // Generating a unique contentId
+        size: file.size.toString(),
+        contentType: file.contentType ?? '',
+      }));
       const payload = {
         content: content,
         type,
@@ -353,6 +359,7 @@ function TicketDetails(props: Props) {
       const newMessage = {
         assignee: null,
         author: user,
+        attachments: updatedAttachments,
         author_id: user!.id,
         content,
         id: getUniqueId(),
