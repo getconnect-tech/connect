@@ -852,7 +852,7 @@ function TicketDetails(props: Props) {
                     )}
                   </div>
                   {uploadLoading !== null && (
-                    <p>Loading...({uploadLoading}%)</p>
+                    <p>Loading...({Math.floor(uploadLoading)}%)</p>
                   )}
                   <IconDiv modeSelectedItem={modeSelectedItem}>
                     <Icon
