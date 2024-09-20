@@ -19,7 +19,7 @@ export const Typography = {
   body_xs_regular: css`
     font-size: 11px;
     line-height: 12px;
-    font-weight: 500;
+    font-weight: 400;
   `,
   body_sm_regular: css`
     font-size: 12px;

@@ -49,6 +49,7 @@ export default function FileCard({
             iconName={'download-alt-icon'}
             iconSize={'12'}
             iconViewBox={'0 0 12 12'}
+            secondaryIcon={true}
           />
         </a>
       </div>
