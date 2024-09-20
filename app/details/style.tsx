@@ -121,6 +121,10 @@ const Input = styled.div<Props>`
   box-shadow: var(--shadow-card);
   margin-left: 10px;
   margin-top: 8px;
+  .loading-text {
+    ${Typography.body_sm_regular};
+    margin-bottom: 10px;
+  }
   .attach-file-div {
     display: flex;
     gap: 8px;

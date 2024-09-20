@@ -805,6 +805,11 @@ function TicketDetails(props: Props) {
                     />
                   ))}
                 </div>
+                {uploadLoading !== null && (
+                  <p className='loading-text'>
+                    Loading...({Math.floor(uploadLoading)}%)
+                  </p>
+                )}
                 <InputIcon>
                   <div className='drop-tag'>
                     <DropDownWithTag
@@ -877,9 +882,6 @@ function TicketDetails(props: Props) {
                       </div>
                     )}
                   </div>
-                  {uploadLoading !== null && (
-                    <p>Loading...({Math.floor(uploadLoading)}%)</p>
-                  )}
                   <IconDiv modeSelectedItem={modeSelectedItem}>
                     <Icon
                       iconName='attach-icon'

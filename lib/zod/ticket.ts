@@ -1,4 +1,4 @@
-import { PriorityLevels, TicketSource, TicketStatus } from '@prisma/client';
+import { PriorityLevels, TicketStatus } from '@prisma/client';
 import { z } from 'zod';
 
 export const titleSchema = z.string({
@@ -23,10 +23,6 @@ export const contactIdSchema = z
 
 export const prioritySchema = z.nativeEnum(PriorityLevels, {
   required_error: "'priority' is required!",
-});
-
-export const ticketSourceSchema = z.nativeEnum(TicketSource, {
-  required_error: "'source' is required!",
 });
 
 export const statusSchema = z.nativeEnum(TicketStatus, {
