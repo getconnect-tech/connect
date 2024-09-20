@@ -1,8 +1,10 @@
+/* eslint-disable indent */
 import styled, { css } from 'styled-components';
 
 interface Props {
   size?: boolean;
   isActive?: boolean;
+  secondaryIcon?: boolean;
 }
 
 export const IconDiv = styled.div<Props>`
@@ -22,6 +24,11 @@ export const IconDiv = styled.div<Props>`
     svg {
       fill: var(--icon-hover);
     }
+    ${(props) =>
+      props.secondaryIcon &&
+      css`
+        background-color: var(--bg-surface-hover);
+      `}
   }
   ${(props) =>
     props.isActive &&

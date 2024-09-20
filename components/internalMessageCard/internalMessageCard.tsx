@@ -1,22 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import moment from 'moment';
-import EmojiPicker, { EmojiClickData } from 'emoji-picker-react'; // Import the EmojiPicker component
+import EmojiPicker, { Emoji, EmojiClickData } from 'emoji-picker-react'; // Import the EmojiPicker component
 import FileCard from '../fileCard/fileCard';
-import {
-  AddReactionButton,
-  AttachmentMainDiv,
-  Div,
-  DownloadButton,
-  Emoji,
-  EmojiPickerDiv,
-  FileCardMainDiv,
-  IconDiv,
-  MainDiv,
-  ReactionCard,
-  ReactionsMainDiv,
-  Title,
-  TitleDiv,
-} from './style';
+import { AddReactionButton, AttachmentMainDiv, Div, EmojiPickerDiv, FileCardMainDiv, MainDiv, ReactionCard, ReactionsMainDiv } from './style';
 import { MessageAttachment } from '@/utils/dataTypes';
 import SVGIcon from '@/assets/icons/SVGIcon';
 
@@ -73,14 +59,6 @@ export default function InternalMessageCard({
     'upwards' | 'downwards'
   >('upwards');
 
-  // Function to handle downloading all attachments
-  const onClickDownloadAll = useCallback(() => {
-    attachments.forEach((item) => {
-      // eslint-disable-next-line no-undef
-      if (item?.downloadUrl) window.open(item?.downloadUrl, '_blank');
-    });
-  }, [attachments]);
-
   const handleMouseEnter = (
     e: React.MouseEvent<HTMLElement>,
     // eslint-disable-next-line no-unused-vars
@@ -121,19 +99,13 @@ export default function InternalMessageCard({
   };
 
   return (
-    <div>
+    <>
       <MainDiv>
         <Div>
           <p>
             <div dangerouslySetInnerHTML={{ __html: title }} />
             {attachments && attachments?.length > 0 && (
               <AttachmentMainDiv>
-                <TitleDiv>
-                  <Title>{`${attachments?.length} Attachment${attachments?.length > 1 ? 's' : ''}`}</Title>
-                  <DownloadButton onClick={onClickDownloadAll}>
-                    Download All
-                  </DownloadButton>
-                </TitleDiv>
                 <FileCardMainDiv>
                   {attachments?.map((attachment, index) => (
                     <FileCard
@@ -214,6 +186,6 @@ export default function InternalMessageCard({
           </EmojiPickerDiv>
         </ReactionsMainDiv>
       )}
-    </div>
+    </>
   );
 }

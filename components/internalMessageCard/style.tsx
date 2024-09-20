@@ -125,29 +125,11 @@ const AddReactionButton = styled.div`
   }
 `;
 const AttachmentMainDiv = styled.div`
-  border-top: var(--border-main);
-  padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-`;
-
-const TitleDiv = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-`;
-
-const Title = styled.div`
-  ${Typography.body_md_medium};
-  color: var(--text);
-`;
-
-const DownloadButton = styled.div`
-  ${Typography.body_md_medium};
-  color: var(--text);
-  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 6px;
 `;
 
 const FileCardMainDiv = styled.div`
@@ -274,9 +256,6 @@ export {
   Emoji,
   AddReactionButton,
   AttachmentMainDiv,
-  TitleDiv,
-  Title,
-  DownloadButton,
   FileCardMainDiv,
   EmojiPickerDiv,
 };
