@@ -2,7 +2,7 @@ import {
   MessageType,
   PriorityLevels,
   Prisma,
-  TicketSource,
+  ChannelType,
   TicketStatus,
 } from '@prisma/client';
 import { createOrUpdateContact } from './contact';
@@ -161,7 +161,7 @@ export const createTicket = async ({
       workspace_id: workspaceId,
       mail_id: mailId,
       title: subject,
-      source: TicketSource.MAIL,
+      source: ChannelType.MAIL,
       contact_id: contact.id,
       subject,
     },
@@ -175,7 +175,7 @@ export const updateTicket = async (
   ticketUpdates: {
     title?: string;
     priority?: PriorityLevels;
-    source?: TicketSource;
+    source?: ChannelType;
     contactId?: string;
     assignedTo?: string;
     status?: TicketStatus;
