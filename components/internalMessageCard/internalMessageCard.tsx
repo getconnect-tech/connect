@@ -106,7 +106,7 @@ export default function InternalMessageCard({
       { emoji: emojiData.emoji, count: 1 },
     ];
     setSelectedReactions(newReactions);
-    setShowEmojiPicker(false); // Close the emoji picker after selecting an emoji
+    setShowEmojiPicker(false);
   };
 
   return (
