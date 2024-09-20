@@ -19,12 +19,13 @@ import {
   contentSchema,
   messageTypeSchema,
 } from '@/lib/zod/message';
-import { sendEmailAsReply } from '@/helpers/emails';
+import { sendEmail, sendEmailAsReply } from '@/helpers/emails';
 import { getWorkspaceEmailConfig } from '@/services/serverSide/workspace';
 import {
   getAttachmentsFromToken,
   moveAttachments,
 } from '@/services/serverSide/firebaseServices';
+import { prisma } from '@/prisma/prisma';
 
 export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
@@ -94,6 +95,24 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
 
       let newMessage: Message;
       try {
+        const ticket = await prisma.ticket.findUnique({
+          where: { id: ticketId },
+          select: {
+            mail_id: true,
+            source: true,
+            subject: true,
+            contact: {
+              select: {
+                email: true,
+              },
+            },
+          },
+        });
+
+        if (!ticket) {
+          return Response.json({ error: 'Ticket not found!' }, { status: 404 });
+        }
+
         let attachments: Attachment[] = [];
         if (attachmentToken) {
           attachments = await getAttachmentsFromToken(
@@ -102,15 +121,32 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
             attachmentToken,
           );
         }
-        const mailId = await sendEmailAsReply({
-          ticketId,
-          body: content,
-          senderEmail: emailConfig.primaryEmail,
-          attachments,
-        });
 
-        if (!mailId) {
-          return Response.json({ error: 'Ticket not found!' }, { status: 404 });
+        let mailId: string;
+        if (ticket.source === ChannelType.WEB && !ticket.mail_id) {
+          // The ticket was from web and this is first email in the ticket
+
+          const postmarkMailId = await sendEmail({
+            email: ticket.contact.email,
+            subject: ticket.subject,
+            body: content,
+            senderEmail: emailConfig.primaryEmail,
+            attachments,
+          });
+
+          mailId = `<${postmarkMailId}@mtasv.net>`;
+
+          await prisma.ticket.update({
+            where: { id: ticketId },
+            data: { mail_id: mailId },
+          });
+        } else {
+          mailId = (await sendEmailAsReply({
+            ticketId,
+            body: content,
+            senderEmail: emailConfig.primaryEmail,
+            attachments,
+          }))!;
         }
 
         newMessage = await postMessage({
