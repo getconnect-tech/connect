@@ -125,10 +125,7 @@ export default function InternalMessageCard({
       <MainDiv>
         <Div>
           <p>
-            <div
-              dangerouslySetInnerHTML={{ __html: title }}
-              className='message'
-            />
+            <div dangerouslySetInnerHTML={{ __html: title }} />
             {attachments && attachments?.length > 0 && (
               <AttachmentMainDiv>
                 <TitleDiv>

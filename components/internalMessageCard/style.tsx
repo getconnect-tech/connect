@@ -22,14 +22,12 @@ const Div = styled.div`
   p {
     cursor: pointer;
     background-color: var(--bg-surface-secondary);
+    padding: 6px 12px;
     ${Typography.body_md_regular};
     color: var(--text);
     border-radius: 8px;
     word-wrap: break-word;
     max-width: 536px;
-    .message {
-      padding: 6px 12px;
-    }
     div {
       white-space: normal;
       p {
@@ -127,8 +125,8 @@ const AddReactionButton = styled.div`
   }
 `;
 const AttachmentMainDiv = styled.div`
-  border-top: var(--border-secondary);
-  padding: 6px 12px;
+  border-top: var(--border-main);
+  padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 8px;
