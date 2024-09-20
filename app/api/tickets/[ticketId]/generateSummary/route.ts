@@ -9,6 +9,7 @@ import {
 // GET: /api/tickets/[ticketId]/generateSummary
 export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
+    // Get massage informate from ticket
     const messageData = await getTicketContent(ticketId);
 
     const [ticketSummary, ticketSentiment] = await Promise.all([
