@@ -114,7 +114,7 @@ class TicketStore {
   }
 
   // Set ticketSummary
-  setTicketSummary(value: TicketSummary) {
+  setTicketSummary(value: TicketSummary | null) {
     this.ticketSummary = value;
   }
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Actions,
   ActionsDiv,
@@ -13,9 +13,13 @@ import {
   Title,
 } from './styles';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { ticketStore } from '@/stores/ticketStore';
+import { isEmpty } from '@/helpers/common';
+import { getTicketSummary } from '@/services/clientSide/ticketServices';
 
 function AIBlock() {
   const [generateReply, setGenerateReply] = useState(false);
+  const { ticketDetails, ticketSummary, loading } = ticketStore;
 
   const onClickReplyButton = useCallback(() => {
     setGenerateReply(true);
@@ -25,6 +29,19 @@ function AIBlock() {
     setGenerateReply(false);
   }, []);
 
+  const loadData = useCallback(async () => {
+    if (ticketDetails && !isEmpty(ticketDetails?.id)) {
+      await getTicketSummary(ticketDetails?.id);
+    }
+  }, [ticketDetails?.id]);
+
+  useEffect(() => {
+    loadData();
+    return () => {
+      ticketStore.setTicketSummary(null);
+    };
+  }, [loadData]);
+
   return (
     <>
       <ProfileDiv>
@@ -33,48 +50,50 @@ function AIBlock() {
         </AIIcon>
         <Title>Connect AI</Title>
       </ProfileDiv>
-      <DetailsProfileDiv>
-        <DescriptionDiv>
-          <AIText>
-            Sanjay has issues related to Payment in Invoicing module
-          </AIText>
-          <AIText>Sanjay’s sentiment is slightly sad 😔</AIText>
-        </DescriptionDiv>
-        <DescriptionDiv>
-          <h6>Suggested Action</h6>
-          <ActionsDiv>
-            <Actions>
-              Assign To <span>Sanjay</span>
-            </Actions>
-            <Actions>
-              Add <span>Bug</span> Label
-            </Actions>
-            <Actions>
-              Set <span>Medium</span> Priority
-            </Actions>
-            <ReplyButton onClick={onClickReplyButton}>
-              Generate Reply
-            </ReplyButton>
-          </ActionsDiv>
-        </DescriptionDiv>
-        {generateReply && (
+      {loading ? (
+        'Loading'
+      ) : (
+        <DetailsProfileDiv>
           <DescriptionDiv>
-            <h6>Generated replies</h6>
-            <QuestionMainDiv>
-              <ReplyCard onClick={onCloseReplyCard}>
-                Please let me know if there’s anything specific you’d like me to
-                prepare or review beforehand.
-              </ReplyCard>
-              <ReplyCard onClick={onCloseReplyCard}>
-                We have received your application.
-              </ReplyCard>
-              <ReplyCard onClick={onCloseReplyCard}>
-                Looking forward to collaborating with you again in the future.
-              </ReplyCard>
-            </QuestionMainDiv>
+            <AIText>{ticketSummary?.ticketSummary}</AIText>
+            <AIText>{ticketSummary?.ticketSentiment}</AIText>
           </DescriptionDiv>
-        )}
-      </DetailsProfileDiv>
+          <DescriptionDiv>
+            <h6>Suggested Action</h6>
+            <ActionsDiv>
+              <Actions>
+                Assign To <span>Sanjay</span>
+              </Actions>
+              <Actions>
+                Add <span>Bug</span> Label
+              </Actions>
+              <Actions>
+                Set <span>Medium</span> Priority
+              </Actions>
+              <ReplyButton onClick={onClickReplyButton}>
+                Generate Reply
+              </ReplyButton>
+            </ActionsDiv>
+          </DescriptionDiv>
+          {generateReply && (
+            <DescriptionDiv>
+              <h6>Generated replies</h6>
+              <QuestionMainDiv>
+                <ReplyCard onClick={onCloseReplyCard}>
+                  Please let me know if there’s anything specific you’d like me
+                  to prepare or review beforehand.
+                </ReplyCard>
+                <ReplyCard onClick={onCloseReplyCard}>
+                  We have received your application.
+                </ReplyCard>
+                <ReplyCard onClick={onCloseReplyCard}>
+                  Looking forward to collaborating with you again in the future.
+                </ReplyCard>
+              </QuestionMainDiv>
+            </DescriptionDiv>
+          )}
+        </DetailsProfileDiv>
+      )}
     </>
   );
 }
