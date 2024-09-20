@@ -12,8 +12,6 @@ import { getUserDetails } from '@/services/clientSide/userService';
 import { Workspace } from '@/utils/dataTypes';
 import { getLabels } from '@/services/clientSide/settingServices';
 
-console.log(process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID!);
-
 const initOneSignal = async (userId: string) => {
   try {
     // OneSignal.Debug.setLogLevel('trace');
