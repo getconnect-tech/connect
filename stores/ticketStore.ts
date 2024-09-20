@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from 'mobx';
 import { TicketDetailsInterface } from '@/utils/appTypes';
-import { MessageDetails } from '@/utils/dataTypes';
+import { MessageDetails, TicketSummary } from '@/utils/dataTypes';
 
 class TicketStore {
   loading = false;
@@ -8,6 +8,7 @@ class TicketStore {
   ticketDetails: TicketDetailsInterface | null = null;
   messages: MessageDetails[] = [];
   filteredTicketList: TicketDetailsInterface[] = [];
+  ticketSummary: TicketSummary | null = null;
 
   constructor() {
     makeObservable(this, {
@@ -35,6 +36,10 @@ class TicketStore {
       // Inbox ticket List
       filteredTicketList: observable,
       setFilteredTicketList: action,
+
+      // Ticket summary
+      ticketSummary: observable,
+      setTicketSummary: action,
     });
   }
 
@@ -106,6 +111,11 @@ class TicketStore {
     if (tab === 'Open') this.filteredTicketList = openTickets;
     else if (tab === 'Snoozed') this.filteredTicketList = snoozeTicket;
     else if (tab === 'Done') this.filteredTicketList = closedTickets;
+  }
+
+  // Set ticketSummary
+  setTicketSummary(value: TicketSummary) {
+    this.ticketSummary = value;
   }
 }
 
