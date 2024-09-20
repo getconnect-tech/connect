@@ -34,7 +34,7 @@ Connect is the open-source support system for B2B SaaS companies.
 - [Next.js](https://nextjs.org/) – framework
 - [TypeScript](https://www.typescriptlang.org/) – language
 - [Tinybird](https://tinybird.com/) – analytics
-  [Supabase](https://supabase.com/) – database
+- [Supabase](https://supabase.com/) – database
 - [NextAuth.js](https://next-auth.js.org/) – auth
 - [Postmark](https://postmarkapp.com/) – emails
 - [Vercel](https://vercel.com/) – deployments
