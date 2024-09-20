@@ -26,6 +26,7 @@ enum MessageType {
 enum ChannelType {
   MAIL
   WEB
+  INTERNAL
 }
 
 enum TicketStatus {
