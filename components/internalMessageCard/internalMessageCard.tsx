@@ -1,8 +1,19 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
-import EmojiPicker, { Emoji, EmojiClickData } from 'emoji-picker-react'; // Import the EmojiPicker component
+import EmojiPicker, { EmojiClickData } from 'emoji-picker-react'; // Import the EmojiPicker component
 import FileCard from '../fileCard/fileCard';
-import { AddReactionButton, AttachmentMainDiv, Div, EmojiPickerDiv, FileCardMainDiv, MainDiv, ReactionCard, ReactionsMainDiv } from './style';
+import {
+  AddReactionButton,
+  AttachmentMainDiv,
+  Div,
+  Emoji,
+  EmojiPickerDiv,
+  FileCardMainDiv,
+  IconDiv,
+  MainDiv,
+  ReactionCard,
+  ReactionsMainDiv,
+} from './style';
 import { MessageAttachment } from '@/utils/dataTypes';
 import SVGIcon from '@/assets/icons/SVGIcon';
 
