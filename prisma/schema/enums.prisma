@@ -23,7 +23,7 @@ enum MessageType {
   FROM_CONTACT
 }
 
-enum TicketSource {
+enum ChannelType {
   MAIL
   WEB
 }
