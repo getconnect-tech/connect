@@ -13,6 +13,7 @@ interface Props {
   className?: string;
   isActive?: boolean;
   labelSvg?: boolean;
+  secondaryIcon?: boolean;
 }
 
 function Icon({
@@ -24,6 +25,7 @@ function Icon({
   className,
   isActive = false,
   labelSvg = false,
+  secondaryIcon,
 }: Props) {
   return (
     <IconDiv
@@ -31,6 +33,7 @@ function Icon({
       size={size}
       className={className}
       isActive={isActive}
+      secondaryIcon={secondaryIcon}
     >
       {labelSvg ? (
         <LabelSvgIcon
