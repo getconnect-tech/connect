@@ -1,5 +1,10 @@
 import { NextRequest } from 'next/server';
-import { EmailEventType, MessageType, TicketStatus } from '@prisma/client';
+import {
+  ChannelType,
+  EmailEventType,
+  MessageType,
+  TicketStatus,
+} from '@prisma/client';
 import { handleApiError } from '@/helpers/errorHandler';
 import { createTicket, getTicketByMailId } from '@/services/serverSide/ticket';
 import { createEmailEvent, postMessage } from '@/services/serverSide/message';
@@ -47,6 +52,7 @@ export const POST = async (req: NextRequest) => {
           workspaceId: workspaceId,
           senderEmail: postmarkPayload.From,
           senderName: postmarkPayload.FromName,
+          source: ChannelType.MAIL,
         });
       }
 
@@ -62,6 +68,7 @@ export const POST = async (req: NextRequest) => {
         messageType: MessageType.FROM_CONTACT,
         referenceId: mailId,
         ticketId: ticket.id,
+        channel: ChannelType.MAIL,
       });
 
       if (postmarkPayload.Attachments.length > 0) {

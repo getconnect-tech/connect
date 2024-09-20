@@ -1,4 +1,4 @@
-import { MessageType } from '@prisma/client';
+import { ChannelType, MessageType } from '@prisma/client';
 import { handleApiError } from '@/helpers/errorHandler';
 import { prioritySchema } from '@/lib/zod/ticket';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
@@ -21,6 +21,7 @@ export const PUT = withWorkspaceAuth(async (req, { ticketId }) => {
       messageType: MessageType.CHANGE_PRIORITY,
       ticketId,
       authorId: userId,
+      channel: ChannelType.INTERNAL,
     });
 
     return Response.json(updatedTicket, { status: 200 });
