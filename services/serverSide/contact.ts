@@ -1,5 +1,4 @@
 import { TicketStatus } from '@prisma/client';
-import { removeNullUndefined } from '@/helpers/common';
 import { prisma } from '@/prisma/prisma';
 
 export const getContactByEmail = async (email: string) => {
@@ -48,16 +47,31 @@ export const getWorkspaceContacts = async (workspaceId: string) => {
   return contacts;
 };
 
-export const createOrUpdateContact = async (contactDetails: {
+export const createOrUpdateContact = async ({
+  email,
+  name,
+}: {
   email: string;
-  name: string;
+  name?: string;
 }) => {
-  removeNullUndefined(contactDetails);
+  const contact = prisma.$transaction(async (tx) => {
+    const currentContact = await tx.contact.findUnique({
+      where: { email },
+    });
 
-  const contact = await prisma.contact.upsert({
-    where: { email: contactDetails.email },
-    create: contactDetails,
-    update: contactDetails,
+    if (!currentContact) {
+      const senderName = name || email.split('@')[0];
+      return tx.contact.create({ data: { email, name: senderName } });
+    }
+
+    if (name) {
+      return tx.contact.update({
+        where: { id: currentContact.id },
+        data: { name },
+      });
+    }
+
+    return currentContact;
   });
 
   return contact;

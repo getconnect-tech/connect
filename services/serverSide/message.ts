@@ -15,19 +15,21 @@ export const postMessage = async ({
   referenceId,
   ticketId,
   authorId,
+  channel,
 }: {
   messageContent: string;
   referenceId: string;
   messageType: MessageType;
   ticketId: string;
   authorId?: string;
+  channel: ChannelType;
 }) => {
   const dataToInsert: Prisma.MessageUncheckedCreateInput = {
     content: messageContent,
     reference_id: referenceId,
     type: messageType,
     ticket_id: ticketId,
-    channel: ChannelType.MAIL,
+    channel,
   };
 
   if (authorId) {
