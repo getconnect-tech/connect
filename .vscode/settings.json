@@ -11,5 +11,8 @@
   "eslint.options": {
     "extensions": [".js", ".ts", ".jsx", ".tsx"]
   },
-  "editor.formatOnSave": true
-}    "Buttondiv",
+  "editor.formatOnSave": true,
+  "cSpell.words": [
+    "ONESIGNAL"
+  ]
+}
