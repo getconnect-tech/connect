@@ -36,7 +36,6 @@ Connect is the open-source support system for B2B SaaS companies.
 - [Tinybird](https://tinybird.com/) – analytics
 - [PlanetScale](https://planetscale.com/) – database
 - [NextAuth.js](https://next-auth.js.org/) – auth
-- [Stripe](https://stripe.com/) – payments
 - [Postmark](https://postmarkapp.com/) – emails
 - [Vercel](https://vercel.com/) – deployments
 

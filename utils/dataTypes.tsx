@@ -1,3 +1,4 @@
+import { MessageType } from '@prisma/client';
 import { getWorkspaceApiKeys } from '@/services/serverSide/apiKey';
 import { getWorkspaceContacts } from '@/services/serverSide/contact';
 import { getMacros } from '@/services/serverSide/macro';
@@ -57,4 +58,13 @@ export type MessageAttachment = {
   size: string;
   contentType: string;
   downloadUrl: string;
+};
+
+export type MessageSummary = {
+  content: string;
+  type: MessageType;
+  author: {
+    email: string;
+    display_name: string | null;
+  };
 };
