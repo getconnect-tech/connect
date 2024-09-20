@@ -70,7 +70,7 @@ model Ticket {
   assigned_user User?          @relation(fields: [assigned_to], references: [id])
   contact       Contact        @relation(fields: [contact_id], references: [id])
   workspace     Workspace      @relation(fields: [workspace_id], references: [id])
-  source        TicketSource
+  source        ChannelType
   mail_id       String         @unique
   labels        TicketLabel[]
   status        TicketStatus   @default(OPEN)
@@ -86,6 +86,7 @@ model Message {
   ticket_id    String
   author_id    String?
   type         MessageType
+  channel      ChannelType
   author       User?        @relation(fields: [author_id], references: [id])
   ticket       Ticket       @relation(fields: [ticket_id], references: [id])
   email_events EmailEvent[]
