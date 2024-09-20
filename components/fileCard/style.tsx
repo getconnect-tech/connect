@@ -84,7 +84,6 @@ export const FileSize = styled.div`
     display: flex;
   }
 `;
-
 export const FileDetail = styled.div`
   display: flex;
   flex-direction: column;
