@@ -19,7 +19,8 @@ import { getTicketSummary } from '@/services/clientSide/ticketServices';
 
 function AIBlock() {
   const [generateReply, setGenerateReply] = useState(false);
-  const { ticketDetails, ticketSummary, loading } = ticketStore;
+  const { ticketDetails, ticketSummary } = ticketStore;
+  const [loading, setLoading] = useState(false);
 
   const onClickReplyButton = useCallback(() => {
     setGenerateReply(true);
@@ -31,7 +32,14 @@ function AIBlock() {
 
   const loadData = useCallback(async () => {
     if (ticketDetails && !isEmpty(ticketDetails?.id)) {
-      await getTicketSummary(ticketDetails?.id);
+      setLoading(true);
+      try {
+        await getTicketSummary(ticketDetails?.id);
+      } catch (error) {
+        console.error('Error loading ticket summary:', error);
+      } finally {
+        setLoading(false);
+      }
     }
   }, [ticketDetails?.id]);
 
@@ -51,7 +59,7 @@ function AIBlock() {
         <Title>Connect AI</Title>
       </ProfileDiv>
       {loading ? (
-        'Loading'
+        'Loading...'
       ) : (
         <DetailsProfileDiv>
           <DescriptionDiv>
