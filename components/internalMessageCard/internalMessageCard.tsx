@@ -110,7 +110,7 @@ export default function InternalMessageCard({
   };
 
   return (
-    <>
+    <div>
       <MainDiv>
         <Div>
           <p>
@@ -132,35 +132,35 @@ export default function InternalMessageCard({
             )}
           </p>
           <span>{moment(time).fromNow()}</span>
-          {!showReactions && (
-            <EmojiPickerDiv ref={emojiPickerRef}>
-              <IconDiv
-                className='emoji-icon'
-                onClick={handleAddReactionClick}
-                onMouseEnter={(e) => handleMouseEnter(e, setSubmenuPosition)}
-              >
-                <SVGIcon
-                  name='emoji-icon'
-                  width='12'
-                  height='12'
-                  viewBox='0 0 12 12'
-                />
-              </IconDiv>
-              {showEmojiPicker && (
-                <div className='reaction-icon-div'>
-                  <EmojiPicker
-                    onEmojiClick={handleEmojiSelect}
-                    className={
-                      submenuPosition === 'upwards'
-                        ? 'submenu-upwards'
-                        : 'submenu-downwards'
-                    }
-                  />
-                </div>
-              )}
-            </EmojiPickerDiv>
-          )}
         </Div>
+        {!showReactions && (
+          <EmojiPickerDiv ref={emojiPickerRef}>
+            <IconDiv
+              className='emoji-icon'
+              onClick={handleAddReactionClick}
+              onMouseEnter={(e) => handleMouseEnter(e, setSubmenuPosition)}
+            >
+              <SVGIcon
+                name='emoji-icon'
+                width='12'
+                height='12'
+                viewBox='0 0 12 12'
+              />
+            </IconDiv>
+            {showEmojiPicker && (
+              <div className='reaction-icon-div'>
+                <EmojiPicker
+                  onEmojiClick={handleEmojiSelect}
+                  className={
+                    submenuPosition === 'upwards'
+                      ? 'submenu-upwards'
+                      : 'submenu-downwards'
+                  }
+                />
+              </div>
+            )}
+          </EmojiPickerDiv>
+        )}
       </MainDiv>
       {showReactions && (
         <ReactionsMainDiv>
@@ -197,6 +197,6 @@ export default function InternalMessageCard({
           </EmojiPickerDiv>
         </ReactionsMainDiv>
       )}
-    </>
+    </div>
   );
 }
