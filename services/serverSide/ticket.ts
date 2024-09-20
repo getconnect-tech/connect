@@ -143,17 +143,18 @@ export const createTicket = async ({
   subject,
   senderName,
   senderEmail,
+  source,
 }: {
   workspaceId: string;
   mailId: string;
   subject: string;
   senderName?: string;
   senderEmail: string;
+  source: ChannelType;
 }) => {
-  const name = senderName || senderEmail.split('@')[0]!;
   const contact = await createOrUpdateContact({
     email: senderEmail,
-    name,
+    name: senderName,
   });
 
   const newTicket = await prisma.ticket.create({
@@ -161,7 +162,7 @@ export const createTicket = async ({
       workspace_id: workspaceId,
       mail_id: mailId,
       title: subject,
-      source: ChannelType.MAIL,
+      source,
       contact_id: contact.id,
       subject,
     },

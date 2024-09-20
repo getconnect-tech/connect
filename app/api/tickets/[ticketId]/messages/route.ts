@@ -1,5 +1,10 @@
 import { z } from 'zod';
-import { EmailEventType, Message, MessageType } from '@prisma/client';
+import {
+  ChannelType,
+  EmailEventType,
+  Message,
+  MessageType,
+} from '@prisma/client';
 import { Attachment } from 'postmark';
 import { handleApiError } from '@/helpers/errorHandler';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
@@ -57,6 +62,7 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
         referenceId: '',
         ticketId,
         authorId: userId,
+        channel: ChannelType.INTERNAL,
       });
 
       await updateUserLastSeen(ticketId, userId);
@@ -113,6 +119,7 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
           referenceId: mailId,
           ticketId: ticketId,
           authorId: req.user.id,
+          channel: ChannelType.MAIL,
         });
       } catch (err: any) {
         newMessage = await postMessage({
@@ -121,6 +128,7 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
           referenceId: '',
           ticketId: ticketId,
           authorId: req.user.id,
+          channel: ChannelType.MAIL,
         });
 
         await createEmailEvent(newMessage.id, {

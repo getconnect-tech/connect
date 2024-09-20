@@ -1,4 +1,4 @@
-import { MessageType, TicketStatus } from '@prisma/client';
+import { ChannelType, MessageType, TicketStatus } from '@prisma/client';
 import { handleApiError } from '@/helpers/errorHandler';
 import { snoozeUntilSchema, statusSchema } from '@/lib/zod/ticket';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
@@ -27,6 +27,7 @@ export const PUT = withWorkspaceAuth(async (req, { ticketId }) => {
       messageType: MessageType.CHANGE_STATUS,
       ticketId,
       authorId: userId,
+      channel: ChannelType.INTERNAL,
     });
 
     return Response.json(updatedTicket, { status: 200 });
