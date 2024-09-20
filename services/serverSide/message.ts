@@ -1,4 +1,5 @@
 import {
+  ChannelType,
   EmailEventType,
   Label,
   MessageType,
@@ -26,6 +27,7 @@ export const postMessage = async ({
     reference_id: referenceId,
     type: messageType,
     ticket_id: ticketId,
+    channel: ChannelType.MAIL,
   };
 
   if (authorId) {
