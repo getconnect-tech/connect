@@ -40,28 +40,11 @@ const Div = styled.div`
 `;
 
 const AttachmentMainDiv = styled.div`
-  border-top: var(--border-main);
-  padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-`;
-
-const TitleDiv = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const Title = styled.div`
-  ${Typography.body_md_medium};
-  color: var(--text);
-`;
-
-const DownloadButton = styled.div`
-  ${Typography.body_md_medium};
-  color: var(--text);
-  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 6px;
 `;
 
 const FileCardMainDiv = styled.div`
@@ -71,12 +54,4 @@ const FileCardMainDiv = styled.div`
   flex-wrap: wrap;
 `;
 
-export {
-  MainDiv,
-  Div,
-  AttachmentMainDiv,
-  TitleDiv,
-  Title,
-  DownloadButton,
-  FileCardMainDiv,
-};
+export { MainDiv, Div, AttachmentMainDiv, FileCardMainDiv };
