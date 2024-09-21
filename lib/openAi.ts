@@ -20,5 +20,5 @@ export const chatWithOpenAi = async (content: string) => {
     ],
     model: AI_MODEL,
   });
-  return chatCompletion;
+  return chatCompletion.choices[0].message.content!;
 };

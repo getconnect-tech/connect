@@ -34,7 +34,7 @@ const LabelModal = ({ onClose, labelData }: Props) => {
   const handleLabelSubmit = useCallback(
     async (e: React.SyntheticEvent, icon: string, name: string) => {
       e.preventDefault();
-      const payload = { icon, name, color: '#7B7A79' };
+      const payload = { icon, name, color: 'var(--border-selected)' };
       settingStore.setLoading(true);
       try {
         if (labelData) {

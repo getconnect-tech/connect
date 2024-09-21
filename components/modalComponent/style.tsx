@@ -129,4 +129,10 @@ export const IconDiv = styled.div`
   height: 40px;
   align-items: center;
   cursor: pointer;
+  svg {
+    fill: var(--icon);
+    &:hover {
+      fill: var(--icon-hover);
+    }
+  }
 `;

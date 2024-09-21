@@ -44,7 +44,7 @@ export const sendEmailAsReply = async ({
 }) => {
   const ticket = await getTicketById(ticketId);
 
-  if (!ticket) {
+  if (!ticket || !ticket.mail_id) {
     return null;
   }
 
