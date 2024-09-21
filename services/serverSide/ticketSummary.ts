@@ -92,7 +92,7 @@ export const getTicketSummary = async (
   const prompt = `${ticketContent}\n\n\nNow give summary for above content in 1-2 lines.`;
   const summary = await chatWithOpenAi(prompt);
 
-  return summary.choices[0].message.content!;
+  return summary;
 };
 
 // Get ticket sentiment based on message data
@@ -106,5 +106,5 @@ export const getTicketSentiment = async (
   const prompt = `${ticketContent}\n\n\nNow give what is the sentiment of person tagged CONTACT in 1 line with an facial expression emoji. Format Example: Sanjay’s sentiment is slightly sad 😔`;
   const sentiment = await chatWithOpenAi(prompt);
 
-  return sentiment.choices[0].message.content!;
+  return sentiment;
 };
