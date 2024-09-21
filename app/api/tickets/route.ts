@@ -61,7 +61,6 @@ export const POST = withApiAuth(async (req) => {
       senderName: senderName,
       senderEmail: senderEmail,
       subject: ticketTitle,
-      mailId: '',
     });
 
     await postMessage({
