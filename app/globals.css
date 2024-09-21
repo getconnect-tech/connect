@@ -13,7 +13,7 @@ a {
   text-decoration: none;
 }
 .ant-picker-dropdown .ant-picker-time-panel-column {
-  scrollbar-color: #dcdcd9 transparent;
+  scrollbar-color: var(--bg-surface-secondary-hover) transparent;
   width: 68px;
   overflow-y: auto;
 }
@@ -21,21 +21,21 @@ a {
   display: none;
 }
 .ant-btn .css-dev-only-do-not-override-1gwfwyx .ant-btn-primary .ant-btn-sm {
-  background-color: #282828;
+  background-color: var(--brand);
 }
 .ant-picker.ant-picker-outlined {
   border-radius: 30px;
-  border-color: #dcdcd9;
+  border-color: var(--bg-surface-secondary-hover);
   width: 114px;
 }
 .anticon.anticon-clock-circle {
   display: none;
 }
 .ant-picker-dropdown .ant-picker-time-panel-column:not(:first-child) {
-  border-inline-start: 1px solid #e9e8e5;
+  border-inline-start: 1px solid var(--bg-surface-hover);
 }
 .ant-picker-dropdown .ant-picker-footer {
-  border-top: 1px solid #e9e8e5;
+  border-top: 1px solid var(--bg-surface-hover);
 }
 .ant-picker-dropdown .ant-picker-panel > .ant-picker-time-panel {
   padding: 0;
@@ -45,12 +45,12 @@ a {
 }
 .ant-btn-primary:disabled,
 .ant-btn-primary.ant-btn-disabled {
-  background-color: #282828;
+  background-color: var(--brand);
   border: none;
   border-radius: 30px;
   height: 24px;
   width: 42px;
-  color: #ffffff;
+  color: var(--white);
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
@@ -60,15 +60,15 @@ a {
   .ant-picker-time-panel-column
   > li.ant-picker-time-panel-cell
   .ant-picker-time-panel-cell-inner:hover {
-  background-color: #f2f2f2;
+  background-color: var(--bg-white-hover);
   border-radius: 6px;
 }
 .ant-picker-dropdown
   .ant-picker-time-panel-column
   > li.ant-picker-time-panel-cell-selected
   .ant-picker-time-panel-cell-inner {
-  background-color: #f2f2f2;
-  color: #282828 !important;
+  background-color: var(--bg-white-hover);
+  color: var(--brand) !important;
   border-radius: 6px;
 }
 .ant-picker-dropdown
@@ -79,32 +79,32 @@ a {
   .ant-picker-time-panel-column
   > li.ant-picker-time-panel-cell-selected
   .ant-picker-time-panel-cell-inner:hover {
-  background-color: #f2f2f2;
+  background-color: var(--bg-white-hover);
 }
 .ant-picker-time-panel-cell-inner {
-  color: #7b7a79 !important;
+  color: var(--text-text-secondary) !important;
 }
 .ant-btn-primary {
-  background-color: #282828;
+  background-color: var(--brand);
   border: none;
   border-radius: 30px;
   height: 24px;
   width: 42px;
-  color: #ffffff;
+  color: var(--white);
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
   line-height: 16px;
 }
 .ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
-  background-color: #3e3e3e;
+  background-color: var(--brand-fill-hover);
 }
 .ant-picker-outlined:focus {
-  border-color: #282828;
+  border-color: var(--brand);
   box-shadow: none;
 }
 .ant-picker-outlined:focus-within {
-  border-color: #282828;
+  border-color: var(--brand);
   box-shadow: none;
 }
 .ant-picker:hover .ant-picker-clear {
