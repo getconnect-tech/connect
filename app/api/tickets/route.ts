@@ -5,6 +5,7 @@ import { lastUpdatedTimeSchema } from '@/lib/zod/common';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import {
   createTicket,
+  generateTicketTitle,
   getWorkspaceTickets,
 } from '@/services/serverSide/ticket';
 import { withApiAuth } from '@/middlewares/withApiAuth';
@@ -52,12 +53,14 @@ export const POST = withApiAuth(async (req) => {
       requestBody as z.infer<typeof createRequestBody>;
     const workspaceId = req.workspace.id;
 
+    const ticketTitle = subject ?? (await generateTicketTitle(message));
+
     const newTicket = await createTicket({
       workspaceId,
       source: ChannelType.WEB,
       senderName: senderName,
       senderEmail: senderEmail,
-      subject: subject || `${senderEmail} FROM WEB`,
+      subject: ticketTitle,
       mailId: '',
     });
 
