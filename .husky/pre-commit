@@ -1,18 +1,18 @@
-# #!/bin/sh
-# . "$(dirname "$0")/_/husky.sh"
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
 
-# protected_branch='main'
-# protected_branch_2='dev'
-# current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
+protected_branch='main'
+protected_branch_2='dev'
+current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
 
-# if [ "$current_branch" = "$protected_branch" ]; then
-#   echo "You can't commit directly to $protected_branch branch"
-#   exit 1
-# fi
-# if [ "$current_branch" = "$protected_branch_2" ]; then
-#   echo "You can't commit directly to $protected_branch_2 branch"
-#   exit 1
-# fi
+if [ "$current_branch" = "$protected_branch" ]; then
+  echo "You can't commit directly to $protected_branch branch"
+  exit 1
+fi
+if [ "$current_branch" = "$protected_branch_2" ]; then
+  echo "You can't commit directly to $protected_branch_2 branch"
+  exit 1
+fi
 
-# # echo "Please wait... checking lint & formating"
-# # yarn run lint
+# echo "Please wait... checking lint & formating"
+# yarn run lint
