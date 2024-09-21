@@ -88,7 +88,7 @@ const InputDiv = styled.div`
   z-index: 1;
   max-width: 702px;
   margin: 0 auto;
-  padding: 0 0 20px;
+  padding: 0 0 12px;
   .input-main-div {
     display: flex;
     gap: 12px;
