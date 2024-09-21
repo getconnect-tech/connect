@@ -147,7 +147,7 @@ export const createTicket = async ({
   source,
 }: {
   workspaceId: string;
-  mailId?: string;
+  mailId: string;
   subject: string;
   senderName?: string;
   senderEmail: string;

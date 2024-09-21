@@ -71,7 +71,7 @@ model Ticket {
   contact       Contact        @relation(fields: [contact_id], references: [id])
   workspace     Workspace      @relation(fields: [workspace_id], references: [id])
   source        ChannelType
-  mail_id       String?        @unique
+  mail_id       String         @unique
   labels        TicketLabel[]
   status        TicketStatus   @default(OPEN)
   snooze_until  DateTime?
