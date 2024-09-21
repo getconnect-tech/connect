@@ -141,11 +141,19 @@ const CenterDiv = styled.div`
   position: relative;
 `;
 
-const InputIcon = styled.div`
+const InputIcon = styled.div<Props>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
+  .icon {
+    background-color: var(
+      ${({ modeSelectedItem }) =>
+        modeSelectedItem?.name === 'Internal'
+          ? '--bg-surface-secondary-hover'
+          : '--bg-surface-secondary'}
+    );
+  }
   .send-icon {
     background-color: var(--bg-surface-secondary);
     border-radius: 50%;
@@ -154,7 +162,7 @@ const InputIcon = styled.div`
     }
   }
   .submenu-upwards {
-    bottom: 60px;
+    bottom: 52px;
     top: auto;
   }
   .submenu-downwards {
