@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+import OneSignal from 'react-onesignal';
 import { isEmpty } from './common';
 import UserPreferenceSingleton from './userPreferenceSingleton';
 import { getSessionDetails } from '@/services/serverSide/auth/authentication';
@@ -11,8 +12,25 @@ import { getUserDetails } from '@/services/clientSide/userService';
 import { Workspace } from '@/utils/dataTypes';
 import { getLabels } from '@/services/clientSide/settingServices';
 
+const initOneSignal = async (userId: string) => {
+  try {
+    // OneSignal.Debug.setLogLevel('trace');
+    await OneSignal.init({
+      appId: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID!,
+      allowLocalhostAsSecureOrigin: process.env.NODE_ENV === 'development',
+      autoRegister: true,
+    });
+
+    OneSignal.User.addAlias('external_id', userId);
+    await OneSignal.login(userId);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const appInit: any = async () => {
   const session = await getSessionDetails();
+
   if (isEmpty(session)) {
     if (
       window.location.pathname === '/login' ||
@@ -23,6 +41,8 @@ export const appInit: any = async () => {
   }
 
   if (session?.user) {
+    // Init OneSignal for notifications
+    initOneSignal(session.user.id);
     getUserDetails();
 
     // Get user's workspace list

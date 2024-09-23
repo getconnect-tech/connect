@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
 import {
+  ChannelType,
   MessageType,
   PriorityLevels,
   TicketStatus,
@@ -476,7 +477,7 @@ function TicketDetails(props: Props) {
                 <Avatar imgSrc={''} name={contact?.name || ''} size={20} />
               </div>
               <MessageCard
-                title={`${contact?.name} send email`}
+                title={`${contact?.name} sent ${message.channel === ChannelType.WEB ? 'a message' : 'an email'}`}
                 time={message?.created_at}
                 subTitle={'To Teamcamp Support '}
                 message={message.content || ''}
@@ -495,7 +496,8 @@ function TicketDetails(props: Props) {
                 />
               </div>
               <MessageCard
-                title={`${message?.author?.display_name} send email`}
+                // eslint-disable-next-line max-len
+                title={`${message?.author?.display_name} sent ${message.channel === ChannelType.WEB ? 'a message' : 'an email'}`}
                 time={message?.created_at}
                 subTitle={`To ${contact?.email}`}
                 message={message.content || ''}
