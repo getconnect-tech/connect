@@ -8,7 +8,7 @@ const nextConfig = {
     return [
       {
         // Routes this applies to
-        source: '/api/(.*)',
+        source: '/api/*',
         // Headers
         headers: [
           // Allow for specific domains to have access or * for all
