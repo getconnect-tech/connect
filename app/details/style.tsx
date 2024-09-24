@@ -89,7 +89,7 @@ const InputDiv = styled.div`
   z-index: 1;
   max-width: 702px;
   margin: 0 auto;
-  padding: 0 0 20px;
+  padding: 0 0 12px;
   width: 100%;
   .input-main-div {
     display: flex;
@@ -157,7 +157,7 @@ const InputIcon = styled.div`
     }
   }
   .submenu-upwards {
-    bottom: 60px;
+    bottom: 52px;
     top: auto;
   }
   .submenu-downwards {

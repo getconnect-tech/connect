@@ -871,7 +871,7 @@ function TicketDetails(props: Props) {
                             iconSize={''}
                             iconViewBox={''}
                             style={{
-                              bottom: 60,
+                              bottom: 52,
                               maxWidth: 146,
                               width: '100%',
                             }}
