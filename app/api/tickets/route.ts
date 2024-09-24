@@ -16,6 +16,9 @@ import {
   subjectSchema,
 } from '@/lib/zod/ticket';
 import { postMessage } from '@/services/serverSide/message';
+import { attachmentSchema } from '@/lib/zod/message';
+import { uploadAttachments } from '@/services/serverSide/firebaseServices';
+import { downloadFileAsBase64 } from '@/helpers/common';
 
 export const GET = withWorkspaceAuth(async (req) => {
   try {
@@ -42,6 +45,7 @@ const createRequestBody = z.object({
   senderEmail: senderEmailSchema,
   subject: subjectSchema.optional(),
   message: messageSchema,
+  attachments: z.array(attachmentSchema).optional(),
 });
 export const POST = withApiAuth(async (req) => {
   try {
@@ -49,7 +53,7 @@ export const POST = withApiAuth(async (req) => {
 
     createRequestBody.parse(requestBody);
 
-    const { senderEmail, senderName, message, subject } =
+    const { senderEmail, senderName, message, subject, attachments } =
       requestBody as z.infer<typeof createRequestBody>;
     const workspaceId = req.workspace.id;
 
@@ -63,13 +67,37 @@ export const POST = withApiAuth(async (req) => {
       subject: ticketTitle,
     });
 
-    await postMessage({
+    const newMessage = await postMessage({
       messageContent: message,
       messageType: MessageType.FROM_CONTACT,
       ticketId: newTicket.id,
       referenceId: '',
       channel: ChannelType.WEB,
     });
+
+    if (attachments && attachments.length > 0) {
+      const attachmentsToUpload = await Promise.all(
+        attachments.map(async (attachment) => {
+          const { content, contentType } = await downloadFileAsBase64(
+            attachment.url,
+          );
+
+          return {
+            Name: attachment.filename,
+            ContentID: null,
+            Content: content,
+            ContentType: contentType,
+          };
+        }),
+      );
+
+      await uploadAttachments(
+        workspaceId,
+        newTicket.id,
+        newMessage.id,
+        attachmentsToUpload,
+      );
+    }
 
     return Response.json(newTicket, { status: 201 });
   } catch (err) {
