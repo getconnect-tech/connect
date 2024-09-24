@@ -5,6 +5,7 @@ import {
   ref,
   uploadBytesResumable,
 } from 'firebase/storage';
+import { convert } from 'html-to-text';
 import { app } from '@/utils/firebase';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { messageStore } from '@/stores/messageStore';
@@ -221,4 +222,10 @@ export const formatFileSize = (sizeInBytes: number): string => {
   } else {
     return sizeInBytes + ' Bytes';
   }
+};
+
+export const htmlToString = (html: string) => {
+  const plainText = convert(html, { wordwrap: 130 });
+
+  return plainText;
 };
