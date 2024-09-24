@@ -19,6 +19,7 @@ export const sendOneSignalNotification = async (
   title: string,
   body: string,
   receiverUserIds: string[],
+  url?: string,
 ) => {
   const response = await oneSignalClient.createNotification({
     headings: {
@@ -28,6 +29,7 @@ export const sendOneSignalNotification = async (
       en: body,
     },
     include_external_user_ids: receiverUserIds,
+    url,
   });
 
   return response;
