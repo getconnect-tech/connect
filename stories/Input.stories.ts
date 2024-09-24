@@ -43,3 +43,11 @@ export const Disable: Story = {
     disabled: true,
   },
 };
+
+export const Error: Story = {
+  args: {
+    placeholder: 'Enter name',
+    hasError: true,
+    error: 'Not valid name',
+  },
+};
