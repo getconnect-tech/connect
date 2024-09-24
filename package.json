@@ -11,11 +11,15 @@
     "format-check": "prettier --check .",
     "check-lint": "eslint . --ext ts --ext tsx --ext js",
     "lint:js": "eslint --max-warnings 0 app --ext .js,.jsx,.ts,.tsx",
-    "lint": "npm run lint:js"
+    "lint": "npm run lint:js",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@prisma/client": "^5.19.1",
     "@radix-ui/react-context-menu": "^2.2.1",
+    "@storybook/addons": "^7.6.17",
+    "@storybook/react": "^8.3.2",
     "@syncfusion/ej2-react-dropdowns": "^26.2.8",
     "@syncfusion/ej2-react-richtexteditor": "^26.2.8",
     "antd": "^5.20.2",
@@ -42,6 +46,16 @@
     "zod-error": "^1.5.0"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^1.9.0",
+    "@storybook/addon-actions": "^8.3.2",
+    "@storybook/addon-essentials": "^8.3.2",
+    "@storybook/addon-interactions": "^8.3.2",
+    "@storybook/addon-links": "^8.3.2",
+    "@storybook/addon-onboarding": "^8.3.2",
+    "@storybook/blocks": "^8.3.2",
+    "@storybook/cli": "^8.3.2",
+    "@storybook/nextjs": "^8.3.2",
+    "@storybook/test": "^8.3.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -57,9 +71,11 @@
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-storybook": "^0.8.0",
     "husky": "^9.1.4",
     "prettier": "^3.3.3",
     "prisma": "^5.19.1",
+    "storybook": "^8.3.2",
     "typescript": "^5"
   }
 }
