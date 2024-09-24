@@ -26,6 +26,7 @@ import {
   moveAttachments,
 } from '@/services/serverSide/firebaseServices';
 import { prisma } from '@/prisma/prisma';
+import { NotificationProvider } from '@/services/serverSide/notifications';
 
 export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
@@ -76,6 +77,15 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
           attachmentToken,
         );
       }
+
+      NotificationProvider.sendMentionsNotification(userId, ticketId, content);
+
+      NotificationProvider.sendNewMessageNotification(
+        userId,
+        ticketId,
+        content,
+        false,
+      );
 
       return Response.json(newMessage, { status: 201 });
     }
@@ -183,6 +193,13 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
           );
         }
       }
+
+      NotificationProvider.sendNewMessageNotification(
+        userId,
+        ticketId,
+        content,
+        false,
+      );
 
       return Response.json(newMessage, { status: 201 });
     }
