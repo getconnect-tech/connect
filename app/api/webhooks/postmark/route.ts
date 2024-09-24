@@ -21,6 +21,8 @@ import {
 } from '@/utils/webhookPayloadType';
 import { prisma } from '@/prisma/prisma';
 import { uploadAttachments } from '@/services/serverSide/firebaseServices';
+import { NotificationProvider } from '@/services/serverSide/notifications';
+import { htmlToString } from '@/helpers/common';
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -79,6 +81,14 @@ export const POST = async (req: NextRequest) => {
           postmarkPayload.Attachments,
         );
       }
+
+      const messageContent = htmlToString(message.content);
+      await NotificationProvider.sendNewMessageNotification(
+        ticket.contact_id,
+        ticket.id,
+        messageContent,
+        true,
+      );
     }
 
     if (isOutbound(postmarkPayload)) {
