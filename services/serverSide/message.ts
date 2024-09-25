@@ -1,10 +1,8 @@
 import {
   ChannelType,
   EmailEventType,
-  Label,
   MessageType,
   Prisma,
-  User,
 } from '@prisma/client';
 import { getTicketAttachments } from './firebaseServices';
 import { prisma } from '@/prisma/prisma';
@@ -49,127 +47,132 @@ export const getMessageById = async (messageId: string) => {
 };
 
 export const getTicketMessages = async (ticketId: string) => {
-  // get workspace
+  // Fetch ticket and workspace in one query
   const ticket = await prisma.ticket.findUnique({
     where: { id: ticketId },
     select: { workspace_id: true },
   });
 
-  if (!ticket) {
-    throw new Error('Invalid ticket id!');
-  }
+  if (!ticket) throw new Error('Invalid ticket id!');
 
-  // const workspaceId = ticket.workspace_id;
-
-  // fetch raw messages data
+  // Fetch messages with necessary data, filtering and selecting only the needed fields
   const messages = await prisma.message.findMany({
     where: { ticket_id: ticketId },
     include: {
-      author: true,
+      author: {
+        select: { id: true, display_name: true },
+      },
       email_events: {
         where: { event: EmailEventType.OPENED },
         select: { created_at: true, extra: true },
+      },
+      users_rel: {
+        select: {
+          reaction: true,
+          user: {
+            select: { id: true, display_name: true },
+          },
+        },
       },
     },
     orderBy: { created_at: 'asc' },
   });
 
-  // Collect Ids of all distinct Assignees
-  const allAssigneeIds = Array.from(
-    new Set(
-      messages
-        .filter((x) => x.type === MessageType.CHANGE_ASSIGNEE && x.reference_id)
-        .map((x) => x.reference_id),
-    ),
-  );
+  // Extract unique assignee and label IDs
+  const assigneeIds = new Set<string>();
+  const labelIds = new Set<string>();
+  const contactEmails = new Set<string>();
 
-  // Fetch data of all assignees in a single batch
-  const usersData = await prisma.user.findMany({
-    where: { id: { in: allAssigneeIds } },
-    include: { tickets_rel: true },
-  });
-
-  // Create map with assignee id -> user object
-  const usersMap = new Map<string, User>();
-  for (const user of usersData) {
-    usersMap.set(user.id, user);
+  for (const message of messages) {
+    if (message.type === MessageType.CHANGE_ASSIGNEE && message.reference_id) {
+      assigneeIds.add(message.reference_id);
+    }
+    if (message.type === MessageType.CHANGE_LABEL && message.reference_id) {
+      labelIds.add(message.reference_id);
+    }
+    message.email_events.forEach((event) => contactEmails.add(event.extra));
   }
 
-  // Collect Ids of all distinct Labels
-  const allLabelIds = Array.from(
-    new Set(
-      messages
-        .filter((x) => x.type === MessageType.CHANGE_LABEL)
-        .map((x) => x.reference_id),
-    ),
+  // Fetch assignees, labels, contacts, and attachments concurrently
+  const [assignees, labels, contacts, messageAttachmentsMap] =
+    await Promise.all([
+      prisma.user.findMany({
+        where: { id: { in: Array.from(assigneeIds) } },
+        select: { id: true, display_name: true },
+      }),
+      prisma.label.findMany({
+        where: { id: { in: Array.from(labelIds) } },
+        select: { id: true, name: true }, // Only fetch fields we care about
+      }),
+      prisma.contact.findMany({
+        where: { email: { in: Array.from(contactEmails) } },
+        select: { email: true, name: true, id: true },
+      }),
+      getTicketAttachments(ticket.workspace_id, ticketId),
+    ]);
+
+  // Create maps for quick lookup
+  const assigneesMap = new Map(
+    assignees.map((assignee) => [assignee.id, assignee]),
+  );
+  const labelsMap = new Map(labels.map((label) => [label.id, label]));
+  const contactsMap = new Map(
+    contacts.map((contact) => [contact.email, contact]),
   );
 
-  // Fetch data of all labels in a single batch
-  const labelsData = await prisma.label.findMany({
-    where: { id: { in: allLabelIds } },
-  });
+  // Format messages with the necessary data
+  const formattedMessages = messages.map((message) => {
+    const { email_events, users_rel, ...msgData } = message;
 
-  // Create map with label id -> label object
-  const labelsMap = new Map<string, Label>();
-  for (const label of labelsData) {
-    labelsMap.set(label.id, label);
-  }
+    // Process read_by from email_events
+    const read_by = email_events
+      .map((event) => {
+        const contact = contactsMap.get(event.extra);
+        return contact ? { ...contact, seen_at: event.created_at } : null;
+      })
+      .filter(Boolean);
 
-  // Collect email Ids of all distinct Contact emails
-  const allContactEmails = Array.from(
-    new Set(messages.map((x) => x.email_events.map((y) => y.extra)).flat()),
-  );
+    // Process reactions
+    const reactions = users_rel.map((rel) => ({
+      reaction: rel.reaction,
+      author: rel.user,
+    }));
 
-  // Fetch all Contacts by emails
-  const contactsData = await prisma.contact.findMany({
-    where: { email: { in: allContactEmails } },
-    select: { email: true, name: true, id: true },
-  });
-
-  // Create map with email id -> contact object
-  const contactsMap = new Map<string, (typeof contactsData)[number]>();
-  for (const contact of contactsData) {
-    contactsMap.set(contact.email, contact);
-  }
-
-  // get Message attachments
-  const messageAttachmentsMap = await getTicketAttachments(
-    ticket.workspace_id,
-    ticketId,
-  );
-
-  // Format messages by injecting respective data
-  const formattedMessages = messages.map((m) => {
-    const { email_events, ...message } = m;
-    const read_by = email_events.map((event) => {
-      const email = event.extra;
-      const contact = contactsMap.get(email)!;
-
-      return {
-        ...contact,
-        seen_at: event.created_at,
-      };
-    });
+    // Process attachments from the map
     const attachments = messageAttachmentsMap[message.id] || [];
 
+    // Format message based on type
     switch (message.type) {
       case MessageType.CHANGE_ASSIGNEE: {
-        const assignee = message.reference_id
-          ? usersMap.get(message.reference_id)!
-          : null;
-        return { ...message, read_by, assignee, label: null, attachments };
+        return {
+          ...msgData,
+          read_by,
+          assignee: message.reference_id
+            ? assigneesMap.get(message.reference_id)
+            : null,
+          label: null,
+          attachments,
+          reactions,
+        };
       }
       case MessageType.CHANGE_LABEL: {
-        const label = labelsMap.get(message.reference_id)!;
-        return { ...message, read_by, label, assignee: null, attachments };
+        return {
+          ...msgData,
+          read_by,
+          assignee: null,
+          label: labelsMap.get(message.reference_id),
+          attachments,
+          reactions,
+        };
       }
       default:
         return {
-          ...message,
+          ...msgData,
           read_by,
-          label: null,
           assignee: null,
+          label: null,
           attachments,
+          reactions,
         };
     }
   });
