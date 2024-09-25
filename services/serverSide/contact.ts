@@ -6,6 +6,12 @@ export const getContactByEmail = async (email: string) => {
   return contact;
 };
 
+export const getContactById = async (contactId: string) => {
+  const contact = await prisma.contact.findUnique({ where: { id: contactId } });
+
+  return contact;
+};
+
 export const getWorkspaceContacts = async (workspaceId: string) => {
   const contacts = await prisma.$transaction(async (tx) => {
     const contactsWithStatus = await tx.ticket.groupBy({

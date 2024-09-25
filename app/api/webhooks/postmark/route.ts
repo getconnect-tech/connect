@@ -83,7 +83,7 @@ export const POST = async (req: NextRequest) => {
       }
 
       const messageContent = htmlToString(message.content);
-      await NotificationProvider.sendNewMessageNotification(
+      await NotificationProvider.notifyNewMessage(
         ticket.contact_id,
         ticket.id,
         messageContent,
