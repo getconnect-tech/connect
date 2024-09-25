@@ -78,14 +78,9 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
         );
       }
 
-      NotificationProvider.sendMentionsNotification(userId, ticketId, content);
+      NotificationProvider.notifyMentions(userId, ticketId, content);
 
-      NotificationProvider.sendNewMessageNotification(
-        userId,
-        ticketId,
-        content,
-        false,
-      );
+      NotificationProvider.notifyNewMessage(userId, ticketId, content);
 
       return Response.json(newMessage, { status: 201 });
     }
@@ -194,12 +189,7 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
         }
       }
 
-      NotificationProvider.sendNewMessageNotification(
-        userId,
-        ticketId,
-        content,
-        false,
-      );
+      NotificationProvider.notifyNewMessage(userId, ticketId, content);
 
       return Response.json(newMessage, { status: 201 });
     }
