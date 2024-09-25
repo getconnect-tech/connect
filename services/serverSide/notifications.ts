@@ -1,7 +1,9 @@
+import { Contact, User } from '@prisma/client';
+import { getMessageById } from './message';
 import { sendOneSignalNotification } from '@/lib/oneSignal';
 import { getUserById } from '@/services/serverSide/user';
 import { getTicketById } from '@/services/serverSide/ticket';
-import { getContactByEmail } from '@/services/serverSide/contact';
+import { getContactById } from '@/services/serverSide/contact';
 import { htmlToString } from '@/helpers/common';
 
 interface Notification {
@@ -11,113 +13,86 @@ interface Notification {
   url?: string;
 }
 
-interface SenderInfo {
-  id: string;
-  name: string;
+// Helper type guard to check if the sender is a contact
+function isContactType(sender: Contact | User): sender is Contact {
+  return (sender as Contact).name !== undefined;
 }
 
 // Centralized service to manage & send notifications
 export class NotificationProvider {
-  // service to get user notifications settings
+  // Fetch user notifications settings (not implemented)
   private static getUserNotificationSettings() {
     throw new Error('Not implemented');
   }
 
-  private static async getSenderInfo(
-    senderId: string,
-    isContact: boolean = false,
-  ) {
-    let senderInfo: SenderInfo;
-    if (isContact) {
-      const contactInfo = await getContactByEmail(senderId);
+  // Fetch sender information (either a contact or a user)
+  private static async getSenderInfo(senderId: string, isContact = false) {
+    const sender = isContact
+      ? await getContactById(senderId)
+      : await getUserById(senderId);
 
-      if (!contactInfo) {
-        throw new Error('Invalid sender ID!');
-      }
+    if (!sender) throw new Error('Invalid sender ID!');
 
-      senderInfo = {
-        id: contactInfo.id,
-        name: contactInfo.name,
-      };
-    } else {
-      const userInfo = await getUserById(senderId);
+    // Use type guard to access the correct property
+    const senderName = isContactType(sender)
+      ? sender.name
+      : sender.display_name || 'Unknown';
 
-      if (!userInfo) {
-        throw new Error('Invalid sender ID!');
-      }
-
-      senderInfo = {
-        id: userInfo.id,
-        name: userInfo.display_name || 'Unknown',
-      };
-    }
-
-    return senderInfo;
+    return {
+      id: sender.id,
+      name: senderName,
+    };
   }
 
+  // Fetch ticket information
   private static async getTicketInfo(ticketId: string) {
-    const ticketInfo = await getTicketById(ticketId);
-
-    if (!ticketInfo) {
-      throw new Error('Invalid ticket ID!');
-    }
-
-    return ticketInfo;
+    const ticket = await getTicketById(ticketId);
+    if (!ticket) throw new Error('Invalid ticket ID!');
+    return ticket;
   }
 
-  private static getMentionedUserIds(messageContent: string) {
-    // Regex to match the UUID format in the 'title' attribute of <a> tags
+  // Fetch message information
+  private static async getMessageInfo(messageId: string) {
+    const message = await getMessageById(messageId);
+    if (!message) throw new Error('Invalid message ID!');
+    return message;
+  }
+
+  // Extract mentioned user IDs from message content
+  private static getMentionedUserIds(content: string): string[] {
     const regex = /title="([a-f0-9-]+)"/g;
-
-    // Find all matches
-    const matches = Array.from(messageContent.matchAll(regex));
-
-    // Extract the first capturing group (which contains the UUID) from each match
-    const userIds = matches.map((match) => match[1]);
-
-    const uniqueUserIds = Array.from(new Set(userIds));
-
-    return uniqueUserIds;
+    const matches = Array.from(content.matchAll(regex)).map(
+      (match) => match[1],
+    );
+    return Array.from(new Set(matches));
   }
 
-  // main service to send notifications
+  // Send notifications (currently only push notifications)
   public static sendNotification(notification: Notification) {
-    // TODO: fetch user's notifications and send notifications accordingly
-
-    const promises = [];
-
-    promises.push(this.sendPushNotification(notification));
-
-    return promises;
+    return this.sendPushNotification(notification);
   }
 
-  // service to send push notifications to web & mobile
+  // Send push notification using OneSignal
   private static async sendPushNotification(notification: Notification) {
     const { title, body, receiverIds, url } = notification;
-
     return sendOneSignalNotification(title, body, receiverIds, url);
   }
 
-  // service to send email notifications
-  private static sendEmailNotification() {
-    throw new Error('Not implemented');
-  }
-
-  public static async sendAssignTicketNotification(
+  // Send assignment notification for tickets
+  public static async notifyTicketAssignment(
     assignerId: string,
     assignedToId: string,
     ticketId: string,
   ) {
-    if (assignerId === assignedToId) {
-      return null;
-    }
+    if (assignerId === assignedToId) return null;
 
-    const senderInfo = await this.getSenderInfo(assignerId);
-    const ticketInfo = await this.getTicketInfo(ticketId);
+    const [senderInfo, ticketInfo] = await Promise.all([
+      this.getSenderInfo(assignerId),
+      this.getTicketInfo(ticketId),
+    ]);
 
-    const title = `${senderInfo.name} has assigned you a ticket`;
+    const title = `${senderInfo.name} assigned you a ticket`;
     const body = ticketInfo.title;
-
     const ticketUrl = `/details/${ticketInfo.id}`;
 
     return this.sendNotification({
@@ -128,18 +103,20 @@ export class NotificationProvider {
     });
   }
 
-  public static async sendNewMessageNotification(
+  // Send notification for new message
+  public static async notifyNewMessage(
     senderId: string,
     ticketId: string,
     messageContent: string,
-    fromContact: boolean = false,
+    fromContact = false,
   ) {
-    const senderInfo = await this.getSenderInfo(senderId, fromContact);
-    const ticketInfo = await this.getTicketInfo(ticketId);
+    const [senderInfo, ticketInfo] = await Promise.all([
+      this.getSenderInfo(senderId, fromContact),
+      this.getTicketInfo(ticketId),
+    ]);
 
-    if (!ticketInfo.assigned_to || ticketInfo.assigned_to === senderId) {
+    if (!ticketInfo.assigned_to || ticketInfo.assigned_to === senderId)
       return null;
-    }
 
     const title = `${senderInfo.name} sent a message in ${ticketInfo.title}`;
     const body = htmlToString(messageContent);
@@ -153,29 +130,53 @@ export class NotificationProvider {
     });
   }
 
-  public static async sendMentionsNotification(
+  // Send notification for mentions in a message
+  public static async notifyMentions(
     senderId: string,
     ticketId: string,
     messageContent: string,
   ) {
-    const mentionedUserIds = this.getMentionedUserIds(messageContent);
-    const receiverIds = mentionedUserIds.filter((mId) => mId !== senderId);
+    const mentionedUserIds = this.getMentionedUserIds(messageContent).filter(
+      (id) => id !== senderId,
+    );
+    if (mentionedUserIds.length === 0) return null;
 
-    if (receiverIds.length <= 0) {
-      return null;
-    }
+    const [senderInfo, ticketInfo] = await Promise.all([
+      this.getSenderInfo(senderId),
+      this.getTicketInfo(ticketId),
+    ]);
 
-    const senderInfo = await this.getSenderInfo(senderId);
-    const ticketInfo = await this.getTicketInfo(ticketId);
-
-    const title = `${senderInfo.name} has mentioned you in a message`;
+    const title = `${senderInfo.name} mentioned you in a message`;
     const body = htmlToString(messageContent);
     const ticketUrl = `/details/${ticketInfo.id}`;
 
     return this.sendNotification({
       title,
       body,
-      receiverIds,
+      receiverIds: mentionedUserIds,
+      url: ticketUrl,
+    });
+  }
+
+  // Send notification for message reactions
+  public static async notifyMessageReaction(
+    senderId: string,
+    messageId: string,
+    reaction: string,
+  ) {
+    const [senderInfo, messageInfo] = await Promise.all([
+      this.getSenderInfo(senderId),
+      this.getMessageInfo(messageId),
+    ]);
+
+    const title = `${senderInfo.name} reacted ${reaction} to your message`;
+    const body = htmlToString(messageInfo.content);
+    const ticketUrl = `/details/${messageInfo.ticket_id}`;
+
+    return this.sendNotification({
+      title,
+      body,
+      receiverIds: [messageInfo.author_id!],
       url: ticketUrl,
     });
   }

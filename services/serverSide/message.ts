@@ -1,10 +1,8 @@
 import {
   ChannelType,
   EmailEventType,
-  Label,
   MessageType,
   Prisma,
-  User,
 } from '@prisma/client';
 import { getTicketAttachments } from './firebaseServices';
 import { prisma } from '@/prisma/prisma';
@@ -43,133 +41,144 @@ export const postMessage = async ({
   return newMessage;
 };
 
+export const getMessageById = async (messageId: string) => {
+  const message = await prisma.message.findUnique({ where: { id: messageId } });
+  return message;
+};
+
 export const getTicketMessages = async (ticketId: string) => {
-  // get workspace
+  // Pre-fetch ticket and workspace details
   const ticket = await prisma.ticket.findUnique({
     where: { id: ticketId },
     select: { workspace_id: true },
   });
 
-  if (!ticket) {
-    throw new Error('Invalid ticket id!');
-  }
+  if (!ticket) throw new Error('Invalid ticket id!');
 
-  // const workspaceId = ticket.workspace_id;
-
-  // fetch raw messages data
+  // Fetch all related message data in one query with selected fields only
   const messages = await prisma.message.findMany({
     where: { ticket_id: ticketId },
     include: {
-      author: true,
+      author: {
+        select: { id: true, display_name: true, profile_url: true },
+      },
       email_events: {
         where: { event: EmailEventType.OPENED },
         select: { created_at: true, extra: true },
+      },
+      users_rel: {
+        select: {
+          reaction: true,
+          user: {
+            select: { id: true, display_name: true },
+          },
+        },
       },
     },
     orderBy: { created_at: 'asc' },
   });
 
-  // Collect Ids of all distinct Assignees
-  const allAssigneeIds = Array.from(
-    new Set(
-      messages
-        .filter((x) => x.type === MessageType.CHANGE_ASSIGNEE && x.reference_id)
-        .map((x) => x.reference_id),
-    ),
-  );
+  // Early return if no messages
+  if (!messages.length) return [];
 
-  // Fetch data of all assignees in a single batch
-  const usersData = await prisma.user.findMany({
-    where: { id: { in: allAssigneeIds } },
-    include: { tickets_rel: true },
-  });
+  // Gather all reference ids in one loop to reduce extra passes
+  const allAssigneeIds = new Set<string>();
+  const allLabelIds = new Set<string>();
+  const allContactEmails = new Set<string>();
 
-  // Create map with assignee id -> user object
-  const usersMap = new Map<string, User>();
-  for (const user of usersData) {
-    usersMap.set(user.id, user);
+  for (const message of messages) {
+    if (message.type === MessageType.CHANGE_ASSIGNEE && message.reference_id) {
+      allAssigneeIds.add(message.reference_id);
+    }
+    if (message.type === MessageType.CHANGE_LABEL && message.reference_id) {
+      allLabelIds.add(message.reference_id);
+    }
+    message.email_events.forEach((event) => allContactEmails.add(event.extra));
   }
 
-  // Collect Ids of all distinct Labels
-  const allLabelIds = Array.from(
-    new Set(
-      messages
-        .filter((x) => x.type === MessageType.CHANGE_LABEL)
-        .map((x) => x.reference_id),
-    ),
+  // Combine all queries into one Promise.all for concurrent execution
+  const [assigneesData, labelsData, contactsData, messageAttachmentsMap] =
+    await Promise.all([
+      prisma.user.findMany({
+        where: { id: { in: Array.from(allAssigneeIds) } },
+        select: { id: true, display_name: true }, // Limit the fields
+      }),
+      prisma.label.findMany({
+        where: { id: { in: Array.from(allLabelIds) } },
+        select: { id: true, name: true }, // Only fetch relevant fields
+      }),
+      prisma.contact.findMany({
+        where: { email: { in: Array.from(allContactEmails) } },
+        select: { email: true, name: true, id: true },
+      }),
+      getTicketAttachments(ticket.workspace_id, ticketId), // Use optimized attachment fetching
+    ]);
+
+  // Create maps for efficient lookup
+  const assigneesMap = new Map(
+    assigneesData.map((assignee) => [assignee.id, assignee]),
+  );
+  const labelsMap = new Map(labelsData.map((label) => [label.id, label]));
+  const contactsMap = new Map(
+    contactsData.map((contact) => [contact.email, contact]),
   );
 
-  // Fetch data of all labels in a single batch
-  const labelsData = await prisma.label.findMany({
-    where: { id: { in: allLabelIds } },
-  });
+  // Process messages in a single loop for efficiency
+  return messages.map((message) => {
+    const { email_events, users_rel, ...messageData } = message;
 
-  // Create map with label id -> label object
-  const labelsMap = new Map<string, Label>();
-  for (const label of labelsData) {
-    labelsMap.set(label.id, label);
-  }
+    // Process read_by from email_events
+    const read_by = email_events
+      .map((event) => {
+        const contact = contactsMap.get(event.extra);
+        return contact ? { ...contact, seen_at: event.created_at } : null;
+      })
+      .filter((x) => x !== null); // Filter out any null values
 
-  // Collect email Ids of all distinct Contact emails
-  const allContactEmails = Array.from(
-    new Set(messages.map((x) => x.email_events.map((y) => y.extra)).flat()),
-  );
+    // Process reactions in one go
+    const reactions = users_rel.map((rel) => ({
+      reaction: rel.reaction,
+      author: rel.user,
+    }));
 
-  // Fetch all Contacts by emails
-  const contactsData = await prisma.contact.findMany({
-    where: { email: { in: allContactEmails } },
-    select: { email: true, name: true, id: true },
-  });
-
-  // Create map with email id -> contact object
-  const contactsMap = new Map<string, (typeof contactsData)[number]>();
-  for (const contact of contactsData) {
-    contactsMap.set(contact.email, contact);
-  }
-
-  // get Message attachments
-  const messageAttachmentsMap = await getTicketAttachments(
-    ticket.workspace_id,
-    ticketId,
-  );
-
-  // Format messages by injecting respective data
-  const formattedMessages = messages.map((m) => {
-    const { email_events, ...message } = m;
-    const read_by = email_events.map((event) => {
-      const email = event.extra;
-      const contact = contactsMap.get(email)!;
-
-      return {
-        ...contact,
-        seen_at: event.created_at,
-      };
-    });
+    // Attachments are lazily fetched from the map
     const attachments = messageAttachmentsMap[message.id] || [];
 
+    // Format message based on its type
     switch (message.type) {
-      case MessageType.CHANGE_ASSIGNEE: {
-        const assignee = message.reference_id
-          ? usersMap.get(message.reference_id)!
-          : null;
-        return { ...message, read_by, assignee, label: null, attachments };
-      }
-      case MessageType.CHANGE_LABEL: {
-        const label = labelsMap.get(message.reference_id)!;
-        return { ...message, read_by, label, assignee: null, attachments };
-      }
-      default:
+      case MessageType.CHANGE_ASSIGNEE:
         return {
-          ...message,
+          ...messageData,
           read_by,
+          assignee: message.reference_id
+            ? assigneesMap.get(message.reference_id)
+            : null,
           label: null,
+          attachments,
+          reactions,
+        };
+
+      case MessageType.CHANGE_LABEL:
+        return {
+          ...messageData,
+          read_by,
+          label: labelsMap.get(message.reference_id),
           assignee: null,
           attachments,
+          reactions,
+        };
+
+      default:
+        return {
+          ...messageData,
+          read_by,
+          assignee: null,
+          label: null,
+          attachments,
+          reactions,
         };
     }
   });
-
-  return formattedMessages;
 };
 
 export const createEmailEvent = async (
@@ -199,4 +208,56 @@ export const updateUserLastSeen = async (ticketId: string, userId: string) => {
   });
 
   return updatedLastSeen;
+};
+
+export const reactMessage = async (
+  messageId: string,
+  userId: string,
+  reaction: string,
+) => {
+  const messageInfo = await getMessageById(messageId);
+
+  if (!messageInfo) {
+    throw new Error('Invalid message ID!');
+  }
+
+  if (messageInfo.type !== MessageType.REGULAR) {
+    throw new Error('Can only react to Regular messages!');
+  }
+
+  const newReaction = await prisma.$transaction(async (tx) => {
+    const whereClause = {
+      user_message_id: { user_id: userId, message_id: messageId },
+    };
+
+    const currentReaction = await tx.userMessage.findUnique({
+      where: whereClause,
+      select: { reaction: true },
+    });
+
+    if (!currentReaction) {
+      const newReaction = await tx.userMessage.create({
+        data: { user_id: userId, message_id: messageId, reaction },
+      });
+
+      return { status: 'created', ...newReaction };
+    }
+
+    if (currentReaction.reaction === reaction) {
+      const deletedReaction = await tx.userMessage.delete({
+        where: whereClause,
+      });
+
+      return { status: 'deleted', ...deletedReaction };
+    }
+
+    const updatedReaction = await tx.userMessage.update({
+      where: whereClause,
+      data: { reaction },
+    });
+
+    return { status: 'updated', ...updatedReaction };
+  });
+
+  return newReaction;
 };
