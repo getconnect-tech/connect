@@ -1,5 +1,10 @@
 import { z } from 'zod';
-import { EmailEventType, Message, MessageType } from '@prisma/client';
+import {
+  ChannelType,
+  EmailEventType,
+  Message,
+  MessageType,
+} from '@prisma/client';
 import { Attachment } from 'postmark';
 import { handleApiError } from '@/helpers/errorHandler';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
@@ -14,12 +19,14 @@ import {
   contentSchema,
   messageTypeSchema,
 } from '@/lib/zod/message';
-import { sendEmailAsReply } from '@/helpers/emails';
+import { sendEmail, sendEmailAsReply } from '@/helpers/emails';
 import { getWorkspaceEmailConfig } from '@/services/serverSide/workspace';
 import {
   getAttachmentsFromToken,
   moveAttachments,
 } from '@/services/serverSide/firebaseServices';
+import { prisma } from '@/prisma/prisma';
+import { NotificationProvider } from '@/services/serverSide/notifications';
 
 export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
@@ -57,6 +64,7 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
         referenceId: '',
         ticketId,
         authorId: userId,
+        channel: ChannelType.INTERNAL,
       });
 
       await updateUserLastSeen(ticketId, userId);
@@ -69,6 +77,15 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
           attachmentToken,
         );
       }
+
+      NotificationProvider.sendMentionsNotification(userId, ticketId, content);
+
+      NotificationProvider.sendNewMessageNotification(
+        userId,
+        ticketId,
+        content,
+        false,
+      );
 
       return Response.json(newMessage, { status: 201 });
     }
@@ -88,6 +105,24 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
 
       let newMessage: Message;
       try {
+        const ticket = await prisma.ticket.findUnique({
+          where: { id: ticketId },
+          select: {
+            mail_id: true,
+            source: true,
+            subject: true,
+            contact: {
+              select: {
+                email: true,
+              },
+            },
+          },
+        });
+
+        if (!ticket) {
+          return Response.json({ error: 'Ticket not found!' }, { status: 404 });
+        }
+
         let attachments: Attachment[] = [];
         if (attachmentToken) {
           attachments = await getAttachmentsFromToken(
@@ -96,15 +131,32 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
             attachmentToken,
           );
         }
-        const mailId = await sendEmailAsReply({
-          ticketId,
-          body: content,
-          senderEmail: emailConfig.primaryEmail,
-          attachments,
-        });
 
-        if (!mailId) {
-          return Response.json({ error: 'Ticket not found!' }, { status: 404 });
+        let mailId: string;
+        if (ticket.source === ChannelType.WEB && !ticket.mail_id) {
+          // The ticket was from web and this is first email in the ticket
+
+          const postmarkMailId = await sendEmail({
+            email: ticket.contact.email,
+            subject: ticket.subject,
+            body: content,
+            senderEmail: emailConfig.primaryEmail,
+            attachments,
+          });
+
+          mailId = `<${postmarkMailId}@mtasv.net>`;
+
+          await prisma.ticket.update({
+            where: { id: ticketId },
+            data: { mail_id: mailId },
+          });
+        } else {
+          mailId = (await sendEmailAsReply({
+            ticketId,
+            body: content,
+            senderEmail: emailConfig.primaryEmail,
+            attachments,
+          }))!;
         }
 
         newMessage = await postMessage({
@@ -113,6 +165,7 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
           referenceId: mailId,
           ticketId: ticketId,
           authorId: req.user.id,
+          channel: ChannelType.MAIL,
         });
       } catch (err: any) {
         newMessage = await postMessage({
@@ -121,6 +174,7 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
           referenceId: '',
           ticketId: ticketId,
           authorId: req.user.id,
+          channel: ChannelType.MAIL,
         });
 
         await createEmailEvent(newMessage.id, {
@@ -139,6 +193,13 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
           );
         }
       }
+
+      NotificationProvider.sendNewMessageNotification(
+        userId,
+        ticketId,
+        content,
+        false,
+      );
 
       return Response.json(newMessage, { status: 201 });
     }

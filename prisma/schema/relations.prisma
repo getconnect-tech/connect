@@ -1,31 +1,43 @@
 model UserWorkspaces {
-    workspace_id String
-    user_id      String
-    user         User      @relation(fields: [user_id], references: [id])
-    workspace    Workspace @relation(fields: [workspace_id], references: [id])
-    role         UserRole  @default(MEMBER)
-    created_at   DateTime  @default(now())
+  workspace_id String
+  user_id      String
+  user         User      @relation(fields: [user_id], references: [id])
+  workspace    Workspace @relation(fields: [workspace_id], references: [id])
+  role         UserRole  @default(MEMBER)
+  created_at   DateTime  @default(now())
 
-    @@id(name: "user_workspace_id", [workspace_id, user_id])
+  @@id(name: "user_workspace_id", [workspace_id, user_id])
 }
 
 model TicketLabel {
-    label_id  String
-    ticket_id String
-    label     Label  @relation(fields: [label_id], references: [id])
-    ticket    Ticket @relation(fields: [ticket_id], references: [id])
+  label_id  String
+  ticket_id String
+  label     Label  @relation(fields: [label_id], references: [id])
+  ticket    Ticket @relation(fields: [ticket_id], references: [id])
 
-    @@id(name: "ticket_label_id", [label_id, ticket_id])
+  @@id(name: "ticket_label_id", [label_id, ticket_id])
 }
 
 model TicketUser {
-    ticket_id String
-    user_id   String
+  ticket_id String
+  user_id   String
 
-    user   User   @relation(fields: [user_id], references: [id])
-    ticket Ticket @relation(fields: [ticket_id], references: [id])
+  user   User   @relation(fields: [user_id], references: [id])
+  ticket Ticket @relation(fields: [ticket_id], references: [id])
 
-    last_seen DateTime @default(now())
+  last_seen DateTime @default(now())
 
-    @@id(name: "ticket_user_id", [ticket_id, user_id])
+  @@id(name: "ticket_user_id", [ticket_id, user_id])
+}
+
+model UserMessage {
+  user_id    String
+  message_id String
+
+  user    User    @relation(fields: [user_id], references: [id])
+  message Message @relation(fields: [message_id], references: [id])
+
+  reaction String
+
+  @@id(name: "user_message_id", [user_id, message_id])
 }

@@ -5,6 +5,8 @@ import {
   ref,
   uploadBytesResumable,
 } from 'firebase/storage';
+import { convert } from 'html-to-text';
+import axios from 'axios';
 import { app } from '@/utils/firebase';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { messageStore } from '@/stores/messageStore';
@@ -221,4 +223,31 @@ export const formatFileSize = (sizeInBytes: number): string => {
   } else {
     return sizeInBytes + ' Bytes';
   }
+};
+
+export const htmlToString = (html: string) => {
+  const plainText = convert(html, { wordwrap: 130 });
+
+  return plainText;
+};
+
+/**
+ * Downloads a file from the given URL and converts it to a Base64 string.
+ *
+ * @param fileUrl - The URL of the file to download.
+ * @returns A promise that resolves to the Base64 string of the downloaded file.
+ */
+export const downloadFileAsBase64 = async (fileUrl: string) => {
+  const response = await axios.get(fileUrl, {
+    responseType: 'arraybuffer', // Ensures response is returned as a Buffer
+  });
+
+  // Convert the response data (buffer) to a Base64 string
+  const base64String = Buffer.from(response.data, 'binary').toString('base64');
+
+  // Optionally, you can add a MIME type prefix to the base64 string for some use cases
+  const mimeType = response.headers['content-type'];
+  // return `data:${mimeType};base64,${base64String}`;
+
+  return { contentType: mimeType, content: base64String };
 };

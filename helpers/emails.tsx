@@ -11,11 +11,13 @@ export const sendEmail = async ({
   subject,
   body,
   senderEmail,
+  attachments = [],
 }: {
   email: string;
   subject: string;
   body: string;
   senderEmail?: string;
+  attachments?: Attachment[];
 }) => {
   const from = senderEmail ?? process.env.POSTMARK_SENDER_EMAIL!;
 
@@ -24,6 +26,7 @@ export const sendEmail = async ({
     To: email,
     Subject: subject,
     HtmlBody: body,
+    Attachments: attachments,
   });
   return res.MessageID;
 };
@@ -41,7 +44,7 @@ export const sendEmailAsReply = async ({
 }) => {
   const ticket = await getTicketById(ticketId);
 
-  if (!ticket) {
+  if (!ticket || !ticket.mail_id) {
     return null;
   }
 

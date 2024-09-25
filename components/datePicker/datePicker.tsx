@@ -204,7 +204,7 @@ function DatePickerModal({
                 popupStyle={{
                   border: '1px solid',
                   borderRadius: 8,
-                  borderColor: '#E3E8EA',
+                  borderColor: 'var(--border)',
                 }}
               />
             </div>

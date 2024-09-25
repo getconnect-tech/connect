@@ -68,3 +68,8 @@ export type MessageSummary = {
     display_name: string | null;
   };
 };
+
+export type TicketSummary = {
+  ticketSummary: string;
+  ticketSentiment: string;
+};

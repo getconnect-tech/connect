@@ -300,3 +300,26 @@ export const deleteLabelFromTicket = async (
     ticketStore.setLoading(false);
   }
 };
+
+/**
+ * @desc Get ticket summary
+ * @param {*} ticketId
+ */
+export const getTicketSummary = async (ticketId: string) => {
+  try {
+    ticketStore.setLoading(true);
+    const response = await axios.get(
+      `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}/generateSummary`,
+    );
+    const { data } = response;
+    ticketStore.setTicketSummary(data);
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    ticketStore.setLoading(false);
+  }
+};

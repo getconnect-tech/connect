@@ -8,6 +8,7 @@ import {
 import { createOrUpdateContact } from './contact';
 import { prisma } from '@/prisma/prisma';
 import { removeNullUndefined } from '@/helpers/common';
+import { chatWithOpenAi } from '@/lib/openAi';
 
 type TicketWithPayload = Prisma.TicketGetPayload<{
   include: {
@@ -143,17 +144,18 @@ export const createTicket = async ({
   subject,
   senderName,
   senderEmail,
+  source,
 }: {
   workspaceId: string;
-  mailId: string;
+  mailId?: string;
   subject: string;
   senderName?: string;
   senderEmail: string;
+  source: ChannelType;
 }) => {
-  const name = senderName || senderEmail.split('@')[0]!;
   const contact = await createOrUpdateContact({
     email: senderEmail,
-    name,
+    name: senderName,
   });
 
   const newTicket = await prisma.ticket.create({
@@ -161,7 +163,7 @@ export const createTicket = async ({
       workspace_id: workspaceId,
       mail_id: mailId,
       title: subject,
-      source: ChannelType.MAIL,
+      source,
       contact_id: contact.id,
       subject,
     },
@@ -267,4 +269,12 @@ export const updateAssignee = async (ticketId: string, newAssignee: string) => {
   });
 
   return updatedTicket;
+};
+
+export const generateTicketTitle = async (ticketDesc: string) => {
+  const prompt = `Generate a single line title (without any quotes) for a ticket with message:\n${ticketDesc}`;
+
+  const generatedTitle = await chatWithOpenAi(prompt);
+
+  return generatedTitle;
 };

@@ -1,9 +1,10 @@
-import { MessageType } from '@prisma/client';
+import { ChannelType, MessageType } from '@prisma/client';
 import { handleApiError } from '@/helpers/errorHandler';
 import { assignToSchema } from '@/lib/zod/ticket';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import { postMessage } from '@/services/serverSide/message';
 import { updateAssignee } from '@/services/serverSide/ticket';
+import { NotificationProvider } from '@/services/serverSide/notifications';
 
 // PUT: /api/tickets/[ticketId]/changeAssignee
 export const PUT = withWorkspaceAuth(async (req, { ticketId }) => {
@@ -21,7 +22,16 @@ export const PUT = withWorkspaceAuth(async (req, { ticketId }) => {
       messageType: MessageType.CHANGE_ASSIGNEE,
       ticketId,
       authorId: userId,
+      channel: ChannelType.INTERNAL,
     });
+
+    if (assignee) {
+      NotificationProvider.sendAssignTicketNotification(
+        req.user.id,
+        assignee,
+        ticketId,
+      );
+    }
 
     return Response.json(updatedTicket, { status: 200 });
   } catch (err) {
