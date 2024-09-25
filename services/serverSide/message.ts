@@ -47,7 +47,7 @@ export const getMessageById = async (messageId: string) => {
 };
 
 export const getTicketMessages = async (ticketId: string) => {
-  // Fetch ticket and workspace in one query
+  // Pre-fetch ticket and workspace details
   const ticket = await prisma.ticket.findUnique({
     where: { id: ticketId },
     select: { workspace_id: true },
@@ -55,7 +55,7 @@ export const getTicketMessages = async (ticketId: string) => {
 
   if (!ticket) throw new Error('Invalid ticket id!');
 
-  // Fetch messages with necessary data, filtering and selecting only the needed fields
+  // Fetch all related message data in one query with selected fields only
   const messages = await prisma.message.findMany({
     where: { ticket_id: ticketId },
     include: {
@@ -78,51 +78,54 @@ export const getTicketMessages = async (ticketId: string) => {
     orderBy: { created_at: 'asc' },
   });
 
-  // Extract unique assignee and label IDs
-  const assigneeIds = new Set<string>();
-  const labelIds = new Set<string>();
-  const contactEmails = new Set<string>();
+  // Early return if no messages
+  if (!messages.length) return [];
+
+  // Gather all reference ids in one loop to reduce extra passes
+  const allAssigneeIds = new Set<string>();
+  const allLabelIds = new Set<string>();
+  const allContactEmails = new Set<string>();
 
   for (const message of messages) {
     if (message.type === MessageType.CHANGE_ASSIGNEE && message.reference_id) {
-      assigneeIds.add(message.reference_id);
+      allAssigneeIds.add(message.reference_id);
     }
     if (message.type === MessageType.CHANGE_LABEL && message.reference_id) {
-      labelIds.add(message.reference_id);
+      allLabelIds.add(message.reference_id);
     }
-    message.email_events.forEach((event) => contactEmails.add(event.extra));
+    message.email_events.forEach((event) => allContactEmails.add(event.extra));
   }
 
-  // Fetch assignees, labels, contacts, and attachments concurrently
-  const [assignees, labels, contacts, messageAttachmentsMap] =
+  // Combine all queries into one Promise.all for concurrent execution
+  const [assigneesData, labelsData, contactsData, messageAttachmentsMap] =
     await Promise.all([
       prisma.user.findMany({
-        where: { id: { in: Array.from(assigneeIds) } },
-        select: { id: true, display_name: true },
+        where: { id: { in: Array.from(allAssigneeIds) } },
+        select: { id: true, display_name: true }, // Limit the fields
       }),
       prisma.label.findMany({
-        where: { id: { in: Array.from(labelIds) } },
-        select: { id: true, name: true }, // Only fetch fields we care about
+        where: { id: { in: Array.from(allLabelIds) } },
+        select: { id: true, name: true }, // Only fetch relevant fields
       }),
       prisma.contact.findMany({
-        where: { email: { in: Array.from(contactEmails) } },
+        where: { email: { in: Array.from(allContactEmails) } },
         select: { email: true, name: true, id: true },
       }),
-      getTicketAttachments(ticket.workspace_id, ticketId),
+      getTicketAttachments(ticket.workspace_id, ticketId), // Use optimized attachment fetching
     ]);
 
-  // Create maps for quick lookup
+  // Create maps for efficient lookup
   const assigneesMap = new Map(
-    assignees.map((assignee) => [assignee.id, assignee]),
+    assigneesData.map((assignee) => [assignee.id, assignee]),
   );
-  const labelsMap = new Map(labels.map((label) => [label.id, label]));
+  const labelsMap = new Map(labelsData.map((label) => [label.id, label]));
   const contactsMap = new Map(
-    contacts.map((contact) => [contact.email, contact]),
+    contactsData.map((contact) => [contact.email, contact]),
   );
 
-  // Format messages with the necessary data
-  const formattedMessages = messages.map((message) => {
-    const { email_events, users_rel, ...msgData } = message;
+  // Process messages in a single loop for efficiency
+  return messages.map((message) => {
+    const { email_events, users_rel, ...messageData } = message;
 
     // Process read_by from email_events
     const read_by = email_events
@@ -130,22 +133,22 @@ export const getTicketMessages = async (ticketId: string) => {
         const contact = contactsMap.get(event.extra);
         return contact ? { ...contact, seen_at: event.created_at } : null;
       })
-      .filter(Boolean);
+      .filter(Boolean); // Filter out any null values
 
-    // Process reactions
+    // Process reactions in one go
     const reactions = users_rel.map((rel) => ({
       reaction: rel.reaction,
       author: rel.user,
     }));
 
-    // Process attachments from the map
+    // Attachments are lazily fetched from the map
     const attachments = messageAttachmentsMap[message.id] || [];
 
-    // Format message based on type
+    // Format message based on its type
     switch (message.type) {
-      case MessageType.CHANGE_ASSIGNEE: {
+      case MessageType.CHANGE_ASSIGNEE:
         return {
-          ...msgData,
+          ...messageData,
           read_by,
           assignee: message.reference_id
             ? assigneesMap.get(message.reference_id)
@@ -154,20 +157,20 @@ export const getTicketMessages = async (ticketId: string) => {
           attachments,
           reactions,
         };
-      }
-      case MessageType.CHANGE_LABEL: {
+
+      case MessageType.CHANGE_LABEL:
         return {
-          ...msgData,
+          ...messageData,
           read_by,
-          assignee: null,
           label: labelsMap.get(message.reference_id),
+          assignee: null,
           attachments,
           reactions,
         };
-      }
+
       default:
         return {
-          ...msgData,
+          ...messageData,
           read_by,
           assignee: null,
           label: null,
@@ -176,8 +179,6 @@ export const getTicketMessages = async (ticketId: string) => {
         };
     }
   });
-
-  return formattedMessages;
 };
 
 export const createEmailEvent = async (
