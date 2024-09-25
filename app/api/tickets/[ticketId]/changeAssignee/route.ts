@@ -26,7 +26,7 @@ export const PUT = withWorkspaceAuth(async (req, { ticketId }) => {
     });
 
     if (assignee) {
-      NotificationProvider.sendAssignTicketNotification(
+      NotificationProvider.notifyTicketAssignment(
         req.user.id,
         assignee,
         ticketId,
