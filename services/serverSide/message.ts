@@ -60,7 +60,7 @@ export const getTicketMessages = async (ticketId: string) => {
     where: { ticket_id: ticketId },
     include: {
       author: {
-        select: { id: true, display_name: true },
+        select: { id: true, display_name: true, profile_url: true },
       },
       email_events: {
         where: { event: EmailEventType.OPENED },
@@ -133,7 +133,7 @@ export const getTicketMessages = async (ticketId: string) => {
         const contact = contactsMap.get(event.extra);
         return contact ? { ...contact, seen_at: event.created_at } : null;
       })
-      .filter(Boolean); // Filter out any null values
+      .filter((x) => x !== null); // Filter out any null values
 
     // Process reactions in one go
     const reactions = users_rel.map((rel) => ({
