@@ -24,6 +24,7 @@ model User {
   api_keys      ApiKeys[]
   macros        Macro[]
   tickets_rel   TicketUser[]
+  messages_rel  UserMessage[]
 }
 
 model Workspace {
@@ -79,17 +80,18 @@ model Ticket {
 }
 
 model Message {
-  id           String       @id @default(uuid())
+  id           String        @id @default(uuid())
   reference_id String
   content      String
-  created_at   DateTime     @default(now())
+  created_at   DateTime      @default(now())
   ticket_id    String
   author_id    String?
   type         MessageType
   channel      ChannelType
-  author       User?        @relation(fields: [author_id], references: [id])
-  ticket       Ticket       @relation(fields: [ticket_id], references: [id])
+  author       User?         @relation(fields: [author_id], references: [id])
+  ticket       Ticket        @relation(fields: [ticket_id], references: [id])
   email_events EmailEvent[]
+  users_rel    UserMessage[]
 }
 
 model Contact {
