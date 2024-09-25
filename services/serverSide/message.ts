@@ -200,3 +200,45 @@ export const updateUserLastSeen = async (ticketId: string, userId: string) => {
 
   return updatedLastSeen;
 };
+
+export const reactMessage = async (
+  messageId: string,
+  userId: string,
+  reaction: string,
+) => {
+  const newReaction = await prisma.$transaction(async (tx) => {
+    const whereClause = {
+      user_message_id: { user_id: userId, message_id: messageId },
+    };
+
+    const currentReaction = await tx.userMessage.findUnique({
+      where: whereClause,
+      select: { reaction: true },
+    });
+
+    if (!currentReaction) {
+      const newReaction = await tx.userMessage.create({
+        data: { user_id: userId, message_id: messageId, reaction },
+      });
+
+      return newReaction;
+    }
+
+    if (currentReaction.reaction === reaction) {
+      const deletedReaction = await tx.userMessage.delete({
+        where: whereClause,
+      });
+
+      return deletedReaction;
+    }
+
+    const updatedReaction = await tx.userMessage.update({
+      where: whereClause,
+      data: { reaction },
+    });
+
+    return updatedReaction;
+  });
+
+  return newReaction;
+};
