@@ -28,3 +28,8 @@ export const attachmentSchema = z.object({
     })
     .url(),
 });
+
+export const reactionSchema = z.string({
+  required_error: "'reaction' is required!",
+  invalid_type_error: "'reaction' must be of type string!",
+});
