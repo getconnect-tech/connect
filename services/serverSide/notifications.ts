@@ -1,3 +1,4 @@
+import { getMessageById } from './message';
 import { sendOneSignalNotification } from '@/lib/oneSignal';
 import { getUserById } from '@/services/serverSide/user';
 import { getTicketById } from '@/services/serverSide/ticket';
@@ -63,6 +64,16 @@ export class NotificationProvider {
     }
 
     return ticketInfo;
+  }
+
+  private static async getMessageInfo(messageId: string) {
+    const messageInfo = await getMessageById(messageId);
+
+    if (!messageInfo) {
+      throw new Error('Invalid message ID!');
+    }
+
+    return messageInfo;
   }
 
   private static getMentionedUserIds(messageContent: string) {
@@ -176,6 +187,27 @@ export class NotificationProvider {
       title,
       body,
       receiverIds,
+      url: ticketUrl,
+    });
+  }
+
+  public static async sendMessageReactionNotification(
+    senderId: string,
+    messageId: string,
+    reaction: string,
+  ) {
+    const senderInfo = await this.getSenderInfo(senderId);
+    const messageInfo = await this.getMessageInfo(messageId);
+
+    const title = `${senderInfo.name} reacted ${reaction} on your message`;
+    const body = htmlToString(messageInfo.content);
+
+    const ticketUrl = `/details/${messageInfo.ticket_id}`;
+
+    return this.sendNotification({
+      title,
+      body,
+      receiverIds: [messageInfo.author_id!],
       url: ticketUrl,
     });
   }

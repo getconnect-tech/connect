@@ -43,6 +43,11 @@ export const postMessage = async ({
   return newMessage;
 };
 
+export const getMessageById = async (messageId: string) => {
+  const message = await prisma.message.findUnique({ where: { id: messageId } });
+  return message;
+};
+
 export const getTicketMessages = async (ticketId: string) => {
   // get workspace
   const ticket = await prisma.ticket.findUnique({
@@ -206,6 +211,16 @@ export const reactMessage = async (
   userId: string,
   reaction: string,
 ) => {
+  const messageInfo = await getMessageById(messageId);
+
+  if (!messageInfo) {
+    throw new Error('Invalid message ID!');
+  }
+
+  if (messageInfo.type !== MessageType.REGULAR) {
+    throw new Error('Can only react to Regular messages!');
+  }
+
   const newReaction = await prisma.$transaction(async (tx) => {
     const whereClause = {
       user_message_id: { user_id: userId, message_id: messageId },
@@ -221,7 +236,7 @@ export const reactMessage = async (
         data: { user_id: userId, message_id: messageId, reaction },
       });
 
-      return newReaction;
+      return { status: 'created', ...newReaction };
     }
 
     if (currentReaction.reaction === reaction) {
@@ -229,7 +244,7 @@ export const reactMessage = async (
         where: whereClause,
       });
 
-      return deletedReaction;
+      return { status: 'deleted', ...deletedReaction };
     }
 
     const updatedReaction = await tx.userMessage.update({
@@ -237,7 +252,7 @@ export const reactMessage = async (
       data: { reaction },
     });
 
-    return updatedReaction;
+    return { status: 'updated', ...updatedReaction };
   });
 
   return newReaction;
