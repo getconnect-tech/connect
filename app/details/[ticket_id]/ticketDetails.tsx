@@ -147,8 +147,8 @@ function TicketDetails(props: Props) {
       await Promise.all([
         getTicketDetails(ticket_id),
         getTicketMessages(ticket_id),
+        getMacros(),
       ]);
-      await getMacros();
     }
   }, [ticket_id, currentWorkspace?.id]);
 
