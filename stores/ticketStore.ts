@@ -32,6 +32,7 @@ class TicketStore {
       messages: observable,
       setTicketMessages: action,
       addTicketMessage: action,
+      updateMessageId: action,
 
       // Inbox ticket List
       filteredTicketList: observable,
@@ -80,6 +81,12 @@ class TicketStore {
 
   addTicketMessage(value: MessageDetails) {
     this.messages = [...(this.messages || []), value];
+  }
+
+  updateMessageId(newId: string, oldId: string) {
+    this.messages = this.messages.map((message) =>
+      message.id === oldId ? { ...message, id: newId } : message,
+    );
   }
 
   // set filtered ticket list

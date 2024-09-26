@@ -67,6 +67,7 @@ import { messageStore } from '@/stores/messageStore';
 import {
   HandleClickProps,
   MessageAttachment,
+  Reaction,
   ReactionProps,
 } from '@/utils/appTypes';
 import LabelDropdown from '@/components/labelDropdown/labelDropdown';
@@ -393,6 +394,7 @@ function TicketDetails(props: Props) {
         reference_id: '',
         ticket_id,
         type,
+        reactions: [] as Reaction[],
         // add default ready_by field
       } as MessageDetails;
 
@@ -401,7 +403,8 @@ function TicketDetails(props: Props) {
           setCommentValue('');
           setAttachFiels([]);
           ticketStore.addTicketMessage(newMessage);
-          await sendMessage(ticket_id, payload);
+          const res = await sendMessage(ticket_id, payload);
+          ticketStore.updateMessageId(res.id, newMessage.id);
         }
       } catch (e) {
         console.log('Error : ', e);
