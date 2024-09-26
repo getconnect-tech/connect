@@ -206,11 +206,11 @@ const InternalMessageCard = ({
     setShowEmojiPicker(false);
   };
 
-  const dropdownItem = [
-    { name: 'Pinal', isName: true },
-    { name: 'Pinal', isName: true },
-    { name: 'Pinal', isName: true },
-  ];
+  const dropdownItem = (index: number) => {
+    return selectedReactions[index]?.author.map((member) => {
+      return { name: member.display_name, isName: true };
+    });
+  };
 
   return (
     <div>
@@ -287,7 +287,7 @@ const InternalMessageCard = ({
               </ReactionCard>
               {isDropdownVisible && hoveredIndex === index && (
                 <DropDown
-                  items={dropdownItem}
+                  items={dropdownItem(index)}
                   iconSize={''}
                   iconViewBox={''}
                   onMouseLeave={handleMouseLeave}
