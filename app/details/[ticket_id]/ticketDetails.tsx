@@ -66,7 +66,7 @@ import { messageStore } from '@/stores/messageStore';
 import {
   HandleClickProps,
   MessageAttachment,
-  Reaction,
+  ReactionProps,
 } from '@/utils/appTypes';
 import LabelDropdown from '@/components/labelDropdown/labelDropdown';
 import { getMacros } from '@/services/clientSide/settingServices';
@@ -451,14 +451,17 @@ function TicketDetails(props: Props) {
             }
           };
           const reactionData = message?.reactions.reduce(
-            (acc: any, { reaction }) => {
-              const existing = acc.find(
-                (item: Reaction) => item.reaction === reaction,
-              );
+            (acc: ReactionProps[], { reaction, author }) => {
+              const existing = acc.find((item) => item.emoji === reaction);
               if (existing) {
                 existing.count++;
+                existing.author.push(author);
               } else {
-                acc.push({ emoji: reaction, count: 1 });
+                acc.push({
+                  emoji: reaction,
+                  count: 1,
+                  author: [author],
+                });
               }
               return acc;
             },

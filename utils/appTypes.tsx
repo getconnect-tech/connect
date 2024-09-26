@@ -46,3 +46,12 @@ export type Reaction = {
     display_name: string | null;
   };
 };
+
+export type ReactionProps = {
+  emoji: string;
+  count: number;
+  author: {
+    id: string;
+    display_name: string | null;
+  }[];
+};
