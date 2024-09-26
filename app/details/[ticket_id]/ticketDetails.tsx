@@ -502,7 +502,7 @@ function TicketDetails(props: Props) {
                 title={message?.content || ''}
                 time={message?.created_at}
                 reactions={reactionData}
-                showReactions={true}
+                showReactions={reactionData && reactionData.length > 0}
                 attachments={message?.attachments}
                 addReactionToMessage={addReactionToMessage}
               />

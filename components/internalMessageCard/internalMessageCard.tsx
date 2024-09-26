@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
-import EmojiPicker, { EmojiClickData } from 'emoji-picker-react'; // Import the EmojiPicker component
+import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import { observer } from 'mobx-react-lite';
 import FileCard from '../fileCard/fileCard';
+import DropDown from '../dropDown/dropDown';
 import {
   AddReactionButton,
   AttachmentMainDiv,
@@ -36,7 +37,6 @@ export const useOutsideClick = (callback: () => void) => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-
       if (ref.current && !ref.current.contains(event.target as Node)) {
         if (target.closest(`.tag-div`)) {
           return;
@@ -65,8 +65,9 @@ const InternalMessageCard = ({
   addReactionToMessage,
 }: Props) => {
   const { user } = userStore;
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false); // State to toggle emoji picker visibility
-  const emojiPickerRef = useOutsideClick(() => setShowEmojiPicker(false)); // Create a ref for the EmojiPickerDiv
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiPickerRef = useOutsideClick(() => setShowEmojiPicker(false));
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [selectedReactions, setSelectedReactions] =
     useState<ReactionProps[]>(reactions);
   const [submenuPosition, setSubmenuPosition] = useState<
@@ -97,6 +98,10 @@ const InternalMessageCard = ({
       // Set dropdown to appear downwards
       setPosition('downwards');
     }
+  };
+
+  const handleMouseLeave = () => {
+    setIsDropdownVisible(false);
   };
 
   const handleAddReactionClick = () => {
@@ -188,7 +193,7 @@ const InternalMessageCard = ({
       // If the selected emoji doesn't exist in the reactions, add a new reaction
       newReactions.push({
         emoji: selectedEmoji,
-        count: 1, // New reaction starts with a count of 1
+        count: 1,
         author: [
           { id: user?.id || '', display_name: user?.display_name || null },
         ],
@@ -199,6 +204,12 @@ const InternalMessageCard = ({
     setSelectedReactions(newReactions);
     setShowEmojiPicker(false);
   };
+
+  const dropdownItem = [
+    { name: 'Pinal', isName: true },
+    { name: 'Pinal', isName: true },
+    { name: 'Pinal', isName: true },
+  ];
 
   return (
     <div>
@@ -256,10 +267,32 @@ const InternalMessageCard = ({
       {showReactions && (
         <ReactionsMainDiv>
           {selectedReactions?.map((reaction, index) => (
-            <ReactionCard key={index}>
-              <Emoji>{reaction.emoji}</Emoji>
-              <p>{reaction.count}</p>
-            </ReactionCard>
+            <div
+              key={index}
+              onMouseEnter={(e) => {
+                handleMouseEnter(e, setSubmenuPosition);
+                setIsDropdownVisible(true);
+              }}
+              onMouseLeave={handleMouseLeave}
+            >
+              <ReactionCard>
+                <Emoji>{reaction.emoji}</Emoji>
+                <p>{reaction.count}</p>
+              </ReactionCard>
+              {isDropdownVisible && (
+                <DropDown
+                  items={dropdownItem}
+                  iconSize={''}
+                  iconViewBox={''}
+                  onMouseLeave={handleMouseLeave}
+                  className={
+                    submenuPosition === 'upwards'
+                      ? 'submenu-upwards'
+                      : 'submenu-downwards'
+                  }
+                />
+              )}
+            </div>
           ))}
           <EmojiPickerDiv ref={emojiPickerRef}>
             <AddReactionButton

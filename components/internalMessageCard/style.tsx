@@ -79,6 +79,14 @@ const ReactionsMainDiv = styled.div`
   gap: 4px;
   padding-left: 32px;
   padding-top: 6px;
+  .submenu-upwards {
+    bottom: calc(100% - 35px);
+    top: auto;
+  }
+  .submenu-downwards {
+    bottom: auto;
+    margin-top: 4px;
+  }
 `;
 
 const ReactionCard = styled.div`
