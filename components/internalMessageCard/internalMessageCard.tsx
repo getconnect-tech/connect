@@ -68,6 +68,7 @@ const InternalMessageCard = ({
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiPickerRef = useOutsideClick(() => setShowEmojiPicker(false));
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [selectedReactions, setSelectedReactions] =
     useState<ReactionProps[]>(reactions);
   const [submenuPosition, setSubmenuPosition] = useState<
@@ -271,15 +272,20 @@ const InternalMessageCard = ({
               key={index}
               onMouseEnter={(e) => {
                 handleMouseEnter(e, setSubmenuPosition);
+                setHoveredIndex(index); // Set the hovered index
                 setIsDropdownVisible(true);
               }}
-              onMouseLeave={handleMouseLeave}
+              onMouseLeave={() => {
+                handleMouseLeave();
+                setHoveredIndex(null); // Clear the hovered index
+                setIsDropdownVisible(false);
+              }}
             >
               <ReactionCard>
                 <Emoji>{reaction.emoji}</Emoji>
                 <p>{reaction.count}</p>
               </ReactionCard>
-              {isDropdownVisible && (
+              {isDropdownVisible && hoveredIndex === index && (
                 <DropDown
                   items={dropdownItem}
                   iconSize={''}
