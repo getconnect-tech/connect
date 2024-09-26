@@ -15,6 +15,7 @@ import {
   BottomDiv,
   ButtonDiv,
   CenterDiv,
+  CenterMainDiv,
   HeaderDiv,
   IconDiv,
   Input,
@@ -79,6 +80,7 @@ function TicketDetails(props: Props) {
   const [messageModeDropdown, setMessageModeDropdown] = useState(false);
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
   const [messageRefId, setMessageRefId] = useState('');
   const [commentValue, setCommentValue] = useState<string>('');
   const [attachFile, setAttachFiels] = useState<MessageAttachment[]>([]);
@@ -145,8 +147,8 @@ function TicketDetails(props: Props) {
       await Promise.all([
         getTicketDetails(ticket_id),
         getTicketMessages(ticket_id),
+        getMacros(),
       ]);
-      await getMacros();
     }
   }, [ticket_id, currentWorkspace?.id]);
 
@@ -154,17 +156,34 @@ function TicketDetails(props: Props) {
     loadData();
   }, [loadData]);
 
-  const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({
-        block: 'end',
-      });
-    }
+  const handleScroll = (e: Event) => {
+    const element = e.target as HTMLDivElement;
+    const atBottom =
+      element.scrollHeight - element.scrollTop <= element.clientHeight + 50;
+    setIsUserScrolling(!atBottom);
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    const element = messagesEndRef.current?.parentElement;
+    if (!element) return;
+
+    const scrollToBottom = () => {
+      if (isUserScrolling) return;
+      element.scrollTop = element.scrollHeight;
+    };
+    const resizeObserver = new ResizeObserver(() => {
+      scrollToBottom();
+    });
+    resizeObserver.observe(element);
+
+    setTimeout(() => scrollToBottom(), 0);
+
+    element.addEventListener('scroll', handleScroll as EventListener);
+    return () => {
+      resizeObserver.disconnect();
+      element.removeEventListener('scroll', handleScroll as EventListener);
+    };
+  }, [messages, isUserScrolling]);
 
   useEffect(() => {
     return () => {
@@ -748,7 +767,7 @@ function TicketDetails(props: Props) {
             </ButtonDiv>
           </StatusDiv>
         </TopDiv>
-        <div style={{ padding: '0 20px' }}>
+        <CenterMainDiv>
           <BottomDiv>
             <CenterDiv ref={messagesEndRef}>
               {messages?.map((message, index) => (
@@ -852,7 +871,7 @@ function TicketDetails(props: Props) {
                             iconSize={''}
                             iconViewBox={''}
                             style={{
-                              bottom: 60,
+                              bottom: 52,
                               maxWidth: 146,
                               width: '100%',
                             }}
@@ -896,7 +915,7 @@ function TicketDetails(props: Props) {
               </Input>
             </div>
           </InputDiv>
-        </div>
+        </CenterMainDiv>
       </MainDiv>
       <ProfileSection />
     </Main>
