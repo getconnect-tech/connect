@@ -38,3 +38,11 @@ export type MessageAttachment = {
   size: number;
   downloadUrl: string;
 };
+
+export type Reaction = {
+  reaction: string;
+  author: {
+    id: string;
+    display_name: string | null;
+  };
+};

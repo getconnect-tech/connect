@@ -45,6 +45,7 @@ import {
   sendMessage,
   deleteLabelFromTicket,
   addLabelToTicket,
+  reactMessage,
 } from '@/services/clientSide/ticketServices';
 import {
   capitalizeString,
@@ -62,7 +63,11 @@ import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
 import SnoozeDropdown from '@/components/snoozeDropdown/snoozeDropdown';
 import InternalMessageCard from '@/components/internalMessageCard/internalMessageCard';
 import { messageStore } from '@/stores/messageStore';
-import { HandleClickProps, MessageAttachment } from '@/utils/appTypes';
+import {
+  HandleClickProps,
+  MessageAttachment,
+  Reaction,
+} from '@/utils/appTypes';
 import LabelDropdown from '@/components/labelDropdown/labelDropdown';
 import { getMacros } from '@/services/clientSide/settingServices';
 import FileCard from '@/components/fileCard/fileCard';
@@ -434,7 +439,31 @@ function TicketDetails(props: Props) {
   const renderActivityMessage = useCallback(
     (message: MessageDetails) => {
       switch (message.type) {
-        case MessageType.REGULAR:
+        case MessageType.REGULAR: {
+          const addReactionToMessage = async (emoji: string) => {
+            try {
+              const payload = {
+                reaction: emoji,
+              };
+              await reactMessage(message?.id, payload);
+            } catch (e) {
+              console.log('Error : ', e);
+            }
+          };
+          const reactionData = message?.reactions.reduce(
+            (acc: any, { reaction }) => {
+              const existing = acc.find(
+                (item: Reaction) => item.reaction === reaction,
+              );
+              if (existing) {
+                existing.count++;
+              } else {
+                acc.push({ emoji: reaction, count: 1 });
+              }
+              return acc;
+            },
+            [],
+          );
           return (
             <ActivityDiv>
               <div className='avtar-internal'>
@@ -447,15 +476,14 @@ function TicketDetails(props: Props) {
               <InternalMessageCard
                 title={message?.content || ''}
                 time={message?.created_at}
-                reactions={[
-                  { emoji: '👍', count: 4 },
-                  { emoji: '👌', count: 1 },
-                ]}
+                reactions={reactionData}
                 showReactions={true}
                 attachments={message?.attachments}
+                addReactionToMessage={addReactionToMessage}
               />
             </ActivityDiv>
           );
+        }
         case MessageType.FROM_CONTACT:
           return (
             <ActivityDiv>

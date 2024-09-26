@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react'; // Import the EmojiPicker component
+import { observer } from 'mobx-react-lite';
 import FileCard from '../fileCard/fileCard';
 import {
   AddReactionButton,
@@ -27,6 +28,8 @@ interface Props {
   showReactions?: boolean;
   reactions: ReactionProps[];
   attachments?: MessageAttachment[];
+  // eslint-disable-next-line no-unused-vars
+  addReactionToMessage: (emoji: string) => void;
 }
 
 export const useOutsideClick = (callback: () => void) => {
@@ -55,17 +58,16 @@ export const useOutsideClick = (callback: () => void) => {
   return ref;
 };
 
-export default function InternalMessageCard({
+const InternalMessageCard = ({
   time,
   title,
   showReactions,
   reactions,
   attachments = [],
-}: Props) {
+  addReactionToMessage,
+}: Props) => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false); // State to toggle emoji picker visibility
   const emojiPickerRef = useOutsideClick(() => setShowEmojiPicker(false)); // Create a ref for the EmojiPickerDiv
-  const [selectedReactions, setSelectedReactions] =
-    useState<ReactionProps[]>(reactions);
   const [submenuPosition, setSubmenuPosition] = useState<
     'upwards' | 'downwards'
   >('upwards');
@@ -101,11 +103,7 @@ export default function InternalMessageCard({
   };
 
   const handleEmojiSelect = (emojiData: EmojiClickData) => {
-    const newReactions = [
-      ...selectedReactions,
-      { emoji: emojiData.emoji, count: 1 },
-    ];
-    setSelectedReactions(newReactions);
+    addReactionToMessage(emojiData.emoji);
     setShowEmojiPicker(false);
   };
 
@@ -164,7 +162,7 @@ export default function InternalMessageCard({
       </MainDiv>
       {showReactions && (
         <ReactionsMainDiv>
-          {selectedReactions.map((reaction, index) => (
+          {reactions?.map((reaction, index) => (
             <ReactionCard key={index}>
               <Emoji>{reaction.emoji}</Emoji>
               <p>{reaction.count}</p>
@@ -199,4 +197,6 @@ export default function InternalMessageCard({
       )}
     </div>
   );
-}
+};
+
+export default observer(InternalMessageCard);
