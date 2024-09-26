@@ -131,7 +131,7 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
         if (ticket.source === ChannelType.WEB && !ticket.mail_id) {
           // The ticket was from web and this is first email in the ticket
 
-          const postmarkMailId = await sendEmail({
+          mailId = await sendEmail({
             email: ticket.contact.email,
             subject: ticket.subject,
             body: content,
@@ -139,11 +139,11 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
             attachments,
           });
 
-          mailId = `<${postmarkMailId}@mtasv.net>`;
+          const referenceMailId = `<${mailId}@mtasv.net>`;
 
           await prisma.ticket.update({
             where: { id: ticketId },
-            data: { mail_id: mailId },
+            data: { mail_id: referenceMailId },
           });
         } else {
           mailId = (await sendEmailAsReply({
