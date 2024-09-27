@@ -14,9 +14,9 @@ import DatePickerModal from '../datePicker/datePicker';
 import RenderHtml from '../renderHtml';
 import {
   CardDiv,
+  Description,
   DesTitle,
   DotIcon,
-  InternalDescription,
   InternalMessageDiv,
   LeftDiv,
   LineDiv,
@@ -263,7 +263,7 @@ const InboxCard = ({
         <DesTitle>{title}</DesTitle>
         {last_message?.type === MessageType.EMAIL ||
         last_message?.type === MessageType.FROM_CONTACT ? (
-          <NameText>
+          <NameText className='description'>
             <RenderHtml isSpreadIcon={false} htmlstring={description} />
           </NameText>
         ) : (
@@ -274,9 +274,11 @@ const InboxCard = ({
               name={last_message?.author.display_name || ''}
               size={24}
             />
-            <InternalDescription>
-              <RenderHtml isSpreadIcon={false} htmlstring={description} />
-            </InternalDescription>
+            <Description>
+              <p>
+                <RenderHtml isSpreadIcon={false} htmlstring={description} />
+              </p>
+            </Description>
           </InternalMessageDiv>
         )}
 

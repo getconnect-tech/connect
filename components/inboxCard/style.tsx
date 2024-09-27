@@ -59,16 +59,18 @@ const RightDiv = styled.div`
   gap: 4px;
   margin-left: 53px;
   margin-top: -4px;
+  .description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    word-break: break-word;
+  }
 `;
 
 const NameText = styled.div`
   ${Typography.body_md_regular};
   color: var(--text-text-secondary);
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
-  word-break: break-word;
 `;
 
 const DesTitle = styled.div`
@@ -146,19 +148,31 @@ const InternalMessageDiv = styled.div`
   gap: 4px;
 `;
 
-const InternalDescription = styled.div`
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  overflow: hidden;
-  word-break: break-word;
-  ${Typography.body_md_regular};
-  color: var(--text);
+const Description = styled.div`
+  display: flex;
   padding: 2px 8px;
   background-color: var(--bg-surface);
   border-radius: 30px;
+  align-items: center;
+  p {
+    ${Typography.body_md_regular};
+    color: var(--text-text-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    div {
+      white-space: normal;
+      p {
+        span {
+          br {
+            display: none;
+          }
+        }
+      }
+    }
+  }
 `;
-
 export {
   DesTitle,
   NameText,
@@ -171,5 +185,5 @@ export {
   TagDiv,
   LineDiv,
   InternalMessageDiv,
-  InternalDescription,
+  Description,
 };
