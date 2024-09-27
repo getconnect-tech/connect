@@ -26,10 +26,10 @@ const BottomDiv = styled.div`
   max-width: 702px;
   width: 100%;
   margin: 0 auto;
-  height: calc(100% - 120px);
+  height: calc(100% - 116px);
   overflow: auto;
   scroll-padding-bottom: 15px;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
 `;
 
 const MainDiv = styled.div`
@@ -99,10 +99,11 @@ const InputDiv = styled.div`
     height: 20px;
     border-left: var(--border-main);
     margin-left: 10px;
+    margin-top: -8px;
   }
   .avtar {
     position: absolute;
-    top: 20px;
+    top: 12px;
     z-index: 1;
   }
 `;
@@ -120,7 +121,6 @@ const Input = styled.div<Props>`
   gap: 2px;
   box-shadow: var(--shadow-card);
   margin-left: 10px;
-  margin-top: 8px;
   .loading-text {
     ${Typography.body_sm_regular};
     margin-bottom: 10px;
