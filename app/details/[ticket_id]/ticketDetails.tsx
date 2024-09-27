@@ -73,6 +73,7 @@ import {
 import LabelDropdown from '@/components/labelDropdown/labelDropdown';
 import { getMacros } from '@/services/clientSide/settingServices';
 import FileCard from '@/components/fileCard/fileCard';
+import ProsemirrorEditor from '@/components/prosemirror';
 
 interface Props {
   ticket_id: string;
@@ -835,12 +836,20 @@ function TicketDetails(props: Props) {
                 />
               </div>
               <Input modeSelectedItem={modeSelectedItem}>
-                <RichTextBox
+                {/* <RichTextBox
                   isInternalDiscussion={modeSelectedItem.name !== 'Email'}
                   users={currentWorkspace?.users}
                   placeholder='Write a message'
                   valueContent={commentValue}
                   setValueContent={setCommentValue}
+                /> */}
+                <ProsemirrorEditor
+                  users={currentWorkspace?.users?.map((user) => {
+                    return {
+                      ...(user || []),
+                      name: user?.display_name,
+                    };
+                  })}
                 />
                 <div className='attach-file-div'>
                   {/* Attached Files render */}
