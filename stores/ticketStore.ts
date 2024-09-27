@@ -1,5 +1,5 @@
 import { action, makeObservable, observable } from 'mobx';
-import { Reaction, TicketDetailsInterface } from '@/utils/appTypes';
+import { TicketDetailsInterface } from '@/utils/appTypes';
 import { MessageDetails, TicketSummary } from '@/utils/dataTypes';
 
 class TicketStore {
@@ -90,12 +90,35 @@ class TicketStore {
     );
   }
 
-  addReactionInMessage(messageId: string, value: Reaction) {
-    this.messages = this.messages.map((message) =>
-      message.id === messageId
-        ? { ...message, reactions: [...message.reactions, value] }
-        : message,
-    );
+  addReactionInMessage(
+    messageId: string,
+    status: string,
+    reaction: string,
+    userId: string,
+    userName: string,
+  ) {
+    this.messages = this.messages.map((message) => {
+      if (message.id === messageId) {
+        let updatedReactions = [...message.reactions];
+
+        if (status === 'created') {
+          updatedReactions.push({
+            reaction,
+            author: { id: userId, display_name: userName },
+          });
+        } else if (status === 'deleted') {
+          updatedReactions = updatedReactions.filter(
+            (item) => item.author.id !== userId,
+          );
+        } else if (status === 'updated') {
+          updatedReactions = updatedReactions.map((item) =>
+            item.author.id === userId ? { ...item, reaction } : item,
+          );
+        }
+        return { ...message, reactions: updatedReactions };
+      }
+      return message;
+    });
   }
 
   // set filtered ticket list

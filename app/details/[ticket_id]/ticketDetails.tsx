@@ -46,7 +46,6 @@ import {
   sendMessage,
   deleteLabelFromTicket,
   addLabelToTicket,
-  reactMessage,
 } from '@/services/clientSide/ticketServices';
 import {
   capitalizeString,
@@ -462,23 +461,6 @@ function TicketDetails(props: Props) {
     (message: MessageDetails) => {
       switch (message.type) {
         case MessageType.REGULAR: {
-          const addReactionToMessage = async (emoji: string) => {
-            try {
-              const payload = {
-                reaction: emoji,
-              };
-              ticketStore.addReactionInMessage(message.id, {
-                reaction: emoji,
-                author: {
-                  id: user?.id || '',
-                  display_name: user?.display_name || null,
-                },
-              });
-              await reactMessage(message?.id, payload);
-            } catch (e) {
-              console.log('Error : ', e);
-            }
-          };
           const reactionData = message?.reactions.reduce(
             (acc: ReactionProps[], { reaction, author }) => {
               const existing = acc.find((item) => item.emoji === reaction);
@@ -509,9 +491,9 @@ function TicketDetails(props: Props) {
                 title={message?.content || ''}
                 time={message?.created_at}
                 reactions={reactionData}
-                showReactions={reactionData && reactionData.length > 0}
+                showReactions={reactionData.length > 0}
                 attachments={message?.attachments}
-                addReactionToMessage={addReactionToMessage}
+                messageId={message.id}
               />
             </ActivityDiv>
           );
