@@ -323,3 +323,27 @@ export const getTicketSummary = async (ticketId: string) => {
     ticketStore.setLoading(false);
   }
 };
+
+/**
+ * @desc React message
+ * @param {*} messageId
+ * @param {*} payload { "reaction": "👍"}
+ */
+export const reactMessage = async (messageId: string, payload: object) => {
+  try {
+    ticketStore.setLoading(true);
+    const response = await axios.post(
+      `${NEXT_PUBLIC_API_URL}/messages/${messageId}/react`,
+      payload,
+    );
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    ticketStore.setLoading(false);
+  }
+};
