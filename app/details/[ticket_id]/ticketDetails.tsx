@@ -467,14 +467,14 @@ function TicketDetails(props: Props) {
               const payload = {
                 reaction: emoji,
               };
-              ticketStore.addReactionInMessage(message.id, {
-                reaction: emoji,
-                author: {
-                  id: user?.id || '',
-                  display_name: user?.display_name || null,
-                },
-              });
-              await reactMessage(message?.id, payload);
+              const res = await reactMessage(message?.id, payload);
+              ticketStore.addReactionInMessage(
+                message.id,
+                res.status,
+                emoji,
+                user?.id || '',
+                user?.display_name || '',
+              );
             } catch (e) {
               console.log('Error : ', e);
             }
@@ -509,7 +509,7 @@ function TicketDetails(props: Props) {
                 title={message?.content || ''}
                 time={message?.created_at}
                 reactions={reactionData}
-                showReactions={reactionData && reactionData.length > 0}
+                showReactions={reactionData.length > 0}
                 attachments={message?.attachments}
                 addReactionToMessage={addReactionToMessage}
               />

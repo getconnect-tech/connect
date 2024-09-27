@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import { observer } from 'mobx-react-lite';
@@ -204,13 +204,17 @@ const InternalMessageCard = ({
     // Set the updated reactions
     setSelectedReactions(newReactions);
     setShowEmojiPicker(false);
+    setHoveredIndex(null);
   };
 
-  const dropdownItem = (index: number) => {
-    return selectedReactions[index]?.author.map((member) => {
-      return { name: member.display_name, isName: true };
-    });
-  };
+  const dropdownItem = useCallback(
+    (index: number) => {
+      return selectedReactions[index]?.author.map((member) => {
+        return { name: member.display_name, isName: true };
+      });
+    },
+    [selectedReactions],
+  );
 
   return (
     <div>
