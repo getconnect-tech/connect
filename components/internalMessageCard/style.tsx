@@ -83,7 +83,7 @@ const ReactionsMainDiv = styled.div`
   padding-left: 32px;
   padding-top: 6px;
   .submenu-upwards {
-    bottom: calc(100% - 35px);
+    bottom: calc(100% + 3px);
     top: auto;
   }
   .submenu-downwards {

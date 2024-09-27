@@ -325,6 +325,7 @@ const InternalMessageCard = ({
                 setHoveredIndex(null); // Clear the hovered index
                 setIsDropdownVisible(false);
               }}
+              style={{ position: 'relative' }}
             >
               <ReactionCard>
                 <Emoji>{reaction.emoji}</Emoji>
