@@ -17,35 +17,38 @@ const MainDiv = styled.div`
 
 const Div = styled.div`
   display: flex;
-  align-items: center;
   gap: 8px;
-  p {
-    cursor: pointer;
-    background-color: var(--bg-surface-secondary);
-    padding: 6px 12px;
-    ${Typography.body_md_regular};
-    color: var(--text);
-    border-radius: 8px;
-    word-wrap: break-word;
-    max-width: 536px;
-    div {
-      white-space: normal;
-      p {
-        padding: 0;
-        span {
-          white-space: inherit;
-          color: var(--text);
-        }
-        br {
-          display: none;
-        }
+  align-items: center;
+  div {
+    font-size: 14px !important;
+    font-family: unset !important;
+    white-space: normal;
+    p {
+      br {
+        display: none;
       }
+    }
+    ul {
+      margin-left: 18px;
+    }
+    ol {
+      margin-left: 20px;
     }
   }
   span {
     ${Typography.body_md_regular};
     color: var(--text-text-secondary);
     white-space: nowrap;
+  }
+  .message {
+    background-color: var(--bg-surface-secondary);
+    padding: 6px 12px;
+    border-radius: 8px;
+    ${Typography.body_md_regular};
+    cursor: pointer;
+    color: var(--text);
+    max-width: 536px;
+    word-break: break-word;
   }
 `;
 
