@@ -73,7 +73,7 @@ interface DropDownProps {
 }
 
 // Hook to handle outside clicks
-export const useOutsideClick = (callback: () => void) => {
+export const useOutsideClick = (callback?: () => void) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export const useOutsideClick = (callback: () => void) => {
         if (target.closest(`.tag-div`)) {
           return;
         }
-        callback();
+        if (callback) callback();
       }
     };
 
@@ -119,7 +119,7 @@ const DropDown = ({
   labelField = 'name',
   isSeen,
 }: DropDownProps) => {
-  const dropDownRef = useOutsideClick(onClose!);
+  const dropDownRef = useOutsideClick(onClose);
   const [value, setValueItem] = useState<string | null>(null);
   const [query, setQuery] = useState('');
   const [searchResult, setSearchResult] = useState<DropDownItem[]>([]);

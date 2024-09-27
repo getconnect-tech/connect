@@ -169,6 +169,10 @@ export class NotificationProvider {
       this.getMessageInfo(messageId),
     ]);
 
+    if (messageInfo.author_id === senderId) {
+      return null;
+    }
+
     const title = `${senderInfo.name} reacted ${reaction} to your message`;
     const body = htmlToString(messageInfo.content);
     const ticketUrl = `/details/${messageInfo.ticket_id}`;

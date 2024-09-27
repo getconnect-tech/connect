@@ -46,6 +46,7 @@ import {
   sendMessage,
   deleteLabelFromTicket,
   addLabelToTicket,
+  reactMessage,
 } from '@/services/clientSide/ticketServices';
 import {
   capitalizeString,
@@ -63,7 +64,12 @@ import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
 import SnoozeDropdown from '@/components/snoozeDropdown/snoozeDropdown';
 import InternalMessageCard from '@/components/internalMessageCard/internalMessageCard';
 import { messageStore } from '@/stores/messageStore';
-import { HandleClickProps, MessageAttachment } from '@/utils/appTypes';
+import {
+  HandleClickProps,
+  MessageAttachment,
+  Reaction,
+  ReactionProps,
+} from '@/utils/appTypes';
 import LabelDropdown from '@/components/labelDropdown/labelDropdown';
 import { getMacros } from '@/services/clientSide/settingServices';
 import FileCard from '@/components/fileCard/fileCard';
@@ -388,6 +394,7 @@ function TicketDetails(props: Props) {
         reference_id: '',
         ticket_id,
         type,
+        reactions: [] as Reaction[],
         // add default ready_by field
       } as MessageDetails;
 
@@ -396,7 +403,8 @@ function TicketDetails(props: Props) {
           setCommentValue('');
           setAttachFiels([]);
           ticketStore.addTicketMessage(newMessage);
-          await sendMessage(ticket_id, payload);
+          const res = await sendMessage(ticket_id, payload);
+          ticketStore.updateMessageId(res.id, newMessage.id);
         }
       } catch (e) {
         console.log('Error : ', e);
@@ -453,7 +461,41 @@ function TicketDetails(props: Props) {
   const renderActivityMessage = useCallback(
     (message: MessageDetails) => {
       switch (message.type) {
-        case MessageType.REGULAR:
+        case MessageType.REGULAR: {
+          const addReactionToMessage = async (emoji: string) => {
+            try {
+              const payload = {
+                reaction: emoji,
+              };
+              ticketStore.addReactionInMessage(message.id, {
+                reaction: emoji,
+                author: {
+                  id: user?.id || '',
+                  display_name: user?.display_name || null,
+                },
+              });
+              await reactMessage(message?.id, payload);
+            } catch (e) {
+              console.log('Error : ', e);
+            }
+          };
+          const reactionData = message?.reactions.reduce(
+            (acc: ReactionProps[], { reaction, author }) => {
+              const existing = acc.find((item) => item.emoji === reaction);
+              if (existing) {
+                existing.count++;
+                existing.author.push(author);
+              } else {
+                acc.push({
+                  emoji: reaction,
+                  count: 1,
+                  author: [author],
+                });
+              }
+              return acc;
+            },
+            [],
+          );
           return (
             <ActivityDiv>
               <div className='avtar-internal'>
@@ -466,10 +508,14 @@ function TicketDetails(props: Props) {
               <InternalMessageCard
                 title={message?.content || ''}
                 time={message?.created_at}
+                reactions={reactionData}
+                showReactions={reactionData && reactionData.length > 0}
                 attachments={message?.attachments}
+                addReactionToMessage={addReactionToMessage}
               />
             </ActivityDiv>
           );
+        }
         case MessageType.FROM_CONTACT:
           return (
             <ActivityDiv>
