@@ -20,6 +20,8 @@ import { MessageAttachment } from '@/utils/dataTypes';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { userStore } from '@/stores/userStore';
 import { ReactionProps } from '@/utils/appTypes';
+import { reactMessage } from '@/services/clientSide/ticketServices';
+import { ticketStore } from '@/stores/ticketStore';
 
 interface Props {
   title: string;
@@ -27,8 +29,7 @@ interface Props {
   showReactions?: boolean;
   reactions: ReactionProps[];
   attachments?: MessageAttachment[];
-  // eslint-disable-next-line no-unused-vars
-  addReactionToMessage: (emoji: string) => void;
+  messageId: string;
 }
 
 export const useOutsideClick = (callback: () => void) => {
@@ -62,7 +63,7 @@ const InternalMessageCard = ({
   showReactions,
   reactions,
   attachments = [],
-  addReactionToMessage,
+  messageId,
 }: Props) => {
   const { user } = userStore;
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -109,103 +110,142 @@ const InternalMessageCard = ({
     setShowEmojiPicker((prev) => !prev);
   };
 
-  const handleEmojiSelect = (emojiData: EmojiClickData) => {
-    const selectedEmoji = emojiData.emoji;
-    // API call
-    addReactionToMessage(selectedEmoji);
+  const handleEmojiSelect = useCallback(
+    async (emojiData: EmojiClickData) => {
+      const selectedEmoji = emojiData.emoji;
 
-    // Check if the reaction already exists for the selected emoji
-    const reactionIndex = selectedReactions.findIndex(
-      (reaction) => reaction.emoji === selectedEmoji,
-    );
-
-    let newReactions = [...selectedReactions]; // Copy of selected reactions
-
-    // Check if the user has any existing reaction
-    const existingReactionIndex = newReactions.findIndex((reaction) =>
-      reaction.author.some((author) => author.id === user?.id),
-    );
-
-    // If the user already reacted with a different emoji
-    if (
-      existingReactionIndex !== -1 &&
-      newReactions[existingReactionIndex].emoji !== selectedEmoji
-    ) {
-      // Decrease count of the previous reaction and remove the user from authors
-      const previousReaction = newReactions[existingReactionIndex];
-      const updatedAuthors = previousReaction.author.filter(
-        (author) => author.id !== user?.id,
+      // Check if the reaction already exists for the selected emoji
+      const reactionIndex = selectedReactions.findIndex(
+        (reaction) => reaction.emoji === selectedEmoji,
       );
 
-      // Update the previous reaction
-      if (updatedAuthors.length === 0) {
-        // If no authors left, remove the whole previous reaction
-        newReactions = newReactions.filter(
-          (_, index) => index !== existingReactionIndex,
-        );
-      } else {
-        // Otherwise, decrement the count and update the authors list
-        newReactions[existingReactionIndex] = {
-          ...previousReaction,
-          count: updatedAuthors.length,
-          author: updatedAuthors,
-        };
-      }
-    }
+      let newReactions = [...selectedReactions]; // Copy of selected reactions
 
-    if (reactionIndex !== -1) {
-      // If the selected emoji exists, update the existing reaction
-      const existingReaction = newReactions[reactionIndex];
-      const userAlreadyReacted = existingReaction?.author.some(
-        (author) => author.id === user?.id,
+      // Check if the user has any existing reaction
+      const existingReactionIndex = newReactions.findIndex((reaction) =>
+        reaction.author.some((author) => author.id === user?.id),
       );
 
-      if (userAlreadyReacted) {
-        // If the user already reacted with this emoji, remove them from the authors
-        const updatedAuthors = existingReaction.author.filter(
+      // If the user already reacted with a different emoji
+      if (
+        existingReactionIndex !== -1 &&
+        newReactions[existingReactionIndex].emoji !== selectedEmoji
+      ) {
+        // Decrease count of the previous reaction and remove the user from authors
+        const previousReaction = newReactions[existingReactionIndex];
+        const updatedAuthors = previousReaction.author.filter(
           (author) => author.id !== user?.id,
         );
 
+        // Update the previous reaction
         if (updatedAuthors.length === 0) {
-          // If no authors left, remove the whole reaction
+          // If no authors left, remove the whole previous reaction
           newReactions = newReactions.filter(
-            (_, index) => index !== reactionIndex,
+            (_, index) => index !== existingReactionIndex,
           );
         } else {
           // Otherwise, decrement the count and update the authors list
-          newReactions[reactionIndex] = {
-            ...existingReaction,
+          newReactions[existingReactionIndex] = {
+            ...previousReaction,
             count: updatedAuthors.length,
             author: updatedAuthors,
           };
         }
+        ticketStore.addReactionInMessage(
+          messageId,
+          'deleted',
+          selectedEmoji,
+          user?.id || '',
+          user?.display_name || '',
+        );
+      }
+
+      if (reactionIndex !== -1) {
+        // If the selected emoji exists, update the existing reaction
+        const existingReaction = newReactions[reactionIndex];
+        const userAlreadyReacted = existingReaction?.author.some(
+          (author) => author.id === user?.id,
+        );
+
+        if (userAlreadyReacted) {
+          // If the user already reacted with this emoji, remove them from the authors
+          const updatedAuthors = existingReaction.author.filter(
+            (author) => author.id !== user?.id,
+          );
+
+          if (updatedAuthors.length === 0) {
+            // If no authors left, remove the whole reaction
+            newReactions = newReactions.filter(
+              (_, index) => index !== reactionIndex,
+            );
+          } else {
+            // Otherwise, decrement the count and update the authors list
+            newReactions[reactionIndex] = {
+              ...existingReaction,
+              count: updatedAuthors.length,
+              author: updatedAuthors,
+            };
+          }
+          ticketStore.addReactionInMessage(
+            messageId,
+            'deleted',
+            selectedEmoji,
+            user?.id || '',
+            user?.display_name || '',
+          );
+        } else {
+          // If the user hasn't reacted with this emoji, add them to the author list and increment count
+          newReactions[reactionIndex] = {
+            ...existingReaction,
+            count: existingReaction.count + 1,
+            author: [
+              ...existingReaction.author,
+              { id: user?.id || '', display_name: user?.display_name || null },
+            ],
+          };
+          ticketStore.addReactionInMessage(
+            messageId,
+            'created',
+            selectedEmoji,
+            user?.id || '',
+            user?.display_name || '',
+          );
+        }
       } else {
-        // If the user hasn't reacted with this emoji, add them to the author list and increment count
-        newReactions[reactionIndex] = {
-          ...existingReaction,
-          count: existingReaction.count + 1,
+        // If the selected emoji doesn't exist in the reactions, add a new reaction
+        newReactions.push({
+          emoji: selectedEmoji,
+          count: 1,
           author: [
-            ...existingReaction.author,
             { id: user?.id || '', display_name: user?.display_name || null },
           ],
-        };
+        });
+        ticketStore.addReactionInMessage(
+          messageId,
+          'created',
+          selectedEmoji,
+          user?.id || '',
+          user?.display_name || '',
+        );
       }
-    } else {
-      // If the selected emoji doesn't exist in the reactions, add a new reaction
-      newReactions.push({
-        emoji: selectedEmoji,
-        count: 1,
-        author: [
-          { id: user?.id || '', display_name: user?.display_name || null },
-        ],
-      });
-    }
 
-    // Set the updated reactions
-    setSelectedReactions(newReactions);
-    setShowEmojiPicker(false);
-    setHoveredIndex(null);
-  };
+      // Set the updated reactions
+      setSelectedReactions(newReactions);
+      setShowEmojiPicker(false);
+      setHoveredIndex(null);
+
+      // API call
+      try {
+        const payload = {
+          reaction: selectedEmoji,
+        };
+        await reactMessage(messageId, payload);
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [selectedReactions],
+  );
 
   const dropdownItem = useCallback(
     (index: number) => {
@@ -285,11 +325,7 @@ const InternalMessageCard = ({
                 setIsDropdownVisible(false);
               }}
             >
-              <ReactionCard
-                onClick={() =>
-                  handleEmojiSelect({ emoji: reaction.emoji } as EmojiClickData)
-                }
-              >
+              <ReactionCard>
                 <Emoji>{reaction.emoji}</Emoji>
                 <p>{reaction.count}</p>
               </ReactionCard>
