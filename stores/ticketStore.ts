@@ -92,7 +92,7 @@ class TicketStore {
 
   addReactionInMessage(messageId: string, value: Reaction) {
     this.messages = this.messages.map((message) =>
-      message.id === messageId
+      message.id === messageId && message.reactions.length === 0
         ? { ...message, reactions: [...message.reactions, value] }
         : message,
     );

@@ -156,7 +156,7 @@ const InternalMessageCard = ({
     if (reactionIndex !== -1) {
       // If the selected emoji exists, update the existing reaction
       const existingReaction = newReactions[reactionIndex];
-      const userAlreadyReacted = existingReaction.author.some(
+      const userAlreadyReacted = existingReaction?.author.some(
         (author) => author.id === user?.id,
       );
 
@@ -281,7 +281,11 @@ const InternalMessageCard = ({
                 setIsDropdownVisible(false);
               }}
             >
-              <ReactionCard>
+              <ReactionCard
+                onClick={() =>
+                  handleEmojiSelect({ emoji: reaction.emoji } as EmojiClickData)
+                }
+              >
                 <Emoji>{reaction.emoji}</Emoji>
                 <p>{reaction.count}</p>
               </ReactionCard>
