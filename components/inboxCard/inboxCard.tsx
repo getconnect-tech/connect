@@ -237,6 +237,17 @@ const InboxCard = ({
     [ticketDetail],
   );
 
+  const getCombinedDescription = (htmlString: string) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlString, 'text/html');
+    const paragraphs = doc.querySelectorAll('p');
+    return Array.from(paragraphs)
+      .map((p) => p.textContent)
+      .join(' ');
+  };
+
+  const combinedDescription = getCombinedDescription(description);
+
   return (
     <CardDiv
       isShowHoverItems={snoozeDropdown || showDatePicker}
@@ -264,7 +275,7 @@ const InboxCard = ({
         {last_message?.type === MessageType.EMAIL ||
         last_message?.type === MessageType.FROM_CONTACT ? (
           <NameText className='description'>
-            <RenderHtml isSpreadIcon={false} htmlstring={description} />
+            <RenderHtml isSpreadIcon={false} htmlstring={combinedDescription} />
           </NameText>
         ) : (
           <InternalMessageDiv>
@@ -275,9 +286,10 @@ const InboxCard = ({
               size={24}
             />
             <Description>
-              <p>
-                <RenderHtml isSpreadIcon={false} htmlstring={description} />
-              </p>
+              <RenderHtml
+                isSpreadIcon={false}
+                htmlstring={combinedDescription}
+              />
             </Description>
           </InternalMessageDiv>
         )}
