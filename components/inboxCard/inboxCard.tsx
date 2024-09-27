@@ -275,9 +275,7 @@ const InboxCard = ({
               size={24}
             />
             <Description>
-              <p>
-                <RenderHtml isSpreadIcon={false} htmlstring={description} />
-              </p>
+              <RenderHtml isSpreadIcon={false} htmlstring={description} />
             </Description>
           </InternalMessageDiv>
         )}
