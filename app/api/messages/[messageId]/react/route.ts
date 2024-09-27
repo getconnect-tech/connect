@@ -12,7 +12,7 @@ export const POST = withWorkspaceAuth(async (req, { messageId }) => {
 
     const userId = req.user.id;
 
-    const { status, reaction: newReaction } = await reactMessage(
+    const { status, ...newReaction } = await reactMessage(
       messageId,
       userId,
       reaction,
@@ -22,13 +22,16 @@ export const POST = withWorkspaceAuth(async (req, { messageId }) => {
       NotificationProvider.notifyMessageReaction(
         userId,
         messageId,
-        newReaction,
+        newReaction.reaction,
       );
     }
 
-    return Response.json(newReaction, {
-      status: status === 'created' ? 201 : 200,
-    });
+    return Response.json(
+      { status, ...newReaction },
+      {
+        status: status === 'created' ? 201 : 200,
+      },
+    );
   } catch (err) {
     return handleApiError(err);
   }
