@@ -84,7 +84,7 @@ export const useOutsideClick = (callback: () => void) => {
         if (target.closest(`.tag-div`)) {
           return;
         }
-        callback();
+        if (callback) callback();
       }
     };
 

@@ -1,5 +1,5 @@
 import { action, makeObservable, observable } from 'mobx';
-import { TicketDetailsInterface } from '@/utils/appTypes';
+import { Reaction, TicketDetailsInterface } from '@/utils/appTypes';
 import { MessageDetails, TicketSummary } from '@/utils/dataTypes';
 
 class TicketStore {
@@ -33,6 +33,7 @@ class TicketStore {
       setTicketMessages: action,
       addTicketMessage: action,
       updateMessageId: action,
+      addReactionInMessage: action,
 
       // Inbox ticket List
       filteredTicketList: observable,
@@ -86,6 +87,14 @@ class TicketStore {
   updateMessageId(newId: string, oldId: string) {
     this.messages = this.messages.map((message) =>
       message.id === oldId ? { ...message, id: newId } : message,
+    );
+  }
+
+  addReactionInMessage(messageId: string, value: Reaction) {
+    this.messages = this.messages.map((message) =>
+      message.id === messageId
+        ? { ...message, reactions: [...message.reactions, value] }
+        : message,
     );
   }
 

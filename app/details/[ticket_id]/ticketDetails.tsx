@@ -467,6 +467,13 @@ function TicketDetails(props: Props) {
               const payload = {
                 reaction: emoji,
               };
+              ticketStore.addReactionInMessage(message.id, {
+                reaction: emoji,
+                author: {
+                  id: user?.id || '',
+                  display_name: user?.display_name || null,
+                },
+              });
               await reactMessage(message?.id, payload);
             } catch (e) {
               console.log('Error : ', e);
