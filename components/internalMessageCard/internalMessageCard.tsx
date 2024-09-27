@@ -4,6 +4,7 @@ import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import { observer } from 'mobx-react-lite';
 import FileCard from '../fileCard/fileCard';
 import DropDown from '../dropDown/dropDown';
+import RenderHtml from '../renderHtml';
 import {
   AddReactionButton,
   AttachmentMainDiv,
@@ -216,8 +217,8 @@ const InternalMessageCard = ({
     <div>
       <MainDiv>
         <Div>
-          <p>
-            <div dangerouslySetInnerHTML={{ __html: title }} />
+          <div className='message'>
+            <RenderHtml htmlstring={title} />
             {attachments && attachments?.length > 0 && (
               <AttachmentMainDiv>
                 <FileCardMainDiv>
@@ -233,7 +234,7 @@ const InternalMessageCard = ({
                 </FileCardMainDiv>
               </AttachmentMainDiv>
             )}
-          </p>
+          </div>
           <span>{moment(time).fromNow()}</span>
         </Div>
         {!showReactions && (
