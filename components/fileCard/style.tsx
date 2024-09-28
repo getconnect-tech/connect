@@ -98,10 +98,36 @@ export const ImageDiv = styled.div`
   box-shadow: var(--shadow-card);
   border-radius: 6px;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
   img {
     width: 100%;
     height: 100%;
-    overflow: hidden;
     border-radius: 6px;
+  }
+  .download-icon {
+    display: none;
+  }
+  &:hover {
+    background: var(--bg-overlay-color);
+    box-shadow: var(--shadow-card-hover);
+    img {
+      opacity: 15%;
+    }
+    .download-icon {
+      display: block;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+
+      svg {
+        fill: var(--white);
+      }
+      :hover {
+        svg {
+          fill: var(--text);
+        }
+      }
+    }
   }
 `;

@@ -109,6 +109,16 @@ export default function FileCard({
         // If it's an image, only show the image
         <ImageDiv>
           <img src={url} alt={fileName} className='image-preview' />
+          <div className='download-icon'>
+            <a href={url} target='_blank' download={fileName}>
+              <Icon
+                iconName={'download-alt-icon'}
+                iconSize={'12'}
+                iconViewBox={'0 0 12 12'}
+                secondaryIcon={true}
+              />
+            </a>
+          </div>
         </ImageDiv>
       ) : (
         // Otherwise, show the FileCardDiv with the icon and other details
