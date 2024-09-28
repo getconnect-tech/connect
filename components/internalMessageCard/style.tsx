@@ -27,6 +27,9 @@ const Div = styled.div`
       br {
         display: none;
       }
+      span {
+        white-space: normal;
+      }
     }
     ul {
       margin-left: 18px;

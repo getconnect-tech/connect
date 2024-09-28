@@ -54,6 +54,9 @@ const CardMessage = styled.p`
       br {
         display: none;
       }
+      span {
+        white-space: normal;
+      }
     }
     ul {
       margin-left: 18px;
