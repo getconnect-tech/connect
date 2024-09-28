@@ -27,41 +27,29 @@ export default function FileCard({
   url,
   type,
 }: Props) {
-  const fileExtension = fileName.split('.').pop()?.toLowerCase();
-  const isImageFile = ['png', 'jpg', 'jpeg'].includes(fileExtension || '');
-  console.log('type', type);
+  const isImageFile = type?.startsWith('image/');
+  const isVideoFile = type?.startsWith('video/');
+
   const renderFileContent = useCallback(() => {
-    switch (fileExtension) {
-      case 'png':
-      case 'jpg':
-      case 'jpeg':
+    // Switch based on the actual MIME type, not booleans
+    switch (true) {
+      case isImageFile:
         return (
           <ImageDiv>
             <img src={url} alt={fileName} className='image-preview' />
           </ImageDiv>
         );
-      case 'pdf':
+      case isVideoFile:
         return (
           <SVGIcon
-            name='pdf-icon'
+            name='mp4-icon'
             width='20'
             height='20'
             viewBox='0 0 16 16'
             className='file-icon'
           />
         );
-      case 'doc':
-      case 'docx':
-        return (
-          <SVGIcon
-            name='doc-icon'
-            width='20'
-            height='20'
-            viewBox='0 0 16 16'
-            className='file-icon'
-          />
-        );
-      case 'csv':
+      case type === 'text/csv':
         return (
           <SVGIcon
             name='csv-icon'
@@ -71,21 +59,34 @@ export default function FileCard({
             className='file-icon'
           />
         );
-      case 'xls':
-      case 'xlsx':
+      case type === 'application/pdf':
         return (
           <SVGIcon
-            name='excel-icon'
+            name='pdf-icon'
             width='20'
             height='20'
             viewBox='0 0 16 16'
             className='file-icon'
           />
         );
-      case 'mp4':
+      case type === 'application/msword':
+      case type ===
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
         return (
           <SVGIcon
-            name='mp4-icon'
+            name='doc-icon'
+            width='20'
+            height='20'
+            viewBox='0 0 16 16'
+            className='file-icon'
+          />
+        );
+      case type === 'application/vnd.ms-excel':
+      case type ===
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+        return (
+          <SVGIcon
+            name='excel-icon'
             width='20'
             height='20'
             viewBox='0 0 16 16'
@@ -103,7 +104,7 @@ export default function FileCard({
           />
         );
     }
-  }, []);
+  }, [type, isImageFile, isVideoFile, url, fileName]);
 
   return (
     <>
