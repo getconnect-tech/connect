@@ -55,7 +55,6 @@ import {
   isEmpty,
 } from '@/helpers/common';
 import Icon from '@/components/icon/icon';
-import RichTextBox from '@/components/commentBox';
 import DropDown, { DropDownItem } from '@/components/dropDown/dropDown';
 import Tag from '@/components/tag/tag';
 import { MessageDetails } from '@/utils/dataTypes';
@@ -72,6 +71,7 @@ import {
 import LabelDropdown from '@/components/labelDropdown/labelDropdown';
 import { getMacros } from '@/services/clientSide/settingServices';
 import FileCard from '@/components/fileCard/fileCard';
+import ProsemirrorEditor from '@/components/prosemirror';
 
 interface Props {
   ticket_id: string;
@@ -90,6 +90,7 @@ function TicketDetails(props: Props) {
   const [commentValue, setCommentValue] = useState<string>('');
   const [attachFile, setAttachFiels] = useState<MessageAttachment[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<{ clearEditor: () => void }>(null);
   const { ticketStore, workspaceStore, userStore, settingStore, appStore } =
     useStores();
   const { currentWorkspace } = workspaceStore || {};
@@ -400,6 +401,7 @@ function TicketDetails(props: Props) {
       try {
         if (ticket_id) {
           setCommentValue('');
+          editorRef?.current?.clearEditor();
           setAttachFiels([]);
           ticketStore.addTicketMessage(newMessage);
           const res = await sendMessage(ticket_id, payload);
@@ -409,7 +411,7 @@ function TicketDetails(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [ticket_id, user, messageRefId, attachFile],
+    [ticket_id, user, messageRefId, attachFile, editorRef],
   );
 
   /*
@@ -817,11 +819,8 @@ function TicketDetails(props: Props) {
                 />
               </div>
               <Input modeSelectedItem={modeSelectedItem}>
-                <RichTextBox
-                  isInternalDiscussion={modeSelectedItem.name !== 'Email'}
-                  users={currentWorkspace?.users}
-                  placeholder='Write a message'
-                  valueContent={commentValue}
+                <ProsemirrorEditor
+                  ref={editorRef}
                   setValueContent={setCommentValue}
                 />
                 <div className='attach-file-div'>
