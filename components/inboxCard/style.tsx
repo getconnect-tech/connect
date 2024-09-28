@@ -154,15 +154,20 @@ const Description = styled.div`
   background-color: var(--bg-surface);
   border-radius: 30px;
   align-items: center;
-  p {
-    ${Typography.body_md_regular};
-    color: var(--text-text-secondary);
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    div {
-      white-space: normal;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  ${Typography.body_md_regular};
+  color: var(--text-text-secondary);
+  div {
+    white-space: normal;
+    p {
+      span {
+        br {
+          display: none;
+        }
+      }
     }
   }
 `;
