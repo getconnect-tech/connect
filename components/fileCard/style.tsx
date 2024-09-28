@@ -91,3 +91,17 @@ export const FileDetail = styled.div`
   gap: 2px;
   justify-content: center;
 `;
+
+export const ImageDiv = styled.div`
+  width: 155px;
+  height: 125px;
+  box-shadow: var(--shadow-card);
+  border-radius: 6px;
+  cursor: pointer;
+  img {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 6px;
+  }
+`;
