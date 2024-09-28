@@ -832,6 +832,8 @@ function TicketDetails(props: Props) {
                       documentText={fileData?.fileName || 'Uploaded file'}
                       fileSize={`${fileData?.size}`}
                       fileName={fileData?.fileName}
+                      url={fileData?.downloadUrl}
+                      type={fileData?.contentType}
                     />
                   ))}
                 </div>

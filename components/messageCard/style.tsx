@@ -54,6 +54,10 @@ const CardMessage = styled.p`
       br {
         display: none;
       }
+      span {
+        white-space: normal;
+        color: var(--text);
+      }
     }
     ul {
       margin-left: 18px;

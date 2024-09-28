@@ -273,6 +273,7 @@ const InternalMessageCard = ({
                       fileSize={attachment.size}
                       fileName={attachment.fileName}
                       url={attachment.downloadUrl}
+                      type={attachment.contentType}
                     />
                   ))}
                 </FileCardMainDiv>
