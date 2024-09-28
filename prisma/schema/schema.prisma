@@ -42,6 +42,7 @@ model Workspace {
   api_keys       ApiKeys[]
   configurations Configuration[]
   macros         Macro[]
+  contacts       Contact[]
 }
 
 model Label {
@@ -95,12 +96,19 @@ model Message {
 }
 
 model Contact {
-  id         String   @id @default(uuid())
-  name       String
-  email      String   @unique
-  company_id String?
-  company    Company? @relation(fields: [company_id], references: [id])
-  tickets    Ticket[]
+  id           String   @id @default(uuid())
+  name         String
+  email        String
+  company_id   String?
+  workspace_id String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @default(now()) @updatedAt
+
+  company   Company?  @relation(fields: [company_id], references: [id])
+  tickets   Ticket[]
+  workspace Workspace @relation(fields: [workspace_id], references: [id])
+
+  @@unique(name: "workspace_email_id", [workspace_id, email])
 }
 
 model Company {
