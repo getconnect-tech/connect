@@ -29,6 +29,7 @@ const Div = styled.div`
       }
       span {
         white-space: normal;
+        color: var(--text);
       }
     }
     ul {

@@ -56,6 +56,7 @@ const CardMessage = styled.p`
       }
       span {
         white-space: normal;
+        color: var(--text);
       }
     }
     ul {
