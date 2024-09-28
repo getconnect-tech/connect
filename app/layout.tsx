@@ -2,9 +2,6 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ReactNode } from 'react';
-import AppProvider from '../components/appProvider';
-import SessionWrapper from './SessionWrapper';
-import Favicon from '@/components/favIcon';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,14 +17,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <head>
-        <Favicon />
-      </head>
-      <body className={inter.className}>
-        <SessionWrapper>
-          <AppProvider>{children}</AppProvider>
-        </SessionWrapper>
-      </body>
+      <head></head>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
