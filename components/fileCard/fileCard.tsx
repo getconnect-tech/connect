@@ -17,6 +17,7 @@ interface Props {
   fileSize: string;
   fileName: string;
   url?: string;
+  type?: string;
 }
 
 export default function FileCard({
@@ -24,10 +25,11 @@ export default function FileCard({
   fileSize,
   fileName,
   url,
+  type,
 }: Props) {
   const fileExtension = fileName.split('.').pop()?.toLowerCase();
   const isImageFile = ['png', 'jpg', 'jpeg'].includes(fileExtension || '');
-
+  console.log('type', type);
   const renderFileContent = useCallback(() => {
     switch (fileExtension) {
       case 'png':
