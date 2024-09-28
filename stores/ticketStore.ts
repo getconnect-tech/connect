@@ -32,6 +32,8 @@ class TicketStore {
       messages: observable,
       setTicketMessages: action,
       addTicketMessage: action,
+      updateMessageId: action,
+      addReactionInMessage: action,
 
       // Inbox ticket List
       filteredTicketList: observable,
@@ -80,6 +82,43 @@ class TicketStore {
 
   addTicketMessage(value: MessageDetails) {
     this.messages = [...(this.messages || []), value];
+  }
+
+  updateMessageId(newId: string, oldId: string) {
+    this.messages = this.messages.map((message) =>
+      message.id === oldId ? { ...message, id: newId } : message,
+    );
+  }
+
+  addReactionInMessage(
+    messageId: string,
+    status: string,
+    reaction: string,
+    userId: string,
+    userName: string,
+  ) {
+    this.messages = this.messages.map((message) => {
+      if (message.id === messageId) {
+        let updatedReactions = [...message.reactions];
+
+        if (status === 'created') {
+          updatedReactions.push({
+            reaction,
+            author: { id: userId, display_name: userName },
+          });
+        } else if (status === 'deleted') {
+          updatedReactions = updatedReactions.filter(
+            (item) => item.author.id !== userId,
+          );
+        } else if (status === 'updated') {
+          updatedReactions = updatedReactions.map((item) =>
+            item.author.id === userId ? { ...item, reaction } : item,
+          );
+        }
+        return { ...message, reactions: updatedReactions };
+      }
+      return message;
+    });
   }
 
   // set filtered ticket list

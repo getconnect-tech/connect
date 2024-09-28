@@ -15,6 +15,7 @@ import {
   BottomDiv,
   ButtonDiv,
   CenterDiv,
+  CenterMainDiv,
   HeaderDiv,
   IconDiv,
   Input,
@@ -62,7 +63,12 @@ import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
 import SnoozeDropdown from '@/components/snoozeDropdown/snoozeDropdown';
 import InternalMessageCard from '@/components/internalMessageCard/internalMessageCard';
 import { messageStore } from '@/stores/messageStore';
-import { HandleClickProps, MessageAttachment } from '@/utils/appTypes';
+import {
+  HandleClickProps,
+  MessageAttachment,
+  Reaction,
+  ReactionProps,
+} from '@/utils/appTypes';
 import LabelDropdown from '@/components/labelDropdown/labelDropdown';
 import { getMacros } from '@/services/clientSide/settingServices';
 import FileCard from '@/components/fileCard/fileCard';
@@ -79,6 +85,7 @@ function TicketDetails(props: Props) {
   const [messageModeDropdown, setMessageModeDropdown] = useState(false);
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
   const [messageRefId, setMessageRefId] = useState('');
   const [commentValue, setCommentValue] = useState<string>('');
   const [attachFile, setAttachFiels] = useState<MessageAttachment[]>([]);
@@ -145,8 +152,8 @@ function TicketDetails(props: Props) {
       await Promise.all([
         getTicketDetails(ticket_id),
         getTicketMessages(ticket_id),
+        getMacros(),
       ]);
-      await getMacros();
     }
   }, [ticket_id, currentWorkspace?.id]);
 
@@ -154,17 +161,34 @@ function TicketDetails(props: Props) {
     loadData();
   }, [loadData]);
 
-  const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({
-        block: 'end',
-      });
-    }
+  const handleScroll = (e: Event) => {
+    const element = e.target as HTMLDivElement;
+    const atBottom =
+      element.scrollHeight - element.scrollTop <= element.clientHeight + 50;
+    setIsUserScrolling(!atBottom);
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    const element = messagesEndRef.current?.parentElement;
+    if (!element) return;
+
+    const scrollToBottom = () => {
+      if (isUserScrolling) return;
+      element.scrollTop = element.scrollHeight;
+    };
+    const resizeObserver = new ResizeObserver(() => {
+      scrollToBottom();
+    });
+    resizeObserver.observe(element);
+
+    setTimeout(() => scrollToBottom(), 0);
+
+    element.addEventListener('scroll', handleScroll as EventListener);
+    return () => {
+      resizeObserver.disconnect();
+      element.removeEventListener('scroll', handleScroll as EventListener);
+    };
+  }, [messages, isUserScrolling]);
 
   useEffect(() => {
     return () => {
@@ -369,6 +393,7 @@ function TicketDetails(props: Props) {
         reference_id: '',
         ticket_id,
         type,
+        reactions: [] as Reaction[],
         // add default ready_by field
       } as MessageDetails;
 
@@ -377,7 +402,8 @@ function TicketDetails(props: Props) {
           setCommentValue('');
           setAttachFiels([]);
           ticketStore.addTicketMessage(newMessage);
-          await sendMessage(ticket_id, payload);
+          const res = await sendMessage(ticket_id, payload);
+          ticketStore.updateMessageId(res.id, newMessage.id);
         }
       } catch (e) {
         console.log('Error : ', e);
@@ -434,7 +460,24 @@ function TicketDetails(props: Props) {
   const renderActivityMessage = useCallback(
     (message: MessageDetails) => {
       switch (message.type) {
-        case MessageType.REGULAR:
+        case MessageType.REGULAR: {
+          const reactionData = message?.reactions.reduce(
+            (acc: ReactionProps[], { reaction, author }) => {
+              const existing = acc.find((item) => item.emoji === reaction);
+              if (existing) {
+                existing.count++;
+                existing.author.push(author);
+              } else {
+                acc.push({
+                  emoji: reaction,
+                  count: 1,
+                  author: [author],
+                });
+              }
+              return acc;
+            },
+            [],
+          );
           return (
             <ActivityDiv>
               <div className='avtar-internal'>
@@ -447,10 +490,14 @@ function TicketDetails(props: Props) {
               <InternalMessageCard
                 title={message?.content || ''}
                 time={message?.created_at}
+                reactions={reactionData}
+                showReactions={reactionData.length > 0}
                 attachments={message?.attachments}
+                messageId={message.id}
               />
             </ActivityDiv>
           );
+        }
         case MessageType.FROM_CONTACT:
           return (
             <ActivityDiv>
@@ -748,7 +795,7 @@ function TicketDetails(props: Props) {
             </ButtonDiv>
           </StatusDiv>
         </TopDiv>
-        <div style={{ padding: '0 20px' }}>
+        <CenterMainDiv>
           <BottomDiv>
             <CenterDiv ref={messagesEndRef}>
               {messages?.map((message, index) => (
@@ -785,6 +832,8 @@ function TicketDetails(props: Props) {
                       documentText={fileData?.fileName || 'Uploaded file'}
                       fileSize={`${fileData?.size}`}
                       fileName={fileData?.fileName}
+                      url={fileData?.downloadUrl}
+                      type={fileData?.contentType}
                     />
                   ))}
                 </div>
@@ -852,7 +901,7 @@ function TicketDetails(props: Props) {
                             iconSize={''}
                             iconViewBox={''}
                             style={{
-                              bottom: 60,
+                              bottom: 52,
                               maxWidth: 146,
                               width: '100%',
                             }}
@@ -896,7 +945,7 @@ function TicketDetails(props: Props) {
               </Input>
             </div>
           </InputDiv>
-        </div>
+        </CenterMainDiv>
       </MainDiv>
       <ProfileSection />
     </Main>

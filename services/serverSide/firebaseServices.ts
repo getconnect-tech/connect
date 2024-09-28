@@ -43,7 +43,7 @@ export const uploadAttachments = async (
 
   for (const attachment of attachments) {
     const { Name, Content, ContentType, ContentID } = attachment;
-    const fileName = ContentID + Name;
+    const fileName = `${ContentID}+` + Name;
 
     const uploadFilePromise = uploadFile({
       fileName,
