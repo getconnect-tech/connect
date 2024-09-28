@@ -173,6 +173,7 @@ export default function MessageCard({
                   fileSize={attachment.size}
                   fileName={attachment.fileName}
                   url={attachment.downloadUrl}
+                  type={attachment.contentType}
                 />
               ))}
             </FileCardMainDiv>

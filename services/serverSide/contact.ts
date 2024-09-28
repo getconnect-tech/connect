@@ -1,8 +1,10 @@
 import { TicketStatus } from '@prisma/client';
 import { prisma } from '@/prisma/prisma';
 
-export const getContactByEmail = async (email: string) => {
-  const contact = await prisma.contact.findUnique({ where: { email } });
+export const getContactByEmail = async (email: string, workspaceId: string) => {
+  const contact = await prisma.contact.findUnique({
+    where: { workspace_email_id: { email, workspace_id: workspaceId } },
+  });
   return contact;
 };
 
@@ -56,18 +58,22 @@ export const getWorkspaceContacts = async (workspaceId: string) => {
 export const createOrUpdateContact = async ({
   email,
   name,
+  workspaceId,
 }: {
   email: string;
+  workspaceId: string;
   name?: string;
 }) => {
   const contact = prisma.$transaction(async (tx) => {
     const currentContact = await tx.contact.findUnique({
-      where: { email },
+      where: { workspace_email_id: { email, workspace_id: workspaceId } },
     });
 
     if (!currentContact) {
       const senderName = name || email.split('@')[0];
-      return tx.contact.create({ data: { email, name: senderName } });
+      return tx.contact.create({
+        data: { email, name: senderName, workspace_id: workspaceId },
+      });
     }
 
     if (name) {

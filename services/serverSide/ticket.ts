@@ -156,6 +156,7 @@ export const createTicket = async ({
   const contact = await createOrUpdateContact({
     email: senderEmail,
     name: senderName,
+    workspaceId,
   });
 
   const newTicket = await prisma.ticket.create({

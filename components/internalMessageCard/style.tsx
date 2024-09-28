@@ -27,6 +27,10 @@ const Div = styled.div`
       br {
         display: none;
       }
+      span {
+        white-space: normal;
+        color: var(--text);
+      }
     }
     ul {
       margin-left: 18px;
