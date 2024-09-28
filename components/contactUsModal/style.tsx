@@ -105,7 +105,6 @@ export const FileCardRight = styled.div`
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
-    word-break: break-all;
   }
   p {
     ${Typography.body_sm_regular}
