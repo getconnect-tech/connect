@@ -10,6 +10,7 @@ import { schema } from 'prosemirror-schema-basic';
 import { exampleSetup } from 'prosemirror-example-setup';
 import { addListNodes } from 'prosemirror-schema-list';
 import { tagNode, mentionNode, getMentionsPlugin } from 'prosemirror-mentions';
+import { EditorDiv } from './style';
 
 const ProseMirrorEditor = (props: any) => {
   const { users } = props || {};
@@ -106,6 +107,7 @@ const ProseMirrorEditor = (props: any) => {
       const fragment = DOMSerializer.fromSchema(
         view.state.schema,
       ).serializeFragment(view.state.doc.content);
+      // eslint-disable-next-line no-undef
       const div = document.createElement('div');
       div.appendChild(fragment);
       return div.innerHTML;
@@ -115,7 +117,7 @@ const ProseMirrorEditor = (props: any) => {
 
   console.log('users', users, getEditorContent());
 
-  return <div id='editor' ref={editorRef} />;
+  return <EditorDiv id='editor' ref={editorRef}></EditorDiv>;
 };
 
 export default ProseMirrorEditor;
