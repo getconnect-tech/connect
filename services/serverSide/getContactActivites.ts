@@ -43,7 +43,6 @@ export const getContactActivites = async (userID: string) => {
       event_type: event.event_type,
       event_time: event.event_time,
     }));
-    console.log('User Activity Data:', filteredEvents);
     return filteredEvents;
   } catch (error) {
     console.error('Error fetching user activity:', error);
