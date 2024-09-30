@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import {
   Dot,
-  DotLine,
   EventDetailDiv,
   EventDiv,
   EventMainDiv,
@@ -37,37 +36,37 @@ export default function RecentEvent() {
         <EventDetailDiv>
           <EventDiv>
             <h6>1h</h6>
-            <DotLine>
+            <div>
               <Dot />
               <Line />
-            </DotLine>
+            </div>
             <p>Message sent</p>
           </EventDiv>
           <LineDiv />
           <EventDiv>
             <h6>12h</h6>
-            <DotLine>
+            <div>
               <Dot />
               <Line />
-            </DotLine>
+            </div>
             <p>Comment added</p>
           </EventDiv>
           <LineDiv />
           <EventDiv>
             <h6>1d</h6>
-            <DotLine>
+            <div>
               <Dot />
               <Line />
-            </DotLine>
+            </div>
             <p>Ticket view</p>
           </EventDiv>
           <LineDiv />
           <EventDiv>
             <h6>1w</h6>
-            <DotLine>
+            <div>
               <Dot />
               <Line />
-            </DotLine>
+            </div>
             <p>Ticket deleted</p>
           </EventDiv>
         </EventDetailDiv>

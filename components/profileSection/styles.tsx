@@ -43,24 +43,16 @@ const DetailsProfileDiv = styled.div`
 
 const DetailsDiv = styled.div`
   display: flex;
-  align-items: center;
   gap: 20px;
   p {
     ${Typography.body_md_medium}
     color: var(--text);
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    overflow: hidden;
     word-wrap: break-word;
     max-width: 155px;
   }
 `;
 
 const LeftDiv = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
   width: 100px;
   p {
     ${Typography.body_md_medium}
@@ -102,8 +94,6 @@ const EventDetailDiv = styled.div`
   padding: 0 20px 12px;
   position: relative;
 `;
-
-const DotLine = styled.div``;
 
 const EventDiv = styled.div`
   display: flex;
@@ -264,7 +254,6 @@ export {
   EventMainDiv,
   EventDetailDiv,
   EventDiv,
-  DotLine,
   Dot,
   Line,
   LineDiv,
