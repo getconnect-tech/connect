@@ -50,3 +50,22 @@ export const PrimaryWithReaction: Story = {
     showReactions: true,
   },
 };
+
+export const AttachmentOption: Story = {
+  args: {
+    title: '@Laxita Hello, Good morning',
+    time: new Date('2023-09-24T12:34:56Z'),
+    reactions: [],
+    messageId: '2',
+    showReactions: false,
+    attachments: [
+      {
+        fileName: 'Testing',
+        contentId: '',
+        size: '10mb',
+        contentType: '',
+        downloadUrl: '',
+      },
+    ],
+  },
+};
