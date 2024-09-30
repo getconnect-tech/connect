@@ -19,7 +19,7 @@ export const Primary: Story = {
   args: {
     title: '@Laxita Hello, Good morning',
     time: new Date('2023-09-24T12:34:56Z'),
-    reactions: [{}],
+    reactions: [],
     messageId: '1',
   },
 };
