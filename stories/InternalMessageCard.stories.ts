@@ -24,7 +24,7 @@ export const Primary: Story = {
   },
 };
 
-export const PrimaryWithReaction: Story = {
+export const WithReaction: Story = {
   args: {
     title: '@Laxita Hello, Good morning',
     time: new Date('2023-09-24T12:34:56Z'),
