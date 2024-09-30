@@ -91,3 +91,17 @@ export const Primary: Story = {
     ticketIndex: 0,
   },
 };
+
+export const WithoutDot: Story = {
+  args: {
+    ticketDetail: mockTicketDetail,
+    description: 'Inbox card description goes here.',
+    showDotIcon: false,
+    src: 'https://via.placeholder.com/150',
+    currentOpenDropdown: null,
+    setCurrentOpenDropdown: mockSetCurrentOpenDropdown,
+    dropdownIdentifier: 'dropdown1',
+    loadData: () => console.log('Load data triggered'),
+    ticketIndex: 0,
+  },
+};
