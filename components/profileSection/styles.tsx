@@ -11,7 +11,7 @@ const ProfileDiv = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 20px 16px;
+  padding: 12px 20px;
 `;
 
 const Title = styled.p`
@@ -36,7 +36,7 @@ const DetailsMainDiv = styled.div`
 const DetailsProfileDiv = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   padding: 0 20px 12px;
   border-bottom: var(--border-main);
 `;
@@ -46,7 +46,7 @@ const DetailsDiv = styled.div`
   align-items: center;
   gap: 20px;
   p {
-    ${Typography.body_sm_medium}
+    ${Typography.body_md_medium}
     color: var(--text);
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -63,7 +63,7 @@ const LeftDiv = styled.div`
   gap: 8px;
   width: 100px;
   p {
-    ${Typography.body_sm_medium}
+    ${Typography.body_md_medium}
     color: var(--text-text-secondary);
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -111,11 +111,11 @@ const EventDiv = styled.div`
   gap: 6px;
   position: relative;
   p {
-    ${Typography.body_sm_medium};
+    ${Typography.body_md_medium};
     color: var(--text-text-secondary);
   }
   h6 {
-    ${Typography.body_sm_medium};
+    ${Typography.body_sm_regular};
     color: var(--text-text-secondary);
     width: 20px;
     text-align: right;
@@ -168,7 +168,7 @@ const NameDiv = styled.div`
 `;
 
 const AIText = styled.p`
-  ${Typography.body_sm_regular};
+  ${Typography.body_md_regular};
   color: var(--text);
 `;
 
@@ -177,8 +177,11 @@ const DescriptionDiv = styled.div`
   flex-direction: column;
   gap: 12px;
   h6 {
-    ${Typography.body_sm_medium};
+    ${Typography.body_md_medium};
     color: var(--text-text-secondary);
+  }
+  &.action-div {
+    gap: 8px;
   }
 `;
 
@@ -189,7 +192,7 @@ const ActionsDiv = styled.div`
 `;
 
 const Actions = styled.p`
-  ${Typography.body_sm_regular};
+  ${Typography.body_md_regular};
   color: var(--text-text-secondary);
   padding: 4px 12px;
   background-color: var(--bg-surface-secondary);
@@ -201,13 +204,13 @@ const Actions = styled.p`
   -o-user-select: none;
   user-select: none;
   span {
-    ${Typography.body_sm_medium};
+    ${Typography.body_md_medium};
     color: var(--text);
   }
 `;
 
 const ReplyButton = styled.button`
-  ${Typography.body_sm_regular};
+  ${Typography.body_md_regular};
   color: var(--text-text-secondary);
   padding: 4px 12px;
   background-color: var(--bg-surface-secondary);
@@ -235,7 +238,7 @@ const QuestionMainDiv = styled.div`
 const ReplyCard = styled.div`
   padding: 6px 12px;
   background-color: var(--bg-surface-secondary);
-  ${Typography.body_sm_regular};
+  ${Typography.body_md_regular};
   color: var(--text);
   border-radius: 0 8px 8px 8px;
   max-width: max-content;

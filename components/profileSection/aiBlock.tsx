@@ -66,7 +66,7 @@ function AIBlock() {
             <AIText>{ticketSummary?.ticketSummary}</AIText>
             <AIText>{ticketSummary?.ticketSentiment}</AIText>
           </DescriptionDiv>
-          <DescriptionDiv>
+          <DescriptionDiv className='action-div'>
             <h6>Suggested Action</h6>
             <ActionsDiv>
               <Actions>
@@ -84,7 +84,7 @@ function AIBlock() {
             </ActionsDiv>
           </DescriptionDiv>
           {generateReply && (
-            <DescriptionDiv>
+            <DescriptionDiv className='action-div'>
               <h6>Generated replies</h6>
               <QuestionMainDiv>
                 <ReplyCard onClick={onCloseReplyCard}>
