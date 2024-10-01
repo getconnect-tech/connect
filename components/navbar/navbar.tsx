@@ -1,7 +1,8 @@
 'use client';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
+import { Drawer, Button } from 'antd';
 import DropDown from '../dropDown/dropDown';
 import Modal from '../modal/modal';
 import ContactUsModal from '../contactUsModal/contactUsModal';
@@ -46,7 +47,8 @@ function Navbar() {
   const [activeIndex, setActiveIndex] = useState<number | null>(
     navbarMenu.Inbox,
   );
-  // State to store the previous open ticket count
+  const [isDrawerVisible, setDrawerVisible] = useState(false); // Drawer state
+
   const openSupportDropdown = useCallback(() => {
     setSupportDropdown(true);
   }, []);
@@ -63,8 +65,6 @@ function Navbar() {
     setIsOpen((prev) => !prev);
   }, []);
 
-  useEffect(() => {}, []);
-
   const handleModalClose = useCallback(() => {
     setIsModalOpen(false);
   }, []);
@@ -72,7 +72,6 @@ function Navbar() {
   const handleClick = useCallback((index: number, path?: string) => {
     setActiveIndex(index); // Update active index
     if (path) {
-      // Set the redirect path
       router.push(path);
     }
   }, []);
@@ -93,6 +92,11 @@ function Navbar() {
     ).length;
   }, [ticketList]);
 
+  // Handle Drawer Open/Close
+  const toggleDrawer = () => {
+    setDrawerVisible(!isDrawerVisible);
+  };
+
   return (
     <>
       <MainDiv>
@@ -111,13 +115,6 @@ function Navbar() {
                 />
                 <p>{workspaceStore?.currentWorkspace?.name || ''}</p>
               </OrganizationNameDiv>
-              {/* <Icon
-                onClick={() => {}}
-                iconName={'sidebar-icon'}
-                iconSize={'16'}
-                iconViewBox={'0 0 16 16'}
-                className='icon'
-              /> */}
             </LogoDiv>
             {isOpen && (
               <ProfileDropdown
@@ -126,65 +123,73 @@ function Navbar() {
               />
             )}
           </div>
-          {/* <NavbarItem
-            title='Getting started'
-            icon='started-icon'
-            isActive={activeIndex === 0}
-            onClickItem={() => handleClick(0)}
-          /> */}
-          <ItemMainDiv>
-            <NavbarItem
-              title='Inbox'
-              count={openTicketCount}
-              icon='inbox-icon'
-              isActive={pathname === '/inbox'}
-              onClickItem={() => handleClick(1, '/inbox')}
-            />
-            <NavbarItem
-              title='Unassigned'
-              icon='unassign-icon'
-              isActive={pathname === '/unassigned'}
-              onClickItem={() => handleClick(2, '/unassigned')}
-            />
-            <NavbarItem
-              title='All'
-              icon='all-icon'
-              isActive={pathname === '/' || pathname === '/tickets'}
-              onClickItem={() => handleClick(3, '/tickets')}
-            />
-          </ItemMainDiv>
-          <ItemMainDiv>
-            <NavbarItem
-              title='Contacts'
-              icon='contact-icon'
-              isActive={pathname === '/contact'}
-              onClickItem={() => handleClick(4, '/contact')}
-            />
-            <NavbarItem
-              title='Insights'
-              icon='insight-icon'
-              isActive={activeIndex === 5}
-              onClickItem={() => handleClick(5)}
-            />
-          </ItemMainDiv>
-          <ItemMainDiv>
-            <Label>Label</Label>
-            {labelItem.map((item, index) => (
-              <div key={index} className='label-item'>
-                {item.icon && (
-                  <NavbarItem
-                    title={item.name}
-                    icon={item.icon}
-                    isActive={pathname === `/tickets/labels/${item.labelId}`}
-                    onClickItem={() =>
-                      handleClick(8, `/tickets/labels/${item.labelId}`)
-                    }
-                    label={true}
-                  />
-                )}
-              </div>
-            ))}
-          </ItemMainDiv>
+
+          {/* Add a button to toggle the Drawer for mobile view */}
+          <Button onClick={toggleDrawer} className='mobile-menu-btn'>
+            Menu
+          </Button>
+
+          {/* Drawer for Mobile View */}
+          <Drawer
+            title='Menu'
+            placement='left'
+            onClose={toggleDrawer}
+            visible={isDrawerVisible}
+          >
+            <ItemMainDiv>
+              <NavbarItem
+                title='Inbox'
+                count={openTicketCount}
+                icon='inbox-icon'
+                isActive={pathname === '/inbox'}
+                onClickItem={() => handleClick(1, '/inbox')}
+              />
+              <NavbarItem
+                title='Unassigned'
+                icon='unassign-icon'
+                isActive={pathname === '/unassigned'}
+                onClickItem={() => handleClick(2, '/unassigned')}
+              />
+              <NavbarItem
+                title='All'
+                icon='all-icon'
+                isActive={pathname === '/' || pathname === '/tickets'}
+                onClickItem={() => handleClick(3, '/tickets')}
+              />
+            </ItemMainDiv>
+            <ItemMainDiv>
+              <NavbarItem
+                title='Contacts'
+                icon='contact-icon'
+                isActive={pathname === '/contact'}
+                onClickItem={() => handleClick(4, '/contact')}
+              />
+              <NavbarItem
+                title='Insights'
+                icon='insight-icon'
+                isActive={activeIndex === 5}
+                onClickItem={() => handleClick(5)}
+              />
+            </ItemMainDiv>
+            <ItemMainDiv>
+              <Label>Label</Label>
+              {labelItem.map((item, index) => (
+                <div key={index} className='label-item'>
+                  {item.icon && (
+                    <NavbarItem
+                      title={item.name}
+                      icon={item.icon}
+                      isActive={pathname === `/tickets/labels/${item.labelId}`}
+                      onClickItem={() =>
+                        handleClick(8, `/tickets/labels/${item.labelId}`)
+                      }
+                      label={true}
+                    />
+                  )}
+                </div>
+              ))}
+            </ItemMainDiv>
+          </Drawer>
         </TopDiv>
         <div className='tag-div'>
           <NavbarItem
