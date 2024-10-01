@@ -21,6 +21,7 @@ import {
   LeftDiv,
   LineDiv,
   NameText,
+  ResponsiveTimeDiv,
   RightDiv,
   StatusMainDiv,
   TagDiv,
@@ -67,6 +68,11 @@ const InboxCard = ({
   const { ticketStore, workspaceStore, settingStore } = useStores();
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showResponsiveDatePicker, setShowResponsiveDatePicker] =
+    useState(false);
+  const [snoozeResponsiveDropdown, setSnoozeResponsiveDropdown] =
+    useState(false);
+
   const { currentWorkspace } = workspaceStore || {};
   const { labels } = settingStore || {};
 
@@ -212,6 +218,7 @@ const InboxCard = ({
   const onSnoozeIconClick = useCallback((e: SyntheticEvent) => {
     e.stopPropagation();
     setSnoozeDropdown(true);
+    setSnoozeResponsiveDropdown(true);
   }, []);
 
   const handleChangeSnooze = useCallback(
@@ -266,7 +273,7 @@ const InboxCard = ({
             {contact?.name} from {capitalizeString(source)}
           </NameText>
         </div>
-        <NameText>
+        <NameText className='time-text'>
           {moment(last_message && last_message.created_at).fromNow()}
         </NameText>
       </LeftDiv>
@@ -368,7 +375,11 @@ const InboxCard = ({
                 />
               </div>
               <LineDiv />
-              <div>
+              <div
+                onMouseEnter={(e: any) =>
+                  handleMouseEnter(e, setSubmenuPosition)
+                }
+              >
                 <Icon
                   iconName='context-snooze-icon'
                   iconSize='12'
@@ -390,11 +401,16 @@ const InboxCard = ({
                       setSnoozeDropdown(false);
                     }}
                     style={{
-                      right: 10,
+                      right: 0,
                       maxWidth: 260,
                       width: '100%',
                       maxHeight: 'none',
                     }}
+                    className={
+                      submenuPosition === 'upwards'
+                        ? 'submenu-upwards'
+                        : 'submenu-downwards'
+                    }
                   />
                 )}
                 {showDatePicker && (
@@ -402,12 +418,79 @@ const InboxCard = ({
                     ticketIndex={ticketIndex}
                     ticketDetails={ticketDetail}
                     onClose={() => setShowDatePicker(false)}
-                    style={{ right: 10, top: 4, position: 'relative' }}
+                    style={{ right: 0, top: 4, position: 'relative' }}
                   />
                 )}
               </div>
             </TagDiv>
           )}
+          <ResponsiveTimeDiv>
+            <NameText>
+              {moment(last_message && last_message.created_at).fromNow()}
+            </NameText>
+            {ticketDetail.status !== TicketStatus.CLOSED && (
+              <TagDiv>
+                <div onClick={handleCloseTicket}>
+                  <Icon
+                    iconName='close-icon'
+                    iconSize='12'
+                    iconViewBox='0 0 12 12'
+                    onClick={() => {}}
+                    size={true}
+                  />
+                </div>
+                <LineDiv />
+                <div
+                  onMouseEnter={(e: any) =>
+                    handleMouseEnter(e, setSubmenuPosition)
+                  }
+                >
+                  <Icon
+                    iconName='context-snooze-icon'
+                    iconSize='12'
+                    iconViewBox='0 0 12 12'
+                    onClick={onSnoozeIconClick}
+                    size={true}
+                  />
+                  {snoozeResponsiveDropdown && (
+                    <DropDown
+                      isSnooze={true}
+                      items={snoozeItem}
+                      iconSize={''}
+                      iconViewBox={''}
+                      handleClick={handleChangeSnooze}
+                      onChange={(item) => {
+                        if (item?.name === 'date&time')
+                          setShowResponsiveDatePicker(true);
+                      }}
+                      onClose={() => {
+                        setSnoozeResponsiveDropdown(false);
+                      }}
+                      style={{
+                        right: 0,
+                        maxWidth: 260,
+                        width: '100%',
+                        maxHeight: 'none',
+                      }}
+                      className={
+                        submenuPosition === 'upwards'
+                          ? 'submenu-upwards'
+                          : 'submenu-downwards'
+                      }
+                    />
+                  )}
+                  {showResponsiveDatePicker && (
+                    <DatePickerModal
+                      ticketIndex={ticketIndex}
+                      ticketDetails={ticketDetail}
+                      onClose={() => setShowResponsiveDatePicker(false)}
+                      style={{ right: 0, top: 4, position: 'relative' }}
+                    />
+                  )}
+                </div>
+              </TagDiv>
+            )}
+          </ResponsiveTimeDiv>
         </StatusMainDiv>
       </RightDiv>
     </CardDiv>

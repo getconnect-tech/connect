@@ -16,6 +16,9 @@ const MainDiv = styled.div`
   justify-content: space-between;
   border-right: var(--border-main);
   position: fixed;
+  @media screen and (max-width: 449px) {
+    display: none;
+  }
 `;
 
 const TopDiv = styled.div`

@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import {
   BottomDiv,
   HeaderDiv,
+  IconAndTitle,
   Main,
   MainDiv,
   Tab,
@@ -20,6 +21,7 @@ import { isEmpty } from '@/helpers/common';
 import EmptyState from '@/components/emptyState/emptyState';
 import InboxLoading from '@/components/inboxLoading/inboxLoading';
 import { NAVBAR, TICKETS_HEADER } from '@/global/constants';
+import Icon from '@/components/icon/icon';
 
 interface InboxProps {
   activeNav?: number;
@@ -90,9 +92,17 @@ function Inbox({ activeNav, labelId }: InboxProps) {
       <MainDiv>
         <TopDiv>
           <HeaderDiv>
-            <Title>
-              {activeNav ? TICKETS_HEADER[activeNav] : currentLabel?.name}
-            </Title>
+            <IconAndTitle>
+              <Icon
+                iconName='sidebar-icon'
+                iconSize='16'
+                iconViewBox='0 0 16 16'
+                className='sidebar-icon'
+              />
+              <Title>
+                {activeNav ? TICKETS_HEADER[activeNav] : currentLabel?.name}
+              </Title>
+            </IconAndTitle>
             <TabDiv>
               {tabItem.map((tab) => (
                 <Tab
@@ -106,7 +116,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
             </TabDiv>
           </HeaderDiv>
         </TopDiv>
-        <div style={{ padding: '0 20px' }}>
+        <div style={{ padding: '0 16px' }}>
           <BottomDiv>
             {loading &&
               (!filteredTicketList || filteredTicketList?.length === 0) && (
