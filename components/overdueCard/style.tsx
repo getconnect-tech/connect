@@ -20,9 +20,9 @@ const MainCardDiv = styled.div`
 const ProfileDiv = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 28px;
   height: 28px;
-  padding: 7px;
   border-radius: 50%;
   margin-left: 13px;
   background-color: var(--fill-danger);
