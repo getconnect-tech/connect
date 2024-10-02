@@ -305,8 +305,18 @@ export const deleteLabelFromTicket = async (
  * @desc Get ticket summary
  * @param {*} ticketId
  */
-export const getTicketSummary = async (ticketId: string) => {
+export const getTicketSummary = async (
+  ticketId: string,
+  aiConnected: boolean = false,
+) => {
   try {
+    if (!aiConnected) {
+      ticketStore.setTicketSummary({
+        ticketSummary: 'Connect AI is disabled',
+        ticketSentiment: '',
+      });
+      return null;
+    }
     ticketStore.setLoading(true);
     const response = await axios.get(
       `${NEXT_PUBLIC_API_URL}/tickets/${ticketId}/generateSummary`,
