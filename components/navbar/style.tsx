@@ -207,12 +207,6 @@ const ResponsiveMainDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  .sidebar-icon {
-    position: absolute;
-    z-index: 111;
-    left: 16px;
-    top: 8px;
-  }
 `;
 
 export {
