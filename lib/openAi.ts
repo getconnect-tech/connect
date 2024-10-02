@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 import { zodResponseFormat } from 'openai/helpers/zod';
-import { TicketAnalysisSchema } from './zod/ticket';
+import { ZodSchema } from 'zod';
 
 const openAiAPIStr = process.env.OPENAI_API_KEY;
 const AI_MODEL = 'gpt-4o-mini';
@@ -25,9 +25,10 @@ export const chatWithOpenAi = async (content: string) => {
   return chatCompletion.choices[0].message.content!;
 };
 
-export const getParsedTicketAnalysis = async (
+export const chatWithOpenAiForStructuredOutput = async (
   systemMessage: string,
   messageData: string,
+  outputSchema: ZodSchema,
 ) => {
   const chatCompletion = await openAi.beta.chat.completions.parse({
     model: AI_MODEL,
@@ -35,7 +36,7 @@ export const getParsedTicketAnalysis = async (
       { role: 'system', content: `${systemMessage}` },
       { role: 'user', content: `${messageData}` },
     ],
-    response_format: zodResponseFormat(TicketAnalysisSchema, 'ticketAnalysis'),
+    response_format: zodResponseFormat(outputSchema, 'output_schema'),
   });
   return chatCompletion.choices[0].message.parsed!;
 };

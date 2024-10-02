@@ -313,7 +313,7 @@ export const getTicketSummary = async (
     if (!aiConnected) {
       ticketStore.setTicketSummary({
         ticketSummary: 'Connect AI is disabled',
-        ticketSentiment: '',
+        contactSentiment: '',
       });
       return null;
     }

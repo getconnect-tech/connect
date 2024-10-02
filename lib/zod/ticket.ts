@@ -53,5 +53,5 @@ export const snoozeUntilSchema = z
 
 export const TicketAnalysisSchema = z.object({
   ticketSummary: z.string(),
-  ticketSentiment: z.string(),
+  contactSentiment: z.string(),
 });
