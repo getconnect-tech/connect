@@ -1,7 +1,7 @@
 import { MessageType } from '@prisma/client';
 import { prisma } from '@/prisma/prisma';
 import { MessageSummary } from '@/utils/dataTypes';
-import { chatWithOpenAi } from '@/lib/openAi';
+import { chatWithOpenAi, getParsedTicketAnalysis } from '@/lib/openAi';
 
 const formatMessageData = (message: MessageSummary) => {
   const displayName = message.author.display_name
@@ -107,4 +107,13 @@ export const getTicketSentiment = async (
   const sentiment = await chatWithOpenAi(prompt);
 
   return sentiment;
+};
+
+export const getTicketSummaryAndSentiment = async (ticketId: string) => {
+  const ticketContent = await getTicketContent(ticketId);
+
+  // eslint-disable-next-line max-len
+  const prompt = `\n\n\nNow give summary for above content in 1-2 lines. and \n\n\nNow give what is the sentiment of person tagged CONTACT in 1 line with an facial expression emoji. Format Example: Sanjay’s sentiment is slightly sad 😔`;
+  const analysisResult = await getParsedTicketAnalysis(ticketContent, prompt);
+  return analysisResult;
 };

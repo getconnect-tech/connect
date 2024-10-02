@@ -34,7 +34,7 @@ function AIBlock() {
     if (ticketDetails && !isEmpty(ticketDetails?.id)) {
       setLoading(true);
       try {
-        await getTicketSummary(ticketDetails?.id);
+        await getTicketSummary(ticketDetails?.id, true);
       } catch (error) {
         console.error('Error loading ticket summary:', error);
       } finally {
