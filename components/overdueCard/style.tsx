@@ -28,6 +28,7 @@ const ProfileDiv = styled.div`
   height: 28px;
   padding: 7px;
   border-radius: 50%;
+  margin-left: 13px;
   background-color: var(--fill-danger);
 `;
 
