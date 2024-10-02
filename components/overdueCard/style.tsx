@@ -56,7 +56,7 @@ const ButtonSection = styled.div`
   gap: 12px;
   a {
     ${Typography.body_sm_medium}
-    color: var( --text-link);
+    color: var(--text-link);
   }
 `;
 
