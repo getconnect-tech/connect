@@ -20,6 +20,7 @@ import { isEmpty } from '@/helpers/common';
 import EmptyState from '@/components/emptyState/emptyState';
 import InboxLoading from '@/components/inboxLoading/inboxLoading';
 import { NAVBAR, TICKETS_HEADER } from '@/global/constants';
+import OverdueCard from '@/components/overdueCard/overdueCard';
 
 interface InboxProps {
   activeNav?: number;
@@ -123,6 +124,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
                   description='This is where you will receive notifications for all types of tickets. Enjoy your clutter-free inbox!'
                 />
               )}
+            <OverdueCard />
             {filteredTicketList?.length > 0 &&
               filteredTicketList.map((ticket, index) => (
                 <>
