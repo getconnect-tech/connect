@@ -50,3 +50,8 @@ export const snoozeUntilSchema = z
     invalid_type_error: "'snoozeUntil' must be of type string!",
   })
   .datetime({ message: 'Invalid date string!' });
+
+export const TicketAnalysisSchema = z.object({
+  ticketSummary: z.string(),
+  ticketSentiment: z.string(),
+});

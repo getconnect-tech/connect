@@ -113,7 +113,10 @@ export const getTicketSummaryAndSentiment = async (ticketId: string) => {
   const ticketContent = await getTicketContent(ticketId);
 
   // eslint-disable-next-line max-len
-  const prompt = `\n\n\nNow give summary for above content in 1-2 lines. and \n\n\nNow give what is the sentiment of person tagged CONTACT in 1 line with an facial expression emoji. Format Example: Sanjay’s sentiment is slightly sad 😔`;
-  const analysisResult = await getParsedTicketAnalysis(ticketContent, prompt);
+  const instructions = `You have to generate ticket summary and the sentiment of person tagged CONTACT in 1 line with an facial expression emoji (Format Example: Sanjay’s sentiment is slightly sad 😔).`;
+  const analysisResult = await getParsedTicketAnalysis(
+    instructions,
+    ticketContent,
+  );
   return analysisResult;
 };
