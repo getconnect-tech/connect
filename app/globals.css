@@ -32,6 +32,8 @@ a {
   border-radius: 30px;
   border-color: var(--bg-surface-secondary-hover);
   width: 114px;
+  padding: 8px 16px;
+  margin-top: 4px;
 }
 
 .anticon.anticon-clock-circle {
@@ -46,7 +48,7 @@ a {
   border-top: 1px solid var(--bg-surface-hover);
 }
 
-.ant-picker-dropdown .ant-picker-panel>.ant-picker-time-panel {
+.ant-picker-dropdown .ant-picker-panel > .ant-picker-time-panel {
   padding: 0;
 }
 
@@ -68,19 +70,31 @@ a {
   line-height: 16px;
 }
 
-.ant-picker-dropdown .ant-picker-time-panel-column>li.ant-picker-time-panel-cell .ant-picker-time-panel-cell-inner:hover {
+.ant-picker-dropdown
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell
+  .ant-picker-time-panel-cell-inner:hover {
   background-color: var(--bg-white-hover);
   border-radius: 6px;
 }
 
-.ant-picker-dropdown .ant-picker-time-panel-column>li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner {
+.ant-picker-dropdown
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell-selected
+  .ant-picker-time-panel-cell-inner {
   background-color: var(--bg-white-hover);
   color: var(--brand) !important;
   border-radius: 6px;
 }
 
-.ant-picker-dropdown .ant-picker-time-panel-column>li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner:hover,
-.ant-picker-dropdown .ant-picker-time-panel-column>li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner:hover {
+.ant-picker-dropdown
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell-selected
+  .ant-picker-time-panel-cell-inner:hover,
+.ant-picker-dropdown
+  .ant-picker-time-panel-column
+  > li.ant-picker-time-panel-cell-selected
+  .ant-picker-time-panel-cell-inner:hover {
   background-color: var(--bg-white-hover);
 }
 
@@ -117,6 +131,20 @@ a {
 
 .ant-picker:hover .ant-picker-clear {
   display: none;
+}
+
+.ant-picker .ant-picker-input > input {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.ant-picker-dropdown .ant-picker-time-panel .ant-picker-content {
+  max-height: 148px;
+}
+
+.ant-btn:not(:disabled):focus-visible {
+  outline: unset;
 }
 
 :root {
@@ -179,15 +207,21 @@ a {
   --border-style: solid;
   --border-main: var(--border-width) var(--border-style) var(--border);
   --border-primary: var(--border-width) var(--border-style) var(--border-brand);
-  --border-secondary: var(--border-width) var(--border-style) var(--border-input_border);
-  --border-disable: var(--border-width) var(--border-style) var(--border-disabled);
+  --border-secondary: var(--border-width) var(--border-style)
+    var(--border-input_border);
+  --border-disable: var(--border-width) var(--border-style)
+    var(--border-disabled);
   --border-danger: var(--border-width) var(--border-style) var(--fill-danger);
-  --border-loading: var(--border-loading-width) var(--border-style) var(--text-white);
+  --border-loading: var(--border-loading-width) var(--border-style)
+    var(--text-white);
   --border-light: var(--border-light-width) var(--border-style) var(--border);
-  --border-light-hover: var(--border-light-width) var(--border-style) var(--border-hover);
+  --border-light-hover: var(--border-light-width) var(--border-style)
+    var(--border-hover);
   --border-error: var(--border-width) var(--border-style) var(--error-border);
-  --border-success: var(--border-width) var(--border-style) var(--success-border);
-  --border-warning: var(--border-width) var(--border-style) var(--warning-border);
+  --border-success: var(--border-width) var(--border-style)
+    var(--success-border);
+  --border-warning: var(--border-width) var(--border-style)
+    var(--warning-border);
   /* All box Shadow */
   --shadow-tab: 0px 1px 1px 0px var(--box-shadow);
   --shadow-card: 0px 0px 0px 0.5px var(--box-shadow),
@@ -199,16 +233,15 @@ a {
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2),
-only screen and (min--moz-device-pixel-ratio: 2),
-only screen and (-o-min-device-pixel-ratio: 2/1),
-only screen and (min-device-pixel-ratio: 2),
-only screen and (min-resolution: 192dpi),
-only screen and (min-resolution: 2dppx) {
+  only screen and (min--moz-device-pixel-ratio: 2),
+  only screen and (-o-min-device-pixel-ratio: 2/1),
+  only screen and (min-device-pixel-ratio: 2),
+  only screen and (min-resolution: 192dpi),
+  only screen and (min-resolution: 2dppx) {
   :root {
     --border-width: 1px;
   }
 }
-
 
 .ProseMirror {
   position: relative;
@@ -220,7 +253,7 @@ only screen and (min-resolution: 2dppx) {
   white-space: break-spaces;
   -webkit-font-variant-ligatures: none;
   font-variant-ligatures: none;
-  font-feature-settings: "liga" 0;
+  font-feature-settings: 'liga' 0;
   /* the above doesn't seem to work in Edge */
 }
 
@@ -245,8 +278,8 @@ only screen and (min-resolution: 2dppx) {
 }
 
 /* See https://github.com/ProseMirror/prosemirror/issues/1421#issuecomment-1759320191 */
-.ProseMirror [draggable][contenteditable=false] {
-  user-select: text
+.ProseMirror [draggable][contenteditable='false'] {
+  user-select: text;
 }
 
 .ProseMirror-selectednode {
@@ -260,7 +293,7 @@ li.ProseMirror-selectednode {
 }
 
 li.ProseMirror-selectednode:after {
-  content: "";
+  content: '';
   position: absolute;
   left: -32px;
   right: -2px;
@@ -323,11 +356,11 @@ img.ProseMirror-separator {
 }
 
 .ProseMirror-menu-dropdown:after {
-  content: "";
+  content: '';
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-top: 4px solid currentColor;
-  opacity: .6;
+  opacity: 0.6;
   position: absolute;
   right: 4px;
   top: calc(50% - 2px);
@@ -362,11 +395,11 @@ img.ProseMirror-separator {
 }
 
 .ProseMirror-menu-submenu-label:after {
-  content: "";
+  content: '';
   border-top: 4px solid transparent;
   border-bottom: 4px solid transparent;
   border-left: 4px solid currentColor;
-  opacity: .6;
+  opacity: 0.6;
   position: absolute;
   right: 4px;
   top: calc(50% - 4px);
@@ -385,7 +418,7 @@ img.ProseMirror-separator {
 }
 
 .ProseMirror-menu-disabled {
-  opacity: .3;
+  opacity: 0.3;
 }
 
 .ProseMirror-menu-submenu-wrap:hover .ProseMirror-menu-submenu,
@@ -413,7 +446,7 @@ img.ProseMirror-separator {
 
 .ProseMirror-icon {
   display: inline-block;
-  line-height: .8;
+  line-height: 0.8;
   vertical-align: -2px;
   /* Compensate for padding */
   padding: 2px 8px;
@@ -440,7 +473,7 @@ img.ProseMirror-separator {
 }
 
 .ProseMirror-gapcursor:after {
-  content: "";
+  content: '';
   display: block;
   position: absolute;
   top: -2px;
@@ -455,10 +488,7 @@ img.ProseMirror-separator {
   }
 }
 
-
-
 /* prosmirror style */
-
 
 .ProseMirror-focused .ProseMirror-gapcursor {
   display: block;
@@ -473,7 +503,7 @@ img.ProseMirror-separator {
 }
 
 .ProseMirror-example-setup-style hr:after {
-  content: "";
+  content: '';
   display: block;
   height: 1px;
   background-color: silver;
@@ -503,7 +533,7 @@ img.ProseMirror-separator {
   position: fixed;
   border-radius: 3px;
   z-index: 11;
-  box-shadow: -.5px 2px 5px rgba(0, 0, 0, .2);
+  box-shadow: -0.5px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .ProseMirror-prompt h5 {
@@ -513,14 +543,14 @@ img.ProseMirror-separator {
   color: #444;
 }
 
-.ProseMirror-prompt input[type="text"],
+.ProseMirror-prompt input[type='text'],
 .ProseMirror-prompt textarea {
   background: #eee;
   border: none;
   outline: none;
 }
 
-.ProseMirror-prompt input[type="text"] {
+.ProseMirror-prompt input[type='text'] {
   padding: 0 4px;
 }
 
@@ -535,7 +565,7 @@ img.ProseMirror-separator {
 }
 
 .ProseMirror-prompt-close:after {
-  content: "✕";
+  content: '✕';
   font-size: 12px;
 }
 
@@ -581,5 +611,5 @@ img.ProseMirror-separator {
 }
 
 .ProseMirror p {
-  margin-bottom: 1em
+  margin-bottom: 1em;
 }

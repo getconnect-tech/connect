@@ -539,11 +539,13 @@ function TicketDetails(props: Props) {
         case MessageType.CHANGE_PRIORITY:
           return (
             <ActivityDiv>
-              <Avatar
-                imgSrc={message?.author?.profile_url || ''}
-                name={message?.author?.display_name || ''}
-                size={20}
-              />
+              <div className='avtar-activity'>
+                <Avatar
+                  imgSrc={message?.author?.profile_url || ''}
+                  name={message?.author?.display_name || ''}
+                  size={20}
+                />
+              </div>
               <Message>
                 {message?.author?.display_name || ''}{' '}
                 <span>set priority to</span>{' '}
@@ -562,11 +564,13 @@ function TicketDetails(props: Props) {
         case MessageType.CHANGE_ASSIGNEE:
           return (
             <ActivityDiv>
-              <Avatar
-                imgSrc={message?.author?.profile_url || ''}
-                name={message?.author?.display_name || ''}
-                size={20}
-              />
+              <div className='avtar-activity'>
+                <Avatar
+                  imgSrc={message?.author?.profile_url || ''}
+                  name={message?.author?.display_name || ''}
+                  size={20}
+                />
+              </div>
               <Message>
                 {message?.author?.display_name || ''}{' '}
                 <span>
@@ -589,11 +593,13 @@ function TicketDetails(props: Props) {
         case MessageType.CHANGE_STATUS:
           return (
             <ActivityDiv>
-              <Avatar
-                imgSrc={message?.author?.profile_url || ''}
-                name={message?.author?.display_name || ''}
-                size={20}
-              />
+              <div className='avtar-activity'>
+                <Avatar
+                  imgSrc={message?.author?.profile_url || ''}
+                  name={message?.author?.display_name || ''}
+                  size={20}
+                />
+              </div>
               <Message>
                 {message?.author?.display_name || ''}{' '}
                 <span>
