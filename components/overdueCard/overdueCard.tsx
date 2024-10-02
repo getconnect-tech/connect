@@ -35,7 +35,7 @@ function OverdueCard({ countAssign }: Props) {
             </Description>
           </ContentDiv>
           <ButtonSection>
-            <Button title='View Tickets' secondary />
+            <Button title='View Tickets' secondary variant='small' />
             <a>Dismiss</a>
           </ButtonSection>
         </RightSection>
