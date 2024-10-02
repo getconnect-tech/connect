@@ -18,6 +18,9 @@ const CardDiv = styled.div<Props>`
   box-shadow: var(--shadow-card);
   &:hover {
     box-shadow: var(--shadow-card-hover);
+    @media screen and (max-width: 449px) {
+      box-shadow: var(--shadow-card);
+    }
   }
   &:hover .tagDiv {
     display: flex;
