@@ -151,6 +151,12 @@ const TagDiv = styled.div`
       bottom: calc(100% + 4px);
     }
   }
+  .date-picker-downwards {
+    top: 4px;
+  }
+  .date-picker {
+    bottom: calc(100% + 27px);
+  }
 
   .submenu-downwards {
     /* top: calc(100% - 12px); */
