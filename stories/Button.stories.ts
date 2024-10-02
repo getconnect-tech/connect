@@ -74,3 +74,10 @@ export const Medium: Story = {
     title: 'Button',
   },
 };
+
+export const Small: Story = {
+  args: {
+    variant: 'small',
+    title: 'Button',
+  },
+};
