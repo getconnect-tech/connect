@@ -96,8 +96,9 @@ const InboxCard = ({
   ) => {
     const triggerElement = e.currentTarget;
     const rect = triggerElement.getBoundingClientRect();
+    const stickyInputHeight = 150;
     // eslint-disable-next-line no-undef
-    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceBelow = window.innerHeight - rect.bottom - stickyInputHeight;
     const spaceAbove = rect.top;
 
     if (spaceBelow < 200 && spaceAbove > 200) {
@@ -421,7 +422,11 @@ const InboxCard = ({
                     ticketIndex={ticketIndex}
                     ticketDetails={ticketDetail}
                     onClose={() => setShowDatePicker(false)}
-                    style={{ right: 0, top: 4, position: 'relative' }}
+                    className={
+                      submenuPosition === 'upwards'
+                        ? 'submenu-upwards date-picker'
+                        : 'submenu-downwards date-picker-downwards'
+                    }
                   />
                 )}
               </div>
@@ -487,7 +492,11 @@ const InboxCard = ({
                       ticketIndex={ticketIndex}
                       ticketDetails={ticketDetail}
                       onClose={() => setShowResponsiveDatePicker(false)}
-                      style={{ right: 0, top: 4, position: 'relative' }}
+                      className={
+                        submenuPosition === 'upwards'
+                          ? 'submenu-upwards date-picker'
+                          : 'submenu-downwards date-picker-downwards'
+                      }
                     />
                   )}
                 </div>

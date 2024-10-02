@@ -18,6 +18,9 @@ const CardDiv = styled.div<Props>`
   box-shadow: var(--shadow-card);
   &:hover {
     box-shadow: var(--shadow-card-hover);
+    @media screen and (max-width: 449px) {
+      box-shadow: var(--shadow-card);
+    }
   }
   &:hover .tagDiv {
     display: flex;
@@ -151,6 +154,12 @@ const TagDiv = styled.div`
       bottom: calc(100% + 4px);
     }
   }
+  .date-picker-downwards {
+    top: 4px;
+  }
+  .date-picker {
+    bottom: calc(100% + 27px);
+  }
 
   .submenu-downwards {
     /* top: calc(100% - 12px); */
@@ -193,7 +202,7 @@ const Description = styled.div`
   -webkit-line-clamp: 1;
   overflow: hidden;
   ${Typography.body_md_regular};
-  color: var(--text-text-secondary);
+  color: var(--text);
   @media screen and (max-width: 449px) {
     -webkit-line-clamp: 2;
   }
