@@ -4,6 +4,7 @@ import { Typography } from '@/styles/typography';
 
 interface Props {
   isShowHoverItems: boolean;
+  isShowNavbar: boolean;
 }
 
 const CardDiv = styled.div<Props>`
@@ -24,6 +25,13 @@ const CardDiv = styled.div<Props>`
       display: none;
     }
   }
+  ${(props) =>
+    props.isShowNavbar &&
+    css`
+      @media screen and (max-width: 449px) {
+        min-width: 361px;
+      }
+    `}
 
   ${(props) =>
     props.isShowHoverItems &&

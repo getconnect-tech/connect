@@ -50,6 +50,7 @@ interface Props {
   dropdownIdentifier: string;
   loadData: () => void;
   ticketIndex: number;
+  isShowNavbar: boolean;
 }
 
 const InboxCard = ({
@@ -61,6 +62,7 @@ const InboxCard = ({
   setCurrentOpenDropdown,
   dropdownIdentifier,
   ticketIndex,
+  isShowNavbar,
 }: Props) => {
   const { title, source, contact, priority, assigned_to, last_message } =
     ticketDetail;
@@ -259,6 +261,7 @@ const InboxCard = ({
     <CardDiv
       isShowHoverItems={snoozeDropdown || showDatePicker}
       onClick={onClickTicket}
+      isShowNavbar={isShowNavbar}
     >
       {showDotIcon && <DotIcon />}
       <LeftDiv>
