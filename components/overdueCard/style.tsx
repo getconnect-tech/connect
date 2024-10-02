@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { Typography } from '@/styles/typography';
 
 const MainDiv = styled.div`
-  max-width: 662px;
   width: 100%;
   border-radius: 12px;
   padding: 12px 12px 12px 8px;
@@ -11,9 +10,6 @@ const MainDiv = styled.div`
   margin: 12px 0;
   &:hover {
     box-shadow: var(--shadow-card-hover);
-  }
-  @media screen and (max-width: 449px) {
-    max-width: 361px;
   }
 `;
 const MainCardDiv = styled.div`
