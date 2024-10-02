@@ -200,6 +200,7 @@ const ProfileItemDiv = styled.div`
 
 const ResponsiveMainDiv = styled.div`
   max-width: 260px;
+  min-width: 260px;
   width: 100%;
   padding: 16px;
   border-right: var(--border-main);
