@@ -10,7 +10,7 @@ const mockTicketDetail: TicketDetailsInterface = {
     author: {
       id: 'author-123',
       email: 'author@example.com',
-      display_name: null,
+      display_name: 'Pinal',
       profile_url: null,
       is_verified: false,
       created_at: new Date('2023-09-24T12:34:56Z'),
