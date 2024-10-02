@@ -16,6 +16,9 @@ const MainDiv = styled.div`
   justify-content: space-between;
   border-right: var(--border-main);
   position: fixed;
+  @media screen and (max-width: 449px) {
+    display: none;
+  }
 `;
 
 const TopDiv = styled.div`
@@ -35,6 +38,12 @@ const LogoDiv = styled.div`
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
+  .cross-icon {
+    display: none;
+    @media screen and (max-width: 449px) {
+      display: flex;
+    }
+  }
 `;
 
 const OrganizationNameDiv = styled.div`
@@ -55,6 +64,9 @@ const OrganizationNameDiv = styled.div`
     cursor: pointer;
     background-color: var(--bg-surface-hover);
     border-radius: 30px;
+  }
+  @media screen and (max-width: 449px) {
+    padding: 0;
   }
 `;
 
@@ -185,6 +197,18 @@ const ProfileItemDiv = styled.div`
     }
   }
 `;
+
+const ResponsiveMainDiv = styled.div`
+  max-width: 260px;
+  min-width: 260px;
+  width: 100%;
+  padding: 16px;
+  border-right: var(--border-main);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
 export {
   MainDiv,
   LogoDiv,
@@ -202,4 +226,5 @@ export {
   Description,
   ProfileItemDiv,
   OrganizationNameDiv,
+  ResponsiveMainDiv,
 };

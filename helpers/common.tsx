@@ -128,9 +128,9 @@ export const getFirebaseUrlFromFile = async (
         const metadata = {
           contentType: file?.type,
         };
-        const fileExtension = file?.name.split('.').pop();
+        const fileExtension = file?.name?.split('.').pop();
         const uniqueFilename = generateRandomFilename();
-        const fullFilename = `${file?.name.replace(/\.[^/.]+$/, '')}_${uniqueFilename}.${fileExtension}`;
+        const fullFilename = `${file?.name?.replace(/\.[^/.]+$/, '')}_${uniqueFilename}.${fileExtension}`;
         let pathName = '';
         if (!folderName?.startsWith('UserProfiles')) {
           const workspace = workspaceStore.currentWorkspace;

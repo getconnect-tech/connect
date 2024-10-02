@@ -26,4 +26,4 @@ export const lastUpdatedTimeSchema = z
     required_error: "'last_updated' is required!",
     invalid_type_error: "'last_updated' must be of type string!",
   })
-  .date();
+  .datetime();

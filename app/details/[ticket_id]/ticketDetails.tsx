@@ -90,7 +90,7 @@ function TicketDetails(props: Props) {
   const [commentValue, setCommentValue] = useState<string>('');
   const [attachFile, setAttachFiels] = useState<MessageAttachment[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const editorRef = useRef<{ clearEditor: () => void }>(null);
+  const editorRef = useRef<any>(null);
   const { ticketStore, workspaceStore, userStore, settingStore, appStore } =
     useStores();
   const { currentWorkspace } = workspaceStore || {};
@@ -675,12 +675,32 @@ function TicketDetails(props: Props) {
           }
           const fileData: any = await handleFileRead(fileObj);
           if (!isEmpty(fileData?.fileContent)) {
+            if (
+              ['image/jpeg', 'image/jpg', 'image/png']?.includes(
+                fileData?.fileType,
+              )
+            ) {
+              editorRef?.current?.uploadFile(
+                fileData?.file,
+                `tickets/${ticket_id}/temp/${messageRefId}/attachments`,
+                fileData?.name,
+              );
+              return;
+            }
+
             const fileUrl = await getFirebaseUrlFromFile(
               fileData?.file,
               `tickets/${ticket_id}/temp/${messageRefId}/attachments`,
               fileData?.name,
             );
             if (fileUrl) {
+              // if (
+              //   ['image/jpeg', 'image/jpg', 'image/png']?.includes(
+              //     fileData?.fileType,
+              //   )
+              // ) {
+              //   editorRef?.current?.uploadFile(fileUrl);
+              // }
               setAttachFiels([
                 ...(attachFile || []),
                 {
