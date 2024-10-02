@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import Button from '../button/button';
 import {
   ButtonSection,
@@ -15,6 +16,12 @@ interface Props {
   countAssign?: number;
 }
 function OverdueCard({ countAssign }: Props) {
+  const router = useRouter();
+
+  const redirectToUnassigned = useCallback(() => {
+    router.push('/unassigned');
+  }, []);
+
   return (
     <MainDiv>
       <MainCardDiv>
@@ -35,7 +42,12 @@ function OverdueCard({ countAssign }: Props) {
             </Description>
           </ContentDiv>
           <ButtonSection>
-            <Button title='View Tickets' secondary variant='small' />
+            <Button
+              onClick={redirectToUnassigned}
+              title='View Tickets'
+              secondary
+              variant='small'
+            />
             <a>Dismiss</a>
           </ButtonSection>
         </RightSection>

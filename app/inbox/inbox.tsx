@@ -2,6 +2,7 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { usePathname } from 'next/navigation';
 import {
   BottomDiv,
   HeaderDiv,
@@ -20,6 +21,7 @@ import { isEmpty } from '@/helpers/common';
 import EmptyState from '@/components/emptyState/emptyState';
 import InboxLoading from '@/components/inboxLoading/inboxLoading';
 import { NAVBAR, TICKETS_HEADER } from '@/global/constants';
+import OverdueCard from '@/components/overdueCard/overdueCard';
 
 interface InboxProps {
   activeNav?: number;
@@ -38,6 +40,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
   const { user } = userStore || {};
   const { labels } = settingStore || {};
   const currentLabel = labels?.find((label) => label.id === labelId);
+  const pathname = usePathname();
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
@@ -112,6 +115,8 @@ function Inbox({ activeNav, labelId }: InboxProps) {
               (!filteredTicketList || filteredTicketList?.length === 0) && (
                 <InboxLoading />
               )}
+            {(!loading || filteredTicketList?.length > 0) &&
+              pathname === '/inbox' && <OverdueCard />}
             {!loading &&
               (!filteredTicketList || filteredTicketList?.length === 0) && (
                 <EmptyState
@@ -123,7 +128,6 @@ function Inbox({ activeNav, labelId }: InboxProps) {
                   description='This is where you will receive notifications for all types of tickets. Enjoy your clutter-free inbox!'
                 />
               )}
-
             {filteredTicketList?.length > 0 &&
               filteredTicketList.map((ticket, index) => (
                 <>
