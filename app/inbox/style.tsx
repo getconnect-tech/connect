@@ -16,7 +16,7 @@ const TopDiv = styled.div`
   top: 0;
   background-color: var(--bg-surface);
   z-index: 99;
-  padding: 0 20px;
+  padding: 0 16px;
 `;
 
 const BottomDiv = styled.div`
@@ -29,6 +29,9 @@ const MainDiv = styled.div`
   margin-left: 223px;
   overflow: auto;
   position: relative;
+  @media screen and (max-width: 449px) {
+    margin-left: unset;
+  }
 `;
 
 const HeaderDiv = styled.div`
@@ -38,6 +41,24 @@ const HeaderDiv = styled.div`
   padding: 24px 0 6px;
   max-width: 662px;
   margin: 0 auto;
+  @media screen and (max-width: 449px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0 4px;
+  }
+`;
+
+const IconAndTitle = styled.div`
+  display: flex;
+  align-items: center;
+  .sidebar-icon {
+    display: none;
+    @media screen and (max-width: 449px) {
+      display: flex;
+      margin-right: 8px;
+    }
+  }
 `;
 
 const Title = styled.div`
@@ -66,6 +87,21 @@ const Tab = styled.p<Props>`
       box-shadow: var(--shadow-tab);
       color: var(--text);
     `}
+  @media screen and (max-width: 449px) {
+    min-width: 92px;
+    display: flex;
+    justify-content: center;
+  }
 `;
 
-export { Main, MainDiv, HeaderDiv, Title, TabDiv, Tab, TopDiv, BottomDiv };
+export {
+  Main,
+  MainDiv,
+  HeaderDiv,
+  Title,
+  TabDiv,
+  Tab,
+  TopDiv,
+  BottomDiv,
+  IconAndTitle,
+};

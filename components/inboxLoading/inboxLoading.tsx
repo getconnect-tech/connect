@@ -8,6 +8,7 @@ import {
   Leftside,
   Main,
   Profile,
+  ResponsiveSide,
   Rightside,
   Subdiv,
   Top,
@@ -26,18 +27,21 @@ export default function InboxLoading() {
             </Avtar>
             <TopDiv>
               <Subdiv>
-                <Top className='loading-animation' />
+                <div className='top-loading'>
+                  <Top className='loading-animation' />
+                  <Leftside className='loading-animation' />
+                </div>
                 <Top className='center loading-animation' />
                 <Top className='bottom loading-animation' />
               </Subdiv>
               <BottomDiv>
                 <Bottom className='loading-animation' />
-                <Bottom className='loading-animation' />
-                <Bottom className='loading-animation' />
+                <Bottom className='loading-animation center' />
+                <Bottom className='loading-animation last' />
               </BottomDiv>
+              <ResponsiveSide className='loading-animation' />
             </TopDiv>
           </Rightside>
-          <Leftside className='loading-animation' />
         </Firstblock>
         <Firstblock className='second-block'>
           <Rightside>
@@ -47,18 +51,21 @@ export default function InboxLoading() {
             </Avtar>
             <TopDiv>
               <Subdiv>
-                <Top className='loading-animation' />
+                <div className='top-loading'>
+                  <Top className='loading-animation' />
+                  <Leftside className='loading-animation' />
+                </div>
                 <Top className='center loading-animation' />
                 <Top className='bottom loading-animation' />
               </Subdiv>
               <BottomDiv>
                 <Bottom className='loading-animation' />
-                <Bottom className='loading-animation' />
-                <Bottom className='loading-animation' />
+                <Bottom className='loading-animation center' />
+                <Bottom className='loading-animation last' />
               </BottomDiv>
+              <ResponsiveSide className='loading-animation' />
             </TopDiv>
           </Rightside>
-          <Leftside className='loading-animation' />
         </Firstblock>
         <Firstblock className='third-block'>
           <Rightside>
@@ -67,18 +74,21 @@ export default function InboxLoading() {
             </Avtar>
             <TopDiv>
               <Subdiv>
-                <Top className='loading-animation' />
+                <div className='top-loading'>
+                  <Top className='loading-animation' />
+                  <Leftside className='loading-animation' />
+                </div>
                 <Top className='center loading-animation' />
                 <Top className='bottom loading-animation' />
               </Subdiv>
               <BottomDiv>
                 <Bottom className='loading-animation' />
-                <Bottom className='loading-animation' />
-                <Bottom className='loading-animation' />
+                <Bottom className='loading-animation center' />
+                <Bottom className='loading-animation last' />
               </BottomDiv>
+              <ResponsiveSide className='loading-animation' />
             </TopDiv>
           </Rightside>
-          <Leftside className='loading-animation' />
         </Firstblock>
         <Firstblock className='fourth-block'>
           <Rightside>
@@ -87,18 +97,21 @@ export default function InboxLoading() {
             </Avtar>
             <TopDiv>
               <Subdiv>
-                <Top className='loading-animation' />
+                <div className='top-loading'>
+                  <Top className='loading-animation' />
+                  <Leftside className='loading-animation' />
+                </div>
                 <Top className='center loading-animation' />
                 <Top className='bottom loading-animation' />
               </Subdiv>
               <BottomDiv>
                 <Bottom className='loading-animation' />
-                <Bottom className='loading-animation' />
-                <Bottom className='loading-animation' />
+                <Bottom className='loading-animation center' />
+                <Bottom className='loading-animation last' />
               </BottomDiv>
+              <ResponsiveSide className='loading-animation' />
             </TopDiv>
           </Rightside>
-          <Leftside className='loading-animation' />
         </Firstblock>
       </Main>
     </>

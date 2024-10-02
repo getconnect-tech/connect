@@ -48,10 +48,8 @@ const Firstblock = styled.div`
   background-color: var(--bg-white);
   border-radius: 12px;
   box-shadow: var(--shadow-card);
-  display: flex;
   justify-content: space-between;
   position: relative;
-  gap: 12px;
   z-index: 11111;
   opacity: 90%;
 `;
@@ -77,6 +75,7 @@ const TopDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
 `;
 
 const BottomDiv = styled.div`
@@ -97,9 +96,13 @@ const DotIcon = styled.div`
 const Subdiv = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   padding-top: 6px;
   padding-bottom: 6px;
+  .top-loading {
+    display: flex;
+    justify-content: space-between;
+  }
 `;
 
 const Top = styled.div`
@@ -110,23 +113,36 @@ const Top = styled.div`
   &.center {
     width: 333px;
     height: 12px;
+    @media screen and (max-width: 449px) {
+      max-width: 246px;
+      width: 100%;
+    }
   }
   &.bottom {
     width: 417px;
     height: 8px;
+    @media screen and (max-width: 449px) {
+      max-width: 288px;
+      width: 100%;
+    }
+  }
+  @media screen and (max-width: 449px) {
+    max-width: 177px;
+    width: 100%;
   }
 `;
 
 const Bottom = styled.div`
-  width: 65px;
+  max-width: 65px;
   height: 24px;
   border-radius: 30px;
+  width: 100%;
   background-color: var(--bg-surface-secondary);
-  &.first {
-    width: 99px;
+  &.center {
+    max-width: 83px;
   }
-  &.second {
-    width: 90px;
+  &.last {
+    max-width: 95px;
   }
 `;
 const Leftside = styled.div`
@@ -134,6 +150,21 @@ const Leftside = styled.div`
   height: 8px;
   border-radius: 30px;
   background-color: var(--bg-surface-secondary);
+  @media screen and (max-width: 449px) {
+    display: none;
+  }
+`;
+
+const ResponsiveSide = styled.div`
+  display: none;
+  @media screen and (max-width: 449px) {
+    width: 66px;
+    height: 8px;
+    border-radius: 30px;
+    background-color: var(--bg-surface-secondary);
+    display: flex;
+    margin-top: 10px;
+  }
 `;
 
 export {
@@ -149,4 +180,5 @@ export {
   BottomDiv,
   TopDiv,
   DotIcon,
+  ResponsiveSide,
 };
