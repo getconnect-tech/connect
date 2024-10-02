@@ -199,7 +199,7 @@ const Description = styled.div`
   -webkit-line-clamp: 1;
   overflow: hidden;
   ${Typography.body_md_regular};
-  color: var(--text-text-secondary);
+  color: var(--text);
   @media screen and (max-width: 449px) {
     -webkit-line-clamp: 2;
   }
