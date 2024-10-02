@@ -492,7 +492,11 @@ const InboxCard = ({
                       ticketIndex={ticketIndex}
                       ticketDetails={ticketDetail}
                       onClose={() => setShowResponsiveDatePicker(false)}
-                      style={{ right: 0, top: 4, position: 'relative' }}
+                      className={
+                        submenuPosition === 'upwards'
+                          ? 'submenu-upwards date-picker'
+                          : 'submenu-downwards date-picker-downwards'
+                      }
                     />
                   )}
                 </div>
