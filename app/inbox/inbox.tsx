@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import {
   BottomDiv,
   HeaderDiv,
+  IconAndTitle,
   Main,
   MainDiv,
   Tab,
@@ -20,6 +21,8 @@ import { isEmpty } from '@/helpers/common';
 import EmptyState from '@/components/emptyState/emptyState';
 import InboxLoading from '@/components/inboxLoading/inboxLoading';
 import { NAVBAR, TICKETS_HEADER } from '@/global/constants';
+import Icon from '@/components/icon/icon';
+import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 
 interface InboxProps {
   activeNav?: number;
@@ -38,6 +41,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
   const { user } = userStore || {};
   const { labels } = settingStore || {};
   const currentLabel = labels?.find((label) => label.id === labelId);
+  const [isNavbar, setIsNavbar] = useState(false);
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
@@ -85,14 +89,32 @@ function Inbox({ activeNav, labelId }: InboxProps) {
     loadData();
   }, [loadData]);
 
+  const onClickIcon = useCallback(() => {
+    setIsNavbar(true);
+  }, []);
+
+  const onCloseNavbar = useCallback(() => {
+    setIsNavbar(false);
+  }, []);
+
   return (
     <Main>
+      {isNavbar && <ResponsiveNavbar onClose={onCloseNavbar} />}
       <MainDiv>
         <TopDiv>
           <HeaderDiv>
-            <Title>
-              {activeNav ? TICKETS_HEADER[activeNav] : currentLabel?.name}
-            </Title>
+            <IconAndTitle>
+              <Icon
+                iconName='sidebar-icon'
+                iconSize='16'
+                iconViewBox='0 0 16 16'
+                className='sidebar-icon'
+                onClick={onClickIcon}
+              />
+              <Title>
+                {activeNav ? TICKETS_HEADER[activeNav] : currentLabel?.name}
+              </Title>
+            </IconAndTitle>
             <TabDiv>
               {tabItem.map((tab) => (
                 <Tab
@@ -106,7 +128,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
             </TabDiv>
           </HeaderDiv>
         </TopDiv>
-        <div style={{ padding: '0 20px' }}>
+        <div style={{ padding: '0 16px' }} onClick={onCloseNavbar}>
           <BottomDiv>
             {loading &&
               (!filteredTicketList || filteredTicketList?.length === 0) && (
@@ -142,6 +164,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
                         dropdownIdentifier={`card-${ticket.id}`}
                         loadData={loadData}
                         ticketIndex={index}
+                        isShowNavbar={isNavbar}
                       />
                     </div>
                   </CustomContextMenu>

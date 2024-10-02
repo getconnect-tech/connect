@@ -4,6 +4,7 @@ import { Typography } from '@/styles/typography';
 
 interface Props {
   isShowHoverItems: boolean;
+  isShowNavbar: boolean;
 }
 
 const CardDiv = styled.div<Props>`
@@ -20,7 +21,17 @@ const CardDiv = styled.div<Props>`
   }
   &:hover .tagDiv {
     display: flex;
+    @media screen and (max-width: 449px) {
+      display: none;
+    }
   }
+  ${(props) =>
+    props.isShowNavbar &&
+    css`
+      @media screen and (max-width: 449px) {
+        min-width: 361px;
+      }
+    `}
 
   ${(props) =>
     props.isShowHoverItems &&
@@ -65,12 +76,21 @@ const RightDiv = styled.div`
     -webkit-line-clamp: 1;
     overflow: hidden;
     word-break: break-word;
+    @media screen and (max-width: 449px) {
+      -webkit-line-clamp: 2;
+    }
   }
 `;
 
 const NameText = styled.div`
   ${Typography.body_md_regular};
   color: var(--text-text-secondary);
+  &.time-text {
+    display: flex;
+    @media screen and (max-width: 449px) {
+      display: none;
+    }
+  }
 `;
 
 const DesTitle = styled.div`
@@ -85,6 +105,7 @@ const StatusMainDiv = styled.div`
   align-items: flex-end;
   padding-top: 4px;
   justify-content: space-between;
+  position: relative;
   .statusDiv {
     display: flex;
     gap: 8px;
@@ -93,13 +114,17 @@ const StatusMainDiv = styled.div`
     width: 100%;
   }
   .submenu-upwards {
-    bottom: calc(100% - 83px);
+    bottom: calc(100% - 0px);
     top: auto;
   }
 
   .submenu-downwards {
     /* top: calc(100% - 12px); */
     bottom: auto;
+  }
+  @media screen and (max-width: 449px) {
+    flex-direction: column;
+    align-items: unset;
   }
 `;
 
@@ -116,21 +141,30 @@ const TagDiv = styled.div`
     }
   }
   .submenu-upwards {
-    bottom: calc(100% - 84px);
+    bottom: calc(100% - 0px);
     top: auto;
     position: absolute;
     background-color: var(--bg-white);
     box-shadow: var(--shadow-dropdown);
     border-radius: 12px;
+    @media screen and (max-width: 449px) {
+      bottom: calc(100% + 4px);
+    }
   }
 
   .submenu-downwards {
-    top: calc(100% - 12px);
+    /* top: calc(100% - 12px); */
     bottom: auto;
     position: absolute;
     background-color: var(--bg-white);
     box-shadow: var(--shadow-dropdown);
     border-radius: 12px;
+  }
+  @media screen and (max-width: 449px) {
+    display: flex;
+    &.tagDiv {
+      display: none;
+    }
   }
 `;
 const LineDiv = styled.div`
@@ -152,7 +186,7 @@ const Description = styled.div`
   display: flex;
   padding: 2px 8px;
   background-color: var(--bg-surface);
-  border-radius: 30px;
+  border-radius: 12px;
   align-items: center;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -160,6 +194,9 @@ const Description = styled.div`
   overflow: hidden;
   ${Typography.body_md_regular};
   color: var(--text-text-secondary);
+  @media screen and (max-width: 449px) {
+    -webkit-line-clamp: 2;
+  }
   div {
     white-space: normal;
     p {
@@ -171,6 +208,17 @@ const Description = styled.div`
     }
   }
 `;
+
+const ResponsiveTimeDiv = styled.div`
+  display: none;
+  @media screen and (max-width: 449px) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+`;
+
 export {
   DesTitle,
   NameText,
@@ -184,4 +232,5 @@ export {
   LineDiv,
   InternalMessageDiv,
   Description,
+  ResponsiveTimeDiv,
 };
