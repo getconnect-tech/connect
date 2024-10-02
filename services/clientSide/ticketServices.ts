@@ -311,6 +311,10 @@ export const getTicketSummary = async (
 ) => {
   try {
     if (!aiConnected) {
+      ticketStore.setTicketSummary({
+        ticketSummary: 'Connect AI is Disable',
+        ticketSentiment: '',
+      });
       return null;
     }
     ticketStore.setLoading(true);
