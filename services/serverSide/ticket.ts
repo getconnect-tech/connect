@@ -27,7 +27,25 @@ export const getWorkspaceTickets = async (
 
   if (lastUpdated) {
     const lastUpdatedDate = new Date(lastUpdated);
-    query.updated_at = { gt: lastUpdatedDate };
+    query.OR = [
+      { updated_at: { gt: lastUpdatedDate } },
+      {
+        messages: {
+          some: {
+            created_at: { gt: lastUpdatedDate },
+            type: {
+              in: [
+                // Include message types which doesn't update ticket schema
+                MessageType.FROM_CONTACT,
+                MessageType.EMAIL,
+                MessageType.REGULAR,
+                MessageType.CHANGE_LABEL,
+              ],
+            },
+          },
+        },
+      },
+    ];
   }
 
   const tickets = await prisma.ticket.findMany({
