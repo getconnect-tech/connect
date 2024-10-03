@@ -171,6 +171,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
                 <OverdueCard
                   countAssign={countOfUnassigneOpenTicket?.length}
                   onClickDismiss={onClickDismiss}
+                  isShowNavbar={isNavbar}
                 />
               )}
             {!loading &&
