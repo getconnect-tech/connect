@@ -16,14 +16,6 @@ const MainDiv = styled.div`
   justify-content: space-between;
   border-right: var(--border-main);
   position: fixed;
-  .support-dropdown {
-    bottom: 52px;
-    width: 100%;
-    max-width: 191px;
-    @media screen and (max-width: 449px) {
-      max-width: 228px;
-    }
-  }
   @media screen and (max-width: 449px) {
     display: none;
   }
@@ -218,6 +210,11 @@ const ResponsiveMainDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  .support-dropdown {
+    bottom: 52px;
+    max-width: 228px;
+    width: 100%;
+  }
   @media screen and (min-width: 448px) {
     display: none;
   }

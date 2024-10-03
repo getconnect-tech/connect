@@ -203,7 +203,7 @@ function Navbar() {
               iconViewBox={'0 0 12 12'}
               onClose={closeSupportDropdown}
               onChange={handleSupportClick}
-              className='support-dropdown'
+              style={{ bottom: 52, maxWidth: 191, width: '100%' }}
             />
           )}
         </div>
