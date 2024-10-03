@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import OneSignal from 'react-onesignal';
+import { observer } from 'mobx-react-lite';
 import Button from '../button/button';
 import {
   ButtonSection,
@@ -11,12 +13,55 @@ import {
   Title,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { messageStore } from '@/stores/messageStore';
+import { initOneSignal } from '@/helpers/appInitHelper';
+import { useStores } from '@/stores';
 
 interface Props {
   isShowNavbar: boolean;
+  onClose: () => void;
 }
 
-function NotificationCard({ isShowNavbar }: Props) {
+function NotificationCard({ isShowNavbar, onClose }: Props) {
+  const { userStore } = useStores();
+
+  const handleEnableClick = async () => {
+    try {
+      const currentNotificationState = Notification.permission;
+
+      if (currentNotificationState === 'denied') {
+        messageStore.setErrorMessage(
+          'Please enable notification permission under site settings!',
+        );
+        return;
+      }
+
+      await initOneSignal(userStore.user!.id);
+    } catch (err: any) {
+      console.error(err);
+      messageStore.setErrorMessage(err.message);
+    }
+  };
+
+  const handleNotificationPermissionChange = async (hasAllowed: boolean) => {
+    if (hasAllowed) {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    OneSignal.Notifications.addEventListener(
+      'permissionChange',
+      handleNotificationPermissionChange,
+    );
+
+    return () =>
+      OneSignal.Notifications.removeEventListener(
+        'permissionChange',
+        handleNotificationPermissionChange,
+      );
+  }, []);
+
   return (
     <MainDiv isShowNavbar={isShowNavbar}>
       <MainCardDiv>
@@ -38,7 +83,7 @@ function NotificationCard({ isShowNavbar }: Props) {
           </ContentDiv>
           <ButtonSection>
             <Button
-              onClick={() => {}}
+              onClick={handleEnableClick}
               title='Enable Notifications'
               secondary
               variant='small'
@@ -48,6 +93,7 @@ function NotificationCard({ isShowNavbar }: Props) {
               isLink={true}
               className='link-button'
               variant='small'
+              onClick={onClose}
             />
           </ButtonSection>
         </RightSection>
@@ -56,4 +102,4 @@ function NotificationCard({ isShowNavbar }: Props) {
   );
 }
 
-export default NotificationCard;
+export default observer(NotificationCard);

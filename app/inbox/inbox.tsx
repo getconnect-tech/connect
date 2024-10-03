@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { usePathname } from 'next/navigation';
 import moment from 'moment';
 import { TicketStatus } from '@prisma/client';
+import OneSignal from 'react-onesignal';
 import {
   BottomDiv,
   HeaderDiv,
@@ -41,6 +42,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
     null,
   );
   const [loading, setLoading] = useState(true); // Loading state added
+  const [toShowNotificationCard, setToShowNotificationCard] = useState(true);
   const [overDueCardDismissed, setOverDueCardDismissed] = useState(false);
   const { workspaceStore, ticketStore, userStore, settingStore } = useStores();
   const { currentWorkspace } = workspaceStore;
@@ -65,6 +67,11 @@ function Inbox({ activeNav, labelId }: InboxProps) {
       }
     }
   }, [currentWorkspace?.id]);
+
+  const shouldShowNotificationCard = useCallback(() => {
+    const hasNotificationPermission = Notification.permission === 'granted';
+    setToShowNotificationCard(!hasNotificationPermission);
+  }, []);
 
   const shouldShowOverdueCard = useCallback(() => {
     const unAssignedDismissTime =
@@ -109,6 +116,10 @@ function Inbox({ activeNav, labelId }: InboxProps) {
     setOverDueCardDismissed(true);
   };
 
+  const handleNotificationCardClose = () => {
+    setToShowNotificationCard(false);
+  };
+
   useEffect(() => {
     displayTicketList();
   }, [activeTab, ticketList]);
@@ -116,6 +127,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
   useEffect(() => {
     loadData();
     shouldShowOverdueCard();
+    shouldShowNotificationCard();
   }, [loadData]);
 
   const onClickIcon = useCallback(() => {
@@ -159,7 +171,12 @@ function Inbox({ activeNav, labelId }: InboxProps) {
         </TopDiv>
         <div style={{ padding: '0 16px' }} onClick={onCloseNavbar}>
           <BottomDiv>
-            <NotificationCard isShowNavbar={isNavbar} />
+            {userStore.user?.id && toShowNotificationCard && (
+              <NotificationCard
+                isShowNavbar={isNavbar}
+                onClose={handleNotificationCardClose}
+              />
+            )}
             {loading &&
               (!filteredTicketList || filteredTicketList?.length === 0) && (
                 <InboxLoading />
