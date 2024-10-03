@@ -45,7 +45,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
   const { labels } = settingStore || {};
   const currentLabel = labels?.find((label) => label.id === labelId);
   const pathname = usePathname();
-  const countOfUnassigneOpenTicket = ticketList.filter(
+  const countOfUnassigneOpenTicket = ticketList?.filter(
     (ticket) =>
       ticket.status === TicketStatus.OPEN && ticket.assigned_to === null,
   );
@@ -141,11 +141,11 @@ function Inbox({ activeNav, labelId }: InboxProps) {
                 <InboxLoading />
               )}
             {(!loading || filteredTicketList?.length > 0) &&
-              countOfUnassigneOpenTicket.length > 0 &&
+              countOfUnassigneOpenTicket?.length > 0 &&
               !overDueCardDismissed &&
               pathname === '/inbox' && (
                 <OverdueCard
-                  countAssign={countOfUnassigneOpenTicket.length}
+                  countAssign={countOfUnassigneOpenTicket?.length}
                   onClickDismiss={onClickDismiss}
                 />
               )}
