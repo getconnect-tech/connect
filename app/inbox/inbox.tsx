@@ -41,7 +41,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
     null,
   );
   const [loading, setLoading] = useState(true); // Loading state added
-  const [toShowNotificationCard, setToShowNotificationCard] = useState(true);
+  const [toShowNotificationCard, setToShowNotificationCard] = useState(false);
   const [overDueCardDismissed, setOverDueCardDismissed] = useState(false);
   const { workspaceStore, ticketStore, userStore, settingStore } = useStores();
   const { currentWorkspace } = workspaceStore;
@@ -69,11 +69,11 @@ function Inbox({ activeNav, labelId }: InboxProps) {
 
   const shouldShowNotificationCard = useCallback(() => {
     const hasNotificationPermission = Notification.permission === 'granted';
-    if (hasNotificationPermission) {
+    const enableNotification =
+      UserPreferenceSingleton.getInstance().getEnableNotification();
+    if (hasNotificationPermission || !enableNotification) {
       setToShowNotificationCard(!hasNotificationPermission);
     } else {
-      const enableNotification =
-        UserPreferenceSingleton.getInstance().getEnableNotification();
       const currentTime = moment();
       const dismissTime = moment(enableNotification);
       setToShowNotificationCard(currentTime.isAfter(dismissTime));
@@ -182,16 +182,15 @@ function Inbox({ activeNav, labelId }: InboxProps) {
         </TopDiv>
         <div style={{ padding: '0 16px' }} onClick={onCloseNavbar}>
           <BottomDiv>
+            {userStore.user?.id && toShowNotificationCard && (
+              <NotificationCard
+                isShowNavbar={isNavbar}
+                onClose={onClickEnableNotification}
+              />
+            )}
             {loading &&
               (!filteredTicketList || filteredTicketList?.length === 0) && (
                 <InboxLoading />
-              )}
-            {(!loading || filteredTicketList?.length > 0) &&
-              toShowNotificationCard && (
-                <NotificationCard
-                  isShowNavbar={isNavbar}
-                  onClose={onClickEnableNotification}
-                />
               )}
             {(!loading || filteredTicketList?.length > 0) &&
               countOfUnassignOpenTicket?.length > 0 &&
