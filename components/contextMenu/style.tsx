@@ -17,6 +17,9 @@ const ContextMenuContent = styled(ContextMenu.Content)`
     border-bottom: var(--border-main);
     padding: 4px;
   }
+  @media screen and (max-width: 449px) {
+    display: none;
+  }
 `;
 
 const ContextMenuItem = styled(ContextMenu.Item)`

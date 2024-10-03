@@ -176,12 +176,15 @@ const ActivityDiv = styled.div`
   .avtar {
     position: absolute;
     top: 14px;
-    z-index: 1;
+    z-index: 11;
   }
   .avtar-internal {
     position: absolute;
     top: 6px;
-    z-index: 1;
+    z-index: 11;
+  }
+  .avtar-activity {
+    z-index: 11;
   }
 `;
 

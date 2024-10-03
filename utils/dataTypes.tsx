@@ -71,5 +71,5 @@ export type MessageSummary = {
 
 export type TicketSummary = {
   ticketSummary: string;
-  ticketSentiment: string;
+  contactSentiment: string;
 };

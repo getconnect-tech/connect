@@ -18,6 +18,10 @@ export const ModalDiv = styled.div`
       margin-bottom: 0;
     }
   }
+  @media screen and (max-width: 449px) {
+    min-width: 390px;
+    max-width: 390px;
+  }
 `;
 
 export const ModalHeader = styled.div`
