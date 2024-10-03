@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { AmplitudeUserSearchResponse } from '@/utils/dataTypes';
+import { AmplitudeEvent, AmplitudeUserSearchResponse } from '@/utils/dataTypes';
 
 const API_KEY = process.env.AMPLITUDE_API_KEY!;
 const SECRET_KEY = process.env.AMPLITUDE_SECRET_KEY!;
 
-const authHeader = Buffer.from(`${API_KEY}:${SECRET_KEY}`, 'base64');
+const authHeader = Buffer.from(`${API_KEY}:${SECRET_KEY}`).toString('base64');
 
 export const findUserByEmail = async (userEmail: string) => {
   const response = await axios.get(
@@ -31,6 +31,6 @@ export const getUserActivities = async (amplitudeId: string | number) => {
     },
   );
 
-  const userActivityData = response.data;
+  const userActivityData = response.data.events as AmplitudeEvent[];
   return userActivityData;
 };
