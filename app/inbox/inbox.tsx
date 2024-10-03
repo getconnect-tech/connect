@@ -51,7 +51,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
   const currentLabel = labels?.find((label) => label.id === labelId);
   const [isNavbar, setIsNavbar] = useState(false);
   const pathname = usePathname();
-  const countOfUnassigneOpenTicket = ticketList?.filter(
+  const countOfUnassignOpenTicket = ticketList?.filter(
     (ticket) =>
       ticket.status === TicketStatus.OPEN && ticket.assigned_to === null,
   );
@@ -69,7 +69,15 @@ function Inbox({ activeNav, labelId }: InboxProps) {
 
   const shouldShowNotificationCard = useCallback(() => {
     const hasNotificationPermission = Notification.permission === 'granted';
-    setToShowNotificationCard(!hasNotificationPermission);
+    if (hasNotificationPermission) {
+      setToShowNotificationCard(!hasNotificationPermission);
+    } else {
+      const enableNotification =
+        UserPreferenceSingleton.getInstance().getEnableNotification();
+      const currentTime = moment();
+      const dismissTime = moment(enableNotification);
+      setToShowNotificationCard(currentTime.isAfter(dismissTime));
+    }
   }, []);
 
   const shouldShowOverdueCard = useCallback(() => {
@@ -115,7 +123,11 @@ function Inbox({ activeNav, labelId }: InboxProps) {
     setOverDueCardDismissed(true);
   };
 
-  const handleNotificationCardClose = () => {
+  const onClickEnableNotification = () => {
+    const futureNotificationTime = moment().add(7, 'days').toISOString();
+    UserPreferenceSingleton.getInstance().setEnableNotification(
+      futureNotificationTime,
+    );
     setToShowNotificationCard(false);
   };
 
@@ -170,22 +182,23 @@ function Inbox({ activeNav, labelId }: InboxProps) {
         </TopDiv>
         <div style={{ padding: '0 16px' }} onClick={onCloseNavbar}>
           <BottomDiv>
-            {userStore.user?.id && toShowNotificationCard && (
-              <NotificationCard
-                isShowNavbar={isNavbar}
-                onClose={handleNotificationCardClose}
-              />
-            )}
             {loading &&
               (!filteredTicketList || filteredTicketList?.length === 0) && (
                 <InboxLoading />
               )}
             {(!loading || filteredTicketList?.length > 0) &&
-              countOfUnassigneOpenTicket?.length > 0 &&
+              toShowNotificationCard && (
+                <NotificationCard
+                  isShowNavbar={isNavbar}
+                  onClose={onClickEnableNotification}
+                />
+              )}
+            {(!loading || filteredTicketList?.length > 0) &&
+              countOfUnassignOpenTicket?.length > 0 &&
               !overDueCardDismissed &&
               pathname === '/inbox' && (
                 <OverdueCard
-                  countAssign={countOfUnassigneOpenTicket?.length}
+                  countAssign={countOfUnassignOpenTicket?.length}
                   onClickDismiss={onClickDismiss}
                   isShowNavbar={isNavbar}
                 />
