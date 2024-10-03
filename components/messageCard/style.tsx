@@ -26,6 +26,7 @@ const TagDiv = styled.div`
   color: var(--text-text-secondary);
   background-color: var(--bg-surface-secondary);
   border-radius: 30px;
+  white-space: nowrap;
   &:hover {
     cursor: pointer;
     color: var(--text);
@@ -78,6 +79,10 @@ const MessageCardMainDiv = styled.div`
   padding-left: 22px;
   margin-left: 10px;
   width: 100%;
+  @media screen and (max-width: 449px) {
+    padding-left: unset;
+    margin-left: unset;
+  }
 `;
 
 const NameDiv = styled.div`
@@ -87,6 +92,12 @@ const NameDiv = styled.div`
   span {
     ${Typography.body_md_regular}
     color: var(--text-text-secondary);
+  }
+  .avtar-message {
+    display: none;
+    @media screen and (max-width: 449px) {
+      display: flex;
+    }
   }
 `;
 

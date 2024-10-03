@@ -829,7 +829,7 @@ function TicketDetails(props: Props) {
               {messages?.map((message, index) => (
                 <div key={index}>
                   {renderActivityMessage(message)}
-                  {index !== messages?.length - 1 && <LineDiv />}
+                  {/* {index !== messages?.length - 1 && <LineDiv />} */}
                 </div>
               ))}
             </CenterDiv>

@@ -111,11 +111,17 @@ const InputDiv = styled.div`
     border-left: var(--border-main);
     margin-left: 10px;
     margin-top: -8px;
+    @media screen and (max-width: 449px) {
+      display: none;
+    }
   }
   .avtar {
     position: absolute;
     top: 12px;
     z-index: 1;
+    @media screen and (max-width: 449px) {
+      display: none;
+    }
   }
 `;
 
@@ -142,6 +148,9 @@ const Input = styled.div<Props>`
     flex-wrap: wrap;
     align-items: center;
     margin-bottom: 8px;
+  }
+  @media screen and (max-width: 449px) {
+    margin-left: unset;
   }
 `;
 
@@ -188,21 +197,31 @@ const ActivityDiv = styled.div`
     position: absolute;
     top: 14px;
     z-index: 11;
+    @media screen and (max-width: 449px) {
+      display: none;
+    }
   }
   .avtar-internal {
     position: absolute;
     top: 6px;
     z-index: 11;
+    @media screen and (max-width: 449px) {
+      display: none;
+    }
   }
   .avtar-activity {
     z-index: 11;
+    @media screen and (max-width: 449px) {
+      margin-left: 12px;
+      z-index: 1;
+    }
   }
 `;
 
 const Message = styled.p`
   ${Typography.body_md_regular};
   color: var(--text);
-  border-left: var(--border-main);
+  /* border-left: var(--border-main); */
   padding-left: 22px;
   margin-left: -22px;
   span {
@@ -211,6 +230,9 @@ const Message = styled.p`
   }
   svg {
     margin: 0 8px 3px;
+  }
+  @media screen and (max-width: 449px) {
+    padding-left: 18px;
   }
 `;
 
@@ -239,8 +261,9 @@ const IconDiv = styled.div<Props>`
 const CenterMainDiv = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 20px;
+  padding: 0 16px;
   height: calc(100% - 82px);
+  background-color: var(--bg-surface);
 `;
 export {
   Main,

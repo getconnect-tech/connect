@@ -13,6 +13,10 @@ const MainDiv = styled.div`
       display: flex;
     }
   }
+  @media screen and (max-width: 449px) {
+    padding-left: unset;
+    margin-left: unset;
+  }
 `;
 
 const Div = styled.div`

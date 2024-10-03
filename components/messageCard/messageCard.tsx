@@ -5,6 +5,7 @@ import moment from 'moment';
 import RenderHtml from '../renderHtml';
 import DropDown from '../dropDown/dropDown';
 import FileCard from '../fileCard/fileCard';
+import Avatar from '../avtar/Avtar';
 import {
   AttachmentMainDiv,
   CardHead,
@@ -22,6 +23,7 @@ import {
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { MessageAttachment, ReadBy } from '@/utils/dataTypes';
+import { ticketStore } from '@/stores/ticketStore';
 
 interface Props {
   title: string;
@@ -44,6 +46,8 @@ export default function MessageCard({
   const [submenuPosition, setSubmenuPosition] = useState<
     'upwards' | 'downwards'
   >('upwards');
+  const { ticketDetails } = ticketStore || {};
+  const { contact } = ticketDetails || {};
 
   const getDuration = (lastSeen: Date) => {
     const lastSeenMoment = moment(lastSeen);
@@ -113,24 +117,40 @@ export default function MessageCard({
         <CardTop>
           <CardHead>
             <NameDiv>
-              <NameTitle>{title}</NameTitle>
-              <SVGIcon
-                name='dot-icon'
-                width='4'
-                height='4'
-                fill='none'
-                viewBox='0 0 4 4'
-              />
-              <span>{moment(time).fromNow()}</span>
+              <div className='avtar-message'>
+                <Avatar imgSrc={''} name={contact?.name || ''} size={20} />
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <NameTitle>{title}</NameTitle>
+                <SVGIcon
+                  name='dot-icon'
+                  width='4'
+                  height='4'
+                  fill='none'
+                  viewBox='0 0 4 4'
+                  style={{ margin: '0 6px' }}
+                />
+                <span>{moment(time).fromNow()}</span>
+              </div>
             </NameDiv>
             <p>{subTitle}</p>
           </CardHead>
           {dropdownItems && dropdownItems.length > 0 && (
-            <TagDiv
-              onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
-              onMouseLeave={handleMouseLeave}
-            >
-              Seen
+            <div>
+              <TagDiv
+                onMouseEnter={(e: any) =>
+                  handleMouseEnter(e, setSubmenuPosition)
+                }
+                onMouseLeave={handleMouseLeave}
+              >
+                Seen
+              </TagDiv>
               {isDropdownVisible && (
                 <DropDown
                   items={dropdownItems}
@@ -151,7 +171,7 @@ export default function MessageCard({
                   }
                 />
               )}
-            </TagDiv>
+            </div>
           )}
         </CardTop>
         <CardMessage>
