@@ -864,7 +864,7 @@ function TicketDetails(props: Props) {
             </ButtonDiv>
           </StatusDiv>
         </TopDiv>
-        {isProfileSection && screenWidth <= 449 ? (
+        {isProfileSection && screenWidth <= 768 ? (
           <ResponsiveProfileSection />
         ) : (
           <CenterMainDiv>

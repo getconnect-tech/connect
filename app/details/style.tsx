@@ -51,7 +51,7 @@ const HeaderDiv = styled.div`
   .sidebar-icon {
     display: none;
   }
-  @media screen and (max-width: 449px) {
+  @media screen and (max-width: 768px) {
     padding: 7px 16px;
     .sidebar-icon {
       display: flex;

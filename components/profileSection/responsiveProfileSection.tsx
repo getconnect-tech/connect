@@ -21,7 +21,6 @@ export default function ResponsiveProfileSection() {
 
   return (
     <ResponsiveMainDiv>
-      {/* <MainDiv> */}
       <AIBlock />
       <ProfileDiv>
         <Avatar
@@ -73,7 +72,6 @@ export default function ResponsiveProfileSection() {
       </DetailsProfileDiv>
       <WorkDetails />
       <RecentEvent />
-      {/* </MainDiv> */}
     </ResponsiveMainDiv>
   );
 }

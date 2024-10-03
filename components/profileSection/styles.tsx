@@ -5,7 +5,7 @@ const MainDiv = styled.div`
   max-width: 315px;
   width: 100%;
   overflow: auto;
-  @media screen and (max-width: 449px) {
+  @media screen and (max-width: 768px) {
     display: none;
   }
 `;
@@ -250,9 +250,6 @@ const ResponsiveMainDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  @media screen and (min-width: 448px) {
-    display: none;
-  }
 `;
 export {
   MainDiv,
