@@ -244,6 +244,16 @@ const ReplyCard = styled.div`
   cursor: pointer;
 `;
 
+const ResponsiveMainDiv = styled.div`
+  width: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  @media screen and (min-width: 448px) {
+    display: none;
+  }
+`;
 export {
   MainDiv,
   ProfileDiv,
@@ -270,4 +280,5 @@ export {
   ReplyButton,
   QuestionMainDiv,
   ReplyCard,
+  ResponsiveMainDiv,
 };

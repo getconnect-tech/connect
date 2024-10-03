@@ -1,17 +1,18 @@
 /* eslint-disable indent */
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Typography } from '../../styles/typography';
 import { DropDownItem } from '@/components/dropDown/dropDown';
 
 interface Props {
   modeSelectedItem?: DropDownItem;
   isMargin?: boolean;
+  isProfileSection?: boolean;
 }
 
-const Main = styled.div`
+const Main = styled.div<Props>`
   display: flex;
   background-color: var(--bg-surface);
-  height: 100vh;
+  height: ${({ isProfileSection }) => (isProfileSection ? '100%' : '100vh')};
 `;
 
 const TopDiv = styled.div`
@@ -47,8 +48,15 @@ const HeaderDiv = styled.div`
   gap: 20px;
   justify-content: space-between;
   padding: 7px 20px;
+  .sidebar-icon {
+    display: none;
+  }
   @media screen and (max-width: 449px) {
     padding: 7px 16px;
+    .sidebar-icon {
+      display: flex;
+      margin-right: 8px;
+    }
   }
 `;
 
@@ -63,7 +71,7 @@ const Title = styled.div`
   color: var(--text);
 `;
 
-const StatusDiv = styled.div`
+const StatusDiv = styled.div<Props>`
   display: flex;
   gap: 8px;
   align-items: center;
@@ -76,6 +84,11 @@ const StatusDiv = styled.div`
     flex-direction: column;
     align-items: flex-start;
   }
+  ${(props) =>
+    props.isProfileSection &&
+    css`
+      display: none;
+    `}
 `;
 
 const ButtonDiv = styled.div`

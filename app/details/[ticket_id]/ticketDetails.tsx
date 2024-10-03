@@ -72,6 +72,7 @@ import LabelDropdown from '@/components/labelDropdown/labelDropdown';
 import { getMacros } from '@/services/clientSide/settingServices';
 import FileCard from '@/components/fileCard/fileCard';
 import ProsemirrorEditor from '@/components/prosemirror';
+import ResponsiveProfileSection from '@/components/profileSection/responsiveProfileSection';
 
 interface Props {
   ticket_id: string;
@@ -101,6 +102,7 @@ function TicketDetails(props: Props) {
   const { priority, assigned_to, contact } = ticketDetails || {};
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [macroDropdown, setMacroDropdown] = useState(false);
+  const [isProfileSection, setIsProfileSection] = useState(false);
   const [modeSelectedItem, setModeSelectedItem] = useState<DropDownItem>({
     name: 'Email',
     icon: 'email-icon',
@@ -112,6 +114,10 @@ function TicketDetails(props: Props) {
   const handleModeItemChange = (item: DropDownItem) => {
     setModeSelectedItem(item);
   };
+
+  const onClickIcon = useCallback(() => {
+    setIsProfileSection((prevState) => !prevState); // Toggle the state
+  }, []);
 
   const handleMacroSelect = useCallback(
     (selectedMacro: { content: string; name: string }) => {
@@ -726,8 +732,25 @@ function TicketDetails(props: Props) {
     [messageRefId, ticket_id, attachFile],
   );
 
+  // eslint-disable-next-line no-undef
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      // eslint-disable-next-line no-undef
+      setScreenWidth(window.innerWidth);
+    };
+
+    // eslint-disable-next-line no-undef
+    window.addEventListener('resize', handleResize);
+    return () => {
+      // eslint-disable-next-line no-undef
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
-    <Main>
+    <Main isProfileSection={isProfileSection}>
       <MainDiv>
         <TopDiv>
           <HeaderDiv>
@@ -750,8 +773,26 @@ function TicketDetails(props: Props) {
               iconSize='16'
               iconViewBox='0 0 16 16'
             /> */}
+            <Icon
+              iconName={
+                isProfileSection
+                  ? 'profile-sidebar-active-icon'
+                  : 'profile-sidebar-icon'
+              }
+              iconSize='16'
+              iconViewBox='0 0 16 16'
+              className='sidebar-icon'
+              onClick={onClickIcon}
+            />
+            {/* <Icon
+              iconName='profile-sidebar-active-icon'
+              iconSize='16'
+              iconViewBox='0 0 16 16'
+              className='sidebar-icon'
+              onClick={onClickIcon}
+            /> */}
           </HeaderDiv>
-          <StatusDiv>
+          <StatusDiv isProfileSection={isProfileSection}>
             <ButtonDiv>
               <LabelDropdown
                 handleClick={handleTicketLabel}
@@ -823,154 +864,158 @@ function TicketDetails(props: Props) {
             </ButtonDiv>
           </StatusDiv>
         </TopDiv>
-        <CenterMainDiv>
-          <BottomDiv>
-            <CenterDiv ref={messagesEndRef}>
-              {messages?.map((message, index) => (
-                <div key={index}>
-                  {renderActivityMessage(message)}
-                  {/* {index !== messages?.length - 1 && <LineDiv />} */}
-                </div>
-              ))}
-            </CenterDiv>
-          </BottomDiv>
-          <InputDiv>
-            <div className='input-main-div'>
-              <div className='line' />
-              <div className='avtar'>
-                <Avatar
-                  imgSrc={user?.profile_url || ''}
-                  size={20}
-                  name={user?.display_name || ''}
-                />
-              </div>
-              <Input modeSelectedItem={modeSelectedItem}>
-                <ProsemirrorEditor
-                  ref={editorRef}
-                  setValueContent={setCommentValue}
-                />
-                <div className='attach-file-div'>
-                  {/* Attached Files render */}
-                  {attachFile?.map((fileData, index: number) => (
-                    <FileCard
-                      key={index}
-                      documentText={fileData?.fileName || 'Uploaded file'}
-                      fileSize={`${fileData?.size}`}
-                      fileName={fileData?.fileName}
-                      url={fileData?.downloadUrl}
-                      type={fileData?.contentType}
-                    />
-                  ))}
-                </div>
-                {uploadLoading !== null && (
-                  <p className='loading-text'>
-                    Loading...({Math.floor(uploadLoading)}%)
-                  </p>
-                )}
-                <InputIcon>
-                  <div className='drop-tag'>
-                    <DropDownWithTag
-                      onClick={handleMessageModeTag}
-                      selectedValue={modeSelectedItem}
-                      dropdownOpen={messageModeDropdown}
-                      title='Email'
-                      onClose={() => {
-                        setMessageModeDropdown(false);
-                      }}
-                      items={modeItem}
-                      onChange={handleModeItemChange}
-                      isTag={true}
-                      iconName={modeSelectedItem?.icon}
-                      iconSize='12'
-                      iconViewBox='0 0 12 12'
-                      isActive={messageModeDropdown ? true : false}
-                      className={
-                        submenuPosition === 'upwards'
-                          ? 'submenu-upwards'
-                          : 'submenu-downwards'
-                      }
-                      onMouseEnter={(e: any) =>
-                        handleMouseEnter(e, setSubmenuPosition)
-                      }
-                      dropDownStyle={{ maxWidth: 142, width: '100%' }}
-                      tagStyle={{
-                        backgroundColor: (() => {
-                          if (modeSelectedItem?.name === 'Email') {
-                            return `var(--bg-surface-secondary)`;
-                          } else if (modeSelectedItem?.name === 'Internal') {
-                            return `var(--bg-surface-secondary-hover)`;
-                          } else {
-                            return undefined;
-                          }
-                        })(),
-                      }}
-                    />
-                    {(macros.length > 0 ||
-                      currentWorkspace?.role === UserRole.OWNER ||
-                      currentWorkspace?.role === UserRole.ADMIN) && (
-                      <div className='tag-div'>
-                        <Icon
-                          iconName='sticky-note-icon'
-                          iconSize='12'
-                          iconViewBox='0 0 12 12'
-                          size={true}
-                          onClick={handleMacroItem}
-                          isActive={true}
-                        />
-                        {macroDropdown && (
-                          <DropDown
-                            items={macros}
-                            labelField='title'
-                            onClose={handleOutsideClick}
-                            onChange={handleMacroSelect}
-                            iconSize={''}
-                            iconViewBox={''}
-                            style={{
-                              bottom: 52,
-                              maxWidth: 146,
-                              width: '100%',
-                            }}
-                            isMacro={
-                              currentWorkspace?.role === UserRole.OWNER ||
-                              currentWorkspace?.role === UserRole.ADMIN
-                            }
-                          />
-                        )}
-                      </div>
-                    )}
+        {isProfileSection && screenWidth <= 449 ? (
+          <ResponsiveProfileSection />
+        ) : (
+          <CenterMainDiv>
+            <BottomDiv>
+              <CenterDiv ref={messagesEndRef}>
+                {messages?.map((message, index) => (
+                  <div key={index}>
+                    {renderActivityMessage(message)}
+                    {/* {index !== messages?.length - 1 && <LineDiv />} */}
                   </div>
-                  <IconDiv modeSelectedItem={modeSelectedItem}>
-                    <Icon
-                      iconName='attach-icon'
-                      iconSize='12'
-                      iconViewBox='0 0 12 12'
-                      size={true}
-                      onClick={handleFileInput}
-                    />
-                    <Icon
-                      onClick={() =>
-                        handleCommentSend(commentValue, modeSelectedItem.name)
-                      }
-                      iconName='send-icon'
-                      iconSize='12'
-                      iconViewBox='0 0 12 12'
-                      size={true}
-                      isActive={true}
-                      className='icon'
-                    />
-                  </IconDiv>
-                </InputIcon>
-                <input
-                  type='file'
-                  ref={fileInputRef}
-                  style={{ display: 'none' }}
-                  onChange={onFileUpload}
-                  multiple
-                />
-              </Input>
-            </div>
-          </InputDiv>
-        </CenterMainDiv>
+                ))}
+              </CenterDiv>
+            </BottomDiv>
+            <InputDiv>
+              <div className='input-main-div'>
+                <div className='line' />
+                <div className='avtar'>
+                  <Avatar
+                    imgSrc={user?.profile_url || ''}
+                    size={20}
+                    name={user?.display_name || ''}
+                  />
+                </div>
+                <Input modeSelectedItem={modeSelectedItem}>
+                  <ProsemirrorEditor
+                    ref={editorRef}
+                    setValueContent={setCommentValue}
+                  />
+                  <div className='attach-file-div'>
+                    {/* Attached Files render */}
+                    {attachFile?.map((fileData, index: number) => (
+                      <FileCard
+                        key={index}
+                        documentText={fileData?.fileName || 'Uploaded file'}
+                        fileSize={`${fileData?.size}`}
+                        fileName={fileData?.fileName}
+                        url={fileData?.downloadUrl}
+                        type={fileData?.contentType}
+                      />
+                    ))}
+                  </div>
+                  {uploadLoading !== null && (
+                    <p className='loading-text'>
+                      Loading...({Math.floor(uploadLoading)}%)
+                    </p>
+                  )}
+                  <InputIcon>
+                    <div className='drop-tag'>
+                      <DropDownWithTag
+                        onClick={handleMessageModeTag}
+                        selectedValue={modeSelectedItem}
+                        dropdownOpen={messageModeDropdown}
+                        title='Email'
+                        onClose={() => {
+                          setMessageModeDropdown(false);
+                        }}
+                        items={modeItem}
+                        onChange={handleModeItemChange}
+                        isTag={true}
+                        iconName={modeSelectedItem?.icon}
+                        iconSize='12'
+                        iconViewBox='0 0 12 12'
+                        isActive={messageModeDropdown ? true : false}
+                        className={
+                          submenuPosition === 'upwards'
+                            ? 'submenu-upwards'
+                            : 'submenu-downwards'
+                        }
+                        onMouseEnter={(e: any) =>
+                          handleMouseEnter(e, setSubmenuPosition)
+                        }
+                        dropDownStyle={{ maxWidth: 142, width: '100%' }}
+                        tagStyle={{
+                          backgroundColor: (() => {
+                            if (modeSelectedItem?.name === 'Email') {
+                              return `var(--bg-surface-secondary)`;
+                            } else if (modeSelectedItem?.name === 'Internal') {
+                              return `var(--bg-surface-secondary-hover)`;
+                            } else {
+                              return undefined;
+                            }
+                          })(),
+                        }}
+                      />
+                      {(macros.length > 0 ||
+                        currentWorkspace?.role === UserRole.OWNER ||
+                        currentWorkspace?.role === UserRole.ADMIN) && (
+                        <div className='tag-div'>
+                          <Icon
+                            iconName='sticky-note-icon'
+                            iconSize='12'
+                            iconViewBox='0 0 12 12'
+                            size={true}
+                            onClick={handleMacroItem}
+                            isActive={true}
+                          />
+                          {macroDropdown && (
+                            <DropDown
+                              items={macros}
+                              labelField='title'
+                              onClose={handleOutsideClick}
+                              onChange={handleMacroSelect}
+                              iconSize={''}
+                              iconViewBox={''}
+                              style={{
+                                bottom: 52,
+                                maxWidth: 146,
+                                width: '100%',
+                              }}
+                              isMacro={
+                                currentWorkspace?.role === UserRole.OWNER ||
+                                currentWorkspace?.role === UserRole.ADMIN
+                              }
+                            />
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    <IconDiv modeSelectedItem={modeSelectedItem}>
+                      <Icon
+                        iconName='attach-icon'
+                        iconSize='12'
+                        iconViewBox='0 0 12 12'
+                        size={true}
+                        onClick={handleFileInput}
+                      />
+                      <Icon
+                        onClick={() =>
+                          handleCommentSend(commentValue, modeSelectedItem.name)
+                        }
+                        iconName='send-icon'
+                        iconSize='12'
+                        iconViewBox='0 0 12 12'
+                        size={true}
+                        isActive={true}
+                        className='icon'
+                      />
+                    </IconDiv>
+                  </InputIcon>
+                  <input
+                    type='file'
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    onChange={onFileUpload}
+                    multiple
+                  />
+                </Input>
+              </div>
+            </InputDiv>
+          </CenterMainDiv>
+        )}
       </MainDiv>
       <ProfileSection />
     </Main>
