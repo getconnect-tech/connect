@@ -73,3 +73,15 @@ export type TicketSummary = {
   ticketSummary: string;
   contactSentiment: string;
 };
+
+export type AmplitudeUserSearchResponse =
+  | {
+      matches: [
+        {
+          user_id: string;
+          amplitude_id: number;
+        },
+      ];
+      type: 'match_user_or_device_id';
+    }
+  | { type: 'nomatch'; matches: [] };
