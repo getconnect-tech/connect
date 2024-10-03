@@ -1,7 +1,11 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Typography } from '@/styles/typography';
 
-const MainDiv = styled.div`
+interface Props {
+  isShowNavbar: boolean;
+}
+
+const MainDiv = styled.div<Props>`
   width: 100%;
   border-radius: 12px;
   padding: 12px 12px 12px 8px;
@@ -11,6 +15,13 @@ const MainDiv = styled.div`
   &:hover {
     box-shadow: var(--shadow-card-hover);
   }
+  ${(props) =>
+    props.isShowNavbar &&
+    css`
+      @media screen and (max-width: 449px) {
+        min-width: 361px;
+      }
+    `}
 `;
 const MainCardDiv = styled.div`
   display: flex;

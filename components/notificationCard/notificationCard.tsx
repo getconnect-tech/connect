@@ -13,7 +13,11 @@ import {
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 
-function NotificationCard() {
+interface Props {
+  isShowNavbar: boolean;
+}
+
+function NotificationCard({ isShowNavbar }: Props) {
   const router = useRouter();
 
   const redirectToUnassigned = useCallback(() => {
@@ -21,7 +25,7 @@ function NotificationCard() {
   }, []);
 
   return (
-    <MainDiv>
+    <MainDiv isShowNavbar={isShowNavbar}>
       <MainCardDiv>
         <ProfileDiv>
           <SVGIcon

@@ -134,7 +134,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
         </TopDiv>
         <div style={{ padding: '0 16px' }} onClick={onCloseNavbar}>
           <BottomDiv>
-            <NotificationCard />
+            <NotificationCard isShowNavbar={isNavbar} />
             {loading &&
               (!filteredTicketList || filteredTicketList?.length === 0) && (
                 <InboxLoading />
@@ -145,6 +145,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
                   countAssign={
                     ticketList.filter((ticket) => ticket.assigned_to).length
                   }
+                  isShowNavbar={isNavbar}
                 />
               )}
             {!loading &&

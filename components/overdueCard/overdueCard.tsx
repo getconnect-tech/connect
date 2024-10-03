@@ -14,8 +14,9 @@ import {
 import SVGIcon from '@/assets/icons/SVGIcon';
 interface Props {
   countAssign: number;
+  isShowNavbar: boolean;
 }
-function OverdueCard({ countAssign }: Props) {
+function OverdueCard({ countAssign, isShowNavbar }: Props) {
   const router = useRouter();
 
   const redirectToUnassigned = useCallback(() => {
@@ -23,7 +24,7 @@ function OverdueCard({ countAssign }: Props) {
   }, []);
 
   return (
-    <MainDiv>
+    <MainDiv isShowNavbar={isShowNavbar}>
       <MainCardDiv>
         <ProfileDiv>
           <SVGIcon
