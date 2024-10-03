@@ -143,3 +143,10 @@ export type AmplitudeEvent = {
   raw_event_type: string;
   os: null;
 };
+
+export type UserActivity = {
+  event_id: number;
+  event_type: string;
+  event_time: string;
+  event_properties: object;
+};
