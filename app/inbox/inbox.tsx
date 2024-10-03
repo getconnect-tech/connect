@@ -3,6 +3,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { usePathname } from 'next/navigation';
+import moment from 'moment';
+import { TicketStatus } from '@prisma/client';
 import {
   BottomDiv,
   HeaderDiv,
@@ -23,6 +25,7 @@ import EmptyState from '@/components/emptyState/emptyState';
 import InboxLoading from '@/components/inboxLoading/inboxLoading';
 import { NAVBAR, TICKETS_HEADER } from '@/global/constants';
 import OverdueCard from '@/components/overdueCard/overdueCard';
+import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
 import Icon from '@/components/icon/icon';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 
@@ -37,6 +40,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
     null,
   );
   const [loading, setLoading] = useState(true); // Loading state added
+  const [overDueCardDismissed, setOverDueCardDismissed] = useState(false);
   const { workspaceStore, ticketStore, userStore, settingStore } = useStores();
   const { currentWorkspace } = workspaceStore;
   const { ticketList, filteredTicketList } = ticketStore;
@@ -45,6 +49,10 @@ function Inbox({ activeNav, labelId }: InboxProps) {
   const currentLabel = labels?.find((label) => label.id === labelId);
   const [isNavbar, setIsNavbar] = useState(false);
   const pathname = usePathname();
+  const countOfUnassigneOpenTicket = ticketList?.filter(
+    (ticket) =>
+      ticket.status === TicketStatus.OPEN && ticket.assigned_to === null,
+  );
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
@@ -56,6 +64,16 @@ function Inbox({ activeNav, labelId }: InboxProps) {
       }
     }
   }, [currentWorkspace?.id]);
+
+  const shouldShowOverdueCard = useCallback(() => {
+    const unAssignedDismissTime =
+      UserPreferenceSingleton.getInstance().getAssignedDismiss();
+    if (unAssignedDismissTime) {
+      const currentTime = moment();
+      const dismissTime = moment(unAssignedDismissTime);
+      setOverDueCardDismissed(!currentTime.isAfter(dismissTime));
+    }
+  }, []);
 
   const displayTicketList = useCallback(() => {
     // Filter ticket based on activeTab
@@ -84,12 +102,19 @@ function Inbox({ activeNav, labelId }: InboxProps) {
     ticketStore.setFilteredTicketList(activeTab, filteredTickets);
   }, [activeTab, activeNav, ticketList, user, ticketStore]);
 
+  const onClickDismiss = () => {
+    const futureTime = moment().add(24, 'hours').toISOString();
+    UserPreferenceSingleton.getInstance().setAssignedDismiss(futureTime);
+    setOverDueCardDismissed(true);
+  };
+
   useEffect(() => {
     displayTicketList();
   }, [activeTab, ticketList]);
 
   useEffect(() => {
     loadData();
+    shouldShowOverdueCard();
   }, [loadData]);
 
   const onClickIcon = useCallback(() => {
@@ -138,7 +163,14 @@ function Inbox({ activeNav, labelId }: InboxProps) {
                 <InboxLoading />
               )}
             {(!loading || filteredTicketList?.length > 0) &&
-              pathname === '/inbox' && <OverdueCard />}
+              countOfUnassigneOpenTicket?.length > 0 &&
+              !overDueCardDismissed &&
+              pathname === '/inbox' && (
+                <OverdueCard
+                  countAssign={countOfUnassigneOpenTicket?.length}
+                  onClickDismiss={onClickDismiss}
+                />
+              )}
             {!loading &&
               (!filteredTicketList || filteredTicketList?.length === 0) && (
                 <EmptyState

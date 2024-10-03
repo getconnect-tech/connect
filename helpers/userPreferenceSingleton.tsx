@@ -62,6 +62,10 @@ export default class UserPreferenceSingleton {
     return 'current_workspace';
   }
 
+  static get UNASSIGNED_DISMISS() {
+    return 'unassigned_dismiss';
+  }
+
   constructor(enforcer: any) {
     if (enforcer !== singletonEnforcer)
       throw new Error('Cannot construct singleton');
@@ -95,6 +99,20 @@ export default class UserPreferenceSingleton {
   setCurrentWorkspace(value: string) {
     return this.userPreferences.set(
       UserPreferenceSingleton.CURRENT_WORKSPACE,
+      value,
+    );
+  }
+
+  getAssignedDismiss() {
+    return this.userPreferences.get(
+      UserPreferenceSingleton.UNASSIGNED_DISMISS,
+      undefined,
+    );
+  }
+
+  setAssignedDismiss(value: string) {
+    return this.userPreferences.set(
+      UserPreferenceSingleton.UNASSIGNED_DISMISS,
       value,
     );
   }
