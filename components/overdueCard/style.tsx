@@ -69,6 +69,7 @@ const ButtonSection = styled.div`
   a {
     ${Typography.body_sm_medium}
     color: var(--text-link);
+    cursor: pointer;
   }
 `;
 
