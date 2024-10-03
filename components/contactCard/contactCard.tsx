@@ -21,6 +21,7 @@ interface Props {
   openCount: string;
   closeCount: string;
   peopleCount?: string;
+  isShowNavbar: boolean;
 }
 
 export default function ContactCard({
@@ -33,9 +34,10 @@ export default function ContactCard({
   openCount,
   closeCount,
   peopleCount,
+  isShowNavbar,
 }: Props) {
   return (
-    <CardMainDiv>
+    <CardMainDiv isShowNavbar={isShowNavbar}>
       <LeftDiv>
         <Avatar
           imgSrc={imgSrc}

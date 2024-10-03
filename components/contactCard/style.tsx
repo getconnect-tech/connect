@@ -1,6 +1,11 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Typography } from '@/styles/typography';
-const CardMainDiv = styled.div`
+
+interface Props {
+  isShowNavbar: boolean;
+}
+
+const CardMainDiv = styled.div<Props>`
   padding: 8px 12px;
   display: flex;
   justify-content: space-between;
@@ -14,6 +19,13 @@ const CardMainDiv = styled.div`
     gap: 4px;
     align-items: baseline;
   }
+  ${(props) =>
+    props.isShowNavbar &&
+    css`
+      @media screen and (max-width: 449px) {
+        min-width: 361px;
+      }
+    `}
 `;
 
 const LeftDiv = styled.div`
