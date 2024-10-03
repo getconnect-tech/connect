@@ -103,6 +103,12 @@ const Buttons = styled.button<WrapButton>`
       ${Typography.body_sm_medium}
     `}
     ${(props) =>
+    props.variant === 'small' &&
+    css`
+      ${Typography.body_sm_medium}
+      padding: 6px 16px;
+    `}
+    ${(props) =>
     props.isDelete &&
     css`
       background-color: var(--fill-danger);
