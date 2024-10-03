@@ -12,10 +12,8 @@ import {
   Title,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
-interface Props {
-  countAssign: number;
-}
-function OverdueCard({ countAssign }: Props) {
+
+function NotificationCard() {
   const router = useRouter();
 
   const redirectToUnassigned = useCallback(() => {
@@ -27,7 +25,7 @@ function OverdueCard({ countAssign }: Props) {
       <MainCardDiv>
         <ProfileDiv>
           <SVGIcon
-            name='users-icon'
+            name='notification-icon'
             width='14'
             height='14'
             viewBox='0 0 14 14'
@@ -35,20 +33,20 @@ function OverdueCard({ countAssign }: Props) {
         </ProfileDiv>
         <RightSection>
           <ContentDiv>
-            <Title>{countAssign} unassigned tickets awaiting attention!</Title>
+            <Title>Enable notifications and Stay in the Loop!</Title>
             <Description>
-              Assign these tickets to the relevant team members to ensure a
-              quick resolution.
+              Enable notifications to receive real-time updates on ticket
+              progress, new assignments, and important messages.
             </Description>
           </ContentDiv>
           <ButtonSection>
             <Button
               onClick={redirectToUnassigned}
-              title='View Tickets'
+              title='Enable Notifications'
               secondary
               variant='small'
             />
-            <a>Dismiss</a>
+            <a>No, Thanks</a>
           </ButtonSection>
         </RightSection>
       </MainCardDiv>
@@ -56,4 +54,4 @@ function OverdueCard({ countAssign }: Props) {
   );
 }
 
-export default OverdueCard;
+export default NotificationCard;

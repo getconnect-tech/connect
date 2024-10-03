@@ -25,6 +25,7 @@ import { NAVBAR, TICKETS_HEADER } from '@/global/constants';
 import OverdueCard from '@/components/overdueCard/overdueCard';
 import Icon from '@/components/icon/icon';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
+import NotificationCard from '@/components/notificationCard/notificationCard';
 
 interface InboxProps {
   activeNav?: number;
@@ -133,12 +134,19 @@ function Inbox({ activeNav, labelId }: InboxProps) {
         </TopDiv>
         <div style={{ padding: '0 16px' }} onClick={onCloseNavbar}>
           <BottomDiv>
+            <NotificationCard />
             {loading &&
               (!filteredTicketList || filteredTicketList?.length === 0) && (
                 <InboxLoading />
               )}
             {(!loading || filteredTicketList?.length > 0) &&
-              pathname === '/inbox' && <OverdueCard />}
+              pathname === '/inbox' && (
+                <OverdueCard
+                  countAssign={
+                    ticketList.filter((ticket) => ticket.assigned_to).length
+                  }
+                />
+              )}
             {!loading &&
               (!filteredTicketList || filteredTicketList?.length === 0) && (
                 <EmptyState

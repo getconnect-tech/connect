@@ -26,7 +26,7 @@ const ProfileDiv = styled.div`
   height: 28px;
   border-radius: 50%;
   margin-left: 13px;
-  background-color: var(--fill-danger);
+  background-color: var(--text-warning);
 `;
 
 const RightSection = styled.div`
