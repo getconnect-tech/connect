@@ -43,7 +43,12 @@ function NotificationCard({ isShowNavbar }: Props) {
               secondary
               variant='small'
             />
-            <a>No, Thanks</a>
+            <Button
+              title='No, Thanks'
+              isLink={true}
+              className='link-button'
+              variant='small'
+            />
           </ButtonSection>
         </RightSection>
       </MainCardDiv>
