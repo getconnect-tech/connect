@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite';
 import { usePathname } from 'next/navigation';
 import moment from 'moment';
 import { TicketStatus } from '@prisma/client';
-import OneSignal from 'react-onesignal';
 import {
   BottomDiv,
   HeaderDiv,
