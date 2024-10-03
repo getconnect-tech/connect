@@ -5,6 +5,9 @@ const MainDiv = styled.div`
   max-width: 315px;
   width: 100%;
   overflow: auto;
+  @media screen and (max-width: 449px) {
+    display: none;
+  }
 `;
 
 const ProfileDiv = styled.div`

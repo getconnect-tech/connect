@@ -36,6 +36,9 @@ const MainDiv = styled.div`
   width: 100%;
   margin-left: 223px;
   border-right: var(--border-main);
+  @media screen and (max-width: 449px) {
+    margin-left: unset;
+  }
 `;
 
 const HeaderDiv = styled.div`
@@ -44,6 +47,9 @@ const HeaderDiv = styled.div`
   gap: 20px;
   justify-content: space-between;
   padding: 7px 20px;
+  @media screen and (max-width: 449px) {
+    padding: 7px 16px;
+  }
 `;
 
 const LeftDiv = styled.div`
@@ -65,6 +71,11 @@ const StatusDiv = styled.div`
   padding: 9px 20px;
   border-top: var(--border-main);
   position: relative;
+  @media screen and (max-width: 449px) {
+    padding: 9px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const ButtonDiv = styled.div`
