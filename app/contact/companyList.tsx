@@ -1,7 +1,10 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ListMainDiv } from './style';
 import ContactCard from '@/components/contactCard/contactCard';
+import { getContactData } from '@/services/clientSide/contactServices';
+import { isEmpty } from '@/helpers/common';
+import ContactsLoading from '@/components/contactsLoading/contactsLoading';
 
 const cardData = [
   {
@@ -34,20 +37,45 @@ const cardData = [
 ];
 
 export default function PersonList() {
+  const [loading, setLoading] = useState(true); // Loading state added
+  const loadData = useCallback(async () => {
+    if (!isEmpty(cardData)) {
+      setLoading(true);
+      try {
+        await getContactData();
+      } catch (err: any) {
+        console.error('Error fetching contact data:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+  }, [cardData]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
   return (
-    <ListMainDiv>
-      {cardData.map((card, index) => (
-        <ContactCard
-          key={index}
-          imgSrc={card.imgSrc}
-          name={card.name}
-          email={card.email}
-          openCount={card.openCount}
-          closeCount={card.closeCount}
-          isCompany={false}
-          peopleCount={card.peopleCount}
-        />
-      ))}
-    </ListMainDiv>
+    <>
+      {loading && (!cardData || cardData.length === 0) ? (
+        <ContactsLoading />
+      ) : (
+        <>
+          <ListMainDiv>
+            {cardData.map((card, index) => (
+              <ContactCard
+                key={index}
+                imgSrc={card.imgSrc}
+                name={card.name}
+                email={card.email}
+                openCount={card.openCount}
+                closeCount={card.closeCount}
+                isCompany={false}
+                peopleCount={card.peopleCount}
+              />
+            ))}
+          </ListMainDiv>
+        </>
+      )}
+    </>
   );
 }

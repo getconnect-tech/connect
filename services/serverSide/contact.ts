@@ -1,4 +1,5 @@
 import { TicketStatus } from '@prisma/client';
+import moment from 'moment';
 import { prisma } from '@/prisma/prisma';
 import { findUserByEmail, getUserActivities } from '@/lib/amplitude';
 
@@ -105,7 +106,7 @@ export const getActivities = async (email: string) => {
     return {
       event_id,
       event_type,
-      event_time,
+      event_time: moment(event_time + 'UTC'),
       event_properties,
     };
   });
