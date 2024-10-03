@@ -9,6 +9,11 @@ const CardMainDiv = styled.div`
   &:last-child {
     border-bottom: none;
   }
+  @media screen and (max-width: 449px) {
+    flex-direction: column;
+    gap: 4px;
+    align-items: baseline;
+  }
 `;
 
 const LeftDiv = styled.div`
@@ -29,16 +34,22 @@ const TitleDiv = styled.div`
     ${Typography.body_md_regular};
     color: var(--text-text-secondary);
   }
-  div {
+  .company-maindiv {
     display: flex;
     align-items: center;
     gap: 6px;
+    flex-wrap: wrap;
+    @media screen and (max-width: 449px) {
+      gap: 0;
+    }
   }
 `;
 
 const CompanyDiv = styled.div`
   display: flex;
   gap: 6px;
+  align-items: center;
+
   p {
     ${Typography.body_md_regular};
     color: var(--text-text-secondary);
@@ -50,6 +61,9 @@ const DotIcon = styled.div`
   height: 3px;
   background-color: var(--text-text-secondary);
   border-radius: 50%;
+  @media screen and (max-width: 449px) {
+    margin: 0 6px;
+  }
 `;
 
 const CompanyNameDiv = styled.div`
@@ -79,6 +93,9 @@ const RightDiv = styled.div`
   p {
     ${Typography.body_sm_regular};
     color: var(--text-text-secondary);
+  }
+  @media screen and (max-width: 449px) {
+    padding-left: 40px;
   }
 `;
 
