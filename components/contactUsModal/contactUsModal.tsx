@@ -101,6 +101,14 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
                         viewBox='0 0 16 16'
                       />
                     </RemoveIcon>
+                    <Icon
+                      iconName='cross-icon'
+                      iconViewBox='0 0 16 16'
+                      iconSize='12'
+                      onClick={() => handleRemoveFile(index)}
+                      className='close-icon'
+                      size={true}
+                    />
                   </FileCard>
                 ))}
               </FileCardContainer>

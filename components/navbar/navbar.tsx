@@ -202,8 +202,8 @@ function Navbar() {
               iconSize={'12'}
               iconViewBox={'0 0 12 12'}
               onClose={closeSupportDropdown}
-              style={{ bottom: 52, maxWidth: 191, width: '100%' }}
               onChange={handleSupportClick}
+              className='support-dropdown'
             />
           )}
         </div>

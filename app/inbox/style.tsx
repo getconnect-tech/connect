@@ -64,6 +64,7 @@ const IconAndTitle = styled.div`
 const Title = styled.div`
   ${Typography.body_md_medium}
   color: var(--text);
+  white-space: nowrap;
 `;
 
 const TabDiv = styled.div`
