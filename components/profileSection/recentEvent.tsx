@@ -29,6 +29,10 @@ export default function RecentEvent() {
     const eventTime = moment(isoString); // Event time
     const diffInMinutes = now.diff(eventTime, 'minutes');
 
+    if (diffInMinutes <= 0) {
+      return 'Now';
+    }
+
     // Format difference based on time range
     if (diffInMinutes < 60) {
       return `${diffInMinutes}m`;
