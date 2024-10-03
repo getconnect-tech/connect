@@ -1,5 +1,6 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import moment from 'moment';
 import {
   Dot,
   EventDetailDiv,
@@ -11,9 +12,66 @@ import {
   TitleDiv,
 } from './styles';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { ticketStore } from '@/stores/ticketStore';
+import { getUserActivity } from '@/services/clientSide/ticketServices';
+import { isEmpty } from '@/helpers/common';
+import { UserActivity } from '@/utils/dataTypes';
 
 export default function RecentEvent() {
   const [showDetails, setShowDetails] = useState(true);
+  const [userActivity, setUserActivity] = useState<UserActivity[]>([]);
+  const { ticketDetails, loading } = ticketStore;
+  const [activityLoading, setActivityLoading] = useState(loading);
+  const { contact } = ticketDetails || {};
+
+  const foramteTime = (isoString: string) => {
+    const now = moment(); // Current time
+    const eventTime = moment(isoString); // Event time
+    const diffInMinutes = now.diff(eventTime, 'minutes');
+
+    // Format difference based on time range
+    if (diffInMinutes < 60) {
+      return `${diffInMinutes}m`;
+    } else if (diffInMinutes < 1440) {
+      const hours = Math.floor(diffInMinutes / 60);
+      return `${hours}h`;
+    } else if (diffInMinutes < 10080) {
+      const days = Math.floor(diffInMinutes / 1440);
+      return `${days}d`;
+    } else if (diffInMinutes < 43200) {
+      const weeks = Math.floor(diffInMinutes / 10080);
+      return `${weeks}w`;
+    } else {
+      const months = Math.floor(diffInMinutes / 43200);
+      return `${months}m`;
+    }
+  };
+
+  const formateEventName = (eventType: string) => {
+    const prefix = '[Amplitude]';
+    if (eventType.startsWith(prefix)) {
+      return eventType.slice(prefix.length).trim();
+    }
+    return eventType;
+  };
+
+  const loadData = useCallback(async () => {
+    if (contact && !isEmpty(contact?.id)) {
+      try {
+        setActivityLoading(true);
+        const data = await getUserActivity(contact?.id);
+        setUserActivity(data);
+      } catch (error) {
+        console.error('Error loading ticket summary:', error);
+      } finally {
+        setActivityLoading(false);
+      }
+    }
+  }, [contact?.id]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const toggleDetails = () => {
     setShowDetails((prevShowDetails) => !prevShowDetails);
@@ -34,41 +92,26 @@ export default function RecentEvent() {
       </TitleDiv>
       {showDetails && (
         <EventDetailDiv>
-          <EventDiv>
-            <h6>1h</h6>
-            <div>
-              <Dot />
-              <Line />
-            </div>
-            <p>Message sent</p>
-          </EventDiv>
-          <LineDiv />
-          <EventDiv>
-            <h6>12h</h6>
-            <div>
-              <Dot />
-              <Line />
-            </div>
-            <p>Comment added</p>
-          </EventDiv>
-          <LineDiv />
-          <EventDiv>
-            <h6>1d</h6>
-            <div>
-              <Dot />
-              <Line />
-            </div>
-            <p>Ticket view</p>
-          </EventDiv>
-          <LineDiv />
-          <EventDiv>
-            <h6>1w</h6>
-            <div>
-              <Dot />
-              <Line />
-            </div>
-            <p>Ticket deleted</p>
-          </EventDiv>
+          {activityLoading ? (
+            'Loading...'
+          ) : (
+            <>
+              {userActivity.length > 0 &&
+                userActivity.map((event: UserActivity, index) => (
+                  <React.Fragment key={index}>
+                    <EventDiv>
+                      <h6>{foramteTime(event.event_time)}</h6>
+                      <div>
+                        <Dot />
+                        <Line />
+                      </div>
+                      <p>{formateEventName(event.event_type)}</p>
+                    </EventDiv>
+                    {index < userActivity.length - 1 && <LineDiv />}
+                  </React.Fragment>
+                ))}
+            </>
+          )}
         </EventDetailDiv>
       )}
     </EventMainDiv>
