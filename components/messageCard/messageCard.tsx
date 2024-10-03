@@ -23,7 +23,6 @@ import {
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { MessageAttachment, ReadBy } from '@/utils/dataTypes';
-import { ticketStore } from '@/stores/ticketStore';
 
 interface Props {
   title: string;
@@ -32,6 +31,8 @@ interface Props {
   message: string;
   readBy?: ReadBy[];
   attachments?: MessageAttachment[];
+  messageImg: any;
+  messageName: any;
 }
 
 export default function MessageCard({
@@ -41,13 +42,13 @@ export default function MessageCard({
   message,
   readBy,
   attachments = [],
+  messageImg,
+  messageName,
 }: Props) {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [submenuPosition, setSubmenuPosition] = useState<
     'upwards' | 'downwards'
   >('upwards');
-  const { ticketDetails } = ticketStore || {};
-  const { contact } = ticketDetails || {};
 
   const getDuration = (lastSeen: Date) => {
     const lastSeenMoment = moment(lastSeen);
@@ -118,7 +119,7 @@ export default function MessageCard({
           <CardHead>
             <NameDiv>
               <div className='avtar-message'>
-                <Avatar imgSrc={''} name={contact?.name || ''} size={20} />
+                <Avatar imgSrc={messageImg} name={messageName} size={20} />
               </div>
               <div
                 style={{

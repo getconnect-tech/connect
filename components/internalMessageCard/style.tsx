@@ -43,10 +43,13 @@ const Div = styled.div`
       margin-left: 20px;
     }
   }
-  span {
+  .time {
     ${Typography.body_md_regular};
     color: var(--text-text-secondary);
     white-space: nowrap;
+    @media screen and (max-width: 449px) {
+      display: none;
+    }
   }
   .message {
     background-color: var(--bg-surface-secondary);
@@ -57,6 +60,14 @@ const Div = styled.div`
     color: var(--text);
     max-width: 536px;
     word-break: break-word;
+    @media screen and (max-width: 449px) {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+  @media screen and (max-width: 449px) {
+    display: block;
   }
 `;
 
@@ -97,6 +108,10 @@ const ReactionsMainDiv = styled.div`
   .submenu-downwards {
     bottom: auto;
     margin-top: 4px;
+  }
+  @media screen and (max-width: 449px) {
+    padding-left: unset;
+    padding-top: 4px;
   }
 `;
 
@@ -266,6 +281,25 @@ const EmojiPickerDiv = styled.div`
   }
 `;
 
+const NameMainDiv = styled.div`
+  display: none;
+  @media screen and (max-width: 449px) {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    p {
+      ${Typography.body_md_regular};
+      color: var(--text-text-secondary);
+      white-space: nowrap;
+    }
+  }
+`;
+
+const Name = styled.h5`
+  ${Typography.body_md_medium};
+  color: var(--text);
+`;
+
 export {
   MainDiv,
   Div,
@@ -277,4 +311,6 @@ export {
   AttachmentMainDiv,
   FileCardMainDiv,
   EmojiPickerDiv,
+  NameMainDiv,
+  Name,
 };

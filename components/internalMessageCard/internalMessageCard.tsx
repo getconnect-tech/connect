@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import FileCard from '../fileCard/fileCard';
 import DropDown from '../dropDown/dropDown';
 import RenderHtml from '../renderHtml';
+import Avatar from '../avtar/Avtar';
 import {
   AddReactionButton,
   AttachmentMainDiv,
@@ -14,6 +15,8 @@ import {
   FileCardMainDiv,
   IconDiv,
   MainDiv,
+  Name,
+  NameMainDiv,
   ReactionCard,
   ReactionsMainDiv,
 } from './style';
@@ -31,6 +34,8 @@ interface Props {
   reactions: ReactionProps[];
   attachments?: MessageAttachment[];
   messageId: string;
+  message: any;
+  messageName: any;
 }
 
 export const useOutsideClick = (callback: () => void) => {
@@ -65,6 +70,8 @@ const InternalMessageCard = ({
   reactions,
   attachments = [],
   messageId,
+  message,
+  messageName,
 }: Props) => {
   const { user } = userStore;
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -258,10 +265,22 @@ const InternalMessageCard = ({
   );
 
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       <MainDiv>
         <Div>
           <div className='message'>
+            <NameMainDiv>
+              <Avatar imgSrc={message} name={messageName} size={20} />
+              <Name>{messageName}</Name>
+              <SVGIcon
+                name='dot-icon'
+                width='4'
+                height='4'
+                fill='none'
+                viewBox='0 0 4 4'
+              />
+              <p>{moment(time).fromNow()}</p>
+            </NameMainDiv>
             <RenderHtml htmlstring={title} />
             {attachments && attachments?.length > 0 && (
               <AttachmentMainDiv>
@@ -280,7 +299,7 @@ const InternalMessageCard = ({
               </AttachmentMainDiv>
             )}
           </div>
-          <span>{moment(time).fromNow()}</span>
+          <span className='time'>{moment(time).fromNow()}</span>
         </Div>
         {!showReactions && (
           <EmojiPickerDiv ref={emojiPickerRef}>

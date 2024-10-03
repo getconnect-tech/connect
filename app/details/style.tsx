@@ -110,7 +110,7 @@ const InputDiv = styled.div`
   position: sticky;
   bottom: 0;
   background-color: var(--bg-surface);
-  z-index: 1;
+  z-index: 11;
   max-width: 702px;
   margin: 0 auto;
   padding: 0 0 12px;
@@ -209,7 +209,7 @@ const ActivityDiv = styled.div`
   .avtar {
     position: absolute;
     top: 14px;
-    z-index: 11;
+    z-index: 111;
     @media screen and (max-width: 449px) {
       display: none;
     }
@@ -217,13 +217,13 @@ const ActivityDiv = styled.div`
   .avtar-internal {
     position: absolute;
     top: 6px;
-    z-index: 11;
+    z-index: 111;
     @media screen and (max-width: 449px) {
       display: none;
     }
   }
   .avtar-activity {
-    z-index: 11;
+    z-index: 111;
     @media screen and (max-width: 449px) {
       margin-left: 12px;
       z-index: 1;

@@ -502,6 +502,8 @@ function TicketDetails(props: Props) {
                 showReactions={reactionData.length > 0}
                 attachments={message?.attachments}
                 messageId={message.id}
+                message={message?.author?.profile_url || ''}
+                messageName={message?.author?.display_name || ''}
               />
             </ActivityDiv>
           );
@@ -518,6 +520,8 @@ function TicketDetails(props: Props) {
                 subTitle={'To Teamcamp Support '}
                 message={message.content || ''}
                 attachments={message?.attachments}
+                messageImg={''}
+                messageName={contact?.name || ''}
               />
             </ActivityDiv>
           );
@@ -539,6 +543,8 @@ function TicketDetails(props: Props) {
                 message={message.content || ''}
                 readBy={message.read_by}
                 attachments={message?.attachments}
+                messageImg={message?.author?.profile_url || ''}
+                messageName={message?.author?.display_name || ''}
               />
             </ActivityDiv>
           );
