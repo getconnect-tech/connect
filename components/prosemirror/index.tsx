@@ -17,7 +17,9 @@ import { addListNodes } from 'prosemirror-schema-list';
 import { exampleSetup } from 'prosemirror-example-setup';
 import { Plugin } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
-import { getFirebaseUrlFromFile } from '@/helpers/common';
+import { mentionNode, getMentionsPlugin } from 'prosemirror-mentions';
+import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
+import { workspaceStore } from '@/stores/workspaceStore';
 
 interface Props {
   // eslint-disable-next-line no-unused-vars
@@ -82,24 +84,6 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
     },
   });
 
-  // const findPlaceholder = useCallback(
-  //   (state: any, id: any) => {
-  //     const decos = placeholderPlugin.getState(state);
-  //     const found = decos?.find(null, null, (spec) => spec.id === id);
-  //     return found?.length ? found[0].from : null;
-  //   },
-  //   [placeholderPlugin],
-  // );
-
-  // async function uploadFile(file: any) {
-  //   // Simulate an upload and return a URL. Replace this with actual file upload logic.
-  //   return new Promise((resolve) => {
-  //     setTimeout(() => {
-  //       resolve(URL.createObjectURL(file)); // Returns a local URL for the image (for demo purposes)
-  //     }, 1500); // Simulating an upload delay
-  //   });
-  // }
-
   const startImageUpload = useCallback(
     (view: any, file: any, uploadPath: string, fileName: string) => {
       const id = {};
@@ -130,7 +114,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
           view.dispatch(tr.setMeta(placeholderPlugin, { remove: { id } }));
         });
     },
-    [placeholderPlugin, viewRef.current],
+    [placeholderPlugin],
   );
 
   useEffect(() => {
@@ -138,27 +122,81 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
 
     // Define schema with list nodes
     const mySchema = new Schema({
-      nodes: addListNodes(schema.spec.nodes, 'paragraph block*', 'block'),
+      nodes: addListNodes(
+        schema.spec.nodes,
+        'paragraph block*',
+        'block',
+      ).append({ mention: mentionNode }), // Add mention node
       marks: schema.spec.marks,
     });
 
-    // Initialize the EditorView when the component mounts
+    const getMentionSuggestionsHTML = (items: any[]) =>
+      '<div class="suggestion-item-list">' +
+      items
+        .map((i) => '<div class="suggestion-item">' + i.name + '</div>')
+        .join('') +
+      '</div>';
+
+    const mentionPlugin = getMentionsPlugin({
+      mentionTrigger: '@',
+      getSuggestions: (
+        type: string,
+        text: string,
+        // eslint-disable-next-line no-unused-vars
+        done: (items: any[]) => void,
+      ) => {
+        if (type === 'mention') {
+          // Filter users by the text typed after "@"
+          const users = workspaceStore?.currentWorkspace?.users?.map((user) => {
+            return { ...user, name: user?.display_name };
+          });
+          if (isEmpty(text)) done(users || []);
+          else {
+            const filteredUsers = users?.filter((user: any) =>
+              user?.name?.toLowerCase().includes(text.toLowerCase()),
+            );
+            done(filteredUsers || []);
+          }
+        }
+      },
+      getSuggestionsHTML: (items: any, type: any) => {
+        if (type === 'mention') {
+          return getMentionSuggestionsHTML(items);
+        }
+      },
+      // activeClass: 'suggestion-item-active',
+    });
+
+    const parser = new DOMParser();
+    const doc = ProseMirrorDOMParser.fromSchema(mySchema).parse(
+      parser.parseFromString(`<p></p>`, 'text/xml').documentElement,
+    );
+
+    const state = EditorState.create({
+      doc,
+      plugins: [mentionPlugin].concat(exampleSetup({ schema: mySchema })),
+    });
+
     const view = new EditorView(editorRef.current, {
-      state: EditorState.create({
-        doc: ProseMirrorDOMParser.fromSchema(mySchema).parse(
-          contentRef.current,
-        ),
-        plugins: [...exampleSetup({ schema: mySchema }), placeholderPlugin],
-      }),
-      // Capture the update event to handle editor state changes
+      state,
       dispatchTransaction(transaction) {
         const newState = view.state.apply(transaction);
         view.updateState(newState);
-
         // Convert the editor content to HTML and update the state
         const contentNode = view.state.doc;
         const htmlString = convertNodeToHTML(contentNode, mySchema);
         setValueContent(htmlString);
+
+        const html: any = DOMSerializer.fromSchema(mySchema).serializeFragment(
+          newState.doc.content,
+        );
+        const htmlStringNode = Array.from(html)
+          .map((node: any) => node.outerHTML)
+          .join(''); // Convert the content to HTML string
+        return htmlStringNode;
+      },
+      handleDOMEvents: {
+        input: () => {},
       },
     });
 
