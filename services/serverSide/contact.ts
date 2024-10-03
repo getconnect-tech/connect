@@ -1,5 +1,6 @@
 import { TicketStatus } from '@prisma/client';
 import { prisma } from '@/prisma/prisma';
+import { findUserByEmail, getUserActivities } from '@/lib/amplitude';
 
 export const getContactByEmail = async (email: string, workspaceId: string) => {
   const contact = await prisma.contact.findUnique({
@@ -87,4 +88,27 @@ export const createOrUpdateContact = async ({
   });
 
   return contact;
+};
+
+export const getActivities = async (email: string) => {
+  const userMatches = await findUserByEmail(email);
+
+  if (userMatches.length <= 0) {
+    return null;
+  }
+
+  const userEvents = await getUserActivities(userMatches[0]!.amplitude_id);
+
+  const formattedEventsData = userEvents.map((event) => {
+    const { event_type, event_id, event_time, event_properties } = event;
+
+    return {
+      event_id,
+      event_type,
+      event_time,
+      event_properties,
+    };
+  });
+
+  return formattedEventsData;
 };
