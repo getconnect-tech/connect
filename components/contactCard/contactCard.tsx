@@ -45,15 +45,15 @@ export default function ContactCard({
         />
         <TitleDiv>
           <h6>{name}</h6>
-          <div>
+          <div className='company-maindiv'>
             <p>{email}</p>
+            <DotIcon />
             {isCompany ? (
               <CompanyDiv>
-                <DotIcon />
                 <CompanyNameDiv>
                   <Avatar
                     imgSrc={companyImg}
-                    name={''}
+                    name={'L'}
                     size={20}
                     isShowBorder={true}
                   />
@@ -63,7 +63,6 @@ export default function ContactCard({
             ) : (
               <>
                 <CompanyDiv>
-                  <DotIcon />
                   <p>{peopleCount} people</p>
                 </CompanyDiv>
               </>
