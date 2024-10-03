@@ -15,8 +15,10 @@ import SVGIcon from '@/assets/icons/SVGIcon';
 interface Props {
   countAssign: number;
   isShowNavbar: boolean;
+  onClickDismiss: () => void;
 }
-function OverdueCard({ countAssign, isShowNavbar }: Props) {
+
+function OverdueCard({ countAssign, onClickDismiss, isShowNavbar }: Props) {
   const router = useRouter();
 
   const redirectToUnassigned = useCallback(() => {
@@ -49,7 +51,7 @@ function OverdueCard({ countAssign, isShowNavbar }: Props) {
               secondary
               variant='small'
             />
-            <a>Dismiss</a>
+            <a onClick={onClickDismiss}>Dismiss</a>
           </ButtonSection>
         </RightSection>
       </MainCardDiv>
