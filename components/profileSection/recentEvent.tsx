@@ -47,7 +47,7 @@ export default function RecentEvent() {
       return `${weeks}w`;
     } else {
       const months = Math.floor(diffInMinutes / 43200);
-      return `${months}m`;
+      return `${months}mon`;
     }
   };
 
