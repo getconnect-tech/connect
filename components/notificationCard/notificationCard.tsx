@@ -1,5 +1,4 @@
-import React, { useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import React from 'react';
 import Button from '../button/button';
 import {
   ButtonSection,
@@ -18,12 +17,6 @@ interface Props {
 }
 
 function NotificationCard({ isShowNavbar }: Props) {
-  const router = useRouter();
-
-  const redirectToUnassigned = useCallback(() => {
-    router.push('/unassigned');
-  }, []);
-
   return (
     <MainDiv isShowNavbar={isShowNavbar}>
       <MainCardDiv>
@@ -45,7 +38,7 @@ function NotificationCard({ isShowNavbar }: Props) {
           </ContentDiv>
           <ButtonSection>
             <Button
-              onClick={redirectToUnassigned}
+              onClick={() => {}}
               title='Enable Notifications'
               secondary
               variant='small'
