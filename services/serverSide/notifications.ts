@@ -139,7 +139,6 @@ export class NotificationProvider {
     const mentionedUserIds = this.getMentionedUserIds(messageContent).filter(
       (id) => id !== senderId,
     );
-    console.log(mentionedUserIds);
 
     if (mentionedUserIds.length === 0) return null;
 
