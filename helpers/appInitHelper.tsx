@@ -12,7 +12,7 @@ import { getUserDetails } from '@/services/clientSide/userService';
 import { Workspace } from '@/utils/dataTypes';
 import { getLabels } from '@/services/clientSide/settingServices';
 
-const initOneSignal = async (userId: string) => {
+export const initOneSignal = async (userId: string) => {
   try {
     // OneSignal.Debug.setLogLevel('trace');
     await OneSignal.init({
@@ -42,7 +42,9 @@ export const appInit: any = async () => {
 
   if (session?.user) {
     // Init OneSignal for notifications
-    initOneSignal(session.user.id);
+    if (Notification.permission === 'granted') {
+      initOneSignal(session.user.id);
+    }
     getUserDetails();
 
     // Get user's workspace list
