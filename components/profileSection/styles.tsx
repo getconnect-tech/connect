@@ -101,6 +101,9 @@ const TitleDiv = styled.div`
   }
   @media screen and (max-width: 768px) {
     margin: 12px 16px;
+    .icon {
+      display: flex;
+    }
   }
 `;
 
