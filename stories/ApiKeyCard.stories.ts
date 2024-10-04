@@ -15,7 +15,19 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
+
 export const Primary: Story = {
+  args: {
+    keyName: 'jbhbg',
+    keyNumber: 'jnj',
+    currentOpenDropdown: null,
+    setCurrentOpenDropdown: () => {},
+    dropdownIdentifier: '',
+    apiKey: '',
+  },
+};
+
+export const WithDrodown: Story = {
   args: {
     keyName: 'Sample Key',
     keyNumber: '12345',
