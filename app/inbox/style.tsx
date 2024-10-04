@@ -38,7 +38,7 @@ const HeaderDiv = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 24px 0 6px;
+  padding: 24px 0 4px;
   max-width: 662px;
   margin: 0 auto;
   @media screen and (max-width: 449px) {
@@ -64,6 +64,7 @@ const IconAndTitle = styled.div`
 const Title = styled.div`
   ${Typography.body_md_medium}
   color: var(--text);
+  white-space: nowrap;
 `;
 
 const TabDiv = styled.div`

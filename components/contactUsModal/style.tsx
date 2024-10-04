@@ -19,8 +19,12 @@ export const ModalDiv = styled.div`
     }
   }
   @media screen and (max-width: 449px) {
-    min-width: 390px;
-    max-width: 390px;
+    min-width: 361px;
+    max-width: 361px;
+  }
+  @media screen and (max-width: 320px) {
+    min-width: 300px;
+    max-width: 300px;
   }
 `;
 
@@ -82,8 +86,7 @@ export const RemoveIcon = styled.div`
 
 export const FileCard = styled.div`
   display: flex;
-  max-width: 162px;
-  min-width: 162px;
+  max-width: 228px;
   width: 100%;
   padding: 8px;
   border-radius: 8px;
@@ -95,20 +98,33 @@ export const FileCard = styled.div`
   &:hover ${RemoveIcon} {
     display: flex;
   }
+  .close-icon {
+    display: none;
+    @media screen and (max-width: 449px) {
+      display: flex;
+    }
+  }
+  @media screen and (max-width: 449px) {
+    max-width: unset;
+    &:hover ${RemoveIcon} {
+      display: none;
+    }
+  }
 `;
 
 export const FileCardRight = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 98px;
+  gap: 2px;
   width: 100%;
   h2 {
-    ${Typography.body_sm_medium}
+    ${Typography.body_md_medium};
     color: var(--text);
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    margin-right: 16px;
   }
   p {
     ${Typography.body_sm_regular}

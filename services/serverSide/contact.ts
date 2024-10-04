@@ -1,5 +1,7 @@
 import { TicketStatus } from '@prisma/client';
+import moment from 'moment';
 import { prisma } from '@/prisma/prisma';
+import { findUserByEmail, getUserActivities } from '@/lib/amplitude';
 
 export const getContactByEmail = async (email: string, workspaceId: string) => {
   const contact = await prisma.contact.findUnique({
@@ -15,44 +17,42 @@ export const getContactById = async (contactId: string) => {
 };
 
 export const getWorkspaceContacts = async (workspaceId: string) => {
-  const contacts = await prisma.$transaction(async (tx) => {
-    const contactsWithStatus = await tx.ticket.groupBy({
-      by: ['contact_id', 'status'],
-      where: { workspace_id: workspaceId },
-      _count: {
-        status: true,
+  const workspaceContacts = await prisma.contact.findMany({
+    where: {
+      workspace_id: workspaceId,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      company_id: true,
+      workspace_id: true,
+      created_at: true,
+      updated_at: true,
+      tickets: {
+        select: {
+          status: true,
+        },
       },
-    });
-
-    const contactIdToStatusCountMap: Record<
-      string,
-      Record<TicketStatus, number>
-    > = {};
-
-    for (const entry of contactsWithStatus) {
-      if (!contactIdToStatusCountMap[entry.contact_id]) {
-        contactIdToStatusCountMap[entry.contact_id] = {} as Record<
-          TicketStatus,
-          number
-        >;
-      }
-
-      contactIdToStatusCountMap[entry.contact_id][entry.status] =
-        entry._count.status;
-    }
-
-    const contactIds = Object.keys(contactIdToStatusCountMap);
-    const contacts = await tx.contact.findMany({
-      where: { id: { in: contactIds } },
-    });
-
-    return contacts.map((c) => ({
-      ...c,
-      ticketsCount: contactIdToStatusCountMap[c.id],
-    }));
+    },
   });
 
-  return contacts;
+  const formattedContacts = workspaceContacts.map((contact) => {
+    const { tickets, ...restContact } = contact;
+
+    const ticketsCount = {} as Record<TicketStatus, number>;
+
+    tickets.forEach((ticket) => {
+      ticketsCount[ticket.status] = (ticketsCount[ticket.status] || 0) + 1;
+    });
+
+    return {
+      ...restContact,
+      ticketsCount,
+    };
+  });
+
+  return formattedContacts;
 };
 
 export const createOrUpdateContact = async ({
@@ -87,4 +87,27 @@ export const createOrUpdateContact = async ({
   });
 
   return contact;
+};
+
+export const getActivities = async (email: string) => {
+  const userMatches = await findUserByEmail(email);
+
+  if (userMatches.length <= 0) {
+    return null;
+  }
+
+  const userEvents = await getUserActivities(userMatches[0]!.amplitude_id);
+
+  const formattedEventsData = userEvents.map((event) => {
+    const { event_type, event_id, event_time, event_properties } = event;
+
+    return {
+      event_id,
+      event_type,
+      event_time: moment(event_time + 'UTC'),
+      event_properties,
+    };
+  });
+
+  return formattedEventsData;
 };

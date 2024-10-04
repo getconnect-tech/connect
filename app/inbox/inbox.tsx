@@ -2,6 +2,9 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { usePathname } from 'next/navigation';
+import moment from 'moment';
+import { TicketStatus } from '@prisma/client';
 import {
   BottomDiv,
   HeaderDiv,
@@ -21,8 +24,11 @@ import { isEmpty } from '@/helpers/common';
 import EmptyState from '@/components/emptyState/emptyState';
 import InboxLoading from '@/components/inboxLoading/inboxLoading';
 import { NAVBAR, TICKETS_HEADER } from '@/global/constants';
+import OverdueCard from '@/components/overdueCard/overdueCard';
+import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
 import Icon from '@/components/icon/icon';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
+import NotificationCard from '@/components/notificationCard/notificationCard';
 
 interface InboxProps {
   activeNav?: number;
@@ -35,6 +41,8 @@ function Inbox({ activeNav, labelId }: InboxProps) {
     null,
   );
   const [loading, setLoading] = useState(true); // Loading state added
+  const [toShowNotificationCard, setToShowNotificationCard] = useState(false);
+  const [overDueCardDismissed, setOverDueCardDismissed] = useState(false);
   const { workspaceStore, ticketStore, userStore, settingStore } = useStores();
   const { currentWorkspace } = workspaceStore;
   const { ticketList, filteredTicketList } = ticketStore;
@@ -42,6 +50,11 @@ function Inbox({ activeNav, labelId }: InboxProps) {
   const { labels } = settingStore || {};
   const currentLabel = labels?.find((label) => label.id === labelId);
   const [isNavbar, setIsNavbar] = useState(false);
+  const pathname = usePathname();
+  const countOfUnassignOpenTicket = ticketList?.filter(
+    (ticket) =>
+      ticket.status === TicketStatus.OPEN && ticket.assigned_to === null,
+  );
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
@@ -53,6 +66,29 @@ function Inbox({ activeNav, labelId }: InboxProps) {
       }
     }
   }, [currentWorkspace?.id]);
+
+  const shouldShowNotificationCard = useCallback(() => {
+    const hasNotificationPermission = Notification.permission === 'granted';
+    const enableNotification =
+      UserPreferenceSingleton.getInstance().getEnableNotification();
+    if (hasNotificationPermission || !enableNotification) {
+      setToShowNotificationCard(!hasNotificationPermission);
+    } else {
+      const currentTime = moment();
+      const dismissTime = moment(enableNotification);
+      setToShowNotificationCard(currentTime.isAfter(dismissTime));
+    }
+  }, []);
+
+  const shouldShowOverdueCard = useCallback(() => {
+    const unAssignedDismissTime =
+      UserPreferenceSingleton.getInstance().getAssignedDismiss();
+    if (unAssignedDismissTime) {
+      const currentTime = moment();
+      const dismissTime = moment(unAssignedDismissTime);
+      setOverDueCardDismissed(!currentTime.isAfter(dismissTime));
+    }
+  }, []);
 
   const displayTicketList = useCallback(() => {
     // Filter ticket based on activeTab
@@ -81,12 +117,24 @@ function Inbox({ activeNav, labelId }: InboxProps) {
     ticketStore.setFilteredTicketList(activeTab, filteredTickets);
   }, [activeTab, activeNav, ticketList, user, ticketStore]);
 
+  const onClickDismiss = () => {
+    const futureTime = moment().add(24, 'hours').toISOString();
+    UserPreferenceSingleton.getInstance().setAssignedDismiss(futureTime);
+    setOverDueCardDismissed(true);
+  };
+
+  const closeNotificationCard = () => {
+    setToShowNotificationCard(false);
+  };
+
   useEffect(() => {
     displayTicketList();
   }, [activeTab, ticketList]);
 
   useEffect(() => {
     loadData();
+    shouldShowOverdueCard();
+    shouldShowNotificationCard();
   }, [loadData]);
 
   const onClickIcon = useCallback(() => {
@@ -130,9 +178,25 @@ function Inbox({ activeNav, labelId }: InboxProps) {
         </TopDiv>
         <div style={{ padding: '0 16px' }} onClick={onCloseNavbar}>
           <BottomDiv>
+            {userStore.user?.id && toShowNotificationCard && (
+              <NotificationCard
+                isShowNavbar={isNavbar}
+                onClose={closeNotificationCard}
+              />
+            )}
             {loading &&
               (!filteredTicketList || filteredTicketList?.length === 0) && (
                 <InboxLoading />
+              )}
+            {(!loading || filteredTicketList?.length > 0) &&
+              countOfUnassignOpenTicket?.length > 0 &&
+              !overDueCardDismissed &&
+              pathname === '/inbox' && (
+                <OverdueCard
+                  countAssign={countOfUnassignOpenTicket?.length}
+                  onClickDismiss={onClickDismiss}
+                  isShowNavbar={isNavbar}
+                />
               )}
             {!loading &&
               (!filteredTicketList || filteredTicketList?.length === 0) && (
