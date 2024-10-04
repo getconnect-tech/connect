@@ -123,11 +123,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
     setOverDueCardDismissed(true);
   };
 
-  const onClickEnableNotification = () => {
-    const futureNotificationTime = moment().add(7, 'days').toISOString();
-    UserPreferenceSingleton.getInstance().setEnableNotification(
-      futureNotificationTime,
-    );
+  const closeNotificationCard = () => {
     setToShowNotificationCard(false);
   };
 
@@ -185,7 +181,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
             {userStore.user?.id && toShowNotificationCard && (
               <NotificationCard
                 isShowNavbar={isNavbar}
-                onClose={onClickEnableNotification}
+                onClose={closeNotificationCard}
               />
             )}
             {loading &&
