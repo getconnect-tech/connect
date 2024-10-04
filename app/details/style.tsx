@@ -39,6 +39,7 @@ const MainDiv = styled.div`
   border-right: var(--border-main);
   @media screen and (max-width: 449px) {
     margin-left: unset;
+    min-height: 100vh;
   }
 `;
 
