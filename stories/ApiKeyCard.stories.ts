@@ -17,11 +17,13 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Primary: Story = {
   args: {
-    keyName: 'jbhbg',
-    keyNumber: 'jnj',
-    currentOpenDropdown: null,
-    setCurrentOpenDropdown: () => {},
-    dropdownIdentifier: '',
-    apiKey: '',
+    keyName: 'Sample Key',
+    keyNumber: '12345',
+    currentOpenDropdown: 'example-key', // This matches the dropdown identifier to open it by default
+    setCurrentOpenDropdown: (dropdown: string | null) => {
+      console.log('Dropdown state updated:', dropdown);
+    },
+    dropdownIdentifier: 'example', // Make sure this matches the dropdownIdentifier for the dropdown
+    apiKey: 'abcd1234',
   },
 };
