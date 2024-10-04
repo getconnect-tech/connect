@@ -114,6 +114,9 @@ const ReactionsMainDiv = styled.div`
   .submenu-downwards {
     bottom: auto;
     margin-top: 4px;
+    @media screen and (max-width: 449px) {
+      margin-left: 4px;
+    }
   }
   @media screen and (max-width: 449px) {
     padding-left: unset;
