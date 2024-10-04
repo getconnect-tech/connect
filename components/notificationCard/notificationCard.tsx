@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import OneSignal from 'react-onesignal';
 import { observer } from 'mobx-react-lite';
+import moment from 'moment';
 import Button from '../button/button';
 import {
   ButtonSection,
@@ -16,6 +17,7 @@ import SVGIcon from '@/assets/icons/SVGIcon';
 import { messageStore } from '@/stores/messageStore';
 import { initOneSignal } from '@/helpers/appInitHelper';
 import { useStores } from '@/stores';
+import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
 
 interface Props {
   isShowNavbar: boolean;
@@ -41,6 +43,14 @@ function NotificationCard({ isShowNavbar, onClose }: Props) {
       console.error(err);
       messageStore.setErrorMessage(err.message);
     }
+  };
+
+  const handleDismiss = () => {
+    const futureNotificationTime = moment().add(7, 'days').toISOString();
+    UserPreferenceSingleton.getInstance().setEnableNotification(
+      futureNotificationTime,
+    );
+    onClose();
   };
 
   const handleNotificationPermissionChange = async (hasAllowed: boolean) => {
@@ -93,7 +103,7 @@ function NotificationCard({ isShowNavbar, onClose }: Props) {
               isLink={true}
               className='link-button'
               variant='small'
-              onClick={onClose}
+              onClick={handleDismiss}
             />
           </ButtonSection>
         </RightSection>
