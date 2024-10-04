@@ -24,6 +24,7 @@ export const OnBoardScreen = styled.div<Props>`
     `}
   @media screen and (max-width: 449px) {
     padding: 16px;
+    max-width: unset;
   }
 `;
 export const Heading = styled.div`

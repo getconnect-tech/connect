@@ -15,6 +15,10 @@ export const LoginSection = styled.div`
   flex-direction: column;
   gap: 32px;
   align-items: center;
+  @media screen and (max-width: 449px) {
+    max-width: unset;
+    padding: 0 16px;
+  }
 `;
 export const Heading = styled.div`
   display: flex;
