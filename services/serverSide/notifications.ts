@@ -60,7 +60,7 @@ export class NotificationProvider {
 
   // Extract mentioned user IDs from message content
   private static getMentionedUserIds(content: string): string[] {
-    const regex = /title="([a-f0-9-]+)"/g;
+    const regex = /data-mention-id="([a-f0-9-]+)"/g;
     const matches = Array.from(content.matchAll(regex)).map(
       (match) => match[1],
     );
@@ -139,6 +139,8 @@ export class NotificationProvider {
     const mentionedUserIds = this.getMentionedUserIds(messageContent).filter(
       (id) => id !== senderId,
     );
+    console.log(mentionedUserIds);
+
     if (mentionedUserIds.length === 0) return null;
 
     const [senderInfo, ticketInfo] = await Promise.all([
