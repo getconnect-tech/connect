@@ -41,6 +41,14 @@ export const Form = styled.form`
     flex-direction: column;
     gap: 12px;
   }
+  @media screen and (max-width: 449px) {
+    .input-div {
+      gap: 16px;
+    }
+    .button {
+      margin-top: 8px;
+    }
+  }
 `;
 export const Bottom = styled.div`
   display: flex;
