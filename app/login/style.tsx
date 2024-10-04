@@ -59,6 +59,9 @@ export const CodeSection = styled.form`
   .button {
     width: 100%;
   }
+  @media screen and (max-width: 449px) {
+    gap: 32px;
+  }
 `;
 export const TimeText = styled.div<{ isActive?: boolean }>`
   display: flex;
@@ -69,6 +72,9 @@ export const TimeText = styled.div<{ isActive?: boolean }>`
   a {
     color: var(${({ isActive }) => (isActive ? '--text' : '--text-disabled')});
     cursor: pointer;
+  }
+  @media screen and (max-width: 449px) {
+    margin-top: -8px;
   }
 `;
 export const TitleDiv = styled.div`
