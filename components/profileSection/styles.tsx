@@ -15,6 +15,9 @@ const ProfileDiv = styled.div`
   align-items: center;
   gap: 8px;
   padding: 12px 20px;
+  @media screen and (max-width: 768px) {
+    padding: 12px 16px;
+  }
 `;
 
 const Title = styled.p`
@@ -34,6 +37,10 @@ const DetailsMainDiv = styled.div`
   flex-direction: column;
   gap: 16px;
   padding: 0 20px 12px;
+  @media screen and (max-width: 768px) {
+    padding: 0 16px 12px;
+    gap: 12px;
+  }
 `;
 
 const DetailsProfileDiv = styled.div`
@@ -42,6 +49,9 @@ const DetailsProfileDiv = styled.div`
   gap: 12px;
   padding: 0 20px 12px;
   border-bottom: var(--border-main);
+  @media screen and (max-width: 768px) {
+    padding: 0 16px 12px;
+  }
 `;
 
 const DetailsDiv = styled.div`
@@ -89,6 +99,9 @@ const TitleDiv = styled.div`
   &:hover .icon {
     display: flex;
   }
+  @media screen and (max-width: 768px) {
+    margin: 12px 16px;
+  }
 `;
 
 const EventDetailDiv = styled.div`
@@ -96,6 +109,9 @@ const EventDetailDiv = styled.div`
   flex-direction: column;
   padding: 0 20px 12px;
   position: relative;
+  @media screen and (max-width: 768px) {
+    padding: 0 16px 12px;
+  }
 `;
 
 const EventDiv = styled.div`
@@ -176,6 +192,9 @@ const DescriptionDiv = styled.div`
   &.action-div {
     gap: 8px;
   }
+  @media screen and (max-width: 768px) {
+    gap: 4px;
+  }
 `;
 
 const ActionsDiv = styled.div`
@@ -250,6 +269,9 @@ const ResponsiveMainDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @media screen and (max-width: 768px) {
+    padding: 8px 0 0;
+  }
 `;
 export {
   MainDiv,
