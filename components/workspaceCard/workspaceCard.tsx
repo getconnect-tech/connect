@@ -21,6 +21,9 @@ export const Card = styled.div`
   &:hover {
     box-shadow: var(--shadow-card-hover);
   }
+  @media screen and (max-width: 449px) {
+    max-width: unset;
+  }
 `;
 
 interface Props {
