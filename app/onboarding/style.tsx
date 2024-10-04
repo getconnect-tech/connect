@@ -22,6 +22,10 @@ export const OnBoardScreen = styled.div<Props>`
     css`
       max-width: 500px;
     `}
+  @media screen and (max-width: 449px) {
+    padding: 16px;
+    max-width: unset;
+  }
 `;
 export const Heading = styled.div`
   display: flex;
@@ -39,6 +43,9 @@ export const Title = styled.div<Props>`
     css`
       padding: 0 92px;
     `}
+  @media screen and (max-width: 449px) {
+    padding: 0 40px;
+  }
 `;
 export const Frame = styled.div`
   display: flex;
@@ -94,6 +101,9 @@ export const TextField = styled.div<Props>`
       align-items: center;
       gap: 12px;
     `}
+  @media screen and (max-width: 449px) {
+    gap: 8px;
+  }
 `;
 export const Label = styled.div`
   ${Typography.body_md_medium}
@@ -131,6 +141,9 @@ export const Card = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+  @media screen and (max-width: 449px) {
+    gap: 16px;
+  }
 `;
 export const Icon = styled.div`
   max-width: 24px;

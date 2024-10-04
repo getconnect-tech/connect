@@ -13,6 +13,9 @@ export const MainDiv = styled.div`
     top: 20px;
     right: 20px;
   }
+  @media screen and (max-width: 449px) {
+    padding: 46px 16px 0;
+  }
 `;
 
 export const Content = styled.div`
@@ -24,6 +27,9 @@ export const Content = styled.div`
   h6 {
     ${Typography.heading_heading_semibold}
     color: var(--text);
+  }
+  @media screen and (max-width: 449px) {
+    gap: 32px;
   }
 `;
 
@@ -48,4 +54,7 @@ export const CardsDiv = styled.div`
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  @media screen and (max-width: 449px) {
+    gap: 8px;
+  }
 `;

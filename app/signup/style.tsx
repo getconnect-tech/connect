@@ -15,6 +15,10 @@ export const LoginSection = styled.div`
   flex-direction: column;
   gap: 32px;
   align-items: center;
+  @media screen and (max-width: 449px) {
+    max-width: unset;
+    padding: 0 16px;
+  }
 `;
 export const Heading = styled.div`
   display: flex;
@@ -40,6 +44,14 @@ export const Form = styled.form`
     display: flex;
     flex-direction: column;
     gap: 12px;
+  }
+  @media screen and (max-width: 449px) {
+    .input-div {
+      gap: 16px;
+    }
+    .button {
+      margin-top: 8px;
+    }
   }
 `;
 export const Bottom = styled.div`
