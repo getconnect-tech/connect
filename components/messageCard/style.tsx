@@ -83,6 +83,7 @@ const MessageCardMainDiv = styled.div`
   @media screen and (max-width: 449px) {
     padding-left: unset;
     margin-left: unset;
+    margin-bottom: 20px;
   }
 `;
 

@@ -177,6 +177,9 @@ const CenterDiv = styled.div`
   justify-content: end;
   gap: 20px;
   position: relative;
+  @media screen and (max-width: 449px) {
+    gap: 0;
+  }
 `;
 
 const InputIcon = styled.div`
@@ -249,6 +252,7 @@ const Message = styled.p`
   }
   @media screen and (max-width: 449px) {
     padding-left: 18px;
+    border-left: var(--border-main);
   }
 `;
 
@@ -260,6 +264,9 @@ const LineDiv = styled.div`
   top: 34px;
   @media screen and (max-width: 449px) {
     margin-left: 22px;
+    height: 20px;
+    position: relative;
+    top: unset;
   }
 `;
 

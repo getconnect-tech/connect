@@ -1,6 +1,13 @@
 import styled from 'styled-components';
 import { Typography } from '@/styles/typography';
 
+const Main = styled.div`
+  width: 100%;
+  @media screen and (max-width: 449px) {
+    margin-bottom: 20px;
+  }
+`;
+
 const MainDiv = styled.div`
   padding-left: 22px;
   margin-left: 10px;
@@ -340,6 +347,7 @@ const Name = styled.h5`
 `;
 
 export {
+  Main,
   MainDiv,
   Div,
   IconDiv,

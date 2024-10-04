@@ -14,6 +14,7 @@ import {
   EmojiPickerDiv,
   FileCardMainDiv,
   IconDiv,
+  Main,
   MainDiv,
   Name,
   NameMainDiv,
@@ -274,7 +275,7 @@ const InternalMessageCard = ({
   );
 
   return (
-    <div style={{ width: '100%' }}>
+    <Main>
       <MainDiv>
         <Div>
           <div className='message'>
@@ -434,7 +435,7 @@ const InternalMessageCard = ({
           </EmojiPickerDiv>
         </ReactionsMainDiv>
       )}
-    </div>
+    </Main>
   );
 };
 

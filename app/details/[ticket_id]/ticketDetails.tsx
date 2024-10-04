@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 'use client';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -78,8 +79,25 @@ interface Props {
   ticket_id: string;
 }
 
+const useMediaQuery = (width: number): boolean => {
+  // eslint-disable-next-line no-undef
+  const [matches, setMatches] = useState<boolean>(window.innerWidth > width);
+
+  useEffect(() => {
+    // eslint-disable-next-line no-undef
+    const handleResize = () => setMatches(window.innerWidth > width);
+    // eslint-disable-next-line no-undef
+    window.addEventListener('resize', handleResize);
+    // eslint-disable-next-line no-undef
+    return () => window.removeEventListener('resize', handleResize);
+  }, [width]);
+
+  return matches;
+};
+
 function TicketDetails(props: Props) {
   const { ticket_id } = props;
+  const isLargeScreen = useMediaQuery(449);
   const router = useRouter();
   const [labelDropdown, setLabelDropdown] = useState(false);
   const [priorityDropdown, setPriorityDropdown] = useState(false);
@@ -879,7 +897,15 @@ function TicketDetails(props: Props) {
                 {messages?.map((message, index) => (
                   <div key={index}>
                     {renderActivityMessage(message)}
-                    {index !== messages?.length - 1 && <LineDiv />}
+                    {isLargeScreen
+                      ? index !== messages?.length - 1 && <LineDiv />
+                      : index !== messages?.length - 1 &&
+                        (message.type === MessageType.CHANGE_ASSIGNEE ||
+                          message.type === MessageType.CHANGE_LABEL ||
+                          message.type === MessageType.CHANGE_PRIORITY ||
+                          message.type === MessageType.CHANGE_STATUS) && (
+                          <LineDiv />
+                        )}
                   </div>
                 ))}
               </CenterDiv>
