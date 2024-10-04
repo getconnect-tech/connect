@@ -79,6 +79,7 @@ const MessageCardMainDiv = styled.div`
   padding-left: 22px;
   margin-left: 10px;
   width: 100%;
+  z-index: 1;
   @media screen and (max-width: 449px) {
     padding-left: unset;
     margin-left: unset;

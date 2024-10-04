@@ -39,6 +39,8 @@ const MainDiv = styled.div`
   border-right: var(--border-main);
   @media screen and (max-width: 449px) {
     margin-left: unset;
+  }
+  @media screen and (max-width: 768px) {
     min-height: 100vh;
   }
 `;
@@ -256,6 +258,9 @@ const LineDiv = styled.div`
   margin-left: 10px;
   position: absolute;
   top: 34px;
+  @media screen and (max-width: 449px) {
+    margin-left: 22px;
+  }
 `;
 
 const IconDiv = styled.div<Props>`
