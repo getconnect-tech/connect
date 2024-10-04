@@ -11,6 +11,9 @@ const MainDiv = styled.div`
   &:hover {
     .emoji-icon {
       display: flex;
+      @media screen and (max-width: 449px) {
+        display: none;
+      }
     }
   }
   @media screen and (max-width: 449px) {
@@ -104,6 +107,9 @@ const ReactionsMainDiv = styled.div`
   .submenu-upwards {
     bottom: calc(100% + 3px);
     top: auto;
+    @media screen and (max-width: 449px) {
+      margin-left: 4px;
+    }
   }
   .submenu-downwards {
     bottom: auto;
@@ -179,10 +185,21 @@ const EmojiPickerDiv = styled.div`
     bottom: calc(100% + 33px);
     top: auto;
   }
+  .responsive-upwards {
+    @media screen and (max-width: 449px) {
+      right: 0;
+      bottom: calc(100% + 22px);
+    }
+  }
   .submenu-downwards {
     position: absolute;
     top: 100%;
     bottom: auto;
+  }
+  .responsive {
+    @media screen and (max-width: 449px) {
+      right: 0;
+    }
   }
   .epr_-7mgpwf:hover {
     background-color: var(--bg-surface-hover);
@@ -194,12 +211,18 @@ const EmojiPickerDiv = styled.div`
     position: absolute;
     z-index: 11;
     margin-top: 4px;
+    @media screen and (max-width: 449px) {
+      margin-top: unset;
+    }
   }
   .reaction-icon-div {
     position: absolute;
     z-index: 11;
     margin-top: 20px;
     margin-left: 12px;
+    @media screen and (max-width: 449px) {
+      margin-top: unset;
+    }
   }
   .epr_-kg0voo {
     display: none;
@@ -212,6 +235,9 @@ const EmojiPickerDiv = styled.div`
   }
   .epr_qyh4cg {
     display: none;
+  }
+  .epr-emoji-list {
+    margin-left: unset;
   }
   .epr_-4ueg5a {
     width: 236px !important;
@@ -286,11 +312,20 @@ const NameMainDiv = styled.div`
   @media screen and (max-width: 449px) {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 6px;
     p {
       ${Typography.body_md_regular};
       color: var(--text-text-secondary);
       white-space: nowrap;
+    }
+    .left-div {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .icon {
+      fill: var(--icon);
     }
   }
 `;
