@@ -138,6 +138,9 @@ const ProfileDrop = styled.div`
   border-radius: 12px;
   background-color: var(--bg-white);
   box-shadow: var(--shadow-dropdown);
+  @media screen and (max-width: 449px) {
+    max-width: 228px;
+  }
 `;
 const Frame1 = styled.div`
   display: flex;
@@ -207,6 +210,14 @@ const ResponsiveMainDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  .support-dropdown {
+    bottom: 52px;
+    max-width: 228px;
+    width: 100%;
+  }
+  @media screen and (min-width: 448px) {
+    display: none;
+  }
 `;
 
 export {
