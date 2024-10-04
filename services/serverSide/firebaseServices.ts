@@ -1,5 +1,6 @@
 import { Attachment } from 'postmark';
 import { getDownloadURL } from 'firebase-admin/storage';
+import type { File } from '@google-cloud/storage';
 import { storage } from '@/lib/firebaseAdmin';
 import { createStreamFromBuffer } from '@/helpers/common';
 import { MessageAttachment } from '@/utils/dataTypes';
@@ -39,21 +40,15 @@ export const uploadAttachments = async (
   attachments: Attachment[],
 ) => {
   const filePath = `workspaces/${workspaceId}/tickets/${ticketId}/messages/${messageId}/attachments/`;
-  const filesPromises = [];
-
-  for (const attachment of attachments) {
-    const { Name, Content, ContentType, ContentID } = attachment;
-    const fileName = `${ContentID}+` + Name;
-
-    const uploadFilePromise = uploadFile({
-      fileName,
-      filePath,
-      content: Content,
-      contentType: ContentType,
-    });
-
-    filesPromises.push(uploadFilePromise);
-  }
+  const filesPromises = attachments.map(
+    ({ Name, Content, ContentType, ContentID }) =>
+      uploadFile({
+        fileName: `${ContentID}+` + Name,
+        filePath,
+        content: Content,
+        contentType: ContentType,
+      }),
+  );
 
   const files = await Promise.all(filesPromises);
 
@@ -85,6 +80,16 @@ export const moveAttachments = async (
   return movedResponses;
 };
 
+export const extractFileDetails = (file: File) => {
+  const args = file.name.split('/');
+  const fileNameFull = args.at(-1)!.split('+');
+  const contentId = fileNameFull.shift()!;
+  const fileName = fileNameFull.join('+');
+  const messageId = args.at(-3)!;
+
+  return { contentId, fileName, messageId };
+};
+
 export const getTicketAttachments = async (
   workspaceId: string,
   ticketId: string,
@@ -98,36 +103,21 @@ export const getTicketAttachments = async (
 
   const messageAttachmentsMap = {} as Record<string, MessageAttachment[]>;
 
-  const messageAttachmentsPromises = [];
+  const messageAttachmentsPromises = files.map(async (file) => {
+    const { contentId, fileName, messageId } = extractFileDetails(file);
 
-  for (const file of files) {
-    const args = file.name.split('/');
-    const fileNameFull = args.at(-1)!.split('+');
-    const contentId = fileNameFull.shift()!;
-    const fileName = fileNameFull.join('+');
-    const messageId = args.at(-3)!;
-
-    const attachmentPromise = new Promise<{
-      messageId: string;
-      attachment: MessageAttachment;
-    }>((resolve, reject) => {
-      getDownloadURL(file)
-        .then((downloadUrl) =>
-          resolve({
-            messageId,
-            attachment: {
-              fileName,
-              contentId,
-              size: `${file.metadata.size}`,
-              contentType: file.metadata.contentType!,
-              downloadUrl: downloadUrl as any as string,
-            },
-          }),
-        )
-        .catch((err) => reject(err));
-    });
-    messageAttachmentsPromises.push(attachmentPromise);
-  }
+    const downloadUrl = await getDownloadURL(file);
+    return {
+      messageId,
+      attachment: {
+        fileName,
+        contentId,
+        size: `${file.metadata.size}`,
+        contentType: file.metadata.contentType!,
+        downloadUrl,
+      },
+    };
+  });
 
   const messageAttachments = await Promise.all(messageAttachmentsPromises);
 
@@ -163,7 +153,7 @@ export const getAttachmentsFromToken = async (
     const fileName = fileNameFull.join('+');
 
     const contents = await file.download();
-    const fileString = Buffer.from(contents[0]).toString('base64');
+    const fileString = contents[0].toString('base64');
 
     const attachment: Attachment = {
       ContentID: contentId,
