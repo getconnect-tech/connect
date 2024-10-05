@@ -48,16 +48,9 @@ function OverdueCard({ countAssign, onClickDismiss, isShowNavbar }: Props) {
             <Button
               onClick={redirectToUnassigned}
               title='View Tickets'
-              secondary
-              variant='small'
+              tertiary={true}
             />
-            <Button
-              title='No, Thanks'
-              isLink={true}
-              className='link-button'
-              variant='small'
-              onClick={onClickDismiss}
-            />
+            <a onClick={onClickDismiss}>No, Thanks</a>
           </ButtonSection>
         </RightSection>
       </MainCardDiv>
