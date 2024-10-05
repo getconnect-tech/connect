@@ -48,7 +48,6 @@ interface Props {
   // eslint-disable-next-line no-unused-vars
   setCurrentOpenDropdown: (dropdown: string | null) => void;
   dropdownIdentifier: string;
-  loadData: () => void;
   ticketIndex: number;
   isShowNavbar: boolean;
 }

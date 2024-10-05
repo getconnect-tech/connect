@@ -1,8 +1,11 @@
 import axios from 'axios';
+import moment from 'moment';
+import TicketCacheService from './ticketCacheServices';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { ticketStore } from '@/stores/ticketStore';
 import { getAPIErrorMessage, isEmpty } from '@/helpers/common';
 import { messageStore } from '@/stores/messageStore';
+import { workspaceStore } from '@/stores/workspaceStore';
 
 /**
  * @desc Get ticket list
@@ -11,48 +14,34 @@ import { messageStore } from '@/stores/messageStore';
 export const getTicketList = async () => {
   try {
     ticketStore.setLoading(true);
-    const response = await axios.get(`${NEXT_PUBLIC_API_URL}/tickets`);
+
+    const companyId = workspaceStore?.currentWorkspace?.id;
+    const lastUpdatedTime =
+      await TicketCacheService.getInstance()?.getLastUpdatedTime(companyId);
+    const adjustedTime = moment().subtract(10, 'minutes').toISOString();
+
+    const response = await axios.get(`${NEXT_PUBLIC_API_URL}/tickets`, {
+      params: {
+        last_updated: lastUpdatedTime !== 0 ? lastUpdatedTime : undefined,
+      },
+    });
     const { data } = response;
 
-    if (!data || data?.length === 0) {
-      const mockData = [
-        {
-          id: '746a45db-4ede-4ab6-959c-19d7b7cd9f47',
-          workspace_id: '3e4b0b59-00af-4683-8158-b139925d38ff',
-          title: 'Test message from gmail',
-          contact_id: null,
-          assigned_to: null,
-          created_at: '2024-08-08T10:03:27.341Z',
-          updated_at: '2024-08-08T10:03:27.341Z',
-          priority: 'NONE',
-          source: 'MAIL',
-          mail_id:
-            '<CAFYk3OX9wLATj+yVGmB_oSEqmNzgZEmqUEv6cq6ps65nghesxw@mail.gmail.com>',
-          sender_name: 'Vatsal Ghoghari',
-          sender_mail: 'vghoghari82@gmail.com',
-        },
-        {
-          id: '96882ab7-4b22-48cc-88a0-dd23d99ad9d6',
-          workspace_id: '3e4b0b59-00af-4683-8158-b139925d38ff',
-          title: 'I found bugin ticker generate message',
-          contact_id: null,
-          assigned_to: null,
-          created_at: '2024-08-08T10:32:03.065Z',
-          updated_at: '2024-08-08T10:32:03.065Z',
-          priority: 'NONE',
-          source: 'MAIL',
-          mail_id:
-            '<TY0PR06MB5625D47D4955E92645EB99E5C4B92@TY0PR06MB5625.apcprd06.prod.outlook.com>',
-          sender_name: 'Aniket Ramani',
-          sender_mail: 'aniket@pixer.digital',
-        },
-      ];
-      ticketStore.setTicketList(data);
-      return mockData;
+    // let hasUpdatedData = false;
+    if (lastUpdatedTime === 0 || isEmpty(lastUpdatedTime)) {
+      await TicketCacheService.getInstance().addBulk(data);
+    } else {
+      await TicketCacheService.getInstance().addBulk(data);
     }
+    await TicketCacheService.getInstance().setLastUpdatedTime(
+      adjustedTime,
+      companyId,
+    );
+    const dataFromLocal = await TicketCacheService.getInstance().get();
+
     // set ticket list in store
-    ticketStore.setTicketList(data);
-    return data;
+    ticketStore.setTicketList(dataFromLocal);
+    return dataFromLocal;
   } catch (err: any) {
     messageStore.setErrorMessage(
       getAPIErrorMessage(err) || 'Something went wrong!',

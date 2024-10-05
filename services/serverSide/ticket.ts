@@ -46,6 +46,14 @@ export const getWorkspaceTickets = async (
           },
         },
       },
+      {
+        users: {
+          some: {
+            user_id: userId,
+            last_seen: { gt: lastUpdatedDate },
+          },
+        },
+      },
     ];
   }
 
