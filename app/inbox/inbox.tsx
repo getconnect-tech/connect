@@ -226,7 +226,6 @@ function Inbox({ activeNav, labelId }: InboxProps) {
                         currentOpenDropdown={currentOpenDropdown}
                         setCurrentOpenDropdown={setCurrentOpenDropdown}
                         dropdownIdentifier={`card-${ticket.id}`}
-                        loadData={loadData}
                         ticketIndex={index}
                         isShowNavbar={isNavbar}
                       />

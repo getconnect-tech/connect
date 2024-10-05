@@ -5,7 +5,7 @@ import LocalDbService, {
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
 
 let singleton: any;
-let organizationId: any;
+let organizationId: string | undefined;
 
 export default class TicketCacheService extends LocalDbService {
   constructor(props: any) {
@@ -39,7 +39,7 @@ export default class TicketCacheService extends LocalDbService {
     return result;
   }
 
-  async setLastUpdatedTime(value: any, companyId: string) {
+  async setLastUpdatedTime(value: string, companyId: string) {
     if (companyId !== organizationId) return false;
     const result = await super.setLastUpdatedTime(
       `${UPDATE_ON_ID.TICKETS}_${companyId}`,

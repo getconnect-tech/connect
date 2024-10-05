@@ -93,7 +93,7 @@ export default class LocalDbService {
     return [];
   }
 
-  async getItem(id: any) {
+  async getItem(id: string) {
     if (this.db) {
       const rows = await this.getDb().where({ id: id }).limit(1).toArray();
       if (rows && rows.length > 0) {
@@ -130,7 +130,7 @@ export default class LocalDbService {
     return false;
   }
 
-  async updateExisting(id: any, value: any) {
+  async updateExisting(id: string, value: any) {
     if (value && this.db) {
       const dbItem = {
         id: id,

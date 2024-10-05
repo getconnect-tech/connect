@@ -21,7 +21,9 @@ export const getTicketList = async () => {
     const adjustedTime = moment().subtract(10, 'minutes').toISOString();
 
     const response = await axios.get(`${NEXT_PUBLIC_API_URL}/tickets`, {
-      params: { last_updated: lastUpdatedTime },
+      params: {
+        last_updated: lastUpdatedTime !== 0 ? lastUpdatedTime : undefined,
+      },
     });
     const { data } = response;
 
