@@ -231,6 +231,18 @@ const CenterMainDiv = styled.div`
   padding: 0 20px;
   height: calc(100% - 82px);
 `;
+
+const MacroIconDiv = styled.div<Props>`
+  .icon {
+    background-color: var(
+      ${({ modeSelectedItem }) =>
+        modeSelectedItem?.name === 'Internal'
+          ? '--bg-surface-secondary-hover'
+          : '--bg-surface-secondary'}
+    );
+  }
+`;
+
 export {
   Main,
   MainDiv,
@@ -250,4 +262,5 @@ export {
   IconDiv,
   ButtonDiv,
   CenterMainDiv,
+  MacroIconDiv,
 };

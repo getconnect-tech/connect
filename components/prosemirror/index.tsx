@@ -18,6 +18,8 @@ import { exampleSetup } from 'prosemirror-example-setup';
 import { Plugin } from 'prosemirror-state';
 import { Decoration, DecorationSet } from 'prosemirror-view';
 import { mentionNode, getMentionsPlugin } from 'prosemirror-mentions';
+import ReactDOMServer from 'react-dom/server';
+import Avatar from '../avtar/Avtar';
 import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { workspaceStore } from '@/stores/workspaceStore';
 
@@ -130,12 +132,18 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
       marks: schema.spec.marks,
     });
 
-    const getMentionSuggestionsHTML = (items: any[]) =>
-      '<div class="suggestion-item-list">' +
-      items
-        .map((i) => '<div class="suggestion-item">' + i.name + '</div>')
-        .join('') +
-      '</div>';
+    const getMentionSuggestionsHTML = (items: any[]) => {
+      return ReactDOMServer.renderToString(
+        <div className='suggestion-item-list'>
+          {items.map((i) => (
+            <div className='suggestion-item' key={i.id}>
+              <Avatar imgSrc={i.profile_url || ''} name={i.name} size={20} />
+              <span className='name'>{i.name}</span>
+            </div>
+          ))}
+        </div>,
+      );
+    };
 
     const mentionPlugin = getMentionsPlugin({
       mentionTrigger: '@',
@@ -146,10 +154,14 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
         done: (items: any[]) => void,
       ) => {
         if (type === 'mention') {
-          // Filter users by the text typed after "@"
-          const users = workspaceStore?.currentWorkspace?.users?.map((user) => {
-            return { ...user, name: user?.display_name };
-          });
+          const users = workspaceStore?.currentWorkspace?.users?.map(
+            (user) => ({
+              ...user,
+              name: user?.display_name,
+              profile_url: user?.profile_url,
+            }),
+          );
+
           if (isEmpty(text)) done(users || []);
           else {
             const filteredUsers = users?.filter((user: any) =>
@@ -161,10 +173,9 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
       },
       getSuggestionsHTML: (items: any, type: any) => {
         if (type === 'mention') {
-          return getMentionSuggestionsHTML(items);
+          return getMentionSuggestionsHTML(items); // Render React component to HTML string
         }
       },
-      // activeClass: 'suggestion-item-active',
     });
 
     const parser = new DOMParser();
@@ -236,7 +247,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
       <div id='content' ref={contentRef} style={{ display: 'none' }}></div>
 
       {/* ProseMirror editor will be initialized here */}
-      <div id='editor' ref={editorRef}></div>
+      <div id='editor' ref={editorRef} />
     </div>
   );
 });
