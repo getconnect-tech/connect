@@ -45,14 +45,3 @@ export const WithDrodown: Story = {
     src: 'http://localhost:gytgyver.github',
   },
 };
-
-// userId: string;
-//     designation?: string | undefined;
-//     name: string;
-//     email: string;
-//     src: string;
-//     currentOpenDropdown?: (string | null) | undefined;
-//     dropdownIdentifier?: string | undefined;
-//     setOpenDropdown: (dropdown: string | null) => void;
-//     loadData: () => void;
-//     isInvited: boolean;
