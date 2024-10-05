@@ -174,7 +174,9 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
 
     const state = EditorState.create({
       doc,
-      plugins: [mentionPlugin].concat(exampleSetup({ schema: mySchema })),
+      plugins: [mentionPlugin].concat(
+        exampleSetup({ schema: mySchema, menuBar: false }),
+      ),
     });
 
     const view = new EditorView(editorRef.current, {
