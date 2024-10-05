@@ -4,6 +4,7 @@ import { Typography } from '@/styles/typography';
 
 interface WrapButton {
   secondary: boolean;
+  tertiary?: boolean;
   isDelete: boolean;
   isLoading?: boolean;
   width?: boolean;
@@ -41,6 +42,18 @@ const Buttons = styled.button<WrapButton>`
       border: var(--border-secondary);
       &:hover {
         background-color: var(--bg-surface-hover);
+      }
+    `}
+  ${(props) =>
+    props.tertiary &&
+    css`
+      background-color: var(--bg-surface-secondary);
+      color: var(--text);
+      border: var(--bg-surface);
+      padding: 4px 12px;
+      ${Typography.body_sm_regular};
+      &:hover {
+        background-color: var(--bg-surface-secondary-hover);
       }
     `}
   ${(props) =>

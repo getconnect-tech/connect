@@ -95,16 +95,9 @@ function NotificationCard({ isShowNavbar, onClose }: Props) {
             <Button
               onClick={handleEnableClick}
               title='Enable Notifications'
-              secondary
-              variant='small'
+              tertiary={true}
             />
-            <Button
-              title='No, Thanks'
-              isLink={true}
-              className='link-button'
-              variant='small'
-              onClick={handleDismiss}
-            />
+            <a onClick={handleDismiss}>No, Thanks</a>
           </ButtonSection>
         </RightSection>
       </MainCardDiv>
