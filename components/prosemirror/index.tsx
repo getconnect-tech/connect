@@ -1,5 +1,11 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
-import { EditorState } from 'prosemirror-state';
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from 'react';
+import { EditorState, PluginKey } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import {
   Schema,
@@ -9,6 +15,11 @@ import {
 import { schema } from 'prosemirror-schema-basic';
 import { addListNodes } from 'prosemirror-schema-list';
 import { exampleSetup } from 'prosemirror-example-setup';
+import { Plugin } from 'prosemirror-state';
+import { Decoration, DecorationSet } from 'prosemirror-view';
+import { mentionNode, getMentionsPlugin } from 'prosemirror-mentions';
+import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
+import { workspaceStore } from '@/stores/workspaceStore';
 
 interface Props {
   // eslint-disable-next-line no-unused-vars
@@ -32,32 +43,162 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
     return div.innerHTML;
   };
 
+  const placeholderPluginKey = new PluginKey('placeholderPlugin');
+
+  // eslint-disable-next-line prefer-const
+  let placeholderPlugin = new Plugin({
+    key: placeholderPluginKey, // Assign the key here
+    state: {
+      init() {
+        return DecorationSet.empty;
+      },
+      apply(tr, set) {
+        set = set.map(tr.mapping, tr.doc);
+
+        // Use the plugin key to get meta information
+        const action = tr.getMeta(placeholderPluginKey);
+
+        if (action && action.add) {
+          // eslint-disable-next-line no-undef
+          const widget = document.createElement('placeholder');
+          const deco = Decoration.widget(action.add.pos, widget, {
+            id: action.add.id,
+          });
+          set = set.add(tr.doc, [deco]);
+        } else if (action && action.remove) {
+          set = set.remove(
+            set.find(
+              undefined,
+              undefined,
+              (spec) => spec.id === action.remove.id,
+            ),
+          );
+        }
+        return set;
+      },
+    },
+    props: {
+      decorations(state) {
+        return this.getState(state);
+      },
+    },
+  });
+
+  const startImageUpload = useCallback(
+    (view: any, file: any, uploadPath: string, fileName: string) => {
+      const id = {};
+      // Replace the selection with a placeholder
+      const tr = view.state.tr;
+      if (!tr.selection.empty) tr.deleteSelection();
+      tr.setMeta(placeholderPlugin, { add: { id, pos: tr.selection.from } });
+      view.dispatch(tr);
+
+      getFirebaseUrlFromFile(file, uploadPath, fileName)
+        .then((url) => {
+          // const pos = findPlaceholder(view.state, id);
+          const pos = tr.selection.from;
+          if (pos === null) return;
+
+          // Replace the placeholder with the uploaded image
+          view.dispatch(
+            view.state.tr
+              .replaceWith(
+                pos,
+                pos,
+                view.state.schema.nodes.image.create({ src: url }),
+              )
+              .setMeta(placeholderPlugin, { remove: { id } }),
+          );
+        })
+        .catch(() => {
+          view.dispatch(tr.setMeta(placeholderPlugin, { remove: { id } }));
+        });
+    },
+    [placeholderPlugin],
+  );
+
   useEffect(() => {
     if (!editorRef.current || !contentRef.current) return;
 
     // Define schema with list nodes
     const mySchema = new Schema({
-      nodes: addListNodes(schema.spec.nodes, 'paragraph block*', 'block'),
+      nodes: addListNodes(
+        schema.spec.nodes,
+        'paragraph block*',
+        'block',
+      ).append({ mention: mentionNode }), // Add mention node
       marks: schema.spec.marks,
     });
 
-    // Initialize the EditorView when the component mounts
+    const getMentionSuggestionsHTML = (items: any[]) =>
+      '<div class="suggestion-item-list">' +
+      items
+        .map((i) => '<div class="suggestion-item">' + i.name + '</div>')
+        .join('') +
+      '</div>';
+
+    const mentionPlugin = getMentionsPlugin({
+      mentionTrigger: '@',
+      getSuggestions: (
+        type: string,
+        text: string,
+        // eslint-disable-next-line no-unused-vars
+        done: (items: any[]) => void,
+      ) => {
+        if (type === 'mention') {
+          // Filter users by the text typed after "@"
+          const users = workspaceStore?.currentWorkspace?.users?.map((user) => {
+            return { ...user, name: user?.display_name };
+          });
+          if (isEmpty(text)) done(users || []);
+          else {
+            const filteredUsers = users?.filter((user: any) =>
+              user?.name?.toLowerCase().includes(text.toLowerCase()),
+            );
+            done(filteredUsers || []);
+          }
+        }
+      },
+      getSuggestionsHTML: (items: any, type: any) => {
+        if (type === 'mention') {
+          return getMentionSuggestionsHTML(items);
+        }
+      },
+      // activeClass: 'suggestion-item-active',
+    });
+
+    const parser = new DOMParser();
+    const doc = ProseMirrorDOMParser.fromSchema(mySchema).parse(
+      parser.parseFromString(`<p></p>`, 'text/xml').documentElement,
+    );
+
+    const state = EditorState.create({
+      doc,
+      plugins: [mentionPlugin].concat(
+        exampleSetup({ schema: mySchema, menuBar: false }),
+      ),
+    });
+
     const view = new EditorView(editorRef.current, {
-      state: EditorState.create({
-        doc: ProseMirrorDOMParser.fromSchema(mySchema).parse(
-          contentRef.current,
-        ),
-        plugins: exampleSetup({ schema: mySchema }),
-      }),
-      // Capture the update event to handle editor state changes
+      state,
       dispatchTransaction(transaction) {
         const newState = view.state.apply(transaction);
         view.updateState(newState);
-
         // Convert the editor content to HTML and update the state
         const contentNode = view.state.doc;
         const htmlString = convertNodeToHTML(contentNode, mySchema);
         setValueContent(htmlString);
+
+        const html: any = DOMSerializer.fromSchema(mySchema).serializeFragment(
+          newState.doc.content,
+        );
+        const htmlStringNode = Array.from(html)
+          .map((node: any) => node.outerHTML)
+          .join(''); // Convert the content to HTML string
+        return htmlStringNode;
+      },
+      handleDOMEvents: {
+        input: () => {},
       },
     });
 
@@ -78,8 +219,13 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
           plugins: viewRef.current.state.plugins,
         });
         viewRef.current.updateState(emptyState);
-        // setEditorHTML(''); // Clear the HTML state as well
         setValueContent('');
+      }
+    },
+    uploadFile(file: any, uploadPath: string, fileName: string) {
+      if (file && viewRef.current?.state.selection.$from.parent.inlineContent) {
+        viewRef.current.focus();
+        startImageUpload(viewRef.current, file, uploadPath, fileName);
       }
     },
   }));

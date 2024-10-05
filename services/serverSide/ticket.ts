@@ -25,6 +25,7 @@ export const getWorkspaceTickets = async (
 ) => {
   const query: Prisma.TicketWhereInput = { workspace_id: workspaceId };
 
+  // Build the query based on lastUpdated
   if (lastUpdated) {
     const lastUpdatedDate = new Date(lastUpdated);
     query.OR = [
@@ -56,6 +57,7 @@ export const getWorkspaceTickets = async (
     ];
   }
 
+  // Use Prisma's select to limit fields retrieved
   const tickets = await prisma.ticket.findMany({
     where: query,
     include: {
@@ -85,55 +87,54 @@ export const getWorkspaceTickets = async (
           content: true,
           type: true,
         },
-        take: 1,
+        take: 1, // Only get the most recent message
         orderBy: { created_at: 'desc' },
       },
     },
   });
 
-  const ticketIds = tickets.map((t) => t.id);
+  const ticketIds = tickets.map((ticket) => ticket.id);
 
+  // Fetch last seen tickets in one go
   const ticketLastSeen = await prisma.ticketUser.findMany({
-    where: { ticket_id: { in: ticketIds }, user_id: userId },
+    where: {
+      ticket_id: { in: ticketIds },
+      user_id: userId,
+    },
     select: { last_seen: true, ticket_id: true },
   });
 
-  const ticketLastSeenMap = new Map<string, Date>();
-  ticketLastSeen.forEach((t) =>
-    ticketLastSeenMap.set(t.ticket_id, new Date(t.last_seen)),
+  // Create a Map for quick lookups
+  const ticketLastSeenMap = new Map(
+    ticketLastSeen.map((t) => [t.ticket_id, new Date(t.last_seen)]),
   );
 
+  // Build the final ticket structure
   const ticketsWithLastMessage = tickets.map((ticket) => {
     const { messages, ...rest } = ticket;
     const last_message = messages[0];
 
-    let has_read = false;
-    if (ticketLastSeenMap.has(ticket.id)) {
-      has_read =
-        ticketLastSeenMap.get(ticket.id)!.getTime() >=
+    const has_read =
+      ticketLastSeenMap.has(ticket.id) &&
+      ticketLastSeenMap.get(ticket.id)!.getTime() >=
         new Date(last_message.created_at).getTime();
-    }
 
-    const newTicket = { ...rest, last_message, has_read };
-
-    return newTicket;
+    return { ...rest, last_message, has_read };
   });
 
-  ticketsWithLastMessage.sort(
-    (a, b) =>
-      new Date(
-        b.last_message ? b.last_message.created_at : b.created_at,
-      ).getTime() -
-      new Date(
-        a.last_message ? a.last_message.created_at : a.created_at,
-      ).getTime(),
-  );
+  // Sort tickets based on last message or ticket creation date
+  ticketsWithLastMessage.sort((a, b) => {
+    const aTime = a.last_message
+      ? new Date(a.last_message.created_at).getTime()
+      : new Date(a.created_at).getTime();
+    const bTime = b.last_message
+      ? new Date(b.last_message.created_at).getTime()
+      : new Date(b.created_at).getTime();
+    return bTime - aTime;
+  });
 
-  const formattedTickets = ticketsWithLastMessage.map(
-    formatTicket,
-  ) as any as (typeof ticketsWithLastMessage)[0][];
-
-  return formattedTickets;
+  // Format tickets before returning
+  return ticketsWithLastMessage.map(formatTicket);
 };
 
 export const getTicketById = async (ticketId: string, workspaceId?: string) => {

@@ -62,6 +62,14 @@ export default class UserPreferenceSingleton {
     return 'current_workspace';
   }
 
+  static get UNASSIGNED_DISMISS() {
+    return 'unassigned_dismiss';
+  }
+
+  static get ENABLE_NOTIFICATION() {
+    return 'enable_notification';
+  }
+
   constructor(enforcer: any) {
     if (enforcer !== singletonEnforcer)
       throw new Error('Cannot construct singleton');
@@ -95,6 +103,34 @@ export default class UserPreferenceSingleton {
   setCurrentWorkspace(value: string) {
     return this.userPreferences.set(
       UserPreferenceSingleton.CURRENT_WORKSPACE,
+      value,
+    );
+  }
+
+  getAssignedDismiss() {
+    return this.userPreferences.get(
+      UserPreferenceSingleton.UNASSIGNED_DISMISS,
+      undefined,
+    );
+  }
+
+  setAssignedDismiss(value: string) {
+    return this.userPreferences.set(
+      UserPreferenceSingleton.UNASSIGNED_DISMISS,
+      value,
+    );
+  }
+
+  getEnableNotification() {
+    return this.userPreferences.get(
+      UserPreferenceSingleton.ENABLE_NOTIFICATION,
+      undefined,
+    );
+  }
+
+  setEnableNotification(value: string) {
+    return this.userPreferences.set(
+      UserPreferenceSingleton.ENABLE_NOTIFICATION,
       value,
     );
   }

@@ -344,3 +344,24 @@ export const reactMessage = async (messageId: string, payload: object) => {
     ticketStore.setLoading(false);
   }
 };
+
+/**
+ * @desc Get user activites
+ * @param {*} contactId
+ */
+export const getUserActivity = async (contactId: string) => {
+  try {
+    const response = await axios.get(
+      `${NEXT_PUBLIC_API_URL}/contacts/${contactId}/activites`,
+    );
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    ticketStore.setLoading(false);
+  }
+};

@@ -16,8 +16,7 @@ const TopDiv = styled.div`
   top: 0;
   background-color: var(--bg-surface);
   z-index: 99;
-  margin-bottom: 12px;
-  padding: 0 20px;
+  padding: 0 16px;
 `;
 
 const BottomDiv = styled.div`
@@ -29,15 +28,25 @@ const MainDiv = styled.div`
   width: 100%;
   margin-left: 223px;
   overflow: auto;
+
+  @media screen and (max-width: 449px) {
+    margin-left: unset;
+  }
 `;
 
 const HeaderDiv = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 24px 0 6px;
+  padding: 24px 0 4px;
   max-width: 662px;
   margin: 0 auto;
+  @media screen and (max-width: 449px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0 4px;
+  }
 `;
 
 const Title = styled.div`
@@ -66,6 +75,11 @@ const Tab = styled.p<Props>`
       box-shadow: var(--shadow-tab);
       color: var(--text);
     `}
+  @media screen and (max-width: 449px) {
+    min-width: 138px;
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 const ListMainDiv = styled.div`
@@ -74,7 +88,10 @@ const ListMainDiv = styled.div`
   box-shadow: var(--shadow-card);
   border-radius: 12px;
   max-width: 662px;
-  margin: 4px auto 0;
+  margin: 12px auto 0;
+  @media screen and (max-width: 449px) {
+    padding: 0;
+  }
 `;
 
 export {
