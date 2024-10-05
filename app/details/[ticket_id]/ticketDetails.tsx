@@ -23,6 +23,7 @@ import {
   InputIcon,
   LeftDiv,
   LineDiv,
+  MacroIconDiv,
   Main,
   MainDiv,
   Message,
@@ -908,7 +909,10 @@ function TicketDetails(props: Props) {
                     {(macros.length > 0 ||
                       currentWorkspace?.role === UserRole.OWNER ||
                       currentWorkspace?.role === UserRole.ADMIN) && (
-                      <div className='tag-div'>
+                      <MacroIconDiv
+                        modeSelectedItem={modeSelectedItem}
+                        className='tag-div'
+                      >
                         <Icon
                           iconName='sticky-note-icon'
                           iconSize='12'
@@ -916,6 +920,7 @@ function TicketDetails(props: Props) {
                           size={true}
                           onClick={handleMacroItem}
                           isActive={true}
+                          className='icon'
                         />
                         {macroDropdown && (
                           <DropDown
@@ -936,7 +941,7 @@ function TicketDetails(props: Props) {
                             }
                           />
                         )}
-                      </div>
+                      </MacroIconDiv>
                     )}
                   </div>
                   <IconDiv modeSelectedItem={modeSelectedItem}>
