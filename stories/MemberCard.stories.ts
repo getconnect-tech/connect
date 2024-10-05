@@ -29,16 +29,16 @@ export const Primary: Story = {
   },
 };
 
-export const WithDrodown: Story = {
+export const WithDropdown: Story = {
   args: {
     name: 'ABCDE',
     email: 'testing@',
     designation: 'job',
-    currentOpenDropdown: 'example-key', // This matches the dropdown identifier to open it by default
+    currentOpenDropdown: 'example-member', // Correct this to match dropdownIdentifier + "-member"
     setOpenDropdown: (dropdown: string | null) => {
       console.log('Dropdown state updated:', dropdown);
     },
-    dropdownIdentifier: 'example', // Make sure this matches the dropdownIdentifier for the dropdown
+    dropdownIdentifier: 'example', // This is used in the dropdownIdentifier
     userId: 'ABcd',
     loadData: () => {},
     isInvited: true,
