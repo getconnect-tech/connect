@@ -593,8 +593,6 @@ img.ProseMirror-separator {
   color: black;
   background-clip: padding-box;
   border-radius: 4px;
-  padding: 5px 0;
-  /* margin-bottom: 23px; */
 }
 
 .ProseMirror p:first-child,
@@ -604,11 +602,10 @@ img.ProseMirror-separator {
 .ProseMirror h4:first-child,
 .ProseMirror h5:first-child,
 .ProseMirror h6:first-child {
-  margin-top: 10px;
+  /* margin-top: 10px; */
 }
 
 .ProseMirror {
-  padding: 4px 8px 4px 14px;
   line-height: 1.2;
   outline: none;
 }
