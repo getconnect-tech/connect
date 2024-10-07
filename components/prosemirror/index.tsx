@@ -5,8 +5,8 @@ import {
   useImperativeHandle,
   useRef,
 } from 'react';
-import { EditorState, PluginKey } from 'prosemirror-state';
-import { EditorView } from 'prosemirror-view';
+import { EditorState, Plugin, PluginKey } from 'prosemirror-state';
+import { EditorView, Decoration, DecorationSet } from 'prosemirror-view';
 import {
   Schema,
   DOMParser as ProseMirrorDOMParser,
@@ -15,8 +15,6 @@ import {
 import { schema } from 'prosemirror-schema-basic';
 import { addListNodes } from 'prosemirror-schema-list';
 import { exampleSetup } from 'prosemirror-example-setup';
-import { Plugin } from 'prosemirror-state';
-import { Decoration, DecorationSet } from 'prosemirror-view';
 import { mentionNode, getMentionsPlugin } from 'prosemirror-mentions';
 import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { workspaceStore } from '@/stores/workspaceStore';
@@ -32,6 +30,8 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
 
+  const placeholderPluginKey = new PluginKey('placeholderPlugin');
+
   // Helper function to convert ProseMirror Node to HTML string
   const convertNodeToHTML = (node: any, schema: any) => {
     const fragment = DOMSerializer.fromSchema(schema).serializeFragment(
@@ -42,8 +42,6 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
     div.appendChild(fragment);
     return div.innerHTML;
   };
-
-  const placeholderPluginKey = new PluginKey('placeholderPlugin');
 
   // eslint-disable-next-line prefer-const
   let placeholderPlugin = new Plugin({
@@ -79,7 +77,25 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
     },
     props: {
       decorations(state) {
-        return this.getState(state);
+        const docIsEmpty =
+          state.doc.childCount === 1 &&
+          state.doc.firstChild?.isTextblock &&
+          state.doc.firstChild?.content.size === 0;
+
+        if (docIsEmpty) {
+          // Show placeholder if the document is empty
+          const placeholderDecoration = Decoration.widget(1, () => {
+            // eslint-disable-next-line no-undef
+            const placeholder = document.createElement('span');
+            placeholder.textContent = 'Write a message'; // Set your placeholder text
+            placeholder.style.cssText = `color: var(--text-text-secondary);`;
+            return placeholder;
+          });
+          return DecorationSet.create(state.doc, [placeholderDecoration]);
+        }
+
+        return DecorationSet.empty;
+        // return this.getState(state);
       },
     },
   });
@@ -146,10 +162,12 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
         done: (items: any[]) => void,
       ) => {
         if (type === 'mention') {
-          // Filter users by the text typed after "@"
-          const users = workspaceStore?.currentWorkspace?.users?.map((user) => {
-            return { ...user, name: user?.display_name };
-          });
+          const users = workspaceStore?.currentWorkspace?.users?.map(
+            (user) => ({
+              ...user,
+              name: user?.display_name,
+            }),
+          );
           if (isEmpty(text)) done(users || []);
           else {
             const filteredUsers = users?.filter((user: any) =>
@@ -164,7 +182,6 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
           return getMentionSuggestionsHTML(items);
         }
       },
-      // activeClass: 'suggestion-item-active',
     });
 
     const parser = new DOMParser();
@@ -174,7 +191,9 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
 
     const state = EditorState.create({
       doc,
-      plugins: [mentionPlugin].concat(exampleSetup({ schema: mySchema })),
+      plugins: [mentionPlugin, placeholderPlugin].concat(
+        exampleSetup({ schema: mySchema, menuBar: false }),
+      ),
     });
 
     const view = new EditorView(editorRef.current, {

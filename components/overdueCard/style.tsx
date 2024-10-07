@@ -66,8 +66,10 @@ const ButtonSection = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
-  .link-button {
-    padding: 0;
+  a {
+    ${Typography.body_sm_regular};
+    color: var(--text);
+    cursor: pointer;
   }
 `;
 

@@ -18,6 +18,7 @@ interface Props {
   iconViewBox?: string;
   className?: string;
   isLink?: boolean;
+  tertiary?: boolean;
 }
 
 const Button: React.FC<Props> = (Props) => {
@@ -36,6 +37,7 @@ const Button: React.FC<Props> = (Props) => {
     className,
     isLink,
     variant,
+    tertiary,
     ...props
   } = Props;
   return (
@@ -44,6 +46,7 @@ const Button: React.FC<Props> = (Props) => {
         onClick={onClick}
         secondary={secondary}
         isDelete={isDelete}
+        tertiary={tertiary}
         disabled={disabled || isLoading}
         isLoading={isLoading}
         type={type}
