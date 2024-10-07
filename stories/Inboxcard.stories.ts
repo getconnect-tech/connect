@@ -87,8 +87,8 @@ export const Primary: Story = {
     currentOpenDropdown: null,
     setCurrentOpenDropdown: mockSetCurrentOpenDropdown,
     dropdownIdentifier: 'dropdown1',
-    loadData: () => console.log('Load data triggered'),
     ticketIndex: 0,
+    isShowNavbar: false,
   },
 };
 
@@ -101,7 +101,7 @@ export const WithoutDot: Story = {
     currentOpenDropdown: null,
     setCurrentOpenDropdown: mockSetCurrentOpenDropdown,
     dropdownIdentifier: 'dropdown1',
-    loadData: () => console.log('Load data triggered'),
     ticketIndex: 0,
+    isShowNavbar: false,
   },
 };
