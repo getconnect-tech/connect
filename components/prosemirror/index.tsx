@@ -16,6 +16,8 @@ import { schema } from 'prosemirror-schema-basic';
 import { addListNodes } from 'prosemirror-schema-list';
 import { exampleSetup } from 'prosemirror-example-setup';
 import { mentionNode, getMentionsPlugin } from 'prosemirror-mentions';
+import ReactDOMServer from 'react-dom/server';
+import Avatar from '../avtar/Avtar';
 import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { workspaceStore } from '@/stores/workspaceStore';
 
@@ -146,12 +148,18 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
       marks: schema.spec.marks,
     });
 
-    const getMentionSuggestionsHTML = (items: any[]) =>
-      '<div class="suggestion-item-list">' +
-      items
-        .map((i) => '<div class="suggestion-item">' + i.name + '</div>')
-        .join('') +
-      '</div>';
+    const getMentionSuggestionsHTML = (items: any[]) => {
+      return ReactDOMServer.renderToString(
+        <div className='suggestion-item-list'>
+          {items.map((i) => (
+            <div className='suggestion-item' key={i.id}>
+              <Avatar imgSrc={i.profile_url || ''} name={i.name} size={20} />
+              <span className='name'>{i.name}</span>
+            </div>
+          ))}
+        </div>,
+      );
+    };
 
     const mentionPlugin = getMentionsPlugin({
       mentionTrigger: '@',
@@ -166,6 +174,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
             (user) => ({
               ...user,
               name: user?.display_name,
+              profile_url: user?.profile_url,
             }),
           );
           if (isEmpty(text)) done(users || []);
