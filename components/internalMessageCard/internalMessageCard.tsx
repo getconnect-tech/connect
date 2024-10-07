@@ -261,7 +261,7 @@ const InternalMessageCard = ({
     <div>
       <MainDiv>
         <Div>
-          <div className='message'>
+          <div className='message ProseMirror'>
             <RenderHtml htmlstring={title} />
             {attachments && attachments?.length > 0 && (
               <AttachmentMainDiv>
