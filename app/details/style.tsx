@@ -303,6 +303,9 @@ const CenterMainDiv = styled.div`
   padding: 0 16px;
   height: calc(100% - 82px);
   background-color: var(--bg-surface);
+  @media screen and (max-width: 449px) {
+    height: calc(100% - 117px);
+  }
 `;
 export {
   Main,
