@@ -20,7 +20,6 @@ interface Props {
 }
 
 function MacroCard({
-  index,
   id,
   name,
   description,
@@ -138,7 +137,7 @@ function MacroCard({
       </Modal>
       <Modal open={macroModal} onClose={onCloseMacroModal}>
         <MacroModal
-          macroData={{ index, title: name, description }}
+          macroData={{ id, title: name, description }}
           onClose={onCloseMacroModal}
         />
       </Modal>

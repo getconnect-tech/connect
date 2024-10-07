@@ -22,12 +22,13 @@ import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { workspaceStore } from '@/stores/workspaceStore';
 
 interface Props {
+  valueContent?: string;
   // eslint-disable-next-line no-unused-vars
   setValueContent: (value: string) => void;
 }
 
 const ProsemirrorEditor = forwardRef((props: Props, ref) => {
-  const { setValueContent } = props;
+  const { valueContent, setValueContent } = props;
   const editorRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
@@ -195,7 +196,10 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
 
     const parser = new DOMParser();
     const doc = ProseMirrorDOMParser.fromSchema(mySchema).parse(
-      parser.parseFromString(`<p></p>`, 'text/xml').documentElement,
+      parser.parseFromString(
+        `<p>${valueContent ? valueContent : ''}</p>`,
+        'text/xml',
+      ).documentElement,
     );
 
     const state = EditorState.create({
@@ -252,6 +256,26 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
       if (file && viewRef.current?.state.selection.$from.parent.inlineContent) {
         viewRef.current.focus();
         startImageUpload(viewRef.current, file, uploadPath, fileName);
+      }
+    },
+    addContent(content: string) {
+      if (viewRef.current) {
+        const { state, dispatch } = viewRef.current;
+        const { schema, tr } = state; // Correctly accessing the schema from state
+
+        // Parse the HTML content
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(content, 'text/html');
+
+        // Convert HTML to ProseMirror nodes using ProseMirror DOMParser
+        const fragment = ProseMirrorDOMParser.fromSchema(schema).parse(
+          doc.body,
+        );
+
+        // Insert the fragment into the document at the current selection
+        const transaction = tr.replaceSelectionWith(fragment);
+        dispatch(transaction); // Dispatch the transaction to update the editor
+        viewRef.current.focus(); // Focus on the editor
       }
     },
   }));

@@ -86,9 +86,13 @@ class SettingStore {
     this.macros = [...(this.macros || []), value];
   }
 
-  //update macro
-  updateMacros(index: number, updatedMacro: Macros) {
-    this.macros[index] = updatedMacro;
+  // Update Label
+  updateMacros(macroId: string, value: Label) {
+    if (!this.macros) return;
+
+    this.macros = this.macros.map((macro) =>
+      macro.id === macroId ? { ...macro, ...value } : macro,
+    );
   }
 
   // Delete Macro
