@@ -237,7 +237,7 @@ const ActivityDiv = styled.div`
   }
 `;
 
-const Message = styled.p`
+const Message = styled.p<{ hideAvatarLine?: boolean }>`
   ${Typography.body_md_regular};
   color: var(--text);
   /* border-left: var(--border-main); */
@@ -252,7 +252,11 @@ const Message = styled.p`
   }
   @media screen and (max-width: 449px) {
     padding-left: 18px;
-    border-left: var(--border-main);
+    ${(props) =>
+      !props.hideAvatarLine &&
+      css`
+        border-left: var(--border-main);
+      `}
   }
 `;
 

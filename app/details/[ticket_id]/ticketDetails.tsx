@@ -484,7 +484,7 @@ function TicketDetails(props: Props) {
    * @desc Render message based on message type
    */
   const renderActivityMessage = useCallback(
-    (message: MessageDetails) => {
+    (message: MessageDetails, hideAvatarLine: boolean) => {
       switch (message.type) {
         case MessageType.REGULAR: {
           const reactionData = message?.reactions.reduce(
@@ -576,7 +576,7 @@ function TicketDetails(props: Props) {
                   size={20}
                 />
               </div>
-              <Message>
+              <Message hideAvatarLine={hideAvatarLine}>
                 {message?.author?.display_name || ''}{' '}
                 <span>set priority to</span>{' '}
                 {capitalizeString(message?.reference_id)}
@@ -601,7 +601,7 @@ function TicketDetails(props: Props) {
                   size={20}
                 />
               </div>
-              <Message>
+              <Message hideAvatarLine={hideAvatarLine}>
                 {message?.author?.display_name || ''}{' '}
                 <span>
                   {message?.assignee?.display_name
@@ -630,7 +630,7 @@ function TicketDetails(props: Props) {
                   size={20}
                 />
               </div>
-              <Message>
+              <Message hideAvatarLine={hideAvatarLine}>
                 {message?.author?.display_name || ''}{' '}
                 <span>
                   {message?.reference_id === 'SNOOZE'
@@ -894,20 +894,31 @@ function TicketDetails(props: Props) {
           <CenterMainDiv>
             <BottomDiv>
               <CenterDiv ref={messagesEndRef}>
-                {messages?.map((message, index) => (
-                  <div key={index}>
-                    {renderActivityMessage(message)}
-                    {isLargeScreen
-                      ? index !== messages?.length - 1 && <LineDiv />
-                      : index !== messages?.length - 1 &&
+                {messages?.map((message, index) => {
+                  const hideAvatarLine =
+                    index === messages?.length - 1 ||
+                    (messages?.[index + 1] &&
+                      (messages?.[index + 1]?.type === MessageType.EMAIL ||
+                        messages?.[index + 1]?.type ===
+                          MessageType.FROM_CONTACT ||
+                        messages?.[index + 1]?.type === MessageType.REGULAR));
+                  return (
+                    <div key={index}>
+                      {renderActivityMessage(message, hideAvatarLine)}
+                      {isLargeScreen && index !== messages?.length - 1 && (
+                        <LineDiv />
+                      )}
+                      {!isLargeScreen &&
+                        !hideAvatarLine &&
                         (message.type === MessageType.CHANGE_ASSIGNEE ||
                           message.type === MessageType.CHANGE_LABEL ||
                           message.type === MessageType.CHANGE_PRIORITY ||
                           message.type === MessageType.CHANGE_STATUS) && (
                           <LineDiv />
                         )}
-                  </div>
-                ))}
+                    </div>
+                  );
+                })}
               </CenterDiv>
             </BottomDiv>
             <InputDiv>
