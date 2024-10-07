@@ -187,8 +187,10 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
 
     const parser = new DOMParser();
     const doc = ProseMirrorDOMParser.fromSchema(mySchema).parse(
-      parser.parseFromString(`<p>${valueContent}</p>`, 'text/xml')
-        .documentElement,
+      parser.parseFromString(
+        `<p>${valueContent ? valueContent : ''}</p>`,
+        'text/xml',
+      ).documentElement,
     );
 
     const state = EditorState.create({
