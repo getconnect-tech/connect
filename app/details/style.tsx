@@ -31,6 +31,10 @@ const BottomDiv = styled.div`
   overflow: auto;
   scroll-padding-bottom: 15px;
   padding-bottom: 20px;
+  @media screen and (max-width: 449px) {
+    padding-bottom: unset;
+    height: calc(100% - 114px);
+  }
 `;
 
 const MainDiv = styled.div`
@@ -256,6 +260,11 @@ const Message = styled.p<{ hideAvatarLine?: boolean }>`
       !props.hideAvatarLine &&
       css`
         border-left: var(--border-main);
+      `}
+    ${(props) =>
+      props.hideAvatarLine &&
+      css`
+        margin-bottom: 20px;
       `}
   }
 `;
