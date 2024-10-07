@@ -154,7 +154,7 @@ export default function MessageCard({
             </TagDiv>
           )}
         </CardTop>
-        <CardMessage>
+        <CardMessage className='ProseMirror'>
           <RenderHtml htmlstring={message} />
         </CardMessage>
         {attachments?.length > 0 && (
