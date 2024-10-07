@@ -279,6 +279,50 @@ const InternalMessageCard = ({
       <MainDiv>
         <Div>
           <div className='message ProseMirror'>
+            <NameMainDiv>
+              <div className='left-div'>
+                <Avatar imgSrc={message} name={messageName} size={20} />
+                <Name>{messageName}</Name>
+                <SVGIcon
+                  name='dot-icon'
+                  width='4'
+                  height='4'
+                  fill='none'
+                  viewBox='0 0 4 4'
+                />
+                <p>{moment(time).fromNow()}</p>
+              </div>
+              {!showReactions && (
+                <EmojiPickerDiv ref={emojiResponsivePickerRef}>
+                  <div
+                    onClick={handleResponsiveAddReactionClick}
+                    onMouseEnter={(e) =>
+                      handleMouseEnter(e, setSubmenuPosition)
+                    }
+                  >
+                    <SVGIcon
+                      name='emoji-icon'
+                      width='12'
+                      height='12'
+                      viewBox='0 0 12 12'
+                      className='icon'
+                    />
+                  </div>
+                  {showResponsiveEmojiPicker && (
+                    <div className='reaction-icon-div'>
+                      <EmojiPicker
+                        onEmojiClick={handleEmojiSelect}
+                        className={
+                          submenuPosition === 'upwards'
+                            ? 'submenu-upwards responsive-upwards'
+                            : 'submenu-downwards responsive'
+                        }
+                      />
+                    </div>
+                  )}
+                </EmojiPickerDiv>
+              )}
+            </NameMainDiv>
             <RenderHtml htmlstring={title} />
             {attachments && attachments?.length > 0 && (
               <AttachmentMainDiv>
