@@ -27,13 +27,12 @@ const BottomDiv = styled.div`
   max-width: 702px;
   width: 100%;
   margin: 0 auto;
-  height: calc(100% - 116px);
+  height: calc(100% - 114px);
   overflow: auto;
   scroll-padding-bottom: 15px;
   padding-bottom: 20px;
   @media screen and (max-width: 449px) {
     padding-bottom: unset;
-    height: calc(100% - 114px);
   }
 `;
 
