@@ -10,6 +10,7 @@ import {
   updateMacros,
 } from '@/services/clientSide/settingServices';
 import { messageStore } from '@/stores/messageStore';
+import { isEmpty } from '@/helpers/common';
 
 interface MacroData {
   index: number;
@@ -63,7 +64,7 @@ function MacroModal({ onClose, macroData }: Props) {
 
   return (
     <MainDiv className='macro-main-div'>
-      <Header>Edit Macro</Header>
+      <Header>{isEmpty(title) ? 'Add Macro' : 'Edit Macro'}</Header>
       <BottomDiv onSubmit={handleMacrosSubmit}>
         <div className='content'>
           <div>
