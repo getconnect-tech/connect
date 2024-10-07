@@ -86,8 +86,8 @@ class SettingStore {
     this.macros = [...(this.macros || []), value];
   }
 
-  // Update Label
-  updateMacros(macroId: string, value: Label) {
+  // Update macros
+  updateMacros(macroId: string, value: Macros) {
     if (!this.macros) return;
 
     this.macros = this.macros.map((macro) =>
