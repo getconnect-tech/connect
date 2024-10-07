@@ -602,7 +602,7 @@ img.ProseMirror-separator {
 .ProseMirror h4:first-child,
 .ProseMirror h5:first-child,
 .ProseMirror h6:first-child {
-  /* margin-top: 10px; */
+  margin-top: 10px;
 }
 
 .ProseMirror {

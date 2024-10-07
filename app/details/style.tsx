@@ -115,7 +115,7 @@ const Input = styled.div<Props>`
   );
   border-radius: 12px;
   width: 100%;
-  padding: 12px;
+  padding: 6px 12px 12px;
   display: flex;
   flex-direction: column;
   gap: 2px;
