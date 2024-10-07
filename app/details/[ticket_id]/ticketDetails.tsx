@@ -124,6 +124,7 @@ function TicketDetails(props: Props) {
           ? `${prevValue}\n${selectedMacro.content}`
           : selectedMacro.content;
       });
+      editorRef.current.addContent(selectedMacro.content || '');
       setMacroDropdown(false);
     },
     [],
@@ -847,6 +848,7 @@ function TicketDetails(props: Props) {
               <Input modeSelectedItem={modeSelectedItem}>
                 <ProsemirrorEditor
                   ref={editorRef}
+                  valueContent={commentValue}
                   setValueContent={setCommentValue}
                 />
                 <div className='attach-file-div'>

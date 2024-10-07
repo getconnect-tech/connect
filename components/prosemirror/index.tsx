@@ -249,6 +249,26 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
         startImageUpload(viewRef.current, file, uploadPath, fileName);
       }
     },
+    addContent(content: string) {
+      if (viewRef.current) {
+        const { state, dispatch } = viewRef.current;
+        const { schema, tr } = state; // Correctly accessing the schema from state
+
+        // Parse the HTML content
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(content, 'text/html');
+
+        // Convert HTML to ProseMirror nodes using ProseMirror DOMParser
+        const fragment = ProseMirrorDOMParser.fromSchema(schema).parse(
+          doc.body,
+        );
+
+        // Insert the fragment into the document at the current selection
+        const transaction = tr.replaceSelectionWith(fragment);
+        dispatch(transaction); // Dispatch the transaction to update the editor
+        viewRef.current.focus(); // Focus on the editor
+      }
+    },
   }));
 
   return (
