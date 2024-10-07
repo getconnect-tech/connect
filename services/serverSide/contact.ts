@@ -25,7 +25,7 @@ export const getWorkspaceContacts = async (workspaceId: string) => {
       id: true,
       name: true,
       email: true,
-      company_id: true,
+      group_id: true,
       workspace_id: true,
       created_at: true,
       updated_at: true,
