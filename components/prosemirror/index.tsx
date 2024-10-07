@@ -20,12 +20,13 @@ import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { workspaceStore } from '@/stores/workspaceStore';
 
 interface Props {
+  valueContent?: string;
   // eslint-disable-next-line no-unused-vars
   setValueContent: (value: string) => void;
 }
 
 const ProsemirrorEditor = forwardRef((props: Props, ref) => {
-  const { setValueContent } = props;
+  const { valueContent, setValueContent } = props;
   const editorRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
@@ -186,7 +187,8 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
 
     const parser = new DOMParser();
     const doc = ProseMirrorDOMParser.fromSchema(mySchema).parse(
-      parser.parseFromString(`<p></p>`, 'text/xml').documentElement,
+      parser.parseFromString(`<p>${valueContent}</p>`, 'text/xml')
+        .documentElement,
     );
 
     const state = EditorState.create({

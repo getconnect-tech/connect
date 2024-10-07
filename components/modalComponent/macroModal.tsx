@@ -1,8 +1,8 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import Input from '../input/input';
-import RichTextBox from '../commentBox';
 import Button from '../button/button';
+import ProsemirrorEditor from '../prosemirror';
 import { BottomDiv, Header, Label, MainDiv } from './style';
 import { useStores } from '@/stores';
 import {
@@ -79,12 +79,7 @@ function MacroModal({ onClose, macroData }: Props) {
           </div>
           <div className='text-field'>
             <Label>Description</Label>
-            <RichTextBox
-              isApplyMaxHeight={412}
-              isApplyMinHeight={412}
-              isInlineToolbar={false}
-              className='rich-text'
-              placeholder='Enter description'
+            <ProsemirrorEditor
               valueContent={description}
               setValueContent={setDescription}
             />
