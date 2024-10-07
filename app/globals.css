@@ -593,8 +593,6 @@ img.ProseMirror-separator {
   color: black;
   background-clip: padding-box;
   border-radius: 4px;
-  padding: 5px 0;
-  /* margin-bottom: 23px; */
 }
 
 .ProseMirror p:first-child,
@@ -608,11 +606,29 @@ img.ProseMirror-separator {
 }
 
 .ProseMirror {
-  padding: 4px 8px 4px 14px;
   line-height: 1.2;
   outline: none;
 }
 
 .ProseMirror p {
   margin-bottom: 1em;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.ProseMirror h1 {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 28px;
+}
+.ProseMirror h2 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+}
+.ProseMirror h3 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
 }

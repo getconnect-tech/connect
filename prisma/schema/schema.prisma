@@ -96,22 +96,38 @@ model Message {
 }
 
 model Contact {
-  id           String   @id @default(uuid())
-  name         String
-  email        String
-  company_id   String?
+  id           String @id @default(uuid())
   workspace_id String
-  created_at   DateTime @default(now())
-  updated_at   DateTime @default(now()) @updatedAt
+  email        String
 
-  company   Company?  @relation(fields: [company_id], references: [id])
+  address     Json?
+  age         Int?
+  avatar      String?
+  birthday    DateTime?
+  description String?
+  first_name  String?
+  last_name   String?
+  name        String
+  gender      GENDER?
+  phone       String?
+  title       String?
+  username    String?
+  website     String?
+  group_id    String?
+
+  custom_traits Json?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  group     Group?    @relation(fields: [group_id], references: [id])
   tickets   Ticket[]
   workspace Workspace @relation(fields: [workspace_id], references: [id])
 
   @@unique(name: "workspace_email_id", [workspace_id, email])
 }
 
-model Company {
+model Group {
   id       String    @id @default(uuid())
   name     String
   email    String

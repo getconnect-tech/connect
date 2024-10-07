@@ -52,3 +52,8 @@ enum EmailEventType {
   SPAMED
   FAILED
 }
+
+enum GENDER {
+  MALE
+  FEMALE
+}
