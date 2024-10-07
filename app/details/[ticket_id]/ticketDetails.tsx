@@ -494,7 +494,7 @@ function TicketDetails(props: Props) {
                 title={message?.content || ''}
                 time={message?.created_at}
                 reactions={reactionData}
-                showReactions={reactionData.length > 0}
+                showReactions={reactionData?.length > 0}
                 attachments={message?.attachments}
                 messageId={message.id}
               />
@@ -907,7 +907,7 @@ function TicketDetails(props: Props) {
                         })(),
                       }}
                     />
-                    {(macros.length > 0 ||
+                    {(macros?.length > 0 ||
                       currentWorkspace?.role === UserRole.OWNER ||
                       currentWorkspace?.role === UserRole.ADMIN) && (
                       <div className='tag-div'>
