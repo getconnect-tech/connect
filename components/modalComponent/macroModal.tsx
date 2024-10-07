@@ -13,7 +13,7 @@ import { messageStore } from '@/stores/messageStore';
 import { isEmpty } from '@/helpers/common';
 
 interface MacroData {
-  index: number;
+  id: string;
   title: string;
   description: string;
 }
@@ -42,9 +42,9 @@ function MacroModal({ onClose, macroData }: Props) {
       try {
         if (macroData) {
           // Update existing macro
-          const result = await updateMacros(macroData?.index, payload);
+          const result = await updateMacros(macroData?.id, payload);
           if (result) {
-            settingStore.updateMacros(macroData?.index, result);
+            settingStore.updateMacros(macroData?.id, result);
           }
         } else {
           // Create new macro
