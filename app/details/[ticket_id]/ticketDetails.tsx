@@ -148,6 +148,7 @@ function TicketDetails(props: Props) {
           ? `${prevValue}\n${selectedMacro.content}`
           : selectedMacro.content;
       });
+      editorRef.current.addContent(selectedMacro.content || '');
       setMacroDropdown(false);
     },
     [],
@@ -517,7 +518,7 @@ function TicketDetails(props: Props) {
                 title={message?.content || ''}
                 time={message?.created_at}
                 reactions={reactionData}
-                showReactions={reactionData.length > 0}
+                showReactions={reactionData?.length > 0}
                 attachments={message?.attachments}
                 messageId={message.id}
                 message={message?.author?.profile_url || ''}

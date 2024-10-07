@@ -218,7 +218,7 @@ export const createMacros = async (payload: object) => {
  * @desc  update macros
  * @param {*} payload { "title" , "content"}
  */
-export const updateMacros = async (macrosId: number, payload: object) => {
+export const updateMacros = async (macrosId: string, payload: object) => {
   try {
     settingStore.setLoading(true);
     const response = await axios.put(

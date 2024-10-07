@@ -1,8 +1,8 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import Input from '../input/input';
-import RichTextBox from '../commentBox';
 import Button from '../button/button';
+import ProsemirrorEditor from '../prosemirror';
 import { BottomDiv, Header, Label, MainDiv } from './style';
 import { useStores } from '@/stores';
 import {
@@ -10,9 +10,10 @@ import {
   updateMacros,
 } from '@/services/clientSide/settingServices';
 import { messageStore } from '@/stores/messageStore';
+import { isEmpty } from '@/helpers/common';
 
 interface MacroData {
-  index: number;
+  id: string;
   title: string;
   description: string;
 }
@@ -41,9 +42,9 @@ function MacroModal({ onClose, macroData }: Props) {
       try {
         if (macroData) {
           // Update existing macro
-          const result = await updateMacros(macroData?.index, payload);
+          const result = await updateMacros(macroData?.id, payload);
           if (result) {
-            settingStore.updateMacros(macroData?.index, result);
+            settingStore.updateMacros(macroData?.id, result);
           }
         } else {
           // Create new macro
@@ -63,7 +64,7 @@ function MacroModal({ onClose, macroData }: Props) {
 
   return (
     <MainDiv className='macro-main-div'>
-      <Header>Edit Macro</Header>
+      <Header>{isEmpty(title) ? 'Add Macro' : 'Edit Macro'}</Header>
       <BottomDiv onSubmit={handleMacrosSubmit}>
         <div className='content'>
           <div>
@@ -79,12 +80,7 @@ function MacroModal({ onClose, macroData }: Props) {
           </div>
           <div className='text-field'>
             <Label>Description</Label>
-            <RichTextBox
-              isApplyMaxHeight={412}
-              isApplyMinHeight={412}
-              isInlineToolbar={false}
-              className='rich-text'
-              placeholder='Enter description'
+            <ProsemirrorEditor
               valueContent={description}
               setValueContent={setDescription}
             />
