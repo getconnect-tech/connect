@@ -31,6 +31,7 @@ const Buttons = styled.button<WrapButton>`
   white-space: nowrap;
   align-items: center;
   cursor: pointer;
+  font-family: unset;
   &:hover {
     background-color: var(--brand-fill-hover);
   }
@@ -49,11 +50,12 @@ const Buttons = styled.button<WrapButton>`
     css`
       background-color: var(--bg-surface-secondary);
       color: var(--text);
-      border: var(--bg-surface);
+      border: var(--bg-surface-secondary);
       padding: 4px 12px;
       ${Typography.body_sm_regular};
       &:hover {
         background-color: var(--bg-surface-secondary-hover);
+        border: var(--bg-surface-secondary-hover);
       }
     `}
   ${(props) =>

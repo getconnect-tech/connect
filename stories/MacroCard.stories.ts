@@ -28,14 +28,16 @@ export const Primary: Story = {
   },
 };
 
-export const Primary: Story = {
+export const WithDropdown: Story = {
   args: {
     index: 0,
     name: 'Macro Card',
     description: 'Request for Feedback on Connect.',
-    currentOpenDropdown: '',
-    setCurrentOpenDropdown: () => {},
-    dropdownIdentifier: '',
+    currentOpenDropdown: 'example-key',
+    setCurrentOpenDropdown: (dropdown: string | null) => {
+      console.log('Dropdown state updated:', dropdown);
+    },
+    dropdownIdentifier: 'example',
     id: '',
   },
 };
