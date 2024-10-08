@@ -955,7 +955,7 @@ function TicketDetails(props: Props) {
                       Loading...({Math.floor(uploadLoading)}%)
                     </p>
                   )}
-                  <InputIcon>
+                  <InputIcon modeSelectedItem={modeSelectedItem}>
                     <div className='drop-tag'>
                       <DropDownWithTag
                         onClick={handleMessageModeTag}
@@ -1004,6 +1004,7 @@ function TicketDetails(props: Props) {
                             size={true}
                             onClick={handleMacroItem}
                             isActive={true}
+                            className='icon'
                           />
                           {macroDropdown && (
                             <DropDown
