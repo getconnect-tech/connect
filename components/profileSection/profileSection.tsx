@@ -14,7 +14,7 @@ import WorkDetails from './workDetails';
 import RecentEvent from './recentEvent';
 import AIBlock from './aiBlock';
 import { useStores } from '@/stores';
-import { capitalizeString } from '@/helpers/common';
+import { capitalizeString, formatTime } from '@/helpers/common';
 
 interface ContactInfo {
   label: string;
@@ -26,33 +26,6 @@ export default function ProfileSection() {
   const { ticketDetails } = ticketStore;
   const { contact } = ticketDetails || {};
   const [contactInfo, setContactInfo] = useState<ContactInfo[]>([]);
-
-  const formatTime = (isoString: string) => {
-    const now = moment(); // Current time
-    const eventTime = moment(isoString); // Event time
-    const diffInMinutes = now.diff(eventTime, 'minutes');
-
-    if (diffInMinutes <= 0) {
-      return 'Now';
-    }
-
-    // Format difference based on time range
-    if (diffInMinutes < 60) {
-      return `${diffInMinutes}m`;
-    } else if (diffInMinutes < 1440) {
-      const hours = Math.floor(diffInMinutes / 60);
-      return `${hours}h`;
-    } else if (diffInMinutes < 10080) {
-      const days = Math.floor(diffInMinutes / 1440);
-      return `${days}d`;
-    } else if (diffInMinutes < 43200) {
-      const weeks = Math.floor(diffInMinutes / 10080);
-      return `${weeks}w`;
-    } else {
-      const months = Math.floor(diffInMinutes / 43200);
-      return `${months}mon`;
-    }
-  };
 
   const createContactInfo = useCallback(() => {
     const contactArray: ContactInfo[] = [];
