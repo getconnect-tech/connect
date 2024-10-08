@@ -59,7 +59,8 @@ export type ReactionProps = {
   }[];
 };
 
-export interface Contact extends Partial<PrismaContact> {
+export interface Contact extends Omit<Partial<PrismaContact>, 'birthday'> {
   address?: z.infer<typeof addressSchema>;
   custom_traits?: z.infer<typeof customTraitsSchema>;
+  birthday?: string;
 }
