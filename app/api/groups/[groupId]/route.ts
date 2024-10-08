@@ -1,17 +1,18 @@
 import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
-import { nameSchema } from '@/lib/zod/common';
+import { externalIdSchema, nameSchema } from '@/lib/zod/common';
 import { groupLabelSchema } from '@/lib/zod/group';
-import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import { customTraitsSchema } from '@/lib/zod/contact';
 import { updateGroup } from '@/services/serverSide/group';
+import withAdminAuth from '@/middlewares/withAdminAuth';
 
 const UpdateGroupBody = z.object({
   name: nameSchema.optional(),
   groupLabel: groupLabelSchema.optional(),
   customTraits: customTraitsSchema.optional(),
+  externalId: externalIdSchema.optional(),
 });
-export const PUT = withWorkspaceAuth(async (req, { groupId }) => {
+export const PUT = withAdminAuth(async (req, { groupId }) => {
   try {
     const requestBody = await req.json();
 

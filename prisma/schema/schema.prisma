@@ -97,7 +97,8 @@ model Message {
 }
 
 model Contact {
-  id           String @id @default(uuid())
+  id           String  @id @default(uuid())
+  contact_id   String?
   workspace_id String
   email        String
 
@@ -125,10 +126,12 @@ model Contact {
   groups    ContactGroup[]
 
   @@unique(name: "workspace_email_id", [workspace_id, email])
+  @@unique(name: "external_user_id", [workspace_id, contact_id])
 }
 
 model Group {
-  id           String @id @default(uuid())
+  id           String  @id @default(uuid())
+  group_id     String?
   workspace_id String
   name         String
   group_label  String
@@ -139,6 +142,8 @@ model Group {
 
   workspace Workspace      @relation(fields: [workspace_id], references: [id])
   contacts  ContactGroup[]
+
+  @@unique(name: "external_group_id", [workspace_id, group_id])
 }
 
 model VerificationToken {

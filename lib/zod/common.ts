@@ -27,3 +27,8 @@ export const lastUpdatedTimeSchema = z
     invalid_type_error: "'last_updated' must be of type string!",
   })
   .datetime();
+
+export const externalIdSchema = z.string({
+  required_error: "'externalId' is required!",
+  invalid_type_error: "'externalId' must be of type string!",
+});
