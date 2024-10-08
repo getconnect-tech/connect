@@ -592,6 +592,8 @@ img.ProseMirror-separator {
   color: black;
   background-clip: padding-box;
   border-radius: 4px;
+  max-height: 240px;
+  overflow: auto;
 }
 
 .ProseMirror p:first-child,

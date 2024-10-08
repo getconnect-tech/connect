@@ -57,10 +57,16 @@ export const BottomDiv = styled.form`
     .input {
       padding: 8px 16px;
     }
+    .prosemirror {
+      border: var(--border-secondary);
+      border-radius: 12px !important;
+      padding: 0 16px !important;
+      min-height: 160px;
+    }
     .rich-text {
       border: var(--border-main);
       border-radius: 12px;
-      .e-richtexteditor .rte-placeholder {
+      .e-richtexteditor .rte-placeholder {ed
         padding: 8px 16px;
       }
       .e-richtexteditor .e-rte-content .e-content {
