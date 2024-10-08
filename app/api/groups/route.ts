@@ -29,9 +29,9 @@ export const POST = withAdminAuth(async (req) => {
 
     CreateGroupBody.parse(requestBody);
 
-    const { name, groupLabel } = requestBody as z.infer<typeof CreateGroupBody>;
+    const groupData = requestBody as z.infer<typeof CreateGroupBody>;
 
-    const newGroup = await createGroup(req.workspace.id, { name, groupLabel });
+    const newGroup = await createGroup(req.workspace.id, groupData);
 
     return Response.json(newGroup, { status: 201 });
   } catch (err) {
