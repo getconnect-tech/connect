@@ -2,9 +2,10 @@ import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import { createGroup, getWorkspaceGroups } from '@/services/serverSide/group';
-import { nameSchema } from '@/lib/zod/common';
+import { externalIdSchema, nameSchema } from '@/lib/zod/common';
 import { groupLabelSchema } from '@/lib/zod/group';
 import { customTraitsSchema } from '@/lib/zod/contact';
+import withAdminAuth from '@/middlewares/withAdminAuth';
 
 export const GET = withWorkspaceAuth(async (req) => {
   try {
@@ -20,8 +21,9 @@ const CreateGroupBody = z.object({
   name: nameSchema,
   groupLabel: groupLabelSchema,
   customTraits: customTraitsSchema.optional(),
+  externalId: externalIdSchema.optional(),
 });
-export const POST = withWorkspaceAuth(async (req) => {
+export const POST = withAdminAuth(async (req) => {
   try {
     const requestBody = await req.json();
 
