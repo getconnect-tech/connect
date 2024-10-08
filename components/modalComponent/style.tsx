@@ -57,6 +57,14 @@ export const BottomDiv = styled.form`
     .input {
       padding: 8px 16px;
     }
+    .prosemirror {
+      border: var(--border-secondary);
+      border-radius: 12px !important;
+      padding: 0 16px !important;
+      min-height: 195px;
+      max-height: 195px;
+      overflow: auto;
+    }
     .rich-text {
       border: var(--border-main);
       border-radius: 12px;

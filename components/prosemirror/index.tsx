@@ -25,6 +25,8 @@ interface Props {
   valueContent?: string;
   // eslint-disable-next-line no-unused-vars
   setValueContent: (value: string) => void;
+  className?: string;
+  placeholder: string;
 }
 
 const ProsemirrorEditor = forwardRef((props: Props, ref) => {
@@ -90,7 +92,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
           const placeholderDecoration = Decoration.widget(1, () => {
             // eslint-disable-next-line no-undef
             const placeholder = document.createElement('span');
-            placeholder.textContent = 'Write a message'; // Set your placeholder text
+            placeholder.textContent = props.placeholder; // Set your placeholder text
             placeholder.style.cssText = `color: var(--text-text-secondary);`;
             return placeholder;
           });
@@ -286,7 +288,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
       <div id='content' ref={contentRef} style={{ display: 'none' }}></div>
 
       {/* ProseMirror editor will be initialized here */}
-      <div id='editor' ref={editorRef}></div>
+      <div id='editor' className={props.className} ref={editorRef}></div>
     </div>
   );
 });

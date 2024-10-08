@@ -1,6 +1,5 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
-import moment from 'moment';
 import {
   Dot,
   EventDetailDiv,
@@ -14,7 +13,7 @@ import {
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { ticketStore } from '@/stores/ticketStore';
 import { getUserActivity } from '@/services/clientSide/ticketServices';
-import { isEmpty } from '@/helpers/common';
+import { formatTime, isEmpty } from '@/helpers/common';
 import { UserActivity } from '@/utils/dataTypes';
 
 export default function RecentEvent() {
@@ -23,33 +22,6 @@ export default function RecentEvent() {
   const { ticketDetails, loading } = ticketStore;
   const [activityLoading, setActivityLoading] = useState(loading);
   const { contact } = ticketDetails || {};
-
-  const foramteTime = (isoString: string) => {
-    const now = moment(); // Current time
-    const eventTime = moment(isoString); // Event time
-    const diffInMinutes = now.diff(eventTime, 'minutes');
-
-    if (diffInMinutes <= 0) {
-      return 'Now';
-    }
-
-    // Format difference based on time range
-    if (diffInMinutes < 60) {
-      return `${diffInMinutes}m`;
-    } else if (diffInMinutes < 1440) {
-      const hours = Math.floor(diffInMinutes / 60);
-      return `${hours}h`;
-    } else if (diffInMinutes < 10080) {
-      const days = Math.floor(diffInMinutes / 1440);
-      return `${days}d`;
-    } else if (diffInMinutes < 43200) {
-      const weeks = Math.floor(diffInMinutes / 10080);
-      return `${weeks}w`;
-    } else {
-      const months = Math.floor(diffInMinutes / 43200);
-      return `${months}mon`;
-    }
-  };
 
   const formateEventName = (eventType: string) => {
     const prefix = '[Amplitude]';
@@ -104,7 +76,7 @@ export default function RecentEvent() {
                 userActivity.map((event: UserActivity, index) => (
                   <React.Fragment key={index}>
                     <EventDiv>
-                      <h6>{foramteTime(event.event_time)}</h6>
+                      <h6>{formatTime(event.event_time)}</h6>
                       <div>
                         <Dot />
                         <Line />

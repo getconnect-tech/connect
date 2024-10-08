@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
-import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import {
   addressSchema,
   ageSchema,
@@ -17,7 +16,8 @@ import {
   websiteSchema,
 } from '@/lib/zod/contact';
 import { createOrUpdateContact } from '@/services/serverSide/contact';
-import { nameSchema } from '@/lib/zod/common';
+import { externalIdSchema, nameSchema } from '@/lib/zod/common';
+import withAdminAuth from '@/middlewares/withAdminAuth';
 
 const UpdateContactBody = z.object({
   address: addressSchema.optional(),
@@ -34,8 +34,9 @@ const UpdateContactBody = z.object({
   username: usernameSchema.optional(),
   website: websiteSchema.optional(),
   customTraits: customTraitsSchema.optional(),
+  externalId: externalIdSchema.optional(),
 });
-export const PUT = withWorkspaceAuth(async (req, { contactId }) => {
+export const PUT = withAdminAuth(async (req, { contactId }) => {
   try {
     const contactUpdate = await req.json();
     UpdateContactBody.parse(contactUpdate);

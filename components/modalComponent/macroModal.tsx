@@ -83,6 +83,8 @@ function MacroModal({ onClose, macroData }: Props) {
             <ProsemirrorEditor
               valueContent={description}
               setValueContent={setDescription}
+              className='prosemirror'
+              placeholder='Enter description'
             />
           </div>
         </div>
