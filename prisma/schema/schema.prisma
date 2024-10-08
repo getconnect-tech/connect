@@ -43,6 +43,7 @@ model Workspace {
   configurations Configuration[]
   macros         Macro[]
   contacts       Contact[]
+  groups         Group[]
 }
 
 model Label {
@@ -127,15 +128,17 @@ model Contact {
 }
 
 model Group {
-  id          String @id @default(uuid())
-  name        String
-  group_label String
-  traits      Json?
+  id           String @id @default(uuid())
+  workspace_id String
+  name         String
+  group_label  String
+  traits       Json?
 
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
 
-  contacts ContactGroup[]
+  workspace Workspace      @relation(fields: [workspace_id], references: [id])
+  contacts  ContactGroup[]
 }
 
 model VerificationToken {
