@@ -41,3 +41,13 @@ model UserMessage {
 
   @@id(name: "user_message_id", [user_id, message_id])
 }
+
+model ContactGroup {
+  contact_id String
+  group_id   String
+
+  contact Contact @relation(fields: [contact_id], references: [id])
+  group   Group   @relation(fields: [group_id], references: [id])
+
+  @@id(name: "contact_group_id", [contact_id, group_id])
+}
