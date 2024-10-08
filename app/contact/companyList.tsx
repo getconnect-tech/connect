@@ -6,6 +6,10 @@ import { getContactData } from '@/services/clientSide/contactServices';
 import { isEmpty } from '@/helpers/common';
 import ContactsLoading from '@/components/contactsLoading/contactsLoading';
 
+interface GroupList {
+  activeTab: string;
+}
+
 const cardData = [
   {
     imgSrc:
@@ -36,7 +40,8 @@ const cardData = [
   },
 ];
 
-export default function PersonList() {
+export default function PersonList({ activeTab }: GroupList) {
+  console.log('activeTab', activeTab);
   const [loading, setLoading] = useState(true); // Loading state added
   const loadData = useCallback(async () => {
     if (!isEmpty(cardData)) {
