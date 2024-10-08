@@ -51,21 +51,36 @@ export const updateGroup = async (
   return updatedGroup;
 };
 
-export const addContactToGroup = async (contactId: string, groupId: string) => {
-  const relation = await prisma.contactGroup.create({
-    data: { contact_id: contactId, group_id: groupId },
+export const addContactsToGroup = async (
+  groupId: string,
+  contactIds: string[],
+) => {
+  if (contactIds.length <= 0) {
+    return null;
+  }
+
+  const payload = contactIds.map((contactId) => ({
+    contact_id: contactId,
+    group_id: groupId,
+  }));
+  const relation = await prisma.contactGroup.createMany({
+    data: payload,
   });
 
   return relation;
 };
 
-export const removeContactFromGroup = async (
-  contactId: string,
+export const removeContactsFromGroup = async (
   groupId: string,
+  contactIds: string[],
 ) => {
-  const removedRelation = await prisma.contactGroup.delete({
-    where: { contact_group_id: { contact_id: contactId, group_id: groupId } },
+  if (contactIds.length <= 0) {
+    return null;
+  }
+
+  const response = await prisma.contactGroup.deleteMany({
+    where: { group_id: groupId, contact_id: { in: contactIds } },
   });
 
-  return removedRelation;
+  return response;
 };

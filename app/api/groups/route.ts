@@ -33,7 +33,7 @@ export const POST = withAdminAuth(async (req) => {
 
     const newGroup = await createGroup(req.workspace.id, { name, groupLabel });
 
-    return Response.json(newGroup, { status: 200 });
+    return Response.json(newGroup, { status: 201 });
   } catch (err) {
     return handleApiError(err);
   }

@@ -92,3 +92,10 @@ export const websiteSchema = z
     invalid_type_error: "'website' must be of type string!",
   })
   .url({ message: "'website' must be a valid URL!" });
+
+export const contactIdsSchema = z.array(
+  z.string({
+    required_error: "'contactIds' is required!",
+    invalid_type_error: "'contactIds' must be of type string!",
+  }),
+);
