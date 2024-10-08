@@ -1,6 +1,9 @@
 import { User } from '@prisma/client';
+import { Contact as PrismaContact } from '@prisma/client';
+import { z } from 'zod';
 import { LabelData } from './dataTypes';
 import { formatTicket } from '@/services/serverSide/ticket';
+import { addressSchema, customTraitsSchema } from '@/lib/zod/contact';
 
 export interface UpdateRole {
   userId: string;
@@ -55,3 +58,8 @@ export type ReactionProps = {
     display_name: string | null;
   }[];
 };
+
+export interface Contact extends Partial<PrismaContact> {
+  address?: z.infer<typeof addressSchema>;
+  custom_traits?: z.infer<typeof customTraitsSchema>;
+}

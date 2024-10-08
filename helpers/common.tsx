@@ -11,6 +11,7 @@ import { app } from '@/utils/firebase';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { messageStore } from '@/stores/messageStore';
 import { appStore } from '@/stores/appStore';
+import { Contact } from '@/utils/appTypes';
 
 export function isEmpty(value: any) {
   if (
@@ -250,4 +251,17 @@ export const downloadFileAsBase64 = async (fileUrl: string) => {
   // return `data:${mimeType};base64,${base64String}`;
 
   return { contentType: mimeType, content: base64String };
+};
+
+// Helper function to generate a name from first and last name, or fallback to email
+export const generateContactName = (
+  update: Partial<Contact>,
+  email: string,
+) => {
+  const nameParts: string[] = [];
+  if (update.first_name) nameParts.push(update.first_name);
+  if (update.last_name) nameParts.push(update.last_name);
+
+  // Fallback to the email prefix if no name parts are available
+  return nameParts.length > 0 ? nameParts.join(' ') : email.split('@')[0];
 };
