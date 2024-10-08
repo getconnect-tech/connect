@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
-import RichTextBox from '../commentBox';
 import Icon from '../icon/icon';
 import Button from '../button/button';
+import ProsemirrorEditor from '../prosemirror';
 import {
   FileCard,
   FileCardRight,
@@ -29,6 +29,8 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
   const [files, setFiles] = useState<File[]>([]);
   const [success, setSuccess] = useState<boolean>(isSuccessfull || false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [contactText, setContactText] = useState<string>('');
+  console.log('contactText', contactText);
 
   const handleIconClick = useCallback(() => {
     if (fileInputRef.current) {
@@ -66,10 +68,7 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
             </ModalDescription>
           </ModalHeader>
           <ModalContant>
-            <RichTextBox
-              className='richtext'
-              placeholder='How can we help you?'
-            />
+            <ProsemirrorEditor setValueContent={setContactText} />
             <input
               type='file'
               ref={fileInputRef}
