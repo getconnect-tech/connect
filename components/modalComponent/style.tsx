@@ -61,12 +61,14 @@ export const BottomDiv = styled.form`
       border: var(--border-secondary);
       border-radius: 12px !important;
       padding: 0 16px !important;
-      min-height: 160px;
+      min-height: 195px;
+      max-height: 195px;
+      overflow: auto;
     }
     .rich-text {
       border: var(--border-main);
       border-radius: 12px;
-      .e-richtexteditor .rte-placeholder {ed
+      .e-richtexteditor .rte-placeholder {
         padding: 8px 16px;
       }
       .e-richtexteditor .e-rte-content .e-content {
