@@ -850,6 +850,7 @@ function TicketDetails(props: Props) {
                   ref={editorRef}
                   valueContent={commentValue}
                   setValueContent={setCommentValue}
+                  placeholder='Write a message'
                 />
                 <div className='attach-file-div'>
                   {/* Attached Files render */}
