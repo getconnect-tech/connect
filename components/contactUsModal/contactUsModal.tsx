@@ -71,6 +71,7 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
             <ProsemirrorEditor
               setValueContent={setContactText}
               placeholder={'How can we help you?'}
+              className='contact-us'
             />
             <input
               type='file'
