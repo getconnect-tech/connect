@@ -11,7 +11,36 @@ export const MainDiv = styled.div`
   gap: 12px;
   margin-top: 50px;
   position: fixed;
+  @media screen and (max-width: 449px) {
+    display: none;
+  }
 `;
+
+export const ResponsiveMainDiv = styled.div`
+  margin-top: unset;
+  padding: 12px 16px;
+  max-width: 210px;
+  min-width: 210px;
+  width: 100%;
+  height: 100vh;
+  border-right: var(--border-main);
+  @media screen and (min-width: 450px) {
+    display: none;
+  }
+`;
+
+export const TitleMainDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .cross-icon {
+    display: none;
+    @media screen and (max-width: 449px) {
+      display: flex;
+    }
+  }
+`;
+
 export const IconDiv = styled.div`
   position: fixed;
   width: 28px;

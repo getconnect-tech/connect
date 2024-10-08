@@ -16,9 +16,11 @@ import {
   Link,
   Main,
   MainDiv,
+  NavbarTitle,
   ProfileDetail,
   ProfileImage,
   ProfileInputs,
+  ResponsiveHeader,
   RightDiv,
   TextField,
   Title,
@@ -30,11 +32,14 @@ import { useStores } from '@/stores';
 import { updateUserDetails } from '@/services/clientSide/userService';
 import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { messageStore } from '@/stores/messageStore';
+import Icon from '@/components/icon/icon';
+import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
 
 const MyProfile = () => {
   const { userStore } = useStores();
   const { user, loading } = userStore;
   const [displayName, setDisplayName] = useState<string>('');
+  const [isNavbar, setIsNavbar] = useState(false);
   const [image, setImage] = useState<{
     profile: string | ArrayBuffer | null;
     file: File;
@@ -156,17 +161,36 @@ const MyProfile = () => {
     [],
   );
 
+  const onClickIcon = useCallback(() => {
+    setIsNavbar(true);
+  }, []);
+
+  const onCloseNavbar = useCallback(() => {
+    setIsNavbar(false);
+  }, []);
+
   return (
     <Main>
+      {isNavbar && <ResponsiveSettingNavBar onClose={onCloseNavbar} />}
       <MainDiv>
         <RightDiv>
+          <ResponsiveHeader>
+            <Icon
+              iconName='sidebar-icon'
+              iconSize='16'
+              iconViewBox='0 0 16 16'
+              className='sidebar-icon'
+              onClick={onClickIcon}
+            />
+            <NavbarTitle>Setting</NavbarTitle>
+          </ResponsiveHeader>
           <Head>
             <LeftDiv>
               <Title>My Profile</Title>
               <Description>Manage your account Profile</Description>
             </LeftDiv>
           </Head>
-          <ProfileDetail onSubmit={onSubmit}>
+          <ProfileDetail onSubmit={onSubmit} isNavbar={isNavbar}>
             <ProfileImage>
               <input
                 type='file'

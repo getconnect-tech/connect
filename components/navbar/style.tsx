@@ -215,7 +215,7 @@ const ResponsiveMainDiv = styled.div`
     max-width: 228px;
     width: 100%;
   }
-  @media screen and (min-width: 448px) {
+  @media screen and (min-width: 450px) {
     display: none;
   }
 `;

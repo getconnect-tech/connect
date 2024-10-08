@@ -1,13 +1,21 @@
+/* eslint-disable indent */
 /* eslint-disable prettier/prettier */
 /* eslint-disable max-len */
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Typography } from '@/styles/typography';
 
-export const Main = styled.div`
+interface Props {
+  isNavbar?: boolean;
+}
+
+export const Main = styled.div<Props>`
   display: flex;
   background-color: var(--bg-surface);
   width: 100%;
   margin-left: 254px;
+  @media screen and (max-width: 449px) {
+    margin-left: unset;
+  }
 `;
 
 export const MainDiv = styled.div`
@@ -27,6 +35,19 @@ export const RightDiv = styled.div`
   }
 `;
 
+export const ResponsiveHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: var(--border-main);
+`;
+
+export const NavbarTitle = styled.div`
+  ${Typography.body_md_medium};
+  color: var(--text);
+`;
+
 export const Head = styled.div`
   display: flex;
   align-items: center;
@@ -37,6 +58,20 @@ export const Head = styled.div`
   z-index: 2;
   margin: 0 -4px;
   padding: 50px 5px 10px;
+  .left-main-div {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .sidebar-icon {
+    display: none;
+    @media screen and (max-width: 449px) {
+      display: flex;
+    }
+  }
+  @media screen and (max-width: 449px) {
+    padding: 16px 0 10px;
+  }
 `;
 
 export const Description = styled.div`
@@ -49,7 +84,7 @@ export const Title = styled.div`
   color: var(--text);
 `;
 
-export const ProfileDetail = styled.form`
+export const ProfileDetail = styled.form<Props>`
   display: flex;
   flex-direction: column;
   border-radius: 12px;
@@ -57,6 +92,13 @@ export const ProfileDetail = styled.form`
   gap: 16px;
   background-color: var(--bg-white);
   box-shadow: var(--shadow-card);
+  @media screen and (max-width: 449px) {
+    ${(props) =>
+      props.isNavbar &&
+      css`
+        min-width: 361px;
+      `}
+  }
 `;
 
 export const ProfileImage = styled.div`
@@ -125,7 +167,9 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
 
   &:checked {
     background-color: var(--brand);
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG,)}');
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(
+      checkmarkSVG,
+    )}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;
