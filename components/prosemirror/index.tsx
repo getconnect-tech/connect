@@ -16,16 +16,19 @@ import { schema } from 'prosemirror-schema-basic';
 import { addListNodes } from 'prosemirror-schema-list';
 import { exampleSetup } from 'prosemirror-example-setup';
 import { mentionNode, getMentionsPlugin } from 'prosemirror-mentions';
+import ReactDOMServer from 'react-dom/server';
+import Avatar from '../avtar/Avtar';
 import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { workspaceStore } from '@/stores/workspaceStore';
 
 interface Props {
+  valueContent?: string;
   // eslint-disable-next-line no-unused-vars
   setValueContent: (value: string) => void;
 }
 
 const ProsemirrorEditor = forwardRef((props: Props, ref) => {
-  const { setValueContent } = props;
+  const { valueContent, setValueContent } = props;
   const editorRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
@@ -146,12 +149,18 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
       marks: schema.spec.marks,
     });
 
-    const getMentionSuggestionsHTML = (items: any[]) =>
-      '<div class="suggestion-item-list">' +
-      items
-        .map((i) => '<div class="suggestion-item">' + i.name + '</div>')
-        .join('') +
-      '</div>';
+    const getMentionSuggestionsHTML = (items: any[]) => {
+      return ReactDOMServer.renderToString(
+        <div className='suggestion-item-list'>
+          {items.map((i) => (
+            <div className='suggestion-item' key={i.id}>
+              <Avatar imgSrc={i.profile_url || ''} name={i.name} size={20} />
+              <span className='name'>{i.name}</span>
+            </div>
+          ))}
+        </div>,
+      );
+    };
 
     const mentionPlugin = getMentionsPlugin({
       mentionTrigger: '@',
@@ -166,6 +175,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
             (user) => ({
               ...user,
               name: user?.display_name,
+              profile_url: user?.profile_url,
             }),
           );
           if (isEmpty(text)) done(users || []);
@@ -186,7 +196,10 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
 
     const parser = new DOMParser();
     const doc = ProseMirrorDOMParser.fromSchema(mySchema).parse(
-      parser.parseFromString(`<p></p>`, 'text/xml').documentElement,
+      parser.parseFromString(
+        `<p>${valueContent ? valueContent : ''}</p>`,
+        'text/xml',
+      ).documentElement,
     );
 
     const state = EditorState.create({
@@ -243,6 +256,26 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
       if (file && viewRef.current?.state.selection.$from.parent.inlineContent) {
         viewRef.current.focus();
         startImageUpload(viewRef.current, file, uploadPath, fileName);
+      }
+    },
+    addContent(content: string) {
+      if (viewRef.current) {
+        const { state, dispatch } = viewRef.current;
+        const { schema, tr } = state; // Correctly accessing the schema from state
+
+        // Parse the HTML content
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(content, 'text/html');
+
+        // Convert HTML to ProseMirror nodes using ProseMirror DOMParser
+        const fragment = ProseMirrorDOMParser.fromSchema(schema).parse(
+          doc.body,
+        );
+
+        // Insert the fragment into the document at the current selection
+        const transaction = tr.replaceSelectionWith(fragment);
+        dispatch(transaction); // Dispatch the transaction to update the editor
+        viewRef.current.focus(); // Focus on the editor
       }
     },
   }));

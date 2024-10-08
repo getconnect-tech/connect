@@ -124,6 +124,7 @@ function TicketDetails(props: Props) {
           ? `${prevValue}\n${selectedMacro.content}`
           : selectedMacro.content;
       });
+      editorRef.current.addContent(selectedMacro.content || '');
       setMacroDropdown(false);
     },
     [],
@@ -493,7 +494,7 @@ function TicketDetails(props: Props) {
                 title={message?.content || ''}
                 time={message?.created_at}
                 reactions={reactionData}
-                showReactions={reactionData.length > 0}
+                showReactions={reactionData?.length > 0}
                 attachments={message?.attachments}
                 messageId={message.id}
               />
@@ -847,6 +848,7 @@ function TicketDetails(props: Props) {
               <Input modeSelectedItem={modeSelectedItem}>
                 <ProsemirrorEditor
                   ref={editorRef}
+                  valueContent={commentValue}
                   setValueContent={setCommentValue}
                 />
                 <div className='attach-file-div'>
@@ -905,7 +907,7 @@ function TicketDetails(props: Props) {
                         })(),
                       }}
                     />
-                    {(macros.length > 0 ||
+                    {(macros?.length > 0 ||
                       currentWorkspace?.role === UserRole.OWNER ||
                       currentWorkspace?.role === UserRole.ADMIN) && (
                       <div className='tag-div'>
