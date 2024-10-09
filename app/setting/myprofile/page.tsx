@@ -185,7 +185,7 @@ const MyProfile = () => {
                 className='sidebar-icon'
                 onClick={onClickIcon}
               />
-              <NavbarTitle>Setting</NavbarTitle>
+              <NavbarTitle>Settings</NavbarTitle>
             </div>
             <Icon
               iconName={'cross-icon'}
