@@ -24,6 +24,12 @@ import {
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { createTicketViaWeb } from '@/services/clientSide/contactUsServices';
 import { useStores } from '@/stores';
+import { getFirebaseUrlFromFile } from '@/helpers/common';
+
+interface AttachFile {
+  filename: string;
+  url: string;
+}
 interface Props {
   isSuccessfull?: boolean;
   onClose: () => void;
@@ -31,11 +37,12 @@ interface Props {
 function ContactUsModal({ isSuccessfull, onClose }: Props) {
   const [files, setFiles] = useState<File[]>([]);
   const [success, setSuccess] = useState<boolean>(isSuccessfull || false);
+  const [loading, setLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [messageText, setMessageText] = useState<string>('');
+  const [attachFiles, setAttachFiles] = useState<AttachFile[]>([]);
   const { userStore } = useStores();
   const { user } = userStore;
-  console.log('contactText', user, files);
 
   const handleIconClick = useCallback(() => {
     if (fileInputRef.current) {
@@ -44,10 +51,25 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
   }, []);
 
   const handleFileChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.files) {
         const selectedFiles = Array.from(event.target.files);
+        const fileURL = await getFirebaseUrlFromFile(
+          selectedFiles,
+          'Contact-us',
+          selectedFiles[0]?.name,
+        );
         setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+        if (fileURL) {
+          setAttachFiles((prev) => [
+            ...prev,
+            { filename: selectedFiles[0].name, url: fileURL },
+          ]);
+        }
+        // Reset input value
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
       }
     },
     [],
@@ -55,23 +77,29 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
 
   const handleRemoveFile = useCallback((index: number) => {
     setFiles((prevFiles) => prevFiles?.filter((_, i) => i !== index));
+    setAttachFiles((prevFiles) => prevFiles?.filter((_, i) => i !== index));
   }, []);
 
-  const handleSendMessage = useCallback(async () => {
-    const payload = {
-      senderName: user?.display_name || '',
-      senderEmail: user?.email || '',
-      message: messageText,
-      // attachments: [
-      //   {
-      //     filename: 'apple.png',
-      //     url: 'file url link',
-      //   },
-      // ],
-    };
-    await createTicketViaWeb(payload);
-    setSuccess(true);
-  }, [messageText]);
+  const handleSendMessage = useCallback(
+    async (attachFileData: AttachFile[]) => {
+      setLoading(true);
+      try {
+        const payload = {
+          senderName: user?.display_name || '',
+          senderEmail: user?.email || '',
+          message: messageText,
+          attachments: attachFileData.length > 0 ? attachFileData : [],
+        };
+        await createTicketViaWeb(payload);
+        setSuccess(true);
+      } catch (err: any) {
+        console.error('Error in send message', err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [messageText],
+  );
 
   return (
     <ModalDiv>
@@ -149,8 +177,9 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
               />
               <Button
                 title='Send message'
-                onClick={handleSendMessage}
+                onClick={() => handleSendMessage(attachFiles)}
                 variant='medium'
+                isLoading={loading}
               />
             </RightDiv>
           </ModalBottom>
