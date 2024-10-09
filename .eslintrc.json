@@ -38,7 +38,6 @@
     "no-useless-return": "error",
     "no-constant-condition": "error",
     "no-unused-vars": ["error"],
-    "indent": ["error", 2, { "SwitchCase": 1 }],
     "max-len": ["error", { "code": 120 }],
     "import/order": [
       "error",
