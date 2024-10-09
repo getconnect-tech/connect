@@ -2,10 +2,23 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { UserRole } from '@prisma/client';
 import { observer } from 'mobx-react-lite';
-import { BottomBlock, Item, MainDiv, NavItems, Title, TopBlock } from './style';
+import Icon from '../icon/icon';
+import {
+  BottomBlock,
+  Item,
+  NavItems,
+  ResponsiveMainDiv,
+  Title,
+  TitleMainDiv,
+  TopBlock,
+} from './style';
 import { useStores } from '@/stores';
 
-const SettingNavBar = () => {
+interface Props {
+  onClose: () => void;
+}
+
+const ResponsiveSettingNavbar = ({ onClose }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
   const defaultPath = '/setting/myprofile';
@@ -26,10 +39,20 @@ const SettingNavBar = () => {
   );
 
   return (
-    <MainDiv>
+    <ResponsiveMainDiv>
       <div>
         <TopBlock>
-          <Title>You</Title>
+          <TitleMainDiv>
+            <Title>You</Title>
+            <Icon
+              iconName={'cross-icon'}
+              iconSize={'12'}
+              iconViewBox={'0 0 16 16'}
+              size={true}
+              className='cross-icon'
+              onClick={onClose}
+            />
+          </TitleMainDiv>
           <NavItems>
             <Item
               onClick={() => handleItemClick(defaultPath)}
@@ -91,8 +114,8 @@ const SettingNavBar = () => {
           </BottomBlock>
         )}
       </div>
-    </MainDiv>
+    </ResponsiveMainDiv>
   );
 };
 
-export default observer(SettingNavBar);
+export default observer(ResponsiveSettingNavbar);

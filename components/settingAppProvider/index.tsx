@@ -24,6 +24,9 @@ export const MainDiv = styled.div`
     position: fixed;
     top: 20px;
     right: 20px;
+    @media screen and (max-width: 449px) {
+      display: none;
+    }
   }
 `;
 
