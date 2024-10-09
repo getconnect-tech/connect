@@ -43,6 +43,7 @@ model Workspace {
   configurations Configuration[]
   macros         Macro[]
   contacts       Contact[]
+  groups         Group[]
 }
 
 model Label {
@@ -96,7 +97,8 @@ model Message {
 }
 
 model Contact {
-  id           String @id @default(uuid())
+  id           String  @id @default(uuid())
+  contact_id   String?
   workspace_id String
   email        String
 
@@ -113,25 +115,35 @@ model Contact {
   title       String?
   username    String?
   website     String?
-  group_id    String?
 
   custom_traits Json?
 
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
 
-  group     Group?    @relation(fields: [group_id], references: [id])
   tickets   Ticket[]
-  workspace Workspace @relation(fields: [workspace_id], references: [id])
+  workspace Workspace      @relation(fields: [workspace_id], references: [id])
+  groups    ContactGroup[]
 
   @@unique(name: "workspace_email_id", [workspace_id, email])
+  @@unique(name: "external_user_id", [workspace_id, contact_id])
 }
 
 model Group {
-  id       String    @id @default(uuid())
-  name     String
-  email    String
-  contacts Contact[]
+  id           String  @id @default(uuid())
+  group_id     String?
+  workspace_id String
+  name         String
+  group_label  String
+  traits       Json?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  workspace Workspace      @relation(fields: [workspace_id], references: [id])
+  contacts  ContactGroup[]
+
+  @@unique(name: "external_group_id", [workspace_id, group_id])
 }
 
 model VerificationToken {

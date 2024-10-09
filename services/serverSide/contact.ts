@@ -2,6 +2,8 @@ import { TicketStatus } from '@prisma/client';
 import moment from 'moment';
 import { prisma } from '@/prisma/prisma';
 import { findUserByEmail, getUserActivities } from '@/lib/amplitude';
+import { Contact } from '@/utils/appTypes';
+import { generateContactName, removeNullUndefined } from '@/helpers/common';
 
 export const getContactByEmail = async (email: string, workspaceId: string) => {
   const contact = await prisma.contact.findUnique({
@@ -25,7 +27,6 @@ export const getWorkspaceContacts = async (workspaceId: string) => {
       id: true,
       name: true,
       email: true,
-      group_id: true,
       workspace_id: true,
       created_at: true,
       updated_at: true,
@@ -55,38 +56,64 @@ export const getWorkspaceContacts = async (workspaceId: string) => {
   return formattedContacts;
 };
 
-export const createOrUpdateContact = async ({
-  email,
-  name,
-  workspaceId,
-}: {
-  email: string;
-  workspaceId: string;
-  name?: string;
-}) => {
-  const contact = prisma.$transaction(async (tx) => {
-    const currentContact = await tx.contact.findUnique({
-      where: { workspace_email_id: { email, workspace_id: workspaceId } },
-    });
+type ContactPayload = Omit<Partial<Contact>, 'id' | 'workspace_id'> & {
+  workspaceId?: string;
+  contactId?: string;
+};
+export const createOrUpdateContact = async (contact: ContactPayload) => {
+  const { workspaceId, contactId, email, ...update } = contact;
+
+  // Validation: Either contactId or (workspaceId + email) must be provided
+  if (!contactId && (!workspaceId || !email)) {
+    throw new Error("Please provide 'contact_id' or 'workspace_id' & 'email'.");
+  }
+
+  // Utility function to remove null or undefined properties
+  removeNullUndefined(update);
+
+  const updatedContact = await prisma.$transaction(async (tx) => {
+    let currentContact;
+
+    // Check if contact exists by contactId or workspace + email combination
+    if (contactId) {
+      // Search by contactId if provided
+      currentContact = await tx.contact.findUnique({
+        where: { id: contactId },
+      });
+
+      if (!currentContact) {
+        throw new Error('Invalid contact ID!');
+      }
+    } else {
+      // Otherwise, search by workspaceId and email
+      currentContact = await tx.contact.findUnique({
+        where: {
+          workspace_email_id: { workspace_id: workspaceId!, email: email! },
+        },
+      });
+    }
 
     if (!currentContact) {
-      const senderName = name || email.split('@')[0];
-      return tx.contact.create({
-        data: { email, name: senderName, workspace_id: workspaceId },
+      // Generate name if not provided
+      update.name = update.name ?? generateContactName(update, email!);
+
+      return await tx.contact.create({
+        data: {
+          workspace_id: workspaceId!,
+          email: email!,
+          ...update,
+          name: update.name!,
+        },
       });
     }
 
-    if (name) {
-      return tx.contact.update({
-        where: { id: currentContact.id },
-        data: { name },
-      });
-    }
-
-    return currentContact;
+    return await prisma.contact.update({
+      where: { id: currentContact.id },
+      data: { ...update },
+    });
   });
 
-  return contact;
+  return updatedContact;
 };
 
 export const getActivities = async (email: string) => {

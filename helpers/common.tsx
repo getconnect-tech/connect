@@ -7,10 +7,12 @@ import {
 } from 'firebase/storage';
 import { convert } from 'html-to-text';
 import axios from 'axios';
+import moment from 'moment';
 import { app } from '@/utils/firebase';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { messageStore } from '@/stores/messageStore';
 import { appStore } from '@/stores/appStore';
+import { Contact } from '@/utils/appTypes';
 
 export function isEmpty(value: any) {
   if (
@@ -44,6 +46,37 @@ export const getUniqueId = () => {
     S4() +
     S4()
   ).toLowerCase();
+};
+
+/**
+ * @desc Formatting time based on ISOString
+ * @param {*} isoString // Accepts string
+ */
+export const formatTime = (isoString: string) => {
+  const now = moment(); // Current time
+  const eventTime = moment(isoString); // Event time
+  const diffInMinutes = now.diff(eventTime, 'minutes');
+
+  if (diffInMinutes <= 0) {
+    return 'Now';
+  }
+
+  // Format difference based on time range
+  if (diffInMinutes < 60) {
+    return `${diffInMinutes}m`;
+  } else if (diffInMinutes < 1440) {
+    const hours = Math.floor(diffInMinutes / 60);
+    return `${hours}h`;
+  } else if (diffInMinutes < 10080) {
+    const days = Math.floor(diffInMinutes / 1440);
+    return `${days}d`;
+  } else if (diffInMinutes < 43200) {
+    const weeks = Math.floor(diffInMinutes / 10080);
+    return `${weeks}w`;
+  } else {
+    const months = Math.floor(diffInMinutes / 43200);
+    return `${months}mon`;
+  }
 };
 
 export const generateVerificationCode = (length = 5) => {
@@ -250,4 +283,17 @@ export const downloadFileAsBase64 = async (fileUrl: string) => {
   // return `data:${mimeType};base64,${base64String}`;
 
   return { contentType: mimeType, content: base64String };
+};
+
+// Helper function to generate a name from first and last name, or fallback to email
+export const generateContactName = (
+  update: Partial<Contact>,
+  email: string,
+) => {
+  const nameParts: string[] = [];
+  if (update.first_name) nameParts.push(update.first_name);
+  if (update.last_name) nameParts.push(update.last_name);
+
+  // Fallback to the email prefix if no name parts are available
+  return nameParts.length > 0 ? nameParts.join(' ') : email.split('@')[0];
 };

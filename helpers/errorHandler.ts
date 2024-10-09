@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { AxiosError } from 'axios';
 import { NextResponse } from 'next/server';
 import { ZodError } from 'zod';
@@ -33,6 +34,26 @@ export const handleApiError = (error: any) => {
         label: '',
       },
     });
+  }
+
+  // Handle Prisma errors
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    // Customize error handling based on the Prisma error code
+    switch (error.code) {
+      case 'P2002': // Unique constraint violation
+        statusCode = 409;
+        errMessage =
+          'Unique constraint violation: A record with this value already exists.';
+        break;
+      case 'P2025': // Record not found
+        statusCode = 404;
+        errMessage =
+          'Record not found: Unable to locate the requested resource.';
+        break;
+      default:
+        statusCode = 400;
+        errMessage = `Database error: ${error.message}`;
+    }
   }
 
   if (typeof error === 'string') {

@@ -25,10 +25,12 @@ interface Props {
   valueContent?: string;
   // eslint-disable-next-line no-unused-vars
   setValueContent: (value: string) => void;
+  className?: string;
+  placeholder?: string;
 }
 
 const ProsemirrorEditor = forwardRef((props: Props, ref) => {
-  const { valueContent, setValueContent } = props;
+  const { valueContent, setValueContent, placeholder = '' } = props;
   const editorRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
@@ -89,10 +91,10 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
           // Show placeholder if the document is empty
           const placeholderDecoration = Decoration.widget(1, () => {
             // eslint-disable-next-line no-undef
-            const placeholder = document.createElement('span');
-            placeholder.textContent = 'Write a message'; // Set your placeholder text
-            placeholder.style.cssText = `color: var(--text-text-secondary);`;
-            return placeholder;
+            const placeholderRef = document.createElement('span');
+            placeholderRef.textContent = placeholder; // Set your placeholder text
+            placeholderRef.style.cssText = `color: var(--text-text-secondary);`;
+            return placeholderRef;
           });
           return DecorationSet.create(state.doc, [placeholderDecoration]);
         }
@@ -286,7 +288,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
       <div id='content' ref={contentRef} style={{ display: 'none' }}></div>
 
       {/* ProseMirror editor will be initialized here */}
-      <div id='editor' ref={editorRef}></div>
+      <div id='editor' className={props.className} ref={editorRef}></div>
     </div>
   );
 });
