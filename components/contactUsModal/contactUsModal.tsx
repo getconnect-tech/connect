@@ -1,4 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import Icon from '../icon/icon';
 import Button from '../button/button';
 import ProsemirrorEditor from '../prosemirror';
@@ -21,6 +22,8 @@ import {
   ModalContant,
 } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { createTicketViaWeb } from '@/services/clientSide/contactUsServices';
+import { useStores } from '@/stores';
 interface Props {
   isSuccessfull?: boolean;
   onClose: () => void;
@@ -29,8 +32,10 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
   const [files, setFiles] = useState<File[]>([]);
   const [success, setSuccess] = useState<boolean>(isSuccessfull || false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [contactText, setContactText] = useState<string>('');
-  console.log('contactText', contactText);
+  const [messageText, setMessageText] = useState<string>('');
+  const { userStore } = useStores();
+  const { user } = userStore;
+  console.log('contactText', user, files);
 
   const handleIconClick = useCallback(() => {
     if (fileInputRef.current) {
@@ -52,10 +57,21 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
     setFiles((prevFiles) => prevFiles?.filter((_, i) => i !== index));
   }, []);
 
-  const handleSendMessage = useCallback(() => {
-    // Simulate a successful message send
+  const handleSendMessage = useCallback(async () => {
+    const payload = {
+      senderName: user?.display_name || '',
+      senderEmail: user?.email || '',
+      message: messageText,
+      // attachments: [
+      //   {
+      //     filename: 'apple.png',
+      //     url: 'file url link',
+      //   },
+      // ],
+    };
+    await createTicketViaWeb(payload);
     setSuccess(true);
-  }, []);
+  }, [messageText]);
 
   return (
     <ModalDiv>
@@ -69,7 +85,7 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
           </ModalHeader>
           <ModalContant>
             <ProsemirrorEditor
-              setValueContent={setContactText}
+              setValueContent={setMessageText}
               placeholder={'How can we help you?'}
               className='contact-us'
             />
@@ -168,4 +184,4 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
   );
 }
 
-export default ContactUsModal;
+export default observer(ContactUsModal);
