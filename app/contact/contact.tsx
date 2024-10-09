@@ -36,16 +36,22 @@ const Contact = () => {
   }, []);
 
   const loadData = useCallback(async () => {
-    if (!isEmpty(currentWorkspace?.id)) {
-      const groupList: Group[] = await getAllGroup();
-      setTabItem([
-        'People',
-        ...Array.from(
-          new Set(
-            groupList.map((item: { group_label: string }) => item.group_label),
+    try {
+      if (!isEmpty(currentWorkspace?.id)) {
+        const groupList: Group[] = await getAllGroup();
+        setTabItem([
+          'People',
+          ...Array.from(
+            new Set(
+              groupList.map(
+                (item: { group_label: string }) => item.group_label,
+              ),
+            ),
           ),
-        ),
-      ]);
+        ]);
+      }
+    } catch (err: any) {
+      console.error('Error fetching group data:', err);
     }
   }, [currentWorkspace?.id]);
 
