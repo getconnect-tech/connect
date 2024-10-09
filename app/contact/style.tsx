@@ -22,7 +22,7 @@ const TopDiv = styled.div`
 
 const BottomDiv = styled.div`
   max-width: 662px;
-  margin: 0 auto;
+  margin: 0 auto 16px;
 `;
 
 const MainDiv = styled.div`
