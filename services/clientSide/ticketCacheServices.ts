@@ -2,6 +2,7 @@ import LocalDbService, {
   TICKETS_TABLE_NAME,
   UPDATE_ON_ID,
 } from './localDbService';
+import { TicketDetailsInterface } from '@/utils/appTypes';
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
 
 let singleton: any;
@@ -24,6 +25,20 @@ export default class TicketCacheService extends LocalDbService {
       }
     }
     return singleton;
+  }
+
+  async get() {
+    const response = await super.get();
+    response.sort((a: TicketDetailsInterface, b: TicketDetailsInterface) => {
+      const aTime = a.last_message
+        ? new Date(a.last_message.created_at).getTime()
+        : new Date(a.created_at).getTime();
+      const bTime = b.last_message
+        ? new Date(b.last_message.created_at).getTime()
+        : new Date(b.created_at).getTime();
+      return bTime - aTime;
+    });
+    return response;
   }
 
   static removeInstance() {
