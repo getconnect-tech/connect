@@ -78,6 +78,7 @@ const MessageCardMainDiv = styled.div`
   padding-left: 22px;
   margin-left: 10px;
   width: 100%;
+  position: relative;
 `;
 
 const NameDiv = styled.div`

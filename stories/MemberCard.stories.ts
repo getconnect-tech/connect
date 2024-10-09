@@ -1,0 +1,47 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import MemberCard from '@/components/memberCard/memberCard';
+
+// More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
+const meta = {
+  title: 'Example/MemberCard',
+  component: MemberCard,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+} satisfies Meta<typeof MemberCard>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+// More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
+
+export const Primary: Story = {
+  args: {
+    userId: 'ABcd',
+    designation: 'job',
+    name: 'ABCDE',
+    email: 'testing@',
+    src: 'http://localhost:gytgyver.github',
+    setOpenDropdown: () => {},
+    loadData: () => {},
+    isInvited: true,
+  },
+};
+
+export const WithDropdown: Story = {
+  args: {
+    name: 'ABCDE',
+    email: 'testing@',
+    designation: 'job',
+    currentOpenDropdown: 'example-member', // Correct this to match dropdownIdentifier + "-member"
+    setOpenDropdown: (dropdown: string | null) => {
+      console.log('Dropdown state updated:', dropdown);
+    },
+    dropdownIdentifier: 'example', // This is used in the dropdownIdentifier
+    userId: 'ABcd',
+    loadData: () => {},
+    isInvited: true,
+    src: 'http://localhost:gytgyver.github',
+  },
+};
