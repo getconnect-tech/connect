@@ -1,17 +1,18 @@
 /* eslint-disable indent */
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Typography } from '../../styles/typography';
 import { DropDownItem } from '@/components/dropDown/dropDown';
 
 interface Props {
   modeSelectedItem?: DropDownItem;
   isMargin?: boolean;
+  isProfileSection?: boolean;
 }
 
-const Main = styled.div`
+const Main = styled.div<Props>`
   display: flex;
   background-color: var(--bg-surface);
-  height: 100vh;
+  height: ${({ isProfileSection }) => (isProfileSection ? '100%' : '100vh')};
 `;
 
 const TopDiv = styled.div`
@@ -26,16 +27,25 @@ const BottomDiv = styled.div`
   max-width: 702px;
   width: 100%;
   margin: 0 auto;
-  height: calc(100% - 116px);
+  height: calc(100% - 114px);
   overflow: auto;
   scroll-padding-bottom: 15px;
   padding-bottom: 20px;
+  @media screen and (max-width: 449px) {
+    padding-bottom: unset;
+  }
 `;
 
 const MainDiv = styled.div`
   width: 100%;
   margin-left: 223px;
   border-right: var(--border-main);
+  @media screen and (max-width: 449px) {
+    margin-left: unset;
+  }
+  @media screen and (max-width: 768px) {
+    min-height: 100vh;
+  }
 `;
 
 const HeaderDiv = styled.div`
@@ -44,6 +54,16 @@ const HeaderDiv = styled.div`
   gap: 20px;
   justify-content: space-between;
   padding: 7px 20px;
+  .sidebar-icon {
+    display: none;
+  }
+  @media screen and (max-width: 768px) {
+    padding: 7px 16px;
+    .sidebar-icon {
+      display: flex;
+      margin-right: 8px;
+    }
+  }
 `;
 
 const LeftDiv = styled.div`
@@ -57,7 +77,7 @@ const Title = styled.div`
   color: var(--text);
 `;
 
-const StatusDiv = styled.div`
+const StatusDiv = styled.div<Props>`
   display: flex;
   gap: 8px;
   align-items: center;
@@ -65,6 +85,16 @@ const StatusDiv = styled.div`
   padding: 9px 20px;
   border-top: var(--border-main);
   position: relative;
+  @media screen and (max-width: 449px) {
+    padding: 9px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  ${(props) =>
+    props.isProfileSection &&
+    css`
+      display: none;
+    `}
 `;
 
 const ButtonDiv = styled.div`
@@ -86,7 +116,7 @@ const InputDiv = styled.div`
   position: sticky;
   bottom: 0;
   background-color: var(--bg-surface);
-  z-index: 1;
+  z-index: 11;
   max-width: 702px;
   margin: 0 auto;
   padding: 0 0 12px;
@@ -100,11 +130,17 @@ const InputDiv = styled.div`
     border-left: var(--border-main);
     margin-left: 10px;
     margin-top: -8px;
+    @media screen and (max-width: 449px) {
+      display: none;
+    }
   }
   .avtar {
     position: absolute;
     top: 12px;
     z-index: 1;
+    @media screen and (max-width: 449px) {
+      display: none;
+    }
   }
 `;
 
@@ -132,6 +168,9 @@ const Input = styled.div<Props>`
     align-items: center;
     margin-bottom: 8px;
   }
+  @media screen and (max-width: 449px) {
+    margin-left: unset;
+  }
 `;
 
 const CenterDiv = styled.div`
@@ -141,13 +180,24 @@ const CenterDiv = styled.div`
   justify-content: end;
   gap: 20px;
   position: relative;
+  @media screen and (max-width: 449px) {
+    gap: 0;
+  }
 `;
 
-const InputIcon = styled.div`
+const InputIcon = styled.div<Props>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
+  .icon {
+    background-color: var(
+      ${({ modeSelectedItem }) =>
+        modeSelectedItem?.name === 'Internal'
+          ? '--bg-surface-secondary-hover'
+          : '--bg-surface-secondary'}
+    );
+  }
   .send-icon {
     background-color: var(--bg-surface-secondary);
     border-radius: 50%;
@@ -176,22 +226,32 @@ const ActivityDiv = styled.div`
   .avtar {
     position: absolute;
     top: 14px;
-    z-index: 11;
+    z-index: 111;
+    @media screen and (max-width: 449px) {
+      display: none;
+    }
   }
   .avtar-internal {
     position: absolute;
     top: 6px;
-    z-index: 11;
+    z-index: 111;
+    @media screen and (max-width: 449px) {
+      display: none;
+    }
   }
   .avtar-activity {
-    z-index: 11;
+    z-index: 111;
+    @media screen and (max-width: 449px) {
+      margin-left: 12px;
+      z-index: 1;
+    }
   }
 `;
 
-const Message = styled.p`
+const Message = styled.p<{ hideAvatarLine?: boolean }>`
   ${Typography.body_md_regular};
   color: var(--text);
-  border-left: var(--border-main);
+  /* border-left: var(--border-main); */
   padding-left: 22px;
   margin-left: -22px;
   span {
@@ -201,6 +261,19 @@ const Message = styled.p`
   svg {
     margin: 0 8px 3px;
   }
+  @media screen and (max-width: 449px) {
+    padding-left: 18px;
+    ${(props) =>
+      !props.hideAvatarLine &&
+      css`
+        border-left: var(--border-main);
+      `}
+    ${(props) =>
+      props.hideAvatarLine &&
+      css`
+        margin-bottom: 20px;
+      `}
+  }
 `;
 
 const LineDiv = styled.div`
@@ -209,6 +282,12 @@ const LineDiv = styled.div`
   margin-left: 10px;
   position: absolute;
   top: 34px;
+  @media screen and (max-width: 449px) {
+    margin-left: 22px;
+    height: 20px;
+    position: relative;
+    top: unset;
+  }
 `;
 
 const IconDiv = styled.div<Props>`
@@ -228,8 +307,12 @@ const IconDiv = styled.div<Props>`
 const CenterMainDiv = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 20px;
+  padding: 0 16px;
   height: calc(100% - 82px);
+  background-color: var(--bg-surface);
+  @media screen and (max-width: 449px) {
+    height: calc(100% - 117px);
+  }
 `;
 export {
   Main,

@@ -6,8 +6,9 @@ import { getContactData } from '@/services/clientSide/contactServices';
 import { isEmpty } from '@/helpers/common';
 import ContactsLoading from '@/components/contactsLoading/contactsLoading';
 
-interface GroupList {
+interface Props {
   activeTab: string;
+  isShowNavbar: boolean;
 }
 
 const cardData = [
@@ -40,7 +41,7 @@ const cardData = [
   },
 ];
 
-export default function PersonList({ activeTab }: GroupList) {
+export default function PersonList({ activeTab, isShowNavbar }: Props) {
   console.log('activeTab', activeTab);
   const [loading, setLoading] = useState(true); // Loading state added
   const loadData = useCallback(async () => {
@@ -65,7 +66,7 @@ export default function PersonList({ activeTab }: GroupList) {
         <ContactsLoading />
       ) : (
         <>
-          <ListMainDiv>
+          <ListMainDiv isShowNavbar={isShowNavbar}>
             {cardData.map((card, index) => (
               <ContactCard
                 key={index}
@@ -76,6 +77,7 @@ export default function PersonList({ activeTab }: GroupList) {
                 closeCount={card.closeCount}
                 isCompany={false}
                 peopleCount={card.peopleCount}
+                isShowNavbar={isShowNavbar}
               />
             ))}
           </ListMainDiv>

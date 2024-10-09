@@ -3,6 +3,7 @@ import { Typography } from '../../styles/typography';
 
 interface Props {
   active?: boolean;
+  isShowNavbar?: boolean;
 }
 
 const Main = styled.div`
@@ -47,6 +48,17 @@ const HeaderDiv = styled.div`
     gap: 12px;
     padding: 12px 0 4px;
   }
+  .sidebar-icon {
+    display: none;
+    @media screen and (max-width: 449px) {
+      display: flex;
+      margin-right: 8px;
+    }
+  }
+  .title-div {
+    display: flex;
+    align-items: center;
+  }
 `;
 
 const Title = styled.div`
@@ -82,7 +94,7 @@ const Tab = styled.p<Props>`
   }
 `;
 
-const ListMainDiv = styled.div`
+const ListMainDiv = styled.div<Props>`
   background-color: var(--bg-white);
   padding: 4px 0;
   box-shadow: var(--shadow-card);
@@ -92,6 +104,13 @@ const ListMainDiv = styled.div`
   @media screen and (max-width: 449px) {
     padding: 0;
   }
+  ${(props) =>
+    props.isShowNavbar &&
+    css`
+      @media screen and (max-width: 449px) {
+        min-width: 361px;
+      }
+    `}
 `;
 
 export {

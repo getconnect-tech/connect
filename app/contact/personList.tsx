@@ -8,7 +8,11 @@ import { isEmpty } from '@/helpers/common';
 import { getContactData } from '@/services/clientSide/contactServices';
 import ContactsLoading from '@/components/contactsLoading/contactsLoading';
 
-const PersonList = () => {
+interface Props {
+  isShowNavbar: boolean;
+}
+
+const PersonList = ({ isShowNavbar }: Props) => {
   const { workspaceStore, contactStore } = useStores();
   const { currentWorkspace } = workspaceStore;
   const { contacts } = contactStore || {};
@@ -36,7 +40,7 @@ const PersonList = () => {
       {loading && (!contacts || contacts.length === 0) ? (
         <ContactsLoading />
       ) : (
-        <ListMainDiv>
+        <ListMainDiv isShowNavbar={isShowNavbar}>
           {contacts?.map((card, index) => (
             <ContactCard
               key={index}
@@ -51,6 +55,7 @@ const PersonList = () => {
               }
               companyImg={''}
               companyName={'Demo'}
+              isShowNavbar={isShowNavbar}
             />
           ))}
         </ListMainDiv>

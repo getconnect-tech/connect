@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 'use client';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -72,13 +73,31 @@ import LabelDropdown from '@/components/labelDropdown/labelDropdown';
 import { getMacros } from '@/services/clientSide/settingServices';
 import FileCard from '@/components/fileCard/fileCard';
 import ProsemirrorEditor from '@/components/prosemirror';
+import ResponsiveProfileSection from '@/components/profileSection/responsiveProfileSection';
 
 interface Props {
   ticket_id: string;
 }
 
+const useMediaQuery = (width: number): boolean => {
+  // eslint-disable-next-line no-undef
+  const [matches, setMatches] = useState<boolean>(window.innerWidth > width);
+
+  useEffect(() => {
+    // eslint-disable-next-line no-undef
+    const handleResize = () => setMatches(window.innerWidth > width);
+    // eslint-disable-next-line no-undef
+    window.addEventListener('resize', handleResize);
+    // eslint-disable-next-line no-undef
+    return () => window.removeEventListener('resize', handleResize);
+  }, [width]);
+
+  return matches;
+};
+
 function TicketDetails(props: Props) {
   const { ticket_id } = props;
+  const isLargeScreen = useMediaQuery(449);
   const router = useRouter();
   const [labelDropdown, setLabelDropdown] = useState(false);
   const [priorityDropdown, setPriorityDropdown] = useState(false);
@@ -101,6 +120,7 @@ function TicketDetails(props: Props) {
   const { priority, assigned_to, contact } = ticketDetails || {};
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [macroDropdown, setMacroDropdown] = useState(false);
+  const [isProfileSection, setIsProfileSection] = useState(false);
   const [modeSelectedItem, setModeSelectedItem] = useState<DropDownItem>({
     name: 'Email',
     icon: 'email-icon',
@@ -112,6 +132,10 @@ function TicketDetails(props: Props) {
   const handleModeItemChange = (item: DropDownItem) => {
     setModeSelectedItem(item);
   };
+
+  const onClickIcon = useCallback(() => {
+    setIsProfileSection((prevState) => !prevState); // Toggle the state
+  }, []);
 
   const handleMacroSelect = useCallback(
     (selectedMacro: { content: string; name: string }) => {
@@ -461,7 +485,7 @@ function TicketDetails(props: Props) {
    * @desc Render message based on message type
    */
   const renderActivityMessage = useCallback(
-    (message: MessageDetails) => {
+    (message: MessageDetails, hideAvatarLine: boolean) => {
       switch (message.type) {
         case MessageType.REGULAR: {
           const reactionData = message?.reactions.reduce(
@@ -497,6 +521,8 @@ function TicketDetails(props: Props) {
                 showReactions={reactionData?.length > 0}
                 attachments={message?.attachments}
                 messageId={message.id}
+                message={message?.author?.profile_url || ''}
+                messageName={message?.author?.display_name || ''}
               />
             </ActivityDiv>
           );
@@ -513,6 +539,8 @@ function TicketDetails(props: Props) {
                 subTitle={'To Teamcamp Support '}
                 message={message.content || ''}
                 attachments={message?.attachments}
+                messageImg={''}
+                messageName={contact?.name || ''}
               />
             </ActivityDiv>
           );
@@ -534,6 +562,8 @@ function TicketDetails(props: Props) {
                 message={message.content || ''}
                 readBy={message.read_by}
                 attachments={message?.attachments}
+                messageImg={message?.author?.profile_url || ''}
+                messageName={message?.author?.display_name || ''}
               />
             </ActivityDiv>
           );
@@ -547,7 +577,7 @@ function TicketDetails(props: Props) {
                   size={20}
                 />
               </div>
-              <Message>
+              <Message hideAvatarLine={hideAvatarLine}>
                 {message?.author?.display_name || ''}{' '}
                 <span>set priority to</span>{' '}
                 {capitalizeString(message?.reference_id)}
@@ -572,7 +602,7 @@ function TicketDetails(props: Props) {
                   size={20}
                 />
               </div>
-              <Message>
+              <Message hideAvatarLine={hideAvatarLine}>
                 {message?.author?.display_name || ''}{' '}
                 <span>
                   {message?.assignee?.display_name
@@ -601,7 +631,7 @@ function TicketDetails(props: Props) {
                   size={20}
                 />
               </div>
-              <Message>
+              <Message hideAvatarLine={hideAvatarLine}>
                 {message?.author?.display_name || ''}{' '}
                 <span>
                   {message?.reference_id === 'SNOOZE'
@@ -727,8 +757,25 @@ function TicketDetails(props: Props) {
     [messageRefId, ticket_id, attachFile],
   );
 
+  // eslint-disable-next-line no-undef
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      // eslint-disable-next-line no-undef
+      setScreenWidth(window.innerWidth);
+    };
+
+    // eslint-disable-next-line no-undef
+    window.addEventListener('resize', handleResize);
+    return () => {
+      // eslint-disable-next-line no-undef
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
-    <Main>
+    <Main isProfileSection={isProfileSection}>
       <MainDiv>
         <TopDiv>
           <HeaderDiv>
@@ -751,8 +798,26 @@ function TicketDetails(props: Props) {
               iconSize='16'
               iconViewBox='0 0 16 16'
             /> */}
+            <Icon
+              iconName={
+                isProfileSection
+                  ? 'profile-sidebar-active-icon'
+                  : 'profile-sidebar-icon'
+              }
+              iconSize='16'
+              iconViewBox='0 0 16 16'
+              className='sidebar-icon'
+              onClick={onClickIcon}
+            />
+            {/* <Icon
+              iconName='profile-sidebar-active-icon'
+              iconSize='16'
+              iconViewBox='0 0 16 16'
+              className='sidebar-icon'
+              onClick={onClickIcon}
+            /> */}
           </HeaderDiv>
-          <StatusDiv>
+          <StatusDiv isProfileSection={isProfileSection}>
             <ButtonDiv>
               <LabelDropdown
                 handleClick={handleTicketLabel}
@@ -824,156 +889,179 @@ function TicketDetails(props: Props) {
             </ButtonDiv>
           </StatusDiv>
         </TopDiv>
-        <CenterMainDiv>
-          <BottomDiv>
-            <CenterDiv ref={messagesEndRef}>
-              {messages?.map((message, index) => (
-                <div key={index}>
-                  {renderActivityMessage(message)}
-                  {index !== messages?.length - 1 && <LineDiv />}
-                </div>
-              ))}
-            </CenterDiv>
-          </BottomDiv>
-          <InputDiv>
-            <div className='input-main-div'>
-              <div className='line' />
-              <div className='avtar'>
-                <Avatar
-                  imgSrc={user?.profile_url || ''}
-                  size={20}
-                  name={user?.display_name || ''}
-                />
-              </div>
-              <Input modeSelectedItem={modeSelectedItem}>
-                <ProsemirrorEditor
-                  ref={editorRef}
-                  valueContent={commentValue}
-                  setValueContent={setCommentValue}
-                  placeholder='Write a message'
-                />
-                <div className='attach-file-div'>
-                  {/* Attached Files render */}
-                  {attachFile?.map((fileData, index: number) => (
-                    <FileCard
-                      key={index}
-                      documentText={fileData?.fileName || 'Uploaded file'}
-                      fileSize={`${fileData?.size}`}
-                      fileName={fileData?.fileName}
-                      url={fileData?.downloadUrl}
-                      type={fileData?.contentType}
-                    />
-                  ))}
-                </div>
-                {uploadLoading !== null && (
-                  <p className='loading-text'>
-                    Loading...({Math.floor(uploadLoading)}%)
-                  </p>
-                )}
-                <InputIcon>
-                  <div className='drop-tag'>
-                    <DropDownWithTag
-                      onClick={handleMessageModeTag}
-                      selectedValue={modeSelectedItem}
-                      dropdownOpen={messageModeDropdown}
-                      title='Email'
-                      onClose={() => {
-                        setMessageModeDropdown(false);
-                      }}
-                      items={modeItem}
-                      onChange={handleModeItemChange}
-                      isTag={true}
-                      iconName={modeSelectedItem?.icon}
-                      iconSize='12'
-                      iconViewBox='0 0 12 12'
-                      isActive={messageModeDropdown ? true : false}
-                      className={
-                        submenuPosition === 'upwards'
-                          ? 'submenu-upwards'
-                          : 'submenu-downwards'
-                      }
-                      onMouseEnter={(e: any) =>
-                        handleMouseEnter(e, setSubmenuPosition)
-                      }
-                      dropDownStyle={{ maxWidth: 142, width: '100%' }}
-                      tagStyle={{
-                        backgroundColor: (() => {
-                          if (modeSelectedItem?.name === 'Email') {
-                            return `var(--bg-surface-secondary)`;
-                          } else if (modeSelectedItem?.name === 'Internal') {
-                            return `var(--bg-surface-secondary-hover)`;
-                          } else {
-                            return undefined;
-                          }
-                        })(),
-                      }}
-                    />
-                    {(macros?.length > 0 ||
-                      currentWorkspace?.role === UserRole.OWNER ||
-                      currentWorkspace?.role === UserRole.ADMIN) && (
-                      <div className='tag-div'>
-                        <Icon
-                          iconName='sticky-note-icon'
-                          iconSize='12'
-                          iconViewBox='0 0 12 12'
-                          size={true}
-                          onClick={handleMacroItem}
-                          isActive={true}
-                        />
-                        {macroDropdown && (
-                          <DropDown
-                            items={macros}
-                            labelField='title'
-                            onClose={handleOutsideClick}
-                            onChange={handleMacroSelect}
-                            iconSize={''}
-                            iconViewBox={''}
-                            style={{
-                              bottom: 52,
-                              maxWidth: 146,
-                              width: '100%',
-                            }}
-                            isMacro={
-                              currentWorkspace?.role === UserRole.OWNER ||
-                              currentWorkspace?.role === UserRole.ADMIN
-                            }
-                          />
+        {isProfileSection && screenWidth <= 768 ? (
+          <ResponsiveProfileSection />
+        ) : (
+          <CenterMainDiv>
+            <BottomDiv>
+              <CenterDiv ref={messagesEndRef}>
+                {messages?.map((message, index) => {
+                  const hideAvatarLine =
+                    index === messages?.length - 1 ||
+                    (messages?.[index + 1] &&
+                      (messages?.[index + 1]?.type === MessageType.EMAIL ||
+                        messages?.[index + 1]?.type ===
+                          MessageType.FROM_CONTACT ||
+                        messages?.[index + 1]?.type === MessageType.REGULAR));
+                  return (
+                    <div key={index}>
+                      {renderActivityMessage(message, hideAvatarLine)}
+                      {isLargeScreen && index !== messages?.length - 1 && (
+                        <LineDiv />
+                      )}
+                      {!isLargeScreen &&
+                        !hideAvatarLine &&
+                        (message.type === MessageType.CHANGE_ASSIGNEE ||
+                          message.type === MessageType.CHANGE_LABEL ||
+                          message.type === MessageType.CHANGE_PRIORITY ||
+                          message.type === MessageType.CHANGE_STATUS) && (
+                          <LineDiv />
                         )}
-                      </div>
-                    )}
+                    </div>
+                  );
+                })}
+              </CenterDiv>
+            </BottomDiv>
+            <InputDiv>
+              <div className='input-main-div'>
+                <div className='line' />
+                <div className='avtar'>
+                  <Avatar
+                    imgSrc={user?.profile_url || ''}
+                    size={20}
+                    name={user?.display_name || ''}
+                  />
+                </div>
+                <Input modeSelectedItem={modeSelectedItem}>
+                  <ProsemirrorEditor
+                    ref={editorRef}
+                    setValueContent={setCommentValue}
+                    placeholder='Write a message'
+                  />
+                  <div className='attach-file-div'>
+                    {/* Attached Files render */}
+                    {attachFile?.map((fileData, index: number) => (
+                      <FileCard
+                        key={index}
+                        documentText={fileData?.fileName || 'Uploaded file'}
+                        fileSize={`${fileData?.size}`}
+                        fileName={fileData?.fileName}
+                        url={fileData?.downloadUrl}
+                        type={fileData?.contentType}
+                      />
+                    ))}
                   </div>
-                  <IconDiv modeSelectedItem={modeSelectedItem}>
-                    <Icon
-                      iconName='attach-icon'
-                      iconSize='12'
-                      iconViewBox='0 0 12 12'
-                      size={true}
-                      onClick={handleFileInput}
-                    />
-                    <Icon
-                      onClick={() =>
-                        handleCommentSend(commentValue, modeSelectedItem.name)
-                      }
-                      iconName='send-icon'
-                      iconSize='12'
-                      iconViewBox='0 0 12 12'
-                      size={true}
-                      isActive={true}
-                      className='icon'
-                    />
-                  </IconDiv>
-                </InputIcon>
-                <input
-                  type='file'
-                  ref={fileInputRef}
-                  style={{ display: 'none' }}
-                  onChange={onFileUpload}
-                  multiple
-                />
-              </Input>
-            </div>
-          </InputDiv>
-        </CenterMainDiv>
+                  {uploadLoading !== null && (
+                    <p className='loading-text'>
+                      Loading...({Math.floor(uploadLoading)}%)
+                    </p>
+                  )}
+                  <InputIcon modeSelectedItem={modeSelectedItem}>
+                    <div className='drop-tag'>
+                      <DropDownWithTag
+                        onClick={handleMessageModeTag}
+                        selectedValue={modeSelectedItem}
+                        dropdownOpen={messageModeDropdown}
+                        title='Email'
+                        onClose={() => {
+                          setMessageModeDropdown(false);
+                        }}
+                        items={modeItem}
+                        onChange={handleModeItemChange}
+                        isTag={true}
+                        iconName={modeSelectedItem?.icon}
+                        iconSize='12'
+                        iconViewBox='0 0 12 12'
+                        isActive={messageModeDropdown ? true : false}
+                        className={
+                          submenuPosition === 'upwards'
+                            ? 'submenu-upwards'
+                            : 'submenu-downwards'
+                        }
+                        onMouseEnter={(e: any) =>
+                          handleMouseEnter(e, setSubmenuPosition)
+                        }
+                        dropDownStyle={{ maxWidth: 142, width: '100%' }}
+                        tagStyle={{
+                          backgroundColor: (() => {
+                            if (modeSelectedItem?.name === 'Email') {
+                              return `var(--bg-surface-secondary)`;
+                            } else if (modeSelectedItem?.name === 'Internal') {
+                              return `var(--bg-surface-secondary-hover)`;
+                            } else {
+                              return undefined;
+                            }
+                          })(),
+                        }}
+                      />
+                      {(macros.length > 0 ||
+                        currentWorkspace?.role === UserRole.OWNER ||
+                        currentWorkspace?.role === UserRole.ADMIN) && (
+                        <div className='tag-div'>
+                          <Icon
+                            iconName='sticky-note-icon'
+                            iconSize='12'
+                            iconViewBox='0 0 12 12'
+                            size={true}
+                            onClick={handleMacroItem}
+                            isActive={true}
+                            className='icon'
+                          />
+                          {macroDropdown && (
+                            <DropDown
+                              items={macros}
+                              labelField='title'
+                              onClose={handleOutsideClick}
+                              onChange={handleMacroSelect}
+                              iconSize={''}
+                              iconViewBox={''}
+                              style={{
+                                bottom: 52,
+                                maxWidth: 146,
+                                width: '100%',
+                              }}
+                              isMacro={
+                                currentWorkspace?.role === UserRole.OWNER ||
+                                currentWorkspace?.role === UserRole.ADMIN
+                              }
+                            />
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    <IconDiv modeSelectedItem={modeSelectedItem}>
+                      <Icon
+                        iconName='attach-icon'
+                        iconSize='12'
+                        iconViewBox='0 0 12 12'
+                        size={true}
+                        onClick={handleFileInput}
+                      />
+                      <Icon
+                        onClick={() =>
+                          handleCommentSend(commentValue, modeSelectedItem.name)
+                        }
+                        iconName='send-icon'
+                        iconSize='12'
+                        iconViewBox='0 0 12 12'
+                        size={true}
+                        isActive={true}
+                        className='icon'
+                      />
+                    </IconDiv>
+                  </InputIcon>
+                  <input
+                    type='file'
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    onChange={onFileUpload}
+                    multiple
+                  />
+                </Input>
+              </div>
+            </InputDiv>
+          </CenterMainDiv>
+        )}
       </MainDiv>
       <ProfileSection />
     </Main>

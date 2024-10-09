@@ -191,4 +191,8 @@ export const Content = styled.div`
 export const ModalContant = styled.div`
   overflow: auto;
   max-height: 320px;
+  min-height: 320px;
+  .contact-us {
+    padding: 0 16px;
+  }
 `;
