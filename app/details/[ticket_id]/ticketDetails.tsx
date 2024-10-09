@@ -936,6 +936,7 @@ function TicketDetails(props: Props) {
                   <ProsemirrorEditor
                     ref={editorRef}
                     setValueContent={setCommentValue}
+                    placeholder='Write a message'
                   />
                   <div className='attach-file-div'>
                     {/* Attached Files render */}

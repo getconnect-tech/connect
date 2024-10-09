@@ -249,6 +249,7 @@ const EmojiPickerDiv = styled.div`
   }
   .epr-emoji-list {
     margin-left: unset;
+    padding-left: unset;
   }
   .epr_-4ueg5a {
     width: 236px !important;
