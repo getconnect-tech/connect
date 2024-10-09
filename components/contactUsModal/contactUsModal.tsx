@@ -60,7 +60,7 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
         );
         if (fileURL) {
           setAttachFiles((prev) => [
-            ...prev,
+            ...(prev || []),
             { file: selectedFiles[0], url: fileURL },
           ]);
         }
