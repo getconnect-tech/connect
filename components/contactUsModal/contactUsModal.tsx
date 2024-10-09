@@ -86,10 +86,10 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
           senderEmail: user?.email || '',
           message: messageText,
           attachments:
-            attachFileData.length > 0
-              ? attachFileData.map((fileObj) => ({
-                  filename: fileObj.file.name,
-                  url: fileObj.url,
+            attachFileData?.length > 0
+              ? attachFileData?.map((fileObj) => ({
+                  filename: fileObj?.file.name,
+                  url: fileObj?.url,
                 }))
               : [],
         };
@@ -127,9 +127,9 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
               onChange={handleFileChange}
               multiple={true}
             />
-            {attachFiles.length > 0 && (
+            {attachFiles?.length > 0 && (
               <FileCardContainer>
-                {attachFiles.map((fileObj, index) => (
+                {attachFiles?.map((fileObj, index) => (
                   <FileCard key={index}>
                     <IconDiv>
                       <SVGIcon
