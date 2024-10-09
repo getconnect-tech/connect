@@ -165,7 +165,10 @@ export const getFirebaseUrlFromFile = async (
         const uniqueFilename = generateRandomFilename();
         const fullFilename = `${file?.name?.replace(/\.[^/.]+$/, '')}_${uniqueFilename}.${fileExtension}`;
         let pathName = '';
-        if (!folderName?.startsWith('UserProfiles')) {
+        if (
+          !folderName?.startsWith('UserProfiles') &&
+          !folderName?.startsWith('Contact-us')
+        ) {
           const workspace = workspaceStore.currentWorkspace;
           pathName = `workspaces/${workspace?.id}/${folderName}`;
         } else {

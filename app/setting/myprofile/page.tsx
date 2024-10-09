@@ -7,6 +7,7 @@ import React, {
   useEffect,
 } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useRouter } from 'next/navigation';
 import {
   Description,
   Frame,
@@ -16,9 +17,11 @@ import {
   Link,
   Main,
   MainDiv,
+  NavbarTitle,
   ProfileDetail,
   ProfileImage,
   ProfileInputs,
+  ResponsiveHeader,
   RightDiv,
   TextField,
   Title,
@@ -30,11 +33,15 @@ import { useStores } from '@/stores';
 import { updateUserDetails } from '@/services/clientSide/userService';
 import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { messageStore } from '@/stores/messageStore';
+import Icon from '@/components/icon/icon';
+import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
 
 const MyProfile = () => {
   const { userStore } = useStores();
+  const router = useRouter();
   const { user, loading } = userStore;
   const [displayName, setDisplayName] = useState<string>('');
+  const [isNavbar, setIsNavbar] = useState(false);
   const [image, setImage] = useState<{
     profile: string | ArrayBuffer | null;
     file: File;
@@ -156,17 +163,48 @@ const MyProfile = () => {
     [],
   );
 
+  const onClickIcon = useCallback(() => {
+    setIsNavbar(true);
+  }, []);
+
+  const onCloseNavbar = useCallback(() => {
+    setIsNavbar(false);
+  }, []);
+
   return (
     <Main>
+      {isNavbar && <ResponsiveSettingNavBar onClose={onCloseNavbar} />}
       <MainDiv>
         <RightDiv>
+          <ResponsiveHeader>
+            <div className='left-section'>
+              <Icon
+                iconName='sidebar-icon'
+                iconSize='16'
+                iconViewBox='0 0 16 16'
+                className='sidebar-icon'
+                onClick={onClickIcon}
+              />
+              <NavbarTitle>Settings</NavbarTitle>
+            </div>
+            <Icon
+              iconName={'cross-icon'}
+              iconSize={'12'}
+              iconViewBox={'0 0 16 16'}
+              size={true}
+              className='cross-icon'
+              onClick={() => {
+                router.push('/');
+              }}
+            />
+          </ResponsiveHeader>
           <Head>
             <LeftDiv>
               <Title>My Profile</Title>
               <Description>Manage your account Profile</Description>
             </LeftDiv>
           </Head>
-          <ProfileDetail onSubmit={onSubmit}>
+          <ProfileDetail onSubmit={onSubmit} isNavbar={isNavbar}>
             <ProfileImage>
               <input
                 type='file'
