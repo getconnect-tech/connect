@@ -7,6 +7,7 @@ import React, {
   useEffect,
 } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useRouter } from 'next/navigation';
 import {
   Description,
   Frame,
@@ -37,6 +38,7 @@ import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettin
 
 const MyProfile = () => {
   const { userStore } = useStores();
+  const router = useRouter();
   const { user, loading } = userStore;
   const [displayName, setDisplayName] = useState<string>('');
   const [isNavbar, setIsNavbar] = useState(false);
@@ -175,14 +177,26 @@ const MyProfile = () => {
       <MainDiv>
         <RightDiv>
           <ResponsiveHeader>
+            <div className='left-section'>
+              <Icon
+                iconName='sidebar-icon'
+                iconSize='16'
+                iconViewBox='0 0 16 16'
+                className='sidebar-icon'
+                onClick={onClickIcon}
+              />
+              <NavbarTitle>Setting</NavbarTitle>
+            </div>
             <Icon
-              iconName='sidebar-icon'
-              iconSize='16'
-              iconViewBox='0 0 16 16'
-              className='sidebar-icon'
-              onClick={onClickIcon}
+              iconName={'cross-icon'}
+              iconSize={'12'}
+              iconViewBox={'0 0 16 16'}
+              size={true}
+              className='cross-icon'
+              onClick={() => {
+                router.push('/');
+              }}
             />
-            <NavbarTitle>Setting</NavbarTitle>
           </ResponsiveHeader>
           <Head>
             <LeftDiv>

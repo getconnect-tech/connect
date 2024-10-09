@@ -33,14 +33,29 @@ export const RightDiv = styled.div`
     bottom: 20%;
     left: 53%;
   }
+  @media screen and (max-width: 449px) {
+    gap: 0;
+  }
 `;
 
 export const ResponsiveHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 0;
-  border-bottom: var(--border-main);
+  display: none;
+  @media screen and (max-width: 449px) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    position: sticky;
+    top: 0;
+    background-color: var(--bg-surface);
+    z-index: 11;
+    border-bottom: var(--border-main);
+    .left-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
 `;
 
 export const NavbarTitle = styled.div`
@@ -70,7 +85,9 @@ export const Head = styled.div`
     }
   }
   @media screen and (max-width: 449px) {
-    padding: 16px 0 10px;
+    padding: 16px 16px 0;
+    margin: unset;
+    top: 53px;
   }
 `;
 
@@ -93,6 +110,7 @@ export const ProfileDetail = styled.form<Props>`
   background-color: var(--bg-white);
   box-shadow: var(--shadow-card);
   @media screen and (max-width: 449px) {
+    margin: 16px;
     ${(props) =>
       props.isNavbar &&
       css`
@@ -134,6 +152,9 @@ export const TextField = styled.div`
   gap: 4px;
   max-width: 260px;
   width: 100%;
+  @media screen and (max-width: 449px) {
+    max-width: unset;
+  }
 `;
 
 export const Label = styled.div`
@@ -167,7 +188,9 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
 
   &:checked {
     background-color: var(--brand);
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(
+      checkmarkSVG,
+    )}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;
