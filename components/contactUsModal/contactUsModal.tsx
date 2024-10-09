@@ -27,7 +27,7 @@ import { useStores } from '@/stores';
 import { getFirebaseUrlFromFile } from '@/helpers/common';
 
 interface AttachFile {
-  filename: string;
+  file: File;
   url: string;
 }
 interface Props {
@@ -35,12 +35,11 @@ interface Props {
   onClose: () => void;
 }
 function ContactUsModal({ isSuccessfull, onClose }: Props) {
-  const [files, setFiles] = useState<File[]>([]);
+  const [attachFiles, setAttachFiles] = useState<AttachFile[]>([]);
   const [success, setSuccess] = useState<boolean>(isSuccessfull || false);
   const [loading, setLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [messageText, setMessageText] = useState<string>('');
-  const [attachFiles, setAttachFiles] = useState<AttachFile[]>([]);
   const { userStore } = useStores();
   const { user } = userStore;
 
@@ -59,11 +58,10 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
           'Contact-us',
           selectedFiles[0]?.name,
         );
-        setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
         if (fileURL) {
           setAttachFiles((prev) => [
             ...prev,
-            { filename: selectedFiles[0].name, url: fileURL },
+            { file: selectedFiles[0], url: fileURL },
           ]);
         }
         // Reset input value
@@ -76,7 +74,6 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
   );
 
   const handleRemoveFile = useCallback((index: number) => {
-    setFiles((prevFiles) => prevFiles?.filter((_, i) => i !== index));
     setAttachFiles((prevFiles) => prevFiles?.filter((_, i) => i !== index));
   }, []);
 
@@ -88,7 +85,13 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
           senderName: user?.display_name || '',
           senderEmail: user?.email || '',
           message: messageText,
-          attachments: attachFileData.length > 0 ? attachFileData : [],
+          attachments:
+            attachFileData.length > 0
+              ? attachFileData.map((fileObj) => ({
+                  filename: fileObj.file.name,
+                  url: fileObj.url,
+                }))
+              : [],
         };
         await createTicketViaWeb(payload);
         setSuccess(true);
@@ -124,9 +127,9 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
               onChange={handleFileChange}
               multiple={true}
             />
-            {files.length > 0 && (
+            {attachFiles.length > 0 && (
               <FileCardContainer>
-                {files.map((file, index) => (
+                {attachFiles.map((fileObj, index) => (
                   <FileCard key={index}>
                     <IconDiv>
                       <SVGIcon
@@ -137,8 +140,8 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
                       />
                     </IconDiv>
                     <FileCardRight>
-                      <h2>{file.name}</h2>
-                      <p>{(file.size / 1024).toFixed(2)} KB</p>
+                      <h2>{fileObj?.file.name}</h2>
+                      <p>{(fileObj?.file.size / 1024).toFixed(2)} KB</p>
                     </FileCardRight>
                     <RemoveIcon onClick={() => handleRemoveFile(index)}>
                       <SVGIcon
