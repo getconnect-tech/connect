@@ -52,14 +52,13 @@ function Inbox({ activeNav, labelId }: InboxProps) {
   const [isNavbar, setIsNavbar] = useState(false);
   const pathname = usePathname();
   const countOfUnassignOpenTicket = ticketList?.filter((ticket) => {
-    const isSnoozeExpired =
-      ticket.snooze_until === null ||
-      moment(ticket.snooze_until).isBefore(moment());
+    const currentTime = new Date();
 
     return (
       ticket.status === TicketStatus.OPEN &&
       ticket.assigned_to === null &&
-      isSnoozeExpired
+      (isEmpty(ticket?.snooze_until) ||
+        (ticket.snooze_until && new Date(ticket.snooze_until) < currentTime))
     );
   });
 
