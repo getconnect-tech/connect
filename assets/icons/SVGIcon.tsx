@@ -829,6 +829,28 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
+    case 'profile-sidebar-icon':
+      return (
+        <>
+          <path
+            fill='#7B7A79'
+            fillRule='evenodd'
+            d='M3 1.5h10a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3v-8a3 3 0 0 1 3-3Zm11 3a1 1 0 0 0-1-1h-2v10h2a1 1 0 0 0 1-1v-8Zm-5 9H3a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h6v10Z'
+            clipRule='evenodd'
+          />
+        </>
+      );
+    case 'profile-sidebar-active-icon':
+      return (
+        <>
+          <path
+            fill='#313130'
+            fillRule='evenodd'
+            d='M3 1.5h10a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3v-8a3 3 0 0 1 3-3Zm6 12H3a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h6v10Z'
+            clipRule='evenodd'
+          />
+        </>
+      );
     case 'notification-icon':
       return (
         <>

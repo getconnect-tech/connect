@@ -6,6 +6,10 @@ import { getContactData } from '@/services/clientSide/contactServices';
 import { isEmpty } from '@/helpers/common';
 import ContactsLoading from '@/components/contactsLoading/contactsLoading';
 
+interface Props {
+  isShowNavbar: boolean;
+}
+
 const cardData = [
   {
     imgSrc:
@@ -36,7 +40,7 @@ const cardData = [
   },
 ];
 
-export default function PersonList() {
+export default function PersonList({ isShowNavbar }: Props) {
   const [loading, setLoading] = useState(true); // Loading state added
   const loadData = useCallback(async () => {
     if (!isEmpty(cardData)) {
@@ -60,7 +64,7 @@ export default function PersonList() {
         <ContactsLoading />
       ) : (
         <>
-          <ListMainDiv>
+          <ListMainDiv isShowNavbar={isShowNavbar}>
             {cardData.map((card, index) => (
               <ContactCard
                 key={index}
@@ -71,6 +75,7 @@ export default function PersonList() {
                 closeCount={card.closeCount}
                 isCompany={false}
                 peopleCount={card.peopleCount}
+                isShowNavbar={isShowNavbar}
               />
             ))}
           </ListMainDiv>
