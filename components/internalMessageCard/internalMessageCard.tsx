@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import FileCard from '../fileCard/fileCard';
 import DropDown from '../dropDown/dropDown';
 import RenderHtml from '../renderHtml';
+import Avatar from '../avtar/Avtar';
 import {
   AddReactionButton,
   AttachmentMainDiv,
@@ -13,7 +14,10 @@ import {
   EmojiPickerDiv,
   FileCardMainDiv,
   IconDiv,
+  Main,
   MainDiv,
+  Name,
+  NameMainDiv,
   ReactionCard,
   ReactionsMainDiv,
 } from './style';
@@ -31,6 +35,8 @@ interface Props {
   reactions: ReactionProps[];
   attachments?: MessageAttachment[];
   messageId: string;
+  message: any;
+  messageName: any;
 }
 
 export const useOutsideClick = (callback: () => void) => {
@@ -65,10 +71,17 @@ const InternalMessageCard = ({
   reactions,
   attachments = [],
   messageId,
+  message,
+  messageName,
 }: Props) => {
   const { user } = userStore;
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showResponsiveEmojiPicker, setShowResponsiveEmojiPicker] =
+    useState(false);
   const emojiPickerRef = useOutsideClick(() => setShowEmojiPicker(false));
+  const emojiResponsivePickerRef = useOutsideClick(() =>
+    setShowResponsiveEmojiPicker(false),
+  );
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [selectedReactions, setSelectedReactions] =
@@ -109,6 +122,10 @@ const InternalMessageCard = ({
 
   const handleAddReactionClick = () => {
     setShowEmojiPicker((prev) => !prev);
+  };
+
+  const handleResponsiveAddReactionClick = () => {
+    setShowResponsiveEmojiPicker((prev) => !prev);
   };
 
   const handleEmojiSelect = useCallback(
@@ -258,10 +275,54 @@ const InternalMessageCard = ({
   );
 
   return (
-    <div>
+    <Main>
       <MainDiv>
         <Div>
           <div className='message ProseMirror'>
+            <NameMainDiv>
+              <div className='left-div'>
+                <Avatar imgSrc={message} name={messageName} size={20} />
+                <Name>{messageName}</Name>
+                <SVGIcon
+                  name='dot-icon'
+                  width='4'
+                  height='4'
+                  fill='none'
+                  viewBox='0 0 4 4'
+                />
+                <p>{moment(time).fromNow()}</p>
+              </div>
+              {!showReactions && (
+                <EmojiPickerDiv ref={emojiResponsivePickerRef}>
+                  <div
+                    onClick={handleResponsiveAddReactionClick}
+                    onMouseEnter={(e) =>
+                      handleMouseEnter(e, setSubmenuPosition)
+                    }
+                  >
+                    <SVGIcon
+                      name='emoji-icon'
+                      width='12'
+                      height='12'
+                      viewBox='0 0 12 12'
+                      className='icon'
+                    />
+                  </div>
+                  {showResponsiveEmojiPicker && (
+                    <div className='reaction-icon-div'>
+                      <EmojiPicker
+                        onEmojiClick={handleEmojiSelect}
+                        className={
+                          submenuPosition === 'upwards'
+                            ? 'submenu-upwards responsive-upwards'
+                            : 'submenu-downwards responsive'
+                        }
+                      />
+                    </div>
+                  )}
+                </EmojiPickerDiv>
+              )}
+            </NameMainDiv>
             <RenderHtml htmlstring={title} />
             {attachments && attachments?.length > 0 && (
               <AttachmentMainDiv>
@@ -280,7 +341,7 @@ const InternalMessageCard = ({
               </AttachmentMainDiv>
             )}
           </div>
-          <span>{moment(time).fromNow()}</span>
+          <span className='time'>{moment(time).fromNow()}</span>
         </Div>
         {!showReactions && (
           <EmojiPickerDiv ref={emojiPickerRef}>
@@ -374,7 +435,7 @@ const InternalMessageCard = ({
           </EmojiPickerDiv>
         </ReactionsMainDiv>
       )}
-    </div>
+    </Main>
   );
 };
 

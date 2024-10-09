@@ -1,17 +1,32 @@
 import styled from 'styled-components';
 import { Typography } from '@/styles/typography';
 
+const Main = styled.div`
+  width: 100%;
+  @media screen and (max-width: 449px) {
+    margin-bottom: 20px;
+  }
+`;
+
 const MainDiv = styled.div`
   padding-left: 22px;
   margin-left: 10px;
   position: relative;
+  z-index: 1;
   .emoji-icon {
     display: none;
   }
   &:hover {
     .emoji-icon {
       display: flex;
+      @media screen and (max-width: 449px) {
+        display: none;
+      }
     }
+  }
+  @media screen and (max-width: 449px) {
+    padding-left: unset;
+    margin-left: unset;
   }
 `;
 
@@ -39,10 +54,13 @@ const Div = styled.div`
       margin-left: 20px;
     }
   }
-  span {
+  .time {
     ${Typography.body_md_regular};
     color: var(--text-text-secondary);
     white-space: nowrap;
+    @media screen and (max-width: 449px) {
+      display: none;
+    }
   }
   .message {
     background-color: var(--bg-surface-secondary);
@@ -53,6 +71,14 @@ const Div = styled.div`
     color: var(--text);
     max-width: 536px;
     word-break: break-word;
+    @media screen and (max-width: 449px) {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+  @media screen and (max-width: 449px) {
+    display: block;
   }
 `;
 
@@ -89,10 +115,20 @@ const ReactionsMainDiv = styled.div`
   .submenu-upwards {
     bottom: calc(100% + 3px);
     top: auto;
+    @media screen and (max-width: 449px) {
+      margin-left: 4px;
+    }
   }
   .submenu-downwards {
     bottom: auto;
     margin-top: 4px;
+    @media screen and (max-width: 449px) {
+      margin-left: 4px;
+    }
+  }
+  @media screen and (max-width: 449px) {
+    padding-left: unset;
+    padding-top: 4px;
   }
 `;
 
@@ -160,10 +196,21 @@ const EmojiPickerDiv = styled.div`
     bottom: calc(100% + 33px);
     top: auto;
   }
+  .responsive-upwards {
+    @media screen and (max-width: 449px) {
+      right: 0;
+      bottom: calc(100% + 22px);
+    }
+  }
   .submenu-downwards {
     position: absolute;
     top: 100%;
     bottom: auto;
+  }
+  .responsive {
+    @media screen and (max-width: 449px) {
+      right: 0;
+    }
   }
   .epr_-7mgpwf:hover {
     background-color: var(--bg-surface-hover);
@@ -175,12 +222,18 @@ const EmojiPickerDiv = styled.div`
     position: absolute;
     z-index: 11;
     margin-top: 4px;
+    @media screen and (max-width: 449px) {
+      margin-top: unset;
+    }
   }
   .reaction-icon-div {
     position: absolute;
     z-index: 11;
     margin-top: 20px;
     margin-left: 12px;
+    @media screen and (max-width: 449px) {
+      margin-top: unset;
+    }
   }
   .epr_-kg0voo {
     display: none;
@@ -193,6 +246,10 @@ const EmojiPickerDiv = styled.div`
   }
   .epr_qyh4cg {
     display: none;
+  }
+  .epr-emoji-list {
+    margin-left: unset;
+    padding-left: unset;
   }
   .epr_-4ueg5a {
     width: 236px !important;
@@ -262,7 +319,37 @@ const EmojiPickerDiv = styled.div`
   }
 `;
 
+const NameMainDiv = styled.div`
+  display: none;
+  @media screen and (max-width: 449px) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    p {
+      ${Typography.body_md_regular};
+      color: var(--text-text-secondary);
+      white-space: nowrap;
+      margin-bottom: unset !important;
+    }
+    .left-div {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .icon {
+      fill: var(--icon);
+    }
+  }
+`;
+
+const Name = styled.h5`
+  ${Typography.body_md_medium};
+  color: var(--text);
+`;
+
 export {
+  Main,
   MainDiv,
   Div,
   IconDiv,
@@ -273,4 +360,6 @@ export {
   AttachmentMainDiv,
   FileCardMainDiv,
   EmojiPickerDiv,
+  NameMainDiv,
+  Name,
 };
