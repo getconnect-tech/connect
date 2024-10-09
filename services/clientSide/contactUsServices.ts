@@ -3,8 +3,10 @@ import { getAPIErrorMessage } from '@/helpers/common';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { messageStore } from '@/stores/messageStore';
 
+const token = process.env.NEXT_PUBLIC_CREATE_TICKET_VIA_WEB_API_KEY;
+
 /**
- * @desc Add label
+ * @desc Add ticket via web
  * @param {*} payload
  * {
  * "senderName": "senderName",
@@ -23,6 +25,11 @@ export const createTicketViaWeb = async (payload: object) => {
     const response = await axios.post(
       `${NEXT_PUBLIC_API_URL}/tickets`,
       payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
     );
     const { data } = response;
     return data;
