@@ -151,7 +151,7 @@ export const getFirebaseUrlFromFile = async (
   file: any,
   folderName: string,
   fileName?: string,
-  isLoader: boolean = true,
+  showLoader: boolean = true,
 ) => {
   try {
     const promises = [];
@@ -185,7 +185,7 @@ export const getFirebaseUrlFromFile = async (
           (snapshot) => {
             const progress =
               (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            if (isLoader) appStore.setUploadLoading(progress);
+            if (showLoader) appStore.setUploadLoading(progress);
           },
           (error) => {
             myReject(error);
