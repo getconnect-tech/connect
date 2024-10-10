@@ -57,6 +57,7 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
           selectedFiles,
           'Contact-us',
           selectedFiles[0]?.name,
+          false,
         );
         if (fileURL) {
           setAttachFiles((prev) => [
