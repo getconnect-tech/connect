@@ -85,7 +85,7 @@ export default function WorkDetails({ groupInfo }: Props) {
         <NameDiv>
           <Avatar
             imgSrc={groupInfo?.avatar || ''}
-            name={groupInfo?.name}
+            name={groupInfo?.name || ''}
             size={20}
             isShowBorder={true}
           />

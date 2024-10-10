@@ -14,7 +14,9 @@ import WorkDetails from './workDetails';
 import RecentEvent from './recentEvent';
 import AIBlock from './aiBlock';
 import { useStores } from '@/stores';
-import { capitalizeString, formatTime } from '@/helpers/common';
+import { capitalizeString, formatTime, isEmpty } from '@/helpers/common';
+import { ContactGroups } from '@/utils/dataTypes';
+import { getContactGroup } from '@/services/clientSide/contactServices';
 
 interface ContactInfo {
   label: string;
@@ -26,6 +28,7 @@ export default function ResponsiveProfileSection() {
   const { ticketDetails } = ticketStore;
   const { contact } = ticketDetails || {};
   const [contactInfo, setContactInfo] = useState<ContactInfo[]>([]);
+  const [workInfo, setWorkInfo] = useState<ContactGroups[]>([]);
 
   const createContactInfo = useCallback(() => {
     const contactArray: ContactInfo[] = [];
@@ -130,6 +133,21 @@ export default function ResponsiveProfileSection() {
     setContactInfo(contactArray);
   }, [contact]);
 
+  const loadData = useCallback(async () => {
+    if (!isEmpty(contact?.id)) {
+      try {
+        const contactGroupInfo = await getContactGroup(contact?.id || '');
+        setWorkInfo(contactGroupInfo);
+      } catch (err: any) {
+        console.error('Error fetching contact group information:', err);
+      }
+    }
+  }, [contact?.id]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
   useEffect(() => {
     createContactInfo();
   }, [contact]);
@@ -156,7 +174,7 @@ export default function ResponsiveProfileSection() {
           </DetailsDiv>
         ))}
       </DetailsProfileDiv>
-      <WorkDetails />
+      {workInfo?.map((group) => <WorkDetails groupInfo={group} />)}
       <RecentEvent />
     </ResponsiveMainDiv>
   );
