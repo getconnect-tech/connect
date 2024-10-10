@@ -19,6 +19,7 @@ interface Props {
   setCurrentOpenDropdown: (dropdown: string | null) => void;
   dropdownIdentifier: string;
   apiKey: string;
+  isShowNavbar: boolean;
 }
 
 const ApiKeyCard = ({
@@ -28,6 +29,7 @@ const ApiKeyCard = ({
   setCurrentOpenDropdown,
   dropdownIdentifier,
   apiKey,
+  isShowNavbar,
 }: Props) => {
   const dropDownItem = [
     { name: 'Delete', icon: 'delete-icon', isDelete: true },
@@ -79,7 +81,7 @@ const ApiKeyCard = ({
   }, [apiKey]);
 
   return (
-    <CardMainDiv>
+    <CardMainDiv isShowNavbar={isShowNavbar}>
       <LeftDiv>
         <TitleDiv>
           <h6>{keyName}</h6>
@@ -93,6 +95,7 @@ const ApiKeyCard = ({
           iconViewBox='0 0 12 12'
           onClick={handleCopyClick}
           size={true}
+          className='copy-icon'
         />
         <div style={{ position: 'relative' }} className='tag-div'>
           <Icon

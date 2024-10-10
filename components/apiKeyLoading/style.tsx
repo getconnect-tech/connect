@@ -40,6 +40,9 @@ const Main = styled.div`
       transform: translateX(100%);
     }
   }
+  @media screen and (max-width: 449px) {
+    margin: 8px 16px 16px;
+  }
 `;
 
 const Firstblock = styled.div`

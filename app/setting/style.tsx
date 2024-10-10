@@ -32,6 +32,10 @@ export const RightDiv = styled.div`
     position: absolute;
     bottom: 20%;
     left: 53%;
+    @media screen and (max-width: 449px) {
+      bottom: unset;
+      left: 31%;
+    }
   }
   @media screen and (max-width: 449px) {
     gap: 0;
@@ -85,7 +89,7 @@ export const Head = styled.div`
     }
   }
   @media screen and (max-width: 449px) {
-    padding: 16px 16px 0;
+    padding: 16px 16px 8px;
     margin: unset;
     top: 53px;
   }
@@ -110,7 +114,7 @@ export const ProfileDetail = styled.form<Props>`
   background-color: var(--bg-white);
   box-shadow: var(--shadow-card);
   @media screen and (max-width: 449px) {
-    margin: 16px;
+    margin: 8px 16px 16px;
     ${(props) =>
       props.isNavbar &&
       css`
@@ -229,6 +233,9 @@ export const MainCardDiv = styled.div`
   box-shadow: var(--shadow-card);
   border-radius: 12px;
   margin-bottom: 16px;
+  @media screen and (max-width: 449px) {
+    margin: 8px 16px 16px;
+  }
 `;
 export const EmailCardDiv = styled.div`
   display: flex;

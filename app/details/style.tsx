@@ -110,6 +110,9 @@ const ButtonDiv = styled.div`
     bottom: auto;
     right: 20px;
   }
+  @media screen and (max-width: 449px) {
+    flex-wrap: wrap;
+  }
 `;
 
 const InputDiv = styled.div`
