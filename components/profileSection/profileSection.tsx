@@ -15,7 +15,7 @@ import RecentEvent from './recentEvent';
 import AIBlock from './aiBlock';
 import { useStores } from '@/stores';
 import { capitalizeString, formatTime, isEmpty } from '@/helpers/common';
-import { getContactGroup } from '@/services/clientSide/contactServices';
+import { getContactGroups } from '@/services/clientSide/contactServices';
 import { ContactGroups } from '@/utils/dataTypes';
 
 interface ContactInfo {
@@ -136,7 +136,7 @@ export default function ProfileSection() {
   const loadData = useCallback(async () => {
     if (!isEmpty(contact?.id)) {
       try {
-        const contactGroupInfo = await getContactGroup(contact?.id || '');
+        const contactGroupInfo = await getContactGroups(contact?.id || '');
         setWorkInfo(contactGroupInfo);
       } catch (err: any) {
         console.error('Error fetching contact group information:', err);

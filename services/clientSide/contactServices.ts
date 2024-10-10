@@ -52,7 +52,7 @@ export const getAllGroup = async () => {
  * @desc Get contact groups
  * @param {*} contactId
  */
-export const getContactGroup = async (contactId: string) => {
+export const getContactGroups = async (contactId: string) => {
   try {
     const response = await axios.get(
       `${NEXT_PUBLIC_API_URL}/contacts/${contactId}/groups`,
