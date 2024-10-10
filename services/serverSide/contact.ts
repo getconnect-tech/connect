@@ -146,3 +146,16 @@ export const getActivities = async (email: string) => {
 
   return formattedEventsData;
 };
+
+export const getContactGroups = async (contactId: string) => {
+  const contactGroups = await prisma.contactGroup.findMany({
+    where: { contact_id: contactId },
+    select: {
+      group: true,
+    },
+  });
+
+  const groups = contactGroups.map((cg) => cg.group);
+
+  return groups;
+};
