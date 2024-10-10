@@ -184,7 +184,8 @@ export const getFirebaseUrlFromFile = async (
           (snapshot) => {
             const progress =
               (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            appStore.setUploadLoading(progress);
+            if (!folderName?.startsWith('Contact-us'))
+              appStore.setUploadLoading(progress);
           },
           (error) => {
             myReject(error);
