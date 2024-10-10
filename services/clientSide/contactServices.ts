@@ -11,9 +11,7 @@ import { messageStore } from '@/stores/messageStore';
 export const getContactData = async () => {
   try {
     contactStore.setLoading(true);
-    const response = await axios.get(
-      `${NEXT_PUBLIC_API_URL}/workspaces/contacts`,
-    );
+    const response = await axios.get(`${NEXT_PUBLIC_API_URL}/contacts`);
     const { data } = response;
     // set contact data
     contactStore.setContacts(data);

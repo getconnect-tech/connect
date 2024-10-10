@@ -29,6 +29,18 @@ export const getWorkspaceContacts = async (workspaceId: string) => {
           status: true,
         },
       },
+      groups: {
+        select: {
+          group: {
+            select: {
+              id: true,
+              group_id: true,
+              name: true,
+              avatar: true,
+            },
+          },
+        },
+      },
     },
   });
 
