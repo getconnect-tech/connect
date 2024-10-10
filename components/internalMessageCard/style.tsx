@@ -34,6 +34,27 @@ const Div = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
+  .ProseMirror {
+    h3 {
+      &:first-child {
+        margin-top: unset;
+      }
+    }
+    p {
+      &:first-child {
+        margin-top: unset;
+      }
+      &:last-child {
+        margin-bottom: unset;
+      }
+    }
+    ul {
+      margin-left: unset;
+    }
+    ol {
+      margin-left: unset;
+    }
+  }
   div {
     font-size: 14px !important;
     font-family: unset !important;
@@ -62,6 +83,8 @@ const Div = styled.div`
       display: none;
     }
   }
+  .prosemirror-p {
+  }
   .message {
     background-color: var(--bg-surface-secondary);
     padding: 6px 12px;
@@ -71,6 +94,7 @@ const Div = styled.div`
     color: var(--text);
     max-width: 536px;
     word-break: break-word;
+
     @media screen and (max-width: 449px) {
       display: flex;
       flex-direction: column;

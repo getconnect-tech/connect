@@ -6,6 +6,27 @@ const MessageCardInnerDiv = styled.div`
   border: var(--border-main);
   border-radius: 12px;
   word-break: break-word;
+  .ProseMirror {
+    h3 {
+      &:first-child {
+        margin-top: unset;
+      }
+    }
+    p {
+      &:first-child {
+        margin-top: unset;
+      }
+      &:last-child {
+        margin-bottom: unset;
+      }
+    }
+    ul {
+      margin-left: unset;
+    }
+    ol {
+      margin-left: unset;
+    }
+  }
 `;
 
 const CardTop = styled.div`
