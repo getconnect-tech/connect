@@ -5,14 +5,12 @@ import { prisma } from '@/prisma/prisma';
 export const getWorkspaceGroups = async (workspaceId: string) => {
   const groups = await prisma.group.findMany({
     where: { workspace_id: workspaceId },
-    select: {
-      id: true,
-      group_id: true,
-      name: true,
-      group_label: true,
-      created_at: true,
-      updated_at: true,
-      traits: true,
+    include: {
+      _count: {
+        select: {
+          contacts: true,
+        },
+      },
       contacts: {
         select: {
           contact: {
@@ -24,11 +22,6 @@ export const getWorkspaceGroups = async (workspaceId: string) => {
               },
             },
           },
-        },
-      },
-      _count: {
-        select: {
-          contacts: true,
         },
       },
     },

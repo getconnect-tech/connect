@@ -23,13 +23,7 @@ export const getWorkspaceContacts = async (workspaceId: string) => {
     where: {
       workspace_id: workspaceId,
     },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      workspace_id: true,
-      created_at: true,
-      updated_at: true,
+    include: {
       tickets: {
         select: {
           status: true,
