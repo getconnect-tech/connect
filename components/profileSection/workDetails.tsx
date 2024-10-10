@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Avatar from '../avtar/Avtar';
 import {
   DetailsDiv,
@@ -10,25 +10,86 @@ import {
   WorkDetailMainDiv,
 } from './styles';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { ContactGroups } from '@/utils/dataTypes';
+import { capitalizeString, formatTime } from '@/helpers/common';
 
-export default function WorkDetails() {
+interface Props {
+  groupInfo: ContactGroups;
+}
+
+interface GroupInformation {
+  label: string;
+  value: string;
+}
+
+export default function WorkDetails({ groupInfo }: Props) {
   const [showDetails, setShowDetails] = useState(true);
+  const [groupInformation, setGroupInformation] = useState<GroupInformation[]>(
+    [],
+  );
 
   const toggleDetails = () => {
     setShowDetails((prevShowDetails) => !prevShowDetails);
   };
+
+  const createGroupInfo = useCallback(() => {
+    const groupInfoArray: GroupInformation[] = [];
+    if (groupInfo?.name) {
+      groupInfoArray.push({ label: 'Name', value: groupInfo.name });
+    }
+
+    if (groupInfo?.group_label) {
+      groupInfoArray.push({
+        label: 'Group Label',
+        value: groupInfo.group_label,
+      });
+    }
+
+    if (groupInfo?.traits) {
+      Object.entries(groupInfo.traits).forEach(([key, value]) => {
+        if (value) {
+          // Convert the key to a human-readable label
+          const label = key
+            .replace(/([A-Z])/g, ' $1')
+            .replace(/^./, (str) => str.toUpperCase());
+          groupInfoArray.push({
+            label,
+            value: capitalizeString(value),
+          });
+        }
+      });
+    }
+
+    if (groupInfo?.created_at) {
+      groupInfoArray.push({
+        label: 'Created',
+        value: `${formatTime(groupInfo.created_at.toString())} ago`,
+      });
+    }
+    if (groupInfo?.updated_at) {
+      groupInfoArray.push({
+        label: 'Updated',
+        value: `${formatTime(groupInfo.updated_at.toString())} ago`,
+      });
+    }
+    setGroupInformation(groupInfoArray);
+  }, [groupInfo]);
+
+  useEffect(() => {
+    createGroupInfo();
+  }, [groupInfo]);
 
   return (
     <WorkDetailMainDiv>
       <TitleDiv onClick={toggleDetails}>
         <NameDiv>
           <Avatar
-            imgSrc='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6HMrE7xvKu5-UahOPBs3GcE4AZJk8LsX7tg&s'
-            name={''}
+            imgSrc={groupInfo?.avatar || ''}
+            name={groupInfo?.name}
             size={20}
             isShowBorder={true}
           />
-          <Title>Google</Title>
+          <Title>{groupInfo?.name}</Title>
         </NameDiv>
         <div className='icon'>
           <SVGIcon
@@ -42,36 +103,14 @@ export default function WorkDetails() {
       </TitleDiv>
       {showDetails && (
         <DetailsMainDiv>
-          <DetailsDiv>
-            <LeftDiv>
-              <p>Name</p>
-            </LeftDiv>
-            <p>Acme inc.</p>
-          </DetailsDiv>
-          <DetailsDiv>
-            <LeftDiv>
-              <p>ID</p>
-            </LeftDiv>
-            <p>w_12903424354</p>
-          </DetailsDiv>
-          <DetailsDiv>
-            <LeftDiv>
-              <p>Pricing plan</p>
-            </LeftDiv>
-            <p>Pro</p>
-          </DetailsDiv>
-          <DetailsDiv>
-            <LeftDiv>
-              <p>Project Usage</p>
-            </LeftDiv>
-            <p>21 of 25</p>
-          </DetailsDiv>
-          <DetailsDiv>
-            <LeftDiv>
-              <p>Pending request</p>
-            </LeftDiv>
-            <p>12</p>
-          </DetailsDiv>
+          {groupInformation.map((group, index) => (
+            <DetailsDiv key={index}>
+              <LeftDiv>
+                <p>{group?.label}</p>
+              </LeftDiv>
+              <p>{group?.value}</p>
+            </DetailsDiv>
+          ))}
         </DetailsMainDiv>
       )}
     </WorkDetailMainDiv>
