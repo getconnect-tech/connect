@@ -12,7 +12,6 @@ const MainDiv = styled.div`
   padding-left: 22px;
   margin-left: 10px;
   position: relative;
-  z-index: 1;
   .emoji-icon {
     display: none;
   }
