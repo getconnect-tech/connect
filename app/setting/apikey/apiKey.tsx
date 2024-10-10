@@ -1,12 +1,15 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useRouter } from 'next/navigation';
 import {
   Head,
   LeftDiv,
   Main,
   MainCardDiv,
   MainDiv,
+  NavbarTitle,
+  ResponsiveHeader,
   RightDiv,
   Title,
 } from '../style';
@@ -19,15 +22,19 @@ import ApiKeyLoading from '@/components/apiKeyLoading/apiKeyLoading';
 import EmptyState from '@/components/emptyState/emptyState';
 import { useStores } from '@/stores';
 import { getAPIKeys } from '@/services/clientSide/settingServices';
+import Icon from '@/components/icon/icon';
+import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
 
 function ApiKey() {
   const [keyModal, setKeyModal] = useState(false);
+  const router = useRouter();
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
   const { settingStore, workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
   const { apiKeys, loading } = settingStore || {};
+  const [isNavbar, setIsNavbar] = useState(false);
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
@@ -43,6 +50,14 @@ function ApiKey() {
     setKeyModal(false);
   }, []);
 
+  const onClickIcon = useCallback(() => {
+    setIsNavbar(true);
+  }, []);
+
+  const onCloseNavbar = useCallback(() => {
+    setIsNavbar(false);
+  }, []);
+
   useEffect(() => {
     loadData();
   }, [loadData]);
@@ -50,8 +65,31 @@ function ApiKey() {
   return (
     <>
       <Main>
+        {isNavbar && <ResponsiveSettingNavBar onClose={onCloseNavbar} />}
         <MainDiv>
           <RightDiv>
+            <ResponsiveHeader>
+              <div className='left-section'>
+                <Icon
+                  iconName='sidebar-icon'
+                  iconSize='16'
+                  iconViewBox='0 0 16 16'
+                  className='sidebar-icon'
+                  onClick={onClickIcon}
+                />
+                <NavbarTitle>Settings</NavbarTitle>
+              </div>
+              <Icon
+                iconName={'cross-icon'}
+                iconSize={'12'}
+                iconViewBox={'0 0 16 16'}
+                size={true}
+                className='cross-icon'
+                onClick={() => {
+                  router.push('/');
+                }}
+              />
+            </ResponsiveHeader>
             <Head>
               <LeftDiv>
                 <Title>API keys</Title>
@@ -89,6 +127,7 @@ function ApiKey() {
                     setCurrentOpenDropdown={setCurrentOpenDropdown}
                     dropdownIdentifier={`card-${apiKey.api_key}`}
                     apiKey={apiKey.api_key || ''}
+                    isShowNavbar={isNavbar}
                   />
                 ))}
               </MainCardDiv>
