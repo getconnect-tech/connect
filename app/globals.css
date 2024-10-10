@@ -632,6 +632,10 @@ img.ProseMirror-separator {
   line-height: 24px;
 }
 
+.ProseMirror img {
+  width: 100%;
+}
+
 /*Style for each suggestion item */
 .suggestion-item-list {
   background-color: var(--bg-white);
