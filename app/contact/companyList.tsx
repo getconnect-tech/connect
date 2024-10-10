@@ -37,7 +37,6 @@ export default function PersonList({ activeTab, isShowNavbar }: Props) {
                 key={index}
                 imgSrc={''}
                 name={card.name}
-                email={'xyz@gmail.com'}
                 openCount={
                   card.ticketsCount.OPEN ? `${card.ticketsCount.OPEN}` : '0'
                 }

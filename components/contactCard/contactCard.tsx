@@ -14,7 +14,7 @@ import {
 interface Props {
   imgSrc: string;
   name: string;
-  email: string;
+  email?: string;
   companyImg?: string;
   isCompany?: boolean;
   companyName?: string;
@@ -48,8 +48,12 @@ export default function ContactCard({
         <TitleDiv>
           <h6>{name}</h6>
           <div className='company-maindiv'>
-            <p>{email}</p>
-            <DotIcon />
+            {email && (
+              <>
+                <p>{email}</p>
+                <DotIcon />
+              </>
+            )}
             {isCompany ? (
               <CompanyDiv>
                 <CompanyNameDiv>

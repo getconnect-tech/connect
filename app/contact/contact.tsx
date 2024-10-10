@@ -24,7 +24,7 @@ const Contact = () => {
   const { workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const [activeTab, setActiveTab] = useState('People');
-  const [tabItem, setTabItem] = useState<string[]>([]);
+  const [tabItem, setTabItem] = useState<string[]>(['People']);
   const [isNavbar, setIsNavbar] = useState(false);
 
   const onClickIcon = useCallback(() => {

@@ -44,7 +44,7 @@ const PersonList = ({ isShowNavbar }: Props) => {
           {contacts?.map((card, index) => (
             <ContactCard
               key={index}
-              imgSrc={''}
+              imgSrc={card.avatar || ''}
               name={card.name}
               email={card.email}
               openCount={
