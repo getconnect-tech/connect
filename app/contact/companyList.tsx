@@ -38,10 +38,16 @@ export default function PersonList({ activeTab, isShowNavbar }: Props) {
                 imgSrc={''}
                 name={card.name}
                 email={'xyz@gmail.com'}
-                openCount={'1'}
-                closeCount={'2'}
+                openCount={
+                  card.ticketsCount.OPEN ? `${card.ticketsCount.OPEN}` : '0'
+                }
+                closeCount={
+                  card.ticketsCount.CLOSED ? `${card.ticketsCount.CLOSED}` : '0'
+                }
                 isCompany={false}
-                peopleCount={'10'}
+                peopleCount={
+                  card.contacts_count ? `${card.contacts_count}` : '0'
+                }
                 isShowNavbar={isShowNavbar}
               />
             ))}
