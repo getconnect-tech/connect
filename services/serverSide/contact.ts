@@ -43,9 +43,11 @@ export const getWorkspaceContacts = async (workspaceId: string) => {
 
     const ticketsCount = {} as Record<TicketStatus, number>;
 
-    tickets.forEach((ticket) => {
-      ticketsCount[ticket.status] = (ticketsCount[ticket.status] || 0) + 1;
-    });
+    for (const status of Object.values(TicketStatus)) {
+      ticketsCount[status] = 0;
+    }
+
+    tickets.forEach(({ status }) => ticketsCount[status]++);
 
     return {
       ...restContact,
