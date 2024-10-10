@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
 import { externalIdSchema, nameSchema } from '@/lib/zod/common';
 import { groupLabelSchema } from '@/lib/zod/group';
-import { customTraitsSchema } from '@/lib/zod/contact';
+import { avatarSchema, customTraitsSchema } from '@/lib/zod/contact';
 import { updateGroup } from '@/services/serverSide/group';
 import withAdminAuth from '@/middlewares/withAdminAuth';
 
@@ -11,6 +11,7 @@ const UpdateGroupBody = z.object({
   groupLabel: groupLabelSchema.optional(),
   customTraits: customTraitsSchema.optional(),
   externalId: externalIdSchema.optional(),
+  avatar: avatarSchema.optional(),
 });
 export const PUT = withAdminAuth(async (req, { groupId }) => {
   try {
