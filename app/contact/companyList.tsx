@@ -4,6 +4,7 @@ import { ListMainDiv } from './style';
 import ContactCard from '@/components/contactCard/contactCard';
 import ContactsLoading from '@/components/contactsLoading/contactsLoading';
 import { useStores } from '@/stores';
+import { Group } from '@/utils/dataTypes';
 
 interface Props {
   activeTab: string;
@@ -13,10 +14,12 @@ interface Props {
 export default function PersonList({ activeTab, isShowNavbar }: Props) {
   const { contactStore } = useStores();
   const { groups } = contactStore || {};
-  const [cardItem, setCardItem] = useState<any>([]);
+  const [cardItem, setCardItem] = useState<Group[]>([]);
 
   const cardInformation = useCallback(() => {
-    setCardItem(groups?.filter((group) => group.group_label === activeTab));
+    const cardData =
+      groups?.filter((group) => group.group_label === activeTab) || [];
+    setCardItem(cardData);
   }, [activeTab]);
 
   useEffect(() => {
@@ -29,7 +32,7 @@ export default function PersonList({ activeTab, isShowNavbar }: Props) {
       ) : (
         <>
           <ListMainDiv isShowNavbar={isShowNavbar}>
-            {cardItem.map((card: any, index: number) => (
+            {cardItem.map((card: Group, index: number) => (
               <ContactCard
                 key={index}
                 imgSrc={''}
