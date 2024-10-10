@@ -24,18 +24,24 @@ import {
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { createTicketViaWeb } from '@/services/clientSide/contactUsServices';
 import { useStores } from '@/stores';
+import { getFirebaseUrlFromFile } from '@/helpers/common';
+
+interface AttachFile {
+  file: File;
+  url: string;
+}
 interface Props {
   isSuccessfull?: boolean;
   onClose: () => void;
 }
 function ContactUsModal({ isSuccessfull, onClose }: Props) {
-  const [files, setFiles] = useState<File[]>([]);
+  const [attachFiles, setAttachFiles] = useState<AttachFile[]>([]);
   const [success, setSuccess] = useState<boolean>(isSuccessfull || false);
+  const [loading, setLoading] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [messageText, setMessageText] = useState<string>('');
   const { userStore } = useStores();
   const { user } = userStore;
-  console.log('contactText', user, files);
 
   const handleIconClick = useCallback(() => {
     if (fileInputRef.current) {
@@ -44,34 +50,59 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
   }, []);
 
   const handleFileChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.files) {
         const selectedFiles = Array.from(event.target.files);
-        setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+        const fileURL = await getFirebaseUrlFromFile(
+          selectedFiles,
+          'Contact-us',
+          selectedFiles[0]?.name,
+        );
+        if (fileURL) {
+          setAttachFiles((prev) => [
+            ...(prev || []),
+            { file: selectedFiles[0], url: fileURL },
+          ]);
+        }
+        // Reset input value
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
       }
     },
     [],
   );
 
   const handleRemoveFile = useCallback((index: number) => {
-    setFiles((prevFiles) => prevFiles?.filter((_, i) => i !== index));
+    setAttachFiles((prevFiles) => prevFiles?.filter((_, i) => i !== index));
   }, []);
 
-  const handleSendMessage = useCallback(async () => {
-    const payload = {
-      senderName: user?.display_name || '',
-      senderEmail: user?.email || '',
-      message: messageText,
-      // attachments: [
-      //   {
-      //     filename: 'apple.png',
-      //     url: 'file url link',
-      //   },
-      // ],
-    };
-    await createTicketViaWeb(payload);
-    setSuccess(true);
-  }, [messageText]);
+  const handleSendMessage = useCallback(
+    async (attachFileData: AttachFile[]) => {
+      setLoading(true);
+      try {
+        const payload = {
+          senderName: user?.display_name || '',
+          senderEmail: user?.email || '',
+          message: messageText,
+          attachments:
+            attachFileData?.length > 0
+              ? attachFileData?.map((fileObj) => ({
+                  filename: fileObj?.file.name,
+                  url: fileObj?.url,
+                }))
+              : [],
+        };
+        await createTicketViaWeb(payload);
+        setSuccess(true);
+      } catch (err: any) {
+        console.error('Error in send message', err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [messageText],
+  );
 
   return (
     <ModalDiv>
@@ -96,9 +127,9 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
               onChange={handleFileChange}
               multiple={true}
             />
-            {files.length > 0 && (
+            {attachFiles?.length > 0 && (
               <FileCardContainer>
-                {files.map((file, index) => (
+                {attachFiles?.map((fileObj, index) => (
                   <FileCard key={index}>
                     <IconDiv>
                       <SVGIcon
@@ -109,8 +140,8 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
                       />
                     </IconDiv>
                     <FileCardRight>
-                      <h2>{file.name}</h2>
-                      <p>{(file.size / 1024).toFixed(2)} KB</p>
+                      <h2>{fileObj?.file.name}</h2>
+                      <p>{(fileObj?.file.size / 1024).toFixed(2)} KB</p>
                     </FileCardRight>
                     <RemoveIcon onClick={() => handleRemoveFile(index)}>
                       <SVGIcon
@@ -149,8 +180,9 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
               />
               <Button
                 title='Send message'
-                onClick={handleSendMessage}
+                onClick={() => handleSendMessage(attachFiles)}
                 variant='medium'
+                isLoading={loading}
               />
             </RightDiv>
           </ModalBottom>

@@ -11,13 +11,19 @@ import {
   TitleDiv,
 } from './style';
 
+interface GroupInfo {
+  id: string;
+  name: string;
+  avatar: string | null;
+  group_id: string | null;
+}
+
 interface Props {
   imgSrc: string;
   name: string;
-  email: string;
-  companyImg?: string;
+  email?: string;
   isCompany?: boolean;
-  companyName?: string;
+  groupInfo?: GroupInfo[];
   openCount: string;
   closeCount: string;
   peopleCount?: string;
@@ -28,9 +34,8 @@ export default function ContactCard({
   imgSrc,
   name,
   email,
-  companyImg = '',
   isCompany = true,
-  companyName,
+  groupInfo,
   openCount,
   closeCount,
   peopleCount,
@@ -48,19 +53,27 @@ export default function ContactCard({
         <TitleDiv>
           <h6>{name}</h6>
           <div className='company-maindiv'>
-            <p>{email}</p>
-            <DotIcon />
+            {email && (
+              <>
+                <p>{email}</p>
+              </>
+            )}
             {isCompany ? (
               <CompanyDiv>
-                <CompanyNameDiv>
-                  <Avatar
-                    imgSrc={companyImg}
-                    name={''}
-                    size={20}
-                    isShowBorder={true}
-                  />
-                  <p>{companyName}</p>
-                </CompanyNameDiv>
+                {groupInfo?.map((group, index) => (
+                  <>
+                    {!index && <DotIcon />}
+                    <CompanyNameDiv key={group.id}>
+                      <Avatar
+                        imgSrc={group.avatar || ''}
+                        name={group.name}
+                        size={20}
+                        isShowBorder={true}
+                      />
+                      <p>{group.name}</p>
+                    </CompanyNameDiv>
+                  </>
+                ))}
               </CompanyDiv>
             ) : (
               <>

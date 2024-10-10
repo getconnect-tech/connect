@@ -4,7 +4,7 @@ import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import { createGroup, getWorkspaceGroups } from '@/services/serverSide/group';
 import { externalIdSchema, nameSchema } from '@/lib/zod/common';
 import { groupLabelSchema } from '@/lib/zod/group';
-import { customTraitsSchema } from '@/lib/zod/contact';
+import { avatarSchema, customTraitsSchema } from '@/lib/zod/contact';
 import withAdminAuth from '@/middlewares/withAdminAuth';
 
 export const GET = withWorkspaceAuth(async (req) => {
@@ -22,6 +22,7 @@ const CreateGroupBody = z.object({
   groupLabel: groupLabelSchema,
   customTraits: customTraitsSchema.optional(),
   externalId: externalIdSchema.optional(),
+  avatar: avatarSchema.optional(),
 });
 export const POST = withAdminAuth(async (req) => {
   try {

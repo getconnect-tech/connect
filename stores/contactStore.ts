@@ -1,9 +1,10 @@
 import { action, makeObservable, observable } from 'mobx';
-import { Contact } from '@/utils/dataTypes';
+import { Contact, Group } from '@/utils/dataTypes';
 
 class ContactStore {
   loading = false;
   contacts: Contact[] | null = null;
+  groups: Group[] | null = null;
 
   constructor() {
     makeObservable(this, {
@@ -14,6 +15,10 @@ class ContactStore {
       // Contacts
       contacts: observable,
       setContacts: action,
+
+      // Groups
+      groups: observable,
+      setGroups: action,
     });
   }
 
@@ -25,6 +30,11 @@ class ContactStore {
   // set contacts
   setContacts(value: Contact[]) {
     this.contacts = value;
+  }
+
+  // set groups
+  setGroups(value: Group[]) {
+    this.groups = value;
   }
 }
 
