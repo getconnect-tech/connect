@@ -36,6 +36,7 @@ export const getWorkspaceContacts = async (workspaceId: string) => {
               id: true,
               group_id: true,
               name: true,
+              avatar: true,
             },
           },
         },
