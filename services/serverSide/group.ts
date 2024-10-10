@@ -59,6 +59,7 @@ export const createGroup = async (
     name: string;
     groupLabel: string;
     customTraits?: Record<string, string>;
+    avatar?: string;
   },
 ) => {
   const newGroup = await prisma.group.create({
@@ -79,6 +80,7 @@ export const updateGroup = async (
     name?: string;
     groupLabel?: string;
     customTraits?: Record<string, string>;
+    avatar?: string;
   },
 ) => {
   removeNullUndefined(groupData);
