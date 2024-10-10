@@ -30,11 +30,11 @@ export const POST = async (req: NextRequest) => {
 
     if (isInbound(postmarkPayload)) {
       const referencesHeader = postmarkPayload.Headers.find(
-        (header) => header.Name === 'References',
+        (header) => header.Name.toLowerCase() === 'references',
       );
       const references = referencesHeader?.Value?.split(' ') || [];
       const mailId = postmarkPayload.Headers.find(
-        (header) => header.Name === 'Message-ID',
+        (header) => header.Name.toLowerCase() === 'message-id',
       )!.Value;
       const referenceId = references[0] || mailId;
 
