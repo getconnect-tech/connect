@@ -35,18 +35,9 @@ const Div = styled.div`
   gap: 8px;
   align-items: center;
   .ProseMirror {
-    h3 {
-      &:first-child {
-        margin-top: unset;
-      }
-    }
     p {
-      &:first-child {
-        margin-top: unset;
-      }
-      &:last-child {
-        margin-bottom: unset;
-      }
+      margin-top: unset;
+      margin-bottom: unset;
     }
     ul {
       margin-left: unset;
