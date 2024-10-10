@@ -51,10 +51,16 @@ function Inbox({ activeNav, labelId }: InboxProps) {
   const currentLabel = labels?.find((label) => label.id === labelId);
   const [isNavbar, setIsNavbar] = useState(false);
   const pathname = usePathname();
-  const countOfUnassignOpenTicket = ticketList?.filter(
-    (ticket) =>
-      ticket.status === TicketStatus.OPEN && ticket.assigned_to === null,
-  );
+  const countOfUnassignOpenTicket = ticketList?.filter((ticket) => {
+    const currentTime = new Date();
+
+    return (
+      ticket.status === TicketStatus.OPEN &&
+      ticket.assigned_to === null &&
+      (isEmpty(ticket?.snooze_until) ||
+        (ticket.snooze_until && new Date(ticket.snooze_until) < currentTime))
+    );
+  });
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {

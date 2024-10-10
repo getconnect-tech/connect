@@ -135,6 +135,7 @@ model Group {
   workspace_id String
   name         String
   group_label  String
+  avatar       String?
   traits       Json?
 
   created_at DateTime @default(now())

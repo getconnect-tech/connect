@@ -23,33 +23,42 @@ export const getWorkspaceContacts = async (workspaceId: string) => {
     where: {
       workspace_id: workspaceId,
     },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      workspace_id: true,
-      created_at: true,
-      updated_at: true,
+    include: {
       tickets: {
         select: {
           status: true,
+        },
+      },
+      groups: {
+        select: {
+          group: {
+            select: {
+              id: true,
+              group_id: true,
+              name: true,
+              avatar: true,
+            },
+          },
         },
       },
     },
   });
 
   const formattedContacts = workspaceContacts.map((contact) => {
-    const { tickets, ...restContact } = contact;
+    const { tickets, groups, ...restContact } = contact;
 
     const ticketsCount = {} as Record<TicketStatus, number>;
 
-    tickets.forEach((ticket) => {
-      ticketsCount[ticket.status] = (ticketsCount[ticket.status] || 0) + 1;
-    });
+    for (const status of Object.values(TicketStatus)) {
+      ticketsCount[status] = 0;
+    }
+
+    tickets.forEach(({ status }) => ticketsCount[status]++);
 
     return {
       ...restContact,
       ticketsCount,
+      groups: groups.map((g) => g.group),
     };
   });
 
@@ -137,4 +146,17 @@ export const getActivities = async (email: string) => {
   });
 
   return formattedEventsData;
+};
+
+export const getContactGroups = async (contactId: string) => {
+  const contactGroups = await prisma.contactGroup.findMany({
+    where: { contact_id: contactId },
+    select: {
+      group: true,
+    },
+  });
+
+  const groups = contactGroups.map((cg) => cg.group);
+
+  return groups;
 };

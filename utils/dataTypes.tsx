@@ -7,6 +7,7 @@ import {
   getUserWorkspaces,
   getWorkspaceById,
 } from '@/services/serverSide/workspace';
+import { getWorkspaceGroups } from '@/services/serverSide/group';
 
 export interface InviteModal {
   name: string;
@@ -44,6 +45,10 @@ export type ApiKey = NonNullable<
 
 export type Contact = NonNullable<
   Awaited<ReturnType<typeof getWorkspaceContacts>>
+>[0];
+
+export type Group = NonNullable<
+  Awaited<ReturnType<typeof getWorkspaceGroups>>
 >[0];
 
 export type EmailConfig = {
