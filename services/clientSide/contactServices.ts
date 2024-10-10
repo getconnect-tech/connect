@@ -47,3 +47,24 @@ export const getAllGroup = async () => {
     contactStore.setLoading(false);
   }
 };
+
+/**
+ * @desc Get contact groups
+ * @param {*} contactId
+ */
+export const getContactGroup = async (contactId: string) => {
+  try {
+    const response = await axios.get(
+      `${NEXT_PUBLIC_API_URL}/contacts/${contactId}/groups`,
+    );
+    const { data } = response;
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    contactStore.setLoading(false);
+  }
+};
