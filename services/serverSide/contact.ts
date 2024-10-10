@@ -45,7 +45,7 @@ export const getWorkspaceContacts = async (workspaceId: string) => {
   });
 
   const formattedContacts = workspaceContacts.map((contact) => {
-    const { tickets, ...restContact } = contact;
+    const { tickets, groups, ...restContact } = contact;
 
     const ticketsCount = {} as Record<TicketStatus, number>;
 
@@ -58,6 +58,7 @@ export const getWorkspaceContacts = async (workspaceId: string) => {
     return {
       ...restContact,
       ticketsCount,
+      groups: groups.map((g) => g.group),
     };
   });
 

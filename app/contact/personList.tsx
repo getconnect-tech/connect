@@ -44,7 +44,7 @@ const PersonList = ({ isShowNavbar }: Props) => {
           {contacts?.map((card, index) => (
             <ContactCard
               key={index}
-              imgSrc={''}
+              imgSrc={card.avatar || ''}
               name={card.name}
               email={card.email}
               openCount={
@@ -53,8 +53,7 @@ const PersonList = ({ isShowNavbar }: Props) => {
               closeCount={
                 card.ticketsCount.CLOSED ? `${card.ticketsCount.CLOSED}` : '0'
               }
-              companyImg={''}
-              companyName={'Demo'}
+              groupInfo={card.groups}
               isShowNavbar={isShowNavbar}
             />
           ))}
