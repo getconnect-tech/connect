@@ -53,8 +53,7 @@ const PersonList = ({ isShowNavbar }: Props) => {
               closeCount={
                 card.ticketsCount.CLOSED ? `${card.ticketsCount.CLOSED}` : '0'
               }
-              companyImg={''}
-              companyName={'Demo'}
+              groupInfo={card.groups}
               isShowNavbar={isShowNavbar}
             />
           ))}
