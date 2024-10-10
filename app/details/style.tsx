@@ -157,6 +157,10 @@ const Input = styled.div<Props>`
   gap: 2px;
   box-shadow: var(--shadow-card);
   margin-left: 10px;
+  .prosemirror-commentbox {
+    max-height: 300px;
+    overflow: auto;
+  }
   .loading-text {
     ${Typography.body_sm_regular};
     margin-bottom: 10px;
