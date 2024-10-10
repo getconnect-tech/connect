@@ -1,12 +1,52 @@
+import { TicketStatus } from '@prisma/client';
 import { removeNullUndefined } from '@/helpers/common';
 import { prisma } from '@/prisma/prisma';
 
 export const getWorkspaceGroups = async (workspaceId: string) => {
   const groups = await prisma.group.findMany({
     where: { workspace_id: workspaceId },
+    include: {
+      _count: {
+        select: {
+          contacts: true,
+        },
+      },
+      contacts: {
+        select: {
+          contact: {
+            select: {
+              tickets: {
+                select: {
+                  status: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   });
 
-  return groups;
+  const formattedGroups = groups.map(({ _count, contacts, ...group }) => {
+    const ticketsCount = {} as Record<TicketStatus, number>;
+
+    for (const status of Object.values(TicketStatus)) {
+      ticketsCount[status] = 0;
+    }
+
+    // Count the status of tickets for each contact
+    contacts.forEach(({ contact }) => {
+      contact.tickets.forEach(({ status }) => ticketsCount[status]++);
+    });
+
+    return {
+      ...group,
+      contacts_count: _count.contacts,
+      ticketsCount,
+    };
+  });
+
+  return formattedGroups;
 };
 
 export const createGroup = async (
