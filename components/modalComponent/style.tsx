@@ -11,6 +11,12 @@ export const MainDiv = styled.div`
     min-width: 500px;
     max-width: 500px;
   }
+  @media screen and (max-width: 449px) {
+    min-width: 361px;
+  }
+  @media screen and (max-width: 320px) {
+    min-width: 300px;
+  }
 `;
 
 export const Header = styled.div`
