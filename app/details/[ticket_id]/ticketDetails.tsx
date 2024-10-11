@@ -81,7 +81,7 @@ interface Props {
 
 const useMediaQuery = (width: number): boolean => {
   // eslint-disable-next-line no-undef
-  const [matches, setMatches] = useState<boolean>(window.innerWidth > width);
+  const [matches, setMatches] = useState<boolean>(false);
 
   useEffect(() => {
     // eslint-disable-next-line no-undef
@@ -121,6 +121,7 @@ function TicketDetails(props: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [macroDropdown, setMacroDropdown] = useState(false);
   const [isProfileSection, setIsProfileSection] = useState(false);
+  const [screenWidth, setScreenWidth] = useState();
   const [modeSelectedItem, setModeSelectedItem] = useState<DropDownItem>({
     name: 'Email',
     icon: 'email-icon',
@@ -756,9 +757,6 @@ function TicketDetails(props: Props) {
     },
     [messageRefId, ticket_id, attachFile],
   );
-
-  // eslint-disable-next-line no-undef
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const handleResize = () => {
