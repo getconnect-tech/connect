@@ -72,8 +72,8 @@ export default function RecentEvent() {
             'Loading...'
           ) : (
             <>
-              {userActivity.length > 0 &&
-                userActivity.map((event: UserActivity, index) => (
+              {userActivity?.length > 0 &&
+                userActivity?.map((event: UserActivity, index) => (
                   <React.Fragment key={index}>
                     <EventDiv>
                       <h6>{formatTime(event.event_time)}</h6>
@@ -83,7 +83,7 @@ export default function RecentEvent() {
                       </div>
                       <p>{formateEventName(event.event_type)}</p>
                     </EventDiv>
-                    {index < userActivity.length - 1 && <LineDiv />}
+                    {index < userActivity?.length - 1 && <LineDiv />}
                   </React.Fragment>
                 ))}
             </>
