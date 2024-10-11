@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import moment from 'moment';
 import Avatar from '../avtar/Avtar';
+import Icon from '../icon/icon';
 import {
   DetailsDiv,
   DetailsProfileDiv,
@@ -9,6 +10,7 @@ import {
   MainDiv,
   ProfileDiv,
   Title,
+  TopDiv,
 } from './styles';
 import WorkDetails from './workDetails';
 import RecentEvent from './recentEvent';
@@ -29,6 +31,8 @@ export default function ProfileSection() {
   const { contact } = ticketDetails || {};
   const [contactInfo, setContactInfo] = useState<ContactInfo[]>([]);
   const [workInfo, setWorkInfo] = useState<ContactGroups[]>([]);
+  const [rotation, setRotation] = useState(0); // Manage rotation state
+  const [loading, setLoading] = useState(false);
 
   const createContactInfo = useCallback(() => {
     const contactArray: ContactInfo[] = [];
@@ -135,14 +139,30 @@ export default function ProfileSection() {
 
   const loadData = useCallback(async () => {
     if (!isEmpty(contact?.id)) {
+      setLoading(true);
       try {
         const contactGroupInfo = await getContactGroups(contact?.id || '');
         setWorkInfo(contactGroupInfo);
       } catch (err: any) {
         console.error('Error fetching contact group information:', err);
+      } finally {
+        setLoading(false);
       }
     }
   }, [contact?.id]);
+
+  const handleRefresh = async () => {
+    setLoading(true); // Show loading state
+    // Increment rotation by 360 degrees on each click
+    setRotation((prevRotation) => prevRotation + 360);
+    try {
+      await loadData(); // Reload the data
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+    } finally {
+      setLoading(false); // Hide loading state after the data is refreshed
+    }
+  };
 
   useEffect(() => {
     loadData();
@@ -155,25 +175,46 @@ export default function ProfileSection() {
   return (
     <MainDiv>
       <AIBlock />
-      <ProfileDiv>
-        <Avatar
-          imgSrc={contact?.avatar || ''}
-          name={contact?.name || 'Unknown'}
-          size={20}
-          isShowBorder={true}
+      <TopDiv>
+        <ProfileDiv>
+          <Avatar
+            imgSrc={contact?.avatar || ''}
+            name={contact?.name || 'Unknown'}
+            size={20}
+            isShowBorder={true}
+          />
+          <Title>{contact?.name || ''}</Title>
+        </ProfileDiv>
+        <Icon
+          iconName='refresh-icon'
+          iconSize='12'
+          iconViewBox='0 0 12 12'
+          size={true}
+          className='refresh-icon'
+          onClick={handleRefresh}
+          style={{
+            transform: `rotate(${rotation}deg)`,
+            transition: 'transform 1s linear',
+          }}
         />
-        <Title>{contact?.name || ''}</Title>
-      </ProfileDiv>
+      </TopDiv>
       <DetailsProfileDiv>
-        {contactInfo.map((item, index) => (
-          <DetailsDiv key={index}>
-            <LeftDiv>
-              <p>{item?.label}</p>
-            </LeftDiv>
-            <p>{item?.value}</p>
-          </DetailsDiv>
-        ))}
+        {loading ? (
+          'Loading...'
+        ) : (
+          <>
+            {contactInfo.map((item, index) => (
+              <DetailsDiv key={index}>
+                <LeftDiv>
+                  <p>{item?.label}</p>
+                </LeftDiv>
+                <p>{item?.value}</p>
+              </DetailsDiv>
+            ))}
+          </>
+        )}
       </DetailsProfileDiv>
+
       {workInfo?.map((group) => <WorkDetails groupInfo={group} />)}
       <RecentEvent />
     </MainDiv>

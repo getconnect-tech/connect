@@ -14,10 +14,6 @@ const ProfileDiv = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 20px;
-  @media screen and (max-width: 768px) {
-    padding: 12px 16px;
-  }
 `;
 
 const Title = styled.p`
@@ -279,6 +275,21 @@ const ResponsiveMainDiv = styled.div`
     padding: 8px 0 0;
   }
 `;
+
+const TopDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+
+  @media screen and (max-width: 768px) {
+    padding: 12px 16px;
+  }
+
+  .refresh-icon {
+    cursor: pointer;
+  }
+`;
 export {
   MainDiv,
   ProfileDiv,
@@ -306,4 +317,5 @@ export {
   QuestionMainDiv,
   ReplyCard,
   ResponsiveMainDiv,
+  TopDiv,
 };
