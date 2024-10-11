@@ -123,6 +123,7 @@ const Members = () => {
                   dropdownIdentifier={`card-${member.id}`}
                   loadData={loadData}
                   isInvited={false}
+                  isShowNavbar={isNavbar}
                 />
               ))}
               {currentWorkspace?.invited_users?.map((member) => (
@@ -138,6 +139,7 @@ const Members = () => {
                   dropdownIdentifier={`card-${member.id}`}
                   loadData={loadData}
                   isInvited={true}
+                  isShowNavbar={isNavbar}
                 />
               ))}
             </MainCardDiv>

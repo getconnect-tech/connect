@@ -30,6 +30,7 @@ interface Props {
   setOpenDropdown: (dropdown: string | null) => void;
   loadData: () => void;
   isInvited: boolean;
+  isShowNavbar: boolean;
 }
 const MemberCard = ({
   designation,
@@ -42,6 +43,7 @@ const MemberCard = ({
   userId,
   loadData,
   isInvited,
+  isShowNavbar,
 }: Props) => {
   const { workspaceStore } = useStores();
   const [deleteModal, setDeleteModal] = useState(false);
@@ -178,7 +180,7 @@ const MemberCard = ({
   );
 
   return (
-    <CardDiv>
+    <CardDiv isShowNavbar={isShowNavbar}>
       <LeftDiv>
         <Avatar imgSrc={src} name={name} size={28} isShowBorder={true} />
         <NameDiv>
