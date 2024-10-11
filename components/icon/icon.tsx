@@ -14,6 +14,7 @@ interface Props {
   isActive?: boolean;
   labelSvg?: boolean;
   secondaryIcon?: boolean;
+  style?: React.CSSProperties;
 }
 
 function Icon({
@@ -26,6 +27,7 @@ function Icon({
   isActive = false,
   labelSvg = false,
   secondaryIcon,
+  style,
 }: Props) {
   return (
     <IconDiv
@@ -34,6 +36,7 @@ function Icon({
       className={className}
       isActive={isActive}
       secondaryIcon={secondaryIcon}
+      style={style}
     >
       {labelSvg ? (
         <LabelSvgIcon
