@@ -17,6 +17,7 @@ interface Props {
   setCurrentOpenDropdown: (dropdown: string | null) => void;
   dropdownIdentifier: string;
   id: string;
+  isShowNavbar: boolean;
 }
 
 function MacroCard({
@@ -26,6 +27,7 @@ function MacroCard({
   currentOpenDropdown,
   setCurrentOpenDropdown,
   dropdownIdentifier,
+  isShowNavbar,
 }: Props) {
   const [deleteModal, setDeleteModal] = useState(false);
   const [macroModal, setMacroModal] = useState(false);
@@ -114,7 +116,7 @@ function MacroCard({
 
   return (
     <>
-      <CardMainDiv>
+      <CardMainDiv isShowNavbar={isShowNavbar}>
         <LeftDiv>
           <TitleDiv>
             <h6>{name}</h6>

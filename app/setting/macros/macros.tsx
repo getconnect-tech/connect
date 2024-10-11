@@ -139,18 +139,7 @@ const Macros = () => {
                     currentOpenDropdown={currentOpenDropdown}
                     setCurrentOpenDropdown={setCurrentOpenDropdown}
                     dropdownIdentifier={`card-${macros.id}`}
-                  />
-                ))}
-                {macros.map((macros, index) => (
-                  <MacroCard
-                    key={index}
-                    index={index}
-                    id={macros?.id}
-                    name={macros.title}
-                    description={macros.content}
-                    currentOpenDropdown={currentOpenDropdown}
-                    setCurrentOpenDropdown={setCurrentOpenDropdown}
-                    dropdownIdentifier={`card-${macros.id}`}
+                    isShowNavbar={isNavbar}
                   />
                 ))}
               </MainCardDiv>
