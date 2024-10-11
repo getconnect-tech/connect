@@ -121,7 +121,7 @@ function TicketDetails(props: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [macroDropdown, setMacroDropdown] = useState(false);
   const [isProfileSection, setIsProfileSection] = useState(false);
-  const [screenWidth, setScreenWidth] = useState();
+  const [screenWidth, setScreenWidth] = useState(0);
   const [modeSelectedItem, setModeSelectedItem] = useState<DropDownItem>({
     name: 'Email',
     icon: 'email-icon',
