@@ -1,7 +1,11 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Typography } from '@/styles/typography';
 
-export const ItemDiv = styled.div`
+interface Props {
+  isShowNavbar: boolean;
+}
+
+export const ItemDiv = styled.div<Props>`
   display: flex;
   border-bottom: var(--border-light);
   padding: 8px 12px;
@@ -11,6 +15,13 @@ export const ItemDiv = styled.div`
   &:last-child {
     border-bottom: none;
   }
+  ${(props) =>
+    props.isShowNavbar &&
+    css`
+      @media screen and (max-width: 449px) {
+        min-width: 361px;
+      }
+    `}
 `;
 
 export const InnerDiv = styled.div`

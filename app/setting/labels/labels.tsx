@@ -1,6 +1,7 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useRouter } from 'next/navigation';
 import {
   Description,
   Head,
@@ -8,6 +9,8 @@ import {
   Main,
   MainCardDiv,
   MainDiv,
+  NavbarTitle,
+  ResponsiveHeader,
   RightDiv,
   Title,
 } from '../style';
@@ -19,8 +22,11 @@ import EmptyState from '@/components/emptyState/emptyState';
 import LabelModal from '@/components/modalComponent/labelModal';
 import { getLabels } from '@/services/clientSide/settingServices';
 import { useStores } from '@/stores';
+import Icon from '@/components/icon/icon';
+import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
 
 const Labels = () => {
+  const router = useRouter();
   const [labelModal, setLabelModal] = useState(false);
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
@@ -28,6 +34,15 @@ const Labels = () => {
   const { settingStore, workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { labels } = settingStore || {};
+  const [isNavbar, setIsNavbar] = useState(false);
+
+  const onClickIcon = useCallback(() => {
+    setIsNavbar(true);
+  }, []);
+
+  const onCloseNavbar = useCallback(() => {
+    setIsNavbar(false);
+  }, []);
 
   const onOpenLabelModal = useCallback(() => {
     setLabelModal(true);
@@ -50,8 +65,31 @@ const Labels = () => {
   return (
     <>
       <Main>
+        {isNavbar && <ResponsiveSettingNavBar onClose={onCloseNavbar} />}
         <MainDiv>
           <RightDiv>
+            <ResponsiveHeader>
+              <div className='left-section'>
+                <Icon
+                  iconName='sidebar-icon'
+                  iconSize='16'
+                  iconViewBox='0 0 16 16'
+                  className='sidebar-icon'
+                  onClick={onClickIcon}
+                />
+                <NavbarTitle>Settings</NavbarTitle>
+              </div>
+              <Icon
+                iconName={'cross-icon'}
+                iconSize={'12'}
+                iconViewBox={'0 0 16 16'}
+                size={true}
+                className='cross-icon'
+                onClick={() => {
+                  router.push('/');
+                }}
+              />
+            </ResponsiveHeader>
             <Head>
               <LeftDiv>
                 <Title>Labels</Title>
@@ -94,6 +132,7 @@ const Labels = () => {
                       currentOpenDropdown={currentOpenDropdown}
                       setOpenDropdown={setCurrentOpenDropdown}
                       dropdownIdentifier={`card-${label.id}`}
+                      isShowNavbar={isNavbar}
                     />
                   ))}
               </MainCardDiv>

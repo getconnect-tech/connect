@@ -10,6 +10,12 @@ export const MainDiv = styled.div`
   background-color: var(--bg-white);
   gap: 12px;
   flex-direction: column;
+  @media screen and (max-width: 449px) {
+    min-width: 361px;
+  }
+  @media screen and (max-width: 320px) {
+    min-width: 300px;
+  }
 `;
 
 export const Header = styled.div`

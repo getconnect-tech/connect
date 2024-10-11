@@ -18,6 +18,7 @@ interface Props {
   setOpenDropdown: (dropdown: string | null) => void;
   // eslint-disable-next-line no-unused-vars
   labelDetails?: Label;
+  isShowNavbar: boolean;
 }
 
 function LabelCard({
@@ -25,6 +26,7 @@ function LabelCard({
   currentOpenDropdown,
   setOpenDropdown,
   labelDetails,
+  isShowNavbar,
 }: Props) {
   const { settingStore } = useStores();
   const { loading } = settingStore || {};
@@ -75,7 +77,7 @@ function LabelCard({
 
   return (
     <>
-      <ItemDiv>
+      <ItemDiv isShowNavbar={isShowNavbar}>
         <InnerDiv>
           <LabelSvgIcon
             name={labelDetails?.icon}

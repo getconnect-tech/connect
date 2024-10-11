@@ -20,6 +20,9 @@ export const MainDiv = styled.div`
   overflow: auto;
   left: 55px;
   top: 92px;
+  @media screen and (max-width: 449px) {
+    left: unset;
+  }
 `;
 
 export const SearchDiv = styled.div`

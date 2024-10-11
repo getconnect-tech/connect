@@ -33,8 +33,11 @@ export const RightDiv = styled.div`
     bottom: 20%;
     left: 53%;
     @media screen and (max-width: 449px) {
+      position: relative;
       bottom: unset;
-      left: 31%;
+      left: unset;
+      justify-content: flex-start;
+      margin-top: 150px;
     }
   }
   @media screen and (max-width: 449px) {
