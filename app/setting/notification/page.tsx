@@ -64,7 +64,7 @@ function Notification() {
               <Description>Select where you will be notified</Description>
             </LeftDiv>
           </Head>
-          <NotificationCard>
+          <NotificationCard isNavbar={isNavbar}>
             <NotificationItem>
               <StyledCheckbox />
               <p>Browser Notification</p>

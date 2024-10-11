@@ -202,7 +202,7 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
   }
 `;
 
-export const NotificationCard = styled.div`
+export const NotificationCard = styled.div<Props>`
   display: flex;
   flex-direction: column;
   border-radius: 12px;
@@ -213,6 +213,11 @@ export const NotificationCard = styled.div`
   @media screen and (max-width: 449px) {
     margin: 8px 16px 16px;
   }
+  ${(props) =>
+    props.isNavbar &&
+    css`
+      min-width: 361px;
+    `}
 `;
 
 export const NotificationItem = styled.div`
