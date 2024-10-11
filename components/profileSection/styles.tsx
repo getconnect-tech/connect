@@ -62,6 +62,9 @@ const DetailsDiv = styled.div`
     color: var(--text);
     word-wrap: break-word;
     max-width: 155px;
+    @media screen and (max-width: 768px) {
+      word-wrap: normal;
+    }
   }
 `;
 

@@ -29,6 +29,10 @@ export const NameDiv = styled.div`
   p {
     ${Typography.body_md_regular};
     color: var(--text-text-secondary);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
   }
 `;
 
@@ -42,5 +46,14 @@ export const RightDiv = styled.div`
     padding: 4px 12px;
     background-color: var(--bg-surface-secondary);
     border-radius: 30px;
+  }
+  .submenu-upwards {
+    bottom: calc(100% + 4px);
+    top: auto;
+  }
+
+  .submenu-downwards {
+    /* top: calc(100% - 12px); */
+    bottom: auto;
   }
 `;
