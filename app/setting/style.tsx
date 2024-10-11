@@ -33,8 +33,11 @@ export const RightDiv = styled.div`
     bottom: 20%;
     left: 53%;
     @media screen and (max-width: 449px) {
+      position: relative;
       bottom: unset;
-      left: 31%;
+      left: unset;
+      justify-content: flex-start;
+      margin-top: 150px;
     }
   }
   @media screen and (max-width: 449px) {
@@ -192,9 +195,7 @@ export const StyledCheckbox = styled.input.attrs({ type: 'checkbox' })`
 
   &:checked {
     background-color: var(--brand);
-    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(
-      checkmarkSVG,
-    )}');
+    background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(checkmarkSVG)}');
     background-size: 10px 10px;
     background-repeat: no-repeat;
     background-position: center;
