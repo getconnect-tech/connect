@@ -32,6 +32,7 @@ export default function ProfileSection() {
   const [contactInfo, setContactInfo] = useState<ContactInfo[]>([]);
   const [workInfo, setWorkInfo] = useState<ContactGroups[]>([]);
   const [rotation, setRotation] = useState(0); // Manage rotation state
+  const [loading, setLoading] = useState(false);
 
   const createContactInfo = useCallback(() => {
     const contactArray: ContactInfo[] = [];
@@ -138,21 +139,29 @@ export default function ProfileSection() {
 
   const loadData = useCallback(async () => {
     if (!isEmpty(contact?.id)) {
+      setLoading(true);
       try {
         const contactGroupInfo = await getContactGroups(contact?.id || '');
         setWorkInfo(contactGroupInfo);
       } catch (err: any) {
         console.error('Error fetching contact group information:', err);
+      } finally {
+        setLoading(false);
       }
     }
   }, [contact?.id]);
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
+    setLoading(true); // Show loading state
     // Increment rotation by 360 degrees on each click
     setRotation((prevRotation) => prevRotation + 360);
-
-    // Simulate content loading (as per your previous requirement)
-    setTimeout(() => {}, 2000);
+    try {
+      await loadData(); // Reload the data
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+    } finally {
+      setLoading(false); // Hide loading state after the data is refreshed
+    }
   };
 
   useEffect(() => {
@@ -179,22 +188,33 @@ export default function ProfileSection() {
         <Icon
           iconName='refresh-icon'
           iconSize='12'
-          iconViewBox={'0 0 12 12'}
+          iconViewBox='0 0 12 12'
           size={true}
-          className={`refresh-icon ${rotation ? 'rotate' : ''}`} // Add rotation class conditionally
+          className='refresh-icon'
           onClick={handleRefresh}
+          style={{
+            transform: `rotate(${rotation}deg)`,
+            transition: 'transform 1s linear',
+          }}
         />
       </TopDiv>
       <DetailsProfileDiv>
-        {contactInfo.map((item, index) => (
-          <DetailsDiv key={index}>
-            <LeftDiv>
-              <p>{item?.label}</p>
-            </LeftDiv>
-            <p>{item?.value}</p>
-          </DetailsDiv>
-        ))}
+        {loading ? (
+          'Loading...'
+        ) : (
+          <>
+            {contactInfo.map((item, index) => (
+              <DetailsDiv key={index}>
+                <LeftDiv>
+                  <p>{item?.label}</p>
+                </LeftDiv>
+                <p>{item?.value}</p>
+              </DetailsDiv>
+            ))}
+          </>
+        )}
       </DetailsProfileDiv>
+
       {workInfo?.map((group) => <WorkDetails groupInfo={group} />)}
       <RecentEvent />
     </MainDiv>

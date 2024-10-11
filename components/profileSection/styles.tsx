@@ -14,9 +14,6 @@ const ProfileDiv = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  @media screen and (max-width: 768px) {
-    padding: 12px 16px;
-  }
 `;
 
 const Title = styled.p`
@@ -281,13 +278,13 @@ const TopDiv = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 12px 20px;
-  .refresh-icon {
-    transition: transform 1s linear;
-    cursor: pointer;
+
+  @media screen and (max-width: 768px) {
+    padding: 12px 16px;
   }
 
-  .rotate {
-    transform: rotate(360deg);
+  .refresh-icon {
+    cursor: pointer;
   }
 `;
 export {
