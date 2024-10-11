@@ -11,6 +11,7 @@ import {
   ReplyButton,
   ReplyCard,
   Title,
+  TopDiv,
 } from './styles';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { ticketStore } from '@/stores/ticketStore';
@@ -52,12 +53,19 @@ function AIBlock() {
 
   return (
     <>
-      <ProfileDiv>
-        <AIIcon>
-          <SVGIcon name='ai-icon' width='12' height='12' viewBox='0 0 12 12' />
-        </AIIcon>
-        <Title>Connect AI</Title>
-      </ProfileDiv>
+      <TopDiv>
+        <ProfileDiv>
+          <AIIcon>
+            <SVGIcon
+              name='ai-icon'
+              width='12'
+              height='12'
+              viewBox='0 0 12 12'
+            />
+          </AIIcon>
+          <Title>Connect AI</Title>
+        </ProfileDiv>
+      </TopDiv>
       {loading ? (
         'Loading...'
       ) : (

@@ -14,7 +14,6 @@ const ProfileDiv = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 20px;
   @media screen and (max-width: 768px) {
     padding: 12px 16px;
   }
@@ -276,6 +275,21 @@ const ResponsiveMainDiv = styled.div`
     padding: 8px 0 0;
   }
 `;
+
+const TopDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  .refresh-icon {
+    transition: transform 1s linear;
+    cursor: pointer;
+  }
+
+  .rotate {
+    transform: rotate(360deg);
+  }
+`;
 export {
   MainDiv,
   ProfileDiv,
@@ -303,4 +317,5 @@ export {
   QuestionMainDiv,
   ReplyCard,
   ResponsiveMainDiv,
+  TopDiv,
 };

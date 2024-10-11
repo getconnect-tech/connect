@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import moment from 'moment';
 import Avatar from '../avtar/Avtar';
+import Icon from '../icon/icon';
 import {
   DetailsDiv,
   DetailsProfileDiv,
@@ -9,6 +10,7 @@ import {
   MainDiv,
   ProfileDiv,
   Title,
+  TopDiv,
 } from './styles';
 import WorkDetails from './workDetails';
 import RecentEvent from './recentEvent';
@@ -29,6 +31,7 @@ export default function ProfileSection() {
   const { contact } = ticketDetails || {};
   const [contactInfo, setContactInfo] = useState<ContactInfo[]>([]);
   const [workInfo, setWorkInfo] = useState<ContactGroups[]>([]);
+  const [rotation, setRotation] = useState(0); // Manage rotation state
 
   const createContactInfo = useCallback(() => {
     const contactArray: ContactInfo[] = [];
@@ -144,6 +147,14 @@ export default function ProfileSection() {
     }
   }, [contact?.id]);
 
+  const handleRefresh = () => {
+    // Increment rotation by 360 degrees on each click
+    setRotation((prevRotation) => prevRotation + 360);
+
+    // Simulate content loading (as per your previous requirement)
+    setTimeout(() => {}, 2000);
+  };
+
   useEffect(() => {
     loadData();
   }, [loadData]);
@@ -155,15 +166,25 @@ export default function ProfileSection() {
   return (
     <MainDiv>
       <AIBlock />
-      <ProfileDiv>
-        <Avatar
-          imgSrc={contact?.avatar || ''}
-          name={contact?.name || 'Unknown'}
-          size={20}
-          isShowBorder={true}
+      <TopDiv>
+        <ProfileDiv>
+          <Avatar
+            imgSrc={contact?.avatar || ''}
+            name={contact?.name || 'Unknown'}
+            size={20}
+            isShowBorder={true}
+          />
+          <Title>{contact?.name || ''}</Title>
+        </ProfileDiv>
+        <Icon
+          iconName='refresh-icon'
+          iconSize='12'
+          iconViewBox={'0 0 12 12'}
+          size={true}
+          className={`refresh-icon ${rotation ? 'rotate' : ''}`} // Add rotation class conditionally
+          onClick={handleRefresh}
         />
-        <Title>{contact?.name || ''}</Title>
-      </ProfileDiv>
+      </TopDiv>
       <DetailsProfileDiv>
         {contactInfo.map((item, index) => (
           <DetailsDiv key={index}>
