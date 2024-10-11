@@ -33,6 +33,28 @@ function LabelCard({
 
   const [labelModal, setLabelModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [submenuPosition, setSubmenuPosition] = useState<
+    'upwards' | 'downwards'
+  >('upwards');
+
+  const handleMouseEnter = (
+    e: React.MouseEvent<HTMLElement>,
+    // eslint-disable-next-line no-unused-vars
+    setPosition: (position: 'upwards' | 'downwards') => void,
+  ) => {
+    const triggerElement = e.currentTarget;
+    const rect = triggerElement.getBoundingClientRect();
+    const stickyInputHeight = 150;
+    // eslint-disable-next-line no-undef
+    const spaceBelow = window.innerHeight - rect.bottom - stickyInputHeight;
+    const spaceAbove = rect.top;
+
+    if (spaceBelow < 200 && spaceAbove > 200) {
+      setPosition('upwards');
+    } else {
+      setPosition('downwards');
+    }
+  };
 
   const dropDownItem = [
     { name: 'Edit', icon: 'edit-icon' },
@@ -87,7 +109,11 @@ function LabelCard({
           />
           <Name>{labelDetails?.name}</Name>
         </InnerDiv>
-        <div style={{ position: 'relative' }} className='tag-div'>
+        <div
+          style={{ position: 'relative' }}
+          className='tag-div'
+          onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
+        >
           <Icon
             onClick={handleClickIcon}
             iconName='three-dot-icon'
@@ -111,6 +137,11 @@ function LabelCard({
                   onOpenLabelModal();
                 }
               }}
+              className={
+                submenuPosition === 'upwards'
+                  ? 'submenu-upwards'
+                  : 'submenu-downwards'
+              }
             />
           )}
         </div>

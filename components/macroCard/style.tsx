@@ -77,9 +77,13 @@ const RightDiv = styled.div`
   display: flex;
   align-items: center;
   gap: 6px;
-  p {
-    ${Typography.body_sm_regular};
-    color: var(--text-text-secondary);
+  .submenu-upwards {
+    bottom: calc(100% + 4px);
+    top: auto;
+  }
+
+  .submenu-downwards {
+    bottom: auto;
   }
 `;
 
