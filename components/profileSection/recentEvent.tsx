@@ -36,7 +36,7 @@ export default function RecentEvent() {
       try {
         setActivityLoading(true);
         const data = await getUserActivity(contact?.id);
-        setUserActivity(data);
+        if (data && data.length > 0) setUserActivity(data);
       } catch (error) {
         console.error('Error loading ticket summary:', error);
       } finally {
@@ -72,20 +72,19 @@ export default function RecentEvent() {
             'Loading...'
           ) : (
             <>
-              {userActivity.length > 0 &&
-                userActivity.map((event: UserActivity, index) => (
-                  <React.Fragment key={index}>
-                    <EventDiv>
-                      <h6>{formatTime(event.event_time)}</h6>
-                      <div>
-                        <Dot />
-                        <Line />
-                      </div>
-                      <p>{formateEventName(event.event_type)}</p>
-                    </EventDiv>
-                    {index < userActivity.length - 1 && <LineDiv />}
-                  </React.Fragment>
-                ))}
+              {userActivity.map((event: UserActivity, index) => (
+                <React.Fragment key={index}>
+                  <EventDiv>
+                    <h6>{formatTime(event.event_time)}</h6>
+                    <div>
+                      <Dot />
+                      <Line />
+                    </div>
+                    <p>{formateEventName(event.event_type)}</p>
+                  </EventDiv>
+                  {index < userActivity?.length - 1 && <LineDiv />}
+                </React.Fragment>
+              ))}
             </>
           )}
         </EventDetailDiv>
