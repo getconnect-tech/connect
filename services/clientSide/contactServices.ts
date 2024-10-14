@@ -68,3 +68,26 @@ export const getContactGroups = async (contactId: string) => {
     contactStore.setLoading(false);
   }
 };
+
+/**
+ * @desc Get contact detail by ID
+ * @param {*}
+ */
+export const getContactDetailById = async (contactId: string) => {
+  try {
+    contactStore.setLoading(true);
+    const response = await axios.get(
+      `${NEXT_PUBLIC_API_URL}/contacts/${contactId}`,
+    );
+    const { data } = response;
+    contactStore.setContactDetails(data);
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    contactStore.setLoading(false);
+  }
+};
