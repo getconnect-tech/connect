@@ -28,7 +28,7 @@ export const GET = withWorkspaceAuth(async (req, { contactId }) => {
       return Response.json(updatedContact, { status: 200 });
     }
 
-    return new Response(`Error updating contact: ` + JSON.stringify(data), {
+    return new Response(`Error refreshing contact: ` + JSON.stringify(data), {
       status,
     });
   } catch (err) {
