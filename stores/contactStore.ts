@@ -43,9 +43,8 @@ class ContactStore {
   }
 
   // set contact details
-  setContactDetails(value: ContactDetails) {
+  setContactDetails(value: ContactDetails | null) {
     this.contactDetails = value;
-    console.log('storeData', this.contactDetails);
   }
 }
 

@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import React, { useCallback, useEffect, useState } from 'react';
 import moment from 'moment';
+import { observer } from 'mobx-react-lite';
 import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import {
@@ -17,7 +18,10 @@ import RecentEvent from './recentEvent';
 import AIBlock from './aiBlock';
 import { useStores } from '@/stores';
 import { capitalizeString, formatTime, isEmpty } from '@/helpers/common';
-import { getContactGroups } from '@/services/clientSide/contactServices';
+import {
+  getContactDetailById,
+  getContactGroups,
+} from '@/services/clientSide/contactServices';
 import { ContactGroups } from '@/utils/dataTypes';
 
 interface ContactInfo {
@@ -25,75 +29,93 @@ interface ContactInfo {
   value: string;
 }
 
-export default function ProfileSection() {
-  const { ticketStore } = useStores();
+const ProfileSection = () => {
+  const { ticketStore, contactStore } = useStores();
   const { ticketDetails } = ticketStore;
-  const { contact } = ticketDetails || {};
-  const [contactInfo, setContactInfo] = useState<ContactInfo[]>([]);
+  const { contact_id } = ticketDetails || {};
+  const { contactDetails } = contactStore || {};
+  const [displayContactInfo, setDisplayContactInfo] = useState<ContactInfo[]>(
+    [],
+  );
   const [workInfo, setWorkInfo] = useState<ContactGroups[]>([]);
   const [rotation, setRotation] = useState(0); // Manage rotation state
   const [loading, setLoading] = useState(false);
 
   const createContactInfo = useCallback(() => {
     const contactArray: ContactInfo[] = [];
-    if (contact?.email) {
-      contactArray.push({ label: 'Email', value: contact.email });
+    if (contactDetails?.email) {
+      contactArray.push({ label: 'Email', value: contactDetails.email });
     }
 
-    if (contact?.title) {
-      contactArray.push({ label: 'Title', value: contact.title });
+    if (contactDetails?.title) {
+      contactArray.push({ label: 'Title', value: contactDetails?.title });
     }
 
-    if (contact?.description) {
-      contactArray.push({ label: 'Description', value: contact.description });
+    if (contactDetails?.description) {
+      contactArray.push({
+        label: 'Description',
+        value: contactDetails.description,
+      });
     }
 
-    if (contact?.username) {
-      contactArray.push({ label: 'Username', value: contact.username });
+    if (contactDetails?.username) {
+      contactArray.push({
+        label: 'Username',
+        value: contactDetails.username,
+      });
     }
 
-    if (contact?.name) {
-      contactArray.push({ label: 'Name', value: contact.name });
+    if (contactDetails?.name) {
+      contactArray.push({ label: 'Name', value: contactDetails.name });
     }
 
-    if (contact?.first_name) {
-      contactArray.push({ label: 'First Name', value: contact.first_name });
+    if (contactDetails?.first_name) {
+      contactArray.push({
+        label: 'First Name',
+        value: contactDetails.first_name,
+      });
     }
 
-    if (contact?.last_name) {
-      contactArray.push({ label: 'Last Name', value: contact.last_name });
+    if (contactDetails?.last_name) {
+      contactArray.push({
+        label: 'Last Name',
+        value: contactDetails.last_name,
+      });
     }
 
-    if (contact?.age) {
-      contactArray.push({ label: 'Age', value: contact.age.toString() });
+    if (contactDetails?.age) {
+      contactArray.push({
+        label: 'Age',
+        value: contactDetails.age.toString(),
+      });
     }
-    if (contact?.birthday) {
+    if (contactDetails?.birthday) {
       contactArray.push({
         label: 'Birthday',
-        value: moment(contact.birthday).format('DD/MM/YYYY'),
+        value: moment(contactDetails.birthday).format('DD/MM/YYYY'),
       });
     }
-    if (contact?.gender) {
+    if (contactDetails?.gender) {
       contactArray.push({
         label: 'Gender',
-        value: capitalizeString(contact.gender),
+        value: capitalizeString(contactDetails.gender),
       });
     }
-    if (contact?.phone) {
+    if (contactDetails?.phone) {
       contactArray.push({
         label: 'Phone',
-        value: contact.phone,
+        value: contactDetails.phone,
       });
     }
-    if (contact?.website) {
+    if (contactDetails?.website) {
       contactArray.push({
         label: 'Website',
-        value: contact.website,
+        value: contactDetails.website,
       });
     }
 
-    if (contact?.address) {
-      Object.entries(contact.address).forEach(([key, value]) => {
+    if (contactDetails?.address) {
+      Object.entries(contactDetails.address).forEach(([key, value]) => {
         if (value) {
           // Convert the key to a human-readable label
           const label = key
@@ -107,8 +129,8 @@ export default function ProfileSection() {
       });
     }
 
-    if (contact?.custom_traits) {
-      Object.entries(contact.custom_traits).forEach(([key, value]) => {
+    if (contactDetails?.custom_traits) {
+      Object.entries(contactDetails.custom_traits).forEach(([key, value]) => {
         if (value) {
           // Convert the key to a human-readable label
           const label = key
@@ -122,34 +144,35 @@ export default function ProfileSection() {
       });
     }
 
-    if (contact?.created_at) {
+    if (contactDetails?.created_at) {
       contactArray.push({
         label: 'Created',
-        value: `${formatTime(contact.created_at.toString())} ago`,
+        value: `${formatTime(contactDetails.created_at.toString())} ago`,
       });
     }
-    if (contact?.updated_at) {
+    if (contactDetails?.updated_at) {
       contactArray.push({
         label: 'Updated',
-        value: `${formatTime(contact.updated_at.toString())} ago`,
+        value: `${formatTime(contactDetails.updated_at.toString())} ago`,
       });
     }
-    setContactInfo(contactArray);
-  }, [contact]);
+    setDisplayContactInfo(contactArray);
+  }, [contactDetails]);
 
   const loadData = useCallback(async () => {
-    if (!isEmpty(contact?.id)) {
+    if (!isEmpty(contact_id)) {
       setLoading(true);
       try {
-        const contactGroupInfo = await getContactGroups(contact?.id || '');
+        const contactGroupInfo = await getContactGroups(contact_id || '');
         setWorkInfo(contactGroupInfo);
+        await getContactDetailById(contact_id || '');
       } catch (err: any) {
         console.error('Error fetching contact group information:', err);
       } finally {
         setLoading(false);
       }
     }
-  }, [contact?.id]);
+  }, [contact_id]);
 
   const handleRefresh = async () => {
     setLoading(true); // Show loading state
@@ -166,11 +189,16 @@ export default function ProfileSection() {
 
   useEffect(() => {
     loadData();
+    return () => {
+      contactStore.setContactDetails(null);
+    };
   }, [loadData]);
 
   useEffect(() => {
-    createContactInfo();
-  }, [contact]);
+    if (contactDetails) {
+      createContactInfo();
+    }
+  }, [contactDetails, createContactInfo]);
 
   return (
     <MainDiv>
@@ -178,12 +206,12 @@ export default function ProfileSection() {
       <TopDiv>
         <ProfileDiv>
           <Avatar
-            imgSrc={contact?.avatar || ''}
-            name={contact?.name || 'Unknown'}
+            imgSrc={contactDetails?.avatar || ''}
+            name={contactDetails?.name || 'Unknown'}
             size={20}
             isShowBorder={true}
           />
-          <Title>{contact?.name || ''}</Title>
+          <Title>{contactDetails?.name || ''}</Title>
         </ProfileDiv>
         <Icon
           iconName='refresh-icon'
@@ -203,7 +231,7 @@ export default function ProfileSection() {
           'Loading...'
         ) : (
           <>
-            {contactInfo.map((item, index) => (
+            {displayContactInfo.map((item, index) => (
               <DetailsDiv key={index}>
                 <LeftDiv>
                   <p>{item?.label}</p>
@@ -219,4 +247,6 @@ export default function ProfileSection() {
       <RecentEvent />
     </MainDiv>
   );
-}
+};
+
+export default observer(ProfileSection);
