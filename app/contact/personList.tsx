@@ -57,22 +57,6 @@ const PersonList = ({ isShowNavbar }: Props) => {
               isShowNavbar={isShowNavbar}
             />
           ))}
-          {contacts?.map((card, index) => (
-            <ContactCard
-              key={index}
-              imgSrc={card.avatar || ''}
-              name={card.name}
-              email={card.email}
-              openCount={
-                card.ticketsCount.OPEN ? `${card.ticketsCount.OPEN}` : '0'
-              }
-              closeCount={
-                card.ticketsCount.CLOSED ? `${card.ticketsCount.CLOSED}` : '0'
-              }
-              groupInfo={card.groups}
-              isShowNavbar={isShowNavbar}
-            />
-          ))}
         </ListMainDiv>
       )}
     </>
