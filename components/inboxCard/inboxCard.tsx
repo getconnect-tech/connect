@@ -29,7 +29,7 @@ import {
 import { priorityItem, snoozeItem } from '@/helpers/raw';
 import { capitalizeString } from '@/helpers/common';
 import { useStores } from '@/stores';
-import { HandleClickProps, TicketDetailsInterface } from '@/utils/appTypes';
+import { HandleClickProps, TicketListInterface } from '@/utils/appTypes';
 import {
   updateAssignee,
   changeTicketStatus,
@@ -40,7 +40,7 @@ import {
 } from '@/services/clientSide/ticketServices';
 
 interface Props {
-  ticketDetail: TicketDetailsInterface;
+  ticketDetail: TicketListInterface;
   description: string;
   showDotIcon?: boolean;
   src: string;
@@ -292,7 +292,7 @@ const InboxCard = ({
             <Avatar
               // eslint-disable-next-line max-len
               imgSrc={last_message?.author?.profile_url || ''}
-              name={last_message?.author.display_name || ''}
+              name={last_message?.author?.display_name || ''}
               size={24}
             />
             <Description>

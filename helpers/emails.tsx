@@ -3,6 +3,7 @@ import moment from 'moment';
 import { generateVerificationCode } from './common';
 import { prisma } from '@/prisma/prisma';
 import { getTicketById } from '@/services/serverSide/ticket';
+import { getContactById } from '@/services/serverSide/contact';
 
 const client = new ServerClient(process.env.POSTMARK_SERVER_TOKEN!);
 
@@ -50,9 +51,11 @@ export const sendEmailAsReply = async ({
 
   const from = senderEmail ?? process.env.POSTMARK_SENDER_EMAIL!;
 
+  const contact = (await getContactById(ticket.contact_id))!;
+
   const res = await client.sendEmail({
     From: from,
-    To: ticket.contact.email,
+    To: contact.email,
     Subject: ticket.subject,
     HtmlBody: body,
     Headers: [

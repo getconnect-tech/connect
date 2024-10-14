@@ -32,6 +32,8 @@ const MainDiv = styled.div`
 
   @media screen and (max-width: 449px) {
     margin-left: unset;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 `;
 
@@ -72,6 +74,18 @@ const TabDiv = styled.div`
   padding: 2px;
   border-radius: 30px;
   background-color: var(--bg-surface-secondary);
+  @media screen and (max-width: 449px) {
+    width: max-content;
+  }
+`;
+
+const TabMainDiv = styled.div`
+  @media screen and (max-width: 449px) {
+    overflow: auto;
+    max-width: 100vw;
+    margin: 0 -16px;
+    padding: 0 16px;
+  }
 `;
 
 const Tab = styled.p<Props>`
@@ -123,4 +137,5 @@ export {
   TopDiv,
   BottomDiv,
   ListMainDiv,
+  TabMainDiv,
 };

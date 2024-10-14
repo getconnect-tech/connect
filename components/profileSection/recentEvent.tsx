@@ -15,13 +15,14 @@ import { ticketStore } from '@/stores/ticketStore';
 import { getUserActivity } from '@/services/clientSide/ticketServices';
 import { formatTime, isEmpty } from '@/helpers/common';
 import { UserActivity } from '@/utils/dataTypes';
+import { contactStore } from '@/stores/contactStore';
 
 export default function RecentEvent() {
   const [showDetails, setShowDetails] = useState(true);
   const [userActivity, setUserActivity] = useState<UserActivity[]>([]);
-  const { ticketDetails, loading } = ticketStore;
+  const { loading } = ticketStore;
   const [activityLoading, setActivityLoading] = useState(loading);
-  const { contact } = ticketDetails || {};
+  const { contactDetails } = contactStore;
 
   const formateEventName = (eventType: string) => {
     const prefix = '[Amplitude]';
@@ -32,18 +33,18 @@ export default function RecentEvent() {
   };
 
   const loadData = useCallback(async () => {
-    if (contact && !isEmpty(contact?.id)) {
+    if (contactDetails && !isEmpty(contactDetails?.id)) {
       try {
         setActivityLoading(true);
-        const data = await getUserActivity(contact?.id);
-        setUserActivity(data);
+        const data = await getUserActivity(contactDetails?.id);
+        if (data && data.length > 0) setUserActivity(data);
       } catch (error) {
         console.error('Error loading ticket summary:', error);
       } finally {
         setActivityLoading(false);
       }
     }
-  }, [contact?.id]);
+  }, [contactDetails?.id]);
 
   useEffect(() => {
     loadData();
@@ -72,20 +73,19 @@ export default function RecentEvent() {
             'Loading...'
           ) : (
             <>
-              {userActivity.length > 0 &&
-                userActivity.map((event: UserActivity, index) => (
-                  <React.Fragment key={index}>
-                    <EventDiv>
-                      <h6>{formatTime(event.event_time)}</h6>
-                      <div>
-                        <Dot />
-                        <Line />
-                      </div>
-                      <p>{formateEventName(event.event_type)}</p>
-                    </EventDiv>
-                    {index < userActivity.length - 1 && <LineDiv />}
-                  </React.Fragment>
-                ))}
+              {userActivity.map((event: UserActivity, index) => (
+                <React.Fragment key={index}>
+                  <EventDiv>
+                    <h6>{formatTime(event.event_time)}</h6>
+                    <div>
+                      <Dot />
+                      <Line />
+                    </div>
+                    <p>{formateEventName(event.event_type)}</p>
+                  </EventDiv>
+                  {index < userActivity?.length - 1 && <LineDiv />}
+                </React.Fragment>
+              ))}
             </>
           )}
         </EventDetailDiv>

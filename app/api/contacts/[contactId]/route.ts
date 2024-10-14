@@ -15,9 +15,23 @@ import {
   usernameSchema,
   websiteSchema,
 } from '@/lib/zod/contact';
-import { createOrUpdateContact } from '@/services/serverSide/contact';
+import {
+  createOrUpdateContact,
+  getContactById,
+} from '@/services/serverSide/contact';
 import { externalIdSchema, nameSchema } from '@/lib/zod/common';
 import withAdminAuth from '@/middlewares/withAdminAuth';
+import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
+
+export const GET = withWorkspaceAuth(async (req, { contactId }) => {
+  try {
+    const contact = await getContactById(contactId);
+
+    return Response.json(contact, { status: 200 });
+  } catch (err) {
+    return handleApiError(err);
+  }
+});
 
 const UpdateContactBody = z.object({
   address: addressSchema.optional(),

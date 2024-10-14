@@ -15,11 +15,11 @@ import {
   MainDiv,
 } from './style';
 import { ticketStore } from '@/stores/ticketStore';
-import { TicketDetailsInterface } from '@/utils/appTypes';
 import { getUniqueId } from '@/helpers/common';
 import { MessageDetails } from '@/utils/dataTypes';
 import { snoozeTicket } from '@/services/clientSide/ticketServices';
 import { useStores } from '@/stores';
+import { TicketDetailsInterface } from '@/utils/appTypes';
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];

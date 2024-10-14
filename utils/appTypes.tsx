@@ -1,8 +1,10 @@
-import { User } from '@prisma/client';
 import { Contact as PrismaContact } from '@prisma/client';
 import { z } from 'zod';
 import { LabelData } from './dataTypes';
-import { formatTicket } from '@/services/serverSide/ticket';
+import {
+  getTicketById,
+  getWorkspaceTickets,
+} from '@/services/serverSide/ticket';
 import { addressSchema, customTraitsSchema } from '@/lib/zod/contact';
 
 export interface UpdateRole {
@@ -19,19 +21,13 @@ export type HandleClickProps = {
   item?: any;
 };
 
-export type TicketDetailsInterface = NonNullable<
-  Awaited<ReturnType<typeof formatTicket>>
-> & {
-  last_message?: LastMessage; // Make the last_message field optional
-  has_read: boolean;
-};
+export type TicketListInterface = NonNullable<
+  Awaited<ReturnType<typeof getWorkspaceTickets>>
+>[0];
 
-interface LastMessage {
-  author: User;
-  content: string;
-  created_at: string;
-  type: string;
-}
+export type TicketDetailsInterface = NonNullable<
+  Awaited<ReturnType<typeof getTicketById>>
+>;
 
 export type Message = { id: string; type: string; content: string };
 
