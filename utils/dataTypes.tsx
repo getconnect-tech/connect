@@ -58,8 +58,13 @@ export type ContactGroups = NonNullable<
   Awaited<ReturnType<typeof getContactGroups>>
 >[0];
 
-export type EmailConfig = {
-  primaryEmail: string;
+export type WorkspaceConfig = {
+  emailChannel: {
+    primaryEmail?: string;
+  };
+  webhooks: {
+    contactRefresh?: string;
+  };
 };
 
 export type Macros = NonNullable<Awaited<ReturnType<typeof getMacros>>>[0];

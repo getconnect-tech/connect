@@ -20,13 +20,13 @@ import {
   messageTypeSchema,
 } from '@/lib/zod/message';
 import { sendEmail, sendEmailAsReply } from '@/helpers/emails';
-import { getWorkspaceEmailConfig } from '@/services/serverSide/workspace';
 import {
   getAttachmentsFromToken,
   moveAttachments,
 } from '@/services/serverSide/firebaseServices';
 import { prisma } from '@/prisma/prisma';
 import { NotificationProvider } from '@/services/serverSide/notifications';
+import { getWorkspaceConfig } from '@/services/serverSide/workspace';
 
 export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
@@ -86,9 +86,9 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
     }
 
     if (type === MessageType.EMAIL) {
-      const emailConfig = await getWorkspaceEmailConfig(req.workspace.id);
+      const workspaceConfig = await getWorkspaceConfig(req.workspace.id);
 
-      if (!emailConfig) {
+      if (!workspaceConfig?.emailChannel?.primaryEmail) {
         return Response.json(
           {
             error:
@@ -135,7 +135,7 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
             email: ticket.contact.email,
             subject: ticket.subject,
             body: content,
-            senderEmail: emailConfig.primaryEmail,
+            senderEmail: workspaceConfig.emailChannel.primaryEmail,
             attachments,
           });
 
@@ -149,7 +149,7 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
           mailId = (await sendEmailAsReply({
             ticketId,
             body: content,
-            senderEmail: emailConfig.primaryEmail,
+            senderEmail: workspaceConfig.emailChannel.primaryEmail,
             attachments,
           }))!;
         }

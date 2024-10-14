@@ -28,22 +28,22 @@ model User {
 }
 
 model Workspace {
-  id             String           @id @default(uuid())
-  name           String
-  created_at     DateTime         @default(now())
-  updated_at     DateTime         @default(now()) @updatedAt
-  industry       String
-  image_url      String?
-  team_size      TeamSize
-  invited_users  InvitedUser[]
-  tickets        Ticket[]
-  users          UserWorkspaces[]
-  ticketLabels   Label[]
-  api_keys       ApiKeys[]
-  configurations Configuration[]
-  macros         Macro[]
-  contacts       Contact[]
-  groups         Group[]
+  id            String            @id @default(uuid())
+  name          String
+  created_at    DateTime          @default(now())
+  updated_at    DateTime          @default(now()) @updatedAt
+  industry      String
+  image_url     String?
+  team_size     TeamSize
+  invited_users InvitedUser[]
+  tickets       Ticket[]
+  users         UserWorkspaces[]
+  ticketLabels  Label[]
+  api_keys      ApiKeys[]
+  config        WorkspaceConfig[]
+  macros        Macro[]
+  contacts      Contact[]
+  groups        Group[]
 }
 
 model Label {
@@ -174,17 +174,12 @@ model ApiKeys {
   user         User      @relation(fields: [created_by], references: [id])
 }
 
-model Configuration {
-  id           String     @id @default(uuid())
-  workspace_id String
-  workspace    Workspace  @relation(fields: [workspace_id], references: [id])
-  type         ConfigType
-  extra        String?
-  value        Json
-  created_at   DateTime   @default(now())
-  updated_at   DateTime   @default(now()) @updatedAt
-
-  @@unique(name: "workspace_config_id", [workspace_id, type, extra])
+model WorkspaceConfig {
+  workspace_id String    @id
+  workspace    Workspace @relation(fields: [workspace_id], references: [id])
+  config       Json
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @default(now()) @updatedAt
 }
 
 model Macro {
