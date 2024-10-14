@@ -2,6 +2,7 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useRouter } from 'next/navigation';
 import {
   Description,
   Head,
@@ -9,6 +10,8 @@ import {
   Main,
   MainCardDiv,
   MainDiv,
+  NavbarTitle,
+  ResponsiveHeader,
   RightDiv,
   Title,
 } from '../style';
@@ -19,9 +22,13 @@ import { useStores } from '@/stores';
 import InviteMemberModal from '@/components/modalComponent/inviteMemberModal';
 import Modal from '@/components/modal/modal';
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
+import Icon from '@/components/icon/icon';
+import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
 
 const Members = () => {
+  const router = useRouter();
   const [inviteModal, setInviteModal] = useState(false);
+  const [isNavbar, setIsNavbar] = useState(false);
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
@@ -54,11 +61,41 @@ const Members = () => {
     setInviteModal(false);
   }, []);
 
+  const onClickIcon = useCallback(() => {
+    setIsNavbar(true);
+  }, []);
+
+  const onCloseNavbar = useCallback(() => {
+    setIsNavbar(false);
+  }, []);
   return (
     <>
       <Main>
+        {isNavbar && <ResponsiveSettingNavBar onClose={onCloseNavbar} />}
         <MainDiv>
           <RightDiv>
+            <ResponsiveHeader>
+              <div className='left-section'>
+                <Icon
+                  iconName='sidebar-icon'
+                  iconSize='16'
+                  iconViewBox='0 0 16 16'
+                  className='sidebar-icon'
+                  onClick={onClickIcon}
+                />
+                <NavbarTitle>Settings</NavbarTitle>
+              </div>
+              <Icon
+                iconName={'cross-icon'}
+                iconSize={'12'}
+                iconViewBox={'0 0 16 16'}
+                size={true}
+                className='cross-icon'
+                onClick={() => {
+                  router.push('/');
+                }}
+              />
+            </ResponsiveHeader>
             <Head>
               <LeftDiv>
                 <Title>Members</Title>
@@ -86,6 +123,7 @@ const Members = () => {
                   dropdownIdentifier={`card-${member.id}`}
                   loadData={loadData}
                   isInvited={false}
+                  isShowNavbar={isNavbar}
                 />
               ))}
               {currentWorkspace?.invited_users?.map((member) => (
@@ -101,6 +139,7 @@ const Members = () => {
                   dropdownIdentifier={`card-${member.id}`}
                   loadData={loadData}
                   isInvited={true}
+                  isShowNavbar={isNavbar}
                 />
               ))}
             </MainCardDiv>

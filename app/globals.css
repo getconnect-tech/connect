@@ -9,7 +9,7 @@
   }
 }
 
-@media screen and (max-width: 449px) {
+@media screen and (max-width: 768px) {
   body {
     -webkit-tap-highlight-color: var(--tap-highlight-color);
   }
