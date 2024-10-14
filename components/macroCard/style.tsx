@@ -1,7 +1,11 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Typography } from '@/styles/typography';
 
-const CardMainDiv = styled.div`
+interface Props {
+  isShowNavbar: boolean;
+}
+
+const CardMainDiv = styled.div<Props>`
   padding: 8px 12px;
   display: flex;
   justify-content: space-between;
@@ -10,6 +14,13 @@ const CardMainDiv = styled.div`
   &:last-child {
     border-bottom: none;
   }
+  ${(props) =>
+    props.isShowNavbar &&
+    css`
+      @media screen and (max-width: 449px) {
+        min-width: 361px;
+      }
+    `}
 `;
 
 const LeftDiv = styled.div`
@@ -29,6 +40,11 @@ const TitleDiv = styled.div`
   p {
     ${Typography.body_md_regular};
     color: var(--text-text-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
   }
   div {
     display: flex;
@@ -77,9 +93,13 @@ const RightDiv = styled.div`
   display: flex;
   align-items: center;
   gap: 6px;
-  p {
-    ${Typography.body_sm_regular};
-    color: var(--text-text-secondary);
+  .submenu-upwards {
+    bottom: calc(100% + 4px);
+    top: auto;
+  }
+
+  .submenu-downwards {
+    bottom: auto;
   }
 `;
 
