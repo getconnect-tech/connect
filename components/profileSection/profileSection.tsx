@@ -180,12 +180,10 @@ const ProfileSection = () => {
     // Increment rotation by 360 degrees on each click
     setRotation((prevRotation) => prevRotation + 360);
     try {
-      if (contact_id) {
-        await Promise.all([
-          getContactGroups(contact_id),
-          refreshContact(contact_id),
-        ]);
-      }
+      await Promise.all([
+        getContactGroups(contact_id || ''),
+        refreshContact(contact_id || ''),
+      ]);
     } catch (error) {
       console.error('Error refreshing data:', error);
     } finally {
