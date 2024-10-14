@@ -21,6 +21,7 @@ import { capitalizeString, formatTime, isEmpty } from '@/helpers/common';
 import {
   getContactDetailById,
   getContactGroups,
+  refreshContact,
 } from '@/services/clientSide/contactServices';
 import { ContactGroups } from '@/utils/dataTypes';
 
@@ -174,18 +175,23 @@ const ProfileSection = () => {
     }
   }, [contact_id]);
 
-  const handleRefresh = async () => {
+  const handleRefresh = useCallback(async () => {
     setLoading(true); // Show loading state
     // Increment rotation by 360 degrees on each click
     setRotation((prevRotation) => prevRotation + 360);
     try {
-      await loadData(); // Reload the data
+      if (contact_id) {
+        await Promise.all([
+          getContactGroups(contact_id),
+          refreshContact(contact_id),
+        ]);
+      }
     } catch (error) {
       console.error('Error refreshing data:', error);
     } finally {
       setLoading(false); // Hide loading state after the data is refreshed
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadData();
