@@ -15,13 +15,14 @@ import { ticketStore } from '@/stores/ticketStore';
 import { getUserActivity } from '@/services/clientSide/ticketServices';
 import { formatTime, isEmpty } from '@/helpers/common';
 import { UserActivity } from '@/utils/dataTypes';
+import { contactStore } from '@/stores/contactStore';
 
 export default function RecentEvent() {
   const [showDetails, setShowDetails] = useState(true);
   const [userActivity, setUserActivity] = useState<UserActivity[]>([]);
-  const { ticketDetails, loading } = ticketStore;
+  const { loading } = ticketStore;
   const [activityLoading, setActivityLoading] = useState(loading);
-  const { contact } = ticketDetails || {};
+  const { contactDetails } = contactStore;
 
   const formateEventName = (eventType: string) => {
     const prefix = '[Amplitude]';
@@ -32,10 +33,10 @@ export default function RecentEvent() {
   };
 
   const loadData = useCallback(async () => {
-    if (contact && !isEmpty(contact?.id)) {
+    if (contactDetails && !isEmpty(contactDetails?.id)) {
       try {
         setActivityLoading(true);
-        const data = await getUserActivity(contact?.id);
+        const data = await getUserActivity(contactDetails?.id);
         if (data && data.length > 0) setUserActivity(data);
       } catch (error) {
         console.error('Error loading ticket summary:', error);
@@ -43,7 +44,7 @@ export default function RecentEvent() {
         setActivityLoading(false);
       }
     }
-  }, [contact?.id]);
+  }, [contactDetails?.id]);
 
   useEffect(() => {
     loadData();

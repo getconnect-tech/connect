@@ -1,13 +1,13 @@
 import { action, makeObservable, observable } from 'mobx';
-import { TicketDetailsInterface } from '@/utils/appTypes';
+import { TicketDetailsInterface, TicketListInterface } from '@/utils/appTypes';
 import { MessageDetails, TicketSummary } from '@/utils/dataTypes';
 
 class TicketStore {
   loading = false;
-  ticketList: TicketDetailsInterface[] = [];
+  ticketList: TicketListInterface[] = [];
   ticketDetails: TicketDetailsInterface | null = null;
   messages: MessageDetails[] = [];
-  filteredTicketList: TicketDetailsInterface[] = [];
+  filteredTicketList: TicketListInterface[] = [];
   ticketSummary: TicketSummary | null = null;
 
   constructor() {
@@ -51,7 +51,7 @@ class TicketStore {
   }
 
   // Ticket list actions
-  setTicketList(value: TicketDetailsInterface[]) {
+  setTicketList(value: TicketListInterface[]) {
     this.ticketList = value;
   }
 
@@ -64,9 +64,12 @@ class TicketStore {
   }
 
   updateTicketListItem(index: number, value: TicketDetailsInterface) {
-    this.filteredTicketList[index] = value;
+    this.filteredTicketList[index] = {
+      ...this.filteredTicketList[index],
+      ...value,
+    };
     this.ticketList = this.ticketList?.map((ticket) =>
-      ticket?.id === value?.id ? value : ticket,
+      ticket?.id === value?.id ? { ...ticket, ...value } : ticket,
     );
   }
 
@@ -122,17 +125,17 @@ class TicketStore {
   }
 
   // set filtered ticket list
-  setFilteredTicketList(tab: string, ticketList: TicketDetailsInterface[]) {
+  setFilteredTicketList(tab: string, ticketList: TicketListInterface[]) {
     // Get the current time
     const currentTime = new Date();
 
     // Initialize arrays to hold filtered tickets
-    const closedTickets: TicketDetailsInterface[] = [];
-    const snoozeTicket: TicketDetailsInterface[] = [];
-    const openTickets: TicketDetailsInterface[] = [];
+    const closedTickets: TicketListInterface[] = [];
+    const snoozeTicket: TicketListInterface[] = [];
+    const openTickets: TicketListInterface[] = [];
 
     // Iterate through ticketList and categorize tickets
-    ticketList.forEach((ticket: TicketDetailsInterface) => {
+    ticketList.forEach((ticket) => {
       if (ticket.status === 'CLOSED') {
         closedTickets.push(ticket);
       } else if (ticket.status === 'OPEN') {
