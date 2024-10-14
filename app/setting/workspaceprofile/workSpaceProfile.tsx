@@ -9,6 +9,7 @@ import React, {
   useState,
 } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useRouter } from 'next/navigation';
 import {
   Description,
   Frame,
@@ -18,9 +19,11 @@ import {
   Link,
   Main,
   MainDiv,
+  NavbarTitle,
   ProfileDetail,
   ProfileImage,
   ProfileInputs,
+  ResponsiveHeader,
   RightDiv,
   TextField,
   Title,
@@ -32,10 +35,14 @@ import { updateWorkspaceDetails } from '@/services/clientSide/workspaceServices'
 import Avatar from '@/components/avtar/Avtar';
 import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { messageStore } from '@/stores/messageStore';
+import Icon from '@/components/icon/icon';
+import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
 
 const WorkspaceProfile = () => {
+  const router = useRouter();
   const { workspaceStore } = useStores();
   const { currentWorkspace, loading } = workspaceStore;
+  const [isNavbar, setIsNavbar] = useState(false);
   const [organizationName, setOrganizationName] = useState<string>(
     currentWorkspace?.name || '',
   );
@@ -149,17 +156,48 @@ const WorkspaceProfile = () => {
     [organizationName, image, currentWorkspace, workspaceStore],
   );
 
+  const onClickIcon = useCallback(() => {
+    setIsNavbar(true);
+  }, []);
+
+  const onCloseNavbar = useCallback(() => {
+    setIsNavbar(false);
+  }, []);
+
   return (
     <Main>
+      {isNavbar && <ResponsiveSettingNavBar onClose={onCloseNavbar} />}
       <MainDiv>
         <RightDiv>
+          <ResponsiveHeader>
+            <div className='left-section'>
+              <Icon
+                iconName='sidebar-icon'
+                iconSize='16'
+                iconViewBox='0 0 16 16'
+                className='sidebar-icon'
+                onClick={onClickIcon}
+              />
+              <NavbarTitle>Settings</NavbarTitle>
+            </div>
+            <Icon
+              iconName={'cross-icon'}
+              iconSize={'12'}
+              iconViewBox={'0 0 16 16'}
+              size={true}
+              className='cross-icon'
+              onClick={() => {
+                router.push('/');
+              }}
+            />
+          </ResponsiveHeader>
           <Head>
             <LeftDiv>
               <Title>Workspace Profile</Title>
               <Description>Manage your Workspace Profile</Description>
             </LeftDiv>
           </Head>
-          <ProfileDetail onSubmit={handleUpdate}>
+          <ProfileDetail onSubmit={handleUpdate} isNavbar={isNavbar}>
             <ProfileImage>
               {/* <SVGIcon
                 name='workspaceProfile-icon'

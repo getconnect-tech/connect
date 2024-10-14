@@ -2,6 +2,7 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useRouter } from 'next/navigation';
 import {
   Description,
   Head,
@@ -9,6 +10,8 @@ import {
   Main,
   MainCardDiv,
   MainDiv,
+  NavbarTitle,
+  ResponsiveHeader,
   RightDiv,
   Title,
 } from '../style';
@@ -20,8 +23,11 @@ import MacroCard from '@/components/macroCard/macroCard';
 import Modal from '@/components/modal/modal';
 import MacroModal from '@/components/modalComponent/macroModal';
 import { useStores } from '@/stores';
+import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
+import Icon from '@/components/icon/icon';
 
 const Macros = () => {
+  const router = useRouter();
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
@@ -29,6 +35,7 @@ const Macros = () => {
   const { settingStore, workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { macros } = settingStore || {};
+  const [isNavbar, setIsNavbar] = useState(false);
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
@@ -52,11 +59,42 @@ const Macros = () => {
     setMacroModal(false);
   }, []);
 
+  const onClickIcon = useCallback(() => {
+    setIsNavbar(true);
+  }, []);
+
+  const onCloseNavbar = useCallback(() => {
+    setIsNavbar(false);
+  }, []);
+
   return (
     <>
       <Main>
+        {isNavbar && <ResponsiveSettingNavBar onClose={onCloseNavbar} />}
         <MainDiv>
           <RightDiv>
+            <ResponsiveHeader>
+              <div className='left-section'>
+                <Icon
+                  iconName='sidebar-icon'
+                  iconSize='16'
+                  iconViewBox='0 0 16 16'
+                  className='sidebar-icon'
+                  onClick={onClickIcon}
+                />
+                <NavbarTitle>Settings</NavbarTitle>
+              </div>
+              <Icon
+                iconName={'cross-icon'}
+                iconSize={'12'}
+                iconViewBox={'0 0 16 16'}
+                size={true}
+                className='cross-icon'
+                onClick={() => {
+                  router.push('/');
+                }}
+              />
+            </ResponsiveHeader>
             <Head>
               <LeftDiv>
                 <Title>Macros</Title>
@@ -101,6 +139,7 @@ const Macros = () => {
                     currentOpenDropdown={currentOpenDropdown}
                     setCurrentOpenDropdown={setCurrentOpenDropdown}
                     dropdownIdentifier={`card-${macros.id}`}
+                    isShowNavbar={isNavbar}
                   />
                 ))}
               </MainCardDiv>

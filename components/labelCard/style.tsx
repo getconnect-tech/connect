@@ -22,6 +22,14 @@ export const ItemDiv = styled.div<Props>`
         min-width: 361px;
       }
     `}
+  .submenu-upwards {
+    bottom: calc(100% + 4px);
+    top: auto;
+  }
+
+  .submenu-downwards {
+    bottom: auto;
+  }
 `;
 
 export const InnerDiv = styled.div`

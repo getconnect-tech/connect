@@ -58,11 +58,15 @@ const DetailsDiv = styled.div`
     color: var(--text);
     word-wrap: break-word;
     max-width: 155px;
+    @media screen and (min-width: 321px) and (max-width: 768px) {
+      word-wrap: normal;
+      max-width: unset;
+    }
   }
 `;
 
 const LeftDiv = styled.div`
-  width: 100px;
+  min-width: 100px;
   p {
     ${Typography.body_md_medium}
     color: var(--text-text-secondary);

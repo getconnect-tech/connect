@@ -17,6 +17,7 @@ interface Props {
   setCurrentOpenDropdown: (dropdown: string | null) => void;
   dropdownIdentifier: string;
   id: string;
+  isShowNavbar: boolean;
 }
 
 function MacroCard({
@@ -26,11 +27,34 @@ function MacroCard({
   currentOpenDropdown,
   setCurrentOpenDropdown,
   dropdownIdentifier,
+  isShowNavbar,
 }: Props) {
   const [deleteModal, setDeleteModal] = useState(false);
   const [macroModal, setMacroModal] = useState(false);
   const { settingStore } = useStores();
   const { loading } = settingStore || {};
+  const [submenuPosition, setSubmenuPosition] = useState<
+    'upwards' | 'downwards'
+  >('upwards');
+
+  const handleMouseEnter = (
+    e: React.MouseEvent<HTMLElement>,
+    // eslint-disable-next-line no-unused-vars
+    setPosition: (position: 'upwards' | 'downwards') => void,
+  ) => {
+    const triggerElement = e.currentTarget;
+    const rect = triggerElement.getBoundingClientRect();
+    const stickyInputHeight = 150;
+    // eslint-disable-next-line no-undef
+    const spaceBelow = window.innerHeight - rect.bottom - stickyInputHeight;
+    const spaceAbove = rect.top;
+
+    if (spaceBelow < 200 && spaceAbove > 200) {
+      setPosition('upwards');
+    } else {
+      setPosition('downwards');
+    }
+  };
   const onOpenMacroModal = useCallback(() => {
     setMacroModal(true);
   }, []);
@@ -92,7 +116,7 @@ function MacroCard({
 
   return (
     <>
-      <CardMainDiv>
+      <CardMainDiv isShowNavbar={isShowNavbar}>
         <LeftDiv>
           <TitleDiv>
             <h6>{name}</h6>
@@ -100,7 +124,11 @@ function MacroCard({
           </TitleDiv>
         </LeftDiv>
         <RightDiv>
-          <div style={{ position: 'relative' }} className='tag-div'>
+          <div
+            style={{ position: 'relative' }}
+            className='tag-div'
+            onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
+          >
             <Icon
               onClick={() => handleDropdownClick('key')}
               iconName='three-dot-icon'
@@ -120,6 +148,11 @@ function MacroCard({
                 onChange={(item) => {
                   onChange(item);
                 }}
+                className={
+                  submenuPosition === 'upwards'
+                    ? 'submenu-upwards'
+                    : 'submenu-downwards'
+                }
               />
             )}
           </div>

@@ -30,6 +30,7 @@ interface Props {
   setOpenDropdown: (dropdown: string | null) => void;
   loadData: () => void;
   isInvited: boolean;
+  isShowNavbar: boolean;
 }
 const MemberCard = ({
   designation,
@@ -42,10 +43,33 @@ const MemberCard = ({
   userId,
   loadData,
   isInvited,
+  isShowNavbar,
 }: Props) => {
   const { workspaceStore } = useStores();
   const [deleteModal, setDeleteModal] = useState(false);
   const { loading } = workspaceStore || {};
+  const [submenuPosition, setSubmenuPosition] = useState<
+    'upwards' | 'downwards'
+  >('upwards');
+
+  const handleMouseEnter = (
+    e: React.MouseEvent<HTMLElement>,
+    // eslint-disable-next-line no-unused-vars
+    setPosition: (position: 'upwards' | 'downwards') => void,
+  ) => {
+    const triggerElement = e.currentTarget;
+    const rect = triggerElement.getBoundingClientRect();
+    const stickyInputHeight = 150;
+    // eslint-disable-next-line no-undef
+    const spaceBelow = window.innerHeight - rect.bottom - stickyInputHeight;
+    const spaceAbove = rect.top;
+
+    if (spaceBelow < 200 && spaceAbove > 200) {
+      setPosition('upwards');
+    } else {
+      setPosition('downwards');
+    }
+  };
 
   let dropDownItem: DropDownItem[];
   if (designation === UserRole.OWNER) {
@@ -156,7 +180,7 @@ const MemberCard = ({
   );
 
   return (
-    <CardDiv>
+    <CardDiv isShowNavbar={isShowNavbar}>
       <LeftDiv>
         <Avatar imgSrc={src} name={name} size={28} isShowBorder={true} />
         <NameDiv>
@@ -169,7 +193,11 @@ const MemberCard = ({
           <h6>{capitalizeString(designation)}</h6>
         )}
         {designation !== UserRole.OWNER && (
-          <div style={{ position: 'relative' }} className='tag-div'>
+          <div
+            style={{ position: 'relative' }}
+            className='tag-div'
+            onMouseEnter={(e: any) => handleMouseEnter(e, setSubmenuPosition)}
+          >
             <Icon
               onClick={handleClickIcon}
               iconName='three-dot-icon'
@@ -187,6 +215,11 @@ const MemberCard = ({
                   setOpenDropdown(null);
                 }}
                 style={{ right: 0, zIndex: 1, minWidth: 143 }}
+                className={
+                  submenuPosition === 'upwards'
+                    ? 'submenu-upwards'
+                    : 'submenu-downwards'
+                }
               />
             )}
           </div>
