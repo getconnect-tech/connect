@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
@@ -24,6 +23,7 @@ import Modal from '@/components/modal/modal';
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
 import Icon from '@/components/icon/icon';
 import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
+import MemberLoading from '@/components/memberLoading/memberLoading';
 
 const Members = () => {
   const router = useRouter();
@@ -32,20 +32,22 @@ const Members = () => {
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
+  const [loading, setLoading] = useState(true);
   const { workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
+
   const loadData = useCallback(async () => {
     try {
-      workspaceStore.setLoading(true);
+      setLoading(true);
       const workspaceId =
         await UserPreferenceSingleton.getInstance().getCurrentWorkspace();
       if (workspaceId) {
         await getWorkspaceById(workspaceId);
       }
     } catch (e) {
-      console.log('Error : ', e);
+      console.log('Error:', e);
     } finally {
-      workspaceStore.setLoading(false);
+      setLoading(false);
     }
   }, []);
 
@@ -68,6 +70,7 @@ const Members = () => {
   const onCloseNavbar = useCallback(() => {
     setIsNavbar(false);
   }, []);
+
   return (
     <>
       <Main>
@@ -109,40 +112,49 @@ const Members = () => {
                 variant='medium'
               />
             </Head>
-            <MainCardDiv>
-              {currentWorkspace?.users?.map((member) => (
-                <MemberCard
-                  key={member.id}
-                  userId={member.id}
-                  name={member.display_name || ''}
-                  email={member.email}
-                  src={member.profile_url || ''}
-                  designation={member.role}
-                  currentOpenDropdown={currentOpenDropdown}
-                  setOpenDropdown={setCurrentOpenDropdown}
-                  dropdownIdentifier={`card-${member.id}`}
-                  loadData={loadData}
-                  isInvited={false}
-                  isShowNavbar={isNavbar}
-                />
-              ))}
-              {currentWorkspace?.invited_users?.map((member) => (
-                <MemberCard
-                  key={member.id}
-                  userId={member.id}
-                  name={member.name || ''}
-                  email={member.email}
-                  src={''}
-                  designation={'PENDING'}
-                  currentOpenDropdown={currentOpenDropdown}
-                  setOpenDropdown={setCurrentOpenDropdown}
-                  dropdownIdentifier={`card-${member.id}`}
-                  loadData={loadData}
-                  isInvited={true}
-                  isShowNavbar={isNavbar}
-                />
-              ))}
-            </MainCardDiv>
+            {/* Render loading state */}
+            {loading ||
+            ((!currentWorkspace?.users ||
+              currentWorkspace?.users.length === 0) &&
+              (!currentWorkspace?.invited_users ||
+                currentWorkspace?.invited_users.length) === 0) ? (
+              <MemberLoading />
+            ) : (
+              <MainCardDiv>
+                {currentWorkspace?.users?.map((member) => (
+                  <MemberCard
+                    key={member.id}
+                    userId={member.id}
+                    name={member.display_name || ''}
+                    email={member.email}
+                    src={member.profile_url || ''}
+                    designation={member.role}
+                    currentOpenDropdown={currentOpenDropdown}
+                    setOpenDropdown={setCurrentOpenDropdown}
+                    dropdownIdentifier={`card-${member.id}`}
+                    loadData={loadData}
+                    isInvited={false}
+                    isShowNavbar={isNavbar}
+                  />
+                ))}
+                {currentWorkspace?.invited_users?.map((member) => (
+                  <MemberCard
+                    key={member.id}
+                    userId={member.id}
+                    name={member.name || ''}
+                    email={member.email}
+                    src={''}
+                    designation={'PENDING'}
+                    currentOpenDropdown={currentOpenDropdown}
+                    setOpenDropdown={setCurrentOpenDropdown}
+                    dropdownIdentifier={`card-${member.id}`}
+                    loadData={loadData}
+                    isInvited={true}
+                    isShowNavbar={isNavbar}
+                  />
+                ))}
+              </MainCardDiv>
+            )}
           </RightDiv>
         </MainDiv>
       </Main>

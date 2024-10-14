@@ -8,6 +8,7 @@ import {
   MainDiv,
   Tab,
   TabDiv,
+  TabMainDiv,
   Title,
   TopDiv,
 } from './style';
@@ -75,17 +76,19 @@ const Contact = () => {
               />
               <Title>Contact</Title>
             </div>
-            <TabDiv>
-              {tabItem.map((tab) => (
-                <Tab
-                  key={tab}
-                  active={activeTab === tab}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {tab}
-                </Tab>
-              ))}
-            </TabDiv>
+            <TabMainDiv>
+              <TabDiv>
+                {tabItem.map((tab) => (
+                  <Tab
+                    key={tab}
+                    active={activeTab === tab}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {tab}
+                  </Tab>
+                ))}
+              </TabDiv>
+            </TabMainDiv>
           </HeaderDiv>
         </TopDiv>
         <div style={{ padding: '0 16px' }}>

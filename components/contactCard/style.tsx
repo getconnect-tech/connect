@@ -66,6 +66,9 @@ const CompanyDiv = styled.div`
     ${Typography.body_md_regular};
     color: var(--text-text-secondary);
   }
+  @media screen and (max-width: 449px) {
+    gap: 0;
+  }
 `;
 
 const DotIcon = styled.div`
