@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
