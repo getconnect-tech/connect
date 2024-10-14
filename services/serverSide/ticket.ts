@@ -13,7 +13,6 @@ import { chatWithOpenAi } from '@/lib/openAi';
 type TicketWithPayload = Prisma.TicketGetPayload<{
   include: {
     labels: { include: { label: true } };
-    contact: true;
     assigned_user: true;
   };
 }>;
@@ -134,7 +133,9 @@ export const getWorkspaceTickets = async (
   });
 
   // Format tickets before returning
-  return ticketsWithLastMessage.map(formatTicket);
+  return ticketsWithLastMessage.map(
+    formatTicket<(typeof ticketsWithLastMessage)[number]>,
+  );
 };
 
 export const getTicketById = async (ticketId: string, workspaceId?: string) => {
@@ -146,7 +147,6 @@ export const getTicketById = async (ticketId: string, workspaceId?: string) => {
     where: query,
     include: {
       labels: { include: { label: true } },
-      contact: true,
       assigned_user: true,
     },
   });
@@ -250,7 +250,7 @@ export const removeLabel = async (ticketId: string, labelId: string) => {
   return deletedTicket;
 };
 
-export const formatTicket = (ticket: TicketWithPayload) => {
+export const formatTicket = <T extends TicketWithPayload>(ticket: T) => {
   const formattedTicket = {
     ...ticket,
     labels: ticket.labels.map((x) => x.label),
