@@ -29,7 +29,8 @@ export const GET = withWorkspaceAuth(async (req, { contactId }) => {
 
     const webhookUrl =
       workspaceConfig.webhooks.contactRefresh +
-      `?contactId=${id}&contactEmail=${email}&externalId=${contact_id}`;
+      `?contactId=${encodeURIComponent(id)}&contactEmail=${encodeURIComponent(email)}` +
+      (contact_id ? `&externalId=${encodeURIComponent(contact_id)}` : '');
 
     const { data, status } = await axios.get(webhookUrl);
 
