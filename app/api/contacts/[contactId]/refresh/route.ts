@@ -19,9 +19,20 @@ export const GET = withWorkspaceAuth(async (req, { contactId }) => {
       );
     }
 
-    const { data, status } = await axios.get(
-      workspaceConfig.webhooks.contactRefresh,
-    );
+    const contactDetails = await getContactById(contactId);
+
+    if (!contactDetails) {
+      return Response.json({ error: 'Contact not found!' }, { status: 404 });
+    }
+
+    const { id, contact_id, email } = contactDetails;
+
+    const webhookUrl =
+      workspaceConfig.webhooks.contactRefresh +
+      `?contactId=${encodeURIComponent(id)}&contactEmail=${encodeURIComponent(email)}` +
+      (contact_id ? `&externalId=${encodeURIComponent(contact_id)}` : '');
+
+    const { data, status } = await axios.get(webhookUrl);
 
     if (status === 200) {
       const updatedContact = await getContactById(contactId);

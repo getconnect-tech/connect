@@ -91,3 +91,25 @@ export const getContactDetailById = async (contactId: string) => {
     contactStore.setLoading(false);
   }
 };
+
+/**
+ * @desc Refresh contact information
+ * @param {*} contactId
+ */
+export const refreshContact = async (contactId: string) => {
+  try {
+    const response = await axios.get(
+      `${NEXT_PUBLIC_API_URL}/contacts/${contactId}/refresh`,
+    );
+    const { data } = response;
+    contactStore.setContactDetails(data);
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    contactStore.setLoading(false);
+  }
+};
