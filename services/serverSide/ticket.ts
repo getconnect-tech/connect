@@ -10,14 +10,6 @@ import { prisma } from '@/prisma/prisma';
 import { removeNullUndefined } from '@/helpers/common';
 import { chatWithOpenAi } from '@/lib/openAi';
 
-type TicketWithPayload = Prisma.TicketGetPayload<{
-  include: {
-    labels: { include: { label: true } };
-    contact: true;
-    assigned_user: true;
-  };
-}>;
-
 export const getWorkspaceTickets = async (
   workspaceId: string,
   userId: string,
@@ -134,7 +126,12 @@ export const getWorkspaceTickets = async (
   });
 
   // Format tickets before returning
-  return ticketsWithLastMessage.map(formatTicket);
+  const formattedTickets = ticketsWithLastMessage.map((ticket) => ({
+    ...ticket,
+    labels: ticket.labels.map((x) => x.label),
+  }));
+
+  return formattedTickets;
 };
 
 export const getTicketById = async (ticketId: string, workspaceId?: string) => {
@@ -146,7 +143,6 @@ export const getTicketById = async (ticketId: string, workspaceId?: string) => {
     where: query,
     include: {
       labels: { include: { label: true } },
-      contact: true,
       assigned_user: true,
     },
   });
@@ -155,7 +151,10 @@ export const getTicketById = async (ticketId: string, workspaceId?: string) => {
     return null;
   }
 
-  const formattedTicket = formatTicket(ticket);
+  const formattedTicket = {
+    ...ticket,
+    labels: ticket.labels.map((x) => x.label),
+  };
 
   return formattedTicket;
 };
@@ -248,14 +247,6 @@ export const removeLabel = async (ticketId: string, labelId: string) => {
     where: { ticket_label_id: { ticket_id: ticketId, label_id: labelId } },
   });
   return deletedTicket;
-};
-
-export const formatTicket = (ticket: TicketWithPayload) => {
-  const formattedTicket = {
-    ...ticket,
-    labels: ticket.labels.map((x) => x.label),
-  };
-  return formattedTicket;
 };
 
 export const updatePriority = async (

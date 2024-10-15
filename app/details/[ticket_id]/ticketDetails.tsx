@@ -74,6 +74,7 @@ import { getMacros } from '@/services/clientSide/settingServices';
 import FileCard from '@/components/fileCard/fileCard';
 import ProsemirrorEditor from '@/components/prosemirror';
 import ResponsiveProfileSection from '@/components/profileSection/responsiveProfileSection';
+import { getContactDetailById } from '@/services/clientSide/contactServices';
 
 interface Props {
   ticket_id: string;
@@ -110,14 +111,21 @@ function TicketDetails(props: Props) {
   const [attachFile, setAttachFiels] = useState<MessageAttachment[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<any>(null);
-  const { ticketStore, workspaceStore, userStore, settingStore, appStore } =
-    useStores();
+  const {
+    ticketStore,
+    workspaceStore,
+    userStore,
+    settingStore,
+    appStore,
+    contactStore,
+  } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails, messages } = ticketStore || {};
   const { labels, macros } = settingStore || {};
   const { user } = userStore || {};
   const { uploadLoading } = appStore || {};
-  const { priority, assigned_to, contact } = ticketDetails || {};
+  const { priority, assigned_to } = ticketDetails || {};
+  const { contactDetails } = contactStore || {};
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [macroDropdown, setMacroDropdown] = useState(false);
   const [isProfileSection, setIsProfileSection] = useState(false);
@@ -181,8 +189,9 @@ function TicketDetails(props: Props) {
         getTicketMessages(ticket_id),
         getMacros(),
       ]);
+      await getContactDetailById(ticketDetails?.contact_id || '');
     }
-  }, [ticket_id, currentWorkspace?.id]);
+  }, [ticket_id, currentWorkspace?.id, ticketDetails?.contact_id]);
 
   useEffect(() => {
     loadData();
@@ -532,16 +541,20 @@ function TicketDetails(props: Props) {
           return (
             <ActivityDiv>
               <div className='avtar'>
-                <Avatar imgSrc={''} name={contact?.name || ''} size={20} />
+                <Avatar
+                  imgSrc={''}
+                  name={contactDetails?.name || ''}
+                  size={20}
+                />
               </div>
               <MessageCard
-                title={`${contact?.name} sent ${message.channel === ChannelType.WEB ? 'a message' : 'an email'}`}
+                title={`${contactDetails?.name} sent ${message.channel === ChannelType.WEB ? 'a message' : 'an email'}`}
                 time={message?.created_at}
                 subTitle={'To Teamcamp Support '}
                 message={message.content || ''}
                 attachments={message?.attachments}
                 messageImg={''}
-                messageName={contact?.name || ''}
+                messageName={contactDetails?.name || ''}
               />
             </ActivityDiv>
           );
@@ -559,7 +572,7 @@ function TicketDetails(props: Props) {
                 // eslint-disable-next-line max-len
                 title={`${message?.author?.display_name} sent ${message.channel === ChannelType.WEB ? 'a message' : 'an email'}`}
                 time={message?.created_at}
-                subTitle={`To ${contact?.email}`}
+                subTitle={`To ${contactDetails?.email}`}
                 message={message.content || ''}
                 readBy={message.read_by}
                 attachments={message?.attachments}
@@ -657,7 +670,7 @@ function TicketDetails(props: Props) {
           return <>{message.content}</>;
       }
     },
-    [contact?.name, contact?.email],
+    [contactDetails?.name, contactDetails?.email],
   );
 
   const handleFileInput = () => {

@@ -15,10 +15,10 @@ import {
 import WorkDetails from './workDetails';
 import RecentEvent from './recentEvent';
 import AIBlock from './aiBlock';
-import { useStores } from '@/stores';
 import { capitalizeString, formatTime, isEmpty } from '@/helpers/common';
 import { ContactGroups } from '@/utils/dataTypes';
 import { getContactGroups } from '@/services/clientSide/contactServices';
+import { contactStore } from '@/stores/contactStore';
 
 interface ContactInfo {
   label: string;
@@ -26,14 +26,11 @@ interface ContactInfo {
 }
 
 export default function ResponsiveProfileSection() {
-  const { ticketStore } = useStores();
-  const { ticketDetails } = ticketStore;
-  const { contact } = ticketDetails || {};
+  const { contactDetails: contact } = contactStore;
   const [contactInfo, setContactInfo] = useState<ContactInfo[]>([]);
   const [workInfo, setWorkInfo] = useState<ContactGroups[]>([]);
   const [rotation, setRotation] = useState(0); // Manage rotation state
   const [loading, setLoading] = useState(false);
-
   const createContactInfo = useCallback(() => {
     const contactArray: ContactInfo[] = [];
     if (contact?.email) {
