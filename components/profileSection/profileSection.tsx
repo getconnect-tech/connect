@@ -28,6 +28,7 @@ import { ContactGroups } from '@/utils/dataTypes';
 interface ContactInfo {
   label: string;
   value: string;
+  link?: string;
 }
 
 const ProfileSection = () => {
@@ -111,7 +112,8 @@ const ProfileSection = () => {
     if (contactDetails?.website) {
       contactArray.push({
         label: 'Website',
-        value: contactDetails.website,
+        value: 'Link',
+        link: contactDetails.website,
       });
     }
 
@@ -137,24 +139,45 @@ const ProfileSection = () => {
           const label = key
             .replace(/([A-Z])/g, ' $1')
             .replace(/^./, (str) => str.toUpperCase());
-          contactArray.push({
-            label,
-            value: capitalizeString(value),
-          });
+          if (
+            typeof value === 'string' &&
+            (value.startsWith('https') || value.startsWith('http'))
+          ) {
+            contactArray.push({
+              label,
+              value: 'Link',
+              link: value,
+            });
+          } else if (!isNaN(new Date(value).getTime())) {
+            const formattedTime = formatTime(
+              contactDetails.created_at.toString(),
+            );
+            contactArray.push({
+              label,
+              value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
+            });
+          } else {
+            contactArray.push({
+              label,
+              value: capitalizeString(value),
+            });
+          }
         }
       });
     }
 
     if (contactDetails?.created_at) {
+      const formattedTime = formatTime(contactDetails.created_at.toString());
       contactArray.push({
         label: 'Created',
-        value: `${formatTime(contactDetails.created_at.toString())} ago`,
+        value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
       });
     }
     if (contactDetails?.updated_at) {
+      const formattedTime = formatTime(contactDetails.updated_at.toString());
       contactArray.push({
         label: 'Updated',
-        value: `${formatTime(contactDetails.updated_at.toString())} ago`,
+        value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
       });
     }
     setDisplayContactInfo(contactArray);
@@ -164,9 +187,11 @@ const ProfileSection = () => {
     if (!isEmpty(contact_id)) {
       setLoading(true);
       try {
-        const contactGroupInfo = await getContactGroups(contact_id || '');
-        setWorkInfo(contactGroupInfo);
-        await getContactDetailById(contact_id || '');
+        if (contact_id) {
+          const contactGroupInfo = await getContactGroups(contact_id);
+          setWorkInfo(contactGroupInfo);
+          await getContactDetailById(contact_id);
+        }
       } catch (err: any) {
         console.error('Error fetching contact group information:', err);
       } finally {
@@ -180,16 +205,16 @@ const ProfileSection = () => {
     // Increment rotation by 360 degrees on each click
     setRotation((prevRotation) => prevRotation + 360);
     try {
-      await Promise.all([
-        getContactGroups(contact_id || ''),
-        refreshContact(contact_id || ''),
-      ]);
+      if (contact_id) {
+        await refreshContact(contact_id);
+        await getContactGroups(contact_id);
+      }
     } catch (error) {
       console.error('Error refreshing data:', error);
     } finally {
       setLoading(false); // Hide loading state after the data is refreshed
     }
-  }, []);
+  }, [contact_id]);
 
   useEffect(() => {
     loadData();
@@ -240,7 +265,13 @@ const ProfileSection = () => {
                 <LeftDiv>
                   <p>{item?.label}</p>
                 </LeftDiv>
-                <p>{item?.value}</p>
+                {item.link ? (
+                  <p>
+                    <a href={item.link}>{item.value}</a>
+                  </p>
+                ) : (
+                  <p>{item?.value}</p>
+                )}
               </DetailsDiv>
             ))}
           </>
