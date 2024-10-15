@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import moment from 'moment';
 import { observer } from 'mobx-react-lite';
+import Link from 'next/link';
 import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import {
@@ -112,7 +113,7 @@ const ProfileSection = () => {
     if (contactDetails?.website) {
       contactArray.push({
         label: 'Website',
-        value: 'Link',
+        value: 'Click Here',
         link: contactDetails.website,
       });
     }
@@ -145,7 +146,7 @@ const ProfileSection = () => {
           ) {
             contactArray.push({
               label,
-              value: 'Link',
+              value: 'Click Here',
               link: value,
             });
           } else if (!isNaN(new Date(value).getTime())) {
@@ -267,7 +268,9 @@ const ProfileSection = () => {
                 </LeftDiv>
                 {item.link ? (
                   <p>
-                    <a href={item.link}>{item.value}</a>
+                    <Link target='_blank' href={item.link}>
+                      {item.value}
+                    </Link>
                   </p>
                 ) : (
                   <p>{item?.value}</p>
