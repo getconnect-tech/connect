@@ -189,7 +189,8 @@ function TicketDetails(props: Props) {
         getTicketMessages(ticket_id),
         getMacros(),
       ]);
-      await getContactDetailById(ticketDetails?.contact_id || '');
+      if (ticketDetails?.contact_id)
+        await getContactDetailById(ticketDetails?.contact_id);
     }
   }, [ticket_id, currentWorkspace?.id, ticketDetails?.contact_id]);
 

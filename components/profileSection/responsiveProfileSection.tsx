@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import React, { useCallback, useEffect, useState } from 'react';
 import moment from 'moment';
+import { observer } from 'mobx-react-lite';
 import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import {
@@ -15,22 +16,33 @@ import {
 import WorkDetails from './workDetails';
 import RecentEvent from './recentEvent';
 import AIBlock from './aiBlock';
+import { useStores } from '@/stores';
 import { capitalizeString, formatTime, isEmpty } from '@/helpers/common';
 import { ContactGroups } from '@/utils/dataTypes';
-import { getContactGroups } from '@/services/clientSide/contactServices';
-import { contactStore } from '@/stores/contactStore';
+import {
+  getContactDetailById,
+  getContactGroups,
+  refreshContact,
+} from '@/services/clientSide/contactServices';
 
 interface ContactInfo {
   label: string;
   value: string;
+  link?: string;
 }
 
-export default function ResponsiveProfileSection() {
-  const { contactDetails: contact } = contactStore;
-  const [contactInfo, setContactInfo] = useState<ContactInfo[]>([]);
+const ResponsiveProfileSection = () => {
+  const { ticketStore, contactStore } = useStores();
+  const { ticketDetails } = ticketStore;
+  const { contact_id } = ticketDetails || {};
+  const { contactDetails: contact } = contactStore || {};
+  const [displayContactInfo, setDisplayContactInfo] = useState<ContactInfo[]>(
+    [],
+  );
   const [workInfo, setWorkInfo] = useState<ContactGroups[]>([]);
   const [rotation, setRotation] = useState(0); // Manage rotation state
   const [loading, setLoading] = useState(false);
+
   const createContactInfo = useCallback(() => {
     const contactArray: ContactInfo[] = [];
     if (contact?.email) {
@@ -85,7 +97,8 @@ export default function ResponsiveProfileSection() {
     if (contact?.website) {
       contactArray.push({
         label: 'Website',
-        value: contact.website,
+        value: 'Link',
+        link: contact.website,
       });
     }
 
@@ -111,27 +124,46 @@ export default function ResponsiveProfileSection() {
           const label = key
             .replace(/([A-Z])/g, ' $1')
             .replace(/^./, (str) => str.toUpperCase());
-          contactArray.push({
-            label,
-            value: capitalizeString(value),
-          });
+          if (
+            typeof value === 'string' &&
+            (value.startsWith('https') || value.startsWith('http'))
+          ) {
+            contactArray.push({
+              label,
+              value: 'Link',
+              link: value,
+            });
+          } else if (!isNaN(new Date(value).getTime())) {
+            const formattedTime = formatTime(contact.created_at.toString());
+            contactArray.push({
+              label,
+              value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
+            });
+          } else {
+            contactArray.push({
+              label,
+              value: capitalizeString(value),
+            });
+          }
         }
       });
     }
 
     if (contact?.created_at) {
+      const formattedTime = formatTime(contact.created_at.toString());
       contactArray.push({
         label: 'Created',
-        value: `${formatTime(contact.created_at.toString())} ago`,
+        value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
       });
     }
     if (contact?.updated_at) {
+      const formattedTime = formatTime(contact.updated_at.toString());
       contactArray.push({
         label: 'Updated',
-        value: `${formatTime(contact.updated_at.toString())} ago`,
+        value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
       });
     }
-    setContactInfo(contactArray);
+    setDisplayContactInfo(contactArray);
   }, [contact]);
 
   const loadData = useCallback(async () => {
@@ -140,34 +172,41 @@ export default function ResponsiveProfileSection() {
       try {
         const contactGroupInfo = await getContactGroups(contact?.id || '');
         setWorkInfo(contactGroupInfo);
+        await getContactDetailById(contact_id || '');
       } catch (err: any) {
         console.error('Error fetching contact group information:', err);
       } finally {
         setLoading(false);
       }
     }
-  }, [contact?.id]);
+  }, [contact_id]);
 
-  const handleRefresh = async () => {
+  const handleRefresh = useCallback(async () => {
     setLoading(true); // Show loading state
     // Increment rotation by 360 degrees on each click
     setRotation((prevRotation) => prevRotation + 360);
     try {
-      await loadData(); // Reload the data
+      await refreshContact(contact_id || '');
+      await getContactGroups(contact_id || '');
     } catch (error) {
       console.error('Error refreshing data:', error);
     } finally {
       setLoading(false); // Hide loading state after the data is refreshed
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadData();
+    return () => {
+      contactStore.setContactDetails(null);
+    };
   }, [loadData]);
 
   useEffect(() => {
-    createContactInfo();
-  }, [contact]);
+    if (contact) {
+      createContactInfo();
+    }
+  }, [contact, createContactInfo]);
 
   return (
     <ResponsiveMainDiv>
@@ -200,12 +239,18 @@ export default function ResponsiveProfileSection() {
           'Loading...'
         ) : (
           <>
-            {contactInfo.map((item, index) => (
+            {displayContactInfo.map((item, index) => (
               <DetailsDiv key={index}>
                 <LeftDiv>
                   <p>{item?.label}</p>
                 </LeftDiv>
-                <p>{item?.value}</p>
+                {item.link ? (
+                  <p>
+                    <a href={item.link}>{item.value}</a>
+                  </p>
+                ) : (
+                  <p>{item?.value}</p>
+                )}
               </DetailsDiv>
             ))}
           </>
@@ -215,4 +260,5 @@ export default function ResponsiveProfileSection() {
       <RecentEvent />
     </ResponsiveMainDiv>
   );
-}
+};
+export default observer(ResponsiveProfileSection);
