@@ -608,8 +608,19 @@ img.ProseMirror-separator {
 .ProseMirror h4:first-child,
 .ProseMirror h5:first-child,
 .ProseMirror h6:first-child {
-  margin-top: 10px;
+  margin-top: 0;
 }
+
+.ProseMirror p:last-child,
+.ProseMirror h1:last-child,
+.ProseMirror h2:last-child,
+.ProseMirror h3:last-child,
+.ProseMirror h4:last-child,
+.ProseMirror h5:last-child,
+.ProseMirror h6:last-child {
+  margin-bottom: 0;
+}
+
 
 .ProseMirror {
   line-height: 1.2;
