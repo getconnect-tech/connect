@@ -97,3 +97,8 @@ export const contactIdsSchema = z.array(
     invalid_type_error: "'contactIds' must be of type string!",
   }),
 );
+
+export const contactNameSchema = z.string({
+  required_error: "'name' is required!",
+  invalid_type_error: "'name' must be of type string!",
+});

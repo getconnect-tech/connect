@@ -5,6 +5,7 @@ import {
   ageSchema,
   avatarSchema,
   birthdaySchema,
+  contactNameSchema,
   customTraitsSchema,
   descriptionSchema,
   firstNameSchema,
@@ -19,7 +20,7 @@ import {
   createOrUpdateContact,
   getContactById,
 } from '@/services/serverSide/contact';
-import { externalIdSchema, nameSchema } from '@/lib/zod/common';
+import { externalIdSchema } from '@/lib/zod/common';
 import withAdminAuth from '@/middlewares/withAdminAuth';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 
@@ -41,7 +42,7 @@ const UpdateContactBody = z.object({
   description: descriptionSchema.optional(),
   firstName: firstNameSchema.optional(),
   lastName: lastNameSchema.optional(),
-  name: nameSchema.optional(),
+  name: contactNameSchema.optional(),
   gender: genderSchema.optional(),
   phone: phoneSchema.optional(),
   title: titleSchema.optional(),
