@@ -1,6 +1,6 @@
+import { getActivities, getContactById } from '@/services/serverSide/contact';
 import { handleApiError } from '@/helpers/errorHandler';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
-import { getActivities, getContactById } from '@/services/serverSide/contact';
 
 export const GET = withWorkspaceAuth(async (req, { contactId }) => {
   try {
