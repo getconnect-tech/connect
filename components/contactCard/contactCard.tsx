@@ -60,12 +60,19 @@ export default function ContactCard({
             )}
             {isCompany ? (
               <CompanyDiv>
-                {groupInfo?.map((group, index) => (
+                {groupInfo?.slice(0, 2).map((group, index) => (
                   <>
                     {!index && <DotIcon />}
                     <CompanyNameDiv key={group.id}>
                       <Avatar
-                        imgSrc={group.avatar || ''}
+                        imgSrc={
+                          group?.avatar
+                            ? group.avatar === 'undefined' ||
+                              group.avatar === 'null'
+                              ? ''
+                              : group.avatar
+                            : ''
+                        }
                         name={group.name}
                         size={20}
                         isShowBorder={true}

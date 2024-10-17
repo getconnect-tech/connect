@@ -8,7 +8,7 @@ import {
 import { TicketAnalysisSchema } from '@/lib/zod/ticket';
 
 const formatMessageData = (message: MessageSummary) => {
-  const displayName = message.author.display_name
+  const displayName = message.author?.display_name
     ? message.author.display_name +
       (message.type === MessageType.FROM_CONTACT ? ` [CONTACT]` : '')
     : 'Anonymous';

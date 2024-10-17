@@ -17,7 +17,7 @@ import WorkDetails from './workDetails';
 import RecentEvent from './recentEvent';
 import AIBlock from './aiBlock';
 import { useStores } from '@/stores';
-import { capitalizeString, formatTime, isEmpty } from '@/helpers/common';
+import { capitalizeString, isEmpty } from '@/helpers/common';
 import { ContactGroups } from '@/utils/dataTypes';
 import {
   getContactDetailById,
@@ -117,52 +117,56 @@ const ResponsiveProfileSection = () => {
       });
     }
 
-    if (contact?.custom_traits) {
-      Object.entries(contact.custom_traits).forEach(([key, value]) => {
-        if (value) {
-          // Convert the key to a human-readable label
-          const label = key
-            .replace(/([A-Z])/g, ' $1')
-            .replace(/^./, (str) => str.toUpperCase());
-          if (
-            typeof value === 'string' &&
-            (value.startsWith('https') || value.startsWith('http'))
-          ) {
-            contactArray.push({
-              label,
-              value: 'Link',
-              link: value,
-            });
-          } else if (!isNaN(new Date(value).getTime())) {
-            const formattedTime = formatTime(contact.created_at.toString());
-            contactArray.push({
-              label,
-              value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
-            });
-          } else {
-            contactArray.push({
-              label,
-              value: capitalizeString(value),
-            });
-          }
-        }
-      });
-    }
+    // For custom traits
+    // if (contact?.custom_traits) {
+    //   Object.entries(contact.custom_traits).forEach(([key, value]) => {
+    //     if (value) {
+    //       // Convert the key to a human-readable label
+    //       const label = key
+    //         .replace(/([A-Z])/g, ' $1')
+    //         .replace(/^./, (str) => str.toUpperCase());
+    //       if (
+    //         typeof value === 'string' &&
+    //         (value.startsWith('https') || value.startsWith('http'))
+    //       ) {
+    //         contactArray.push({
+    //           label,
+    //           value: 'Link',
+    //           link: value,
+    //         });
+    //       } else if (!isNaN(new Date(value).getTime())) {
+    //         const formattedTime = formatTime(contact.created_at.toString());
+    //         contactArray.push({
+    //           label,
+    //           value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
+    //         });
+    //       } else {
+    //         contactArray.push({
+    //           label,
+    //           value: capitalizeString(value),
+    //         });
+    //       }
+    //     }
+    //   });
+    // }
 
-    if (contact?.created_at) {
-      const formattedTime = formatTime(contact.created_at.toString());
-      contactArray.push({
-        label: 'Created',
-        value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
-      });
-    }
-    if (contact?.updated_at) {
-      const formattedTime = formatTime(contact.updated_at.toString());
-      contactArray.push({
-        label: 'Updated',
-        value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
-      });
-    }
+    // For created
+    // if (contact?.created_at) {
+    //   const formattedTime = formatTime(contact.created_at.toString());
+    //   contactArray.push({
+    //     label: 'Created',
+    //     value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
+    //   });
+    // }
+
+    // For updated
+    // if (contact?.updated_at) {
+    //   const formattedTime = formatTime(contact.updated_at.toString());
+    //   contactArray.push({
+    //     label: 'Updated',
+    //     value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
+    //   });
+    // }
     setDisplayContactInfo(contactArray);
   }, [contact]);
 

@@ -11,7 +11,7 @@ import {
 } from './styles';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { ContactGroups } from '@/utils/dataTypes';
-import { capitalizeString, formatTime } from '@/helpers/common';
+import { capitalizeString } from '@/helpers/common';
 
 interface Props {
   groupInfo: ContactGroups;
@@ -60,18 +60,21 @@ export default function WorkDetails({ groupInfo }: Props) {
       });
     }
 
-    if (groupInfo?.created_at) {
-      groupInfoArray.push({
-        label: 'Created',
-        value: `${formatTime(groupInfo.created_at.toString())} ago`,
-      });
-    }
-    if (groupInfo?.updated_at) {
-      groupInfoArray.push({
-        label: 'Updated',
-        value: `${formatTime(groupInfo.updated_at.toString())} ago`,
-      });
-    }
+    // For created
+    // if (groupInfo?.created_at) {
+    //   groupInfoArray.push({
+    //     label: 'Created',
+    //     value: `${formatTime(groupInfo.created_at.toString())} ago`,
+    //   });
+    // }
+
+    // For updated
+    // if (groupInfo?.updated_at) {
+    //   groupInfoArray.push({
+    //     label: 'Updated',
+    //     value: `${formatTime(groupInfo.updated_at.toString())} ago`,
+    //   });
+    // }
     setGroupInformation(groupInfoArray);
   }, [groupInfo]);
 
@@ -84,7 +87,14 @@ export default function WorkDetails({ groupInfo }: Props) {
       <TitleDiv onClick={toggleDetails}>
         <NameDiv>
           <Avatar
-            imgSrc={groupInfo?.avatar || ''}
+            imgSrc={
+              groupInfo?.avatar
+                ? groupInfo.avatar === 'undefined' ||
+                  groupInfo.avatar === 'null'
+                  ? ''
+                  : groupInfo.avatar
+                : ''
+            }
             name={groupInfo?.name || ''}
             size={20}
             isShowBorder={true}

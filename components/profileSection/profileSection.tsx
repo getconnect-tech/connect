@@ -18,7 +18,7 @@ import WorkDetails from './workDetails';
 import RecentEvent from './recentEvent';
 import AIBlock from './aiBlock';
 import { useStores } from '@/stores';
-import { capitalizeString, formatTime, isEmpty } from '@/helpers/common';
+import { capitalizeString, isEmpty } from '@/helpers/common';
 import {
   getContactDetailById,
   getContactGroups,
@@ -133,54 +133,58 @@ const ProfileSection = () => {
       });
     }
 
-    if (contactDetails?.custom_traits) {
-      Object.entries(contactDetails.custom_traits).forEach(([key, value]) => {
-        if (value) {
-          // Convert the key to a human-readable label
-          const label = key
-            .replace(/([A-Z])/g, ' $1')
-            .replace(/^./, (str) => str.toUpperCase());
-          if (
-            typeof value === 'string' &&
-            (value.startsWith('https') || value.startsWith('http'))
-          ) {
-            contactArray.push({
-              label,
-              value: 'Click Here',
-              link: value,
-            });
-          } else if (!isNaN(new Date(value).getTime())) {
-            const formattedTime = formatTime(
-              contactDetails.created_at.toString(),
-            );
-            contactArray.push({
-              label,
-              value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
-            });
-          } else {
-            contactArray.push({
-              label,
-              value: capitalizeString(value),
-            });
-          }
-        }
-      });
-    }
+    // For custom traits
+    // if (contactDetails?.custom_traits) {
+    //   Object.entries(contactDetails.custom_traits).forEach(([key, value]) => {
+    //     if (value) {
+    //       // Convert the key to a human-readable label
+    //       const label = key
+    //         .replace(/([A-Z])/g, ' $1')
+    //         .replace(/^./, (str) => str.toUpperCase());
+    //       if (
+    //         typeof value === 'string' &&
+    //         (value.startsWith('https') || value.startsWith('http'))
+    //       ) {
+    //         contactArray.push({
+    //           label,
+    //           value: 'Click Here',
+    //           link: value,
+    //         });
+    //       } else if (!isNaN(new Date(value).getTime())) {
+    //         const formattedTime = formatTime(
+    //           contactDetails.created_at.toString(),
+    //         );
+    //         contactArray.push({
+    //           label,
+    //           value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
+    //         });
+    //       } else {
+    //         contactArray.push({
+    //           label,
+    //           value: capitalizeString(value),
+    //         });
+    //       }
+    //     }
+    //   });
+    // }
 
-    if (contactDetails?.created_at) {
-      const formattedTime = formatTime(contactDetails.created_at.toString());
-      contactArray.push({
-        label: 'Created',
-        value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
-      });
-    }
-    if (contactDetails?.updated_at) {
-      const formattedTime = formatTime(contactDetails.updated_at.toString());
-      contactArray.push({
-        label: 'Updated',
-        value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
-      });
-    }
+    // For created
+    // if (contactDetails?.created_at) {
+    //   const formattedTime = formatTime(contactDetails.created_at.toString());
+    //   contactArray.push({
+    //     label: 'Created',
+    //     value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
+    //   });
+    // }
+
+    // // For updated
+    // if (contactDetails?.updated_at) {
+    //   const formattedTime = formatTime(contactDetails.updated_at.toString());
+    //   contactArray.push({
+    //     label: 'Updated',
+    //     value: formattedTime === 'Now' ? 'Now' : `${formattedTime} ago`,
+    //   });
+    // }
     setDisplayContactInfo(contactArray);
   }, [contactDetails]);
 
@@ -208,7 +212,8 @@ const ProfileSection = () => {
     try {
       if (contact_id) {
         await refreshContact(contact_id);
-        await getContactGroups(contact_id);
+        const data = await getContactGroups(contact_id);
+        setWorkInfo(data);
       }
     } catch (error) {
       console.error('Error refreshing data:', error);
