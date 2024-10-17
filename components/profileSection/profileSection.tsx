@@ -212,7 +212,8 @@ const ProfileSection = () => {
     try {
       if (contact_id) {
         await refreshContact(contact_id);
-        await getContactGroups(contact_id);
+        const data = await getContactGroups(contact_id);
+        setWorkInfo(data);
       }
     } catch (error) {
       console.error('Error refreshing data:', error);
