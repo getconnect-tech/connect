@@ -60,7 +60,7 @@ export default function ContactCard({
             )}
             {isCompany ? (
               <CompanyDiv>
-                {groupInfo?.map((group, index) => (
+                {groupInfo?.slice(0, 2).map((group, index) => (
                   <>
                     {!index && <DotIcon />}
                     <CompanyNameDiv key={group.id}>
