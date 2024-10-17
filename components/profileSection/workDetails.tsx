@@ -87,7 +87,14 @@ export default function WorkDetails({ groupInfo }: Props) {
       <TitleDiv onClick={toggleDetails}>
         <NameDiv>
           <Avatar
-            imgSrc={groupInfo?.avatar || ''}
+            imgSrc={
+              groupInfo?.avatar
+                ? groupInfo.avatar === 'undefined' ||
+                  groupInfo.avatar === 'null'
+                  ? ''
+                  : groupInfo.avatar
+                : ''
+            }
             name={groupInfo?.name || ''}
             size={20}
             isShowBorder={true}
