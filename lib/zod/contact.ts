@@ -70,12 +70,9 @@ export const genderSchema = z.nativeEnum(GENDER, {
   invalid_type_error: "'gender' must be a valid enum value!",
 });
 
-export const phoneSchema = z
-  .string({
-    invalid_type_error: "'phone' must be of type string!",
-  })
-  .min(10, { message: "'phone' must have at least 10 characters!" })
-  .max(15, { message: "'phone' must have at most 15 characters!" });
+export const phoneSchema = z.string({
+  invalid_type_error: "'phone' must be of type string!",
+});
 
 export const titleSchema = z.string({
   invalid_type_error: "'title' must be of type string!",
