@@ -1,13 +1,13 @@
 import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
-import { externalIdSchema, nameSchema } from '@/lib/zod/common';
-import { groupLabelSchema } from '@/lib/zod/group';
+import { externalIdSchema } from '@/lib/zod/common';
+import { groupLabelSchema, groupNameSchema } from '@/lib/zod/group';
 import { avatarSchema, customTraitsSchema } from '@/lib/zod/contact';
 import { updateGroup } from '@/services/serverSide/group';
 import withAdminAuth from '@/middlewares/withAdminAuth';
 
 const UpdateGroupBody = z.object({
-  name: nameSchema.optional(),
+  name: groupNameSchema.optional(),
   groupLabel: groupLabelSchema.optional(),
   customTraits: customTraitsSchema.optional(),
   externalId: externalIdSchema.optional(),

@@ -44,11 +44,9 @@ export const ageSchema = z
   })
   .gt(1, { message: "'age' must be greater than 1!" });
 
-export const avatarSchema = z
-  .string({
-    invalid_type_error: "'avatar' must be of type string!",
-  })
-  .url({ message: "'avatar' must be a valid URL!" });
+export const avatarSchema = z.string({
+  invalid_type_error: "'avatar' must be of type string!",
+});
 
 export const birthdaySchema = z
   .string({

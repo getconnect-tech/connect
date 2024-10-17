@@ -54,20 +54,51 @@ export const createGroup = async (
   {
     name,
     groupLabel,
+    avatar,
     customTraits,
+    externalId,
   }: {
     name: string;
     groupLabel: string;
     customTraits?: Record<string, string>;
     avatar?: string;
+    externalId?: string;
   },
 ) => {
+  if (externalId) {
+    const newGroup = await prisma.group.upsert({
+      where: {
+        external_group_id: {
+          workspace_id: workspaceId,
+          group_id: externalId,
+        },
+      },
+      create: {
+        name,
+        avatar,
+        traits: customTraits,
+        group_label: groupLabel,
+        group_id: externalId,
+        workspace_id: workspaceId,
+      },
+      update: {
+        name,
+        avatar,
+        traits: customTraits,
+        group_label: groupLabel,
+      },
+    });
+
+    return newGroup;
+  }
+
   const newGroup = await prisma.group.create({
     data: {
-      workspace_id: workspaceId,
       name,
+      avatar,
       group_label: groupLabel,
       traits: customTraits,
+      workspace_id: workspaceId,
     },
   });
 
@@ -107,6 +138,7 @@ export const addContactsToGroup = async (
   }));
   const relation = await prisma.contactGroup.createMany({
     data: payload,
+    skipDuplicates: true,
   });
 
   return relation;
