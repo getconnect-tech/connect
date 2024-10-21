@@ -13,6 +13,7 @@ import {
   Schema,
   DOMParser as ProseMirrorDOMParser,
   DOMSerializer,
+  MarkType,
 } from 'prosemirror-model';
 import { schema } from 'prosemirror-schema-basic';
 import { addListNodes } from 'prosemirror-schema-list';
@@ -68,6 +69,27 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
           return ['u', 0];
         },
       },
+      link: {
+        attrs: {
+          href: {},
+          title: { default: null },
+        },
+        inclusive: false,
+        parseDOM: [
+          {
+            tag: 'a[href]',
+            getAttrs(dom: any) {
+              return {
+                href: dom.getAttribute('href'),
+                title: dom.getAttribute('title'),
+              };
+            },
+          },
+        ],
+        toDOM(node) {
+          return ['a', { href: node.attrs.href, title: node.attrs.title }, 0];
+        },
+      },
     }),
   });
 
@@ -85,20 +107,29 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
   };
 
   // Add your link command logic here
-  const setLink = (href: string) => (state: any, dispatch: any) => {
-    const { schema } = state;
-    const { from, to } = state.selection;
+  function setLink(url: string) {
+    // eslint-disable-next-line no-unused-vars
+    return (state: EditorState, dispatch: (tr: Transaction) => void) => {
+      const { schema, selection } = state;
+      const { from, to } = selection;
 
-    if (!href) {
-      return false;
-    }
+      // Get the link mark type from the schema
+      const linkMark: MarkType = schema.marks.link;
 
-    const markType = schema.marks.link;
-    if (dispatch) {
-      dispatch(state.tr.addMark(from, to, markType.create({ href })));
-    }
-    return true;
-  };
+      if (selection.empty) {
+        // If no text is selected, do nothing or show an alert
+        return false;
+      }
+
+      if (dispatch) {
+        // Apply the link mark with the provided URL
+        const tr = state.tr.addMark(from, to, linkMark.create({ href: url }));
+        dispatch(tr);
+      }
+
+      return true;
+    };
+  }
 
   // Remove bullet list command (converts to paragraph)
   // const removeBulletList = (state: any, dispatch: any) => {
@@ -216,7 +247,12 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
         // { label: ' ', command: removeBulletList },
         {
           label: '',
-          command: () => setLink('https://example.com'),
+          command: () => {
+            const url = prompt('Enter the URL');
+            if (url) {
+              setLink(url)(view.state, view.dispatch);
+            }
+          },
           icon: 'link-icon',
         },
         {
