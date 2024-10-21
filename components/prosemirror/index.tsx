@@ -431,7 +431,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
       ).documentElement,
     );
 
-    const plugins = [placeholderPlugin];
+    const plugins = [placeholderPlugin, selectionSizePlugin];
     if (mentionPlugin) {
       plugins.push(mentionPlugin);
     }
