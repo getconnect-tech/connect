@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import {
   forwardRef,
   useCallback,
@@ -17,6 +18,7 @@ import { addListNodes } from 'prosemirror-schema-list';
 import { exampleSetup } from 'prosemirror-example-setup';
 import { mentionNode, getMentionsPlugin } from 'prosemirror-mentions';
 import ReactDOMServer from 'react-dom/server';
+import { toggleMark, setBlockType, wrapIn, lift } from 'prosemirror-commands';
 import Avatar from '../avtar/Avtar';
 import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { workspaceStore } from '@/stores/workspaceStore';
@@ -34,6 +36,12 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
+  const mySchema = new Schema({
+    nodes: addListNodes(schema.spec.nodes, 'paragraph block*', 'block').append({
+      mention: mentionNode,
+    }), // Add mention node
+    marks: schema.spec.marks,
+  });
 
   const placeholderPluginKey = new PluginKey('placeholderPlugin');
 
@@ -47,6 +55,153 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
     div.appendChild(fragment);
     return div.innerHTML;
   };
+
+  // Add your link command logic here
+  const setLink = (href: string) => (state: any, dispatch: any) => {
+    const { schema } = state;
+    const { from, to } = state.selection;
+
+    if (!href) {
+      return false;
+    }
+
+    const markType = schema.marks.link;
+    if (dispatch) {
+      dispatch(state.tr.addMark(from, to, markType.create({ href })));
+    }
+    return true;
+  };
+
+  // Remove bullet list command (converts to paragraph)
+  const removeBulletList = (state: any, dispatch: any) => {
+    return lift(state, dispatch);
+  };
+
+  class SelectionMenuBar {
+    menu: HTMLDivElement;
+
+    constructor(view: EditorView) {
+      this.menu = document.createElement('div');
+      this.menu.className = 'selection-menu-bar';
+      this.menu.style.position = 'absolute';
+      this.menu.style.display = 'none'; // Initially hidden
+      view.dom.parentNode?.appendChild(this.menu);
+
+      // Add buttons for formatting actions
+      this.addMenuItems(view);
+    }
+
+    addMenuItems(view: EditorView) {
+      const menuItems = [
+        { label: 'Bold', command: toggleMark(mySchema.marks.strong) },
+        { label: 'Italic', command: toggleMark(mySchema.marks.em) },
+        {
+          label: 'H1',
+          command: setBlockType(mySchema.nodes.heading, { level: 1 }),
+        },
+        {
+          label: 'H2',
+          command: setBlockType(mySchema.nodes.heading, { level: 2 }),
+        },
+        { label: 'Bullet List', command: wrapIn(mySchema.nodes.bullet_list) },
+        {
+          label: 'Ordered List',
+          command: wrapIn(mySchema.nodes.ordered_list),
+        },
+        { label: 'Remove Bullet List', command: removeBulletList },
+        { label: 'Link', command: () => setLink('https://example.com') },
+        { label: 'Blockquote', command: wrapIn(mySchema.nodes.blockquote) },
+        { label: 'Code Block', command: toggleMark(mySchema.marks.code) },
+        {
+          label: 'Heading',
+          submenu: [
+            {
+              label: 'H1',
+              command: setBlockType(mySchema.nodes.heading, { level: 1 }),
+            },
+            {
+              label: 'H2',
+              command: setBlockType(mySchema.nodes.heading, { level: 2 }),
+            },
+            {
+              label: 'H3',
+              command: setBlockType(mySchema.nodes.heading, { level: 3 }),
+            },
+          ],
+        },
+      ];
+
+      menuItems.forEach((item) => {
+        const button = document.createElement('button');
+        button.textContent = item.label;
+
+        if (item.submenu) {
+          // Create dropdown for heading options
+          const dropdown = document.createElement('div');
+          dropdown.className = 'dropdown';
+          button.appendChild(dropdown);
+
+          // Add submenu items for heading levels
+          item.submenu.forEach((subitem) => {
+            const subButton = document.createElement('button');
+            subButton.textContent = subitem.label;
+            subButton.onclick = () => {
+              const { state, dispatch } = view;
+              if (subitem.command) {
+                subitem.command(state, dispatch); // Pass state and dispatch here
+              }
+            };
+            dropdown.appendChild(subButton);
+          });
+
+          button.onmouseover = () => {
+            dropdown.style.display = 'block';
+          };
+          button.onmouseout = () => {
+            dropdown.style.display = 'none';
+          };
+        } else {
+          // Regular button (without submenu)
+          button.onclick = () => {
+            const { state, dispatch } = view;
+            if (item.command) {
+              item.command(state, dispatch); // Pass state and dispatch here
+            }
+          };
+        }
+
+        this.menu.appendChild(button);
+      });
+    }
+
+    update(view: EditorView) {
+      const { state } = view;
+      const { from, to } = state.selection;
+
+      if (state.selection.empty) {
+        this.menu.style.display = 'none';
+        return;
+      }
+
+      this.menu.style.display = '';
+      const start = view.coordsAtPos(from);
+      const end = view.coordsAtPos(to);
+      const box = this.menu.offsetParent!.getBoundingClientRect();
+      const left = Math.max((start.left + end.left) / 2, start.left + 3);
+      this.menu.style.left = `${left - box.left}px`;
+      this.menu.style.top = `${start.top - box.top - this.menu.offsetHeight - 5}px`;
+    }
+
+    destroy() {
+      this.menu.remove();
+    }
+  }
+
+  const selectionSizePlugin = new Plugin({
+    view(editorView) {
+      return new SelectionMenuBar(editorView);
+    },
+  });
 
   // eslint-disable-next-line prefer-const
   let placeholderPlugin = new Plugin({
@@ -141,16 +296,6 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
   useEffect(() => {
     if (!editorRef.current || !contentRef.current) return;
 
-    // Define schema with list nodes
-    const mySchema = new Schema({
-      nodes: addListNodes(
-        schema.spec.nodes,
-        'paragraph block*',
-        'block',
-      ).append({ mention: mentionNode }), // Add mention node
-      marks: schema.spec.marks,
-    });
-
     const getMentionSuggestionsHTML = (items: any[]) => {
       return ReactDOMServer.renderToString(
         <div className='suggestion-item-list'>
@@ -206,7 +351,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
 
     const state = EditorState.create({
       doc,
-      plugins: [mentionPlugin, placeholderPlugin].concat(
+      plugins: [mentionPlugin, placeholderPlugin, selectionSizePlugin].concat(
         exampleSetup({ schema: mySchema, menuBar: false }),
       ),
     });
