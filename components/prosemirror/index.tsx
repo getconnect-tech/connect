@@ -19,7 +19,7 @@ import { addListNodes } from 'prosemirror-schema-list';
 import { exampleSetup } from 'prosemirror-example-setup';
 import { mentionNode, getMentionsPlugin } from 'prosemirror-mentions';
 import ReactDOMServer from 'react-dom/server';
-import { toggleMark, setBlockType, wrapIn, lift } from 'prosemirror-commands';
+import { toggleMark, setBlockType, wrapIn } from 'prosemirror-commands';
 import ReactDOM from 'react-dom';
 import Avatar from '../avtar/Avtar';
 import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
@@ -32,10 +32,16 @@ interface Props {
   setValueContent: (value: string) => void;
   className?: string;
   placeholder?: string;
+  isInternalDiscussion?: boolean;
 }
 
 const ProsemirrorEditor = forwardRef((props: Props, ref) => {
-  const { valueContent, setValueContent, placeholder = '' } = props;
+  const {
+    valueContent,
+    setValueContent,
+    placeholder = '',
+    isInternalDiscussion = false,
+  } = props;
   const editorRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
@@ -383,37 +389,39 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
       );
     };
 
-    const mentionPlugin = getMentionsPlugin({
-      mentionTrigger: '@',
-      getSuggestions: (
-        type: string,
-        text: string,
-        // eslint-disable-next-line no-unused-vars
-        done: (items: any[]) => void,
-      ) => {
-        if (type === 'mention') {
-          const users = workspaceStore?.currentWorkspace?.users?.map(
-            (user) => ({
-              ...user,
-              name: user?.display_name,
-              profile_url: user?.profile_url,
-            }),
-          );
-          if (isEmpty(text)) done(users || []);
-          else {
-            const filteredUsers = users?.filter((user: any) =>
-              user?.name?.toLowerCase().includes(text.toLowerCase()),
-            );
-            done(filteredUsers || []);
-          }
-        }
-      },
-      getSuggestionsHTML: (items: any, type: any) => {
-        if (type === 'mention') {
-          return getMentionSuggestionsHTML(items);
-        }
-      },
-    });
+    const mentionPlugin = isInternalDiscussion
+      ? getMentionsPlugin({
+          mentionTrigger: '@',
+          getSuggestions: (
+            type: string,
+            text: string,
+            // eslint-disable-next-line no-unused-vars
+            done: (items: any[]) => void,
+          ) => {
+            if (type === 'mention') {
+              const users = workspaceStore?.currentWorkspace?.users?.map(
+                (user) => ({
+                  ...user,
+                  name: user?.display_name,
+                  profile_url: user?.profile_url,
+                }),
+              );
+              if (isEmpty(text)) done(users || []);
+              else {
+                const filteredUsers = users?.filter((user: any) =>
+                  user?.name?.toLowerCase().includes(text.toLowerCase()),
+                );
+                done(filteredUsers || []);
+              }
+            }
+          },
+          getSuggestionsHTML: (items: any, type: any) => {
+            if (type === 'mention') {
+              return getMentionSuggestionsHTML(items);
+            }
+          },
+        })
+      : null;
 
     const parser = new DOMParser();
     const doc = ProseMirrorDOMParser.fromSchema(mySchema).parse(
@@ -423,11 +431,23 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
       ).documentElement,
     );
 
+    const plugins = [placeholderPlugin];
+    if (mentionPlugin) {
+      plugins.push(mentionPlugin);
+    }
+
     const state = EditorState.create({
       doc,
-      plugins: [mentionPlugin, placeholderPlugin, selectionSizePlugin].concat(
-        exampleSetup({ schema: mySchema, menuBar: false }),
-      ),
+      // plugins: plugins.concat(
+      //   exampleSetup({ schema: mySchema, menuBar: false }),
+      // ),
+      plugins: [
+        ...(plugins as Plugin<any>[]), // Type cast to ensure correct type compatibility
+        ...(exampleSetup({
+          schema: mySchema,
+          menuBar: false,
+        }) as Plugin<any>[]), // Ensure the types align
+      ],
     });
 
     const view = new EditorView(editorRef.current, {
@@ -459,7 +479,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
     return () => {
       view.destroy();
     };
-  }, []);
+  }, [isInternalDiscussion]);
 
   useImperativeHandle(ref, () => ({
     clearEditor() {
