@@ -621,7 +621,6 @@ img.ProseMirror-separator {
   margin-bottom: 0;
 }
 
-
 .ProseMirror {
   line-height: 1.2;
   outline: none;
@@ -689,4 +688,38 @@ img.ProseMirror-separator {
   width: 20px;
   height: 20px;
   border-radius: 50%;
+}
+.selection-menu-bar {
+  display: flex;
+  background-color: var(--bg-white);
+  padding: 8px;
+  gap: 8px;
+  border: 1px solid var(--border);
+  align-items: center;
+  border-radius: 80px;
+}
+.menu-item {
+  position: relative;
+  border: unset;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px;
+  background-color: transparent;
+  justify-content: center;
+  &:hover {
+    border-radius: 50px;
+    background-color: var(--bg-surface-hover);
+  }
+}
+.dropdown {
+  display: block;
+  position: absolute;
+  background-color: var(--bg-white);
+  top: unset !important;
+  left: 0;
+  bottom: 30px;
+}
+.hidden {
+  display: none;
 }

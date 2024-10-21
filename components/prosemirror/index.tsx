@@ -1,5 +1,6 @@
+/* eslint-disable max-len */
 /* eslint-disable no-undef */
-import {
+import React, {
   forwardRef,
   useCallback,
   useEffect,
@@ -19,9 +20,11 @@ import { exampleSetup } from 'prosemirror-example-setup';
 import { mentionNode, getMentionsPlugin } from 'prosemirror-mentions';
 import ReactDOMServer from 'react-dom/server';
 import { toggleMark, setBlockType, wrapIn, lift } from 'prosemirror-commands';
+import ReactDOM from 'react-dom';
 import Avatar from '../avtar/Avtar';
 import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { workspaceStore } from '@/stores/workspaceStore';
+import SVGIcon from '@/assets/icons/SVGIcon';
 
 interface Props {
   valueContent?: string;
@@ -73,9 +76,9 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
   };
 
   // Remove bullet list command (converts to paragraph)
-  const removeBulletList = (state: any, dispatch: any) => {
-    return lift(state, dispatch);
-  };
+  // const removeBulletList = (state: any, dispatch: any) => {
+  //   return lift(state, dispatch);
+  // };
 
   class SelectionMenuBar {
     menu: HTMLDivElement;
@@ -93,57 +96,125 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
 
     addMenuItems(view: EditorView) {
       const menuItems = [
-        { label: 'Bold', command: toggleMark(mySchema.marks.strong) },
-        { label: 'Italic', command: toggleMark(mySchema.marks.em) },
         {
-          label: 'H1',
-          command: setBlockType(mySchema.nodes.heading, { level: 1 }),
-        },
-        {
-          label: 'H2',
-          command: setBlockType(mySchema.nodes.heading, { level: 2 }),
-        },
-        { label: 'Bullet List', command: wrapIn(mySchema.nodes.bullet_list) },
-        {
-          label: 'Ordered List',
-          command: wrapIn(mySchema.nodes.ordered_list),
-        },
-        { label: 'Remove Bullet List', command: removeBulletList },
-        { label: 'Link', command: () => setLink('https://example.com') },
-        { label: 'Blockquote', command: wrapIn(mySchema.nodes.blockquote) },
-        { label: 'Code Block', command: toggleMark(mySchema.marks.code) },
-        {
-          label: 'Heading',
+          label: '',
+          icon: 'Heading-icon',
           submenu: [
             {
-              label: 'H1',
+              label: 'Huge',
               command: setBlockType(mySchema.nodes.heading, { level: 1 }),
             },
             {
-              label: 'H2',
+              label: 'Large',
               command: setBlockType(mySchema.nodes.heading, { level: 2 }),
             },
             {
-              label: 'H3',
+              label: 'normal',
               command: setBlockType(mySchema.nodes.heading, { level: 3 }),
             },
+            {
+              label: 'Small',
+              command: setBlockType(mySchema.nodes.heading, { level: 4 }),
+            },
           ],
+        },
+        {
+          label: ``,
+          command: toggleMark(mySchema.marks.strong),
+          icon: 'bold-icon',
+        },
+        {
+          label: ' ',
+          command: toggleMark(mySchema.marks.em),
+          icon: 'italic-icon',
+        },
+        // {
+        //   label: 'H1',
+        //   command: setBlockType(mySchema.nodes.heading, { level: 1 }),
+        // },
+        // {
+        //   label: 'H2',
+        //   command: setBlockType(mySchema.nodes.heading, { level: 2 }),
+        // },
+        // {
+        //   label: 'Ordered List',
+        //   command: wrapIn(mySchema.nodes.ordered_list),
+        //   icon: 'bullet-list-icon',
+        // },
+        // { label: ' ', command: removeBulletList },
+        {
+          label: '',
+          command: () => setLink('https://example.com'),
+          icon: 'link-icon',
+        },
+        {
+          label: '',
+          command: wrapIn(mySchema.nodes.blockquote),
+          icon: 'blockquote-icon',
+        },
+        {
+          label: '',
+          command: toggleMark(mySchema.marks.code),
+          icon: 'code-block-icon',
         },
       ];
 
       menuItems.forEach((item) => {
-        const button = document.createElement('button');
-        button.textContent = item.label;
+        // Create a div for the menu item
+        const menuItem = document.createElement('div');
+        menuItem.className = 'menu-item'; // You can add your styles here
+
+        // Create a container for the SVG icon
+        const iconContainer = document.createElement('div');
+
+        // Render the SVGIcon to the container
+        ReactDOM.render(
+          <SVGIcon
+            name={item.icon}
+            width='12'
+            height='12'
+            viewBox='0 0 12 12'
+          />,
+          iconContainer,
+        );
+
+        // Set the button label
+        const labelElement = document.createElement('span');
+        labelElement.textContent = item.label;
+
+        // Append the icon and label to the menu item div
+        menuItem.appendChild(iconContainer);
+        menuItem.appendChild(labelElement);
 
         if (item.submenu) {
           // Create dropdown for heading options
           const dropdown = document.createElement('div');
-          dropdown.className = 'dropdown';
-          button.appendChild(dropdown);
+          dropdown.className = 'dropdown hidden'; // Use hidden class to initially hide the dropdown
+
+          // Append dropdown to menuItem (important for hover visibility)
+          menuItem.appendChild(dropdown);
+
+          // Create a container for the dropdown icon
+          const dropdownIconContainer = document.createElement('div');
+          dropdownIconContainer.className = 'dropdown-icon'; // Add class for dropdown icon
+
+          // Render the SVGIcon to the dropdownIconContainer
+          ReactDOM.render(
+            <SVGIcon
+              name={'dropdown-icon'}
+              width='8'
+              height='8'
+              viewBox='0 0 8 8'
+            />,
+            dropdownIconContainer,
+          );
+
+          // Append the dropdown icon container to the menu item
+          menuItem.appendChild(dropdownIconContainer);
 
           // Add submenu items for heading levels
           item.submenu.forEach((subitem) => {
-            const subButton = document.createElement('button');
+            const subButton = document.createElement('div');
             subButton.textContent = subitem.label;
             subButton.onclick = () => {
               const { state, dispatch } = view;
@@ -154,15 +225,18 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
             dropdown.appendChild(subButton);
           });
 
-          button.onmouseover = () => {
-            dropdown.style.display = 'block';
+          // Show/Hide dropdown on hover
+          menuItem.onmouseover = () => {
+            dropdown.classList.remove('hidden');
+            dropdown.classList.add('visible');
           };
-          button.onmouseout = () => {
-            dropdown.style.display = 'none';
+          menuItem.onmouseout = () => {
+            dropdown.classList.remove('visible');
+            dropdown.classList.add('hidden');
           };
         } else {
           // Regular button (without submenu)
-          button.onclick = () => {
+          menuItem.onclick = () => {
             const { state, dispatch } = view;
             if (item.command) {
               item.command(state, dispatch); // Pass state and dispatch here
@@ -170,7 +244,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
           };
         }
 
-        this.menu.appendChild(button);
+        this.menu.appendChild(menuItem);
       });
     }
 
