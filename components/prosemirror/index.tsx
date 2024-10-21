@@ -7,7 +7,7 @@ import React, {
   useImperativeHandle,
   useRef,
 } from 'react';
-import { EditorState, Plugin, PluginKey } from 'prosemirror-state';
+import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state';
 import { EditorView, Decoration, DecorationSet } from 'prosemirror-view';
 import {
   Schema,
@@ -45,11 +45,30 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
+
   const mySchema = new Schema({
     nodes: addListNodes(schema.spec.nodes, 'paragraph block*', 'block').append({
       mention: mentionNode,
     }), // Add mention node
-    marks: schema.spec.marks,
+    // marks: schema.spec.marks,
+    marks: schema.spec.marks.append({
+      strikethrough: {
+        parseDOM: [
+          { tag: 's' },
+          { tag: 'strike' },
+          { style: 'text-decoration=line-through' },
+        ],
+        toDOM() {
+          return ['s', 0];
+        },
+      },
+      underline: {
+        parseDOM: [{ tag: 'u' }, { style: 'text-decoration=underline' }],
+        toDOM() {
+          return ['u', 0];
+        },
+      },
+    }),
   });
 
   const placeholderPluginKey = new PluginKey('placeholderPlugin');
@@ -86,6 +105,32 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
   //   return lift(state, dispatch);
   // };
 
+  function clearAllFormatting(
+    state: EditorState,
+    // eslint-disable-next-line no-unused-vars
+    dispatch: (tr: Transaction) => void,
+  ) {
+    const { from, to } = state.selection;
+    const tr = state.tr;
+
+    // Remove all marks
+    Object.keys(state.schema.marks).forEach((markName) => {
+      const markType = state.schema.marks[markName];
+      tr.removeMark(from, to, markType);
+    });
+
+    // Convert the block type to a paragraph
+    const paragraphNode = state.schema.nodes.paragraph;
+    if (paragraphNode) {
+      tr.setBlockType(from, to, paragraphNode);
+    }
+
+    if (dispatch) {
+      dispatch(tr);
+    }
+    return true;
+  }
+
   class SelectionMenuBar {
     menu: HTMLDivElement;
 
@@ -98,6 +143,17 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
 
       // Add buttons for formatting actions
       this.addMenuItems(view);
+    }
+
+    isInBulletList(state: EditorState) {
+      const { $from } = state.selection;
+      for (let i = $from.depth; i > 0; i--) {
+        const node = $from.node(i);
+        if (node.type === state.schema.nodes.bullet_list) {
+          return true; // The selection is inside a bullet list
+        }
+      }
+      return false;
     }
 
     addMenuItems(view: EditorView) {
@@ -134,6 +190,16 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
           command: toggleMark(mySchema.marks.em),
           icon: 'italic-icon',
         },
+        {
+          label: '',
+          command: toggleMark(mySchema.marks.underline), // Ensure underline mark is referenced correctly
+          icon: 'underline-icon', // Replace with the actual icon for underline
+        },
+        {
+          label: 'Strikethrough',
+          command: toggleMark(mySchema.marks.strikethrough),
+          icon: 'strikethrough-icon', // Add the correct strikethrough icon here
+        },
         // {
         //   label: 'H1',
         //   command: setBlockType(mySchema.nodes.heading, { level: 1 }),
@@ -162,6 +228,16 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
           label: '',
           command: toggleMark(mySchema.marks.code),
           icon: 'code-block-icon',
+        },
+        { label: 'Bullet List', command: wrapIn(mySchema.nodes.bullet_list) },
+        {
+          label: 'Ordered List',
+          command: wrapIn(mySchema.nodes.ordered_list),
+        },
+        {
+          label: 'Clear Formatting',
+          command: clearAllFormatting,
+          icon: 'clear-format-icon',
         },
       ];
 
