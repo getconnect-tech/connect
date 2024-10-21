@@ -947,9 +947,11 @@ function TicketDetails(props: Props) {
                 <Input modeSelectedItem={modeSelectedItem}>
                   <ProsemirrorEditor
                     ref={editorRef}
+                    valueContent={commentValue}
                     setValueContent={setCommentValue}
                     placeholder='Write a message'
                     className='prosemirror-commentbox'
+                    isInternalDiscussion={modeSelectedItem.name !== 'Email'}
                   />
                   <div className='attach-file-div'>
                     {/* Attached Files render */}
