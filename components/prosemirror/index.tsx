@@ -202,7 +202,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
               command: setBlockType(mySchema.nodes.heading, { level: 2 }),
             },
             {
-              label: 'normal',
+              label: 'Normal',
               command: setBlockType(mySchema.nodes.heading, { level: 3 }),
             },
             {
@@ -240,10 +240,6 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
         //   command: setBlockType(mySchema.nodes.heading, { level: 2 }),
         // },
         // {
-        //   label: 'Ordered List',
-        //   command: wrapIn(mySchema.nodes.ordered_list),
-        //   icon: 'bullet-list-icon',
-        // },
         // { label: ' ', command: removeBulletList },
         {
           label: '',
@@ -265,11 +261,16 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
           command: toggleMark(mySchema.marks.code),
           icon: 'code-block-icon',
         },
-        { label: 'Bullet List', command: wrapIn(mySchema.nodes.bullet_list) },
         {
-          label: 'Ordered List',
-          command: wrapIn(mySchema.nodes.ordered_list),
+          label: '',
+          command: () => setLink('https://example.com'),
+          icon: 'link-icon',
         },
+        { label: 'Bullet List', command: wrapIn(mySchema.nodes.bullet_list) },
+        // {
+        //   label: 'Ordered List',
+        //   command: wrapIn(mySchema.nodes.ordered_list),
+        // },
         {
           label: 'Clear Formatting',
           command: clearAllFormatting,

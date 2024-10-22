@@ -696,9 +696,10 @@ img.ProseMirror-separator {
   gap: 8px;
   border: 1px solid var(--border);
   align-items: center;
-  border-radius: 80px;
+  border-radius: 30px;
 }
 .menu-item {
+  cursor: pointer;
   position: relative;
   border: unset;
   display: flex;
@@ -707,18 +708,35 @@ img.ProseMirror-separator {
   padding: 6px;
   background-color: transparent;
   justify-content: center;
+
   &:hover {
-    border-radius: 50px;
+    border-radius: 30px;
     background-color: var(--bg-surface-hover);
   }
 }
 .dropdown {
+  cursor: pointer;
   display: block;
   position: absolute;
+  max-width: 116px;
+  width: 100%;
+  min-width: 116px;
   background-color: var(--bg-white);
+  box-shadow: var(--shadow-dropdown);
+  color: var(--text-text-secondary);
+  border-radius: 12px;
   top: unset !important;
   left: 0;
   bottom: 30px;
+  padding: 4px;
+  div {
+    padding: 4px 8px;
+  }
+  :hover {
+    background-color: var(--bg-white-hover);
+    color: var(--text);
+    border-radius: 6px;
+  }
 }
 .hidden {
   display: none;
