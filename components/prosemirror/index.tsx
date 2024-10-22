@@ -1,25 +1,31 @@
-import {
+/* eslint-disable max-len */
+/* eslint-disable no-undef */
+import React, {
   forwardRef,
   useCallback,
   useEffect,
   useImperativeHandle,
   useRef,
 } from 'react';
-import { EditorState, Plugin, PluginKey } from 'prosemirror-state';
+import { EditorState, Plugin, PluginKey, Transaction } from 'prosemirror-state';
 import { EditorView, Decoration, DecorationSet } from 'prosemirror-view';
 import {
   Schema,
   DOMParser as ProseMirrorDOMParser,
   DOMSerializer,
+  MarkType,
 } from 'prosemirror-model';
 import { schema } from 'prosemirror-schema-basic';
 import { addListNodes } from 'prosemirror-schema-list';
 import { exampleSetup } from 'prosemirror-example-setup';
 import { mentionNode, getMentionsPlugin } from 'prosemirror-mentions';
 import ReactDOMServer from 'react-dom/server';
+import { toggleMark, setBlockType, wrapIn } from 'prosemirror-commands';
+import ReactDOM from 'react-dom';
 import Avatar from '../avtar/Avtar';
 import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { workspaceStore } from '@/stores/workspaceStore';
+import SVGIcon from '@/assets/icons/SVGIcon';
 
 interface Props {
   valueContent?: string;
@@ -41,6 +47,52 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
 
+  const mySchema = new Schema({
+    nodes: addListNodes(schema.spec.nodes, 'paragraph block*', 'block').append({
+      mention: mentionNode,
+    }), // Add mention node
+    // marks: schema.spec.marks,
+    marks: schema.spec.marks.append({
+      strikethrough: {
+        parseDOM: [
+          { tag: 's' },
+          { tag: 'strike' },
+          { style: 'text-decoration=line-through' },
+        ],
+        toDOM() {
+          return ['s', 0];
+        },
+      },
+      underline: {
+        parseDOM: [{ tag: 'u' }, { style: 'text-decoration=underline' }],
+        toDOM() {
+          return ['u', 0];
+        },
+      },
+      link: {
+        attrs: {
+          href: {},
+          title: { default: null },
+        },
+        inclusive: false,
+        parseDOM: [
+          {
+            tag: 'a[href]',
+            getAttrs(dom: any) {
+              return {
+                href: dom.getAttribute('href'),
+                title: dom.getAttribute('title'),
+              };
+            },
+          },
+        ],
+        toDOM(node) {
+          return ['a', { href: node.attrs.href, title: node.attrs.title }, 0];
+        },
+      },
+    }),
+  });
+
   const placeholderPluginKey = new PluginKey('placeholderPlugin');
 
   // Helper function to convert ProseMirror Node to HTML string
@@ -53,6 +105,281 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
     div.appendChild(fragment);
     return div.innerHTML;
   };
+
+  // Add your link command logic here
+  function setLink(url: string) {
+    // eslint-disable-next-line no-unused-vars
+    return (state: EditorState, dispatch: (tr: Transaction) => void) => {
+      const { schema, selection } = state;
+      const { from, to } = selection;
+
+      // Get the link mark type from the schema
+      const linkMark: MarkType = schema.marks.link;
+
+      if (selection.empty) {
+        // If no text is selected, do nothing or show an alert
+        return false;
+      }
+
+      if (dispatch) {
+        // Apply the link mark with the provided URL
+        const tr = state.tr.addMark(from, to, linkMark.create({ href: url }));
+        dispatch(tr);
+      }
+
+      return true;
+    };
+  }
+
+  // Remove bullet list command (converts to paragraph)
+  // const removeBulletList = (state: any, dispatch: any) => {
+  //   return lift(state, dispatch);
+  // };
+
+  function clearAllFormatting(
+    state: EditorState,
+    // eslint-disable-next-line no-unused-vars
+    dispatch: (tr: Transaction) => void,
+  ) {
+    const { from, to } = state.selection;
+    const tr = state.tr;
+
+    // Remove all marks
+    Object.keys(state.schema.marks).forEach((markName) => {
+      const markType = state.schema.marks[markName];
+      tr.removeMark(from, to, markType);
+    });
+
+    // Convert the block type to a paragraph
+    const paragraphNode = state.schema.nodes.paragraph;
+    if (paragraphNode) {
+      tr.setBlockType(from, to, paragraphNode);
+    }
+
+    if (dispatch) {
+      dispatch(tr);
+    }
+    return true;
+  }
+
+  class SelectionMenuBar {
+    menu: HTMLDivElement;
+
+    constructor(view: EditorView) {
+      this.menu = document.createElement('div');
+      this.menu.className = 'selection-menu-bar';
+      this.menu.style.position = 'absolute';
+      this.menu.style.display = 'none'; // Initially hidden
+      view.dom.parentNode?.appendChild(this.menu);
+
+      // Add buttons for formatting actions
+      this.addMenuItems(view);
+    }
+
+    isInBulletList(state: EditorState) {
+      const { $from } = state.selection;
+      for (let i = $from.depth; i > 0; i--) {
+        const node = $from.node(i);
+        if (node.type === state.schema.nodes.bullet_list) {
+          return true; // The selection is inside a bullet list
+        }
+      }
+      return false;
+    }
+
+    addMenuItems(view: EditorView) {
+      const menuItems = [
+        {
+          label: '',
+          icon: 'Heading-icon',
+          submenu: [
+            {
+              label: 'Huge',
+              command: setBlockType(mySchema.nodes.heading, { level: 1 }),
+            },
+            {
+              label: 'Large',
+              command: setBlockType(mySchema.nodes.heading, { level: 2 }),
+            },
+            {
+              label: 'Normal',
+              command: setBlockType(mySchema.nodes.heading, { level: 3 }),
+            },
+            {
+              label: 'Small',
+              command: setBlockType(mySchema.nodes.heading, { level: 4 }),
+            },
+          ],
+        },
+        {
+          label: '',
+          command: toggleMark(mySchema.marks.strong),
+          icon: 'bold-icon',
+        },
+        {
+          label: ' ',
+          command: toggleMark(mySchema.marks.em),
+          icon: 'italic-icon',
+        },
+        {
+          label: '',
+          command: toggleMark(mySchema.marks.underline), // Ensure underline mark is referenced correctly
+          icon: 'underline-icon', // Replace with the actual icon for underline
+        },
+        {
+          label: '',
+          command: toggleMark(mySchema.marks.strikethrough),
+          icon: 'strikethrough-icon', // Add the correct strikethrough icon here
+        },
+        {
+          label: '',
+          command: wrapIn(mySchema.nodes.blockquote),
+          icon: 'blockquote-icon',
+        },
+        {
+          label: '',
+          command: toggleMark(mySchema.marks.code),
+          icon: 'code-block-icon',
+        },
+        {
+          label: '',
+          command: () => {
+            const url = prompt('Enter the URL');
+            if (url) {
+              setLink(url)(view.state, view.dispatch);
+            }
+          },
+          icon: 'link-icon',
+        },
+        {
+          label: ' ',
+          command: wrapIn(mySchema.nodes.bullet_list),
+          icon: 'bullet-list-icon',
+        },
+        {
+          label: ' ',
+          command: clearAllFormatting,
+          icon: 'clear-format-icon',
+        },
+      ];
+
+      menuItems.forEach((item) => {
+        // Create a div for the menu item
+        const menuItem = document.createElement('div');
+        menuItem.className = 'menu-item'; // You can add your styles here
+
+        // Create a container for the SVG icon
+        const iconContainer = document.createElement('div');
+
+        // Render the SVGIcon to the container
+        ReactDOM.render(
+          <SVGIcon
+            name={item.icon}
+            width='12'
+            height='12'
+            viewBox='0 0 12 12'
+          />,
+          iconContainer,
+        );
+
+        // Set the button label
+        const labelElement = document.createElement('span');
+        labelElement.textContent = item.label;
+
+        // Append the icon and label to the menu item div
+        menuItem.appendChild(iconContainer);
+        menuItem.appendChild(labelElement);
+
+        if (item.submenu) {
+          // Create dropdown for heading options
+          const dropdown = document.createElement('div');
+          dropdown.className = 'dropdown hidden'; // Use hidden class to initially hide the dropdown
+
+          // Append dropdown to menuItem (important for hover visibility)
+          menuItem.appendChild(dropdown);
+
+          // Create a container for the dropdown icon
+          const dropdownIconContainer = document.createElement('div');
+          dropdownIconContainer.className = 'dropdown-icon'; // Add class for dropdown icon
+
+          // Render the SVGIcon to the dropdownIconContainer
+          ReactDOM.render(
+            <SVGIcon
+              name={'dropdown-icon'}
+              width='8'
+              height='8'
+              viewBox='0 0 8 8'
+            />,
+            dropdownIconContainer,
+          );
+
+          // Append the dropdown icon container to the menu item
+          menuItem.appendChild(dropdownIconContainer);
+
+          // Add submenu items for heading levels
+          item.submenu.forEach((subitem) => {
+            const subButton = document.createElement('div');
+            subButton.textContent = subitem.label;
+            subButton.onclick = () => {
+              const { state, dispatch } = view;
+              if (subitem.command) {
+                subitem.command(state, dispatch); // Pass state and dispatch here
+              }
+            };
+            dropdown.appendChild(subButton);
+          });
+
+          // Show/Hide dropdown on hover
+          menuItem.onmouseover = () => {
+            dropdown.classList.remove('hidden');
+            dropdown.classList.add('visible');
+          };
+          menuItem.onmouseout = () => {
+            dropdown.classList.remove('visible');
+            dropdown.classList.add('hidden');
+          };
+        } else {
+          // Regular button (without submenu)
+          menuItem.onclick = () => {
+            const { state, dispatch } = view;
+            if (item.command) {
+              item.command(state, dispatch); // Pass state and dispatch here
+            }
+          };
+        }
+
+        this.menu.appendChild(menuItem);
+      });
+    }
+
+    update(view: EditorView) {
+      const { state } = view;
+      const { from, to } = state.selection;
+
+      if (state.selection.empty) {
+        this.menu.style.display = 'none';
+        return;
+      }
+
+      this.menu.style.display = '';
+      const start = view.coordsAtPos(from);
+      const end = view.coordsAtPos(to);
+      const box = this.menu.offsetParent!.getBoundingClientRect();
+      const left = Math.max((start.left + end.left) / 2, start.left + 3);
+      this.menu.style.left = `${left - box.left}px`;
+      this.menu.style.top = `${start.top - box.top - this.menu.offsetHeight - 5}px`;
+    }
+
+    destroy() {
+      this.menu.remove();
+    }
+  }
+
+  const selectionSizePlugin = new Plugin({
+    view(editorView) {
+      return new SelectionMenuBar(editorView);
+    },
+  });
 
   // eslint-disable-next-line prefer-const
   let placeholderPlugin = new Plugin({
@@ -147,16 +474,6 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
   useEffect(() => {
     if (!editorRef.current || !contentRef.current) return;
 
-    // Define schema with list nodes
-    const mySchema = new Schema({
-      nodes: addListNodes(
-        schema.spec.nodes,
-        'paragraph block*',
-        'block',
-      ).append(isInternalDiscussion ? { mention: mentionNode } : {}),
-      marks: schema.spec.marks,
-    });
-
     const getMentionSuggestionsHTML = (items: any[]) => {
       return ReactDOMServer.renderToString(
         <div className='suggestion-item-list'>
@@ -212,7 +529,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
       ).documentElement,
     );
 
-    const plugins = [placeholderPlugin];
+    const plugins = [placeholderPlugin, selectionSizePlugin];
     if (mentionPlugin) {
       plugins.push(mentionPlugin);
     }
