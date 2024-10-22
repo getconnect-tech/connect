@@ -212,7 +212,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
           ],
         },
         {
-          label: ``,
+          label: '',
           command: toggleMark(mySchema.marks.strong),
           icon: 'bold-icon',
         },
@@ -227,7 +227,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
           icon: 'underline-icon', // Replace with the actual icon for underline
         },
         {
-          label: 'Strikethrough',
+          label: '',
           command: toggleMark(mySchema.marks.strikethrough),
           icon: 'strikethrough-icon', // Add the correct strikethrough icon here
         },
@@ -241,16 +241,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
         // },
         // {
         // { label: ' ', command: removeBulletList },
-        {
-          label: '',
-          command: () => {
-            const url = prompt('Enter the URL');
-            if (url) {
-              setLink(url)(view.state, view.dispatch);
-            }
-          },
-          icon: 'link-icon',
-        },
+
         {
           label: '',
           command: wrapIn(mySchema.nodes.blockquote),
@@ -263,16 +254,25 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
         },
         {
           label: '',
-          command: () => setLink('https://example.com'),
+          command: () => {
+            const url = prompt('Enter the URL');
+            if (url) {
+              setLink(url)(view.state, view.dispatch);
+            }
+          },
           icon: 'link-icon',
         },
-        { label: 'Bullet List', command: wrapIn(mySchema.nodes.bullet_list) },
+        {
+          label: ' ',
+          command: wrapIn(mySchema.nodes.bullet_list),
+          icon: 'bullet-list-icon',
+        },
         // {
         //   label: 'Ordered List',
         //   command: wrapIn(mySchema.nodes.ordered_list),
         // },
         {
-          label: 'Clear Formatting',
+          label: ' ',
           command: clearAllFormatting,
           icon: 'clear-format-icon',
         },

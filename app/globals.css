@@ -708,10 +708,15 @@ img.ProseMirror-separator {
   padding: 6px;
   background-color: transparent;
   justify-content: center;
-
+  svg {
+    fill: var(--icon);
+  }
   &:hover {
     border-radius: 30px;
     background-color: var(--bg-surface-hover);
+    svg {
+      fill: var(--icon-active);
+    }
   }
 }
 .dropdown {
