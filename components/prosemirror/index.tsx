@@ -231,17 +231,6 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
           command: toggleMark(mySchema.marks.strikethrough),
           icon: 'strikethrough-icon', // Add the correct strikethrough icon here
         },
-        // {
-        //   label: 'H1',
-        //   command: setBlockType(mySchema.nodes.heading, { level: 1 }),
-        // },
-        // {
-        //   label: 'H2',
-        //   command: setBlockType(mySchema.nodes.heading, { level: 2 }),
-        // },
-        // {
-        // { label: ' ', command: removeBulletList },
-
         {
           label: '',
           command: wrapIn(mySchema.nodes.blockquote),
@@ -267,10 +256,6 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
           command: wrapIn(mySchema.nodes.bullet_list),
           icon: 'bullet-list-icon',
         },
-        // {
-        //   label: 'Ordered List',
-        //   command: wrapIn(mySchema.nodes.ordered_list),
-        // },
         {
           label: ' ',
           command: clearAllFormatting,
