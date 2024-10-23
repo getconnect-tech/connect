@@ -23,7 +23,6 @@ export default function Favicon() {
         href='/favIcons/safari-pinned-tab.svg'
         color='#000000'
       />
-      <link rel='manifest' href='/favIcons/site.webmanifest' />
       <link rel='shortcut icon' href='/favIcons/favicon.ico' />
       <meta name='theme-color' content='#000' />
       <meta property='og:type' content='website'></meta>
