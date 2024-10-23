@@ -14,9 +14,10 @@ import {
   DOMParser as ProseMirrorDOMParser,
   DOMSerializer,
   MarkType,
+  Fragment,
 } from 'prosemirror-model';
 import { schema } from 'prosemirror-schema-basic';
-import { addListNodes } from 'prosemirror-schema-list';
+import { addListNodes, wrapInList } from 'prosemirror-schema-list';
 import { exampleSetup } from 'prosemirror-example-setup';
 import { mentionNode, getMentionsPlugin } from 'prosemirror-mentions';
 import ReactDOMServer from 'react-dom/server';
@@ -162,6 +163,37 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
     return true;
   }
 
+  function wrapSelectedInBulletList(
+    state: EditorState,
+    // eslint-disable-next-line no-unused-vars
+    dispatch: (tr: Transaction) => void,
+  ) {
+    const { $from, $to } = state.selection;
+    const range = $from.blockRange($to);
+    if (!range) return false;
+    // If the selection is already inside a list, we can wrap the selected content
+    const wrapping = wrapInList(state.schema.nodes.bullet_list)(
+      state,
+      dispatch,
+    );
+    if (wrapping) return true;
+    const listItemType = state.schema.nodes.list_item;
+    // Iterate through the selected content and wrap each block in a <li> node
+    const contentToWrap = [];
+    for (let i = range.startIndex; i < range.endIndex; i++) {
+      const blockNode = range.parent.child(i);
+      const listItem = listItemType.create(null, blockNode.content);
+      contentToWrap.push(listItem);
+    }
+    const bulletList = state.schema.nodes.bullet_list.create(
+      null,
+      Fragment.fromArray(contentToWrap),
+    );
+    const tr = state.tr.replaceRangeWith(range.start, range.end, bulletList);
+    dispatch(tr.scrollIntoView());
+    return true;
+  }
+
   class SelectionMenuBar {
     menu: HTMLDivElement;
 
@@ -253,7 +285,9 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
         },
         {
           label: ' ',
-          command: wrapIn(mySchema.nodes.bullet_list),
+          command: (state: any, dispatch: any) => {
+            wrapSelectedInBulletList(state, dispatch);
+          },
           icon: 'bullet-list-icon',
         },
         {
