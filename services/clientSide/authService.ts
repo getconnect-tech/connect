@@ -5,6 +5,7 @@ import { getAPIErrorMessage, isValidEmail } from '@/helpers/common';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { userStore } from '@/stores/userStore';
 import { messageStore } from '@/stores/messageStore';
+import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
 
 /**
  * @desc Verify user email
@@ -113,6 +114,7 @@ export const logout = async () => {
     userStore.setLoading(true);
     const response = await signOut({ redirect: false });
     userStore.clearUserDetails();
+    await UserPreferenceSingleton.getInstance().clearStoredUserData();
     return response;
   } catch (err: any) {
     messageStore.setErrorMessage(
