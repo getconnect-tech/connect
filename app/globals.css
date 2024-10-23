@@ -317,7 +317,7 @@ li.ProseMirror-selectednode:after {
 /* Protect against generic img rules */
 
 img.ProseMirror-separator {
-  display: inline !important;
+  display: none !important;
   border: none !important;
   margin: 0 !important;
 }
