@@ -58,6 +58,7 @@ function Signup() {
           !isEmpty(result.path)
         )
           router.push(result.path);
+        else if (result === true) router.push('/');
       }
     } catch (e) {
       console.log('Error : ', e);
