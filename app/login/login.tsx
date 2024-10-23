@@ -112,6 +112,7 @@ function Login() {
           !isEmpty(result.path)
         )
           router.push(result.path);
+        else router.push('/');
       } catch (e) {
         console.log('Error : ', e);
       } finally {
