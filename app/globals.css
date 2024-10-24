@@ -694,9 +694,9 @@ img.ProseMirror-separator {
   background-color: var(--bg-white);
   padding: 4px;
   gap: 8px;
-  border: 1px solid var(--border);
   align-items: center;
   border-radius: 30px;
+  box-shadow: var(--shadow-card);
 }
 .menu-item {
   cursor: pointer;
