@@ -395,25 +395,65 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
         this.menu.appendChild(menuItem);
       });
     }
-
     update(view: EditorView) {
       const { state } = view;
+
       const { from, to } = state.selection;
 
       if (state.selection.empty) {
         this.menu.style.display = 'none';
+
         return;
       }
 
       this.menu.style.display = '';
-      const start = view.coordsAtPos(from);
-      const end = view.coordsAtPos(to);
-      const box = this.menu.offsetParent!.getBoundingClientRect();
-      const left = Math.max((start.left + end.left) / 2, start.left + 3);
-      this.menu.style.left = `${left - box.left}px`;
-      this.menu.style.top = `${start.top - box.top - this.menu.offsetHeight - 5}px`;
-    }
 
+      const start = view.coordsAtPos(from);
+
+      const end = view.coordsAtPos(to);
+
+      // Get the closest offset parent (container)
+
+      const container = this.menu.offsetParent;
+
+      // Check if container is null and handle it
+
+      if (!container) {
+        console.error('Container (offset parent) is null');
+
+        return; // Exit if the container is null, or you can provide a fallback
+      }
+
+      const containerBox = container.getBoundingClientRect();
+
+      // Default container width of 989px if not already defined
+
+      const containerWidth = containerBox.width || 989; // Fallback to 989px if container width is not explicitly set
+
+      // Calculate left position relative to the container
+
+      let left = Math.max((start.left + end.left) / 2, start.left + 3);
+
+      const menuRect = this.menu.getBoundingClientRect();
+
+      // Ensure the menu stays within the container's width of 989px
+
+      if (left + menuRect.width > containerBox.left + containerWidth) {
+        left = containerBox.left + containerWidth - menuRect.width - 10; // Adjust to fit within the container
+      }
+
+      this.menu.style.left = `${left - containerBox.left}px`;
+
+      // Calculate top position relative to the container
+
+      let top = start.top - containerBox.top - this.menu.offsetHeight - 5;
+
+      if (top < 0) {
+        top = start.bottom - containerBox.top + 5; // Adjust to position below if above is out of bounds
+      }
+
+      this.menu.style.top = `${top}px`;
+    }
     destroy() {
       this.menu.remove();
     }
