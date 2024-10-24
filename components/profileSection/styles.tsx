@@ -67,6 +67,7 @@ const DetailsDiv = styled.div`
 
 const LeftDiv = styled.div`
   min-width: 100px;
+  max-width: 100px;
   p {
     ${Typography.body_md_medium}
     color: var(--text-text-secondary);
