@@ -255,13 +255,13 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
         },
         {
           label: '',
-          command: toggleMark(mySchema.marks.underline), // Ensure underline mark is referenced correctly
-          icon: 'underline-icon', // Replace with the actual icon for underline
+          command: toggleMark(mySchema.marks.underline),
+          icon: 'underline-icon',
         },
         {
           label: '',
           command: toggleMark(mySchema.marks.strikethrough),
-          icon: 'strikethrough-icon', // Add the correct strikethrough icon here
+          icon: 'strikethrough-icon',
         },
         {
           label: '',
@@ -329,12 +329,12 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
           const dropdown = document.createElement('div');
           dropdown.className = 'dropdown hidden'; // Use hidden class to initially hide the dropdown
 
-          // Append dropdown to menuItem (important for hover visibility)
+          // Append dropdown to menuItem
           menuItem.appendChild(dropdown);
 
           // Create a container for the dropdown icon
           const dropdownIconContainer = document.createElement('div');
-          dropdownIconContainer.className = 'dropdown-icon'; // Add class for dropdown icon
+          dropdownIconContainer.className = 'dropdown-icon';
 
           // Render the SVGIcon to the dropdownIconContainer
           ReactDOM.render(
@@ -347,37 +347,47 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
             dropdownIconContainer,
           );
 
-          // Append the dropdown icon container to the menu item
           menuItem.appendChild(dropdownIconContainer);
 
-          // Add submenu items for heading levels
+          // Create submenu items
           item.submenu.forEach((subitem) => {
             const subButton = document.createElement('div');
             subButton.textContent = subitem.label;
-            subButton.onclick = () => {
+
+            // On submenu click, execute command and close dropdown
+            subButton.onclick = (event) => {
+              event.stopPropagation();
               const { state, dispatch } = view;
+
               if (subitem.command) {
-                subitem.command(state, dispatch); // Pass state and dispatch here
+                subitem.command(state, dispatch);
               }
+
+              // Close the dropdown and remove active state
+              dropdown.classList.add('hidden');
+              menuItem.classList.remove('active-menu-item');
             };
+
             dropdown.appendChild(subButton);
           });
 
-          // Show/Hide dropdown on hover
-          menuItem.onmouseover = () => {
-            dropdown.classList.remove('hidden');
-            dropdown.classList.add('visible');
-          };
-          menuItem.onmouseout = () => {
-            dropdown.classList.remove('visible');
-            dropdown.classList.add('hidden');
+          // Toggle dropdown visibility on click
+          menuItem.onclick = () => {
+            const isDropdownOpen = !dropdown.classList.contains('hidden');
+            if (isDropdownOpen) {
+              dropdown.classList.add('hidden');
+              menuItem.classList.remove('active-menu-item');
+            } else {
+              dropdown.classList.remove('hidden');
+              menuItem.classList.add('active-menu-item');
+            }
           };
         } else {
-          // Regular button (without submenu)
+          // Regular button
           menuItem.onclick = () => {
             const { state, dispatch } = view;
             if (item.command) {
-              item.command(state, dispatch); // Pass state and dispatch here
+              item.command(state, dispatch);
             }
           };
         }
