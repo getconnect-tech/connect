@@ -301,3 +301,12 @@ export const generateContactName = (
   // Fallback to the email prefix if no name parts are available
   return nameParts.length > 0 ? nameParts.join(' ') : email.split('@')[0];
 };
+
+// Utility function to check if notifications are supported
+export const isNotificationSupported = () =>
+  // eslint-disable-next-line no-undef
+  'Notification' in window &&
+  // eslint-disable-next-line no-undef
+  'serviceWorker' in navigator &&
+  // eslint-disable-next-line no-undef
+  'PushManager' in window;
