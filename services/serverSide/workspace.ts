@@ -61,8 +61,10 @@ export const inviteUsers = async (
   workspaceId: string,
   invitedBy: string,
 ) => {
-  const filteredUsers = users.filter((user) => user.email !== invitedBy);
-  const userEmails = filteredUsers.map((user) => user.email);
+  const filteredUsers = users.filter(
+    (user) => user.email !== invitedBy.toLowerCase(),
+  );
+  const userEmails = filteredUsers.map((user) => user.email.toLowerCase());
 
   // Add verified users to workspace
   const verifiedUsers = await prisma.user.findMany({

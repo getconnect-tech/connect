@@ -18,7 +18,8 @@ export const authOptions: AuthOptions = {
           return null;
         }
 
-        const { email, code } = credentials;
+        const { email: rawEmail, code } = credentials;
+        const email = rawEmail.toLowerCase();
 
         const isValidCode = !!(await prisma.verificationToken.findUnique({
           where: { email, token: code, expires: { gte: new Date() } },
