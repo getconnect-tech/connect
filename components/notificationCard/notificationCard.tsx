@@ -18,6 +18,7 @@ import { messageStore } from '@/stores/messageStore';
 import { initOneSignal } from '@/helpers/appInitHelper';
 import { useStores } from '@/stores';
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
+import { isNotificationSupported } from '@/helpers/common';
 
 interface Props {
   isShowNavbar: boolean;
@@ -29,6 +30,9 @@ function NotificationCard({ isShowNavbar, onClose }: Props) {
 
   const handleEnableClick = async () => {
     try {
+      if (!isNotificationSupported()) {
+        return;
+      }
       const currentNotificationState = Notification.permission;
 
       if (currentNotificationState === 'denied') {

@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import OneSignal from 'react-onesignal';
-import { isEmpty } from './common';
+import { isEmpty, isNotificationSupported } from './common';
 import UserPreferenceSingleton from './userPreferenceSingleton';
 import { getSessionDetails } from '@/services/serverSide/auth/authentication';
 import { APP_INIT_RESPONSE_TYPE } from '@/global/constants';
@@ -42,7 +42,7 @@ export const appInit: any = async () => {
 
   if (session?.user) {
     // Init OneSignal for notifications
-    if (Notification.permission === 'granted') {
+    if (isNotificationSupported() && Notification.permission === 'granted') {
       initOneSignal(session.user.id);
     }
     getUserDetails();

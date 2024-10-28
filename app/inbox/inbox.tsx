@@ -20,7 +20,7 @@ import InboxCard from '@/components/inboxCard/inboxCard';
 import CustomContextMenu from '@/components/contextMenu/contextMenu';
 import { getTicketList } from '@/services/clientSide/ticketServices';
 import { useStores } from '@/stores';
-import { isEmpty } from '@/helpers/common';
+import { isEmpty, isNotificationSupported } from '@/helpers/common';
 import EmptyState from '@/components/emptyState/emptyState';
 import InboxLoading from '@/components/inboxLoading/inboxLoading';
 import { NAVBAR, TICKETS_HEADER } from '@/global/constants';
@@ -74,7 +74,8 @@ function Inbox({ activeNav, labelId }: InboxProps) {
   }, [currentWorkspace?.id]);
 
   const shouldShowNotificationCard = useCallback(() => {
-    const hasNotificationPermission = Notification.permission === 'granted';
+    const hasNotificationPermission =
+      isNotificationSupported() && Notification.permission === 'granted';
     const enableNotification =
       UserPreferenceSingleton.getInstance().getEnableNotification();
     if (hasNotificationPermission || !enableNotification) {
@@ -184,12 +185,14 @@ function Inbox({ activeNav, labelId }: InboxProps) {
         </TopDiv>
         <div style={{ padding: '0 16px' }} onClick={onCloseNavbar}>
           <BottomDiv>
-            {userStore.user?.id && toShowNotificationCard && (
-              <NotificationCard
-                isShowNavbar={isNavbar}
-                onClose={closeNotificationCard}
-              />
-            )}
+            {userStore.user?.id &&
+              isNotificationSupported() &&
+              toShowNotificationCard && (
+                <NotificationCard
+                  isShowNavbar={isNavbar}
+                  onClose={closeNotificationCard}
+                />
+              )}
             {loading &&
               (!filteredTicketList || filteredTicketList?.length === 0) && (
                 <InboxLoading />
