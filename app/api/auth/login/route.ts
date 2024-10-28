@@ -10,9 +10,10 @@ export const POST = async (req: NextRequest) => {
     const { email } = await req.json();
 
     emailSchema.parse(email);
+    const normalizedEmail = email.toLowerCase() as string;
 
     // Check if user already exists on database
-    const isValidEmail = await isUserAlreadyExists(email);
+    const isValidEmail = await isUserAlreadyExists(normalizedEmail);
     if (!isValidEmail) {
       return Response.json(
         { error: errorMessages.ACCOUNT_DOES_NOT_EXISTS },
@@ -20,7 +21,7 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    const messageId = await sendVerificationCode(email);
+    const messageId = await sendVerificationCode(normalizedEmail);
 
     return Response.json(
       { message: 'Verification code sent to user!', messageId },

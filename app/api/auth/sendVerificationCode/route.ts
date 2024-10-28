@@ -14,7 +14,9 @@ export const POST = async (req: NextRequest) => {
 
     emailSchema.parse(email);
 
-    const isValidEmail = await isUserAlreadyExists(email, false);
+    const normalizedEmail = email.toLowerCase() as string;
+
+    const isValidEmail = await isUserAlreadyExists(normalizedEmail, false);
     if (!isValidEmail) {
       return Response.json(
         { error: errorMessages.ACCOUNT_DOES_NOT_EXISTS },
@@ -33,7 +35,7 @@ export const POST = async (req: NextRequest) => {
     });
 
     // Send verification code to user
-    const messageId = await sendVerificationCode(email);
+    const messageId = await sendVerificationCode(normalizedEmail);
 
     return Response.json(
       { message: 'Verification code sent!', messageId },
