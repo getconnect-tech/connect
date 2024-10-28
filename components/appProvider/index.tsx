@@ -28,12 +28,6 @@ export default function AppProvider({
 
   const [styledComponentsStyleSheet] = useState(() => new ServerStyleSheet());
 
-  useServerInsertedHTML(() => {
-    const styles = styledComponentsStyleSheet.getStyleElement();
-    styledComponentsStyleSheet.instance.clearTag();
-    return <>{styles}</>;
-  });
-
   const init = useCallback(async () => {
     try {
       const result = await appInit();
@@ -51,6 +45,12 @@ export default function AppProvider({
   useEffect(() => {
     init();
   }, [init]);
+
+  useServerInsertedHTML(() => {
+    const styles = styledComponentsStyleSheet.getStyleElement();
+    styledComponentsStyleSheet.instance.clearTag();
+    return <>{styles}</>;
+  });
 
   if (ONBOARDING_ROUTES.includes(pathname)) {
     NavbarComponent = null;
