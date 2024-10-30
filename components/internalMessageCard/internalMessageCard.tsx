@@ -2,10 +2,16 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import { observer } from 'mobx-react-lite';
-import FileCard from '../fileCard/fileCard';
-import DropDown from '../dropDown/dropDown';
-import RenderHtml from '../renderHtml';
+import { MessageAttachment } from '@/utils/dataTypes';
+import SVGIcon from '@/assets/icons/SVGIcon';
+import { userStore } from '@/stores/userStore';
+import { ReactionProps } from '@/utils/appTypes';
+import { reactMessage } from '@/services/clientSide/ticketServices';
+import { ticketStore } from '@/stores/ticketStore';
 import Avatar from '../avtar/Avtar';
+import RenderHtml from '../renderHtml';
+import DropDown from '../dropDown/dropDown';
+import FileCard from '../fileCard/fileCard';
 import {
   AddReactionButton,
   AttachmentMainDiv,
@@ -21,12 +27,6 @@ import {
   ReactionCard,
   ReactionsMainDiv,
 } from './style';
-import { MessageAttachment } from '@/utils/dataTypes';
-import SVGIcon from '@/assets/icons/SVGIcon';
-import { userStore } from '@/stores/userStore';
-import { ReactionProps } from '@/utils/appTypes';
-import { reactMessage } from '@/services/clientSide/ticketServices';
-import { ticketStore } from '@/stores/ticketStore';
 
 interface Props {
   title: string;

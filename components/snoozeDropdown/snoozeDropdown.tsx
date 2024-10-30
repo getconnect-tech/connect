@@ -2,15 +2,15 @@ import React, { useCallback, useState } from 'react';
 import { MessageType, TicketStatus, User } from '@prisma/client';
 import { observer } from 'mobx-react-lite';
 import moment from 'moment';
-import DropDown from '../dropDown/dropDown';
-import Tag from '../tag/tag';
-import DatePickerModal from '../datePicker/datePicker';
 import { HandleClickProps, TicketDetailsInterface } from '@/utils/appTypes';
 import { snoozeTicket } from '@/services/clientSide/ticketServices';
 import { getUniqueId } from '@/helpers/common';
 import { MessageDetails } from '@/utils/dataTypes';
 import { ticketStore } from '@/stores/ticketStore';
 import { snoozeItem } from '@/helpers/raw';
+import DatePickerModal from '../datePicker/datePicker';
+import Tag from '../tag/tag';
+import DropDown from '../dropDown/dropDown';
 
 interface Props {
   onClick: () => void;

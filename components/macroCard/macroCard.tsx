@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { deleteMacros } from '@/services/clientSide/settingServices';
+import { useStores } from '@/stores';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
 import Modal from '../modal/modal';
 import DeleteModal from '../deleteModal/deleteModal';
 import MacroModal from '../modalComponent/macroModal';
 import { CardMainDiv, LeftDiv, RightDiv, TitleDiv } from './style';
-import { deleteMacros } from '@/services/clientSide/settingServices';
-import { useStores } from '@/stores';
 interface Props {
   index: number;
   name: string;

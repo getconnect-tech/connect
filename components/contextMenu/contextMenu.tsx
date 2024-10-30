@@ -4,15 +4,6 @@
 import React, { useCallback, useState } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { PriorityLevels, TicketStatus } from '@prisma/client';
-import DropDown from '../dropDown/dropDown';
-import DatePickerModal from '../datePicker/datePicker';
-import {
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuMainDiv,
-  ContextMenuSubContent,
-  ContextMenuSubTrigger,
-} from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { priorityItem, snoozeItem } from '@/helpers/raw';
 import { useStores } from '@/stores';
@@ -25,6 +16,15 @@ import {
   updateAssignee,
   updateTicketPriority,
 } from '@/services/clientSide/ticketServices';
+import DatePickerModal from '../datePicker/datePicker';
+import DropDown from '../dropDown/dropDown';
+import {
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuMainDiv,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+} from './style';
 
 interface Props {
   children: any;

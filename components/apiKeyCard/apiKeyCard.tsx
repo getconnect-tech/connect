@@ -1,15 +1,15 @@
 import React, { useCallback, useState } from 'react';
 import copy from 'clipboard-copy';
 import { observer } from 'mobx-react-lite';
+import { getAPIErrorMessage } from '@/helpers/common';
+import { messageStore } from '@/stores/messageStore';
+import { deleteAPIKey } from '@/services/clientSide/settingServices';
+import { useStores } from '@/stores';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
 import Modal from '../modal/modal';
 import DeleteModal from '../deleteModal/deleteModal';
 import { CardMainDiv, LeftDiv, RightDiv, TitleDiv } from './style';
-import { getAPIErrorMessage } from '@/helpers/common';
-import { messageStore } from '@/stores/messageStore';
-import { deleteAPIKey } from '@/services/clientSide/settingServices';
-import { useStores } from '@/stores';
 
 interface Props {
   keyName: string;

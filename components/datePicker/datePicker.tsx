@@ -3,9 +3,15 @@ import Calendar from 'react-calendar';
 import { TimePicker, TimePickerProps } from 'antd';
 import moment from 'moment';
 import { MessageType, TicketStatus } from '@prisma/client';
-import Icon from '../icon/icon';
-import Input from '../input/input';
+import { ticketStore } from '@/stores/ticketStore';
+import { getUniqueId } from '@/helpers/common';
+import { MessageDetails } from '@/utils/dataTypes';
+import { snoozeTicket } from '@/services/clientSide/ticketServices';
+import { useStores } from '@/stores';
+import { TicketDetailsInterface } from '@/utils/appTypes';
 import Button from '../button/button';
+import Input from '../input/input';
+import Icon from '../icon/icon';
 import {
   CalendarDiv,
   Header,
@@ -14,12 +20,6 @@ import {
   Label,
   MainDiv,
 } from './style';
-import { ticketStore } from '@/stores/ticketStore';
-import { getUniqueId } from '@/helpers/common';
-import { MessageDetails } from '@/utils/dataTypes';
-import { snoozeTicket } from '@/services/clientSide/ticketServices';
-import { useStores } from '@/stores';
-import { TicketDetailsInterface } from '@/utils/appTypes';
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];

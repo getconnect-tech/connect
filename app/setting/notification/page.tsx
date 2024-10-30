@@ -2,6 +2,8 @@
 'use client';
 import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
+import Icon from '@/components/icon/icon';
 import {
   Description,
   Head,
@@ -16,8 +18,6 @@ import {
   StyledCheckbox,
   Title,
 } from '../style';
-import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
-import Icon from '@/components/icon/icon';
 
 function Notification() {
   const router = useRouter();

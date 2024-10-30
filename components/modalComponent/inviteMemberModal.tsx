@@ -1,11 +1,11 @@
 import React, { ChangeEvent, SyntheticEvent } from 'react';
 import { observer } from 'mobx-react-lite';
+import { inviteUsersToWorkspace } from '@/services/clientSide/workspaceServices';
+import { useStores } from '@/stores';
 import Icon from '../icon/icon';
 import Input from '../input/input';
 import Button from '../button/button';
 import { BottomDiv, Header, Label, MainDiv, Title } from './style';
-import { inviteUsersToWorkspace } from '@/services/clientSide/workspaceServices';
-import { useStores } from '@/stores';
 
 interface Props {
   onClose: () => void;

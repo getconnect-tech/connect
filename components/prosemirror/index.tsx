@@ -23,10 +23,10 @@ import { mentionNode, getMentionsPlugin } from 'prosemirror-mentions';
 import ReactDOMServer from 'react-dom/server';
 import { toggleMark, setBlockType, wrapIn } from 'prosemirror-commands';
 import ReactDOM from 'react-dom';
-import Avatar from '../avtar/Avtar';
 import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { workspaceStore } from '@/stores/workspaceStore';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import Avatar from '../avtar/Avtar';
 
 interface Props {
   valueContent?: string;
@@ -306,6 +306,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
         const iconContainer = document.createElement('div');
 
         // Render the SVGIcon to the container
+        // eslint-disable-next-line react/no-deprecated
         ReactDOM.render(
           <SVGIcon
             name={item.icon}
@@ -337,6 +338,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
           dropdownIconContainer.className = 'dropdown-icon';
 
           // Render the SVGIcon to the dropdownIconContainer
+          // eslint-disable-next-line react/no-deprecated
           ReactDOM.render(
             <SVGIcon
               name={'dropdown-icon'}
@@ -465,7 +467,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
     },
   });
 
-  // eslint-disable-next-line prefer-const
+  // eslint-disable-next-line prefer-const, react-hooks/exhaustive-deps
   let placeholderPlugin = new Plugin({
     key: placeholderPluginKey, // Assign the key here
     state: {

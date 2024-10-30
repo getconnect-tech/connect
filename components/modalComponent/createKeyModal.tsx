@@ -1,13 +1,13 @@
 import React, { SyntheticEvent, useCallback, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import Icon from '../icon/icon';
-import Input from '../input/input';
-import Button from '../button/button';
-import { BottomDiv, Header, Label, MainDiv, Title } from './style';
 import { createAPIKey } from '@/services/clientSide/settingServices';
 import { getAPIErrorMessage } from '@/helpers/common';
 import { messageStore } from '@/stores/messageStore';
 import { useStores } from '@/stores';
+import Icon from '../icon/icon';
+import Input from '../input/input';
+import Button from '../button/button';
+import { BottomDiv, Header, Label, MainDiv, Title } from './style';
 
 interface Props {
   onClose: () => void;

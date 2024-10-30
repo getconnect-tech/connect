@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
 import React, { useCallback, useEffect, useState } from 'react';
-import { ListMainDiv } from './style';
 import ContactCard from '@/components/contactCard/contactCard';
 import ContactsLoading from '@/components/contactsLoading/contactsLoading';
 import { useStores } from '@/stores';
 import { Group } from '@/utils/dataTypes';
+import { ListMainDiv } from './style';
 
 interface Props {
   activeTab: string;

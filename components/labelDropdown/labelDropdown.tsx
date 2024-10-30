@@ -1,10 +1,10 @@
 import React from 'react';
 import { Label } from '@prisma/client';
-import DropDown from '../dropDown/dropDown';
-import { StatusDiv, StatusTitle } from './style';
 import LabelSvgIcon from '@/assets/icons/labelIcons';
 import { HandleClickProps } from '@/utils/appTypes';
 import { useStores } from '@/stores';
+import DropDown from '../dropDown/dropDown';
+import { StatusDiv, StatusTitle } from './style';
 
 interface IconTitlePair {
   iconName: string;

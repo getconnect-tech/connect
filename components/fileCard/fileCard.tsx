@@ -1,4 +1,6 @@
 import React, { useCallback } from 'react';
+import SVGIcon from '@/assets/icons/SVGIcon';
+import { formatFileSize } from '@/helpers/common';
 import Icon from '../icon/icon';
 import {
   Content,
@@ -9,8 +11,6 @@ import {
   TextPreviewDiv,
   ImageDiv, // Make sure to use this for styling the image preview
 } from './style';
-import SVGIcon from '@/assets/icons/SVGIcon';
-import { formatFileSize } from '@/helpers/common';
 
 interface Props {
   documentText: string;

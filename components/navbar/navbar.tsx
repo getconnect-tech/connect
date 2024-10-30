@@ -2,6 +2,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
+import { useStores } from '@/stores';
+import { supportItem } from '@/helpers/raw';
 import DropDown from '../dropDown/dropDown';
 import Modal from '../modal/modal';
 import ContactUsModal from '../contactUsModal/contactUsModal';
@@ -16,8 +18,6 @@ import {
 } from './style';
 import NavbarItem from './navbarItem';
 import ProfileDropdown from './profileDropdown';
-import { useStores } from '@/stores';
-import { supportItem } from '@/helpers/raw';
 
 const navbarMenu = {
   'Getting started': 0,

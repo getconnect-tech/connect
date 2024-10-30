@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from 'react';
+import SVGIcon from '@/assets/icons/SVGIcon';
 import Input from '../input/input';
 import Button from '../button/button';
 import {
@@ -15,7 +16,6 @@ import {
   Table,
   TableWrapper,
 } from './style';
-import SVGIcon from '@/assets/icons/SVGIcon';
 interface Props {
   stepName?: string;
   stepContent?: string;

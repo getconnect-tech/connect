@@ -1,7 +1,7 @@
 import React from 'react';
-import { IconDiv } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import LabelSvgIcon from '@/assets/icons/labelIcons';
+import { IconDiv } from './style';
 
 interface Props {
   // eslint-disable-next-line no-unused-vars

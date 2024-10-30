@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { ListMainDiv } from './style';
 import ContactCard from '@/components/contactCard/contactCard';
 import { useStores } from '@/stores';
 import { isEmpty } from '@/helpers/common';
 import { getContactData } from '@/services/clientSide/contactServices';
 import ContactsLoading from '@/components/contactsLoading/contactsLoading';
+import { ListMainDiv } from './style';
 
 interface Props {
   isShowNavbar: boolean;

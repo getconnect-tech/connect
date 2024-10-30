@@ -1,8 +1,8 @@
 import React from 'react';
-import Avatar from '../avtar/Avtar';
-import { StatusDiv, StatusTitle } from './styles';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import LabelSvgIcon from '@/assets/icons/labelIcons';
+import Avatar from '../avtar/Avtar';
+import { StatusDiv, StatusTitle } from './styles';
 
 interface Props {
   isActive: boolean;

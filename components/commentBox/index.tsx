@@ -28,6 +28,7 @@ import '@syncfusion/ej2-navigations/styles/bootstrap5.css';
 import '@syncfusion/ej2-popups/styles/bootstrap5.css';
 import '@syncfusion/ej2-richtexteditor/styles/bootstrap5.css';
 import { MentionComponent } from '@syncfusion/ej2-react-dropdowns';
+import { isEmpty } from '@/helpers/common';
 import Avatar from '../avtar/Avtar';
 import {
   DummyDiv,
@@ -37,7 +38,6 @@ import {
   TextMainDiv,
   Mentioncomponent,
 } from './style';
-import { isEmpty } from '@/helpers/common';
 
 function RichTextBox(this: any, props: any) {
   const {

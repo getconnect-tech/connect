@@ -8,8 +8,12 @@ import React, {
 import { observer } from 'mobx-react-lite';
 import { Label } from '@prisma/client';
 import moment from 'moment';
-import Avatar from '../avtar/Avtar';
+import SVGIcon from '@/assets/icons/SVGIcon';
+import { isEmpty } from '@/helpers/common';
+import LabelSvgIcon from '@/assets/icons/labelIcons';
+import { HandleClickProps } from '@/utils/appTypes';
 import Input from '../input/input';
+import Avatar from '../avtar/Avtar';
 import {
   DateTimeTextDiv,
   ItemDiv,
@@ -20,10 +24,6 @@ import {
   SearchDiv,
   StyledCheckbox,
 } from './style';
-import SVGIcon from '@/assets/icons/SVGIcon';
-import { isEmpty } from '@/helpers/common';
-import LabelSvgIcon from '@/assets/icons/labelIcons';
-import { HandleClickProps } from '@/utils/appTypes';
 
 export type DropDownItem = {
   name: string;

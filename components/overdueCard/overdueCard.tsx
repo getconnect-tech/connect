@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import SVGIcon from '@/assets/icons/SVGIcon';
 import Button from '../button/button';
 import {
   ButtonSection,
@@ -11,7 +12,6 @@ import {
   RightSection,
   Title,
 } from './style';
-import SVGIcon from '@/assets/icons/SVGIcon';
 interface Props {
   countAssign: number;
   isShowNavbar: boolean;

@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 import styled, { css } from 'styled-components';
-import { Typography } from '../../styles/typography';
 import { DropDownItem } from '@/components/dropDown/dropDown';
+import { Typography } from '../../styles/typography';
 
 interface Props {
   modeSelectedItem?: DropDownItem;

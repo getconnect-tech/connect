@@ -1,9 +1,5 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import Input from '../input/input';
-import Button from '../button/button';
-import ProsemirrorEditor from '../prosemirror';
-import { BottomDiv, Header, Label, MainDiv } from './style';
 import { useStores } from '@/stores';
 import {
   createMacros,
@@ -11,6 +7,10 @@ import {
 } from '@/services/clientSide/settingServices';
 import { messageStore } from '@/stores/messageStore';
 import { isEmpty } from '@/helpers/common';
+import Input from '../input/input';
+import Button from '../button/button';
+import ProsemirrorEditor from '../prosemirror';
+import { BottomDiv, Header, Label, MainDiv } from './style';
 
 interface MacroData {
   id: string;

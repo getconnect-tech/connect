@@ -2,6 +2,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import moment from 'moment';
 import { observer } from 'mobx-react-lite';
+import { useStores } from '@/stores';
+import { capitalizeString, isEmpty } from '@/helpers/common';
+import { ContactGroups } from '@/utils/dataTypes';
+import {
+  getContactDetailById,
+  getContactGroups,
+  refreshContact,
+} from '@/services/clientSide/contactServices';
 import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import {
@@ -16,14 +24,6 @@ import {
 import WorkDetails from './workDetails';
 import RecentEvent from './recentEvent';
 import AIBlock from './aiBlock';
-import { useStores } from '@/stores';
-import { capitalizeString, isEmpty } from '@/helpers/common';
-import { ContactGroups } from '@/utils/dataTypes';
-import {
-  getContactDetailById,
-  getContactGroups,
-  refreshContact,
-} from '@/services/clientSide/contactServices';
 
 interface ContactInfo {
   label: string;
@@ -260,7 +260,9 @@ const ResponsiveProfileSection = () => {
           </>
         )}
       </DetailsProfileDiv>
-      {workInfo?.map((group) => <WorkDetails groupInfo={group} />)}
+      {workInfo?.map((group, index) => (
+        <WorkDetails key={index} groupInfo={group} />
+      ))}
       <RecentEvent />
     </ResponsiveMainDiv>
   );

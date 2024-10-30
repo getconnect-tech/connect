@@ -1,6 +1,14 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { isEmpty } from '@/helpers/common';
+import { getAllGroup } from '@/services/clientSide/contactServices';
+import { useStores } from '@/stores';
+import { Group } from '@/utils/dataTypes';
+import Icon from '@/components/icon/icon';
+import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
+import CompanyList from './companyList';
+import PersonList from './personList';
 import {
   BottomDiv,
   HeaderDiv,
@@ -12,14 +20,6 @@ import {
   Title,
   TopDiv,
 } from './style';
-import PersonList from './personList';
-import CompanyList from './companyList';
-import { isEmpty } from '@/helpers/common';
-import { getAllGroup } from '@/services/clientSide/contactServices';
-import { useStores } from '@/stores';
-import { Group } from '@/utils/dataTypes';
-import Icon from '@/components/icon/icon';
-import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 
 const Contact = () => {
   const { workspaceStore } = useStores();

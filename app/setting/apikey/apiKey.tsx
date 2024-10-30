@@ -2,17 +2,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
-import {
-  Head,
-  LeftDiv,
-  Main,
-  MainCardDiv,
-  MainDiv,
-  NavbarTitle,
-  ResponsiveHeader,
-  RightDiv,
-  Title,
-} from '../style';
 import Button from '@/components/button/button';
 import ApiKeyCard from '@/components/apiKeyCard/apiKeyCard';
 import Modal from '@/components/modal/modal';
@@ -24,6 +13,17 @@ import { useStores } from '@/stores';
 import { getAPIKeys } from '@/services/clientSide/settingServices';
 import Icon from '@/components/icon/icon';
 import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
+import {
+  Head,
+  LeftDiv,
+  Main,
+  MainCardDiv,
+  MainDiv,
+  NavbarTitle,
+  ResponsiveHeader,
+  RightDiv,
+  Title,
+} from '../style';
 
 function ApiKey() {
   const [keyModal, setKeyModal] = useState(false);

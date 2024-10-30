@@ -4,6 +4,18 @@ import { useRouter } from 'next/navigation';
 import moment from 'moment';
 import { MessageType, PriorityLevels, TicketStatus } from '@prisma/client';
 import { observer } from 'mobx-react-lite';
+import { priorityItem, snoozeItem } from '@/helpers/raw';
+import { capitalizeString } from '@/helpers/common';
+import { useStores } from '@/stores';
+import { HandleClickProps, TicketListInterface } from '@/utils/appTypes';
+import {
+  updateAssignee,
+  changeTicketStatus,
+  updateTicketPriority,
+  addLabelToTicket,
+  deleteLabelFromTicket,
+  snoozeTicket,
+} from '@/services/clientSide/ticketServices';
 import Avatar from '../avtar/Avtar';
 import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
 import AssigneeDropdown from '../AssigneeDropdown/dropDownWithTag';
@@ -26,18 +38,6 @@ import {
   StatusMainDiv,
   TagDiv,
 } from './style';
-import { priorityItem, snoozeItem } from '@/helpers/raw';
-import { capitalizeString } from '@/helpers/common';
-import { useStores } from '@/stores';
-import { HandleClickProps, TicketListInterface } from '@/utils/appTypes';
-import {
-  updateAssignee,
-  changeTicketStatus,
-  updateTicketPriority,
-  addLabelToTicket,
-  deleteLabelFromTicket,
-  snoozeTicket,
-} from '@/services/clientSide/ticketServices';
 
 interface Props {
   ticketDetail: TicketListInterface;

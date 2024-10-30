@@ -1,6 +1,6 @@
 import React from 'react';
-import Inbox from './inbox';
 import { NAVBAR } from '@/global/constants';
+import Inbox from './inbox';
 
 function InboxPage() {
   return <Inbox activeNav={NAVBAR.INBOX} />;

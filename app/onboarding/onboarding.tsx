@@ -3,6 +3,21 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
+import SVGIcon from '@/assets/icons/SVGIcon';
+import Avatar from '@/components/avtar/Avtar';
+import Button from '@/components/button/button';
+import Input from '@/components/input/input';
+import { DropDownItem } from '@/components/dropDown/dropDown';
+import { industryItems, teamMember } from '@/helpers/raw';
+import { useStores } from '@/stores';
+import {
+  createWorkspace,
+  inviteUsersToWorkspace,
+} from '@/services/clientSide/workspaceServices';
+import { isEmpty } from '@/helpers/common';
+
+import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
+import Icon from '@/components/icon/icon';
 import {
   CenterCard,
   Heading,
@@ -24,21 +39,6 @@ import {
   BottomFrame,
   DetailSection,
 } from './style';
-import SVGIcon from '@/assets/icons/SVGIcon';
-import Avatar from '@/components/avtar/Avtar';
-import Button from '@/components/button/button';
-import Input from '@/components/input/input';
-import { DropDownItem } from '@/components/dropDown/dropDown';
-import { industryItems, teamMember } from '@/helpers/raw';
-import { useStores } from '@/stores';
-import {
-  createWorkspace,
-  inviteUsersToWorkspace,
-} from '@/services/clientSide/workspaceServices';
-import { isEmpty } from '@/helpers/common';
-
-import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
-import Icon from '@/components/icon/icon';
 
 function OnboardingStep1() {
   const [showCard, setShowCard] = useState(false);

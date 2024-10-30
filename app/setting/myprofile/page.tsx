@@ -8,6 +8,15 @@ import React, {
 } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
+import Avatar from '@/components/avtar/Avtar';
+import Button from '@/components/button/button';
+import Input from '@/components/input/input';
+import { useStores } from '@/stores';
+import { updateUserDetails } from '@/services/clientSide/userService';
+import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
+import { messageStore } from '@/stores/messageStore';
+import Icon from '@/components/icon/icon';
+import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
 import {
   Description,
   Frame,
@@ -26,15 +35,6 @@ import {
   TextField,
   Title,
 } from '../style';
-import Avatar from '@/components/avtar/Avtar';
-import Button from '@/components/button/button';
-import Input from '@/components/input/input';
-import { useStores } from '@/stores';
-import { updateUserDetails } from '@/services/clientSide/userService';
-import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
-import { messageStore } from '@/stores/messageStore';
-import Icon from '@/components/icon/icon';
-import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
 
 const MyProfile = () => {
   const { userStore } = useStores();

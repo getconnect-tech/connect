@@ -1,5 +1,11 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
+import SVGIcon from '@/assets/icons/SVGIcon';
+import { ticketStore } from '@/stores/ticketStore';
+import { getUserActivity } from '@/services/clientSide/ticketServices';
+import { formatTime, isEmpty } from '@/helpers/common';
+import { UserActivity } from '@/utils/dataTypes';
+import { contactStore } from '@/stores/contactStore';
 import {
   Dot,
   EventDetailDiv,
@@ -10,12 +16,6 @@ import {
   Title,
   TitleDiv,
 } from './styles';
-import SVGIcon from '@/assets/icons/SVGIcon';
-import { ticketStore } from '@/stores/ticketStore';
-import { getUserActivity } from '@/services/clientSide/ticketServices';
-import { formatTime, isEmpty } from '@/helpers/common';
-import { UserActivity } from '@/utils/dataTypes';
-import { contactStore } from '@/stores/contactStore';
 
 export default function RecentEvent() {
   const [showDetails, setShowDetails] = useState(true);

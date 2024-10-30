@@ -10,17 +10,6 @@ import React, {
 import { useRouter } from 'next/navigation';
 import { observer } from 'mobx-react-lite';
 import { useSession } from 'next-auth/react';
-import {
-  Bottom,
-  CodeSection,
-  Form,
-  Heading,
-  LoginSection,
-  LoginText,
-  MainDiv,
-  TimeText,
-  TitleDiv,
-} from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Input from '@/components/input/input';
 import Button from '@/components/button/button';
@@ -33,6 +22,17 @@ import {
 import { appInit } from '@/helpers/appInitHelper';
 import { APP_INIT_RESPONSE_TYPE } from '@/global/constants';
 import { isEmpty } from '@/helpers/common';
+import {
+  Bottom,
+  CodeSection,
+  Form,
+  Heading,
+  LoginSection,
+  LoginText,
+  MainDiv,
+  TimeText,
+  TitleDiv,
+} from './style';
 
 const INITIAL_TIMER = 5 * 60;
 

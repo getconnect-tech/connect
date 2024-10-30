@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import Avatar from '../avtar/Avtar';
 import { Typography } from '@/styles/typography';
+import Avatar from '../avtar/Avtar';
 
 export const Card = styled.div`
   display: flex;
