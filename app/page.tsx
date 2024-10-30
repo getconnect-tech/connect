@@ -1,5 +1,5 @@
-import Inbox from './inbox/inbox';
 import { NAVBAR } from '@/global/constants';
+import Inbox from './inbox/inbox';
 
 export default function Home() {
   return (

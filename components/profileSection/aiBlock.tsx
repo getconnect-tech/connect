@@ -1,4 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import SVGIcon from '@/assets/icons/SVGIcon';
+import { ticketStore } from '@/stores/ticketStore';
+import { isEmpty } from '@/helpers/common';
+import { getTicketSummary } from '@/services/clientSide/ticketServices';
 import {
   Actions,
   ActionsDiv,
@@ -13,10 +17,6 @@ import {
   Title,
   TopDiv,
 } from './styles';
-import SVGIcon from '@/assets/icons/SVGIcon';
-import { ticketStore } from '@/stores/ticketStore';
-import { isEmpty } from '@/helpers/common';
-import { getTicketSummary } from '@/services/clientSide/ticketServices';
 
 function AIBlock() {
   const [generateReply, setGenerateReply] = useState(false);

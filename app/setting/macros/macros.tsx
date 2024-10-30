@@ -3,6 +3,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
+import Button from '@/components/button/button';
+import EmptyState from '@/components/emptyState/emptyState';
+import { isEmpty } from '@/helpers/common';
+import MacroCard from '@/components/macroCard/macroCard';
+import Modal from '@/components/modal/modal';
+import MacroModal from '@/components/modalComponent/macroModal';
+import { useStores } from '@/stores';
+import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
+import Icon from '@/components/icon/icon';
+import { getMacros } from '../../../services/clientSide/settingServices';
 import {
   Description,
   Head,
@@ -15,16 +25,6 @@ import {
   RightDiv,
   Title,
 } from '../style';
-import { getMacros } from '../../../services/clientSide/settingServices';
-import Button from '@/components/button/button';
-import EmptyState from '@/components/emptyState/emptyState';
-import { isEmpty } from '@/helpers/common';
-import MacroCard from '@/components/macroCard/macroCard';
-import Modal from '@/components/modal/modal';
-import MacroModal from '@/components/modalComponent/macroModal';
-import { useStores } from '@/stores';
-import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
-import Icon from '@/components/icon/icon';
 
 const Macros = () => {
   const router = useRouter();

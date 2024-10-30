@@ -3,6 +3,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import moment from 'moment';
 import { observer } from 'mobx-react-lite';
 import Link from 'next/link';
+import { useStores } from '@/stores';
+import { capitalizeString, isEmpty } from '@/helpers/common';
+import {
+  getContactDetailById,
+  getContactGroups,
+  refreshContact,
+} from '@/services/clientSide/contactServices';
+import { ContactGroups } from '@/utils/dataTypes';
 import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import {
@@ -17,14 +25,6 @@ import {
 import WorkDetails from './workDetails';
 import RecentEvent from './recentEvent';
 import AIBlock from './aiBlock';
-import { useStores } from '@/stores';
-import { capitalizeString, isEmpty } from '@/helpers/common';
-import {
-  getContactDetailById,
-  getContactGroups,
-  refreshContact,
-} from '@/services/clientSide/contactServices';
-import { ContactGroups } from '@/utils/dataTypes';
 
 interface ContactInfo {
   label: string;
@@ -286,7 +286,9 @@ const ProfileSection = () => {
         )}
       </DetailsProfileDiv>
 
-      {workInfo?.map((group) => <WorkDetails groupInfo={group} />)}
+      {workInfo?.map((group, index) => (
+        <WorkDetails key={index} groupInfo={group} />
+      ))}
       <RecentEvent />
     </MainDiv>
   );

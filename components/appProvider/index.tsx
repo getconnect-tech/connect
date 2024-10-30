@@ -5,14 +5,14 @@ import { useRouter, usePathname, useServerInsertedHTML } from 'next/navigation';
 import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 import { Provider } from 'mobx-react';
 import { registerLicense } from '@syncfusion/ej2-base';
-import NavbarPage from '../navbar';
-import SettingAppProvider from '../settingAppProvider';
-import AlertMessage from '../alertMessages/alertMessage';
 import stores from '@/stores';
 import { appInit } from '@/helpers/appInitHelper';
 import { APP_INIT_RESPONSE_TYPE, ONBOARDING_ROUTES } from '@/global/constants';
 import { isEmpty } from '@/helpers/common';
 import { NEXT_PUBLIC_SYNCFUSION_KEY } from '@/helpers/environment';
+import AlertMessage from '../alertMessages/alertMessage';
+import SettingAppProvider from '../settingAppProvider';
+import NavbarPage from '../navbar';
 
 // Register the Syncfusion license key
 registerLicense(NEXT_PUBLIC_SYNCFUSION_KEY || '');

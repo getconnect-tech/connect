@@ -1,16 +1,16 @@
 import React, { useCallback, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Label } from '@prisma/client';
+import LabelSvgIcon from '@/assets/icons/labelIcons';
+import { deleteLabel } from '@/services/clientSide/settingServices';
+import { messageStore } from '@/stores/messageStore';
+import { useStores } from '@/stores';
 import Icon from '../icon/icon';
 import DropDown from '../dropDown/dropDown';
 import Modal from '../modal/modal';
 import LabelModal from '../modalComponent/labelModal';
 import DeleteModal from '../deleteModal/deleteModal';
 import { InnerDiv, ItemDiv, Name } from './style';
-import LabelSvgIcon from '@/assets/icons/labelIcons';
-import { deleteLabel } from '@/services/clientSide/settingServices';
-import { messageStore } from '@/stores/messageStore';
-import { useStores } from '@/stores';
 interface Props {
   currentOpenDropdown?: string | null;
   dropdownIdentifier?: string;

@@ -2,6 +2,8 @@
 /* eslint-disable max-len */
 import React, { useCallback, useState } from 'react';
 import moment from 'moment';
+import SVGIcon from '@/assets/icons/SVGIcon';
+import { MessageAttachment, ReadBy } from '@/utils/dataTypes';
 import RenderHtml from '../renderHtml';
 import DropDown from '../dropDown/dropDown';
 import FileCard from '../fileCard/fileCard';
@@ -21,8 +23,6 @@ import {
   Title,
   TitleDiv,
 } from './style';
-import SVGIcon from '@/assets/icons/SVGIcon';
-import { MessageAttachment, ReadBy } from '@/utils/dataTypes';
 
 interface Props {
   title: string;

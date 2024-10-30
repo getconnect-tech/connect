@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { UserRole } from '@prisma/client';
 import { observer } from 'mobx-react-lite';
-import { BottomBlock, Item, MainDiv, NavItems, Title, TopBlock } from './style';
 import { useStores } from '@/stores';
+import { BottomBlock, Item, MainDiv, NavItems, Title, TopBlock } from './style';
 
 const SettingNavBar = () => {
   const router = useRouter();

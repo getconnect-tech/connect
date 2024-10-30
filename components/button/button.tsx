@@ -1,6 +1,6 @@
 import React from 'react';
-import { Buttons, ButtonWrap } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { Buttons, ButtonWrap } from './style';
 
 interface Props {
   title?: string;

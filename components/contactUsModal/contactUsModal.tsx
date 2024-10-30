@@ -1,5 +1,9 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import SVGIcon from '@/assets/icons/SVGIcon';
+import { createTicketViaWeb } from '@/services/clientSide/contactUsServices';
+import { useStores } from '@/stores';
+import { getFirebaseUrlFromFile } from '@/helpers/common';
 import Icon from '../icon/icon';
 import Button from '../button/button';
 import ProsemirrorEditor from '../prosemirror';
@@ -21,10 +25,6 @@ import {
   Content,
   ModalContant,
 } from './style';
-import SVGIcon from '@/assets/icons/SVGIcon';
-import { createTicketViaWeb } from '@/services/clientSide/contactUsServices';
-import { useStores } from '@/stores';
-import { getFirebaseUrlFromFile } from '@/helpers/common';
 
 interface AttachFile {
   file: File;

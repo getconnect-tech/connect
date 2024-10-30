@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import SVGIcon from '@/assets/icons/SVGIcon';
+import { logout } from '@/services/clientSide/authService';
 import {
   Description,
   Frame1,
@@ -9,8 +11,6 @@ import {
   ProfileDrop,
   ProfileItemDiv,
 } from './style';
-import SVGIcon from '@/assets/icons/SVGIcon';
-import { logout } from '@/services/clientSide/authService';
 interface Props {
   title: string;
   onClose: () => void;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { User } from '@prisma/client';
+import { capitalizeString, isEmpty } from '@/helpers/common';
 import DropDown, { DropDownItem } from '../dropDown/dropDown';
 import Tag from '../tag/tag';
-import { capitalizeString, isEmpty } from '@/helpers/common';
 
 interface Props {
   onClick: () => void;

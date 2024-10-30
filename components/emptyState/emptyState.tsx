@@ -1,7 +1,7 @@
 import React from 'react';
+import SVGIcon from '@/assets/icons/SVGIcon';
 import Button from '../button/button';
 import { IconDiv, MainDiv } from './style';
-import SVGIcon from '@/assets/icons/SVGIcon';
 
 interface Props {
   iconName: string;

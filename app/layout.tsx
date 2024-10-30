@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ReactNode } from 'react';
+import Favicon from '@/components/favIcon';
 import AppProvider from '../components/appProvider';
 import SessionWrapper from './SessionWrapper';
-import Favicon from '@/components/favIcon';
 
 const inter = Inter({ subsets: ['latin'] });
 

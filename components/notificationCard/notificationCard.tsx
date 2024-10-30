@@ -2,6 +2,12 @@ import React, { useEffect } from 'react';
 import OneSignal from 'react-onesignal';
 import { observer } from 'mobx-react-lite';
 import moment from 'moment';
+import SVGIcon from '@/assets/icons/SVGIcon';
+import { messageStore } from '@/stores/messageStore';
+import { initOneSignal } from '@/helpers/appInitHelper';
+import { useStores } from '@/stores';
+import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
+import { isNotificationSupported } from '@/helpers/common';
 import Button from '../button/button';
 import {
   ButtonSection,
@@ -13,12 +19,6 @@ import {
   RightSection,
   Title,
 } from './style';
-import SVGIcon from '@/assets/icons/SVGIcon';
-import { messageStore } from '@/stores/messageStore';
-import { initOneSignal } from '@/helpers/appInitHelper';
-import { useStores } from '@/stores';
-import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
-import { isNotificationSupported } from '@/helpers/common';
 
 interface Props {
   isShowNavbar: boolean;

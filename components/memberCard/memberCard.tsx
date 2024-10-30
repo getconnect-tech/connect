@@ -1,12 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { UserRole } from '@prisma/client';
 import { observer } from 'mobx-react-lite';
-import Avatar from '../avtar/Avtar';
-import Icon from '../icon/icon';
-import DropDown, { DropDownItem } from '../dropDown/dropDown';
-import Modal from '../modal/modal';
-import DeleteModal from '../deleteModal/deleteModal';
-import { CardDiv, LeftDiv, NameDiv, RightDiv } from './style';
 import { capitalizeString } from '@/helpers/common';
 import { HandleClickProps } from '@/utils/appTypes';
 import { useStores } from '@/stores';
@@ -16,6 +10,12 @@ import {
   removeMemberFromWorkspace,
   updateRole,
 } from '@/services/clientSide/workspaceServices';
+import Avatar from '../avtar/Avtar';
+import Icon from '../icon/icon';
+import DropDown, { DropDownItem } from '../dropDown/dropDown';
+import Modal from '../modal/modal';
+import DeleteModal from '../deleteModal/deleteModal';
+import { CardDiv, LeftDiv, NameDiv, RightDiv } from './style';
 
 interface Props {
   userId: string;

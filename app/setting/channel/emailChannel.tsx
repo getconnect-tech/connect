@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 'use client';
 import { useCallback, useState } from 'react';
+import { EmailChannelCard } from '@/components/emailChannelCard/emailChannelCard';
 import {
   Description,
   EmailCardDiv,
@@ -11,7 +12,6 @@ import {
   RightDiv,
   Title,
 } from '../style';
-import { EmailChannelCard } from '@/components/emailChannelCard/emailChannelCard';
 
 function Channel() {
   // Initialize the openCard state with 'Step1' to keep the first step open by default

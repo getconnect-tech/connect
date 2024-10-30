@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import { useRouter, useServerInsertedHTML } from 'next/navigation';
 import styled, { ServerStyleSheet } from 'styled-components';
 import { Provider } from 'mobx-react';
+import stores from '@/stores';
 import SettingNavBar from '../settingNavBar/settingNavBar';
 import Icon from '../icon/icon';
-import stores from '@/stores';
 
 export const Div = styled.div`
   display: flex;

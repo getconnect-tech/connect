@@ -3,7 +3,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
-import { CardsDiv, Content, Head, MainDiv, OrganizationDiv } from './style';
 import Icon from '@/components/icon/icon';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import WorkspaceCard from '@/components/workspaceCard/workspaceCard';
@@ -17,6 +16,7 @@ import { getAPIErrorMessage } from '@/helpers/common';
 import { Workspace } from '@/utils/dataTypes';
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
 import { messageStore } from '@/stores/messageStore';
+import { CardsDiv, Content, Head, MainDiv, OrganizationDiv } from './style';
 
 function SelectWorkSpace() {
   const router = useRouter();

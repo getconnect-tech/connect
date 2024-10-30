@@ -1,7 +1,14 @@
 'use client';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import NavbarItem from './navbarItem';
+import Avatar from '@/components/avtar/Avtar';
+import DropDown from '@/components/dropDown/dropDown';
+import { supportItem } from '@/helpers/raw';
+import Modal from '@/components/modal/modal';
+import ContactUsModal from '@/components/contactUsModal/contactUsModal';
+import { useStores } from '@/stores';
+import Icon from '@/components/icon/icon';
+import ProfileDropdown from './profileDropdown';
 import {
   ItemMainDiv,
   Label,
@@ -10,14 +17,7 @@ import {
   ResponsiveMainDiv,
   TopDiv,
 } from './style';
-import ProfileDropdown from './profileDropdown';
-import Avatar from '@/components/avtar/Avtar';
-import DropDown from '@/components/dropDown/dropDown';
-import { supportItem } from '@/helpers/raw';
-import Modal from '@/components/modal/modal';
-import ContactUsModal from '@/components/contactUsModal/contactUsModal';
-import { useStores } from '@/stores';
-import Icon from '@/components/icon/icon';
+import NavbarItem from './navbarItem';
 
 const navbarMenu = {
   'Getting started': 0,

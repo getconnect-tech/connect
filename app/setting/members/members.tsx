@@ -2,6 +2,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
+import Button from '@/components/button/button';
+import MemberCard from '@/components/memberCard/memberCard';
+import { getWorkspaceById } from '@/services/clientSide/workspaceServices';
+import { useStores } from '@/stores';
+import InviteMemberModal from '@/components/modalComponent/inviteMemberModal';
+import Modal from '@/components/modal/modal';
+import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
+import Icon from '@/components/icon/icon';
+import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
+import MemberLoading from '@/components/memberLoading/memberLoading';
 import {
   Description,
   Head,
@@ -14,16 +24,6 @@ import {
   RightDiv,
   Title,
 } from '../style';
-import Button from '@/components/button/button';
-import MemberCard from '@/components/memberCard/memberCard';
-import { getWorkspaceById } from '@/services/clientSide/workspaceServices';
-import { useStores } from '@/stores';
-import InviteMemberModal from '@/components/modalComponent/inviteMemberModal';
-import Modal from '@/components/modal/modal';
-import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
-import Icon from '@/components/icon/icon';
-import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
-import MemberLoading from '@/components/memberLoading/memberLoading';
 
 const Members = () => {
   const router = useRouter();

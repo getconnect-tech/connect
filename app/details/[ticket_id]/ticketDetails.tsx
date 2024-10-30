@@ -11,26 +11,6 @@ import {
   UserRole,
 } from '@prisma/client';
 import moment from 'moment';
-import {
-  ActivityDiv,
-  BottomDiv,
-  ButtonDiv,
-  CenterDiv,
-  CenterMainDiv,
-  HeaderDiv,
-  IconDiv,
-  Input,
-  InputDiv,
-  InputIcon,
-  LeftDiv,
-  LineDiv,
-  Main,
-  MainDiv,
-  Message,
-  StatusDiv,
-  Title,
-  TopDiv,
-} from '../style';
 import ProfileSection from '@/components/profileSection/profileSection';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
@@ -75,6 +55,26 @@ import FileCard from '@/components/fileCard/fileCard';
 import ProsemirrorEditor from '@/components/prosemirror';
 import ResponsiveProfileSection from '@/components/profileSection/responsiveProfileSection';
 import { getContactDetailById } from '@/services/clientSide/contactServices';
+import {
+  ActivityDiv,
+  BottomDiv,
+  ButtonDiv,
+  CenterDiv,
+  CenterMainDiv,
+  HeaderDiv,
+  IconDiv,
+  Input,
+  InputDiv,
+  InputIcon,
+  LeftDiv,
+  LineDiv,
+  Main,
+  MainDiv,
+  Message,
+  StatusDiv,
+  Title,
+  TopDiv,
+} from '../style';
 
 interface Props {
   ticket_id: string;

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { labelIcons } from '@/helpers/raw';
 import Input from '../input/input';
 import Icon from '../icon/icon';
 import { Icons, MainDiv, SearchDiv } from './style';
-import { labelIcons } from '@/helpers/raw';
 
 interface Props {
   onClose?: () => void;

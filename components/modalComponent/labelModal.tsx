@@ -1,16 +1,16 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Label as PrismaLabel } from '@prisma/client';
 import { observer } from 'mobx-react-lite';
-import Button from '../button/button';
-import Input from '../input/input';
-import LabelIconDropdown from '../labelIcoDropdown/labelIconDropdown';
-import { BottomDiv, Header, IconDiv, Label, MainDiv } from './style';
 import LabelSvgIcon from '@/assets/icons/labelIcons';
 import {
   createLabel,
   updateLabelDetails,
 } from '@/services/clientSide/settingServices';
 import { useStores } from '@/stores';
+import Button from '../button/button';
+import Input from '../input/input';
+import LabelIconDropdown from '../labelIcoDropdown/labelIconDropdown';
+import { BottomDiv, Header, IconDiv, Label, MainDiv } from './style';
 
 interface Props {
   onClose: () => void;

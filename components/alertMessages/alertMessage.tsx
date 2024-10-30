@@ -1,10 +1,10 @@
 import { Alert } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import Icon from '../icon/icon';
-import { AlertmessageDiv } from './style';
 import { useStores } from '@/stores';
 import { Message } from '@/utils/appTypes';
+import Icon from '../icon/icon';
+import { AlertmessageDiv } from './style';
 
 function AlertMessage() {
   const { messageStore } = useStores();

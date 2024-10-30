@@ -5,17 +5,6 @@ import { observer } from 'mobx-react-lite';
 import { usePathname } from 'next/navigation';
 import moment from 'moment';
 import { TicketStatus } from '@prisma/client';
-import {
-  BottomDiv,
-  HeaderDiv,
-  IconAndTitle,
-  Main,
-  MainDiv,
-  Tab,
-  TabDiv,
-  Title,
-  TopDiv,
-} from './style';
 import InboxCard from '@/components/inboxCard/inboxCard';
 import CustomContextMenu from '@/components/contextMenu/contextMenu';
 import { getTicketList } from '@/services/clientSide/ticketServices';
@@ -29,6 +18,17 @@ import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
 import Icon from '@/components/icon/icon';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import NotificationCard from '@/components/notificationCard/notificationCard';
+import {
+  BottomDiv,
+  HeaderDiv,
+  IconAndTitle,
+  Main,
+  MainDiv,
+  Tab,
+  TabDiv,
+  Title,
+  TopDiv,
+} from './style';
 
 interface InboxProps {
   activeNav?: number;

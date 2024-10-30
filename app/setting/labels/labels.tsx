@@ -2,6 +2,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
+import LabelCard from '@/components/labelCard/labelCard';
+import Button from '@/components/button/button';
+import Modal from '@/components/modal/modal';
+import { isEmpty } from '@/helpers/common';
+import EmptyState from '@/components/emptyState/emptyState';
+import LabelModal from '@/components/modalComponent/labelModal';
+import { getLabels } from '@/services/clientSide/settingServices';
+import { useStores } from '@/stores';
+import Icon from '@/components/icon/icon';
+import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
 import {
   Description,
   Head,
@@ -14,16 +24,6 @@ import {
   RightDiv,
   Title,
 } from '../style';
-import LabelCard from '@/components/labelCard/labelCard';
-import Button from '@/components/button/button';
-import Modal from '@/components/modal/modal';
-import { isEmpty } from '@/helpers/common';
-import EmptyState from '@/components/emptyState/emptyState';
-import LabelModal from '@/components/modalComponent/labelModal';
-import { getLabels } from '@/services/clientSide/settingServices';
-import { useStores } from '@/stores';
-import Icon from '@/components/icon/icon';
-import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
 
 const Labels = () => {
   const router = useRouter();

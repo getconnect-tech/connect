@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 'use client';
 import React from 'react';
-import { Errormessage, InputBox, InputDiv, Maindiv } from './style';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { Errormessage, InputBox, InputDiv, Maindiv } from './style';
 
 interface Props {
   title?: string;
