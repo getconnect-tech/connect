@@ -122,7 +122,7 @@ function Inbox({ activeNav, labelId }: InboxProps) {
     }
 
     ticketStore.setFilteredTicketList(activeTab, filteredTickets);
-  }, [activeTab, activeNav, ticketList, user, ticketStore]);
+  }, [ticketList, activeNav, user, labelId, ticketStore, activeTab]);
 
   const onClickDismiss = () => {
     const futureTime = moment().add(24, 'hours').toISOString();
@@ -136,13 +136,13 @@ function Inbox({ activeNav, labelId }: InboxProps) {
 
   useEffect(() => {
     displayTicketList();
-  }, [activeTab, ticketList]);
+  }, [activeTab, displayTicketList, ticketList]);
 
   useEffect(() => {
     loadData();
     shouldShowOverdueCard();
     shouldShowNotificationCard();
-  }, [loadData]);
+  }, [loadData, shouldShowNotificationCard, shouldShowOverdueCard]);
 
   const onClickIcon = useCallback(() => {
     setIsNavbar(true);
