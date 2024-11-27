@@ -160,7 +160,7 @@ const MyProfile = () => {
         console.log('error', e);
       }
     },
-    [],
+    [convertBase64],
   );
 
   const onClickIcon = useCallback(() => {
