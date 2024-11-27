@@ -36,13 +36,16 @@ function SelectWorkSpace() {
     }
   }, []);
 
-  const handleClick = useCallback(async (workSpaceId: string) => {
-    // set current workspace in localstorage
-    UserPreferenceSingleton.getInstance().setCurrentWorkspace(workSpaceId);
-    // get workspace data
-    const result = await workspaceChange(workSpaceId);
-    if (result) router.push('/');
-  }, []);
+  const handleClick = useCallback(
+    async (workSpaceId: string) => {
+      // set current workspace in localstorage
+      UserPreferenceSingleton.getInstance().setCurrentWorkspace(workSpaceId);
+      // get workspace data
+      const result = await workspaceChange(workSpaceId);
+      if (result) router.push('/');
+    },
+    [router],
+  );
 
   useEffect(() => {
     loadData();
@@ -50,7 +53,7 @@ function SelectWorkSpace() {
 
   const redirectToOnboarding = useCallback(() => {
     router.push('/onboarding');
-  }, []);
+  }, [router]);
 
   return (
     <MainDiv>

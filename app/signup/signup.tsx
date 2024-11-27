@@ -65,7 +65,7 @@ function Signup() {
     } finally {
       userStore.setLoading(false);
     }
-  }, [router]);
+  }, [router, status, userStore]);
 
   useEffect(() => {
     //Check session status
@@ -73,7 +73,7 @@ function Signup() {
     // Prefetch navigation routes
     router.prefetch('/onboarding');
     router.prefetch('/');
-  }, [router]);
+  }, [checkUserSession, router]);
 
   //Start couter for resend code enable
   const startCounter = () => {
@@ -124,7 +124,7 @@ function Signup() {
         }
       }
     },
-    [code, router, userEmail],
+    [code, router, userEmail, userStore],
   );
 
   // Resend code in user's email
