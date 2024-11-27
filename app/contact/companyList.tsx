@@ -20,11 +20,11 @@ export default function PersonList({ activeTab, isShowNavbar }: Props) {
     const cardData =
       groups?.filter((group) => group.group_label === activeTab) || [];
     setCardItem(cardData);
-  }, [activeTab]);
+  }, [activeTab, groups]);
 
   useEffect(() => {
     cardInformation();
-  }, [activeTab]);
+  }, [activeTab, cardInformation]);
   return (
     <>
       {!cardItem || cardItem.length === 0 ? (

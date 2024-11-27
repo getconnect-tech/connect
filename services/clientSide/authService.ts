@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { signOut } from 'next-auth/react';
-import { signInWithCode } from '../serverSide/membership/signin';
 import { getAPIErrorMessage, isValidEmail } from '@/helpers/common';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { userStore } from '@/stores/userStore';
 import { messageStore } from '@/stores/messageStore';
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
+import { signInWithCode } from '../serverSide/membership/signin';
 
 /**
  * @desc Verify user email
