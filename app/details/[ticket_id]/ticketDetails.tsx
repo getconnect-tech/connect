@@ -160,7 +160,7 @@ function TicketDetails(props: Props) {
       editorRef.current.addContent(selectedMacro.content || '');
       setMacroDropdown(false);
     },
-    [],
+    [router],
   );
 
   const handleMouseEnter = (
@@ -232,7 +232,7 @@ function TicketDetails(props: Props) {
       ticketStore.setTicketDetails(null);
       ticketStore.setTicketMessages([]);
     };
-  }, []);
+  }, [ticketStore]);
 
   const handlePriorityTag = useCallback(() => {
     setPriorityDropdown((prev) => !prev);
@@ -320,7 +320,7 @@ function TicketDetails(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [ticketDetails],
+    [loadData, ticketDetails, ticketStore],
   );
 
   /*
@@ -350,7 +350,7 @@ function TicketDetails(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [ticketDetails],
+    [loadData, ticketDetails, ticketStore],
   );
   const assignedUser = currentWorkspace?.users?.find(
     (user: { id: string | null | undefined }) => user.id === assigned_to,
@@ -390,7 +390,7 @@ function TicketDetails(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [ticketDetails],
+    [ticketDetails, ticketStore, user],
   );
   /*
    * @desc Send comment
@@ -447,7 +447,7 @@ function TicketDetails(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [ticket_id, user, messageRefId, attachFile, editorRef],
+    [attachFile, messageRefId, user, ticket_id, ticketStore],
   );
 
   /*
@@ -489,7 +489,7 @@ function TicketDetails(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [ticketDetails],
+    [labels, ticketDetails, ticketStore],
   );
 
   /*
@@ -769,7 +769,7 @@ function TicketDetails(props: Props) {
         console.log('Error while uploading file : ', e);
       }
     },
-    [messageRefId, ticket_id, attachFile],
+    [handleFileRead, ticket_id, messageRefId, attachFile],
   );
 
   useEffect(() => {
