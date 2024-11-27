@@ -135,12 +135,12 @@ const DropDown = ({
     } else {
       return items;
     }
-  }, []);
+  }, [items, labelField]);
 
   useEffect(() => {
     const itemsList = getItemsList();
     setSearchResult(itemsList);
-  }, []);
+  }, [getItemsList]);
 
   const onClickItem = useCallback(
     (e: SyntheticEvent, item: DropDownItem, value: string | null) => {
@@ -160,16 +160,19 @@ const DropDown = ({
       if (onChange) onChange(item);
       if (onClose) onClose();
     },
-    [handleClick, onChange, onClose],
+    [handleClick, onChange, onClose, ticketLabelData],
   );
 
-  const searchQuery = useCallback((value: string) => {
-    const result =
-      getItemsList()?.filter((item: any) =>
-        item?.name?.toLowerCase().includes(value?.toLowerCase()),
-      ) || [];
-    setSearchResult(result);
-  }, []);
+  const searchQuery = useCallback(
+    (value: string) => {
+      const result =
+        getItemsList()?.filter((item: any) =>
+          item?.name?.toLowerCase().includes(value?.toLowerCase()),
+        ) || [];
+      setSearchResult(result);
+    },
+    [getItemsList],
+  );
 
   const onChangeSearch = useCallback(
     (value: string) => {
@@ -183,7 +186,7 @@ const DropDown = ({
         setSearchResult(getItemsList);
       }
     },
-    [searchQuery],
+    [getItemsList, searchQuery],
   );
 
   const handleDateTimeClick = (e: SyntheticEvent) => {

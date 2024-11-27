@@ -120,7 +120,7 @@ const InboxCard = ({
   const onClickTicket = useCallback(() => {
     ticketStore.setTicketDetails(ticketDetail);
     router.push(`/details/${ticketDetail?.id}`);
-  }, []);
+  }, [router, ticketDetail, ticketStore]);
 
   /*
    * @desc Update ticket details priority in inbox card
@@ -139,25 +139,28 @@ const InboxCard = ({
         console.log('Error : ', e);
       }
     },
-    [],
+    [ticketDetail, ticketIndex, ticketStore],
   );
 
   /*
    * @desc Update ticket details assign user in inbox card
    */
-  const onChangeAssign = useCallback(async (item: { user_id: string }) => {
-    const payload = { assignee: item?.user_id || null };
-    try {
-      const updatedTicketDetails = {
-        ...(ticketDetail || {}),
-        assigned_to: item?.user_id || null,
-      };
-      ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
-      await updateAssignee(ticketDetail?.id, payload);
-    } catch (e) {
-      console.log('Error : ', e);
-    }
-  }, []);
+  const onChangeAssign = useCallback(
+    async (item: { user_id: string }) => {
+      const payload = { assignee: item?.user_id || null };
+      try {
+        const updatedTicketDetails = {
+          ...(ticketDetail || {}),
+          assigned_to: item?.user_id || null,
+        };
+        ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
+        await updateAssignee(ticketDetail?.id, payload);
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetail, ticketIndex, ticketStore],
+  );
 
   const assignedUser = currentWorkspace?.users?.find(
     (user: { id: string | null }) => user.id === assigned_to,
@@ -182,7 +185,7 @@ const InboxCard = ({
         console.log('Error : ', e);
       }
     },
-    [ticketDetail],
+    [ticketDetail, ticketIndex, ticketStore],
   );
 
   // add/remove label to ticket
@@ -214,7 +217,7 @@ const InboxCard = ({
         console.log('Error : ', e);
       }
     },
-    [ticketDetail],
+    [labels, ticketDetail, ticketIndex, ticketStore],
   );
 
   const onSnoozeIconClick = useCallback((e: SyntheticEvent) => {
@@ -243,7 +246,7 @@ const InboxCard = ({
         console.log('Error : ', e);
       }
     },
-    [ticketDetail],
+    [ticketDetail, ticketIndex, ticketStore],
   );
 
   const getCombinedDescription = (htmlString: string) => {
