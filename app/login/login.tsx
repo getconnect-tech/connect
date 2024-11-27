@@ -64,14 +64,14 @@ function Login() {
     } finally {
       userStore.setLoading(false);
     }
-  }, [router]);
+  }, [router, status, userStore]);
 
   useEffect(() => {
     //Check session status
     checkUserSession();
     // Prefetch navigation routes
     router.prefetch('/');
-  }, [router]);
+  }, [checkUserSession, router]);
 
   //Start counter for resend code enable
   const startCounter = () => {
