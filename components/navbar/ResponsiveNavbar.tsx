@@ -73,13 +73,16 @@ function ResponsiveNavbar({ onClose }: Props) {
     setIsModalOpen(false);
   }, []);
 
-  const handleClick = useCallback((index: number, path?: string) => {
-    setActiveIndex(index); // Update active index
-    if (path) {
-      // Set the redirect path
-      router.push(path);
-    }
-  }, []);
+  const handleClick = useCallback(
+    (index: number, path?: string) => {
+      setActiveIndex(index); // Update active index
+      if (path) {
+        // Set the redirect path
+        router.push(path);
+      }
+    },
+    [router],
+  );
 
   const handleSupportClick = useCallback(() => {
     setIsModalOpen(true);
@@ -95,7 +98,7 @@ function ResponsiveNavbar({ onClose }: Props) {
     return ticketList?.filter(
       (ticket) => ticket.status === 'OPEN' && ticket.assigned_to === user?.id,
     ).length;
-  }, [ticketList]);
+  }, [ticketList, user?.id]);
   return (
     <>
       <ResponsiveMainDiv>
