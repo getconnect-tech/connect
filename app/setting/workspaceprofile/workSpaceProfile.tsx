@@ -111,7 +111,7 @@ const WorkspaceProfile = () => {
         console.log('error', e);
       }
     },
-    [],
+    [convertBase64],
   );
 
   const handleUpdate = useCallback(
