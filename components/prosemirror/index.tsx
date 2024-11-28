@@ -663,6 +663,7 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
     return () => {
       view.destroy();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInternalDiscussion]);
 
   useImperativeHandle(ref, () => ({

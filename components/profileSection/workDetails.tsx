@@ -80,7 +80,7 @@ export default function WorkDetails({ groupInfo }: Props) {
 
   useEffect(() => {
     createGroupInfo();
-  }, [groupInfo]);
+  }, [createGroupInfo, groupInfo]);
 
   return (
     <WorkDetailMainDiv>
