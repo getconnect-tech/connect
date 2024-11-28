@@ -74,6 +74,7 @@ function NotificationCard({ isShowNavbar, onClose }: Props) {
         'permissionChange',
         handleNotificationPermissionChange,
       );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

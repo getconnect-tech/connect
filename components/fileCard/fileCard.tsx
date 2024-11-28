@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useCallback } from 'react';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { formatFileSize } from '@/helpers/common';

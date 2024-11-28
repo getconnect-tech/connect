@@ -69,6 +69,7 @@ function MacroCard({
     } else if (!item.isDelete) {
       onOpenMacroModal();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const dropDownItem = [
@@ -91,6 +92,7 @@ function MacroCard({
     } finally {
       onCloseDeleteModal();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleDropdownClick = (dropdown: string) => {

@@ -262,7 +262,7 @@ const InternalMessageCard = ({
         console.log('Error : ', e);
       }
     },
-    [selectedReactions],
+    [messageId, selectedReactions, user?.display_name, user?.id],
   );
 
   const dropdownItem = useCallback(

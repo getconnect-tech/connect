@@ -46,7 +46,7 @@ const CreateKeyModal = ({ onClose, loadData }: Props) => {
         );
       }
     },
-    [keyName],
+    [keyName, loadData, onClose],
   );
 
   return (

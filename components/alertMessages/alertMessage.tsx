@@ -15,64 +15,70 @@ function AlertMessage() {
     setLoaded(true);
   }, []);
 
-  const handleClose = useCallback((id: string) => {
-    messageStore?.removeMessage(id);
-  }, []);
+  const handleClose = useCallback(
+    (id: string) => {
+      messageStore?.removeMessage(id);
+    },
+    [messageStore],
+  );
 
-  const renderMessage = useCallback((message: Message) => {
-    switch (message?.type) {
-      case 'error':
-        return (
-          <div className='alert-div'>
-            <Alert message={message?.content} type='error' showIcon />
-            <div style={{ width: 24, height: 24 }}>
-              <Icon
-                iconName='cross-icon'
-                iconSize='12'
-                iconViewBox='0 0 16 16'
-                onClick={() => handleClose(message?.id)}
-                className='icon-class'
-                size={true}
-              />
+  const renderMessage = useCallback(
+    (message: Message) => {
+      switch (message?.type) {
+        case 'error':
+          return (
+            <div className='alert-div'>
+              <Alert message={message?.content} type='error' showIcon />
+              <div style={{ width: 24, height: 24 }}>
+                <Icon
+                  iconName='cross-icon'
+                  iconSize='12'
+                  iconViewBox='0 0 16 16'
+                  onClick={() => handleClose(message?.id)}
+                  className='icon-class'
+                  size={true}
+                />
+              </div>
             </div>
-          </div>
-        );
-      case 'success':
-        return (
-          <div className='alert-div'>
-            <Alert message={message?.content} type='success' showIcon />
-            <div style={{ width: 24, height: 24 }}>
-              <Icon
-                iconName='cross-icon'
-                iconSize='12'
-                iconViewBox='0 0 16 16'
-                onClick={() => handleClose(message?.id)}
-                className='icon-class'
-                size={true}
-              />
+          );
+        case 'success':
+          return (
+            <div className='alert-div'>
+              <Alert message={message?.content} type='success' showIcon />
+              <div style={{ width: 24, height: 24 }}>
+                <Icon
+                  iconName='cross-icon'
+                  iconSize='12'
+                  iconViewBox='0 0 16 16'
+                  onClick={() => handleClose(message?.id)}
+                  className='icon-class'
+                  size={true}
+                />
+              </div>
             </div>
-          </div>
-        );
-      case 'warning':
-        return (
-          <div className='alert-div'>
-            <Alert message={message?.content} type='warning' showIcon />
-            <div style={{ width: 24, height: 24 }}>
-              <Icon
-                iconName='cross-icon'
-                iconSize='12'
-                iconViewBox='0 0 16 16'
-                onClick={() => handleClose(message?.id)}
-                className='icon-class'
-                size={true}
-              />
+          );
+        case 'warning':
+          return (
+            <div className='alert-div'>
+              <Alert message={message?.content} type='warning' showIcon />
+              <div style={{ width: 24, height: 24 }}>
+                <Icon
+                  iconName='cross-icon'
+                  iconSize='12'
+                  iconViewBox='0 0 16 16'
+                  onClick={() => handleClose(message?.id)}
+                  className='icon-class'
+                  size={true}
+                />
+              </div>
             </div>
-          </div>
-        );
-      default:
-        <></>;
-    }
-  }, []);
+          );
+        default:
+          <></>;
+      }
+    },
+    [handleClose],
+  );
 
   return loaded ? (
     <AlertmessageDiv>

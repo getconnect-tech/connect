@@ -63,7 +63,7 @@ const ApiKeyCard = ({
       );
       return false;
     }
-  }, []);
+  }, [apiKey]);
 
   const handleDeleteAPIKey = useCallback(async () => {
     try {
@@ -78,7 +78,7 @@ const ApiKeyCard = ({
       );
       return false;
     }
-  }, [apiKey]);
+  }, [apiKey, onCloseDeleteModal, settingStore]);
 
   return (
     <CardMainDiv isShowNavbar={isShowNavbar}>

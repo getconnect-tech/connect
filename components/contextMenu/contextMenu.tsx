@@ -90,25 +90,28 @@ export default function CustomContextMenu(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [],
+    [ticketDetail, ticketIndex, ticketStore],
   );
 
   /*
    * @desc Update ticket details assign user in context menu
    */
-  const onChangeAssign = useCallback(async (item: { user_id: string }) => {
-    const payload = { assignee: item?.user_id || null };
-    try {
-      const updatedTicketDetails = {
-        ...(ticketDetail || {}),
-        assigned_to: item?.user_id || null,
-      };
-      ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
-      await updateAssignee(ticketDetail?.id, payload);
-    } catch (e) {
-      console.log('Error : ', e);
-    }
-  }, []);
+  const onChangeAssign = useCallback(
+    async (item: { user_id: string }) => {
+      const payload = { assignee: item?.user_id || null };
+      try {
+        const updatedTicketDetails = {
+          ...(ticketDetail || {}),
+          assigned_to: item?.user_id || null,
+        };
+        ticketStore.updateTicketListItem(ticketIndex, updatedTicketDetails);
+        await updateAssignee(ticketDetail?.id, payload);
+      } catch (e) {
+        console.log('Error : ', e);
+      }
+    },
+    [ticketDetail, ticketIndex, ticketStore],
+  );
 
   const handleTicketLabel = useCallback(
     async (props: HandleClickProps) => {
@@ -138,7 +141,7 @@ export default function CustomContextMenu(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [ticketDetail],
+    [labels, ticketDetail, ticketIndex, ticketStore],
   );
 
   /*
@@ -162,7 +165,7 @@ export default function CustomContextMenu(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [ticketDetail],
+    [ticketDetail, ticketIndex, ticketStore],
   );
 
   /*
@@ -188,7 +191,7 @@ export default function CustomContextMenu(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [ticketDetail],
+    [ticketDetail, ticketIndex, ticketStore],
   );
 
   const [showDropDown, setShowDropDown] = useState(true);

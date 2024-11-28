@@ -23,7 +23,7 @@ function OverdueCard({ countAssign, onClickDismiss, isShowNavbar }: Props) {
 
   const redirectToUnassigned = useCallback(() => {
     router.push('/unassigned');
-  }, []);
+  }, [router]);
 
   return (
     <MainDiv isShowNavbar={isShowNavbar}>

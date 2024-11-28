@@ -95,7 +95,7 @@ function LabelCard({
     } catch (e) {
       console.log('Error : ', e);
     }
-  }, [labelDetails?.id]);
+  }, [labelDetails?.id, settingStore]);
 
   return (
     <>

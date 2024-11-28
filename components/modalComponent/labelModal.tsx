@@ -55,7 +55,7 @@ const LabelModal = ({ onClose, labelData }: Props) => {
         onClose();
       }
     },
-    [],
+    [labelData, onClose, settingStore],
   );
 
   return (

@@ -59,7 +59,7 @@ function MacroModal({ onClose, macroData }: Props) {
         onClose();
       }
     },
-    [title, description, settingStore, onClose],
+    [description, title, macroData, settingStore, onClose],
   );
 
   return (

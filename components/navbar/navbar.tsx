@@ -69,13 +69,16 @@ function Navbar() {
     setIsModalOpen(false);
   }, []);
 
-  const handleClick = useCallback((index: number, path?: string) => {
-    setActiveIndex(index); // Update active index
-    if (path) {
-      // Set the redirect path
-      router.push(path);
-    }
-  }, []);
+  const handleClick = useCallback(
+    (index: number, path?: string) => {
+      setActiveIndex(index); // Update active index
+      if (path) {
+        // Set the redirect path
+        router.push(path);
+      }
+    },
+    [router],
+  );
 
   const handleSupportClick = useCallback(() => {
     setIsModalOpen(true);
@@ -91,7 +94,7 @@ function Navbar() {
     return ticketList?.filter(
       (ticket) => ticket.status === 'OPEN' && ticket.assigned_to === user?.id,
     ).length;
-  }, [ticketList]);
+  }, [ticketList, user?.id]);
 
   return (
     <>

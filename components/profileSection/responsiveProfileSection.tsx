@@ -171,12 +171,14 @@ const ResponsiveProfileSection = () => {
   }, [contact]);
 
   const loadData = useCallback(async () => {
-    if (!isEmpty(contact?.id)) {
+    if (!isEmpty(contact_id)) {
       setLoading(true);
       try {
-        const contactGroupInfo = await getContactGroups(contact?.id || '');
-        setWorkInfo(contactGroupInfo);
-        await getContactDetailById(contact_id || '');
+        if (contact_id) {
+          const contactGroupInfo = await getContactGroups(contact_id);
+          setWorkInfo(contactGroupInfo);
+          await getContactDetailById(contact_id);
+        }
       } catch (err: any) {
         console.error('Error fetching contact group information:', err);
       } finally {
@@ -190,21 +192,23 @@ const ResponsiveProfileSection = () => {
     // Increment rotation by 360 degrees on each click
     setRotation((prevRotation) => prevRotation + 360);
     try {
-      await refreshContact(contact_id || '');
-      await getContactGroups(contact_id || '');
+      if (contact_id) {
+        await refreshContact(contact_id);
+        await getContactGroups(contact_id);
+      }
     } catch (error) {
       console.error('Error refreshing data:', error);
     } finally {
       setLoading(false); // Hide loading state after the data is refreshed
     }
-  }, []);
+  }, [contact_id]);
 
   useEffect(() => {
     loadData();
     return () => {
       contactStore.setContactDetails(null);
     };
-  }, [loadData]);
+  }, [contactStore, loadData]);
 
   useEffect(() => {
     if (contact) {

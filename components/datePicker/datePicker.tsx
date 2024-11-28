@@ -153,7 +153,7 @@ function DatePickerModal({
         console.error('Invalid date or time');
       }
     },
-    [ticketDetails, timeValue, dateValue],
+    [dateValue, timeValue, user, ticketDetails, ticketIndex, onClose],
   );
 
   return (

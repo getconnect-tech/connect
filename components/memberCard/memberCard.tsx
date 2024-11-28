@@ -134,7 +134,7 @@ const MemberCard = ({
       }
     }
     setDeleteModal(false);
-  }, [userId]);
+  }, [isInvited, userId, workspaceStore]);
 
   const handleClick = useCallback(
     async (props: HandleClickProps) => {

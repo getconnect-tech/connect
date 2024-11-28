@@ -71,6 +71,7 @@ function RichTextBox(this: any, props: any) {
       <MentionTable>
         <MentionList>
           {data?.id === 'everyone' ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img src={''} alt='emptyprofile' width={18} height={18} />
           ) : (
             <Avatar
@@ -140,9 +141,12 @@ function RichTextBox(this: any, props: any) {
     }
   }, [props, mentionRef, uploadedFiles]);
 
-  const onChangeText = useCallback(async (textValue: string) => {
-    setValueContent(textValue);
-  }, []);
+  const onChangeText = useCallback(
+    async (textValue: string) => {
+      setValueContent(textValue);
+    },
+    [setValueContent],
+  );
 
   const handleKeyDown = useCallback(
     (args: {
@@ -299,7 +303,7 @@ function RichTextBox(this: any, props: any) {
         setLoading(false);
       }
     },
-    [handleFileRead, valueContent],
+    [handleFileRead, setValueContent, uploadedFiles, valueContent],
   );
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -368,7 +372,7 @@ function RichTextBox(this: any, props: any) {
       setUploadedFiles([...(uploadedFiles || []), ...files]);
       setValueContent(`<p>${valueContent || ''} ${images}</p>`);
     },
-    [valueContent, handleFileRead],
+    [uploadedFiles, setValueContent, valueContent, handleFileRead],
   );
 
   const pasteCleanupSettings = {

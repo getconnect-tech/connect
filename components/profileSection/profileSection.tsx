@@ -227,7 +227,7 @@ const ProfileSection = () => {
     return () => {
       contactStore.setContactDetails(null);
     };
-  }, [loadData]);
+  }, [contactStore, loadData]);
 
   useEffect(() => {
     if (contactDetails) {

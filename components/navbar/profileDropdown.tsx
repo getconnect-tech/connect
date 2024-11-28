@@ -45,7 +45,7 @@ export default function ProfileDropdown({ title, onClose }: Props) {
   const onClickLogout = useCallback(async () => {
     await logout();
     router.push('/login');
-  }, []);
+  }, [router]);
 
   return (
     <>

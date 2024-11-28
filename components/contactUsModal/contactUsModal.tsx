@@ -102,7 +102,7 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
         setLoading(false);
       }
     },
-    [messageText],
+    [messageText, user?.display_name, user?.email],
   );
 
   return (

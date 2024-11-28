@@ -44,6 +44,7 @@ export default function RecentEvent() {
         setActivityLoading(false);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contactDetails?.id]);
 
   useEffect(() => {
