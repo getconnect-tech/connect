@@ -82,7 +82,7 @@ export const formatTime = (isoString: string) => {
 export const generateVerificationCode = (length = 5) => {
   let code = '';
   while (code.length < length) {
-    const randomNum = Math.ceil(Math.random() * 10);
+    const randomNum = Math.floor(Math.random() * 10);
     code += `${randomNum}`;
   }
   return code;
