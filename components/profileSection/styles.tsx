@@ -39,6 +39,15 @@ const DetailsMainDiv = styled.div`
   }
 `;
 
+const DetailsItemMainDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  @media screen and (max-width: 768px) {
+    gap: 12px;
+  }
+`;
+
 const DetailsProfileDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -76,6 +85,15 @@ const LeftDiv = styled.div`
     -webkit-line-clamp: 1;
     overflow: hidden;
     word-break: break-word;
+  }
+`;
+
+const EventNameDiv = styled.div`
+  min-width: 100px;
+  max-width: 100px;
+  p {
+    ${Typography.body_md_medium}
+    color: var(--text-text-secondary);
   }
 `;
 
@@ -320,4 +338,6 @@ export {
   ReplyCard,
   ResponsiveMainDiv,
   TopDiv,
+  EventNameDiv,
+  DetailsItemMainDiv,
 };

@@ -6,8 +6,9 @@ import { ticketStore } from '@/stores/ticketStore';
 import { getUserActivity } from '@/services/clientSide/ticketServices';
 import {
   DetailsDiv,
-  DetailsMainDiv,
-  LeftDiv,
+  DetailsItemMainDiv,
+  EventDetailDiv,
+  EventNameDiv,
   NameDiv,
   Title,
   TitleDiv,
@@ -83,22 +84,22 @@ function EventStats() {
         </div>
       </TitleDiv>
       {showDetails && (
-        <>
+        <EventDetailDiv>
           {activityLoading ? (
             'Loading...'
           ) : (
-            <DetailsMainDiv>
+            <DetailsItemMainDiv>
               {eventInformation?.map((event, index) => (
                 <DetailsDiv key={index}>
-                  <LeftDiv>
+                  <EventNameDiv>
                     <p>{event?.name}</p>
-                  </LeftDiv>
+                  </EventNameDiv>
                   <p>{event?.value}</p>
                 </DetailsDiv>
               ))}
-            </DetailsMainDiv>
+            </DetailsItemMainDiv>
           )}
-        </>
+        </EventDetailDiv>
       )}
     </WorkDetailMainDiv>
   );
