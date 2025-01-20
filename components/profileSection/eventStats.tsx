@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { contactStore } from '@/stores/contactStore';
+import { isEmpty } from '@/helpers/common';
+import { ticketStore } from '@/stores/ticketStore';
+import { getUserActivity } from '@/services/clientSide/ticketServices';
 import {
   DetailsDiv,
   DetailsMainDiv,
@@ -11,18 +15,56 @@ import {
 } from './styles';
 
 function EventStats() {
+  // Store data
+  const { contactDetails } = contactStore || {};
+  const { loading } = ticketStore;
+
+  // State variables
   const [showDetails, setShowDetails] = useState(true);
+  const [activityLoading, setActivityLoading] = useState(loading);
+  const [eventInformation, setEventInformation] = useState<
+    { name: string; value: number }[]
+  >([]);
 
   const toggleDetails = () => {
     setShowDetails((prevShowDetails) => !prevShowDetails);
   };
 
-  const eventInformation = [
-    { name: 'Comment', value: 3 },
-    { name: 'app loaded', value: 4 },
-    { name: 'task: view', value: 10 },
-    { name: 'account: signed in', value: 6 },
-  ];
+  const loadData = useCallback(async () => {
+    if (contactDetails && !isEmpty(contactDetails?.id)) {
+      try {
+        setActivityLoading(true);
+        const data = await getUserActivity(contactDetails?.id);
+        if (data && data.length > 0) {
+          const eventCountMap = new Map();
+
+          for (const event of data) {
+            const eventType = event.event_type;
+            eventCountMap.set(
+              eventType,
+              (eventCountMap.get(eventType) || 0) + 1,
+            );
+          }
+
+          const formattedData = Array.from(eventCountMap, ([name, value]) => ({
+            name,
+            value,
+          })).sort((a, b) => b.value - a.value);
+
+          setEventInformation(formattedData || []);
+        }
+      } catch (error) {
+        console.error('Error loading ticket summary:', error);
+      } finally {
+        setActivityLoading(false);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contactDetails?.id]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   return (
     <WorkDetailMainDiv>
@@ -41,16 +83,22 @@ function EventStats() {
         </div>
       </TitleDiv>
       {showDetails && (
-        <DetailsMainDiv>
-          {eventInformation.map((event, index) => (
-            <DetailsDiv key={index}>
-              <LeftDiv>
-                <p>{event?.name}</p>
-              </LeftDiv>
-              <p>{event?.value}</p>
-            </DetailsDiv>
-          ))}
-        </DetailsMainDiv>
+        <>
+          {activityLoading ? (
+            'Loading...'
+          ) : (
+            <DetailsMainDiv>
+              {eventInformation?.map((event, index) => (
+                <DetailsDiv key={index}>
+                  <LeftDiv>
+                    <p>{event?.name}</p>
+                  </LeftDiv>
+                  <p>{event?.value}</p>
+                </DetailsDiv>
+              ))}
+            </DetailsMainDiv>
+          )}
+        </>
       )}
     </WorkDetailMainDiv>
   );
