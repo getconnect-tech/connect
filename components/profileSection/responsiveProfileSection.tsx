@@ -24,6 +24,7 @@ import {
 import WorkDetails from './workDetails';
 import RecentEvent from './recentEvent';
 import AIBlock from './aiBlock';
+import EventStats from './eventStats';
 
 interface ContactInfo {
   label: string;
@@ -267,6 +268,7 @@ const ResponsiveProfileSection = () => {
       {workInfo?.map((group, index) => (
         <WorkDetails key={index} groupInfo={group} />
       ))}
+      <EventStats />
       <RecentEvent />
     </ResponsiveMainDiv>
   );
