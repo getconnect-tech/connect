@@ -89,11 +89,17 @@ const LeftDiv = styled.div`
 `;
 
 const EventNameDiv = styled.div`
-  min-width: 100px;
-  max-width: 100px;
-  p {
-    ${Typography.body_md_medium}
+  ${Typography.body_md_medium}
+  color: var(--text-text-secondary);
+  span {
+    ${Typography.body_md_regular}
     color: var(--text-text-secondary);
+    word-wrap: break-word;
+    max-width: 155px;
+    @media screen and (min-width: 321px) and (max-width: 768px) {
+      word-wrap: normal;
+      max-width: unset;
+    }
   }
 `;
 

@@ -5,7 +5,6 @@ import { isEmpty } from '@/helpers/common';
 import { ticketStore } from '@/stores/ticketStore';
 import { getUserActivity } from '@/services/clientSide/ticketServices';
 import {
-  DetailsDiv,
   DetailsItemMainDiv,
   EventDetailDiv,
   EventNameDiv,
@@ -90,12 +89,9 @@ function EventStats() {
           ) : (
             <DetailsItemMainDiv>
               {eventInformation?.map((event, index) => (
-                <DetailsDiv key={index}>
-                  <EventNameDiv>
-                    <p>{event?.name}</p>
-                  </EventNameDiv>
-                  <p>{event?.value}</p>
-                </DetailsDiv>
+                <EventNameDiv key={index}>
+                  {event?.name} <span> ({event?.value})</span>
+                </EventNameDiv>
               ))}
             </DetailsItemMainDiv>
           )}
