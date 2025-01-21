@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { contactStore } from '@/stores/contactStore';
 import { isEmpty } from '@/helpers/common';
@@ -9,6 +9,7 @@ import {
   EventDetailDiv,
   EventNameDiv,
   NameDiv,
+  SeeAllLink,
   Title,
   TitleDiv,
   WorkDetailMainDiv,
@@ -22,12 +23,21 @@ function EventStats() {
   // State variables
   const [showDetails, setShowDetails] = useState(true);
   const [activityLoading, setActivityLoading] = useState(loading);
+  const [showAll, setShowAll] = useState(false);
   const [eventInformation, setEventInformation] = useState<
     { name: string; value: number }[]
   >([]);
 
   const toggleDetails = () => {
     setShowDetails((prevShowDetails) => !prevShowDetails);
+  };
+
+  const eventsToShow = useMemo(() => {
+    return showAll ? eventInformation : eventInformation.slice(0, 5);
+  }, [eventInformation, showAll]);
+
+  const handleShowAllToggle = () => {
+    setShowAll((prevShowAll) => !prevShowAll);
   };
 
   const loadData = useCallback(async () => {
@@ -87,13 +97,21 @@ function EventStats() {
           {activityLoading ? (
             'Loading...'
           ) : (
-            <DetailsItemMainDiv>
-              {eventInformation?.map((event, index) => (
-                <EventNameDiv key={index}>
-                  {event?.name} <span> ({event?.value})</span>
-                </EventNameDiv>
-              ))}
-            </DetailsItemMainDiv>
+            <>
+              <DetailsItemMainDiv>
+                {eventsToShow?.map((event, index) => (
+                  <EventNameDiv key={index}>
+                    {event?.name} <span> ({event?.value})</span>
+                  </EventNameDiv>
+                ))}
+              </DetailsItemMainDiv>
+              {!showAll && eventInformation.length > 5 && (
+                <SeeAllLink onClick={handleShowAllToggle}>Show all</SeeAllLink>
+              )}
+              {showAll && (
+                <SeeAllLink onClick={handleShowAllToggle}>Show Less</SeeAllLink>
+              )}
+            </>
           )}
         </EventDetailDiv>
       )}
