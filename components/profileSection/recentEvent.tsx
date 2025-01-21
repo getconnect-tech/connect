@@ -15,14 +15,18 @@ import {
   LineDiv,
   Title,
   TitleDiv,
+  SeeAllLink, // Add a styled component for the link
 } from './styles';
 
 export default function RecentEvent() {
   const [showDetails, setShowDetails] = useState(true);
+  const [showAll, setShowAll] = useState(false);
   const [userActivity, setUserActivity] = useState<UserActivity[]>([]);
   const { loading } = ticketStore;
   const [activityLoading, setActivityLoading] = useState(loading);
   const { contactDetails } = contactStore;
+
+  const eventsToShow = showAll ? userActivity : userActivity.slice(0, 5);
 
   const formateEventName = (eventType: string) => {
     const prefix = '[Amplitude]';
@@ -54,6 +58,11 @@ export default function RecentEvent() {
   const toggleDetails = () => {
     setShowDetails((prevShowDetails) => !prevShowDetails);
   };
+
+  const handleShowAllToggle = () => {
+    setShowAll((prevShowAll) => !prevShowAll);
+  };
+
   return (
     <EventMainDiv>
       <TitleDiv onClick={toggleDetails}>
@@ -74,7 +83,7 @@ export default function RecentEvent() {
             'Loading...'
           ) : (
             <>
-              {userActivity.map((event: UserActivity, index) => (
+              {eventsToShow.map((event: UserActivity, index) => (
                 <React.Fragment key={index}>
                   <EventDiv>
                     <h6>{formatTime(event.event_time)}</h6>
@@ -84,9 +93,15 @@ export default function RecentEvent() {
                     </div>
                     <p>{formateEventName(event.event_type)}</p>
                   </EventDiv>
-                  {index < userActivity?.length - 1 && <LineDiv />}
+                  {index < eventsToShow?.length - 1 && <LineDiv />}
                 </React.Fragment>
               ))}
+              {!showAll && userActivity.length > 5 && (
+                <SeeAllLink onClick={handleShowAllToggle}>Show all</SeeAllLink>
+              )}
+              {showAll && (
+                <SeeAllLink onClick={handleShowAllToggle}>Show Less</SeeAllLink>
+              )}
             </>
           )}
         </EventDetailDiv>
