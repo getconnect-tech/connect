@@ -316,6 +316,14 @@ const TopDiv = styled.div`
     cursor: pointer;
   }
 `;
+
+const SeeAllLink = styled.div`
+  cursor: pointer;
+  color: var(--text-link);
+  margin-top: 12px;
+  ${Typography.body_md_medium}
+`;
+
 export {
   MainDiv,
   ProfileDiv,
@@ -346,4 +354,5 @@ export {
   TopDiv,
   EventNameDiv,
   DetailsItemMainDiv,
+  SeeAllLink,
 };
