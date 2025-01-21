@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { ticketStore } from '@/stores/ticketStore';
 import { getUserActivity } from '@/services/clientSide/ticketServices';
@@ -26,7 +26,9 @@ export default function RecentEvent() {
   const [activityLoading, setActivityLoading] = useState(loading);
   const { contactDetails } = contactStore;
 
-  const eventsToShow = showAll ? userActivity : userActivity.slice(0, 5);
+  const eventsToShow = useMemo(() => {
+    return showAll ? userActivity : userActivity.slice(0, 5);
+  }, [showAll, userActivity]);
 
   const formateEventName = (eventType: string) => {
     const prefix = '[Amplitude]';
