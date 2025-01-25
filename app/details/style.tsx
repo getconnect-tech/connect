@@ -258,7 +258,6 @@ const ActivityDiv = styled.div`
 const Message = styled.p<{ hideAvatarLine?: boolean }>`
   ${Typography.body_md_regular};
   color: var(--text);
-  /* border-left: var(--border-main); */
   padding-left: 22px;
   margin-left: -22px;
   span {
