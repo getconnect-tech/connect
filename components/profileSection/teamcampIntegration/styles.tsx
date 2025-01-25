@@ -90,17 +90,6 @@ const CenterDiv = styled.div`
   }
 `;
 
-const TextArea = styled.textarea`
-  border: none;
-  outline: none;
-  background-color: unset;
-  font-family: unset;
-  resize: none;
-  ${Typography.body_md_regular}
-  color: var(--text);
-  min-height: 90px;
-`;
-
 const BottomSection = styled.div`
   display: flex;
   justify-content: space-between;
@@ -119,7 +108,6 @@ export {
   Title,
   Input,
   CenterDiv,
-  TextArea,
   BottomSection,
   BottomLeftSection,
 };

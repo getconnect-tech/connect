@@ -7,9 +7,7 @@ import {
   CenterDiv,
   Header,
   Input,
-  LeftSection,
   MainDiv,
-  TextArea,
   Title,
 } from './styles';
 import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
@@ -32,7 +30,7 @@ function CreateTaskModal({ onClose }: Props) {
   const fileInputRef = useRef<HTMLInputElement | null>(null); // Ref for file input
   const editorRef = useRef<any>(null);
   const [commentValue, setCommentValue] = useState<string>('');
-  const [attachFile, setAttachFiels] = useState<MessageAttachment[]>([]);
+  const [attachFile, setAttachFiles] = useState<MessageAttachment[]>([]);
 
   const { workspaceStore, ticketStore, appStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
