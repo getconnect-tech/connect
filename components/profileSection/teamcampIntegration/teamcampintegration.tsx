@@ -96,7 +96,7 @@ function TeamcampIntegration() {
         )}
       </>
     );
-  }, [eventsToShow, showAll]); // Include showAll and eventsToShow in the dependency array
+  }, [eventsToShow, showAll]);
 
   const handleModalOpen = useCallback(() => {
     setCreateTaskModal(true);
