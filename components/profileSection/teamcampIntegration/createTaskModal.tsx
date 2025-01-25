@@ -17,6 +17,9 @@ import { useStores } from '@/stores';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import { priorityItem } from '@/helpers/raw';
 import Button from '@/components/button/button';
+import ProsemirrorEditor from '@/components/prosemirror';
+import FileCard from '@/components/fileCard/fileCard';
+import { MessageAttachment } from '@/utils/appTypes';
 
 interface Props {
   onClose: () => void;
@@ -25,12 +28,17 @@ interface Props {
 function CreateTaskModal({ onClose }: Props) {
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [priorityDropdown, setPriorityDropdown] = useState(false);
+  const [description, setDescription] = useState(''); // State for the description
   const fileInputRef = useRef<HTMLInputElement | null>(null); // Ref for file input
+  const editorRef = useRef<any>(null);
+  const [commentValue, setCommentValue] = useState<string>('');
+  const [attachFile, setAttachFiels] = useState<MessageAttachment[]>([]);
 
-  const { workspaceStore, ticketStore } = useStores();
+  const { workspaceStore, ticketStore, appStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { ticketDetails } = ticketStore || {};
   const { priority } = ticketDetails || {};
+  const { uploadLoading } = appStore || {};
 
   const handleAssignTag = useCallback(() => {
     setAssignDropdown((prev) => !prev);
@@ -60,7 +68,8 @@ function CreateTaskModal({ onClose }: Props) {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      console.log('Selected file:', file); // Handle file (e.g., upload or preview)
+      // Append file name to the description
+      setDescription((prev) => `${prev}\nAttached file: ${file.name}`);
     }
   };
 
@@ -78,7 +87,30 @@ function CreateTaskModal({ onClose }: Props) {
       </Header>
       <CenterDiv>
         <Input placeholder='Task Title' />
-        <TextArea placeholder='Add Description.... ' />
+        <ProsemirrorEditor
+          ref={editorRef}
+          valueContent={commentValue}
+          setValueContent={setCommentValue}
+          placeholder='Add Description.... '
+          className='prosemirror-commentbox'
+        />
+        <div className='attach-file-div'>
+          {attachFile?.map((fileData, index: number) => (
+            <FileCard
+              key={index}
+              documentText={fileData?.fileName || 'Uploaded file'}
+              fileSize={`${fileData?.size}`}
+              fileName={fileData?.fileName}
+              url={fileData?.downloadUrl}
+              type={fileData?.contentType}
+            />
+          ))}
+        </div>
+        {uploadLoading !== null && (
+          <p className='loading-text'>
+            Loading...({Math.floor(uploadLoading)}%)
+          </p>
+        )}
       </CenterDiv>
       <BottomSection>
         <BottomLeftSection>
@@ -113,7 +145,7 @@ function CreateTaskModal({ onClose }: Props) {
             onChange={handleFileChange}
           />
           <Icon
-            iconName={'attachment-icon'}
+            iconName={'attach-icon'}
             iconSize={'12'}
             iconViewBox={'0 0 12 12'}
             size={true}

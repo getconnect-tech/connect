@@ -83,6 +83,11 @@ const CenterDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  .prosemirror-commentbox {
+    max-height: 300px;
+    overflow: auto;
+    min-height: 90px;
+  }
 `;
 
 const TextArea = styled.textarea`
