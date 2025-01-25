@@ -61,6 +61,7 @@ import {
   ButtonDiv,
   CenterDiv,
   CenterMainDiv,
+  CrossIcon,
   HeaderDiv,
   IconDiv,
   Input,
@@ -71,6 +72,9 @@ import {
   Main,
   MainDiv,
   Message,
+  SignatureInnerDiv,
+  SignatureMainDiv,
+  SignatureText,
   StatusDiv,
   Title,
   TopDiv,
@@ -103,6 +107,7 @@ function TicketDetails(props: Props) {
   const [labelDropdown, setLabelDropdown] = useState(false);
   const [priorityDropdown, setPriorityDropdown] = useState(false);
   const [messageModeDropdown, setMessageModeDropdown] = useState(false);
+  const [isSignatureSection, setIsSignatureSection] = useState(false);
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
@@ -285,6 +290,14 @@ function TicketDetails(props: Props) {
 
   const handleOutsideClick = useCallback(() => {
     setMacroDropdown(false);
+  }, []);
+
+  const handleSignature = useCallback(() => {
+    setIsSignatureSection(true);
+  }, []);
+
+  const handleSignatureClose = useCallback(() => {
+    setIsSignatureSection(false);
   }, []);
 
   const assignItem = [
@@ -971,6 +984,28 @@ function TicketDetails(props: Props) {
                       Loading...({Math.floor(uploadLoading)}%)
                     </p>
                   )}
+                  {isSignatureSection && (
+                    <SignatureMainDiv>
+                      <SignatureInnerDiv>
+                        <div>
+                          <SignatureText>-</SignatureText>
+                          <SignatureText>Yours truly, </SignatureText>
+                          <SignatureText>Sanjay M.</SignatureText>
+                        </div>
+                        <SignatureText>
+                          Sent from <a>Connect</a>
+                        </SignatureText>
+                      </SignatureInnerDiv>
+                      <CrossIcon onClick={handleSignatureClose}>
+                        <SVGIcon
+                          name='signature-cross-icon'
+                          width='8'
+                          height='8'
+                          viewBox='0 0 8 8'
+                        />
+                      </CrossIcon>
+                    </SignatureMainDiv>
+                  )}
                   <InputIcon modeSelectedItem={modeSelectedItem}>
                     <div className='drop-tag'>
                       <DropDownWithTag
@@ -1043,6 +1078,15 @@ function TicketDetails(props: Props) {
                           )}
                         </div>
                       )}
+                      <Icon
+                        iconName='email-signature-icon'
+                        iconSize='12'
+                        iconViewBox='0 0 12 12'
+                        size={true}
+                        isActive={true}
+                        onClick={handleSignature}
+                        className='icon'
+                      />
                     </div>
                     <IconDiv modeSelectedItem={modeSelectedItem}>
                       <Icon

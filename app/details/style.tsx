@@ -321,6 +321,48 @@ const CenterMainDiv = styled.div`
     height: calc(100% - 117px);
   }
 `;
+
+const CrossIcon = styled.div`
+  position: absolute;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 6px;
+  right: 8px;
+  border-radius: 50%;
+  &:hover {
+    background-color: var(--bg-surface-secondary);
+  }
+`;
+
+const SignatureMainDiv = styled.div`
+  border-radius: 6px;
+  margin: 0 -8px 12px;
+  position: relative;
+  &:hover {
+    background-color: var(--bg-white-hover);
+  }
+`;
+
+const SignatureText = styled.p`
+  ${Typography.body_sm_regular}
+  color: var(--text);
+  a {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+`;
+
+const SignatureInnerDiv = styled.div`
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
 export {
   Main,
   MainDiv,
@@ -340,4 +382,8 @@ export {
   IconDiv,
   ButtonDiv,
   CenterMainDiv,
+  SignatureMainDiv,
+  SignatureText,
+  SignatureInnerDiv,
+  CrossIcon,
 };
