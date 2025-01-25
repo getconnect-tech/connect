@@ -97,6 +97,12 @@ const BottomSection = styled.div`
   align-items: center;
 `;
 
+const SeeAllLink = styled.div`
+  cursor: pointer;
+  color: var(--text-link);
+  ${Typography.body_md_medium}
+`;
+
 export {
   ItemsMainDiv,
   ItemDiv,
@@ -110,4 +116,5 @@ export {
   CenterDiv,
   BottomSection,
   BottomLeftSection,
+  SeeAllLink,
 };

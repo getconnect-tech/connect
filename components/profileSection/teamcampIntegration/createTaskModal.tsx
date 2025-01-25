@@ -1,5 +1,4 @@
 import React, { useCallback, useRef, useState } from 'react';
-import SVGIcon from '@/assets/icons/SVGIcon';
 import Icon from '@/components/icon/icon';
 import {
   BottomLeftSection,
@@ -26,11 +25,12 @@ interface Props {
 function CreateTaskModal({ onClose }: Props) {
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [priorityDropdown, setPriorityDropdown] = useState(false);
-  const [description, setDescription] = useState(''); // State for the description
-  const fileInputRef = useRef<HTMLInputElement | null>(null); // Ref for file input
-  const editorRef = useRef<any>(null);
+  const [description, setDescription] = useState('');
   const [commentValue, setCommentValue] = useState<string>('');
   const [attachFile, setAttachFiles] = useState<MessageAttachment[]>([]);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const editorRef = useRef<any>(null);
 
   const { workspaceStore, ticketStore, appStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};

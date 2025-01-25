@@ -17,43 +17,54 @@ import {
   ItemsMainDiv,
   LeftSection,
   RightIcon,
+  SeeAllLink,
 } from './styles';
 import CreateTaskModal from './createTaskModal';
 
 function TeamcampIntegration() {
   const [createTaskModal, setCreateTaskModal] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+
+  const handleShowAllToggle = () => {
+    console.log('click');
+    setShowAll((prevShowAll) => !prevShowAll);
+  };
+
+  const taskItem = [
+    {
+      title: 'Provide option to add email signature on setting',
+      iconName: 'complete-icon',
+    },
+    {
+      title: 'Improve manage signature dropdown',
+      iconName: 'canceled-icon',
+    },
+    {
+      title: 'Make “Select templates” working',
+      iconName: 'default-icon',
+    },
+    {
+      title: 'Create design for integrating Teamcamp',
+      iconName: 'in-progress-icon',
+    },
+    {
+      title: 'Create location card design',
+      iconName: 'in-review-icon',
+    },
+    {
+      title: 'Create CTA component Design',
+      iconName: 'backlog-icon',
+    },
+  ];
+
+  const eventsToShow = useMemo(() => {
+    return showAll ? taskItem : taskItem.slice(0, 5);
+  }, [showAll, taskItem]);
 
   const taskList = useMemo(() => {
-    const taskItem = [
-      {
-        title: 'Provide option to add email signature on setting',
-        iconName: 'complete-icon',
-      },
-      {
-        title: 'Improve manage signature dropdown',
-        iconName: 'canceled-icon',
-      },
-      {
-        title: 'Make “Select templates” working',
-        iconName: 'default-icon',
-      },
-      {
-        title: 'Create design for integrating Teamcamp',
-        iconName: 'in-progress-icon',
-      },
-      {
-        title: 'Create location card design',
-        iconName: 'in-review-icon',
-      },
-      {
-        title: 'Create CTA component Design',
-        iconName: 'backlog-icon',
-      },
-    ];
-
     return (
       <>
-        {taskItem.map((item, index) => (
+        {eventsToShow.map((item, index) => (
           <ItemDiv key={index}>
             <LeftSection>
               <IconDiv>
@@ -77,9 +88,15 @@ function TeamcampIntegration() {
             </RightIcon>
           </ItemDiv>
         ))}
+        {!showAll && taskItem.length > 5 && (
+          <SeeAllLink onClick={handleShowAllToggle}>Show all</SeeAllLink>
+        )}
+        {showAll && (
+          <SeeAllLink onClick={handleShowAllToggle}>Show Less</SeeAllLink>
+        )}
       </>
     );
-  }, []);
+  }, [eventsToShow, showAll]); // Include showAll and eventsToShow in the dependency array
 
   const handleModalOpen = useCallback(() => {
     setCreateTaskModal(true);
