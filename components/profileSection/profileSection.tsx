@@ -26,6 +26,7 @@ import WorkDetails from './workDetails';
 import RecentEvent from './recentEvent';
 import AIBlock from './aiBlock';
 import EventStats from './eventStats';
+import TeamcampIntegration from './teamcampIntegration/teamcampintegration';
 
 interface ContactInfo {
   label: string;
@@ -286,7 +287,7 @@ const ProfileSection = () => {
           </>
         )}
       </DetailsProfileDiv>
-
+      <TeamcampIntegration />
       {workInfo?.map((group, index) => (
         <WorkDetails key={index} groupInfo={group} />
       ))}
