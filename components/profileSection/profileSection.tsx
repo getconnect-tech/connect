@@ -11,6 +11,7 @@ import {
   refreshContact,
 } from '@/services/clientSide/contactServices';
 import { ContactGroups } from '@/utils/dataTypes';
+import { getTeamcampCredential } from '@/services/serverSide/serverAction';
 import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import {
@@ -45,6 +46,7 @@ const ProfileSection = () => {
   const [workInfo, setWorkInfo] = useState<ContactGroups[]>([]);
   const [rotation, setRotation] = useState(0); // Manage rotation state
   const [loading, setLoading] = useState(false);
+  const [teamCampCredential, setTeamCampCredential] = useState<boolean>(true);
 
   const createContactInfo = useCallback(() => {
     const contactArray: ContactInfo[] = [];
@@ -237,6 +239,13 @@ const ProfileSection = () => {
     }
   }, [contactDetails, createContactInfo]);
 
+  useEffect(() => {
+    (async () => {
+      const teamcampCredential = await getTeamcampCredential();
+      setTeamCampCredential(teamcampCredential);
+    })();
+  }, []);
+
   return (
     <MainDiv>
       <AIBlock />
@@ -287,7 +296,7 @@ const ProfileSection = () => {
           </>
         )}
       </DetailsProfileDiv>
-      <TeamcampIntegration />
+      {teamCampCredential && <TeamcampIntegration />}
       {workInfo?.map((group, index) => (
         <WorkDetails key={index} groupInfo={group} />
       ))}
