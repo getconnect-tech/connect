@@ -30,6 +30,7 @@ function TeamcampIntegration() {
     setShowAll((prevShowAll) => !prevShowAll);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const taskItem = [
     {
       title: 'Provide option to add email signature on setting',
@@ -96,7 +97,7 @@ function TeamcampIntegration() {
         )}
       </>
     );
-  }, [eventsToShow, showAll]);
+  }, [eventsToShow, showAll, taskItem.length]);
 
   const handleModalOpen = useCallback(() => {
     setCreateTaskModal(true);

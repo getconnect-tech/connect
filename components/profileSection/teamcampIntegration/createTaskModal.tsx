@@ -1,5 +1,13 @@
 import React, { useCallback, useRef, useState } from 'react';
 import Icon from '@/components/icon/icon';
+import { MessageAttachment } from '@/utils/appTypes';
+import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
+import { useStores } from '@/stores';
+import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
+import { priorityItem } from '@/helpers/raw';
+import Button from '@/components/button/button';
+import ProsemirrorEditor from '@/components/prosemirror';
+import FileCard from '@/components/fileCard/fileCard';
 import {
   BottomLeftSection,
   BottomSection,
@@ -9,14 +17,6 @@ import {
   MainDiv,
   Title,
 } from './styles';
-import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
-import { useStores } from '@/stores';
-import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
-import { priorityItem } from '@/helpers/raw';
-import Button from '@/components/button/button';
-import ProsemirrorEditor from '@/components/prosemirror';
-import FileCard from '@/components/fileCard/fileCard';
-import { MessageAttachment } from '@/utils/appTypes';
 
 interface Props {
   onClose: () => void;
@@ -25,8 +25,10 @@ interface Props {
 function CreateTaskModal({ onClose }: Props) {
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [priorityDropdown, setPriorityDropdown] = useState(false);
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [description, setDescription] = useState('');
   const [commentValue, setCommentValue] = useState<string>('');
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [attachFile, setAttachFiles] = useState<MessageAttachment[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
