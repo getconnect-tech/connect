@@ -772,9 +772,6 @@ img.ProseMirror-separator {
   &:hover {
     background-color: var(--bg-surface-secondary);
   }
-  @media screen and (max-width: 449px) {
-    display: flex;
-  }
 }
 
 .signature-main-div {
@@ -783,9 +780,6 @@ img.ProseMirror-separator {
   position: relative;
   transition: all 0.3 ease;
   padding: 8px 6px;
-  @media screen and (max-width: 449px) {
-    background-color: var(--bg-white-hover);
-  }
   &:hover {
     background-color: var(--bg-white-hover);
     .cross-icon {
