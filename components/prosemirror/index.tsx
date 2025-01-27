@@ -35,6 +35,8 @@ interface Props {
   className?: string;
   placeholder?: string;
   isInternalDiscussion?: boolean;
+  isSignature?: boolean;
+  handleClickCross?: () => void;
 }
 
 const ProsemirrorEditor = forwardRef((props: Props, ref) => {
@@ -43,6 +45,8 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
     setValueContent,
     placeholder = '',
     isInternalDiscussion = false,
+    isSignature,
+    handleClickCross,
   } = props;
   const editorRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -707,12 +711,22 @@ const ProsemirrorEditor = forwardRef((props: Props, ref) => {
   }));
 
   return (
-    <div>
+    <div className={isSignature ? 'signature-main-div' : ''}>
       {/* Content that will be parsed by ProseMirror */}
       <div id='content' ref={contentRef} style={{ display: 'none' }}></div>
 
       {/* ProseMirror editor will be initialized here */}
       <div id='editor' className={props.className} ref={editorRef}></div>
+      {isSignature && (
+        <button className='cross-icon' onClick={handleClickCross}>
+          <SVGIcon
+            name='signature-cross-icon'
+            width='8'
+            height='8'
+            viewBox='0 0 8 8'
+          />
+        </button>
+      )}
     </div>
   );
 });

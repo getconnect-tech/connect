@@ -61,7 +61,6 @@ import {
   ButtonDiv,
   CenterDiv,
   CenterMainDiv,
-  CrossIcon,
   HeaderDiv,
   IconDiv,
   Input,
@@ -72,9 +71,6 @@ import {
   Main,
   MainDiv,
   Message,
-  SignatureInnerDiv,
-  SignatureMainDiv,
-  SignatureText,
   StatusDiv,
   Title,
   TopDiv,
@@ -113,6 +109,8 @@ function TicketDetails(props: Props) {
   const [isUserScrolling, setIsUserScrolling] = useState(false);
   const [messageRefId, setMessageRefId] = useState('');
   const [commentValue, setCommentValue] = useState<string>('');
+  const signatureFormat = `<p>-<br />Yours truly,<br />Sanjay M.</p><p>Sent from Connect</p>`;
+  const [signatureValue, setSignatureValue] = useState<string>(signatureFormat);
   const [attachFile, setAttachFiels] = useState<MessageAttachment[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<any>(null);
@@ -985,26 +983,12 @@ function TicketDetails(props: Props) {
                     </p>
                   )}
                   {isSignatureSection && (
-                    <SignatureMainDiv>
-                      <SignatureInnerDiv>
-                        <div>
-                          <SignatureText>-</SignatureText>
-                          <SignatureText>Yours truly, </SignatureText>
-                          <SignatureText>Sanjay M.</SignatureText>
-                        </div>
-                        <SignatureText>
-                          Sent from <a>Connect</a>
-                        </SignatureText>
-                      </SignatureInnerDiv>
-                      <CrossIcon onClick={handleSignatureClose}>
-                        <SVGIcon
-                          name='signature-cross-icon'
-                          width='8'
-                          height='8'
-                          viewBox='0 0 8 8'
-                        />
-                      </CrossIcon>
-                    </SignatureMainDiv>
+                    <ProsemirrorEditor
+                      isSignature={true}
+                      valueContent={signatureValue}
+                      setValueContent={setSignatureValue}
+                      handleClickCross={handleSignatureClose}
+                    />
                   )}
                   <InputIcon modeSelectedItem={modeSelectedItem}>
                     <div className='drop-tag'>

@@ -163,6 +163,7 @@ const Input = styled.div<Props>`
   .prosemirror-commentbox {
     max-height: 300px;
     overflow: auto;
+    min-height: 48px;
   }
   .loading-text {
     ${Typography.body_sm_regular};
@@ -321,51 +322,6 @@ const CenterMainDiv = styled.div`
   }
 `;
 
-const CrossIcon = styled.div`
-  position: absolute;
-  cursor: pointer;
-  width: 16px;
-  height: 16px;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  top: 6px;
-  right: 8px;
-  border-radius: 50%;
-  &:hover {
-    background-color: var(--bg-surface-secondary);
-  }
-`;
-
-const SignatureMainDiv = styled.div`
-  border-radius: 6px;
-  margin: 0 -8px 12px;
-  position: relative;
-  transition: all 0.3 ease;
-  &:hover {
-    background-color: var(--bg-white-hover);
-    ${CrossIcon} {
-      display: flex;
-    }
-  }
-`;
-
-const SignatureText = styled.p`
-  ${Typography.body_sm_regular}
-  color: var(--text);
-  a {
-    text-decoration: underline;
-    cursor: pointer;
-  }
-`;
-
-const SignatureInnerDiv = styled.div`
-  padding: 6px 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
 export {
   Main,
   MainDiv,
@@ -385,8 +341,4 @@ export {
   IconDiv,
   ButtonDiv,
   CenterMainDiv,
-  SignatureMainDiv,
-  SignatureText,
-  SignatureInnerDiv,
-  CrossIcon,
 };
