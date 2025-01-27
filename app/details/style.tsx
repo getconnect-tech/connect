@@ -326,7 +326,7 @@ const CrossIcon = styled.div`
   cursor: pointer;
   width: 16px;
   height: 16px;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   top: 6px;
@@ -341,8 +341,12 @@ const SignatureMainDiv = styled.div`
   border-radius: 6px;
   margin: 0 -8px 12px;
   position: relative;
+  transition: all 0.3 ease;
   &:hover {
     background-color: var(--bg-white-hover);
+    ${CrossIcon} {
+      display: flex;
+    }
   }
 `;
 
