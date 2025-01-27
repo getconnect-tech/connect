@@ -109,7 +109,8 @@ function TicketDetails(props: Props) {
   const [isUserScrolling, setIsUserScrolling] = useState(false);
   const [messageRefId, setMessageRefId] = useState('');
   const [commentValue, setCommentValue] = useState<string>('');
-  const signatureFormat = `<p>-<br />Yours truly,<br />Sanjay M.</p><p>Sent from Connect</p>`;
+  // eslint-disable-next-line max-len
+  const signatureFormat = `<p>-<br/>Yours truly,<br/>Sanjay M.</p><p>Sent from <a target="_blank" href="https://www.getconnect.tech/">Connect</a></p>`;
   const [signatureValue, setSignatureValue] = useState<string>(signatureFormat);
   const [attachFile, setAttachFiels] = useState<MessageAttachment[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);

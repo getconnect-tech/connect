@@ -786,4 +786,8 @@ img.ProseMirror-separator {
       display: flex;
     }
   }
+  a {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 }
