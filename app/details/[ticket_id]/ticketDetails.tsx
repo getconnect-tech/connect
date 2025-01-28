@@ -427,7 +427,7 @@ function TicketDetails(props: Props) {
         contentType: file?.contentType ?? '',
       }));
       const payload = {
-        content: content,
+        content: isSignatureSection ? `${content} ${signatureValue}` : content,
         type,
         attachmentToken: attachFile?.length > 0 ? messageRefId : undefined,
       };
@@ -436,7 +436,7 @@ function TicketDetails(props: Props) {
         author: user,
         attachments: updatedAttachments,
         author_id: user!.id,
-        content,
+        content: isSignatureSection ? `${content} ${signatureValue}` : content,
         id: getUniqueId(),
         created_at: new Date(),
         label: null,
@@ -452,6 +452,7 @@ function TicketDetails(props: Props) {
           setCommentValue('');
           editorRef?.current?.clearEditor();
           setAttachFiels([]);
+          setIsSignatureSection(false);
           ticketStore.addTicketMessage(newMessage);
           const res = await sendMessage(ticket_id, payload);
           ticketStore.updateMessageId(res.id, newMessage.id);
@@ -460,7 +461,15 @@ function TicketDetails(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [attachFile, messageRefId, user, ticket_id, ticketStore],
+    [
+      attachFile,
+      isSignatureSection,
+      signatureValue,
+      messageRefId,
+      user,
+      ticket_id,
+      ticketStore,
+    ],
   );
 
   /*
