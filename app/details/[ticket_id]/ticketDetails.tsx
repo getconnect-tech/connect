@@ -297,7 +297,8 @@ function TicketDetails(props: Props) {
 
   const handleSignatureClose = useCallback(() => {
     setIsSignatureSection(false);
-  }, []);
+    setSignatureValue(signatureFormat);
+  }, [signatureFormat]);
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
