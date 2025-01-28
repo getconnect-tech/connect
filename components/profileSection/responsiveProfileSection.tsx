@@ -10,6 +10,7 @@ import {
   getContactGroups,
   refreshContact,
 } from '@/services/clientSide/contactServices';
+import { getTeamcampCredential } from '@/services/serverSide/serverAction';
 import Avatar from '../avtar/Avtar';
 import Icon from '../icon/icon';
 import {
@@ -25,6 +26,7 @@ import WorkDetails from './workDetails';
 import RecentEvent from './recentEvent';
 import AIBlock from './aiBlock';
 import EventStats from './eventStats';
+import TeamcampIntegration from './teamcampIntegration/teamcampintegration';
 
 interface ContactInfo {
   label: string;
@@ -43,6 +45,7 @@ const ResponsiveProfileSection = () => {
   const [workInfo, setWorkInfo] = useState<ContactGroups[]>([]);
   const [rotation, setRotation] = useState(0); // Manage rotation state
   const [loading, setLoading] = useState(false);
+  const [teamCampCredential, setTeamCampCredential] = useState<boolean>(true);
 
   const createContactInfo = useCallback(() => {
     const contactArray: ContactInfo[] = [];
@@ -217,6 +220,13 @@ const ResponsiveProfileSection = () => {
     }
   }, [contact, createContactInfo]);
 
+  useEffect(() => {
+    (async () => {
+      const teamcampCredential = await getTeamcampCredential();
+      setTeamCampCredential(teamcampCredential);
+    })();
+  }, []);
+
   return (
     <ResponsiveMainDiv>
       <AIBlock />
@@ -265,6 +275,7 @@ const ResponsiveProfileSection = () => {
           </>
         )}
       </DetailsProfileDiv>
+      {teamCampCredential && <TeamcampIntegration />}
       {workInfo?.map((group, index) => (
         <WorkDetails key={index} groupInfo={group} />
       ))}
