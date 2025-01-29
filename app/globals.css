@@ -756,3 +756,38 @@ img.ProseMirror-separator {
     fill: var(--icon-active);
   }
 }
+
+.cross-icon {
+  position: absolute;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  top: 6px;
+  right: 8px;
+  border-radius: 50%;
+  border: none;
+  &:hover {
+    background-color: var(--bg-surface-secondary);
+  }
+}
+
+.signature-main-div {
+  border-radius: 6px;
+  margin: 0 -8px 12px;
+  position: relative;
+  transition: all 0.3 ease;
+  padding: 8px 6px;
+  &:hover {
+    background-color: var(--bg-white-hover);
+    .cross-icon {
+      display: flex;
+    }
+  }
+  a {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}

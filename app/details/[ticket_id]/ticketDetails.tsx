@@ -103,11 +103,15 @@ function TicketDetails(props: Props) {
   const [labelDropdown, setLabelDropdown] = useState(false);
   const [priorityDropdown, setPriorityDropdown] = useState(false);
   const [messageModeDropdown, setMessageModeDropdown] = useState(false);
+  const [isSignatureSection, setIsSignatureSection] = useState(false);
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [snoozeDropdown, setSnoozeDropdown] = useState(false);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
   const [messageRefId, setMessageRefId] = useState('');
   const [commentValue, setCommentValue] = useState<string>('');
+  // eslint-disable-next-line max-len
+  const signatureFormat = `<p>-<br/>Yours truly,<br/>Sanjay M.</p><p>Sent from <a target="_blank" href="https://www.getconnect.tech/">Connect</a></p>`;
+  const [signatureValue, setSignatureValue] = useState<string>(signatureFormat);
   const [attachFile, setAttachFiels] = useState<MessageAttachment[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<any>(null);
@@ -287,6 +291,15 @@ function TicketDetails(props: Props) {
     setMacroDropdown(false);
   }, []);
 
+  const handleSignature = useCallback(() => {
+    setIsSignatureSection(true);
+  }, []);
+
+  const handleSignatureClose = useCallback(() => {
+    setIsSignatureSection(false);
+    setSignatureValue(signatureFormat);
+  }, [signatureFormat]);
+
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
     ...(currentWorkspace?.users?.map((user) => ({
@@ -414,7 +427,7 @@ function TicketDetails(props: Props) {
         contentType: file?.contentType ?? '',
       }));
       const payload = {
-        content: content,
+        content: isSignatureSection ? `${content} ${signatureValue}` : content,
         type,
         attachmentToken: attachFile?.length > 0 ? messageRefId : undefined,
       };
@@ -423,7 +436,7 @@ function TicketDetails(props: Props) {
         author: user,
         attachments: updatedAttachments,
         author_id: user!.id,
-        content,
+        content: isSignatureSection ? `${content} ${signatureValue}` : content,
         id: getUniqueId(),
         created_at: new Date(),
         label: null,
@@ -439,6 +452,7 @@ function TicketDetails(props: Props) {
           setCommentValue('');
           editorRef?.current?.clearEditor();
           setAttachFiels([]);
+          setIsSignatureSection(false);
           ticketStore.addTicketMessage(newMessage);
           const res = await sendMessage(ticket_id, payload);
           ticketStore.updateMessageId(res.id, newMessage.id);
@@ -447,7 +461,15 @@ function TicketDetails(props: Props) {
         console.log('Error : ', e);
       }
     },
-    [attachFile, messageRefId, user, ticket_id, ticketStore],
+    [
+      attachFile,
+      isSignatureSection,
+      signatureValue,
+      messageRefId,
+      user,
+      ticket_id,
+      ticketStore,
+    ],
   );
 
   /*
@@ -971,6 +993,14 @@ function TicketDetails(props: Props) {
                       Loading...({Math.floor(uploadLoading)}%)
                     </p>
                   )}
+                  {isSignatureSection && (
+                    <ProsemirrorEditor
+                      isSignature={true}
+                      valueContent={signatureValue}
+                      setValueContent={setSignatureValue}
+                      handleClickCross={handleSignatureClose}
+                    />
+                  )}
                   <InputIcon modeSelectedItem={modeSelectedItem}>
                     <div className='drop-tag'>
                       <DropDownWithTag
@@ -1043,6 +1073,15 @@ function TicketDetails(props: Props) {
                           )}
                         </div>
                       )}
+                      <Icon
+                        iconName='email-signature-icon'
+                        iconSize='12'
+                        iconViewBox='0 0 12 12'
+                        size={true}
+                        isActive={true}
+                        onClick={handleSignature}
+                        className='icon'
+                      />
                     </div>
                     <IconDiv modeSelectedItem={modeSelectedItem}>
                       <Icon
