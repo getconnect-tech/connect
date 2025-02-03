@@ -16,8 +16,6 @@
   "dependencies": {
     "@prisma/client": "^5.19.1",
     "@radix-ui/react-context-menu": "^2.2.1",
-    "@syncfusion/ej2-react-dropdowns": "^26.2.8",
-    "@syncfusion/ej2-react-richtexteditor": "^26.2.8",
     "antd": "^5.20.2",
     "axios": "^1.7.3",
     "clipboard-copy": "^4.0.1",
