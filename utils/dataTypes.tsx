@@ -172,3 +172,21 @@ export type UserActivity = {
   event_time: string;
   event_properties: object;
 };
+
+export type TeamcampUser = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  profile_photo?: string;
+  isAdmin: boolean;
+  isOwner: boolean;
+};
+
+export type TaskCreatePayload = {
+  taskName: string;
+  description: string;
+  priority: number;
+  taskUsers: string[];
+  files: { fileType: string; href: string; name: string; size: string };
+};
