@@ -5,10 +5,10 @@ import {
   ChannelType,
   TicketStatus,
 } from '@prisma/client';
-import { createOrUpdateContact } from './contact';
 import { prisma } from '@/prisma/prisma';
 import { removeNullUndefined } from '@/helpers/common';
 import { chatWithOpenAi } from '@/lib/openAi';
+import { createOrUpdateContact } from './contact';
 
 export const getWorkspaceTickets = async (
   workspaceId: string,
