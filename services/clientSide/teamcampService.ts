@@ -2,6 +2,7 @@ import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { messageStore } from '@/stores/messageStore';
 import { getAPIErrorMessage } from '@/helpers/common';
+import { teamcampStore } from '@/stores/teamcampStore';
 
 /**
  * @desc get teamcamp tasks list
@@ -54,6 +55,7 @@ export const getUserList = async () => {
       `${NEXT_PUBLIC_API_URL}/teamcamp/project/users`,
     );
     const { data } = response;
+    teamcampStore.setProjectUsers(data);
     return data;
   } catch (err: any) {
     messageStore.setErrorMessage(

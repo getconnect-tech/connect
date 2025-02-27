@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Icon from '@/components/icon/icon';
 import { MessageAttachment } from '@/utils/appTypes';
 import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
@@ -8,6 +8,7 @@ import { priorityItem } from '@/helpers/raw';
 import Button from '@/components/button/button';
 import ProsemirrorEditor from '@/components/prosemirror';
 import FileCard from '@/components/fileCard/fileCard';
+import { getUserList } from '@/services/clientSide/teamcampService';
 import {
   BottomLeftSection,
   BottomSection,
@@ -34,11 +35,23 @@ function CreateTaskModal({ onClose }: Props) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const editorRef = useRef<any>(null);
 
-  const { workspaceStore, ticketStore, appStore } = useStores();
-  const { currentWorkspace } = workspaceStore || {};
+  const { ticketStore, appStore, teamcampStore } = useStores();
+  const { projectUsers } = teamcampStore || {};
   const { ticketDetails } = ticketStore || {};
   const { priority } = ticketDetails || {};
   const { uploadLoading } = appStore || {};
+
+  const loadData = useCallback(async () => {
+    try {
+      if (projectUsers.length === 0) await getUserList();
+    } catch (err) {
+      console.log('error', err);
+    }
+  }, [projectUsers]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const handleAssignTag = useCallback(() => {
     setAssignDropdown((prev) => !prev);
@@ -51,9 +64,9 @@ function CreateTaskModal({ onClose }: Props) {
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
-    ...(currentWorkspace?.users?.map((user) => ({
-      name: user.display_name || '',
-      src: user.profile_url || '',
+    ...(projectUsers?.map((user) => ({
+      name: user.name || '',
+      src: user.profile_photo || '',
       isName: true,
       user_id: user.id,
     })) || []),
