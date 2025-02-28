@@ -31,6 +31,7 @@ interface Props {
 }
 
 function CreateTaskModal({ onClose }: Props) {
+  const [loading, setLoading] = useState(false);
   const [assignDropdown, setAssignDropdown] = useState(false);
   const [priorityDropdown, setPriorityDropdown] = useState(false);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
@@ -109,11 +110,14 @@ function CreateTaskModal({ onClose }: Props) {
 
   const handleCreateTask = useCallback(async () => {
     try {
+      setLoading(true);
       await createTask(taskCreateInput);
       onClose();
       teamcampStore.clearTaskCreateInput();
     } catch (e) {
       console.log('error', e);
+    } finally {
+      setLoading(false);
     }
   }, [onClose, taskCreateInput, teamcampStore]);
 
@@ -216,6 +220,7 @@ function CreateTaskModal({ onClose }: Props) {
             title='Create task'
             className='button'
             variant='small'
+            isLoading={loading}
           />
         </BottomLeftSection>
       </BottomSection>
