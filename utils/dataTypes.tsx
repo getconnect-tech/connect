@@ -74,6 +74,12 @@ export type WorkspaceConfig = {
 
 export type Macros = NonNullable<Awaited<ReturnType<typeof getMacros>>>[0];
 
+export type TeamcampTask = {
+  name: string;
+  status: string;
+  id: string;
+};
+
 export type MessageAttachment = {
   fileName: string;
   contentId: string;

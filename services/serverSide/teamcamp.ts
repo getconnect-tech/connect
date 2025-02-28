@@ -1,6 +1,11 @@
 import axios from 'axios';
 import { User } from '@prisma/client';
-import { TaskCreatePayload, TeamcampUser } from '@/utils/dataTypes';
+import {
+  TaskCreatePayload,
+  TeamcampTask,
+  TeamcampUser,
+} from '@/utils/dataTypes';
+import { STATUS_ICON_NAMES } from '@/global/constants';
 
 const apiKey = process.env.TEAMCAMP_API_KEY;
 const projectId = process.env.TEAMCAMP_PROJECT_ID;
@@ -28,7 +33,8 @@ export const getTasks = async () => {
     }
   }
 
-  return tasks;
+  const formattedTasks: TeamcampTask[] = tasks.map(formatTeamcampTask);
+  return formattedTasks;
 };
 
 export const createTask = async (payload: TaskCreatePayload) => {
@@ -69,4 +75,22 @@ export const formatTeamcampUserToUser = (teamcampUser: TeamcampUser) => {
   };
 
   return user;
+};
+
+export const formatTeamcampTask = (teamcampTask: any) => {
+  const status = teamcampTask.taskStatus
+    ? STATUS_ICON_NAMES[
+        teamcampTask.taskStatus.Type as keyof typeof STATUS_ICON_NAMES
+      ]
+    : teamcampTask.status
+      ? 'complete-icon'
+      : 'default-icon';
+
+  const task: TeamcampTask = {
+    id: teamcampTask.id,
+    name: teamcampTask.taskName,
+    status,
+  };
+
+  return task;
 };

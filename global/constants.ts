@@ -56,3 +56,12 @@ export const PRIORITY_ICON_NAMES: { [key: number]: string } = {
   3: 'MEDIUM',
   4: 'LOW',
 };
+
+export const STATUS_ICON_NAMES = {
+  1: 'backlog-icon',
+  2: 'default-icon',
+  3: 'in-progress-icon',
+  4: 'in-review-icon',
+  5: 'complete-icon',
+  6: 'canceled-icon',
+};

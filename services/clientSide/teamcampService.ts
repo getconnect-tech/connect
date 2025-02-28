@@ -11,6 +11,7 @@ export const getTasksList = async () => {
   try {
     const response = await axios.get(`${NEXT_PUBLIC_API_URL}/teamcamp/tasks`);
     const { data } = response;
+    teamcampStore.setTaskList(data);
     return data;
   } catch (err: any) {
     messageStore.setErrorMessage(

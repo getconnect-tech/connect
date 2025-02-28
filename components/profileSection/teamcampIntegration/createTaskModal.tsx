@@ -125,12 +125,16 @@ function CreateTaskModal({ onClose }: Props) {
           iconName={'modal-close-icon'}
           iconSize={'12'}
           iconViewBox={'0 0 12 12'}
-          onClick={onClose}
+          onClick={() => {
+            onClose();
+            teamcampStore.clearTaskCreateInput();
+          }}
           size={true}
         />
       </Header>
       <CenterDiv>
         <Input
+          value={taskCreateInput?.taskName}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             teamcampStore.updateTaskCreateInput('taskName', e.target.value);
           }}

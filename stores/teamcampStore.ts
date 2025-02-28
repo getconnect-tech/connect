@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from 'mobx';
 import { User } from '@prisma/client';
-import { TaskCreatePayload } from '@/utils/dataTypes';
+import { TaskCreatePayload, TeamcampTask } from '@/utils/dataTypes';
 
 const getInitialTaskCreateInput = (): TaskCreatePayload => ({
   taskName: '',
@@ -14,6 +14,7 @@ class TeamcampStore {
   loading = false;
   projectUsers: User[] = [];
   taskCreateInput: TaskCreatePayload = getInitialTaskCreateInput();
+  taskList: TeamcampTask[] = [];
 
   constructor() {
     makeObservable(this, {
@@ -28,6 +29,10 @@ class TeamcampStore {
       // create task input fields
       taskCreateInput: observable,
       updateTaskCreateInput: action,
+
+      // task list
+      taskList: observable,
+      setTaskList: action,
     });
   }
 
@@ -52,6 +57,11 @@ class TeamcampStore {
   // set task create input
   clearTaskCreateInput() {
     this.taskCreateInput = getInitialTaskCreateInput();
+  }
+
+  // set task list
+  setTaskList(value: TeamcampTask[]) {
+    this.taskList = value;
   }
 }
 

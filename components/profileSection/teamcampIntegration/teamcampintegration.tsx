@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Modal from '@/components/modal/modal';
+import { useStores } from '@/stores';
 import Icon from '../../icon/icon';
 import {
   AIIcon,
@@ -22,47 +23,21 @@ import {
 import CreateTaskModal from './createTaskModal';
 
 function TeamcampIntegration() {
+  const { teamcampStore } = useStores();
+  const { taskList } = teamcampStore || {};
+
   const [createTaskModal, setCreateTaskModal] = useState(false);
   const [showAll, setShowAll] = useState(false);
 
   const handleShowAllToggle = () => {
-    console.log('click');
     setShowAll((prevShowAll) => !prevShowAll);
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const taskItem = [
-    {
-      title: 'Provide option to add email signature on setting',
-      iconName: 'complete-icon',
-    },
-    {
-      title: 'Improve manage signature dropdown',
-      iconName: 'canceled-icon',
-    },
-    {
-      title: 'Make “Select templates” working',
-      iconName: 'default-icon',
-    },
-    {
-      title: 'Create design for integrating Teamcamp',
-      iconName: 'in-progress-icon',
-    },
-    {
-      title: 'Create location card design',
-      iconName: 'in-review-icon',
-    },
-    {
-      title: 'Create CTA component Design',
-      iconName: 'backlog-icon',
-    },
-  ];
-
   const eventsToShow = useMemo(() => {
-    return showAll ? taskItem : taskItem.slice(0, 5);
-  }, [showAll, taskItem]);
+    return showAll ? taskList : taskList.slice(0, 5);
+  }, [showAll, taskList]);
 
-  const taskList = useMemo(() => {
+  const renderTaskList = useMemo(() => {
     return (
       <>
         {eventsToShow.map((item, index) => (
@@ -70,14 +45,14 @@ function TeamcampIntegration() {
             <LeftSection>
               <IconDiv>
                 <SVGIcon
-                  name={item.iconName}
+                  name={item.status}
                   width='16'
                   height='16'
                   viewBox='0 0 16 16'
                   fill='none'
                 />
               </IconDiv>
-              <AIText>{item.title}</AIText>
+              <AIText>{item.name}</AIText>
             </LeftSection>
             <RightIcon>
               <SVGIcon
@@ -89,7 +64,7 @@ function TeamcampIntegration() {
             </RightIcon>
           </ItemDiv>
         ))}
-        {!showAll && taskItem.length > 5 && (
+        {!showAll && taskList.length > 5 && (
           <SeeAllLink onClick={handleShowAllToggle}>Show all</SeeAllLink>
         )}
         {showAll && (
@@ -97,7 +72,7 @@ function TeamcampIntegration() {
         )}
       </>
     );
-  }, [eventsToShow, showAll, taskItem.length]);
+  }, [eventsToShow, showAll, taskList.length]);
 
   const handleModalOpen = useCallback(() => {
     setCreateTaskModal(true);
@@ -133,7 +108,7 @@ function TeamcampIntegration() {
           />
         </TitleDiv>
         <DetailsMainDiv>
-          <ItemsMainDiv>{taskList}</ItemsMainDiv>
+          <ItemsMainDiv>{renderTaskList}</ItemsMainDiv>
         </DetailsMainDiv>
       </WorkDetailMainDiv>
       <Modal open={createTaskModal} onClose={handleModalClose}>
