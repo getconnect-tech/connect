@@ -183,10 +183,17 @@ export type TeamcampUser = {
   isOwner: boolean;
 };
 
+export type File = {
+  fileType: string;
+  href: string;
+  name: string;
+  size: string;
+};
+
 export type TaskCreatePayload = {
   taskName: string;
   description: string;
   priority: number;
   taskUsers: string[];
-  files: { fileType: string; href: string; name: string; size: string };
+  files: File[];
 };

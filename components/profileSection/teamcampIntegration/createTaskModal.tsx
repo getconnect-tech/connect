@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import { PriorityLevels } from '@prisma/client';
 import Icon from '@/components/icon/icon';
 import { MessageAttachment } from '@/utils/appTypes';
 import AssigneeDropdown from '@/components/AssigneeDropdown/dropDownWithTag';
@@ -8,7 +10,12 @@ import { priorityItem } from '@/helpers/raw';
 import Button from '@/components/button/button';
 import ProsemirrorEditor from '@/components/prosemirror';
 import FileCard from '@/components/fileCard/fileCard';
-import { getUserList } from '@/services/clientSide/teamcampService';
+import { createTask, getUserList } from '@/services/clientSide/teamcampService';
+import {
+  PRIORITY_ICON_NAMES,
+  TASK_PRIORITY,
+  TASK_PRIORITY_LABELS,
+} from '@/global/constants';
 import {
   BottomLeftSection,
   BottomSection,
@@ -28,17 +35,14 @@ function CreateTaskModal({ onClose }: Props) {
   const [priorityDropdown, setPriorityDropdown] = useState(false);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [description, setDescription] = useState('');
-  const [commentValue, setCommentValue] = useState<string>('');
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [attachFile, setAttachFiles] = useState<MessageAttachment[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const editorRef = useRef<any>(null);
 
-  const { ticketStore, appStore, teamcampStore } = useStores();
-  const { projectUsers } = teamcampStore || {};
-  const { ticketDetails } = ticketStore || {};
-  const { priority } = ticketDetails || {};
+  const { appStore, teamcampStore } = useStores();
+  const { projectUsers, taskCreateInput } = teamcampStore || {};
   const { uploadLoading } = appStore || {};
 
   const loadData = useCallback(async () => {
@@ -65,8 +69,8 @@ function CreateTaskModal({ onClose }: Props) {
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
     ...(projectUsers?.map((user) => ({
-      name: user.name || '',
-      src: user.profile_photo || '',
+      name: user.display_name || '',
+      src: user.profile_url || '',
       isName: true,
       user_id: user.id,
     })) || []),
@@ -86,6 +90,33 @@ function CreateTaskModal({ onClose }: Props) {
     }
   };
 
+  const onChangeAssign = useCallback(
+    (item: { user_id: string }) => {
+      teamcampStore.updateTaskCreateInput('taskUsers', [item.user_id]);
+    },
+    [teamcampStore],
+  );
+
+  const onChangePriority = useCallback(
+    (item: { value: PriorityLevels }) => {
+      teamcampStore.updateTaskCreateInput(
+        'priority',
+        TASK_PRIORITY[item.value],
+      );
+    },
+    [teamcampStore],
+  );
+
+  const handleCreateTask = useCallback(async () => {
+    try {
+      await createTask(taskCreateInput);
+      onClose();
+      teamcampStore.clearTaskCreateInput();
+    } catch (e) {
+      console.log('error', e);
+    }
+  }, [onClose, taskCreateInput, teamcampStore]);
+
   return (
     <MainDiv>
       <Header>
@@ -99,11 +130,18 @@ function CreateTaskModal({ onClose }: Props) {
         />
       </Header>
       <CenterDiv>
-        <Input placeholder='Task Title' />
+        <Input
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            teamcampStore.updateTaskCreateInput('taskName', e.target.value);
+          }}
+          placeholder='Task Title'
+        />
         <ProsemirrorEditor
           ref={editorRef}
-          valueContent={commentValue}
-          setValueContent={setCommentValue}
+          valueContent={taskCreateInput?.description}
+          setValueContent={(value: string) => {
+            teamcampStore.updateTaskCreateInput('description', value);
+          }}
           placeholder='Add Description.... '
           className='prosemirror-commentbox'
         />
@@ -132,19 +170,24 @@ function CreateTaskModal({ onClose }: Props) {
             dropdownOpen={assignDropdown}
             onClose={() => setAssignDropdown(false)}
             items={assignItem}
-            onChange={() => {}}
+            onChange={onChangeAssign}
             isActive={true}
             iconSize='20'
+            selectedValue={projectUsers?.find(
+              (user) => user.id === taskCreateInput?.taskUsers?.[0],
+            )}
           />
           <DropDownWithTag
             onClick={handlePriorityTag}
             title={'Priority'}
-            iconName={`priority-${priority || 'NONE'}`}
+            iconName={`priority-${PRIORITY_ICON_NAMES[taskCreateInput.priority] || 'NONE'}`}
             dropdownOpen={priorityDropdown}
             onClose={() => setPriorityDropdown(false)}
             items={priorityItem}
-            onChange={() => {}}
-            selectedValue={{ name: priority || 'NONE' }}
+            onChange={onChangePriority}
+            selectedValue={{
+              name: TASK_PRIORITY_LABELS[taskCreateInput.priority] || 'NONE',
+            }}
             isTag={true}
             isActive={true}
           />
@@ -164,11 +207,16 @@ function CreateTaskModal({ onClose }: Props) {
             size={true}
             onClick={handleAttachmentClick}
           />
-          <Button title='Create task' className='button' variant='small' />
+          <Button
+            onClick={handleCreateTask}
+            title='Create task'
+            className='button'
+            variant='small'
+          />
         </BottomLeftSection>
       </BottomSection>
     </MainDiv>
   );
 }
 
-export default CreateTaskModal;
+export default observer(CreateTaskModal);

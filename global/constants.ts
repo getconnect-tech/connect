@@ -32,3 +32,27 @@ export const TICKETS_HEADER: {
   2: 'Unassigned',
   3: 'All Tickets',
 };
+
+export const TASK_PRIORITY_LABELS: { [key: number]: string } = {
+  0: 'None',
+  1: 'Urgent',
+  2: 'High',
+  3: 'Medium',
+  4: 'Low',
+};
+
+export const TASK_PRIORITY = {
+  NONE: 0,
+  URGENT: 1,
+  HIGH: 2,
+  MEDIUM: 3,
+  LOW: 4,
+};
+
+export const PRIORITY_ICON_NAMES: { [key: number]: string } = {
+  0: 'NONE',
+  1: 'URGENT',
+  2: 'HIGH',
+  3: 'MEDIUM',
+  4: 'LOW',
+};
