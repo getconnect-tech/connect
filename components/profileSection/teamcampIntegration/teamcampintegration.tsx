@@ -54,7 +54,15 @@ function TeamcampIntegration() {
               </IconDiv>
               <AIText>{item.name}</AIText>
             </LeftSection>
-            <RightIcon>
+            <RightIcon
+              onClick={() => {
+                window.open(
+                  // eslint-disable-next-line max-len
+                  `https://dash.teamcamp.app/projects/details/${process.env.NEXT_PUBLIC_TEAMCAMP_PROJECT_ID}/tasks?&task=${item.id}`,
+                  '_blank',
+                );
+              }}
+            >
               <SVGIcon
                 name='arrow-icon'
                 width='20'

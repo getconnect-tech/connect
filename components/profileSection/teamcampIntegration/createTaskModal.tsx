@@ -16,6 +16,7 @@ import {
   TASK_PRIORITY,
   TASK_PRIORITY_LABELS,
 } from '@/global/constants';
+import { isEmpty } from '@/helpers/common';
 import {
   BottomLeftSection,
   BottomSection,
@@ -42,7 +43,7 @@ function CreateTaskModal({ onClose }: Props) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const editorRef = useRef<any>(null);
 
-  const { appStore, teamcampStore } = useStores();
+  const { appStore, teamcampStore, messageStore } = useStores();
   const { projectUsers, taskCreateInput } = teamcampStore || {};
   const { uploadLoading } = appStore || {};
 
@@ -109,6 +110,10 @@ function CreateTaskModal({ onClose }: Props) {
   );
 
   const handleCreateTask = useCallback(async () => {
+    if (isEmpty(taskCreateInput.taskName)) {
+      messageStore.setErrorMessage('Please enter task name!');
+      return;
+    }
     try {
       setLoading(true);
       await createTask(taskCreateInput);
@@ -119,7 +124,7 @@ function CreateTaskModal({ onClose }: Props) {
     } finally {
       setLoading(false);
     }
-  }, [onClose, taskCreateInput, teamcampStore]);
+  }, [messageStore, onClose, taskCreateInput, teamcampStore]);
 
   return (
     <MainDiv>
