@@ -1,6 +1,10 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Modal from '@/components/modal/modal';
+import { useStores } from '@/stores';
+import { getTeamcampCredential } from '@/services/serverSide/serverAction';
+import { isEmpty } from '@/helpers/common';
 import Icon from '../../icon/icon';
 import {
   AIIcon,
@@ -22,62 +26,55 @@ import {
 import CreateTaskModal from './createTaskModal';
 
 function TeamcampIntegration() {
+  const { teamcampStore } = useStores();
+  const { taskList } = teamcampStore || {};
+
+  const [teamcampProjectId, setTeamcampProjectId] = useState('');
   const [createTaskModal, setCreateTaskModal] = useState(false);
   const [showAll, setShowAll] = useState(false);
 
   const handleShowAllToggle = () => {
-    console.log('click');
     setShowAll((prevShowAll) => !prevShowAll);
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const taskItem = [
-    {
-      title: 'Provide option to add email signature on setting',
-      iconName: 'complete-icon',
-    },
-    {
-      title: 'Improve manage signature dropdown',
-      iconName: 'canceled-icon',
-    },
-    {
-      title: 'Make “Select templates” working',
-      iconName: 'default-icon',
-    },
-    {
-      title: 'Create design for integrating Teamcamp',
-      iconName: 'in-progress-icon',
-    },
-    {
-      title: 'Create location card design',
-      iconName: 'in-review-icon',
-    },
-    {
-      title: 'Create CTA component Design',
-      iconName: 'backlog-icon',
-    },
-  ];
+  useEffect(() => {
+    (async () => {
+      const teamcampCredential = await getTeamcampCredential();
+      if (teamcampCredential)
+        setTeamcampProjectId(teamcampCredential.projectId);
+    })();
+  }, []);
 
   const eventsToShow = useMemo(() => {
-    return showAll ? taskItem : taskItem.slice(0, 5);
-  }, [showAll, taskItem]);
+    return showAll ? taskList : taskList.slice(0, 5);
+  }, [showAll, taskList]);
 
-  const taskList = useMemo(() => {
+  const renderTaskList = useMemo(() => {
     return (
       <>
         {eventsToShow.map((item, index) => (
-          <ItemDiv key={index}>
+          <ItemDiv
+            key={index}
+            onClick={() => {
+              if (!isEmpty(teamcampProjectId))
+                window.open(
+                  // eslint-disable-next-line max-len
+                  `https://dash.teamcamp.app/projects/details/${teamcampProjectId}/tasks?&task=${item.id}`,
+                  '_blank',
+                );
+            }}
+          >
             <LeftSection>
               <IconDiv>
                 <SVGIcon
-                  name={item.iconName}
+                  name={item.status}
                   width='16'
                   height='16'
                   viewBox='0 0 16 16'
                   fill='none'
                 />
               </IconDiv>
-              <AIText>{item.title}</AIText>
+              <AIText>{item.name}</AIText>
             </LeftSection>
             <RightIcon>
               <SVGIcon
@@ -89,7 +86,7 @@ function TeamcampIntegration() {
             </RightIcon>
           </ItemDiv>
         ))}
-        {!showAll && taskItem.length > 5 && (
+        {!showAll && taskList.length > 5 && (
           <SeeAllLink onClick={handleShowAllToggle}>Show all</SeeAllLink>
         )}
         {showAll && (
@@ -97,7 +94,7 @@ function TeamcampIntegration() {
         )}
       </>
     );
-  }, [eventsToShow, showAll, taskItem.length]);
+  }, [eventsToShow, showAll, taskList.length, teamcampProjectId]);
 
   const handleModalOpen = useCallback(() => {
     setCreateTaskModal(true);
@@ -133,7 +130,7 @@ function TeamcampIntegration() {
           />
         </TitleDiv>
         <DetailsMainDiv>
-          <ItemsMainDiv>{taskList}</ItemsMainDiv>
+          <ItemsMainDiv>{renderTaskList}</ItemsMainDiv>
         </DetailsMainDiv>
       </WorkDetailMainDiv>
       <Modal open={createTaskModal} onClose={handleModalClose}>
@@ -143,4 +140,4 @@ function TeamcampIntegration() {
   );
 }
 
-export default TeamcampIntegration;
+export default observer(TeamcampIntegration);

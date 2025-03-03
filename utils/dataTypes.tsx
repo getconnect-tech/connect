@@ -74,6 +74,14 @@ export type WorkspaceConfig = {
 
 export type Macros = NonNullable<Awaited<ReturnType<typeof getMacros>>>[0];
 
+export type TeamcampTask = {
+  name: string;
+  status: string;
+  id: string;
+  updatedAt: string;
+  createdAt: string;
+};
+
 export type MessageAttachment = {
   fileName: string;
   contentId: string;
@@ -183,10 +191,17 @@ export type TeamcampUser = {
   isOwner: boolean;
 };
 
+export type File = {
+  fileType: string;
+  href: string;
+  name: string;
+  size: string;
+};
+
 export type TaskCreatePayload = {
   taskName: string;
   description: string;
   priority: number;
   taskUsers: string[];
-  files: { fileType: string; href: string; name: string; size: string };
+  files: File[];
 };
