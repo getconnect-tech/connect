@@ -10,7 +10,11 @@ import { priorityItem } from '@/helpers/raw';
 import Button from '@/components/button/button';
 import ProsemirrorEditor from '@/components/prosemirror';
 import FileCard from '@/components/fileCard/fileCard';
-import { createTask, getUserList } from '@/services/clientSide/teamcampService';
+import {
+  createTask,
+  getTasksList,
+  getUserList,
+} from '@/services/clientSide/teamcampService';
 import {
   PRIORITY_ICON_NAMES,
   TASK_PRIORITY,
@@ -119,6 +123,7 @@ function CreateTaskModal({ onClose }: Props) {
       await createTask(taskCreateInput);
       onClose();
       teamcampStore.clearTaskCreateInput();
+      getTasksList();
     } catch (e) {
       console.log('error', e);
     } finally {

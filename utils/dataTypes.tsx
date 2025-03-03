@@ -78,6 +78,8 @@ export type TeamcampTask = {
   name: string;
   status: string;
   id: string;
+  updatedAt: string;
+  createdAt: string;
 };
 
 export type MessageAttachment = {

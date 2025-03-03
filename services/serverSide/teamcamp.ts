@@ -34,7 +34,9 @@ export const getTasks = async () => {
   }
 
   const formattedTasks: TeamcampTask[] = tasks.map(formatTeamcampTask);
-  return formattedTasks;
+  return formattedTasks.toSorted(
+    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+  );
 };
 
 export const createTask = async (payload: TaskCreatePayload) => {
@@ -90,6 +92,8 @@ export const formatTeamcampTask = (teamcampTask: any) => {
     id: teamcampTask.id,
     name: teamcampTask.taskName,
     status,
+    updatedAt: teamcampTask.updatedAt,
+    createdAt: teamcampTask.createdAt,
   };
 
   return task;

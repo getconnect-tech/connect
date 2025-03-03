@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Modal from '@/components/modal/modal';
 import { useStores } from '@/stores';
@@ -139,4 +140,4 @@ function TeamcampIntegration() {
   );
 }
 
-export default TeamcampIntegration;
+export default observer(TeamcampIntegration);
