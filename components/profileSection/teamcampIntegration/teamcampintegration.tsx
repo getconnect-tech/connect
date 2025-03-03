@@ -1,7 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Modal from '@/components/modal/modal';
 import { useStores } from '@/stores';
+import { getTeamcampCredential } from '@/services/serverSide/serverAction';
+import { isEmpty } from '@/helpers/common';
 import Icon from '../../icon/icon';
 import {
   AIIcon,
@@ -26,12 +28,21 @@ function TeamcampIntegration() {
   const { teamcampStore } = useStores();
   const { taskList } = teamcampStore || {};
 
+  const [teamcampProjectId, setTeamcampProjectId] = useState('');
   const [createTaskModal, setCreateTaskModal] = useState(false);
   const [showAll, setShowAll] = useState(false);
 
   const handleShowAllToggle = () => {
     setShowAll((prevShowAll) => !prevShowAll);
   };
+
+  useEffect(() => {
+    (async () => {
+      const teamcampCredential = await getTeamcampCredential();
+      if (teamcampCredential)
+        setTeamcampProjectId(teamcampCredential.projectId);
+    })();
+  }, []);
 
   const eventsToShow = useMemo(() => {
     return showAll ? taskList : taskList.slice(0, 5);
@@ -41,7 +52,17 @@ function TeamcampIntegration() {
     return (
       <>
         {eventsToShow.map((item, index) => (
-          <ItemDiv key={index}>
+          <ItemDiv
+            key={index}
+            onClick={() => {
+              if (!isEmpty(teamcampProjectId))
+                window.open(
+                  // eslint-disable-next-line max-len
+                  `https://dash.teamcamp.app/projects/details/${teamcampProjectId}/tasks?&task=${item.id}`,
+                  '_blank',
+                );
+            }}
+          >
             <LeftSection>
               <IconDiv>
                 <SVGIcon
@@ -54,15 +75,7 @@ function TeamcampIntegration() {
               </IconDiv>
               <AIText>{item.name}</AIText>
             </LeftSection>
-            <RightIcon
-              onClick={() => {
-                window.open(
-                  // eslint-disable-next-line max-len
-                  `https://dash.teamcamp.app/projects/details/${process.env.NEXT_PUBLIC_TEAMCAMP_PROJECT_ID}/tasks?&task=${item.id}`,
-                  '_blank',
-                );
-              }}
-            >
+            <RightIcon>
               <SVGIcon
                 name='arrow-icon'
                 width='20'
@@ -80,7 +93,7 @@ function TeamcampIntegration() {
         )}
       </>
     );
-  }, [eventsToShow, showAll, taskList.length]);
+  }, [eventsToShow, showAll, taskList.length, teamcampProjectId]);
 
   const handleModalOpen = useCallback(() => {
     setCreateTaskModal(true);

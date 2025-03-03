@@ -242,7 +242,7 @@ const ProfileSection = () => {
   useEffect(() => {
     (async () => {
       const teamcampCredential = await getTeamcampCredential();
-      setTeamCampCredential(teamcampCredential);
+      setTeamCampCredential(!!teamcampCredential);
     })();
   }, []);
 
