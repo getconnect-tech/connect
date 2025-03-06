@@ -1,28 +1,20 @@
 import { z } from 'zod';
+import { GENDER } from '@prisma/client';
 import { handleApiError } from '@/helpers/errorHandler';
-import {
-  addressSchema,
-  ageSchema,
-  avatarSchema,
-  birthdaySchema,
-  contactNameSchema,
-  customTraitsSchema,
-  descriptionSchema,
-  firstNameSchema,
-  genderSchema,
-  lastNameSchema,
-  phoneSchema,
-  titleSchema,
-  usernameSchema,
-  websiteSchema,
-} from '@/lib/zod/contact';
 import {
   createOrUpdateContact,
   getContactById,
 } from '@/services/serverSide/contact';
-import { externalIdSchema } from '@/lib/zod/common';
 import withAdminAuth from '@/middlewares/withAdminAuth';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
+import {
+  addressSchema,
+  createEnumSchema,
+  createNumberSchema,
+  createStringSchema,
+  customTraitsSchema,
+  parseAndValidateRequest,
+} from '@/lib/zod';
 
 export const GET = withWorkspaceAuth(async (req, { contactId }) => {
   try {
@@ -34,34 +26,33 @@ export const GET = withWorkspaceAuth(async (req, { contactId }) => {
   }
 });
 
-const UpdateContactBody = z.object({
+const UpdateRequestBody = z.object({
   address: addressSchema.optional(),
-  age: ageSchema.optional(),
-  avatar: avatarSchema.optional(),
-  birthday: birthdaySchema.optional(),
-  description: descriptionSchema.optional(),
-  firstName: firstNameSchema.optional(),
-  lastName: lastNameSchema.optional(),
-  name: contactNameSchema.optional(),
-  gender: genderSchema.optional(),
-  phone: phoneSchema.optional(),
-  title: titleSchema.optional(),
-  username: usernameSchema.optional(),
-  website: websiteSchema.optional(),
+  age: createNumberSchema('age', { min: 1 }).optional(),
+  avatar: createStringSchema('avatar').optional(),
+  birthday: createStringSchema('birthday', { datetime: true }).optional(),
+  description: createStringSchema('description').optional(),
+  firstName: createStringSchema('firstName').optional(),
+  lastName: createStringSchema('lastName').optional(),
+  name: createStringSchema('name').optional(),
+  gender: createEnumSchema('gender', GENDER).optional(),
+  phone: createStringSchema('phone').optional(),
+  title: createStringSchema('title').optional(),
+  username: createStringSchema('username').optional(),
+  website: createStringSchema('website', { url: true }).optional(),
   customTraits: customTraitsSchema.optional(),
-  externalId: externalIdSchema.optional(),
+  externalId: createStringSchema('externalId', { id: true }).optional(),
 });
 export const PUT = withAdminAuth(async (req, { contactId }) => {
   try {
-    const contactUpdate = await req.json();
-    UpdateContactBody.parse(contactUpdate);
+    const contactUpdate = await parseAndValidateRequest(req, UpdateRequestBody);
 
     const {
       firstName: first_name,
       lastName: last_name,
       customTraits: custom_traits,
       ...update
-    } = contactUpdate as z.infer<typeof UpdateContactBody>;
+    } = contactUpdate;
 
     const updatedContact = await createOrUpdateContact({
       contactId,

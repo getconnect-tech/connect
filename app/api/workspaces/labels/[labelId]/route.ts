@@ -2,23 +2,20 @@ import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import { deleteLabelById, updateLabel } from '@/services/serverSide/label';
-import { nameSchema } from '@/lib/zod/common';
-import { iconSchema, colorSchema } from '@/lib/zod/label';
+import { createStringSchema, parseAndValidateRequest } from '@/lib/zod';
 
-const RequestBody = z.object({
-  name: nameSchema.optional(),
-  icon: iconSchema.optional(),
-  color: colorSchema.optional(),
+const UpdateRequestBody = z.object({
+  name: createStringSchema('name', {
+    regex: /^[a-zA-Z ]{2,30}$/,
+  }).optional(),
+  icon: createStringSchema('icon').optional(),
+  color: createStringSchema('color').optional(),
 });
 export const PUT = withWorkspaceAuth(async (req, { labelId }) => {
   try {
-    const requestBody = await req.json();
+    const requestBody = await parseAndValidateRequest(req, UpdateRequestBody);
 
-    RequestBody.parse(requestBody);
-
-    const labelUpdates = requestBody as z.infer<typeof RequestBody>;
-
-    const updatedLabel = await updateLabel(labelId, labelUpdates);
+    const updatedLabel = await updateLabel(labelId, requestBody);
 
     return Response.json(updatedLabel, { status: 200 });
   } catch (err) {

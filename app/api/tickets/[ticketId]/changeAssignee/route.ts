@@ -1,17 +1,20 @@
 import { ChannelType, MessageType } from '@prisma/client';
+import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
-import { assignToSchema } from '@/lib/zod/ticket';
+
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import { postMessage } from '@/services/serverSide/message';
 import { updateAssignee } from '@/services/serverSide/ticket';
 import { NotificationProvider } from '@/services/serverSide/notifications';
+import { createStringSchema, parseAndValidateRequest } from '@/lib/zod';
 
 // PUT: /api/tickets/[ticketId]/changeAssignee
+const UpdateRequestBody = z.object({
+  assignee: createStringSchema('assignee', { id: true }).or(z.null()),
+});
 export const PUT = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
-    const { assignee } = await req.json();
-
-    assignToSchema.parse(assignee);
+    const { assignee } = await parseAndValidateRequest(req, UpdateRequestBody);
 
     const updatedTicket = await updateAssignee(ticketId, assignee);
 

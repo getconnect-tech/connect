@@ -1,16 +1,19 @@
+import { UserRole } from '@prisma/client';
+import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
-import { roleSchema } from '@/lib/zod/workspace';
+import { createEnumSchema, parseAndValidateRequest } from '@/lib/zod';
 import withAdminAuth from '@/middlewares/withAdminAuth';
 import {
   removeUserFromWorkspace,
   updateUser,
 } from '@/services/serverSide/workspace';
 
+const UpdateRequestBody = z.object({
+  role: createEnumSchema('role', UserRole).optional(),
+});
 export const PUT = withAdminAuth(async (req, { userId }) => {
   try {
-    const { role } = await req.json();
-
-    roleSchema.optional().parse(role);
+    const { role } = await parseAndValidateRequest(req, UpdateRequestBody);
 
     const workspaceId = req.workspace.id;
 

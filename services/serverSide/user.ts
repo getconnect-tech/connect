@@ -3,7 +3,7 @@ import { prisma } from '@/prisma/prisma';
 
 export const updateUser = async (
   userId: string,
-  userUpdates: { displayName: string; profilePic: string },
+  userUpdates: { displayName?: string; profilePic?: string },
 ) => {
   const update = {
     display_name: userUpdates.displayName,

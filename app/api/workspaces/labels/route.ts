@@ -1,9 +1,8 @@
 import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
-import { nameSchema } from '@/lib/zod/common';
-import { colorSchema, iconSchema } from '@/lib/zod/label';
 import { createLabel, getWorkspaceLabels } from '@/services/serverSide/label';
+import { createStringSchema, parseAndValidateRequest } from '@/lib/zod';
 
 export const GET = withWorkspaceAuth(async (req) => {
   try {
@@ -16,21 +15,19 @@ export const GET = withWorkspaceAuth(async (req) => {
   }
 });
 
-const RequestBody = z.object({
-  name: nameSchema,
-  icon: iconSchema,
-  color: colorSchema.optional(),
+const CreateRequestBody = z.object({
+  name: createStringSchema('name', {
+    regex: /^[a-zA-Z ]{2,30}$/,
+  }),
+  icon: createStringSchema('icon'),
+  color: createStringSchema('color').optional(),
 });
 export const POST = withWorkspaceAuth(async (req) => {
   try {
-    const requestBody = await req.json();
-
-    RequestBody.parse(requestBody);
-
+    const requestBody = await parseAndValidateRequest(req, CreateRequestBody);
     const workspaceId = req.workspace.id;
-    const newLabelPayload = requestBody as z.infer<typeof RequestBody>;
 
-    const newLabel = await createLabel({ workspaceId, ...newLabelPayload });
+    const newLabel = await createLabel({ workspaceId, ...requestBody });
 
     return Response.json(newLabel, { status: 200 });
   } catch (err) {

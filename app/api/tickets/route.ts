@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { ChannelType, MessageType } from '@prisma/client';
 import { handleApiError } from '@/helpers/errorHandler';
-import { lastUpdatedTimeSchema } from '@/lib/zod/common';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import {
   createTicket,
@@ -9,24 +8,21 @@ import {
   getWorkspaceTickets,
 } from '@/services/serverSide/ticket';
 import { withApiAuth } from '@/middlewares/withApiAuth';
-import {
-  messageSchema,
-  senderEmailSchema,
-  senderNameSchema,
-  subjectSchema,
-} from '@/lib/zod/ticket';
 import { postMessage } from '@/services/serverSide/message';
-import { attachmentSchema } from '@/lib/zod/message';
 import { uploadAttachments } from '@/services/serverSide/firebaseServices';
 import { downloadFileAsBase64 } from '@/helpers/common';
+import { createStringSchema, parseAndValidateRequest } from '@/lib/zod';
 
+const lastUpdatedTimeSchema = createStringSchema('last_updated', {
+  datetime: true,
+}).optional();
 export const GET = withWorkspaceAuth(async (req) => {
   try {
     const workspaceId = req.workspace.id;
     const searchParams = req.nextUrl.searchParams;
     const lastUpdated = searchParams.get('last_updated') ?? undefined;
 
-    lastUpdatedTimeSchema.optional().parse(lastUpdated);
+    lastUpdatedTimeSchema.parse(lastUpdated);
 
     const tickets = await getWorkspaceTickets(
       workspaceId,
@@ -40,21 +36,24 @@ export const GET = withWorkspaceAuth(async (req) => {
   }
 });
 
-const createRequestBody = z.object({
-  senderName: senderNameSchema.optional(),
-  senderEmail: senderEmailSchema,
-  subject: subjectSchema.optional(),
-  message: messageSchema,
-  attachments: z.array(attachmentSchema).optional(),
+const CreateRequestBody = z.object({
+  senderName: createStringSchema('senderName').optional(),
+  senderEmail: createStringSchema('senderEmail', { email: true }),
+  subject: createStringSchema('subject').optional(),
+  message: createStringSchema('message'),
+  attachments: z
+    .array(
+      z.object({
+        filename: createStringSchema('filename'),
+        url: createStringSchema('url', { url: true }),
+      }),
+    )
+    .optional(),
 });
 export const POST = withApiAuth(async (req) => {
   try {
-    const requestBody = await req.json();
-
-    createRequestBody.parse(requestBody);
-
-    const { senderEmail, senderName, message, subject, attachments } =
-      requestBody as z.infer<typeof createRequestBody>;
+    const { subject, message, senderEmail, attachments, senderName } =
+      await parseAndValidateRequest(req, CreateRequestBody);
     const workspaceId = req.workspace.id;
 
     const ticketTitle = subject ?? (await generateTicketTitle(message));

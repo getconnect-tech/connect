@@ -1,15 +1,18 @@
 import { NextRequest } from 'next/server';
+import { z } from 'zod';
 import errorMessages from '@/global/errorMessages';
 import { sendVerificationCode } from '@/helpers/emails';
 import { handleApiError } from '@/helpers/errorHandler';
-import { emailSchema } from '@/lib/zod/common';
-import { isUserAlreadyExists } from '@/services/serverSide/membership/signup';
 
+import { isUserAlreadyExists } from '@/services/serverSide/membership/signup';
+import { createStringSchema, parseAndValidateRequest } from '@/lib/zod';
+
+const CreateRequestBody = z.object({
+  email: createStringSchema('email', { email: true }),
+});
 export const POST = async (req: NextRequest) => {
   try {
-    const { email } = await req.json();
-
-    emailSchema.parse(email);
+    const { email } = await parseAndValidateRequest(req, CreateRequestBody);
 
     const normalizedEmail = email.toLowerCase() as string;
 

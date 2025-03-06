@@ -1,10 +1,11 @@
+import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
-import { nameSchema } from '@/lib/zod/common';
 import withAdminAuth from '@/middlewares/withAdminAuth';
 import {
   createApiKey,
   getWorkspaceApiKeys,
 } from '@/services/serverSide/apiKey';
+import { createStringSchema, parseAndValidateRequest } from '@/lib/zod';
 
 export const GET = withAdminAuth(async (req) => {
   try {
@@ -16,11 +17,14 @@ export const GET = withAdminAuth(async (req) => {
   }
 });
 
+const CreateRequestBody = z.object({
+  name: createStringSchema('name', {
+    regex: /^[a-zA-Z ]{2,30}$/,
+  }),
+});
 export const POST = withAdminAuth(async (req) => {
   try {
-    const { name } = await req.json();
-
-    nameSchema.parse(name);
+    const { name } = await parseAndValidateRequest(req, CreateRequestBody);
 
     const userId = req.user.id;
     const workspaceId = req.workspace.id;

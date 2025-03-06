@@ -1,24 +1,24 @@
 import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
-import { titleSchema } from '@/lib/zod/macro';
 import withAdminAuth from '@/middlewares/withAdminAuth';
 import {
   createOrUpdateMacro as createMacro,
   getMacros,
 } from '@/services/serverSide/macro';
-import { contentSchema } from '@/lib/zod/message';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
+import { createStringSchema, parseAndValidateRequest } from '@/lib/zod';
 
-const createRequestBody = z.object({
-  title: titleSchema,
-  content: contentSchema,
+const CreateRequestBody = z.object({
+  title: createStringSchema('title'),
+  content: createStringSchema('content'),
 });
-
 export const POST = withAdminAuth(async (req) => {
   try {
-    const requestBody = await req.json();
-    createRequestBody.parse(requestBody);
-    const { title, content } = requestBody as z.infer<typeof createRequestBody>;
+    const { title, content } = await parseAndValidateRequest(
+      req,
+      CreateRequestBody,
+    );
+
     const userId = req.user.id;
     const workspaceId = req.workspace.id;
     const macro = await createMacro(userId, workspaceId, '', {

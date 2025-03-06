@@ -14,11 +14,6 @@ import {
   postMessage,
   updateUserLastSeen,
 } from '@/services/serverSide/message';
-import {
-  attachmentTokenSchema,
-  contentSchema,
-  messageTypeSchema,
-} from '@/lib/zod/message';
 import { sendEmail, sendEmailAsReply } from '@/helpers/emails';
 import {
   getAttachmentsFromToken,
@@ -27,6 +22,11 @@ import {
 import { prisma } from '@/prisma/prisma';
 import { NotificationProvider } from '@/services/serverSide/notifications';
 import { getWorkspaceConfig } from '@/services/serverSide/workspace';
+import {
+  createEnumSchema,
+  createStringSchema,
+  parseAndValidateRequest,
+} from '@/lib/zod';
 
 export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
@@ -40,20 +40,22 @@ export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
   }
 });
 
-const RequestBody = z.object({
-  content: contentSchema,
-  type: messageTypeSchema,
-  attachmentToken: attachmentTokenSchema.optional(),
+const { REGULAR, EMAIL } = MessageType;
+const RequestBodySchema = z.object({
+  content: createStringSchema('content'),
+  type: createEnumSchema('type', {
+    [REGULAR]: REGULAR,
+    [EMAIL]: EMAIL,
+  }),
+  attachmentToken: createStringSchema('attachmentToken').optional(),
 });
 export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
-    const requestBody = await req.json();
+    const { type, content, attachmentToken } = await parseAndValidateRequest(
+      req,
+      RequestBodySchema,
+    );
 
-    RequestBody.parse(requestBody);
-
-    const { content, type, attachmentToken } = requestBody as z.infer<
-      typeof RequestBody
-    >;
     const workspaceId = req.workspace.id;
     const userId = req.user.id;
 

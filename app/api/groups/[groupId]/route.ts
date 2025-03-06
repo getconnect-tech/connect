@@ -1,26 +1,25 @@
 import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
-import { externalIdSchema } from '@/lib/zod/common';
-import { groupLabelSchema, groupNameSchema } from '@/lib/zod/group';
-import { avatarSchema, customTraitsSchema } from '@/lib/zod/contact';
 import { updateGroup } from '@/services/serverSide/group';
 import withAdminAuth from '@/middlewares/withAdminAuth';
+import {
+  createStringSchema,
+  customTraitsSchema,
+  parseAndValidateRequest,
+} from '@/lib/zod';
 
-const UpdateGroupBody = z.object({
-  name: groupNameSchema.optional(),
-  groupLabel: groupLabelSchema.optional(),
+const UpdateRequestBody = z.object({
+  name: createStringSchema('name').optional(),
+  groupLabel: createStringSchema('groupLabel').optional(),
   customTraits: customTraitsSchema.optional(),
-  externalId: externalIdSchema.optional(),
-  avatar: avatarSchema.optional(),
+  externalId: createStringSchema('externalId', { id: true }).optional(),
+  avatar: createStringSchema('avatar').optional(),
 });
 export const PUT = withAdminAuth(async (req, { groupId }) => {
   try {
-    const requestBody = await req.json();
+    const requestBody = await parseAndValidateRequest(req, UpdateRequestBody);
 
-    UpdateGroupBody.parse(requestBody);
-
-    const groupData = requestBody as z.infer<typeof UpdateGroupBody>;
-    const updatedGroup = await updateGroup(groupId, groupData);
+    const updatedGroup = await updateGroup(groupId, requestBody);
 
     return Response.json(updatedGroup, { status: 200 });
   } catch (err) {
