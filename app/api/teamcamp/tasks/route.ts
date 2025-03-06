@@ -3,12 +3,10 @@ import { handleApiError } from '@/helpers/errorHandler';
 import withAuth from '@/middlewares/withAuth';
 import { createTask, getTasks } from '@/services/serverSide/teamcamp';
 import {
-  taskDescriptionSchema,
-  taskFilesSchema,
-  taskNameSchema,
-  taskPrioritySchema,
-  taskUsersSchema,
-} from '@/lib/zod/teamcamp';
+  createNumberSchema,
+  createStringSchema,
+  parseAndValidateRequest,
+} from '@/lib/zod';
 
 export const GET = withAuth(async () => {
   try {
@@ -20,17 +18,23 @@ export const GET = withAuth(async () => {
   }
 });
 
-const RequestBody = z.object({
-  taskName: taskNameSchema,
-  description: taskDescriptionSchema,
-  priority: taskPrioritySchema,
-  taskUsers: taskUsersSchema,
-  files: taskFilesSchema,
+const CreateRequestBody = z.object({
+  taskName: createStringSchema('taskName'),
+  description: createStringSchema('description'),
+  priority: createNumberSchema('priority'),
+  taskUsers: z.array(createStringSchema('taskUsers')),
+  files: z.array(
+    z.object({
+      fileType: createStringSchema('fileType'),
+      href: createStringSchema('href'),
+      name: createStringSchema('name'),
+      size: createStringSchema('size'),
+    }),
+  ),
 });
 export const POST = withAuth(async (req) => {
   try {
-    const requestBody = await req.json();
-    RequestBody.parse(requestBody);
+    const requestBody = await parseAndValidateRequest(req, CreateRequestBody);
 
     const newTask = await createTask(requestBody);
 

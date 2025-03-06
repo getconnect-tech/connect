@@ -1,16 +1,22 @@
 import { ChannelType, MessageType, TicketStatus } from '@prisma/client';
 import moment from 'moment';
+import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
-import { snoozeUntilSchema } from '@/lib/zod/ticket';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import { postMessage } from '@/services/serverSide/message';
 import { updateTicket } from '@/services/serverSide/ticket';
+import { createStringSchema, parseAndValidateRequest } from '@/lib/zod';
 
+const RequestBodySchema = z.object({
+  snoozeUntil: createStringSchema('snoozeUntil', { datetime: true }),
+});
 export const PUT = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
-    const { snoozeUntil } = await req.json();
+    const { snoozeUntil } = await parseAndValidateRequest(
+      req,
+      RequestBodySchema,
+    );
 
-    snoozeUntilSchema.parse(snoozeUntil);
     if (new Date(snoozeUntil).getTime() <= new Date().getTime()) {
       return Response.json(
         { error: "'snoozeUntil' date must be in future!" },

@@ -1,7 +1,6 @@
 import { z } from 'zod';
-import { UserRole } from '@prisma/client';
+import { TeamSize, UserRole } from '@prisma/client';
 import { handleApiError } from '@/helpers/errorHandler';
-import { imageUrlSchema, nameSchema } from '@/lib/zod/common';
 import withAuth from '@/middlewares/withAuth';
 import {
   addUserToWorkspace,
@@ -10,26 +9,35 @@ import {
   updateWorkspace,
 } from '@/services/serverSide/workspace';
 import { getUserWorkspaces } from '@/services/serverSide/workspace';
-import { industrySchema, teamSizeSchema } from '@/lib/zod/workspace';
-import { invitedUsersSchema } from '@/lib/zod/user';
+
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
+import {
+  createEnumSchema,
+  createStringSchema,
+  parseAndValidateRequest,
+} from '@/lib/zod';
 
 const CreateRequestBody = z.object({
-  name: nameSchema,
-  teamSize: teamSizeSchema,
-  industry: industrySchema,
-  invitedUsers: invitedUsersSchema.optional(),
+  name: createStringSchema('name', {
+    regex: /^[a-zA-Z ]{2,30}$/,
+  }),
+  teamSize: createEnumSchema('teamSize', TeamSize),
+  industry: createStringSchema('industry', { min: 3 }),
+  invitedUsers: z
+    .array(
+      z.object({
+        email: createStringSchema('email', { email: true }),
+        displayName: createStringSchema('displayName', {
+          regex: /^[a-zA-Z ]{2,30}$/,
+        }),
+      }),
+    )
+    .optional(),
 });
-
 export const POST = withAuth(async (req) => {
   try {
-    const requestBody = await req.json();
-
-    CreateRequestBody.parse(requestBody);
-
-    const { name, teamSize, industry, invitedUsers } = requestBody as z.infer<
-      typeof CreateRequestBody
-    >;
+    const { name, industry, teamSize, invitedUsers } =
+      await parseAndValidateRequest(req, CreateRequestBody);
     const user = req.user;
 
     const newWorkspace = await createWorkspace({ name, industry, teamSize });
@@ -54,15 +62,15 @@ export const GET = withAuth(async (req) => {
 });
 
 const UpdateRequestBody = z.object({
-  name: nameSchema.optional(),
-  imageUrl: imageUrlSchema.optional(),
+  name: createStringSchema('name', {
+    regex: /^[a-zA-Z ]{2,30}$/,
+  }).optional(),
+  imageUrl: createStringSchema('imageUrl', { url: true }).optional(),
 });
 
 export const PUT = withWorkspaceAuth(async (req) => {
   try {
-    const requestBody = await req.json();
-
-    UpdateRequestBody.parse(requestBody);
+    const requestBody = await parseAndValidateRequest(req, UpdateRequestBody);
 
     const updatedWorkspace = await updateWorkspace(
       req.workspace.id,

@@ -1,11 +1,12 @@
 import { Attachment, ServerClient } from 'postmark';
 import moment from 'moment';
-import { generateVerificationCode } from './common';
 import { prisma } from '@/prisma/prisma';
 import { getTicketById } from '@/services/serverSide/ticket';
 import { getContactById } from '@/services/serverSide/contact';
+import { generateVerificationCode } from './common';
+import { POSTMARK_SENDER_EMAIL, POSTMARK_SERVER_TOKEN } from './environment';
 
-const client = new ServerClient(process.env.POSTMARK_SERVER_TOKEN!);
+const client = new ServerClient(POSTMARK_SERVER_TOKEN!);
 
 export const sendEmail = async ({
   email,
@@ -20,7 +21,7 @@ export const sendEmail = async ({
   senderEmail?: string;
   attachments?: Attachment[];
 }) => {
-  const from = senderEmail ?? process.env.POSTMARK_SENDER_EMAIL!;
+  const from = senderEmail ?? POSTMARK_SENDER_EMAIL!;
 
   const res = await client.sendEmail({
     From: from,
@@ -49,7 +50,7 @@ export const sendEmailAsReply = async ({
     return null;
   }
 
-  const from = senderEmail ?? process.env.POSTMARK_SENDER_EMAIL!;
+  const from = senderEmail ?? POSTMARK_SENDER_EMAIL!;
 
   const contact = (await getContactById(ticket.contact_id))!;
 

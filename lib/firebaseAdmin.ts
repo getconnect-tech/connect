@@ -2,18 +2,19 @@ import * as admin from 'firebase-admin';
 import { getAuth } from 'firebase-admin/auth';
 import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
+import {
+  FIREBASE_ADMIN_SDK_CERT,
+  FIREBASE_STORAGE_BUCKET,
+} from '@/helpers/environment';
 
-const serviceAccountStr = process.env.FIREBASE_ADMIN_SDK_CERT;
-const firebaseBucket = process.env.FIREBASE_STORAGE_BUCKET;
-
-if (!serviceAccountStr) {
+if (!FIREBASE_ADMIN_SDK_CERT) {
   throw new Error('Please define `FIREBASE_ADMIN_SDK_CERT` in .env');
 }
-if (!firebaseBucket) {
+if (!FIREBASE_STORAGE_BUCKET) {
   throw new Error('Please define `FIREBASE_STORAGE_BUCKET` in .env');
 }
 
-const serviceAccountCert = JSON.parse(serviceAccountStr);
+const serviceAccountCert = JSON.parse(FIREBASE_ADMIN_SDK_CERT);
 
 const getApp = () => {
   if (admin.apps.length > 0 && admin.apps[0] !== null) {
@@ -21,7 +22,7 @@ const getApp = () => {
   }
   return admin.initializeApp({
     credential: admin.credential.cert(serviceAccountCert),
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET!,
+    storageBucket: FIREBASE_STORAGE_BUCKET!,
   });
 };
 

@@ -1,12 +1,13 @@
+import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
+import { createStringSchema, parseAndValidateRequest } from '@/lib/zod';
 import withAdminAuth from '@/middlewares/withAdminAuth';
-import { contactIdsSchema } from '@/lib/zod/contact';
 import { removeContactsFromGroup } from '@/services/serverSide/group';
 
+const UpdateRequestBody = z.array(createStringSchema('contactIds'));
 export const POST = withAdminAuth(async (req, { groupId }) => {
   try {
-    const requestBody = await req.json();
-    contactIdsSchema.parse(requestBody);
+    const requestBody = await parseAndValidateRequest(req, UpdateRequestBody);
 
     await removeContactsFromGroup(groupId, requestBody);
 

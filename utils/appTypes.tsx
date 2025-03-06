@@ -1,11 +1,11 @@
 import { Contact as PrismaContact } from '@prisma/client';
 import { z } from 'zod';
-import { LabelData } from './dataTypes';
 import {
   getTicketById,
   getWorkspaceTickets,
 } from '@/services/serverSide/ticket';
-import { addressSchema, customTraitsSchema } from '@/lib/zod/contact';
+import { addressSchema, customTraitsSchema } from '@/lib/zod';
+import { LabelData } from './dataTypes';
 
 export interface UpdateRole {
   userId: string;

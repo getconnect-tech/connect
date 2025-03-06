@@ -6,13 +6,17 @@ import {
   TeamcampUser,
 } from '@/utils/dataTypes';
 import { STATUS_ICON_NAMES } from '@/global/constants';
+import {
+  TEAMCAMP_API_KEY,
+  TEAMCAMP_API_URL,
+  TEAMCAMP_PROJECT_ID,
+} from '@/helpers/environment';
 
-const apiKey = process.env.TEAMCAMP_API_KEY;
-const projectId = process.env.TEAMCAMP_PROJECT_ID;
+const projectId = TEAMCAMP_PROJECT_ID;
 
 const teamcampApiClient = axios.create({
-  baseURL: process.env.TEAMCAMP_API_URL,
-  headers: { apiKey },
+  baseURL: TEAMCAMP_API_URL,
+  headers: { apiKey: TEAMCAMP_API_KEY },
   params: { projectId },
 });
 

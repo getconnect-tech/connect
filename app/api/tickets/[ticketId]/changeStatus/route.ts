@@ -1,20 +1,29 @@
 import { ChannelType, MessageType, TicketStatus } from '@prisma/client';
+import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
-import { snoozeUntilSchema, statusSchema } from '@/lib/zod/ticket';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import { postMessage } from '@/services/serverSide/message';
 import { updateStatus } from '@/services/serverSide/ticket';
+import {
+  createEnumSchema,
+  createStringSchema,
+  parseAndValidateRequest,
+} from '@/lib/zod';
 
 // PUT: /api/tickets/[ticketId]/changeStatus
+const UpdateRequestBody = z.object({
+  status: createEnumSchema('status', TicketStatus),
+  snoozeUntil: createStringSchema('snoozeUntil', { datetime: true }).optional(),
+});
 export const PUT = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
-    const { status, snoozeUntil } = await req.json();
-
-    statusSchema.parse(status);
+    const { status, snoozeUntil } = await parseAndValidateRequest(
+      req,
+      UpdateRequestBody,
+    );
 
     let snoozeUntilTime: string | undefined = undefined;
     if (status === TicketStatus.OPEN && snoozeUntil) {
-      snoozeUntilSchema.parse(snoozeUntil);
       snoozeUntilTime = snoozeUntil as string;
     }
 

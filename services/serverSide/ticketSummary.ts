@@ -1,11 +1,12 @@
 import { MessageType } from '@prisma/client';
+import { z } from 'zod';
 import { prisma } from '@/prisma/prisma';
 import { MessageSummary } from '@/utils/dataTypes';
 import {
   chatWithOpenAi,
   chatWithOpenAiForStructuredOutput,
 } from '@/lib/openAi';
-import { TicketAnalysisSchema } from '@/lib/zod/ticket';
+import { createStringSchema } from '@/lib/zod';
 
 const formatMessageData = (message: MessageSummary) => {
   const displayName = message.author?.display_name
@@ -121,7 +122,10 @@ export const getTicketSummaryAndSentiment = async (ticketId: string) => {
   const analysisResult = await chatWithOpenAiForStructuredOutput(
     instructions,
     ticketContent,
-    TicketAnalysisSchema,
+    z.object({
+      ticketSummary: createStringSchema('ticketSummary'),
+      contactSentiment: createStringSchema('contactSentiment'),
+    }),
   );
   return analysisResult;
 };

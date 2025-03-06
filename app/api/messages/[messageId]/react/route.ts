@@ -1,14 +1,16 @@
+import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
-import { reactionSchema } from '@/lib/zod/message';
+import { createStringSchema, parseAndValidateRequest } from '@/lib/zod';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import { reactMessage } from '@/services/serverSide/message';
 import { NotificationProvider } from '@/services/serverSide/notifications';
 
+const CreateRequestBody = z.object({
+  reaction: createStringSchema('reaction'),
+});
 export const POST = withWorkspaceAuth(async (req, { messageId }) => {
   try {
-    const { reaction } = await req.json();
-
-    reactionSchema.parse(reaction);
+    const { reaction } = await parseAndValidateRequest(req, CreateRequestBody);
 
     const userId = req.user.id;
 

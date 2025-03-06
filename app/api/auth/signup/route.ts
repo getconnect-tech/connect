@@ -3,27 +3,26 @@ import { z } from 'zod';
 import errorMessages from '@/global/errorMessages';
 import { sendVerificationCode } from '@/helpers/emails';
 import { handleApiError } from '@/helpers/errorHandler';
-import { emailSchema } from '@/lib/zod/common';
 import {
   createUser,
   isUserAlreadyExists,
 } from '@/services/serverSide/membership/signup';
-import { displayNameSchema, profilePicSchema } from '@/lib/zod/user';
+import { createStringSchema, parseAndValidateRequest } from '@/lib/zod';
 
-const RequestBody = z.object({
-  email: emailSchema,
-  displayName: displayNameSchema,
-  profilePic: profilePicSchema.optional(),
+const CreateRequestBody = z.object({
+  email: createStringSchema('email', { email: true }),
+  displayName: createStringSchema('displayName', {
+    regex: /^[a-zA-Z ]{2,30}$/,
+  }),
+  profilePic: createStringSchema('profilePic', { url: true }).optional(),
 });
-
 export const POST = async (req: NextRequest) => {
   try {
-    const body = await req.json();
-    RequestBody.parse(body);
+    const { displayName, email, profilePic } = await parseAndValidateRequest(
+      req,
+      CreateRequestBody,
+    );
 
-    const { email, displayName, profilePic } = body as z.infer<
-      typeof RequestBody
-    >;
     const normalizedEmail = email.toLowerCase();
 
     // Check if user already exists on database

@@ -1,16 +1,18 @@
-import { ChannelType, MessageType } from '@prisma/client';
+import { ChannelType, MessageType, PriorityLevels } from '@prisma/client';
+import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
-import { prioritySchema } from '@/lib/zod/ticket';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import { postMessage } from '@/services/serverSide/message';
 import { updatePriority } from '@/services/serverSide/ticket';
+import { createEnumSchema, parseAndValidateRequest } from '@/lib/zod';
 
 // PUT: /api/tickets/[ticketId]/changePriority
+const UpdateRequestBody = z.object({
+  priority: createEnumSchema('priority', PriorityLevels),
+});
 export const PUT = withWorkspaceAuth(async (req, { ticketId }) => {
   try {
-    const { priority } = await req.json();
-
-    prioritySchema.parse(priority);
+    const { priority } = await parseAndValidateRequest(req, UpdateRequestBody);
 
     const updatedTicket = await updatePriority(ticketId, priority);
 
