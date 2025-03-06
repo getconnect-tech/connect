@@ -1,7 +1,5 @@
 /* eslint-disable no-undef */
 import OneSignal from 'react-onesignal';
-import { isEmpty, isNotificationSupported } from './common';
-import UserPreferenceSingleton from './userPreferenceSingleton';
 import { getSessionDetails } from '@/services/serverSide/auth/authentication';
 import { APP_INIT_RESPONSE_TYPE } from '@/global/constants';
 import {
@@ -11,13 +9,16 @@ import {
 import { getUserDetails } from '@/services/clientSide/userService';
 import { Workspace } from '@/utils/dataTypes';
 import { getLabels } from '@/services/clientSide/settingServices';
+import UserPreferenceSingleton from './userPreferenceSingleton';
+import { isEmpty, isNotificationSupported } from './common';
+import { NEXT_PUBLIC_ONESIGNAL_APP_ID, NODE_ENV } from './environment';
 
 export const initOneSignal = async (userId: string) => {
   try {
     // OneSignal.Debug.setLogLevel('trace');
     await OneSignal.init({
-      appId: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID!,
-      allowLocalhostAsSecureOrigin: process.env.NODE_ENV === 'development',
+      appId: NEXT_PUBLIC_ONESIGNAL_APP_ID!,
+      allowLocalhostAsSecureOrigin: NODE_ENV === 'development',
       autoRegister: true,
     });
 

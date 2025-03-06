@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { AmplitudeEvent, AmplitudeUserSearchResponse } from '@/utils/dataTypes';
+import { AMPLITUDE_API_KEY, AMPLITUDE_SECRET_KEY } from '@/helpers/environment';
 
-const API_KEY = process.env.AMPLITUDE_API_KEY!;
-const SECRET_KEY = process.env.AMPLITUDE_SECRET_KEY!;
-
-const authHeader = Buffer.from(`${API_KEY}:${SECRET_KEY}`).toString('base64');
+const authHeader = Buffer.from(
+  `${AMPLITUDE_API_KEY}:${AMPLITUDE_SECRET_KEY}`,
+).toString('base64');
 
 export const findUserByEmail = async (userEmail: string) => {
   const response = await axios.get(

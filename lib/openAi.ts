@@ -1,15 +1,15 @@
 import OpenAI from 'openai';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { ZodSchema } from 'zod';
+import { OPENAI_API_KEY } from '@/helpers/environment';
 
-const openAiAPIStr = process.env.OPENAI_API_KEY;
 const AI_MODEL = 'gpt-4o-mini';
 
-if (!openAiAPIStr) {
+if (!OPENAI_API_KEY) {
   throw new Error('Please define `OPENAI_API_KEY` in .env');
 }
 export const openAi = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: OPENAI_API_KEY,
 });
 
 export const chatWithOpenAi = async (content: string) => {
