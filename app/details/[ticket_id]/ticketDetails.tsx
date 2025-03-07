@@ -55,7 +55,6 @@ import FileCard from '@/components/fileCard/fileCard';
 import ProsemirrorEditor from '@/components/prosemirror';
 import ResponsiveProfileSection from '@/components/profileSection/responsiveProfileSection';
 import { getContactDetailById } from '@/services/clientSide/contactServices';
-import { getTasksList } from '@/services/clientSide/teamcampService';
 import {
   ActivityDiv,
   BottomDiv,
@@ -193,12 +192,11 @@ function TicketDetails(props: Props) {
         getTicketDetails(ticket_id),
         getTicketMessages(ticket_id),
         getMacros(),
-        getTasksList(),
       ]);
       if (ticketDetails?.contact_id)
         await getContactDetailById(ticketDetails?.contact_id);
     }
-  }, [ticket_id, currentWorkspace?.id, ticketDetails?.contact_id]);
+  }, [currentWorkspace?.id, ticketDetails?.contact_id, ticket_id]);
 
   useEffect(() => {
     loadData();

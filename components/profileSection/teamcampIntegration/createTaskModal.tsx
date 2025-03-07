@@ -10,11 +10,7 @@ import { priorityItem } from '@/helpers/raw';
 import Button from '@/components/button/button';
 import ProsemirrorEditor from '@/components/prosemirror';
 import FileCard from '@/components/fileCard/fileCard';
-import {
-  createTask,
-  getTasksList,
-  getUserList,
-} from '@/services/clientSide/teamcampService';
+import { createTask, getUserList } from '@/services/clientSide/teamcampService';
 import {
   PRIORITY_ICON_NAMES,
   TASK_PRIORITY,
@@ -47,8 +43,9 @@ function CreateTaskModal({ onClose }: Props) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const editorRef = useRef<any>(null);
 
-  const { appStore, teamcampStore, messageStore } = useStores();
+  const { appStore, teamcampStore, messageStore, ticketStore } = useStores();
   const { projectUsers, taskCreateInput } = teamcampStore || {};
+  const { ticketDetails } = ticketStore || {};
   const { uploadLoading } = appStore || {};
 
   const loadData = useCallback(async () => {
@@ -114,22 +111,42 @@ function CreateTaskModal({ onClose }: Props) {
   );
 
   const handleCreateTask = useCallback(async () => {
+    if (!ticketDetails?.id) return;
+
     if (isEmpty(taskCreateInput.taskName)) {
       messageStore.setErrorMessage('Please enter task name!');
       return;
     }
     try {
       setLoading(true);
-      await createTask(taskCreateInput);
+      teamcampStore.updateTaskCreateInput('ticketId', ticketDetails?.id);
+      const response = await createTask(taskCreateInput);
+
+      if (response) {
+        ticketStore.setTicketDetails({
+          ...(ticketDetails || {}),
+          teamcamp_tasks: [
+            ...(ticketDetails?.teamcamp_tasks || []),
+            response.taskId,
+          ],
+        });
+      }
+
       onClose();
       teamcampStore.clearTaskCreateInput();
-      getTasksList();
     } catch (e) {
       console.log('error', e);
     } finally {
       setLoading(false);
     }
-  }, [messageStore, onClose, taskCreateInput, teamcampStore]);
+  }, [
+    messageStore,
+    onClose,
+    taskCreateInput,
+    teamcampStore,
+    ticketDetails,
+    ticketStore,
+  ]);
 
   return (
     <MainDiv>

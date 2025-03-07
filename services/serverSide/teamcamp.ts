@@ -11,6 +11,7 @@ import {
   TEAMCAMP_API_URL,
   TEAMCAMP_PROJECT_ID,
 } from '@/helpers/environment';
+import { prisma } from '@/prisma/prisma';
 
 const projectId = TEAMCAMP_PROJECT_ID;
 
@@ -20,7 +21,7 @@ const teamcampApiClient = axios.create({
   params: { projectId },
 });
 
-export const getTasks = async () => {
+export const getTasks = async (taskIds: string[]) => {
   const { data: project } = await teamcampApiClient.get(
     `/project/${projectId}`,
   );
@@ -37,7 +38,8 @@ export const getTasks = async () => {
     }
   }
 
-  const formattedTasks: TeamcampTask[] = tasks.map(formatTeamcampTask);
+  const filteredTasks = tasks.filter((task: any) => taskIds.includes(task.id));
+  const formattedTasks: TeamcampTask[] = filteredTasks.map(formatTeamcampTask);
   return formattedTasks.toSorted(
     (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
   );
@@ -50,6 +52,11 @@ export const createTask = async (payload: TaskCreatePayload) => {
     '/task/taskHandler',
     newTaskPayload,
   );
+
+  await prisma.ticket.update({
+    where: { id: payload.ticketId },
+    data: { teamcamp_tasks: { push: data.taskId } },
+  });
 
   return data;
 };

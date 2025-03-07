@@ -60,25 +60,26 @@ model Label {
 }
 
 model Ticket {
-  id            String         @id @default(uuid())
-  workspace_id  String
-  title         String
-  subject       String
-  contact_id    String
-  assigned_to   String?
-  created_at    DateTime       @default(now())
-  updated_at    DateTime       @default(now()) @updatedAt
-  priority      PriorityLevels @default(NONE)
-  messages      Message[]
-  assigned_user User?          @relation(fields: [assigned_to], references: [id])
-  contact       Contact        @relation(fields: [contact_id], references: [id])
-  workspace     Workspace      @relation(fields: [workspace_id], references: [id])
-  source        ChannelType
-  mail_id       String?        @unique
-  labels        TicketLabel[]
-  status        TicketStatus   @default(OPEN)
-  snooze_until  DateTime?
-  users         TicketUser[]
+  id             String         @id @default(uuid())
+  workspace_id   String
+  title          String
+  subject        String
+  contact_id     String
+  assigned_to    String?
+  created_at     DateTime       @default(now())
+  updated_at     DateTime       @default(now()) @updatedAt
+  priority       PriorityLevels @default(NONE)
+  messages       Message[]
+  assigned_user  User?          @relation(fields: [assigned_to], references: [id])
+  contact        Contact        @relation(fields: [contact_id], references: [id])
+  workspace      Workspace      @relation(fields: [workspace_id], references: [id])
+  source         ChannelType
+  mail_id        String?        @unique
+  labels         TicketLabel[]
+  status         TicketStatus   @default(OPEN)
+  snooze_until   DateTime?
+  users          TicketUser[]
+  teamcamp_tasks String[]       @default([])
 }
 
 model Message {
