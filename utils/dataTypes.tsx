@@ -204,4 +204,5 @@ export type TaskCreatePayload = {
   priority: number;
   taskUsers: string[];
   files: File[];
+  ticketId: string;
 };

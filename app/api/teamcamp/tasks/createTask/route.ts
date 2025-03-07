@@ -1,22 +1,12 @@
 import { z } from 'zod';
 import { handleApiError } from '@/helpers/errorHandler';
-import withAuth from '@/middlewares/withAuth';
-import { createTask, getTasks } from '@/services/serverSide/teamcamp';
 import {
-  createNumberSchema,
   createStringSchema,
+  createNumberSchema,
   parseAndValidateRequest,
 } from '@/lib/zod';
-
-export const GET = withAuth(async () => {
-  try {
-    const tasks = await getTasks();
-
-    return Response.json(tasks, { status: 200 });
-  } catch (err) {
-    return handleApiError(err);
-  }
-});
+import withAuth from '@/middlewares/withAuth';
+import { createTask } from '@/services/serverSide/teamcamp';
 
 const CreateRequestBody = z.object({
   taskName: createStringSchema('taskName'),
@@ -31,6 +21,7 @@ const CreateRequestBody = z.object({
       size: createStringSchema('size'),
     }),
   ),
+  ticketId: createStringSchema('ticketId', { id: true }),
 });
 export const POST = withAuth(async (req) => {
   try {
