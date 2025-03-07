@@ -5,6 +5,7 @@ import Modal from '@/components/modal/modal';
 import { useStores } from '@/stores';
 import { getTeamcampCredential } from '@/services/serverSide/serverAction';
 import { isEmpty } from '@/helpers/common';
+import { getTasksList } from '@/services/clientSide/teamcampService';
 import Icon from '../../icon/icon';
 import {
   AIIcon,
@@ -26,31 +27,39 @@ import {
 import CreateTaskModal from './createTaskModal';
 
 function TeamcampIntegration() {
-  const { teamcampStore } = useStores();
+  const { teamcampStore, ticketStore } = useStores();
+  const { ticketDetails } = ticketStore || {};
   const { taskList } = teamcampStore || {};
 
   const [teamcampProjectId, setTeamcampProjectId] = useState('');
   const [createTaskModal, setCreateTaskModal] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleShowAllToggle = () => {
     setShowAll((prevShowAll) => !prevShowAll);
   };
 
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    const teamcampCredential = await getTeamcampCredential();
+    await getTasksList(ticketDetails?.teamcamp_tasks || []);
+    setLoading(false);
+    if (teamcampCredential) setTeamcampProjectId(teamcampCredential.projectId);
+  }, [ticketDetails?.teamcamp_tasks]);
+
   useEffect(() => {
-    (async () => {
-      const teamcampCredential = await getTeamcampCredential();
-      if (teamcampCredential)
-        setTeamcampProjectId(teamcampCredential.projectId);
-    })();
-  }, []);
+    loadData();
+  }, [loadData]);
 
   const eventsToShow = useMemo(() => {
     return showAll ? taskList : taskList.slice(0, 5);
   }, [showAll, taskList]);
 
   const renderTaskList = useMemo(() => {
-    return (
+    return loading ? (
+      <>Loading...</>
+    ) : (
       <>
         {eventsToShow.map((item, index) => (
           <ItemDiv
@@ -94,7 +103,7 @@ function TeamcampIntegration() {
         )}
       </>
     );
-  }, [eventsToShow, showAll, taskList.length, teamcampProjectId]);
+  }, [eventsToShow, loading, showAll, taskList.length, teamcampProjectId]);
 
   const handleModalOpen = useCallback(() => {
     setCreateTaskModal(true);

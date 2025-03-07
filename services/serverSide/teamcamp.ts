@@ -53,10 +53,9 @@ export const createTask = async (payload: TaskCreatePayload) => {
     newTaskPayload,
   );
 
-  const taskId = data._id;
   await prisma.ticket.update({
     where: { id: payload.ticketId },
-    data: { teamcamp_tasks: { push: taskId } },
+    data: { teamcamp_tasks: { push: data.taskId } },
   });
 
   return data;

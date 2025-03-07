@@ -7,9 +7,12 @@ import { teamcampStore } from '@/stores/teamcampStore';
 /**
  * @desc get teamcamp tasks list
  */
-export const getTasksList = async () => {
+export const getTasksList = async (payload: string[]) => {
   try {
-    const response = await axios.get(`${NEXT_PUBLIC_API_URL}/teamcamp/tasks`);
+    const response = await axios.post(
+      `${NEXT_PUBLIC_API_URL}/teamcamp/tasks/getTasks`,
+      { taskIds: payload },
+    );
     const { data } = response;
     teamcampStore.setTaskList(data);
     return data;
@@ -28,13 +31,14 @@ export const getTasksList = async () => {
     "description": "Description",
     "priority": 1,
     "taskUsers": [],
-    "files": []
+    "files": [],
+    "ticketId":""
 }
  */
 export const createTask = async (payload: object) => {
   try {
     const response = await axios.post(
-      `${NEXT_PUBLIC_API_URL}/teamcamp/tasks`,
+      `${NEXT_PUBLIC_API_URL}/teamcamp/tasks/createTask`,
       payload,
     );
     const { data } = response;

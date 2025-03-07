@@ -8,6 +8,7 @@ const getInitialTaskCreateInput = (): TaskCreatePayload => ({
   priority: 0,
   taskUsers: [],
   files: [],
+  ticketId: '',
 });
 
 class TeamcampStore {
