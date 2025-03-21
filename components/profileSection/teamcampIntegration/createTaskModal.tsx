@@ -120,7 +120,7 @@ function CreateTaskModal({ onClose }: Props) {
     try {
       setLoading(true);
       teamcampStore.updateTaskCreateInput('ticketId', ticketDetails?.id);
-      const referenceLink = window.location.href;
+      const referenceLink = `${window.location.origin}/details/${ticketDetails?.id}`;
       const response = await createTask({
         ...(taskCreateInput || {}),
         links: [
