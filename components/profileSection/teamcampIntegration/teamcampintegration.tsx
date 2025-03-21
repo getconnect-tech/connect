@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { MessageType } from '@prisma/client';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Modal from '@/components/modal/modal';
 import { useStores } from '@/stores';
@@ -28,7 +29,7 @@ import CreateTaskModal from './createTaskModal';
 
 function TeamcampIntegration() {
   const { teamcampStore, ticketStore } = useStores();
-  const { ticketDetails } = ticketStore || {};
+  const { ticketDetails, messages } = ticketStore || {};
   const { taskList } = teamcampStore || {};
 
   const [teamcampProjectId, setTeamcampProjectId] = useState('');
@@ -106,8 +107,16 @@ function TeamcampIntegration() {
   }, [eventsToShow, loading, showAll, taskList.length, teamcampProjectId]);
 
   const handleModalOpen = useCallback(() => {
+    const taskDescription = messages.findLast(
+      (item) => item.type === MessageType.FROM_CONTACT,
+    )?.content;
+
+    if (ticketDetails && taskDescription) {
+      teamcampStore.updateTaskCreateInput('taskName', ticketDetails?.title);
+      teamcampStore.updateTaskCreateInput('description', taskDescription);
+    }
     setCreateTaskModal(true);
-  }, []);
+  }, [messages, teamcampStore, ticketDetails]);
 
   const handleModalClose = useCallback(() => {
     setCreateTaskModal(false);
