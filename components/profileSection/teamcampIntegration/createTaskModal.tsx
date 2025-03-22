@@ -125,6 +125,7 @@ function CreateTaskModal({ onClose }: Props) {
         ...(taskCreateInput || {}),
         links: [
           {
+            label: ticketDetails.title,
             reference: referenceLink,
             readonly: true,
           },
