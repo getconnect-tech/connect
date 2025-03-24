@@ -153,6 +153,7 @@ const EventDiv = styled.div`
   p {
     ${Typography.body_md_medium};
     color: var(--text-text-secondary);
+    margin: 0;
   }
   h6 {
     ${Typography.body_sm_regular};
