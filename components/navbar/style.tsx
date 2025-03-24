@@ -168,6 +168,7 @@ const OrganizationProfile = styled.div`
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
     overflow: hidden;
+    margin: 0;
   }
   &:hover {
     cursor: pointer;
@@ -191,6 +192,7 @@ const ProfileItemDiv = styled.div`
   p {
     ${Typography.body_md_regular}
     color: var(--text-text-secondary);
+    margin: 0;
   }
   &:hover {
     fill: var(--icon-hover);
