@@ -42,7 +42,7 @@ const TagDiv = styled.div`
   }
 `;
 
-const CardMessage = styled.p`
+const CardMessage = styled.div`
   padding: 12px;
   ${Typography.body_md_regular};
   color: var(--text);

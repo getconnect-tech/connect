@@ -139,6 +139,7 @@ const ItemLeftDiv = styled.div<Props>`
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    margin: 0;
     max-width: ${({ isSeen }) => (isSeen ? '96px' : 'unset')};
   }
   svg {

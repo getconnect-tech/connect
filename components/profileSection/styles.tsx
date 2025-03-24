@@ -19,6 +19,7 @@ const ProfileDiv = styled.div`
 const Title = styled.p`
   ${Typography.body_md_medium}
   color: var(--text);
+  margin: 0;
 `;
 
 const CompanyName = styled.p`
@@ -67,6 +68,7 @@ const DetailsDiv = styled.div`
     color: var(--text);
     word-wrap: break-word;
     max-width: 155px;
+    margin: 0;
     @media screen and (min-width: 321px) and (max-width: 768px) {
       word-wrap: normal;
       max-width: unset;
@@ -85,6 +87,7 @@ const LeftDiv = styled.div`
     -webkit-line-clamp: 1;
     overflow: hidden;
     word-break: break-word;
+    margin: 0;
   }
 `;
 
@@ -207,6 +210,7 @@ const NameDiv = styled.div`
 const AIText = styled.p`
   ${Typography.body_md_regular};
   color: var(--text);
+  margin: 0;
 `;
 
 const DescriptionDiv = styled.div`
@@ -243,6 +247,7 @@ const Actions = styled.p`
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
+  margin: 0;
   span {
     ${Typography.body_md_medium};
     color: var(--text);

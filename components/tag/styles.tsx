@@ -43,6 +43,7 @@ const StatusDiv = styled.div<Props>`
 const StatusTitle = styled.p`
   ${Typography.body_sm_regular}
   color: var(--text-text-secondary);
+  margin: 0;
 `;
 
 export { StatusDiv, StatusTitle };

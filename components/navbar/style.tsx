@@ -54,6 +54,7 @@ const OrganizationNameDiv = styled.div`
   p {
     ${Typography.body_md_medium}
     color: var(--text);
+    margin: 0;
     margin-right: 8px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -96,6 +97,7 @@ const ItemDiv = styled.div<Props>`
 `;
 
 const Title = styled.p<Props>`
+  margin: 0;
   ${Typography.body_md_regular}
   color: var(${({ isActive }) =>
     isActive ? '--text' : '--text-text-secondary'});
