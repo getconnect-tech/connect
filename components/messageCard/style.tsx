@@ -52,6 +52,7 @@ const CardMessage = styled.div`
     font-family: unset !important;
     white-space: normal;
     p {
+      margin: 0;
       br {
         display: none;
       }
