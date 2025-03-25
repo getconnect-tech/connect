@@ -53,7 +53,7 @@ const QueueChart = () => {
         borderWidth: 2,
         pointStyle: 'circle',
         pointRadius: 3,
-        pointHoverRadius: 15,
+        pointHoverRadius: 7,
         pointBackgroundColor: '#4B8DF8',
         pointHoverBackgroundColor: '#4B8DF8',
       },
@@ -70,14 +70,12 @@ const QueueChart = () => {
     tooltipEl.style.display = 'none';
 
     const handleHover = (event: MouseEvent) => {
-      const { current: chart } = chartRef;
-
       if (!chart) return;
 
       const activePoints = chart.getElementsAtEventForMode(
         event,
         'nearest',
-        { intersect: false },
+        { intersect: true }, // Ensures tooltip only appears when hovering directly over a data point
         true,
       );
 
@@ -114,11 +112,10 @@ const QueueChart = () => {
           tooltipEl.style.display = 'block';
 
           const position = chart.canvas.getBoundingClientRect();
-          const left = event.clientX - position.left;
-          const top = chart.getDatasetMeta(0).data[index].y - 60; // Adjusted for arrow
+          const point = chart.getDatasetMeta(datasetIndex).data[index];
 
-          tooltipEl.style.left = `${left}px`;
-          tooltipEl.style.top = `${top}px`;
+          tooltipEl.style.left = `${point.x}px`;
+          tooltipEl.style.top = `${point.y - 60}px`; // Adjusted for tooltip position
         }
       } else {
         tooltipEl.style.display = 'none';
