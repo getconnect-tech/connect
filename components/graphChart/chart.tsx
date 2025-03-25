@@ -149,6 +149,7 @@ const QueueChart = () => {
     },
     scales: {
       y: {
+        position: 'right',
         min: 0,
         max: 40,
         ticks: {
@@ -157,7 +158,10 @@ const QueueChart = () => {
         },
         grid: {
           drawTicks: false,
-          color: '#EAEAEA',
+          display: false,
+        },
+        border: {
+          display: false,
         },
       },
       x: {
@@ -167,11 +171,14 @@ const QueueChart = () => {
         ticks: {
           padding: 10,
         },
+        border: {
+          display: false,
+        },
       },
     },
     elements: {
       line: {
-        cubicInterpolationMode: 'monotone' as const,
+        cubicInterpolationMode: 'monotone',
       },
     },
   };
