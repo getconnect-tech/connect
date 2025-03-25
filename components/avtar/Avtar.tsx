@@ -44,8 +44,8 @@ const TextWrapper: any = styled.div`
       border-radius: ${props.size}px;
       background: ${props.randColor};
       span {
-        font-size: ${props.size - props.size / 2}px;
-        color: var(--text);
+        font-size: ${props.size - props.size / 2}px !important;
+        color: var(--text) !important;
       }
     `}
 `;
