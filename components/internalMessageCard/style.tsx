@@ -329,7 +329,7 @@ const NameMainDiv = styled.div`
       ${Typography.body_md_regular};
       color: var(--text-text-secondary);
       white-space: nowrap;
-      margin-bottom: unset !important;
+      margin-bottom: unset;
     }
     .left-div {
       display: flex;
