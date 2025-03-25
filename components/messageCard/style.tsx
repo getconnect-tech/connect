@@ -51,6 +51,9 @@ const CardMessage = styled.div`
     color: var(--text) !important;
     font-family: unset !important;
     white-space: normal;
+    table {
+      width: 100%;
+    }
     p {
       margin: 0;
       br {
