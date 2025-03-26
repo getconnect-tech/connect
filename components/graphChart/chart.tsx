@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 'use client';
 import React, { useRef, useEffect } from 'react';
-import { Line } from 'react-chartjs-2';
+import { Chart } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,9 +12,11 @@ import {
   Tooltip,
   Legend,
   Filler,
-  ChartOptions,
-  ChartData,
+  LineController,
+  BarController,
 } from 'chart.js';
+import { BarElement } from 'chart.js';
+import { ChartOptions } from 'chart.js';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import {
   ChartDiv,
@@ -31,6 +33,10 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
+  LineElement,
+  LineController,
+  BarController,
   Title,
   Tooltip,
   Legend,
@@ -47,30 +53,54 @@ const QueueChart = ({ valueTitle, title }: Props) => {
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   // Data configuration
-  const data: ChartData<'line'> = {
-    labels: [
-      '31 Jan',
-      '01 Feb',
-      '02 Feb',
-      '03 Feb',
-      '04 Feb',
-      '05 Feb',
-      '06 Feb',
-      '07 Feb',
-    ],
+  const data = {
+    labels: ['19 Jan', '26 Jan', '02 Feb', '07 Feb', 'Today'],
     datasets: [
       {
-        data: [28, 19, 19, 40, 30, 19, 10, 0],
+        type: 'bar' as const,
+        label: 'Background Bar',
+        data: [5, 15, 25, 19, 28],
+        backgroundColor: (context: any) => {
+          const chart = context.chart;
+          const { ctx, chartArea } = chart;
+
+          if (!chartArea) {
+            // If chartArea is not available, return a fallback color
+            setTimeout(() => {
+              chart.update(); // Trigger re-render once chartArea is available
+            }, 0);
+            return 'rgba(63, 130, 247, 0.1)'; // Temporary fallback color
+          }
+
+          const gradient = ctx.createLinearGradient(
+            0,
+            chartArea.top,
+            0,
+            chartArea.bottom,
+          );
+          gradient.addColorStop(0, 'rgba(63, 130, 247, 0)'); // Transparent at top
+          gradient.addColorStop(1, 'rgba(63, 130, 247, 0.3)'); // Darker at bottom
+
+          return gradient;
+        },
+        borderWidth: 0, // Ensures bars have a visible border
+        barPercentage: 0.6,
+        categoryPercentage: 1.0,
+      },
+      {
+        type: 'line' as const,
+        label: 'Queue Size',
+        data: [5, 15, 25, 19, 28], // Your data points
         borderColor: '#5C67F4',
-        backgroundColor: 'rgba(75, 141, 248, 0.2)',
-        tension: 0.4,
-        fill: true,
-        borderWidth: 2,
-        pointStyle: 'circle',
-        pointRadius: 3,
+        backgroundColor: 'rgba(63, 130, 247, 0.2)',
+        pointBackgroundColor: '#5C67F4',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: '#5C67F4',
+        borderWidth: 2.5, // Makes the line slightly thicker
+        pointRadius: 5,
         pointHoverRadius: 7,
-        pointBackgroundColor: '#4B8DF8',
-        pointHoverBackgroundColor: '#4B8DF8',
+        tension: 0.3, // Smooth curve
       },
     ],
   };
@@ -152,8 +182,7 @@ const QueueChart = ({ valueTitle, title }: Props) => {
     };
   }, [data.datasets, data.labels]);
 
-  // Chart options with proper TypeScript typing
-  const options: ChartOptions<'line'> = {
+  const options: ChartOptions<'bar' | 'line'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -215,8 +244,9 @@ const QueueChart = ({ valueTitle, title }: Props) => {
         <ValueTitle dangerouslySetInnerHTML={{ __html: valueTitle }} />
       </TopSection>
       <ChartDiv>
-        <Line
+        <Chart
           ref={chartRef}
+          type='bar'
           data={data}
           options={options}
           style={{ width: '100%' }}
