@@ -1,9 +1,9 @@
 'use client';
 import React, { useCallback, useState } from 'react';
-import QueueChart from '@/components/graphChart/chart';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Icon from '@/components/icon/icon';
 import { TICKETS_HEADER } from '@/global/constants';
+import GraphList from '@/components/graphChart/graphList';
 import {
   BottomDiv,
   ChartMainDiv,
@@ -28,6 +28,17 @@ function Insights({ activeNav }: InsightsProps) {
   const onCloseNavbar = useCallback(() => {
     setIsNavbar(false);
   }, []);
+
+  // Graph data
+  const chartData = [
+    { valueTitle: '<span>28</span> in todo', title: 'Queue size' },
+    {
+      valueTitle: '<span>2h 43m</span>',
+      title: 'Median first response time',
+    },
+    { valueTitle: '<span>4h 44m</span>', title: 'Median resolution time' },
+  ];
+
   return (
     <Main>
       {isNavbar && <ResponsiveNavbar onClose={onCloseNavbar} />}
@@ -50,7 +61,7 @@ function Insights({ activeNav }: InsightsProps) {
         </TopDiv>
         <BottomDiv isShowNavbar={isNavbar} onClick={onCloseNavbar}>
           <ChartMainDiv>
-            <QueueChart />
+            <GraphList chartData={chartData} />
           </ChartMainDiv>
         </BottomDiv>
       </MainDiv>

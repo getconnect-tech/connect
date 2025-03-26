@@ -15,6 +15,16 @@ import {
   ChartOptions,
   ChartData,
 } from 'chart.js';
+import SVGIcon from '@/assets/icons/SVGIcon';
+import {
+  ChartDiv,
+  HeaderSection,
+  HeadingTitle,
+  MainChartDiv,
+  TooltipDiv,
+  TopSection,
+  ValueTitle,
+} from './style';
 
 ChartJS.register(
   CategoryScale,
@@ -27,7 +37,12 @@ ChartJS.register(
   Filler,
 );
 
-const QueueChart = () => {
+interface Props {
+  valueTitle: string;
+  title: string;
+}
+
+const QueueChart = ({ valueTitle, title }: Props) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
@@ -186,42 +201,30 @@ const QueueChart = () => {
   };
 
   return (
-    <div
-      style={{
-        width: '100%',
-        maxWidth: '600px',
-        fontFamily: 'Arial, sans-serif',
-        position: 'relative',
-      }}
-    >
-      <h3
-        style={{
-          margin: '0 0 20px 0',
-          fontSize: '16px',
-          fontWeight: 'bold',
-          color: '#333',
-        }}
-      >
-        Queue size
-      </h3>
-
-      <div style={{ height: '250px', position: 'relative' }}>
-        <Line ref={chartRef} data={data} options={options} />
-
-        {/* Custom Tooltip Element with Arrow */}
-        <div
-          ref={tooltipRef}
-          style={{
-            position: 'absolute',
-            pointerEvents: 'none',
-            display: 'none',
-            zIndex: 100,
-            transform: 'translateX(-50%)',
-            minWidth: 80,
-          }}
+    <MainChartDiv>
+      <TopSection>
+        <HeaderSection>
+          <HeadingTitle>{title}</HeadingTitle>
+          <SVGIcon
+            name='chart-tooltip-icon'
+            width='12'
+            height='12'
+            viewBox='0 0 12 12'
+          />
+        </HeaderSection>
+        <ValueTitle dangerouslySetInnerHTML={{ __html: valueTitle }} />
+      </TopSection>
+      <ChartDiv>
+        <Line
+          ref={chartRef}
+          data={data}
+          options={options}
+          style={{ width: '100%' }}
         />
-      </div>
-    </div>
+        {/* Custom Tooltip Element with Arrow */}
+        <TooltipDiv ref={tooltipRef} />
+      </ChartDiv>
+    </MainChartDiv>
   );
 };
 
