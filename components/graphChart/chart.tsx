@@ -51,15 +51,28 @@ interface Props {
 const QueueChart = ({ valueTitle, title }: Props) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
+  const taskData = [5, 10, 35, 20, 28, 5, 10, 35, 20, 28];
+  const dates = [
+    '19 Jan',
+    '26 Jan',
+    '02 Feb',
+    '07 Feb',
+    'Today',
+    '19 Jan',
+    '26 Jan',
+    '02 Feb',
+    '07 Feb',
+    'Today',
+  ];
 
   // Data configuration
   const data = {
-    labels: ['19 Jan', '26 Jan', '02 Feb', '07 Feb', 'Today'],
+    labels: dates,
     datasets: [
       {
         type: 'bar' as const,
         label: 'Background Bar',
-        data: [5, 15, 25, 19, 28],
+        data: taskData,
         backgroundColor: (context: any) => {
           const chart = context.chart;
           const { ctx, chartArea } = chart;
@@ -90,7 +103,7 @@ const QueueChart = ({ valueTitle, title }: Props) => {
       {
         type: 'line' as const,
         label: 'Queue Size',
-        data: [5, 15, 25, 19, 28], // Your data points
+        data: taskData, // Your data points
         borderColor: '#5C67F4',
         backgroundColor: 'rgba(63, 130, 247, 0.2)',
         pointBackgroundColor: '#5C67F4',
@@ -100,7 +113,7 @@ const QueueChart = ({ valueTitle, title }: Props) => {
         borderWidth: 2.5, // Makes the line slightly thicker
         pointRadius: 5,
         pointHoverRadius: 7,
-        tension: 0.3, // Smooth curve
+        tension: 0.2, // Smooth curve
       },
     ],
   };
@@ -220,11 +233,6 @@ const QueueChart = ({ valueTitle, title }: Props) => {
         border: {
           display: false,
         },
-      },
-    },
-    elements: {
-      line: {
-        cubicInterpolationMode: 'monotone',
       },
     },
   };

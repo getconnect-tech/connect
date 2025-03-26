@@ -8,6 +8,8 @@ import {
   LinearScale,
   PointElement,
   Tooltip,
+  ChartData,
+  ChartOptions,
 } from 'chart.js';
 
 ChartJS.register(
@@ -19,88 +21,74 @@ ChartJS.register(
   Tooltip,
 );
 
-const CustomChart = () => {
+const CustomChart: React.FC = () => {
   const data = {
-    labels: ['19 Jan', '26 Jan', '02 Feb', '07 Feb', 'Today'],
+    labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     datasets: [
       {
-        type: 'bar' as const,
-        label: 'Background Bar',
-        data: [5, 15, 25, 19, 28],
-        backgroundColor: 'transparent',
-        borderWidth: 2, // Ensure border is visible
-        barPercentage: 0.6,
-        categoryPercentage: 1.0,
-        borderColor: (context: any) => {
-          const chart = context.chart;
-          const { ctx, chartArea } = chart;
+        yAxisID: 'right-y-axis',
+        type: 'line',
+        label: 'CTR',
+        borderColor: '#ba78cb',
+        borderWidth: 3,
+        fill: true,
+        cubicInterpolationMode: 'monotone',
 
-          if (!chartArea) {
-            setTimeout(() => chart.update(), 0);
-            return '#3F82F7'; // Fallback color
-          }
-
-          const gradient = ctx.createLinearGradient(
-            0,
-            chartArea.bottom,
-            0,
-            chartArea.top, // Reverse direction
-          );
-          gradient.addColorStop(0, '#3F82F7'); // Darker at the bottom
-          gradient.addColorStop(1, '#A7C3FF'); // Lighter at the top
-
-          return gradient;
-        },
+        backgroundColor:
+          'linear-gradient(180deg, rgba(92, 103, 244, 0.25) 0%, rgba(255, 255, 255, 0) 70%);',
+        data: [1, 2, 1, 3, 5, 4, 9],
       },
       {
-        type: 'line' as const,
-        label: 'Queue Size',
-        data: [5, 15, 25, 19, 28],
-        borderColor: '#3F82F7',
-        backgroundColor: 'rgba(63, 130, 247, 0.2)',
-        pointBackgroundColor: '#3F82F7',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: '#3F82F7',
-        borderWidth: 2.5,
-        pointRadius: 5,
-        pointHoverRadius: 7,
-        tension: 0.3, // Smooth curve
+        yAxisID: 'left-y-axis',
+        type: 'bar',
+        label: 'Clicks',
+        borderWidth: 1,
+        borderRadius: 0,
+        borderSkipped: false,
+        backgroundColor: 'transparent',
+        data: [30, 30, 30, 30, 30, 30, 30, 30],
+        barThickness: 30,
       },
     ],
   };
 
-  const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      x: {
-        grid: { display: false },
-      },
-      y: {
-        grid: { display: false },
-      },
-    },
+  const options: ChartOptions<'bar'> = {
     plugins: {
       legend: {
         display: false,
       },
-      tooltip: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        titleColor: '#000',
-        bodyColor: '#000',
-        borderColor: '#ccc',
-        borderWidth: 1,
-        displayColors: false,
-        padding: 10,
-        cornerRadius: 5,
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        grid: {
+          display: false,
+        },
+      },
+      'left-y-axis': {
+        type: 'linear',
+        grid: {
+          lineWidth: 0,
+        },
+      },
+      'right-y-axis': {
+        type: 'linear',
+        position: 'right',
+        grid: {
+          display: false,
+        },
       },
     },
   };
 
   return (
     <div style={{ width: '400px', height: '250px' }}>
-      <Chart type='bar' data={data} options={options} />
+      {/* Change Chart type to "bar" and use a mixed dataset */}
+      <Chart type='bar' data={data as any} options={options} />
     </div>
   );
 };
