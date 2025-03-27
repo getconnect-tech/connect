@@ -53,24 +53,33 @@ const QueueChart = ({ valueTitle, title }: Props) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
 
-  // Get formatted labels for the last 28 days
+  // Generate array of last 28 days
   const last28Days = Array.from({ length: 28 }, (_, i) =>
     moment().subtract(27 - i, 'days'),
   );
 
-  // Generate random CTR data (for all 28 days)
-  const allDaysLabels = last28Days.map((date) => date.format('D MMM'));
+  // Find indexes of all Mondays in the array
+  const mondayIndexes = last28Days.reduce((acc, date, index) => {
+    if (date.format('ddd') === 'Mon') acc.push(index);
+    return acc;
+  }, [] as number[]);
 
+  // Generate labels - empty strings except for Mondays
+  const xAxisLabels = last28Days.map((date, index) =>
+    mondayIndexes.includes(index) ? date.format('D MMM') : '',
+  );
+
+  // Generate CTR data for all days
   const ctrData = last28Days.map(() => Math.floor(Math.random() * 40));
 
-  // Clicks data: Keep 0 for non-Monday days and fixed height for Mondays
+  // Generate bar data (only on Mondays)
   const fixedBarHeight = 100;
   const weeklyClicksData = last28Days.map((date) =>
     date.format('ddd') === 'Mon' ? fixedBarHeight : 0,
   );
 
   const data = {
-    labels: allDaysLabels, // Weekly labels (Mondays)
+    labels: last28Days.map((date) => date.format('D MMM')), // All labels
     datasets: [
       {
         type: 'line',
@@ -221,31 +230,36 @@ const QueueChart = ({ valueTitle, title }: Props) => {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        enabled: false,
-      },
+      legend: { display: false },
+      tooltip: { enabled: false },
     },
     scales: {
       y: {
         position: 'right',
         min: 0,
-        max: 120,
-        ticks: { stepSize: 20 },
-        grid: { drawTicks: false, display: false },
+        ticks: {
+          stepSize: 20,
+          color: 'var(--text-text-secondary)',
+          font: { size: 12 },
+        },
+        grid: { display: false },
         border: { display: false },
       },
       x: {
         grid: { display: false },
         ticks: {
-          padding: 10,
-          callback: function (value, index) {
-            return last28Days[index].format('ddd') === 'Mon'
-              ? allDaysLabels[index] // Show only Monday labels
-              : '';
+          color: 'var(--text-text-secondary)',
+          font: {
+            size: 12,
+            family: "'Inter', sans-serif", // Add your font family if needed
           },
+          padding: 10, // Adjust padding as needed
+          callback: function (value, index) {
+            return xAxisLabels[index];
+          },
+          autoSkip: false,
+          maxRotation: 0, // Prevent rotation
+          minRotation: 0, // Prevent rotation
         },
         border: { display: false },
       },

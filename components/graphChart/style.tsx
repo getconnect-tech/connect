@@ -18,6 +18,7 @@ const MainChartDiv = styled.div`
 
 const ChartDiv = styled.div`
   position: relative;
+  height: 200px;
 `;
 
 const TooltipDiv = styled.div`
