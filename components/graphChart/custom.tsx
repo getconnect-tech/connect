@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Chart } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -8,7 +8,6 @@ import {
   LinearScale,
   PointElement,
   Tooltip,
-  ChartData,
   ChartOptions,
 } from 'chart.js';
 
@@ -22,6 +21,21 @@ ChartJS.register(
 );
 
 const CustomChart: React.FC = () => {
+  const chartRef = useRef<any>(null);
+  const [gradient, setGradient] = useState<string | CanvasGradient>('');
+
+  useEffect(() => {
+    if (chartRef.current) {
+      const ctx = chartRef.current.ctx;
+      if (ctx) {
+        const gradientFill = ctx.createLinearGradient(0, 0, 0, 250);
+        gradientFill.addColorStop(0, 'rgba(92, 103, 244, 0.25)');
+        gradientFill.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        setGradient(gradientFill);
+      }
+    }
+  }, []);
+
   const data = {
     labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     datasets: [
@@ -29,13 +43,11 @@ const CustomChart: React.FC = () => {
         yAxisID: 'right-y-axis',
         type: 'line',
         label: 'CTR',
-        borderColor: '#ba78cb',
+        borderColor: '#5C67F4',
         borderWidth: 3,
-        fill: true,
+        fill: true, // Enable fill for gradient effect
         cubicInterpolationMode: 'monotone',
-
-        backgroundColor:
-          'linear-gradient(180deg, rgba(92, 103, 244, 0.25) 0%, rgba(255, 255, 255, 0) 70%);',
+        backgroundColor: gradient, // Apply the gradient here
         data: [1, 2, 1, 3, 5, 4, 9],
       },
       {
@@ -44,6 +56,7 @@ const CustomChart: React.FC = () => {
         label: 'Clicks',
         borderWidth: 1,
         borderRadius: 0,
+        borderColor: 'rgba(255, 255, 255, 0), rgba(233, 232, 229, 1)',
         borderSkipped: false,
         backgroundColor: 'transparent',
         data: [30, 30, 30, 30, 30, 30, 30, 30],
@@ -87,8 +100,8 @@ const CustomChart: React.FC = () => {
 
   return (
     <div style={{ width: '400px', height: '250px' }}>
-      {/* Change Chart type to "bar" and use a mixed dataset */}
-      <Chart type='bar' data={data as any} options={options} />
+      {/* Pass the ref to Chart.js */}
+      <Chart ref={chartRef} type='bar' data={data as any} options={options} />
     </div>
   );
 };
