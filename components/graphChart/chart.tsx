@@ -85,14 +85,9 @@ const QueueChart = ({ valueTitle, title }: Props) => {
 
   // Generate CTR data for all days
   const ctrData = chartDemoData.map((item) => item.queueSize);
-  // last28Days.map(() => Math.floor(Math.random() * 40));
-  console.log('CTR data', ctrData);
-
-  // Generate bar data (only on Mondays)
-  const fixedBarHeight = 100;
-  const queueSizes = chartDemoData.map((item) => item.queueSize);
 
   // Calculate max queue size
+  const queueSizes = chartDemoData.map((item) => item.queueSize);
   const maxQueueSize = Math.max(...queueSizes);
 
   // Calculate dynamic bar height (max size + 50px buffer)
