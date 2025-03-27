@@ -17,7 +17,6 @@ const MainChartDiv = styled.div`
 `;
 
 const ChartDiv = styled.div`
-  height: 158px;
   position: relative;
 `;
 

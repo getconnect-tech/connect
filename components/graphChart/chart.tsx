@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Chart } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -51,20 +51,20 @@ interface Props {
 const QueueChart = ({ valueTitle, title }: Props) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const [gradientFill, setGradientFill] = useState<string | CanvasGradient>('');
+  // const [gradientFill, setGradientFill] = useState<string | CanvasGradient>('');
 
-  useEffect(() => {
-    if (chartRef.current) {
-      const ctx = chartRef.current.ctx;
-      if (ctx) {
-        // Create Fill Gradient for Line Chart
-        const fillGradient = ctx.createLinearGradient(0, 0, 0, 250);
-        fillGradient.addColorStop(0, 'rgba(92, 103, 244, 0.25)');
-        fillGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        setGradientFill(fillGradient);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (chartRef.current) {
+  //     const ctx = chartRef.current.ctx;
+  //     if (ctx) {
+  //       // Create Fill Gradient for Line Chart
+  //       const fillGradient = ctx.createLinearGradient(0, 0, 0, 250);
+  //       fillGradient.addColorStop(0, 'rgba(92, 103, 244, 0.25)');
+  //       fillGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+  //       setGradientFill(fillGradient);
+  //     }
+  //   }
+  // }, []);
 
   const data = {
     labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -76,8 +76,17 @@ const QueueChart = ({ valueTitle, title }: Props) => {
         borderWidth: 3,
         fill: true,
         cubicInterpolationMode: 'monotone',
-        backgroundColor: gradientFill,
-        data: [20, 25, 10, 30, 5, 35, 40], // Keep Line Chart values unchanged
+        backgroundColor: 'transparent',
+        data: [20, 25, 10, 30, 5, 35, 38], // Keep Line Chart values unchanged
+        pointBackgroundColor: '#5C67F4',
+        pointRadius: (context: any) => {
+          // 👇 Show point only for the last index
+          return context.dataIndex === context.dataset.data.length - 1 ? 5 : 0;
+        },
+        pointHoverRadius: (context: any) => {
+          // 👇 Make only last point interactive
+          return context.dataIndex === context.dataset.data.length - 1 ? 8 : 0;
+        },
       },
       {
         type: 'bar',
