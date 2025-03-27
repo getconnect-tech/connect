@@ -22,16 +22,17 @@ ChartJS.register(
 
 const CustomChart: React.FC = () => {
   const chartRef = useRef<any>(null);
-  const [gradient, setGradient] = useState<string | CanvasGradient>('');
+  const [gradientFill, setGradientFill] = useState<string | CanvasGradient>('');
 
   useEffect(() => {
     if (chartRef.current) {
       const ctx = chartRef.current.ctx;
       if (ctx) {
-        const gradientFill = ctx.createLinearGradient(0, 0, 0, 250);
-        gradientFill.addColorStop(0, 'rgba(92, 103, 244, 0.25)');
-        gradientFill.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        setGradient(gradientFill);
+        // Create Fill Gradient for Line Chart
+        const fillGradient = ctx.createLinearGradient(0, 0, 0, 250);
+        fillGradient.addColorStop(0, 'rgba(92, 103, 244, 0.25)');
+        fillGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        setGradientFill(fillGradient);
       }
     }
   }, []);
@@ -45,22 +46,36 @@ const CustomChart: React.FC = () => {
         label: 'CTR',
         borderColor: '#5C67F4',
         borderWidth: 3,
-        fill: true, // Enable fill for gradient effect
+        fill: true,
         cubicInterpolationMode: 'monotone',
-        backgroundColor: gradient, // Apply the gradient here
-        data: [1, 2, 1, 3, 5, 4, 9],
+        backgroundColor: gradientFill,
+        data: [1, 2, 1, 3, 5, 4, 9], // Keep Line Chart values unchanged
       },
       {
         yAxisID: 'left-y-axis',
         type: 'bar',
         label: 'Clicks',
         borderWidth: 1,
-        borderRadius: 0,
-        borderColor: 'rgba(255, 255, 255, 0), rgba(233, 232, 229, 1)',
         borderSkipped: false,
         backgroundColor: 'transparent',
-        data: [30, 30, 30, 30, 30, 30, 30, 30],
+        data: [50, 50, 50, 50, 50, 50, 50], // 🔹 All bars have same height
         barThickness: 30,
+
+        borderColor: (context: any) => {
+          const chart = context.chart;
+          const { ctx, chartArea } = chart;
+          if (!chartArea) return 'rgba(233, 232, 229, 1)'; // Fallback color
+
+          const gradient = ctx.createLinearGradient(
+            0,
+            chartArea.bottom,
+            0,
+            chartArea.top,
+          );
+          gradient.addColorStop(0, 'rgba(233, 232, 229, 1)'); // Dark at Bottom
+          gradient.addColorStop(1, 'rgba(255, 255, 255, 0)'); // Light at Top
+          return gradient;
+        },
       },
     ],
   };
