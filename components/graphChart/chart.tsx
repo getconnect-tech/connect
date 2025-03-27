@@ -177,7 +177,7 @@ const QueueChart = ({ valueTitle, title }: Props) => {
                 <div style="margin-bottom: 2px; font-size: 12px; line-height: 16px; color: var(--text-text-secondary);">${label}</div>
               </div>
               
-              <!-- Red Connecting Line -->
+              <!--Connecting Line -->
               <div style="
                 position: absolute;
                 left: 50%;
@@ -189,7 +189,7 @@ const QueueChart = ({ valueTitle, title }: Props) => {
                 z-index: 1;
               "></div>
               
-              <!-- Red Dot at X-axis -->
+              <!--at X-axis -->
               <div style="
                 position: absolute;
                 left: 50%;
