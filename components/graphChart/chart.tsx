@@ -17,6 +17,7 @@ import {
 } from 'chart.js';
 import { BarElement } from 'chart.js';
 import { ChartOptions } from 'chart.js';
+import moment from 'moment';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import {
   ChartDiv,
@@ -51,6 +52,23 @@ interface Props {
 const QueueChart = ({ valueTitle, title }: Props) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
+
+  // Get formatted labels for the last 28 days
+  const last28Days = Array.from({ length: 28 }, (_, i) =>
+    moment().subtract(27 - i, 'days'),
+  );
+
+  // Extract only Monday labels for x-axis
+  const weeklyLabels = last28Days
+    .filter((date) => date.format('ddd') === 'Mon')
+    .map((date) => date.format('D MMM'));
+
+  // Fixed bar height for uniform bars
+  const fixedBarHeight = 100;
+  const weeklyClicksData = Array(weeklyLabels.length).fill(fixedBarHeight);
+
+  // Generate random data for CTR (matches 28 days)
+  const ctrData = last28Days.map(() => Math.floor(Math.random() * 40));
   // const [gradientFill, setGradientFill] = useState<string | CanvasGradient>('');
 
   // useEffect(() => {
@@ -67,7 +85,7 @@ const QueueChart = ({ valueTitle, title }: Props) => {
   // }, []);
 
   const data = {
-    labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    labels: weeklyLabels, // Weekly labels (Mondays)
     datasets: [
       {
         type: 'line',
@@ -77,16 +95,12 @@ const QueueChart = ({ valueTitle, title }: Props) => {
         fill: true,
         cubicInterpolationMode: 'monotone',
         backgroundColor: 'transparent',
-        data: [20, 25, 10, 30, 5, 35, 38], // Keep Line Chart values unchanged
+        data: ctrData.slice(0, weeklyLabels.length), // Adjust to match weekly data
         pointBackgroundColor: '#5C67F4',
-        pointRadius: (context: any) => {
-          // 👇 Show point only for the last index
-          return context.dataIndex === context.dataset.data.length - 1 ? 5 : 0;
-        },
-        pointHoverRadius: (context: any) => {
-          // 👇 Make only last point interactive
-          return context.dataIndex === context.dataset.data.length - 1 ? 8 : 0;
-        },
+        pointRadius: (context: any) =>
+          context.dataIndex === context.dataset.data.length - 1 ? 5 : 0,
+        pointHoverRadius: (context: any) =>
+          context.dataIndex === context.dataset.data.length - 1 ? 8 : 0,
       },
       {
         type: 'bar',
@@ -94,9 +108,8 @@ const QueueChart = ({ valueTitle, title }: Props) => {
         borderWidth: 1,
         borderSkipped: false,
         backgroundColor: 'transparent',
-        data: [50, 50, 50, 50, 50, 50, 50], // 🔹 All bars have same height
+        data: weeklyClicksData, // Fixed height bars
         barThickness: 50,
-
         borderColor: (context: any) => {
           const chart = context.chart;
           const { ctx, chartArea } = chart;
@@ -208,29 +221,20 @@ const QueueChart = ({ valueTitle, title }: Props) => {
       y: {
         position: 'right',
         min: 0,
-        max: 40,
-        ticks: {
-          stepSize: 10,
-          callback: (value: string | number) => `${value} `,
-        },
-        grid: {
-          drawTicks: false,
-          display: false,
-        },
-        border: {
-          display: false,
-        },
+        max: 120, // Ensure it's higher than `fixedBarHeight`
+        ticks: { stepSize: 10 },
+        grid: { drawTicks: false, display: false },
+        border: { display: false },
       },
       x: {
-        grid: {
-          display: false,
-        },
+        grid: { display: false },
         ticks: {
           padding: 10,
+          callback: function (value, index) {
+            return weeklyLabels[index] || ''; // Show only Monday labels
+          },
         },
-        border: {
-          display: false,
-        },
+        border: { display: false },
       },
     },
   };

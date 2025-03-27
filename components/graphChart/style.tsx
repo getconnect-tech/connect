@@ -26,7 +26,7 @@ const TooltipDiv = styled.div`
   display: none;
   z-index: 100;
   transform: translateX(-50%);
-  min-width: 80px;
+  min-width: max-content;
 `;
 
 const TopSection = styled.div`
