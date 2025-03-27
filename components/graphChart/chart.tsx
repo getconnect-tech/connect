@@ -28,6 +28,7 @@ import {
   TopSection,
   ValueTitle,
 } from './style';
+import { chartDemoData } from '@/helpers/raw';
 
 ChartJS.register(
   CategoryScale,
@@ -53,7 +54,6 @@ const QueueChart = ({ valueTitle, title }: Props) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [gradientFill, setGradientFill] = useState<string | CanvasGradient>('');
-
   useEffect(() => {
     if (chartRef.current) {
       const ctx = chartRef.current.ctx;
@@ -84,13 +84,25 @@ const QueueChart = ({ valueTitle, title }: Props) => {
   );
 
   // Generate CTR data for all days
-  const ctrData = last28Days.map(() => Math.floor(Math.random() * 40));
+  const ctrData = chartDemoData.map((item) => item.queueSize);
+  // last28Days.map(() => Math.floor(Math.random() * 40));
+  console.log('CTR data', ctrData);
 
   // Generate bar data (only on Mondays)
   const fixedBarHeight = 100;
-  const weeklyClicksData = last28Days.map((date) =>
-    date.format('ddd') === 'Mon' ? fixedBarHeight : 0,
-  );
+  const queueSizes = chartDemoData.map((item) => item.queueSize);
+
+  // Calculate max queue size
+  const maxQueueSize = Math.max(...queueSizes);
+
+  // Calculate dynamic bar height (max size + 50px buffer)
+  const dynamicBarHeight = maxQueueSize + 5;
+
+  // Generate bar data (only on Mondays)
+  const weeklyClicksData = last28Days.map((date, index) => {
+    // Only show bars on Mondays, scaled to dynamic height
+    return date.format('ddd') === 'Mon' ? dynamicBarHeight : 0;
+  });
 
   const data = {
     labels: last28Days.map((date) => date.format('D MMM')), // All labels
@@ -252,7 +264,7 @@ const QueueChart = ({ valueTitle, title }: Props) => {
         position: 'right',
         min: 0,
         ticks: {
-          stepSize: 20,
+          stepSize: Math.ceil(dynamicBarHeight / 4),
           color: 'var(--text-text-secondary)',
           font: { size: 12 },
         },
