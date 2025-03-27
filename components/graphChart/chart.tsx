@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Chart } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -51,69 +51,58 @@ interface Props {
 const QueueChart = ({ valueTitle, title }: Props) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const taskData = [5, 10, 35, 20, 28, 5, 10, 35, 20, 28];
-  const dates = [
-    '19 Jan',
-    '26 Jan',
-    '02 Feb',
-    '07 Feb',
-    'Today',
-    '19 Jan',
-    '26 Jan',
-    '02 Feb',
-    '07 Feb',
-    'Today',
-  ];
+  const [gradientFill, setGradientFill] = useState<string | CanvasGradient>('');
 
-  // Data configuration
+  useEffect(() => {
+    if (chartRef.current) {
+      const ctx = chartRef.current.ctx;
+      if (ctx) {
+        // Create Fill Gradient for Line Chart
+        const fillGradient = ctx.createLinearGradient(0, 0, 0, 250);
+        fillGradient.addColorStop(0, 'rgba(92, 103, 244, 0.25)');
+        fillGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        setGradientFill(fillGradient);
+      }
+    }
+  }, []);
+
   const data = {
-    labels: dates,
+    labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     datasets: [
       {
-        type: 'bar' as const,
-        label: 'Background Bar',
-        data: taskData,
-        backgroundColor: (context: any) => {
+        type: 'line',
+        label: 'CTR',
+        borderColor: '#5C67F4',
+        borderWidth: 3,
+        fill: true,
+        cubicInterpolationMode: 'monotone',
+        backgroundColor: gradientFill,
+        data: [20, 25, 10, 30, 5, 35, 40], // Keep Line Chart values unchanged
+      },
+      {
+        type: 'bar',
+        label: 'Clicks',
+        borderWidth: 1,
+        borderSkipped: false,
+        backgroundColor: 'transparent',
+        data: [50, 50, 50, 50, 50, 50, 50], // 🔹 All bars have same height
+        barThickness: 50,
+
+        borderColor: (context: any) => {
           const chart = context.chart;
           const { ctx, chartArea } = chart;
-
-          if (!chartArea) {
-            // If chartArea is not available, return a fallback color
-            setTimeout(() => {
-              chart.update(); // Trigger re-render once chartArea is available
-            }, 0);
-            return 'rgba(63, 130, 247, 0.1)'; // Temporary fallback color
-          }
+          if (!chartArea) return 'rgba(233, 232, 229, 1)'; // Fallback color
 
           const gradient = ctx.createLinearGradient(
             0,
-            chartArea.top,
-            0,
             chartArea.bottom,
+            0,
+            chartArea.top,
           );
-          gradient.addColorStop(0, 'rgba(63, 130, 247, 0)'); // Transparent at top
-          gradient.addColorStop(1, 'rgba(63, 130, 247, 0.3)'); // Darker at bottom
-
+          gradient.addColorStop(0, 'rgba(233, 232, 229, 1)'); // Dark at Bottom
+          gradient.addColorStop(1, 'rgba(255, 255, 255, 0)'); // Light at Top
           return gradient;
         },
-        borderWidth: 0, // Ensures bars have a visible border
-        barPercentage: 0.6,
-        categoryPercentage: 1.0,
-      },
-      {
-        type: 'line' as const,
-        label: 'Queue Size',
-        data: taskData, // Your data points
-        borderColor: '#5C67F4',
-        backgroundColor: 'rgba(63, 130, 247, 0.2)',
-        pointBackgroundColor: '#5C67F4',
-        pointBorderColor: '#fff',
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderColor: '#5C67F4',
-        borderWidth: 2.5, // Makes the line slightly thicker
-        pointRadius: 5,
-        pointHoverRadius: 7,
-        tension: 0.2, // Smooth curve
       },
     ],
   };
@@ -255,7 +244,7 @@ const QueueChart = ({ valueTitle, title }: Props) => {
         <Chart
           ref={chartRef}
           type='bar'
-          data={data}
+          data={data as any}
           options={options}
           style={{ width: '100%' }}
         />

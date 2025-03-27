@@ -41,7 +41,6 @@ const CustomChart: React.FC = () => {
     labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     datasets: [
       {
-        yAxisID: 'right-y-axis',
         type: 'line',
         label: 'CTR',
         borderColor: '#5C67F4',
@@ -49,17 +48,16 @@ const CustomChart: React.FC = () => {
         fill: true,
         cubicInterpolationMode: 'monotone',
         backgroundColor: gradientFill,
-        data: [1, 2, 1, 3, 5, 4, 9], // Keep Line Chart values unchanged
+        data: [20, 25, 10, 30, 5, 35, 40], // Keep Line Chart values unchanged
       },
       {
-        yAxisID: 'left-y-axis',
         type: 'bar',
         label: 'Clicks',
         borderWidth: 1,
         borderSkipped: false,
         backgroundColor: 'transparent',
         data: [50, 50, 50, 50, 50, 50, 50], // 🔹 All bars have same height
-        barThickness: 30,
+        barThickness: 50,
 
         borderColor: (context: any) => {
           const chart = context.chart;
@@ -91,22 +89,23 @@ const CustomChart: React.FC = () => {
         grid: {
           display: false,
         },
-      },
-      y: {
-        grid: {
+        border: {
           display: false,
         },
       },
-      'left-y-axis': {
-        type: 'linear',
-        grid: {
-          lineWidth: 0,
-        },
-      },
-      'right-y-axis': {
-        type: 'linear',
+      y: {
         position: 'right',
+        min: 0,
+        max: 40,
+        ticks: {
+          stepSize: 10,
+          callback: (value: string | number) => `${value} `,
+        },
         grid: {
+          drawTicks: false,
+          display: false,
+        },
+        border: {
           display: false,
         },
       },
@@ -114,7 +113,7 @@ const CustomChart: React.FC = () => {
   };
 
   return (
-    <div style={{ width: '400px', height: '250px' }}>
+    <div style={{ width: '100%', height: '250px' }}>
       {/* Pass the ref to Chart.js */}
       <Chart ref={chartRef} type='bar' data={data as any} options={options} />
     </div>

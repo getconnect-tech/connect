@@ -4,7 +4,6 @@ import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Icon from '@/components/icon/icon';
 import { TICKETS_HEADER } from '@/global/constants';
 import GraphList from '@/components/graphChart/graphList';
-import CustomChart from '@/components/graphChart/custom';
 import {
   BottomDiv,
   ChartMainDiv,
@@ -63,7 +62,6 @@ function Insights({ activeNav }: InsightsProps) {
         <BottomDiv isShowNavbar={isNavbar} onClick={onCloseNavbar}>
           <ChartMainDiv>
             <GraphList chartData={chartData} />
-            <CustomChart />
           </ChartMainDiv>
         </BottomDiv>
       </MainDiv>
