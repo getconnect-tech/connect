@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Chart } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -52,6 +52,20 @@ interface Props {
 const QueueChart = ({ valueTitle, title }: Props) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
+  const [gradientFill, setGradientFill] = useState<string | CanvasGradient>('');
+
+  useEffect(() => {
+    if (chartRef.current) {
+      const ctx = chartRef.current.ctx;
+      if (ctx) {
+        // Create Fill Gradient for Line Chart
+        const fillGradient = ctx.createLinearGradient(0, 0, 0, 250);
+        fillGradient.addColorStop(0, 'rgba(92, 103, 244, 0.25)');
+        fillGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        setGradientFill(fillGradient);
+      }
+    }
+  }, []);
 
   // Generate array of last 28 days
   const last28Days = Array.from({ length: 28 }, (_, i) =>
@@ -88,7 +102,7 @@ const QueueChart = ({ valueTitle, title }: Props) => {
         borderWidth: 3,
         fill: true,
         cubicInterpolationMode: 'monotone',
-        backgroundColor: 'transparent',
+        backgroundColor: gradientFill,
         data: ctrData, // Full 28 days CTR data
         pointBackgroundColor: '#5C67F4',
         pointRadius: (context: any) =>
