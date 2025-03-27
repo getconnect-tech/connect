@@ -54,7 +54,6 @@ const QueueChart = ({ valueTitle, title }: Props) => {
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   // Get formatted labels for the last 28 days
-  // Generate last 28 days
   const last28Days = Array.from({ length: 28 }, (_, i) =>
     moment().subtract(27 - i, 'days'),
   );
@@ -69,21 +68,6 @@ const QueueChart = ({ valueTitle, title }: Props) => {
   const weeklyClicksData = last28Days.map((date) =>
     date.format('ddd') === 'Mon' ? fixedBarHeight : 0,
   );
-
-  // const [gradientFill, setGradientFill] = useState<string | CanvasGradient>('');
-
-  // useEffect(() => {
-  //   if (chartRef.current) {
-  //     const ctx = chartRef.current.ctx;
-  //     if (ctx) {
-  //       // Create Fill Gradient for Line Chart
-  //       const fillGradient = ctx.createLinearGradient(0, 0, 0, 250);
-  //       fillGradient.addColorStop(0, 'rgba(92, 103, 244, 0.25)');
-  //       fillGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-  //       setGradientFill(fillGradient);
-  //     }
-  //   }
-  // }, []);
 
   const data = {
     labels: allDaysLabels, // Weekly labels (Mondays)
