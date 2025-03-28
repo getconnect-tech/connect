@@ -166,8 +166,8 @@ function Navbar() {
             <NavbarItem
               title='Insights'
               icon='insight-icon'
-              isActive={activeIndex === 5}
-              onClickItem={() => handleClick(5)}
+              isActive={pathname === '/insights'}
+              onClickItem={() => handleClick(5, '/insights')}
             />
           </ItemMainDiv>
           <ItemMainDiv>
