@@ -19,6 +19,7 @@ import { BarElement } from 'chart.js';
 import { ChartOptions } from 'chart.js';
 import moment from 'moment';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { ChartData } from '@/utils/appTypes';
 import {
   ChartDiv,
   HeaderSection,
@@ -28,7 +29,6 @@ import {
   TopSection,
   ValueTitle,
 } from './style';
-import { chartDemoData } from '@/helpers/raw';
 
 ChartJS.register(
   CategoryScale,
@@ -48,9 +48,10 @@ ChartJS.register(
 interface Props {
   valueTitle: string;
   title: string;
+  chartData: ChartData[];
 }
 
-const QueueChart = ({ valueTitle, title }: Props) => {
+const CustomChart = ({ valueTitle, title, chartData }: Props) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [gradientFill, setGradientFill] = useState<string | CanvasGradient>('');
@@ -84,17 +85,17 @@ const QueueChart = ({ valueTitle, title }: Props) => {
   );
 
   // Generate CTR data for all days
-  const ctrData = chartDemoData.map((item) => item.queueSize);
+  const ctrData = chartData.map((item) => item.queueSize);
 
   // Calculate max queue size
-  const queueSizes = chartDemoData.map((item) => item.queueSize);
+  const queueSizes = chartData.map((item) => item.queueSize);
   const maxQueueSize = Math.max(...queueSizes);
 
   // Calculate dynamic bar height (max size + 50px buffer)
   const dynamicBarHeight = maxQueueSize + 5;
 
   // Generate bar data (only on Mondays)
-  const weeklyClicksData = last28Days.map((date, index) => {
+  const weeklyClicksData = last28Days.map((date) => {
     // Only show bars on Mondays, scaled to dynamic height
     return date.format('ddd') === 'Mon' ? dynamicBarHeight : 0;
   });
@@ -316,4 +317,4 @@ const QueueChart = ({ valueTitle, title }: Props) => {
   );
 };
 
-export default QueueChart;
+export default CustomChart;

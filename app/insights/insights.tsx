@@ -4,6 +4,7 @@ import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Icon from '@/components/icon/icon';
 import { TICKETS_HEADER } from '@/global/constants';
 import GraphList from '@/components/graphChart/graphList';
+import { chartDemoData } from '@/helpers/raw';
 import {
   BottomDiv,
   ChartMainDiv,
@@ -31,12 +32,21 @@ function Insights({ activeNav }: InsightsProps) {
 
   // Graph data
   const chartData = [
-    { valueTitle: '<span>28</span> in todo', title: 'Queue size' },
+    {
+      valueTitle: '<span>28</span> in todo',
+      title: 'Queue size',
+      chartData: chartDemoData,
+    },
     {
       valueTitle: '<span>2h 43m</span>',
       title: 'Median first response time',
+      chartData: chartDemoData,
     },
-    { valueTitle: '<span>4h 44m</span>', title: 'Median resolution time' },
+    {
+      valueTitle: '<span>4h 44m</span>',
+      title: 'Median resolution time',
+      chartData: chartDemoData,
+    },
   ];
 
   return (
