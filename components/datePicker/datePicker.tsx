@@ -186,7 +186,7 @@ function DatePickerModal({
         </CalendarDiv>
         <InputMainDiv onSubmit={handleSubmit}>
           <Inputs>
-            <div>
+            <div className='input-div'>
               <Label>Date</Label>
               <Input
                 placeholder={'MM/DD/YYYY'}
@@ -194,7 +194,7 @@ function DatePickerModal({
                 value={dateInput}
               />
             </div>
-            <div>
+            <div className='input-div'>
               <Label>Time</Label>
               <TimePicker
                 format='h:00 A'

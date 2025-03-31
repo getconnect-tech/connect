@@ -148,6 +148,9 @@ export const Inputs = styled.div`
     ${Typography.body_sm_medium};
     margin-top: 4px;
   }
+  .input-div {
+    width: 50%;
+  }
 `;
 
 export const Label = styled.p`
