@@ -10,6 +10,8 @@ import React, {
 } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
+import { TimePickerProps } from 'antd';
+import moment from 'moment-timezone';
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
 import { useStores } from '@/stores';
@@ -19,8 +21,12 @@ import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { messageStore } from '@/stores/messageStore';
 import Icon from '@/components/icon/icon';
 import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
+import DropDown from '@/components/dropDown/dropDown';
+import SVGIcon from '@/assets/icons/SVGIcon';
 import {
   Description,
+  DropdownDiv,
+  DropdownTrigger,
   Frame,
   Head,
   Label,
@@ -35,14 +41,38 @@ import {
   ResponsiveHeader,
   RightDiv,
   TextField,
+  TimeContentDiv,
+  TimeZoneContentDiv,
   Title,
 } from '../style';
+import TimePickerSection from './timePickerSection';
 
 const WorkspaceProfile = () => {
+  const timeZones = moment.tz.names().map((zone) => {
+    const offset = moment.tz(zone).utcOffset();
+    const hours = Math.floor(offset / 60);
+    const minutes = Math.abs(offset % 60);
+    const sign = offset >= 0 ? '+' : '-';
+    const label = `UTC${sign}${String(Math.abs(hours)).padStart(2, '0')}:${String(
+      Math.abs(minutes),
+    ).padStart(2, '0')} - ${zone}`;
+
+    return {
+      id: zone,
+      name: label,
+      label: label,
+      value: zone,
+      onClick: () => handleTimezoneSelect(zone),
+    };
+  });
+
   const router = useRouter();
   const { workspaceStore } = useStores();
   const { currentWorkspace, loading } = workspaceStore;
   const [isNavbar, setIsNavbar] = useState(false);
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  const [timeValue, setTimeValue] = useState<string | null>(null);
+  const [isOpenDropdown, setIsOpenDropdown] = useState<boolean>(false);
   const [organizationName, setOrganizationName] = useState<string>(
     currentWorkspace?.name || '',
   );
@@ -164,6 +194,23 @@ const WorkspaceProfile = () => {
     setIsNavbar(false);
   }, []);
 
+  const onChange: TimePickerProps['onChange'] = (time, timeString) => {
+    if (typeof timeString === 'string') {
+      setTimeValue(timeString);
+    } else {
+      setTimeValue(null);
+    }
+  };
+
+  const handleOfficeHourUpdate = useCallback(() => {
+    console.log('office hour submitted');
+  }, []);
+
+  const handleTimezoneSelect = (zone: string) => {
+    console.log('Selected timezone:', zone);
+    setIsOpenDropdown(false);
+  };
+
   return (
     <Main>
       {isNavbar && <ResponsiveSettingNavBar onClose={onCloseNavbar} />}
@@ -240,6 +287,56 @@ const WorkspaceProfile = () => {
                 />
               </TextField>
             </ProfileInputs>
+            <Button
+              type='submit'
+              title='Update'
+              isLoading={loading}
+              variant='medium'
+            />
+          </ProfileDetail>
+          <Head className='bottom-section'>
+            <LeftDiv>
+              <Title>Office hours</Title>
+              <Description>
+                Configure your office hours to improve the accuracy of analytics
+                reports.
+              </Description>
+            </LeftDiv>
+          </Head>
+          <ProfileDetail onSubmit={handleOfficeHourUpdate} isNavbar={isNavbar}>
+            <TextField>
+              <TimeZoneContentDiv>
+                <Label>Current Timezone</Label>
+                <DropdownDiv className='tag-div'>
+                  <DropdownTrigger
+                    onClick={() => setIsOpenDropdown(!isOpenDropdown)}
+                  >
+                    Select timezone
+                    <SVGIcon
+                      name={
+                        isOpenDropdown ? 'up-arrow-icon' : 'down-arrow-icon'
+                      }
+                      width='12'
+                      height='12'
+                      viewBox='0 0 12 12'
+                    />
+                  </DropdownTrigger>
+                  {isOpenDropdown && (
+                    <DropDown
+                      items={timeZones}
+                      iconSize={'12'}
+                      iconViewBox={'0 0 12 12'}
+                      onClose={() => setIsOpenDropdown(false)}
+                      className='timezone-dropdown'
+                    />
+                  )}
+                </DropdownDiv>
+              </TimeZoneContentDiv>
+              <TimeContentDiv>
+                <TimePickerSection label={'Form'} onChange={() => onChange} />
+                <TimePickerSection label={'To'} onChange={() => onChange} />
+              </TimeContentDiv>
+            </TextField>
             <Button
               type='submit'
               title='Update'

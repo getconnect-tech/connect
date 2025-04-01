@@ -150,6 +150,10 @@ export const Inputs = styled.div`
   }
 `;
 
+export const InputDiv = styled.div`
+  width: 50%;
+`;
+
 export const Label = styled.p`
   ${Typography.body_sm_medium};
   color: var(--text);

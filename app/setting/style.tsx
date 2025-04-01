@@ -28,6 +28,9 @@ export const RightDiv = styled.div`
   max-width: 662px;
   width: 100%;
   gap: 6px;
+  .bottom-section {
+    padding-top: 32px;
+  }
   .empty-state {
     position: absolute;
     bottom: 20%;
@@ -116,6 +119,12 @@ export const ProfileDetail = styled.form<Props>`
   gap: 16px;
   background-color: var(--bg-white);
   box-shadow: var(--shadow-card);
+  .timezone-dropdown {
+    min-width: 260px;
+    @media screen and (max-width: 449px) {
+      min-width: 100%;
+    }
+  }
   @media screen and (max-width: 449px) {
     margin: 8px 16px 16px;
     ${(props) =>
@@ -266,4 +275,40 @@ export const EmptyStateDiv = styled.div`
   flex-direction: column;
   gap: 16px;
   justify-content: center;
+`;
+
+export const TimeContentDiv = styled.div`
+  display: flex;
+  gap: 12px;
+  padding-top: 12px;
+`;
+
+export const DropdownTrigger = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 18px;
+  border-radius: 30px;
+  border: var(--border-secondary);
+  background-color: var(--bg-white);
+  ${Typography.body_md_medium};
+  color: var(--text-primary);
+`;
+
+export const TimeZoneContentDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+export const DropdownDiv = styled.div`
+  position: relative;
+`;
+
+export const InputDiv = styled.div`
+  width: 50%;
+  .time-picker {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
 `;
