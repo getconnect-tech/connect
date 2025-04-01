@@ -3,8 +3,9 @@ import styled, { css } from 'styled-components';
 import { Typography } from '@/styles/typography';
 
 interface Props {
-  isShowHoverItems: boolean;
-  isShowNavbar: boolean;
+  isShowHoverItems?: boolean;
+  isShowNavbar?: boolean;
+  isAwaiting?: boolean;
 }
 
 const CardDiv = styled.div<Props>`
@@ -70,11 +71,15 @@ const LeftDiv = styled.div`
   align-items: flex-start;
 `;
 
-const Div = styled.div`
+const Div = styled.div<Props>`
   display: flex;
   gap: 12px;
   @media screen and (max-width: 449px) {
-    padding-bottom: 8px;
+    ${(props) =>
+      props.isAwaiting &&
+      css`
+        padding-bottom: 8px;
+      `}
   }
 `;
 

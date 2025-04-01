@@ -277,7 +277,7 @@ const InboxCard = ({
     >
       {showDotIcon && <DotIcon />}
       <LeftDiv>
-        <Div>
+        <Div isAwaiting={isAwaiting}>
           <Avatar
             size={28}
             imgSrc={src}
