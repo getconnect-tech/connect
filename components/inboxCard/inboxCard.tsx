@@ -16,6 +16,7 @@ import {
   deleteLabelFromTicket,
   snoozeTicket,
 } from '@/services/clientSide/ticketServices';
+import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '../avtar/Avtar';
 import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
 import AssigneeDropdown from '../AssigneeDropdown/dropDownWithTag';
@@ -25,15 +26,21 @@ import DropDown from '../dropDown/dropDown';
 import DatePickerModal from '../datePicker/datePicker';
 import RenderHtml from '../renderHtml';
 import {
+  AwaitingDiv,
+  AwaitingText,
   CardDiv,
   Description,
   DesTitle,
+  AvatarNameWrapper,
   DotIcon,
   InternalMessageDiv,
   LeftDiv,
+  LeftNameContentDiv,
   LineDiv,
   NameText,
+  ResponsiveAwaitingDiv,
   ResponsiveTimeDiv,
+  RightContentDiv,
   RightDiv,
   StatusMainDiv,
   TagDiv,
@@ -63,6 +70,7 @@ const InboxCard = ({
   dropdownIdentifier,
   ticketIndex,
   isShowNavbar,
+  isAwaiting,
 }: Props) => {
   const { title, source, contact, priority, assigned_to, last_message } =
     ticketDetail;
@@ -269,20 +277,46 @@ const InboxCard = ({
     >
       {showDotIcon && <DotIcon />}
       <LeftDiv>
-        <div>
+        <AvatarNameWrapper isAwaiting={isAwaiting}>
           <Avatar
             size={28}
             imgSrc={src}
             name={contact?.name || ''}
             isShowBorder={true}
           />
-          <NameText>
-            {contact?.name} from {capitalizeString(source)}
+          <LeftNameContentDiv>
+            <NameText>
+              {contact?.name} from {capitalizeString(source)}
+            </NameText>
+            {isAwaiting && (
+              <ResponsiveAwaitingDiv>
+                <SVGIcon
+                  name='awaiting-icon'
+                  width='12'
+                  height='12'
+                  viewBox='0 0 12 12'
+                />
+                <AwaitingText>Awaiting for respond</AwaitingText>
+              </ResponsiveAwaitingDiv>
+            )}
+          </LeftNameContentDiv>
+        </AvatarNameWrapper>
+        <RightContentDiv>
+          {isAwaiting && (
+            <AwaitingDiv className='awaiting-div'>
+              <SVGIcon
+                name='reply-icon'
+                width='12'
+                height='12'
+                viewBox='0 0 12 12'
+              />
+              <AwaitingText>Awaiting for respond</AwaitingText>
+            </AwaitingDiv>
+          )}
+          <NameText className='time-text'>
+            {moment(last_message && last_message.created_at).fromNow()}
           </NameText>
-        </div>
-        <NameText className='time-text'>
-          {moment(last_message && last_message.created_at).fromNow()}
-        </NameText>
+        </RightContentDiv>
       </LeftDiv>
       <RightDiv>
         <DesTitle>{title}</DesTitle>
