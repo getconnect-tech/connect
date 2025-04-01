@@ -10,7 +10,7 @@ import React, {
 } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
-import { TimePicker, TimePickerProps } from 'antd';
+import { TimePickerProps } from 'antd';
 import moment from 'moment-timezone';
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
@@ -25,6 +25,7 @@ import DropDown from '@/components/dropDown/dropDown';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import {
   Description,
+  DropdownDiv,
   DropdownTrigger,
   Frame,
   Head,
@@ -44,6 +45,7 @@ import {
   TimeZoneContentDiv,
   Title,
 } from '../style';
+import TimePickerSection from './timePickerSection';
 
 const WorkspaceProfile = () => {
   const timeZones = moment.tz.names().map((zone) => {
@@ -305,7 +307,7 @@ const WorkspaceProfile = () => {
             <TextField>
               <TimeZoneContentDiv>
                 <Label>Current Timezone</Label>
-                <div style={{ position: 'relative' }} className='tag-div'>
+                <DropdownDiv className='tag-div'>
                   <DropdownTrigger
                     onClick={() => setIsOpenDropdown(!isOpenDropdown)}
                   >
@@ -328,37 +330,11 @@ const WorkspaceProfile = () => {
                       className='timezone-dropdown'
                     />
                   )}
-                </div>
+                </DropdownDiv>
               </TimeZoneContentDiv>
               <TimeContentDiv>
-                <div className='input-div'>
-                  <Label>From</Label>
-                  <TimePicker
-                    format='h:mm A'
-                    placeholder='HH:MM'
-                    onChange={onChange}
-                    disabled={false}
-                    popupStyle={{
-                      border: '1px solid',
-                      borderRadius: 8,
-                      borderColor: 'var(--border)',
-                    }}
-                  />
-                </div>
-                <div className='input-div'>
-                  <Label>To</Label>
-                  <TimePicker
-                    format='h:mm A'
-                    placeholder='HH:MM'
-                    onChange={onChange}
-                    disabled={false}
-                    popupStyle={{
-                      border: '1px solid',
-                      borderRadius: 8,
-                      borderColor: 'var(--border)',
-                    }}
-                  />
-                </div>
+                <TimePickerSection label={'Form'} onChange={() => onChange} />
+                <TimePickerSection label={'To'} onChange={() => onChange} />
               </TimeContentDiv>
             </TextField>
             <Button

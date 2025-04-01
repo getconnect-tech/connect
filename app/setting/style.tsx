@@ -281,9 +281,6 @@ export const TimeContentDiv = styled.div`
   display: flex;
   gap: 12px;
   padding-top: 12px;
-  .input-div {
-    width: 50%;
-  }
 `;
 
 export const DropdownTrigger = styled.div`
@@ -302,4 +299,16 @@ export const TimeZoneContentDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
+`;
+
+export const DropdownDiv = styled.div`
+  position: relative;
+`;
+
+export const InputDiv = styled.div`
+  width: 50%;
+  .time-picker {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
 `;
