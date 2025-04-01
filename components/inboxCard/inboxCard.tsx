@@ -50,7 +50,7 @@ interface Props {
   dropdownIdentifier: string;
   ticketIndex: number;
   isShowNavbar: boolean;
-  isAwaiting: boolean;
+  isAwaiting?: boolean;
 }
 
 const InboxCard = ({
