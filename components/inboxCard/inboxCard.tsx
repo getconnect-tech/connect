@@ -291,7 +291,7 @@ const InboxCard = ({
             {isAwaiting && (
               <ResponsiveAwaitingDiv>
                 <SVGIcon
-                  name='awaiting-icon'
+                  name='reply-icon'
                   width='12'
                   height='12'
                   viewBox='0 0 12 12'
@@ -303,7 +303,7 @@ const InboxCard = ({
         </AvatarNameWrapper>
         <RightContentDiv>
           {isAwaiting && (
-            <AwaitingDiv className='awaiting-div'>
+            <AwaitingDiv>
               <SVGIcon
                 name='reply-icon'
                 width='12'
