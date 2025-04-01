@@ -68,6 +68,7 @@ const WorkspaceProfile = () => {
   const { workspaceStore } = useStores();
   const { currentWorkspace, loading } = workspaceStore;
   const [isNavbar, setIsNavbar] = useState(false);
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [timeValue, setTimeValue] = useState<string | null>(null);
   const [isOpenDropdown, setIsOpenDropdown] = useState<boolean>(false);
   const [organizationName, setOrganizationName] = useState<string>(
