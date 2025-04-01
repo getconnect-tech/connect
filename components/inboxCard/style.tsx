@@ -71,7 +71,7 @@ const LeftDiv = styled.div`
   align-items: flex-start;
 `;
 
-const Div = styled.div<Props>`
+const AvatarNameWrapper = styled.div<Props>`
   display: flex;
   gap: 12px;
   @media screen and (max-width: 449px) {
@@ -293,7 +293,7 @@ export {
   ResponsiveTimeDiv,
   AwaitingDiv,
   AwaitingText,
-  Div,
+  AvatarNameWrapper,
   RightContentDiv,
   ResponsiveAwaitingDiv,
   LeftNameContentDiv,

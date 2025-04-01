@@ -1211,7 +1211,7 @@ const getPath = (name: string, props: any) => {
           </defs>
         </>
       );
-    case 'awaiting-icon':
+    case 'reply-icon':
       return (
         <>
           <path

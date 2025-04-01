@@ -31,7 +31,7 @@ import {
   CardDiv,
   Description,
   DesTitle,
-  Div,
+  AvatarNameWrapper,
   DotIcon,
   InternalMessageDiv,
   LeftDiv,
@@ -277,7 +277,7 @@ const InboxCard = ({
     >
       {showDotIcon && <DotIcon />}
       <LeftDiv>
-        <Div isAwaiting={isAwaiting}>
+        <AvatarNameWrapper isAwaiting={isAwaiting}>
           <Avatar
             size={28}
             imgSrc={src}
@@ -300,12 +300,12 @@ const InboxCard = ({
               </ResponsiveAwaitingDiv>
             )}
           </LeftNameContentDiv>
-        </Div>
+        </AvatarNameWrapper>
         <RightContentDiv>
           {isAwaiting && (
             <AwaitingDiv className='awaiting-div'>
               <SVGIcon
-                name='awaiting-icon'
+                name='reply-icon'
                 width='12'
                 height='12'
                 viewBox='0 0 12 12'
