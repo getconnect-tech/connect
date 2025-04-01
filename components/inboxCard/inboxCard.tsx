@@ -50,6 +50,7 @@ interface Props {
   dropdownIdentifier: string;
   ticketIndex: number;
   isShowNavbar: boolean;
+  isAwaiting: boolean;
 }
 
 const InboxCard = ({
@@ -62,6 +63,7 @@ const InboxCard = ({
   dropdownIdentifier,
   ticketIndex,
   isShowNavbar,
+  isAwaiting,
 }: Props) => {
   const { title, source, contact, priority, assigned_to, last_message } =
     ticketDetail;
@@ -265,6 +267,9 @@ const InboxCard = ({
       isShowHoverItems={snoozeDropdown || showDatePicker}
       onClick={onClickTicket}
       isShowNavbar={isShowNavbar}
+      style={
+        isAwaiting ? { backgroundColor: 'red' } : { backgroundColor: 'green' }
+      }
     >
       {showDotIcon && <DotIcon />}
       <LeftDiv>
