@@ -29,12 +29,6 @@ const CardDiv = styled.div<Props>`
       display: none;
     }
   }
-  &:hover .awaiting-div {
-    display: flex;
-    @media screen and (max-width: 449px) {
-      display: none;
-    }
-  }
   ${(props) =>
     props.isShowNavbar &&
     css`
@@ -260,7 +254,9 @@ const AwaitingDiv = styled.div`
   display: flex;
   align-items: center;
   gap: 6px;
-  display: none;
+  @media screen and (max-width: 449px) {
+    display: none;
+  }
 `;
 
 const AwaitingText = styled.p`
