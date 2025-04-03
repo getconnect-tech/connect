@@ -292,7 +292,7 @@ export const DropdownTrigger = styled.div`
   border: var(--border-secondary);
   background-color: var(--bg-white);
   ${Typography.body_md_medium};
-  color: var(--text-primary);
+  color: var(--text);
 `;
 
 export const TimeZoneContentDiv = styled.div`
