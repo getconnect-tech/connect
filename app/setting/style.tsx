@@ -308,7 +308,7 @@ export const DropdownDiv = styled.div`
 export const InputDiv = styled.div`
   width: 50%;
   .time-picker {
-    border: 1px solid var(--border);
-    border-radius: 8px;
+    border: var(--border-secondary);
+    border-radius: 30px;
   }
 `;
