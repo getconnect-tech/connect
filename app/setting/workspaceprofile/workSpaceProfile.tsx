@@ -206,10 +206,10 @@ const WorkspaceProfile = () => {
     console.log('office hour submitted');
   }, []);
 
-  const handleTimezoneSelect = (zone: string) => {
+  const handleTimezoneSelect = useCallback((zone: string) => {
     console.log('Selected timezone:', zone);
     setIsOpenDropdown(false);
-  };
+  }, []);
 
   return (
     <Main>

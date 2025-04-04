@@ -87,10 +87,10 @@ function OnboardingStep1() {
     };
   });
 
-  const handleTimezoneSelect = (zone: string) => {
+  const handleTimezoneSelect = useCallback((zone: string) => {
     console.log('Selected timezone:', zone);
     setIsOpenDropdown(false);
-  };
+  }, []);
 
   const handleIndustryClick = useCallback(() => {
     setIndustryDropdownOpen(!industryDropdownOpen);
@@ -126,33 +126,32 @@ function OnboardingStep1() {
     [inputField],
   );
 
-  const handleTeamSizeChange = (item: DropDownItem) => {
+  const handleTeamSizeChange = useCallback((item: DropDownItem) => {
     setWorkspaceTeamSize(item);
-  };
+  }, []);
 
-  const handleIndustryChange = (item: DropDownItem) => {
+  const handleIndustryChange = useCallback((item: DropDownItem) => {
     setWorkspaceIndustry(item);
-  };
+  }, []);
 
-  const handleInvitedUserInputChange = (
-    type: 'displayName' | 'email',
-    value: string,
-    index: number,
-  ) => {
-    setInputField((prev) => {
-      const newState = [...prev];
-      newState[index][type] = value;
-      return newState;
-    });
-  };
+  const handleInvitedUserInputChange = useCallback(
+    (type: 'displayName' | 'email', value: string, index: number) => {
+      setInputField((prev) => {
+        const newState = [...prev];
+        newState[index][type] = value;
+        return newState;
+      });
+    },
+    [],
+  );
 
-  const handleNextStep = () => {
+  const handleNextStep = useCallback(() => {
     if (currentStep === 2) {
       setCurrentStep(3);
     }
-  };
+  }, [currentStep]);
 
-  const handleGetStarted = async () => {
+  const handleGetStarted = useCallback(async () => {
     const usersToInvite = inputField?.filter(
       ({ displayName, email }) => !isEmpty(displayName) && !isEmpty(email),
     );
@@ -160,7 +159,7 @@ function OnboardingStep1() {
     if (result) {
       router.replace('/');
     }
-  };
+  }, [inputField, router]);
 
   const onChange: TimePickerProps['onChange'] = (time, timeString) => {
     if (typeof timeString === 'string') {
@@ -390,7 +389,7 @@ function OnboardingStep1() {
   );
 
   // Render the appropriate step content based on currentStep
-  const renderStepContent = () => {
+  const renderStepContent = useCallback(() => {
     switch (currentStep) {
       case 1:
         return renderCompanyInfoStep();
@@ -401,10 +400,15 @@ function OnboardingStep1() {
       default:
         return renderCompanyInfoStep();
     }
-  };
+  }, [
+    currentStep,
+    renderCompanyInfoStep,
+    renderTimezoneStep,
+    renderTeamInviteStep,
+  ]);
 
   // Get the appropriate button based on currentStep
-  const renderStepButton = () => {
+  const renderStepButton = useCallback(() => {
     switch (currentStep) {
       case 1:
         return (
@@ -433,7 +437,13 @@ function OnboardingStep1() {
       default:
         return null;
     }
-  };
+  }, [
+    currentStep,
+    handleCreateWorkspace,
+    workspaceStore.loading,
+    handleNextStep,
+    handleGetStarted,
+  ]);
 
   return (
     <MainDiv>
