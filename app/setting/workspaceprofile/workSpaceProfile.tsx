@@ -17,7 +17,11 @@ import Input from '@/components/input/input';
 import { useStores } from '@/stores';
 import { updateWorkspaceDetails } from '@/services/clientSide/workspaceServices';
 import Avatar from '@/components/avtar/Avtar';
-import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
+import {
+  generateTimezoneOptions,
+  getFirebaseUrlFromFile,
+  isEmpty,
+} from '@/helpers/common';
 import { messageStore } from '@/stores/messageStore';
 import Icon from '@/components/icon/icon';
 import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
@@ -48,24 +52,6 @@ import {
 import TimePickerSection from './timePickerSection';
 
 const WorkspaceProfile = () => {
-  const timeZones = moment.tz.names().map((zone) => {
-    const offset = moment.tz(zone).utcOffset();
-    const hours = Math.floor(offset / 60);
-    const minutes = Math.abs(offset % 60);
-    const sign = offset >= 0 ? '+' : '-';
-    const label = `UTC${sign}${String(Math.abs(hours)).padStart(2, '0')}:${String(
-      Math.abs(minutes),
-    ).padStart(2, '0')} - ${zone}`;
-
-    return {
-      id: zone,
-      name: label,
-      label: label,
-      value: zone,
-      onClick: () => handleTimezoneSelect(),
-    };
-  });
-
   const router = useRouter();
   const { workspaceStore } = useStores();
   const { currentWorkspace, loading } = workspaceStore;
@@ -322,11 +308,12 @@ const WorkspaceProfile = () => {
                   </DropdownTrigger>
                   {isOpenDropdown && (
                     <DropDown
-                      items={timeZones}
+                      items={generateTimezoneOptions()}
                       iconSize={'12'}
                       iconViewBox={'0 0 12 12'}
                       onClose={() => setIsOpenDropdown(false)}
                       className='timezone-dropdown'
+                      onChange={handleTimezoneSelect}
                     />
                   )}
                 </DropdownDiv>

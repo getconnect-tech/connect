@@ -7,7 +7,7 @@ import {
 } from 'firebase/storage';
 import { convert } from 'html-to-text';
 import axios from 'axios';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { app } from '@/utils/firebase';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { messageStore } from '@/stores/messageStore';
@@ -310,3 +310,22 @@ export const isNotificationSupported = () =>
   'serviceWorker' in navigator &&
   // eslint-disable-next-line no-undef
   'PushManager' in window;
+
+export const generateTimezoneOptions = () => {
+  return moment.tz.names().map((zone) => {
+    const offset = moment.tz(zone).utcOffset();
+    const hours = Math.floor(offset / 60);
+    const minutes = Math.abs(offset % 60);
+    const sign = offset >= 0 ? '+' : '-';
+    const label = `UTC${sign}${String(Math.abs(hours)).padStart(2, '0')}:${String(
+      Math.abs(minutes),
+    ).padStart(2, '0')} - ${zone}`;
+
+    return {
+      id: zone,
+      name: label,
+      label: label,
+      value: zone,
+    };
+  });
+};

@@ -3,7 +3,6 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
-import moment from 'moment-timezone';
 import { TimePickerProps } from 'antd';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
@@ -16,7 +15,7 @@ import {
   createWorkspace,
   inviteUsersToWorkspace,
 } from '@/services/clientSide/workspaceServices';
-import { isEmpty } from '@/helpers/common';
+import { generateTimezoneOptions, isEmpty } from '@/helpers/common';
 
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import Icon from '@/components/icon/icon';
@@ -68,24 +67,6 @@ function OnboardingStep1() {
   const [workspaceTeamSize, setWorkspaceTeamSize] = useState<DropDownItem>();
   const [workspaceIndustry, setWorkspaceIndustry] = useState<DropDownItem>();
   const router = useRouter();
-
-  const timeZones = moment.tz.names().map((zone) => {
-    const offset = moment.tz(zone).utcOffset();
-    const hours = Math.floor(offset / 60);
-    const minutes = Math.abs(offset % 60);
-    const sign = offset >= 0 ? '+' : '-';
-    const label = `UTC${sign}${String(Math.abs(hours)).padStart(2, '0')}:${String(
-      Math.abs(minutes),
-    ).padStart(2, '0')} - ${zone}`;
-
-    return {
-      id: zone,
-      name: label,
-      label: label,
-      value: zone,
-      onClick: () => handleTimezoneSelect(),
-    };
-  });
 
   const handleTimezoneSelect = useCallback(() => {
     setIsOpenDropdown(false);
@@ -237,7 +218,9 @@ function OnboardingStep1() {
       </CenterCard>
     ),
     [
+      handleIndustryChange,
       handleIndustryClick,
+      handleTeamSizeChange,
       handleTeamSizeClick,
       industryDropdownOpen,
       showCard,
@@ -285,11 +268,12 @@ function OnboardingStep1() {
                 </DropdownTrigger>
                 {isOpenDropdown && (
                   <DropDown
-                    items={timeZones}
+                    items={generateTimezoneOptions()}
                     iconSize={'12'}
                     iconViewBox={'0 0 12 12'}
                     onClose={() => setIsOpenDropdown(false)}
                     className='timezone-dropdown'
+                    onChange={handleTimezoneSelect}
                   />
                 )}
               </DropdownDiv>
@@ -302,7 +286,12 @@ function OnboardingStep1() {
         </Form>
       </CenterCard>
     ),
-    [isOpenDropdown, timeZones, user?.display_name, user?.profile_url],
+    [
+      handleTimezoneSelect,
+      isOpenDropdown,
+      user?.display_name,
+      user?.profile_url,
+    ],
   );
 
   // Step 3: Team Invite
