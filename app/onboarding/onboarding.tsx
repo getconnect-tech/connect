@@ -3,21 +3,23 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
+import { TimePickerProps } from 'antd';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
-import { DropDownItem } from '@/components/dropDown/dropDown';
+import DropDown, { DropDownItem } from '@/components/dropDown/dropDown';
 import { industryItems, teamMember } from '@/helpers/raw';
 import { useStores } from '@/stores';
 import {
   createWorkspace,
   inviteUsersToWorkspace,
 } from '@/services/clientSide/workspaceServices';
-import { isEmpty } from '@/helpers/common';
+import { generateTimezoneOptions, isEmpty } from '@/helpers/common';
 
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import Icon from '@/components/icon/icon';
+import TimePickerSection from '../setting/workspaceprofile/timePickerSection';
 import {
   CenterCard,
   Heading,
@@ -38,15 +40,23 @@ import {
   LabelDiv,
   BottomFrame,
   DetailSection,
+  TimeZoneContentDiv,
+  DropdownDiv,
+  DropdownTrigger,
+  TimeContentDiv,
 } from './style';
 
 function OnboardingStep1() {
+  const [currentStep, setCurrentStep] = useState(1);
   const [showCard, setShowCard] = useState(false);
   const [industryDropdownOpen, setIndustryDropdownOpen] = useState(false);
   const [teamDropdownOpen, setTeamDropdownOpen] = useState(false);
+  const [isOpenDropdown, setIsOpenDropdown] = useState<boolean>(false);
   const [inputField, setInputField] = useState([
     { email: '', displayName: '' },
   ]);
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  const [timeValue, setTimeValue] = useState<string | null>(null);
 
   const {
     userStore: { user },
@@ -57,6 +67,10 @@ function OnboardingStep1() {
   const [workspaceTeamSize, setWorkspaceTeamSize] = useState<DropDownItem>();
   const [workspaceIndustry, setWorkspaceIndustry] = useState<DropDownItem>();
   const router = useRouter();
+
+  const handleTimezoneSelect = useCallback(() => {
+    setIsOpenDropdown(false);
+  }, []);
 
   const handleIndustryClick = useCallback(() => {
     setIndustryDropdownOpen(!industryDropdownOpen);
@@ -75,6 +89,7 @@ function OnboardingStep1() {
       workspaceIndustry!.name,
     );
     if (result) {
+      setCurrentStep(2);
       setShowCard(true);
     }
   }, [workspaceIndustry, workspaceName, workspaceTeamSize?.value]);
@@ -83,32 +98,40 @@ function OnboardingStep1() {
     setInputField([...inputField, { email: '', displayName: '' }]);
   }, [inputField]);
 
-  const handleRemoveInputField = (index: number) => {
-    const newInputField = inputField?.filter((_, i) => i !== index);
-    setInputField(newInputField);
-  };
+  const handleRemoveInputField = useCallback(
+    (index: number) => {
+      const newInputField = inputField?.filter((_, i) => i !== index);
+      setInputField(newInputField);
+    },
+    [inputField],
+  );
 
-  const handleTeamSizeChange = (item: DropDownItem) => {
+  const handleTeamSizeChange = useCallback((item: DropDownItem) => {
     setWorkspaceTeamSize(item);
-  };
+  }, []);
 
-  const handleIndustryChange = (item: DropDownItem) => {
+  const handleIndustryChange = useCallback((item: DropDownItem) => {
     setWorkspaceIndustry(item);
-  };
+  }, []);
 
-  const handleInvitedUserInputChange = (
-    type: 'displayName' | 'email',
-    value: string,
-    index: number,
-  ) => {
-    setInputField((prev) => {
-      const newState = [...prev];
-      newState[index][type] = value;
-      return newState;
-    });
-  };
+  const handleInvitedUserInputChange = useCallback(
+    (type: 'displayName' | 'email', value: string, index: number) => {
+      setInputField((prev) => {
+        const newState = [...prev];
+        newState[index][type] = value;
+        return newState;
+      });
+    },
+    [],
+  );
 
-  const handleGetStarted = async () => {
+  const handleNextStep = useCallback(() => {
+    if (currentStep === 2) {
+      setCurrentStep(3);
+    }
+  }, [currentStep]);
+
+  const handleGetStarted = useCallback(async () => {
     const usersToInvite = inputField?.filter(
       ({ displayName, email }) => !isEmpty(displayName) && !isEmpty(email),
     );
@@ -116,11 +139,303 @@ function OnboardingStep1() {
     if (result) {
       router.replace('/');
     }
+  }, [inputField, router]);
+
+  const onChange: TimePickerProps['onChange'] = (time, timeString) => {
+    if (typeof timeString === 'string') {
+      setTimeValue(timeString);
+    } else {
+      setTimeValue(null);
+    }
   };
+
+  // Step 1: Company Information
+  const renderCompanyInfoStep = useCallback(
+    () => (
+      <CenterCard>
+        <Profile>
+          <Avatar
+            imgSrc={user?.profile_url || ''}
+            name={user?.display_name || ''}
+            size={58}
+          />
+          <Description>
+            <h2>Hello, {user?.display_name}</h2>
+            <p>First, tell us a bit about your company.</p>
+          </Description>
+        </Profile>
+        <Form>
+          <TextField isNext={showCard}>
+            <Label>Company Name</Label>
+            <Input
+              placeholder={'Enter company name'}
+              style={{ padding: '8px 16px' }}
+              value={workspaceName}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setWorkspaceName(e.target.value)
+              }
+            />
+          </TextField>
+          <TextField isNext={showCard}>
+            <Label>Team Size</Label>
+            <DropDownWithTag
+              onClick={handleTeamSizeClick}
+              title={'Select a Team Size'}
+              selectedValue={workspaceTeamSize}
+              style={{
+                color: workspaceTeamSize && 'var(--text)',
+              }}
+              iconName={teamDropdownOpen ? 'up-arrow-icon' : 'down-arrow-icon'}
+              onClose={() => setTeamDropdownOpen(false)}
+              items={teamMember}
+              onChange={handleTeamSizeChange}
+              dropdownOpen={teamDropdownOpen}
+              dropDownStyle={{ width: '100%', maxWidth: 332 }}
+              isTag={false}
+            />
+          </TextField>
+          <TextField isNext={showCard}>
+            <Label>Industry</Label>
+            <DropDownWithTag
+              onClick={handleIndustryClick}
+              title={'Select a Industry'}
+              selectedValue={workspaceIndustry}
+              style={{
+                color: workspaceIndustry && 'var(--text)',
+              }}
+              iconName={
+                industryDropdownOpen ? 'up-arrow-icon' : 'down-arrow-icon'
+              }
+              onClose={() => setIndustryDropdownOpen(false)}
+              items={industryItems}
+              onChange={handleIndustryChange}
+              dropdownOpen={industryDropdownOpen}
+              dropDownStyle={{ width: '100%', maxWidth: 332 }}
+              isTag={false}
+            />
+          </TextField>
+        </Form>
+      </CenterCard>
+    ),
+    [
+      handleIndustryChange,
+      handleIndustryClick,
+      handleTeamSizeChange,
+      handleTeamSizeClick,
+      industryDropdownOpen,
+      showCard,
+      teamDropdownOpen,
+      user?.display_name,
+      user?.profile_url,
+      workspaceIndustry,
+      workspaceName,
+      workspaceTeamSize,
+    ],
+  );
+
+  // Step 2: Timezone and Office Hours
+  const renderTimezoneStep = useCallback(
+    () => (
+      <CenterCard>
+        <NextProfile>
+          <Avatar
+            imgSrc={user?.profile_url || ''}
+            name={user?.display_name || ''}
+            size={58}
+          />
+          <Description>
+            <h2>Hello, {user?.display_name}</h2>
+            <p>
+              Set your office hours and easily update them anytime in settings!
+            </p>
+          </Description>
+        </NextProfile>
+        <Form>
+          <Card>
+            <TimeZoneContentDiv>
+              <Label>Current Timezone</Label>
+              <DropdownDiv className='tag-div'>
+                <DropdownTrigger
+                  onClick={() => setIsOpenDropdown(!isOpenDropdown)}
+                >
+                  Select timezone
+                  <SVGIcon
+                    name={isOpenDropdown ? 'up-arrow-icon' : 'down-arrow-icon'}
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
+                  />
+                </DropdownTrigger>
+                {isOpenDropdown && (
+                  <DropDown
+                    items={generateTimezoneOptions()}
+                    iconSize={'12'}
+                    iconViewBox={'0 0 12 12'}
+                    onClose={() => setIsOpenDropdown(false)}
+                    className='timezone-dropdown'
+                    onChange={handleTimezoneSelect}
+                  />
+                )}
+              </DropdownDiv>
+            </TimeZoneContentDiv>
+            <TimeContentDiv>
+              <TimePickerSection label={'Form'} onChange={() => onChange} />
+              <TimePickerSection label={'To'} onChange={() => onChange} />
+            </TimeContentDiv>
+          </Card>
+        </Form>
+      </CenterCard>
+    ),
+    [
+      handleTimezoneSelect,
+      isOpenDropdown,
+      user?.display_name,
+      user?.profile_url,
+    ],
+  );
+
+  // Step 3: Team Invite
+  const renderTeamInviteStep = useCallback(
+    () => (
+      <CenterCardNext>
+        <NextProfile>
+          <Avatar
+            imgSrc={user?.profile_url || ''}
+            name={user?.display_name || ''}
+            size={58}
+          />
+          <Description>
+            <h2>Hello, {user?.display_name}</h2>
+            <p>Invite members to collaborate in Connect</p>
+          </Description>
+        </NextProfile>
+        <Form>
+          <Card>
+            <LabelDiv>
+              <Label>Email Address</Label>
+              <Label>Full Name</Label>
+            </LabelDiv>
+            <DetailSection>
+              {inputField.map((field, index) => (
+                <TextField isNext={showCard} key={index}>
+                  <Input
+                    placeholder={'Email Address'}
+                    type='email'
+                    value={field.email}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      handleInvitedUserInputChange(
+                        'email',
+                        e.target.value,
+                        index,
+                      )
+                    }
+                  />
+                  <Input
+                    placeholder={'Full Name'}
+                    type='text'
+                    value={field.displayName}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      handleInvitedUserInputChange(
+                        'displayName',
+                        e.target.value,
+                        index,
+                      )
+                    }
+                  />
+                  <Icon
+                    onClick={() => handleRemoveInputField(index)}
+                    iconName={'cross-icon'}
+                    iconSize={'12'}
+                    iconViewBox={'0 0 16 16'}
+                    size={true}
+                  />
+                </TextField>
+              ))}
+            </DetailSection>
+            <BottomFrame>
+              <Button
+                title='Add Another'
+                iconName='plus-icon'
+                iconSize='12'
+                iconViewBox='0 0 12 12'
+                isLink
+                onClick={handleAddInput}
+              />
+            </BottomFrame>
+          </Card>
+        </Form>
+      </CenterCardNext>
+    ),
+    [
+      handleAddInput,
+      handleRemoveInputField,
+      inputField,
+      showCard,
+      user?.display_name,
+      user?.profile_url,
+    ],
+  );
+
+  // Render the appropriate step content based on currentStep
+  const renderStepContent = useCallback(() => {
+    switch (currentStep) {
+      case 1:
+        return renderCompanyInfoStep();
+      case 2:
+        return renderTimezoneStep();
+      case 3:
+        return renderTeamInviteStep();
+      default:
+        return renderCompanyInfoStep();
+    }
+  }, [
+    currentStep,
+    renderCompanyInfoStep,
+    renderTimezoneStep,
+    renderTeamInviteStep,
+  ]);
+
+  // Get the appropriate button based on currentStep
+  const renderStepButton = useCallback(() => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <Button
+            title='Create Workspace'
+            onClick={handleCreateWorkspace}
+            isLoading={workspaceStore.loading}
+          />
+        );
+      case 2:
+        return (
+          <Button
+            title='Next'
+            onClick={handleNextStep}
+            isLoading={workspaceStore.loading}
+          />
+        );
+      case 3:
+        return (
+          <Button
+            title='Get started'
+            onClick={handleGetStarted}
+            isLoading={workspaceStore.loading}
+          />
+        );
+      default:
+        return null;
+    }
+  }, [
+    currentStep,
+    handleCreateWorkspace,
+    workspaceStore.loading,
+    handleNextStep,
+    handleGetStarted,
+  ]);
 
   return (
     <MainDiv>
-      <OnBoardScreen isNext={showCard}>
+      <OnBoardScreen isNext={currentStep === 3}>
         <Heading>
           <SVGIcon
             name='logo-icon'
@@ -128,167 +443,17 @@ function OnboardingStep1() {
             height='60px'
             viewBox='0 0 20 20'
           />
-          <Title isNext={showCard}>
+          <Title isNext={currentStep === 3}>
             Just a few quick things to set up your account
           </Title>
         </Heading>
         <Frame>
-          {!showCard ? (
-            <CenterCard>
-              <Profile>
-                <Avatar
-                  imgSrc={
-                    'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
-                  }
-                  name={''}
-                  size={58}
-                />
-                <Description>
-                  <h2>Hello, {user?.display_name}</h2>
-                  <p>First, tell us a bit about your company.</p>
-                </Description>
-              </Profile>
-              <Form>
-                <TextField isNext={showCard}>
-                  <Label>Company Name</Label>
-                  <Input
-                    placeholder={'Enter company name'}
-                    style={{ padding: '8px 16px' }}
-                    value={workspaceName}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      setWorkspaceName(e.target.value)
-                    }
-                  />
-                </TextField>
-                <TextField isNext={showCard}>
-                  <Label>Team Size</Label>
-                  <DropDownWithTag
-                    onClick={handleTeamSizeClick}
-                    title={'Select a Team Size'}
-                    selectedValue={workspaceTeamSize}
-                    style={{
-                      color: workspaceTeamSize && 'var(--text)', // Use CSS variable for color
-                    }}
-                    iconName={
-                      teamDropdownOpen ? 'up-arrow-icon' : 'down-arrow-icon'
-                    }
-                    onClose={() => setTeamDropdownOpen(false)}
-                    items={teamMember}
-                    onChange={handleTeamSizeChange}
-                    dropdownOpen={teamDropdownOpen}
-                    dropDownStyle={{ width: '100%', maxWidth: 332 }}
-                    isTag={false}
-                  />
-                </TextField>
-                <TextField isNext={showCard}>
-                  <Label>Industry</Label>
-                  <DropDownWithTag
-                    onClick={handleIndustryClick}
-                    title={'Select a Industry'}
-                    selectedValue={workspaceIndustry}
-                    style={{
-                      color: workspaceIndustry && 'var(--text)',
-                    }}
-                    iconName={
-                      industryDropdownOpen ? 'up-arrow-icon' : 'down-arrow-icon'
-                    }
-                    onClose={() => setIndustryDropdownOpen(false)}
-                    items={industryItems}
-                    onChange={handleIndustryChange}
-                    dropdownOpen={industryDropdownOpen}
-                    dropDownStyle={{ width: '100%', maxWidth: 332 }}
-                    isTag={false}
-                  />
-                </TextField>
-              </Form>
-            </CenterCard>
-          ) : (
-            <CenterCardNext>
-              <NextProfile>
-                <Avatar
-                  imgSrc={
-                    'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUntitled1_1701236653470.jpg?alt=media&token=8bc07cdb-5fcc-4c69-8e0d-c9978b94b3e4'
-                  }
-                  name={''}
-                  size={58}
-                />
-                <Description>
-                  <h2>Hello, {user?.display_name}</h2>
-                  <p>Invite members to collaborate in Connect</p>
-                </Description>
-              </NextProfile>
-              <Form>
-                <Card>
-                  <LabelDiv>
-                    <Label>Email Address</Label>
-                    <Label>Full Name</Label>
-                  </LabelDiv>
-                  <DetailSection>
-                    {inputField.map((field, index) => (
-                      <TextField isNext={showCard} key={index}>
-                        <Input
-                          placeholder={'Email Address'}
-                          type='email'
-                          value={field.email}
-                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            handleInvitedUserInputChange(
-                              'email',
-                              e.target.value,
-                              index,
-                            )
-                          }
-                        />
-                        <Input
-                          placeholder={'Full Name'}
-                          type='text'
-                          value={field.displayName}
-                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            handleInvitedUserInputChange(
-                              'displayName',
-                              e.target.value,
-                              index,
-                            )
-                          }
-                        />
-                        <Icon
-                          onClick={() => handleRemoveInputField(index)}
-                          iconName={'cross-icon'}
-                          iconSize={'12'}
-                          iconViewBox={'0 0 16 16'}
-                          size={true}
-                        />
-                      </TextField>
-                    ))}
-                  </DetailSection>
-                  <BottomFrame>
-                    <Button
-                      title='Add Another'
-                      iconName='plus-icon'
-                      iconSize='12'
-                      iconViewBox='0 0 12 12'
-                      isLink
-                      onClick={handleAddInput}
-                    />
-                  </BottomFrame>
-                </Card>
-              </Form>
-            </CenterCardNext>
-          )}
+          {renderStepContent()}
           <Bottom>
-            <Steps>{showCard ? <p>Step 2 of 2</p> : <p>Step 1 of 2 </p>}</Steps>
-            {showCard ? (
-              <Button
-                title='Get started'
-                onClick={handleGetStarted}
-                isLoading={workspaceStore.loading}
-              />
-            ) : (
-              <Button
-                title='Create Workspace'
-                onClick={handleCreateWorkspace}
-                isLoading={workspaceStore.loading}
-              />
-            )}
+            <Steps>
+              <p>Step {currentStep} of 3</p>
+            </Steps>
+            {renderStepButton()}
           </Bottom>
         </Frame>
       </OnBoardScreen>
