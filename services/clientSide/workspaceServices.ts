@@ -174,7 +174,6 @@ export const updateWorkspaceDetails = async (payload: {
  */
 export const updateOfficeData = async (payload: object) => {
   try {
-    workspaceStore.setLoading(true);
     const result = await axios.put(
       `${NEXT_PUBLIC_API_URL}/workspaces/settings`,
       payload,
@@ -182,15 +181,12 @@ export const updateOfficeData = async (payload: object) => {
     if (result) {
       messageStore.setSuccessMessage('Office data updated successfully.');
     }
-    console.log('result', result);
     return true;
   } catch (err: any) {
     messageStore.setErrorMessage(
       getAPIErrorMessage(err) || 'Something went wrong!',
     );
     return null;
-  } finally {
-    workspaceStore.setLoading(false);
   }
 };
 
