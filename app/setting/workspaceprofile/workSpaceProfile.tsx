@@ -11,7 +11,6 @@ import React, {
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
 import { TimePickerProps } from 'antd';
-import moment from 'moment-timezone';
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
 import { useStores } from '@/stores';
