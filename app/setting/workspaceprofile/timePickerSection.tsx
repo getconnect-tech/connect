@@ -1,10 +1,10 @@
 import React from 'react';
-import { TimePicker } from 'antd';
+import { TimePicker, TimePickerProps } from 'antd';
 import { InputDiv, Label } from '../style';
 
 interface Props {
   label: string;
-  onChange: () => void;
+  onChange: TimePickerProps['onChange'];
 }
 
 function TimePickerSection({ label, onChange }: Props) {

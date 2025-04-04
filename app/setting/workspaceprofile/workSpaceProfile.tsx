@@ -10,11 +10,14 @@ import React, {
 } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
-import { TimePickerProps } from 'antd';
+import dayjs from 'dayjs';
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
 import { useStores } from '@/stores';
-import { updateWorkspaceDetails } from '@/services/clientSide/workspaceServices';
+import {
+  updateOfficeData,
+  updateWorkspaceDetails,
+} from '@/services/clientSide/workspaceServices';
 import Avatar from '@/components/avtar/Avtar';
 import {
   generateTimezoneOptions,
@@ -50,17 +53,24 @@ import {
 } from '../style';
 import TimePickerSection from './timePickerSection';
 
+interface TimeZone {
+  id: string;
+  name: string;
+}
+
 const WorkspaceProfile = () => {
   const router = useRouter();
   const { workspaceStore } = useStores();
   const { currentWorkspace, loading } = workspaceStore;
   const [isNavbar, setIsNavbar] = useState(false);
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  const [timeValue, setTimeValue] = useState<string | null>(null);
   const [isOpenDropdown, setIsOpenDropdown] = useState<boolean>(false);
   const [organizationName, setOrganizationName] = useState<string>(
     currentWorkspace?.name || '',
   );
+  const [timeZone, setTimeZone] = useState<TimeZone | null>(null);
+  const [fromTime, setFromTime] = useState<string | null>(null);
+  const [toTime, setToTime] = useState<string | null>(null);
+  const [timeLoader, setTimeLoader] = useState<boolean>(false);
   const [image, setImage] = useState<{
     profile: string | ArrayBuffer | null;
     file: File;
@@ -179,21 +189,45 @@ const WorkspaceProfile = () => {
     setIsNavbar(false);
   }, []);
 
-  const onChange: TimePickerProps['onChange'] = (time, timeString) => {
-    if (typeof timeString === 'string') {
-      setTimeValue(timeString);
-    } else {
-      setTimeValue(null);
-    }
-  };
+  const handleTimeChange = useCallback(
+    (type: 'from' | 'to', _: any, timeString: string) => {
+      const rawTime =
+        typeof timeString === 'string' ? timeString : timeString[0];
+      const formatted = dayjs(rawTime, ['h:mm A']).format('HH:mm');
+      if (type === 'from') {
+        setFromTime(formatted);
+      } else {
+        setToTime(formatted);
+      }
+    },
+    [],
+  );
 
-  const handleOfficeHourUpdate = useCallback(() => {
-    console.log('office hour submitted');
-  }, []);
+  const handleOfficeHourUpdate = useCallback(
+    async (e: SyntheticEvent) => {
+      e.preventDefault();
+      try {
+        setTimeLoader(true);
+        if (fromTime === null || toTime === null) {
+          messageStore.setErrorMessage('Please select time.');
+          return;
+        }
 
-  const handleTimezoneSelect = useCallback(() => {
-    setIsOpenDropdown(false);
-  }, []);
+        const payload = {
+          timeZone: timeZone?.id,
+          startTime: fromTime,
+          endTime: toTime,
+        };
+        await updateOfficeData(payload);
+      } catch (error) {
+        setTimeLoader(false);
+        console.log('error', error);
+      } finally {
+        setTimeLoader(false);
+      }
+    },
+    [fromTime, timeZone, toTime],
+  );
 
   return (
     <Main>
@@ -295,7 +329,7 @@ const WorkspaceProfile = () => {
                   <DropdownTrigger
                     onClick={() => setIsOpenDropdown(!isOpenDropdown)}
                   >
-                    Select timezone
+                    {!isEmpty(timeZone) ? timeZone?.name : 'Select timezone'}
                     <SVGIcon
                       name={
                         isOpenDropdown ? 'up-arrow-icon' : 'down-arrow-icon'
@@ -312,20 +346,33 @@ const WorkspaceProfile = () => {
                       iconViewBox={'0 0 12 12'}
                       onClose={() => setIsOpenDropdown(false)}
                       className='timezone-dropdown'
-                      onChange={handleTimezoneSelect}
+                      onChange={(item) => {
+                        setIsOpenDropdown(false);
+                        setTimeZone(item);
+                      }}
                     />
                   )}
                 </DropdownDiv>
               </TimeZoneContentDiv>
               <TimeContentDiv>
-                <TimePickerSection label={'Form'} onChange={() => onChange} />
-                <TimePickerSection label={'To'} onChange={() => onChange} />
+                <TimePickerSection
+                  label={'From'}
+                  onChange={(value, timeStr) =>
+                    handleTimeChange('from', value, timeStr as string)
+                  }
+                />
+                <TimePickerSection
+                  label={'To'}
+                  onChange={(value, timeStr) =>
+                    handleTimeChange('to', value, timeStr as string)
+                  }
+                />
               </TimeContentDiv>
             </TextField>
             <Button
               type='submit'
               title='Update'
-              isLoading={loading}
+              isLoading={timeLoader}
               variant='medium'
             />
           </ProfileDetail>
