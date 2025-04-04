@@ -235,9 +235,10 @@ export const updateWorkspaceConfig = async (
     ...nweConfig,
   };
 
-  const updatedWorkspaceConfig = await prisma.workspaceConfig.update({
+  const updatedWorkspaceConfig = await prisma.workspaceConfig.upsert({
     where: { workspace_id: workspaceId },
-    data: { config: updatedConfig },
+    update: { config: updatedConfig },
+    create: { config: updatedConfig, workspace_id: workspaceId },
   });
 
   return updatedWorkspaceConfig;
