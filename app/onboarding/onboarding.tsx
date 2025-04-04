@@ -83,12 +83,11 @@ function OnboardingStep1() {
       name: label,
       label: label,
       value: zone,
-      onClick: () => handleTimezoneSelect(zone),
+      onClick: () => handleTimezoneSelect(),
     };
   });
 
-  const handleTimezoneSelect = useCallback((zone: string) => {
-    console.log('Selected timezone:', zone);
+  const handleTimezoneSelect = useCallback(() => {
     setIsOpenDropdown(false);
   }, []);
 

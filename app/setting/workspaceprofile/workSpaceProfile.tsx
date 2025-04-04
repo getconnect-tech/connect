@@ -62,7 +62,7 @@ const WorkspaceProfile = () => {
       name: label,
       label: label,
       value: zone,
-      onClick: () => handleTimezoneSelect(zone),
+      onClick: () => handleTimezoneSelect(),
     };
   });
 
@@ -206,8 +206,7 @@ const WorkspaceProfile = () => {
     console.log('office hour submitted');
   }, []);
 
-  const handleTimezoneSelect = useCallback((zone: string) => {
-    console.log('Selected timezone:', zone);
+  const handleTimezoneSelect = useCallback(() => {
     setIsOpenDropdown(false);
   }, []);
 
