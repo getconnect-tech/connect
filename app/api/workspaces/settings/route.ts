@@ -6,16 +6,20 @@ import { updateWorkspaceConfig } from '@/services/serverSide/workspace';
 import { WorkspaceConfig } from '@/utils/dataTypes';
 
 const UpdateRequestBody = z.object({
-  emailChannel: z.object({
-    primaryEmail: createStringSchema('primaryEmail', {
-      email: true,
-    }).optional(),
-  }),
-  webhooks: z.object({
-    contactRefresh: createStringSchema('contactRefresh', {
-      url: true,
-    }).optional(),
-  }),
+  emailChannel: z
+    .object({
+      primaryEmail: createStringSchema('primaryEmail', {
+        email: true,
+      }).optional(),
+    })
+    .optional(),
+  webhooks: z
+    .object({
+      contactRefresh: createStringSchema('contactRefresh', {
+        url: true,
+      }).optional(),
+    })
+    .optional(),
   timeZone: createStringSchema('timeZone').optional(),
   startTime: createStringSchema('startTime').optional(),
   endTime: createStringSchema('endTime').optional(),
