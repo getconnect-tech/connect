@@ -209,3 +209,8 @@ export type TaskCreatePayload = {
   files: File[];
   ticketId: string;
 };
+
+export type TimeZone = {
+  id: string;
+  name: string;
+};

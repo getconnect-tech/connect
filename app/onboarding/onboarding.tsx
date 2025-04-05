@@ -3,7 +3,7 @@
 import React, { ChangeEvent, useCallback, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
-import { TimePickerProps } from 'antd';
+import dayjs from 'dayjs';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
 import Button from '@/components/button/button';
@@ -14,11 +14,18 @@ import { useStores } from '@/stores';
 import {
   createWorkspace,
   inviteUsersToWorkspace,
+  updateOfficeData,
 } from '@/services/clientSide/workspaceServices';
-import { generateTimezoneOptions, isEmpty } from '@/helpers/common';
+import {
+  generateTimezoneOptions,
+  getAPIErrorMessage,
+  isEmpty,
+} from '@/helpers/common';
 
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import Icon from '@/components/icon/icon';
+import { TimeZone } from '@/utils/dataTypes';
+import { messageStore } from '@/stores/messageStore';
 import TimePickerSection from '../setting/workspaceprofile/timePickerSection';
 import {
   CenterCard,
@@ -55,8 +62,10 @@ function OnboardingStep1() {
   const [inputField, setInputField] = useState([
     { email: '', displayName: '' },
   ]);
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  const [timeValue, setTimeValue] = useState<string | null>(null);
+  const [timeZone, setTimeZone] = useState<TimeZone | null>(null);
+  const [fromTime, setFromTime] = useState<string | null>(null);
+  const [toTime, setToTime] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const {
     userStore: { user },
@@ -67,10 +76,6 @@ function OnboardingStep1() {
   const [workspaceTeamSize, setWorkspaceTeamSize] = useState<DropDownItem>();
   const [workspaceIndustry, setWorkspaceIndustry] = useState<DropDownItem>();
   const router = useRouter();
-
-  const handleTimezoneSelect = useCallback(() => {
-    setIsOpenDropdown(false);
-  }, []);
 
   const handleIndustryClick = useCallback(() => {
     setIndustryDropdownOpen(!industryDropdownOpen);
@@ -125,11 +130,30 @@ function OnboardingStep1() {
     [],
   );
 
-  const handleNextStep = useCallback(() => {
-    if (currentStep === 2) {
-      setCurrentStep(3);
+  const handleNextStep = useCallback(async () => {
+    if (fromTime === null || toTime === null) {
+      messageStore.setErrorMessage('Please select time.');
+      return;
     }
-  }, [currentStep]);
+    setLoading(true);
+    try {
+      const result = await updateOfficeData({
+        timeZone: timeZone?.id,
+        startTime: fromTime,
+        endTime: toTime,
+      });
+      if (result && currentStep === 2) {
+        setCurrentStep(3);
+      }
+    } catch (err: any) {
+      setLoading(false);
+      messageStore.setErrorMessage(
+        getAPIErrorMessage(err) || 'Getting error on office data!',
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, [currentStep, fromTime, timeZone?.id, toTime]);
 
   const handleGetStarted = useCallback(async () => {
     const usersToInvite = inputField?.filter(
@@ -141,13 +165,19 @@ function OnboardingStep1() {
     }
   }, [inputField, router]);
 
-  const onChange: TimePickerProps['onChange'] = (time, timeString) => {
-    if (typeof timeString === 'string') {
-      setTimeValue(timeString);
-    } else {
-      setTimeValue(null);
-    }
-  };
+  const handleTimeChange = useCallback(
+    (type: 'from' | 'to', _: any, timeString: string) => {
+      const rawTime =
+        typeof timeString === 'string' ? timeString : timeString[0];
+      const formatted = dayjs(rawTime, ['h:mm A']).format('HH:mm');
+      if (type === 'from') {
+        setFromTime(formatted);
+      } else {
+        setToTime(formatted);
+      }
+    },
+    [],
+  );
 
   // Step 1: Company Information
   const renderCompanyInfoStep = useCallback(
@@ -258,7 +288,7 @@ function OnboardingStep1() {
                 <DropdownTrigger
                   onClick={() => setIsOpenDropdown(!isOpenDropdown)}
                 >
-                  Select timezone
+                  {!isEmpty(timeZone) ? timeZone?.name : 'Select timezone'}
                   <SVGIcon
                     name={isOpenDropdown ? 'up-arrow-icon' : 'down-arrow-icon'}
                     width='12'
@@ -273,22 +303,36 @@ function OnboardingStep1() {
                     iconViewBox={'0 0 12 12'}
                     onClose={() => setIsOpenDropdown(false)}
                     className='timezone-dropdown'
-                    onChange={handleTimezoneSelect}
+                    onChange={(item) => {
+                      setIsOpenDropdown(false);
+                      setTimeZone(item);
+                    }}
                   />
                 )}
               </DropdownDiv>
             </TimeZoneContentDiv>
             <TimeContentDiv>
-              <TimePickerSection label={'Form'} onChange={() => onChange} />
-              <TimePickerSection label={'To'} onChange={() => onChange} />
+              <TimePickerSection
+                label={'From'}
+                onChange={(value, timeStr) =>
+                  handleTimeChange('from', value, timeStr as string)
+                }
+              />
+              <TimePickerSection
+                label={'To'}
+                onChange={(value, timeStr) =>
+                  handleTimeChange('to', value, timeStr as string)
+                }
+              />
             </TimeContentDiv>
           </Card>
         </Form>
       </CenterCard>
     ),
     [
-      handleTimezoneSelect,
+      handleTimeChange,
       isOpenDropdown,
+      timeZone,
       user?.display_name,
       user?.profile_url,
     ],
@@ -368,6 +412,7 @@ function OnboardingStep1() {
     ),
     [
       handleAddInput,
+      handleInvitedUserInputChange,
       handleRemoveInputField,
       inputField,
       showCard,
@@ -408,11 +453,7 @@ function OnboardingStep1() {
         );
       case 2:
         return (
-          <Button
-            title='Next'
-            onClick={handleNextStep}
-            isLoading={workspaceStore.loading}
-          />
+          <Button title='Next' onClick={handleNextStep} isLoading={loading} />
         );
       case 3:
         return (
@@ -430,6 +471,7 @@ function OnboardingStep1() {
     handleCreateWorkspace,
     workspaceStore.loading,
     handleNextStep,
+    loading,
     handleGetStarted,
   ]);
 
