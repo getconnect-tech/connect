@@ -29,6 +29,7 @@ import Icon from '@/components/icon/icon';
 import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
 import DropDown from '@/components/dropDown/dropDown';
 import SVGIcon from '@/assets/icons/SVGIcon';
+import { TimeZone } from '@/utils/dataTypes';
 import {
   Description,
   DropdownDiv,
@@ -52,11 +53,6 @@ import {
   Title,
 } from '../style';
 import TimePickerSection from './timePickerSection';
-
-interface TimeZone {
-  id: string;
-  name: string;
-}
 
 const WorkspaceProfile = () => {
   const router = useRouter();
