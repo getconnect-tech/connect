@@ -71,7 +71,7 @@ const InboxCard = ({
   ticketIndex,
   isShowNavbar,
   isAwaiting,
-}: Props) => {
+}: any) => {
   const { title, source, contact, priority, assigned_to, last_message } =
     ticketDetail;
   const router = useRouter();
@@ -321,7 +321,7 @@ const InboxCard = ({
       <RightDiv>
         <DesTitle>{title}</DesTitle>
         {last_message?.type === MessageType.EMAIL ||
-        last_message?.type === MessageType.FROM_CONTACT ? (
+          last_message?.type === MessageType.FROM_CONTACT ? (
           <NameText className='description'>
             <RenderHtml isSpreadIcon={false} htmlstring={combinedDescription} />
           </NameText>
@@ -411,7 +411,7 @@ const InboxCard = ({
                   iconName='close-icon'
                   iconSize='12'
                   iconViewBox='0 0 12 12'
-                  onClick={() => {}}
+                  onClick={() => { }}
                   size={true}
                 />
               </div>
@@ -480,7 +480,7 @@ const InboxCard = ({
                     iconName='close-icon'
                     iconSize='12'
                     iconViewBox='0 0 12 12'
-                    onClick={() => {}}
+                    onClick={() => { }}
                     size={true}
                   />
                 </div>

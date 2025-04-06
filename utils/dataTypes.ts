@@ -1,4 +1,4 @@
-import { PriorityLevels, TicketStatus } from '@prisma/client';
+import { PriorityLevels, TicketStatus, ChannelType } from '@prisma/client';
 import { MessageType } from '@prisma/client';
 
 export interface GroupInfo {
@@ -31,17 +31,17 @@ export interface Contact {
   groups: Group[] | undefined;
   ticketsCount: Record<TicketStatus, number>;
   id: string;
-  contact_id?: string;
+  contact_id: string | null;
   workspace_id: string;
   email: string;
-  address?: {
+  address: {
     street?: string;
     city?: string;
     state?: string;
     country?: string;
     postal_code?: string;
-  };
-  age?: number;
+  } | null;
+  age: number | null;
   avatar?: string;
   birthday?: Date;
   description?: string;
@@ -58,6 +58,21 @@ export interface Contact {
   updated_at: Date;
 }
 
+export interface ContactDetails extends Contact {
+  tickets: Array<{
+    id: string;
+    title: string;
+    status: TicketStatus;
+    created_at: Date;
+    updated_at: Date;
+    last_message?: {
+      content: string;
+      type: MessageType;
+      created_at: Date;
+    };
+  }>;
+}
+
 export interface Ticket {
   id: string;
   workspace_id: string;
@@ -69,9 +84,9 @@ export interface Ticket {
   updated_at: Date;
   priority: PriorityLevels;
   status: TicketStatus;
-  source: string;
-  mail_id?: string;
-  snooze_until?: Date;
+  source: ChannelType;
+  mail_id: string | null;
+  snooze_until: Date | null;
   last_message: {
     content: string;
     type: MessageType;

@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
+import { useRouter } from 'next/navigation';
 import ContactCard from '@/components/contactCard/contactCard';
 import { useStores } from '@/stores';
 import { isEmpty } from '@/helpers/common';
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const PersonList = ({ isShowNavbar }: Props) => {
+  const router = useRouter();
   const { workspaceStore, contactStore } = useStores();
   const { currentWorkspace } = workspaceStore;
   const { contacts = [] } = contactStore;
@@ -47,6 +49,10 @@ const PersonList = ({ isShowNavbar }: Props) => {
     }));
   };
 
+  const handleContactClick = (contactId: string) => {
+    router.push(`/contact/${contactId}`);
+  };
+
   if (loading || !contacts || contacts.length === 0) {
     return <ContactsLoading />;
   }
@@ -67,6 +73,7 @@ const PersonList = ({ isShowNavbar }: Props) => {
           }
           groupInfo={formatGroups(card.groups)}
           isShowNavbar={isShowNavbar}
+          onClick={() => handleContactClick(card.id)}
         />
       ))}
     </ListMainDiv>
