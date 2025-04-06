@@ -121,11 +121,19 @@ export function removeNullUndefined(obj: Record<string, any>) {
   }
 }
 
+interface APIError {
+  response?: {
+    data?: {
+      error?: string;
+    };
+  };
+}
+
 /**
  * @desc Convert response error message
- * @param {Record<string, any>} obj
+ * @param {APIError} obj
  */
-export function getAPIErrorMessage(obj: Record<string, any>) {
+export function getAPIErrorMessage(obj: APIError): string | undefined {
   return obj?.response?.data?.error;
 }
 

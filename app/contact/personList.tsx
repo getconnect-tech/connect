@@ -6,6 +6,7 @@ import { useStores } from '@/stores';
 import { isEmpty } from '@/helpers/common';
 import { getContactData } from '@/services/clientSide/contactServices';
 import ContactsLoading from '@/components/contactsLoading/contactsLoading';
+import { Contact, GroupInfo } from '@/utils/dataTypes';
 import { ListMainDiv } from './style';
 
 interface Props {
@@ -15,15 +16,15 @@ interface Props {
 const PersonList = ({ isShowNavbar }: Props) => {
   const { workspaceStore, contactStore } = useStores();
   const { currentWorkspace } = workspaceStore;
-  const { contacts } = contactStore || {};
-  const [loading, setLoading] = useState(true); // Loading state added
+  const { contacts = [] } = contactStore;
+  const [loading, setLoading] = useState(true);
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
       setLoading(true);
       try {
         await getContactData();
-      } catch (err: any) {
+      } catch (err) {
         console.error('Error fetching contact data:', err);
       } finally {
         setLoading(false);
@@ -35,31 +36,40 @@ const PersonList = ({ isShowNavbar }: Props) => {
     loadData();
   }, [loadData]);
 
+  const formatGroups = (groups: Contact['groups']): GroupInfo[] | undefined => {
+    if (!groups) return undefined;
+    return groups.map((group) => ({
+      ...group,
+      group_id: group.group_id || null,
+      avatar: group.avatar || null,
+      group_label: group.group_label || null,
+      contacts_count: group.contacts_count || null,
+    }));
+  };
+
+  if (loading || !contacts || contacts.length === 0) {
+    return <ContactsLoading />;
+  }
+
   return (
-    <>
-      {loading && (!contacts || contacts.length === 0) ? (
-        <ContactsLoading />
-      ) : (
-        <ListMainDiv isShowNavbar={isShowNavbar}>
-          {contacts?.map((card, index) => (
-            <ContactCard
-              key={index}
-              imgSrc={card.avatar || ''}
-              name={card.name}
-              email={card.email}
-              openCount={
-                card.ticketsCount.OPEN ? `${card.ticketsCount.OPEN}` : '0'
-              }
-              closeCount={
-                card.ticketsCount.CLOSED ? `${card.ticketsCount.CLOSED}` : '0'
-              }
-              groupInfo={card.groups}
-              isShowNavbar={isShowNavbar}
-            />
-          ))}
-        </ListMainDiv>
-      )}
-    </>
+    <ListMainDiv isShowNavbar={isShowNavbar}>
+      {contacts.map((card, index) => (
+        <ContactCard
+          key={card.id || index}
+          imgSrc={card.avatar || ''}
+          name={card.name}
+          email={card.email}
+          openCount={
+            card.ticketsCount?.OPEN ? `${card.ticketsCount.OPEN}` : '0'
+          }
+          closeCount={
+            card.ticketsCount?.CLOSED ? `${card.ticketsCount.CLOSED}` : '0'
+          }
+          groupInfo={formatGroups(card.groups)}
+          isShowNavbar={isShowNavbar}
+        />
+      ))}
+    </ListMainDiv>
   );
 };
 
