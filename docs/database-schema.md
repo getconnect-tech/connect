@@ -15,7 +15,6 @@ model User {
   id            String    @id @default(cuid())
   email         String    @unique
   name          String?
-  password      String?
   role          Role      @default(USER)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -28,6 +27,27 @@ model User {
   createdTickets Ticket[] @relation("CreatedTickets")
   comments      Comment[]
   notifications Notification[]
+  otpTokens     OTPToken[]
+}
+```
+
+### OTPTokens
+
+```prisma
+model OTPToken {
+  id          String    @id @default(cuid())
+  email       String
+  token       String
+  expiresAt   DateTime
+  attempts    Int       @default(0)
+  isUsed      Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+
+  // Relations
+  user        User?     @relation(fields: [email], references: [email])
+
+  @@index([email, token])
+  @@index([expiresAt])
 }
 ```
 
@@ -202,6 +222,7 @@ enum NotificationType {
   TICKET_ASSIGNED
   COMMENT_ADDED
   MENTION
+  OTP_SENT
 }
 ```
 
@@ -211,6 +232,12 @@ enum NotificationType {
 
 - `email` (unique)
 - `isActive`
+
+### OTPToken Indexes
+
+- `email, token` (composite)
+- `expiresAt`
+- `isUsed`
 
 ### Workspace Indexes
 
@@ -237,6 +264,12 @@ enum NotificationType {
 - `createdAt`
 
 ## Relationships
+
+### User-OTPToken (One-to-Many)
+
+- Users can have multiple OTP tokens
+- OTP tokens belong to one user
+- Tokens are tracked by email
 
 ### User-Workspace (Many-to-Many)
 
@@ -265,8 +298,14 @@ enum NotificationType {
 ### User
 
 - Email must be valid format
-- Password must meet security requirements
 - Name must be between 2-100 characters
+
+### OTPToken
+
+- Token must be 6 digits
+- Must have expiration time
+- Maximum 3 attempts
+- One-time use only
 
 ### Workspace
 
@@ -289,6 +328,7 @@ enum NotificationType {
 
 - User accounts: Indefinite (can be deactivated)
 - Workspaces: Indefinite (can be archived)
+- OTP tokens: 5 minutes after creation
 - Tickets: 5 years after closure
 - Comments: Same as associated ticket
 - Attachments: Same as associated ticket/comment

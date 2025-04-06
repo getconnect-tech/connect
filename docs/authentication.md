@@ -4,18 +4,25 @@ This document outlines the authentication system used in the Connect Support Sys
 
 ## Overview
 
-The system uses NextAuth.js for authentication, providing a secure and flexible authentication solution with support for multiple providers and custom authentication methods.
+The system uses NextAuth.js for authentication, providing a secure and flexible authentication solution with support for email/OTP and OAuth providers.
 
 ## Authentication Methods
 
-### 1. Email/Password
+### 1. Email/OTP
 
 ```typescript
-// Example login request
-POST /api/auth/login
+// Step 1: Request OTP
+POST /api/auth/otp/request
+{
+  "email": "user@example.com"
+}
+
+// Step 2: Verify OTP
+POST /api/auth/callback/credentials
 {
   "email": "user@example.com",
-  "password": "securepassword"
+  "otp": "123456",
+  "redirect": false
 }
 ```
 
@@ -28,38 +35,89 @@ POST /api/auth/login
 
 ## Authentication Flow
 
-### Login Flow
+### 1. Initial Authentication
 
-1. User submits credentials
-2. System validates credentials
-3. If valid, creates session
-4. Returns JWT token
-5. Sets secure HTTP-only cookie
+1. **User Initiation**
 
-### Session Management
+   - User visits login page
+   - Selects authentication method (Email/OTP or OAuth)
 
-- JWT-based sessions
-- Refresh token rotation
-- Session timeout: 24 hours
-- Refresh token expiry: 30 days
+2. **Email/OTP Flow**
+
+   ```
+   // Step 1: OTP Request
+   Client -> Server: POST /api/auth/otp/request
+   Server -> Email Service: Send OTP
+   Server -> Client: OTP sent confirmation
+
+   // Step 2: OTP Verification
+   Client -> Server: POST /api/auth/callback/credentials
+   Server -> Database: Verify OTP
+   Server -> Client: Set session cookie
+   ```
+
+3. **OAuth Flow**
+   ```
+   Client -> Server: GET /api/auth/signin/{provider}
+   Server -> Provider: Redirect to OAuth provider
+   Provider -> Server: Callback with auth code
+   Server -> Provider: Exchange code for tokens
+   Server -> Database: Create/Update user
+   Server -> Client: Set session cookie
+   ```
+
+### 2. Session Management
+
+1. **Session Creation**
+
+   - JWT token generation
+   - Secure HTTP-only cookie set
+   - Session data stored in database
+
+2. **Session Validation**
+
+   ```
+   Client -> Server: Request with session cookie
+   Server -> Database: Validate session
+   Server -> Client: Response with user data
+   ```
+
+3. **Session Refresh**
+   - Automatic token refresh
+   - Silent re-authentication
+   - Session extension
+
+### 3. Workspace Selection
+
+1. **Post-Authentication**
+
+   - User redirected to workspace selection
+   - List of available workspaces displayed
+
+2. **Workspace Context**
+   - Selected workspace stored in session
+   - Workspace-specific permissions applied
+   - UI adapted to workspace settings
 
 ## Security Measures
 
-### Password Security
+### OTP Security
 
-- BCrypt hashing
-- Minimum 8 characters
-- Requires special characters
-- Password history check
-- Account lockout after 5 failed attempts
+- 6-digit numeric OTP
+- 5-minute expiry
+- Rate limiting per email
+- Maximum 3 attempts per OTP
+- IP-based rate limiting
+- OTP blacklisting after use
 
 ### Token Security
 
-- JWT signing with RSA
-- Short-lived access tokens (1 hour)
+- JWT signing with RSA-256
+- Access token: 1 hour expiry
+- Refresh token: 30 days expiry
 - Secure HTTP-only cookies
-- CSRF protection
-- Token blacklisting
+- CSRF protection with double-submit cookie
+- Token blacklisting for logout
 
 ## API Authentication
 
@@ -69,7 +127,7 @@ POST /api/auth/login
 Authorization: Bearer <token>
 ```
 
-### API Key
+### API Key (for service-to-service)
 
 ```http
 X-API-Key: <api-key>
@@ -77,7 +135,7 @@ X-API-Key: <api-key>
 
 ## Role-Based Access Control (RBAC)
 
-### User Roles
+### System Roles
 
 1. **Super Admin**
 
@@ -102,8 +160,6 @@ X-API-Key: <api-key>
    - View tickets
    - Read-only access
 
-## Workspace Access
-
 ### Workspace Roles
 
 1. **Owner**
@@ -111,74 +167,77 @@ X-API-Key: <api-key>
    - Full workspace control
    - User management
    - Settings management
+   - Billing management
 
 2. **Admin**
 
    - Manage tickets
    - Manage users
    - Configure settings
+   - View analytics
 
 3. **Member**
 
    - Create and manage tickets
    - Comment on tickets
+   - View workspace data
 
 4. **Viewer**
    - View tickets
    - Read-only access
+   - Limited data visibility
 
-## Multi-Factor Authentication (MFA)
+## OTP Flow Details
 
-### Supported Methods
+### OTP Generation
 
-1. **TOTP (Time-based One-Time Password)**
+- Random 6-digit number
+- Stored with timestamp and email
+- Hashed for security
+- One-time use only
 
-   - Google Authenticator
-   - Authy
-   - Microsoft Authenticator
+### OTP Delivery
 
-2. **SMS**
-   - Phone number verification
-   - One-time codes
+- Sent via email
+- Clear expiration time
+- Rate limited per email/IP
+- Delivery confirmation
 
-### MFA Setup Flow
+### OTP Validation
 
-1. User enables MFA
-2. System generates secret
-3. User scans QR code
-4. User verifies setup
-5. System enables MFA
-
-## Password Reset Flow
-
-1. User requests password reset
-2. System sends reset email
-3. User clicks reset link
-4. User sets new password
-5. System invalidates old sessions
+- Check expiration
+- Verify email match
+- Check attempt count
+- Validate format
+- One-time use enforcement
 
 ## Session Management
 
 ### Active Sessions
 
 - View all active sessions
+- Session details (IP, location, device)
 - Revoke specific sessions
 - Logout from all devices
+- Session activity logging
 
 ### Session Timeout
 
 - Inactivity timeout: 30 minutes
 - Maximum session duration: 24 hours
 - Automatic refresh token rotation
+- Grace period for session extension
 
 ## Security Headers
 
 ```http
-Strict-Transport-Security: max-age=31536000; includeSubDomains
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
 X-Content-Type-Options: nosniff
 X-Frame-Options: DENY
 X-XSS-Protection: 1; mode=block
-Content-Security-Policy: default-src 'none'
+Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: geolocation=(), microphone=(), camera=()
 ```
 
 ## Error Handling
@@ -189,10 +248,12 @@ Content-Security-Policy: default-src 'none'
 {
   "error": {
     "code": "AUTH_ERROR",
-    "message": "Invalid credentials",
+    "message": "Invalid OTP",
     "details": {
-      "field": "password",
-      "reason": "incorrect"
+      "field": "otp",
+      "reason": "expired",
+      "attempts": 2,
+      "lockout": false
     }
   }
 }
@@ -200,9 +261,11 @@ Content-Security-Policy: default-src 'none'
 
 ### Rate Limiting
 
-- Login attempts: 5 per 15 minutes
-- Password reset: 3 per hour
+- OTP requests: 3 per 15 minutes per email
+- OTP attempts: 3 per OTP
+- OAuth attempts: 5 per 15 minutes
 - API requests: 100 per minute
+- IP-based rate limiting
 
 ## Integration Guide
 
@@ -214,33 +277,85 @@ import NextAuth from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
 export default NextAuth(authOptions);
+
+// lib/auth.ts
+export const authOptions = {
+  providers: [
+    CredentialsProvider({
+      async authorize(credentials) {
+        // OTP verification logic
+        const { email, otp } = credentials;
+        // Verify OTP and return user
+      },
+    }),
+    GoogleProvider({
+      // Google OAuth config
+    }),
+    // Other providers
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      // JWT handling
+    },
+    async session({ session, token }) {
+      // Session handling
+    },
+  },
+  pages: {
+    signIn: '/login',
+    error: '/auth/error',
+  },
+  session: {
+    strategy: 'jwt',
+    maxAge: 24 * 60 * 60, // 24 hours
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+};
 ```
 
 ### Client-Side Usage
 
 ```typescript
-import { useSession } from 'next-auth/react';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 export default function Component() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
-  if (session) {
-    return <div>Welcome {session.user.name}</div>;
+  if (status === 'loading') {
+    return <div>Loading...</div>;
   }
 
-  return <div>Please sign in</div>;
+  if (session) {
+    return (
+      <div>
+        Welcome {session.user.name}
+        <button onClick={() => signOut()}>Sign out</button>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <button onClick={() => signIn()}>Sign in</button>
+    </div>
+  );
 }
 ```
 
 ## Best Practices
 
 1. Always use HTTPS
-2. Implement rate limiting
+2. Implement comprehensive rate limiting
 3. Use secure session storage
-4. Regularly rotate secrets
+4. Regularly rotate secrets and keys
 5. Monitor authentication attempts
 6. Implement proper error handling
-7. Use secure password policies
-8. Enable MFA where possible
-9. Regular security audits
+7. Use secure OTP generation
+8. Enable OTP expiry
+9. Conduct regular security audits
 10. Keep dependencies updated
+11. Log all authentication events
+12. Implement IP-based security measures
+13. Use secure cookie settings
+14. Validate all user input
+15. Implement proper session cleanup

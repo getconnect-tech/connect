@@ -8,6 +8,7 @@ This guide will help you set up and run the Connect Support System locally.
 - npm or yarn
 - PostgreSQL database
 - Git
+- Email service (for OTP delivery)
 
 ## Installation
 
@@ -30,7 +31,12 @@ yarn install
 cp .env.example .env
 ```
 
-Edit the `.env` file with your configuration values.
+Edit the `.env` file with your configuration values, including:
+
+- Database credentials
+- Email service credentials
+- OAuth provider credentials
+- NextAuth secret
 
 4. Set up the database:
 
@@ -48,6 +54,39 @@ yarn dev
 ```
 
 2. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Authentication Setup
+
+### Email/OTP Configuration
+
+1. Configure email service in `.env`:
+
+```env
+EMAIL_SERVER_HOST=smtp.example.com
+EMAIL_SERVER_PORT=587
+EMAIL_SERVER_USER=user@example.com
+EMAIL_SERVER_PASSWORD=password
+EMAIL_FROM=noreply@example.com
+```
+
+2. Configure OTP settings:
+
+```env
+OTP_EXPIRY_MINUTES=5
+OTP_MAX_ATTEMPTS=3
+OTP_RATE_LIMIT=3
+```
+
+### OAuth Configuration
+
+1. Set up OAuth providers in `.env`:
+
+```env
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+GITHUB_CLIENT_ID=your-github-client-id
+GITHUB_CLIENT_SECRET=your-github-client-secret
+```
 
 ## Project Structure
 
@@ -134,19 +173,22 @@ yarn prisma migrate dev --name your_migration_name
    - Ensure PostgreSQL is running
    - Check network connectivity
 
-2. **Build Errors**
+2. **Authentication Issues**
+
+   - Verify email service configuration
+   - Check OTP settings
+   - Verify OAuth provider credentials
+   - Check session configuration
+
+3. **Build Errors**
 
    - Clear `.next` directory
    - Run `yarn install` again
    - Check TypeScript errors
-
-3. **Authentication Issues**
-   - Verify auth configuration in `.env`
-   - Check session configuration
-   - Clear browser cookies
 
 ## Next Steps
 
 - [Architecture Overview](./architecture.md)
 - [API Documentation](./api/README.md)
 - [Database Schema](./database-schema.md)
+- [Authentication Guide](./authentication.md)

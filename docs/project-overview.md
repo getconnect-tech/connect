@@ -6,6 +6,14 @@ Connect is a modern support system built with Next.js and TypeScript, designed t
 
 ## Key Features
 
+- **Authentication & Security**
+
+  - Email/OTP based authentication
+  - OAuth provider integration
+  - Role-based access control
+  - Secure session management
+  - Multi-workspace support
+
 - **Ticket Management**
 
   - Create, assign, and track support tickets
@@ -50,7 +58,7 @@ Connect is a modern support system built with Next.js and TypeScript, designed t
 - Prisma ORM
 - PostgreSQL Database
 - Firebase Integration
-- NextAuth.js
+- NextAuth.js (Email/OTP & OAuth)
 
 ### Additional Services
 
@@ -90,3 +98,4 @@ This system is designed for:
 - Enhanced team collaboration
 - Comprehensive reporting and analytics
 - Scalable and maintainable architecture
+- Secure authentication with email/OTP

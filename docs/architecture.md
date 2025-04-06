@@ -20,8 +20,8 @@ The Connect Support System follows a modern, scalable architecture built on Next
         ▼                        ▼                        ▼
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
 │                 │     │                 │     │                 │
-│  External       │     │  Authentication │     │  File Storage   │
-│  Services       │     │  & Auth         │     │  (Firebase)     │
+│  Email Service  │     │  Authentication │     │  File Storage   │
+│  (OTP Delivery) │     │  & Auth         │     │  (Firebase)     │
 │                 │     │                 │     │                 │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
 ```
@@ -67,7 +67,22 @@ The Connect Support System follows a modern, scalable architecture built on Next
 - Data validation
 - Error handling
 
-### 3. Data Layer
+### 3. Authentication Layer
+
+#### Email/OTP Authentication
+
+- OTP generation and validation
+- Email delivery service
+- Rate limiting
+- Session management
+
+#### OAuth Integration
+
+- Provider configuration
+- Token handling
+- User profile synchronization
+
+### 4. Data Layer
 
 #### Database
 
@@ -86,24 +101,25 @@ The Connect Support System follows a modern, scalable architecture built on Next
 
 ### Flow
 
-1. User authentication via NextAuth.js
-2. Session management
-3. Role-based access control (RBAC)
-4. Workspace-level permissions
+1. User initiates authentication
+2. System sends OTP via email
+3. User verifies OTP
+4. Session established
+5. Workspace context loaded
 
 ### Security
 
-- JWT-based authentication
-- CSRF protection
+- OTP-based authentication
 - Rate limiting
-- Input validation
-- Secure headers
+- Session management
+- Role-based access control
 
 ## External Services Integration
 
 ### Email Service
 
-- Postmark for transactional emails
+- OTP delivery
+- Transactional emails
 - Email templates
 - Delivery tracking
 
@@ -193,7 +209,7 @@ The Connect Support System follows a modern, scalable architecture built on Next
 
 ### Security
 
-- Two-factor authentication
+- Enhanced OTP security
 - Audit logging
 - Compliance features
 - Security scanning
