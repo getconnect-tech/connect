@@ -1,5 +1,10 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { Typography } from '@/styles/typography';
 
+interface Props {
+  active?: boolean;
+  isShowNavbar?: boolean;
+}
 export const Main = styled.div`
   width: calc(100% - 240px);
   height: calc(100vh - 64px);
@@ -130,17 +135,28 @@ export const Title = styled.h2`
 
 export const TabDiv = styled.div`
   display: flex;
-  gap: 8px;
+  align-items: center;
+  padding: 2px;
+  border-radius: 30px;
+  background-color: var(--bg-surface-secondary);
 `;
 
-export const Tab = styled.div<{ active: boolean }>`
-  padding: 8px 16px;
-  border-radius: 4px;
+export const Tab = styled.p<Props>`
+  padding: 4px 8px;
+  ${Typography.body_sm_regular}
   cursor: pointer;
-  font-size: 14px;
-  background-color: ${({ active }) => (active ? '#f0f0f0' : 'transparent')};
-  color: ${({ active }) => (active ? '#333' : '#666')};
-  &:hover {
-    background-color: #f0f0f0;
+  color: var(--text-text-secondary);
+  ${(props) =>
+    props.active &&
+    css`
+      background-color: var(--bg-white);
+      border-radius: 30px;
+      box-shadow: var(--shadow-tab);
+      color: var(--text);
+    `}
+  @media screen and (max-width: 449px) {
+    min-width: 92px;
+    display: flex;
+    justify-content: center;
   }
-`; 
+`;
