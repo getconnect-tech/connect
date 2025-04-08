@@ -18,7 +18,21 @@ import {
 
 export const GET = withWorkspaceAuth(async (req, { contactId }) => {
   try {
+    const workspaceId = req.workspace.id;
+
+    // Get contact and verify it belongs to the current workspace
     const contact = await getContactById(contactId);
+
+    if (!contact) {
+      return Response.json({ error: 'Contact not found' }, { status: 404 });
+    }
+
+    if (contact.workspace_id !== workspaceId) {
+      return Response.json(
+        { error: 'Contact does not belong to this workspace' },
+        { status: 403 },
+      );
+    }
 
     return Response.json(contact, { status: 200 });
   } catch (err) {

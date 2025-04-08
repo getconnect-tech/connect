@@ -31,4 +31,16 @@ const ClientContactDetailPage = observer(ContactDetailPage);
 // Export a default server component that renders the client component
 export default function Page(props: Props) {
   return <ClientContactDetailPage {...props} />;
-} 
+}
+
+// Add proper type guards
+const formatGroups = (groups: Contact['groups']): GroupInfo[] => {
+  if (!groups) return [];
+  return groups.map((group) => ({
+    ...group,
+    group_id: group.group_id ?? null,
+    avatar: group.avatar ?? null,
+    group_label: group.group_label ?? null,
+    contacts_count: group.contacts_count ?? 0,
+  }));
+};

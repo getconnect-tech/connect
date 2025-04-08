@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { MessageType, TicketStatus } from '@prisma/client';
+import axios from 'axios';
 import { useStores } from '@/stores';
 import { Ticket } from '@/utils/dataTypes';
 import InboxCard from '@/components/inboxCard/inboxCard';
@@ -41,15 +42,39 @@ const ContactDetailComponent = ({ contactId }: ContactDetailProps) => {
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
+  const [ticketLoading, setTicketLoading] = useState(false);
+  const [ticketError, setTicketError] = useState<string | null>(null);
   const tabItem = ['Open', 'Snoozed', 'Done'];
   const { contactStore, workspaceStore } = useStores();
   const { currentWorkspace } = workspaceStore;
   const { currentContact, contactTickets, loading } = contactStore;
 
   useEffect(() => {
-    if (!isEmpty(currentWorkspace?.id)) {
-      contactStore.loadContactDetails(contactId);
-    }
+    const loadContactData = async () => {
+      if (!isEmpty(currentWorkspace?.id)) {
+        setTicketLoading(true);
+        setTicketError(null);
+        try {
+          // Set workspace ID in headers
+          axios.defaults.headers.common['workspace_id'] = currentWorkspace.id;
+
+          // Load contact details
+          await contactStore.loadContactDetails(contactId);
+        } catch (error: any) {
+          console.error('Error loading contact details:', error);
+          setTicketError(error.message || 'Failed to load contact details');
+        } finally {
+          setTicketLoading(false);
+        }
+      } else {
+        setTicketError(
+          'No workspace selected. Please select a workspace first.',
+        );
+      }
+    };
+
+    loadContactData();
+
     return () => {
       contactStore.clearContactDetails();
     };
@@ -61,7 +86,7 @@ const ContactDetailComponent = ({ contactId }: ContactDetailProps) => {
         case 'Open':
           return ticket.status === TicketStatus.OPEN;
         case 'Snoozed':
-          return ticket.status === 'SNOOZED';
+          return ticket.status === TicketStatus.SNOOZED;
         case 'Done':
           return ticket.status === TicketStatus.CLOSED;
         default:
@@ -157,7 +182,17 @@ const ContactDetailComponent = ({ contactId }: ContactDetailProps) => {
               </HeaderDiv>
             </TopDiv>
             <BottomDiv>
-              {displayTicketList().length === 0 ? (
+              {ticketLoading ? (
+                <InboxLoading />
+              ) : ticketError ? (
+                <EmptyState
+                  iconName='error-icon'
+                  iconSize='20'
+                  iconViewBox='0 0 12 12'
+                  title='Error loading tickets'
+                  description={ticketError}
+                />
+              ) : displayTicketList().length === 0 ? (
                 <EmptyState
                   iconName='inbox-icon'
                   iconSize='20'
