@@ -2,7 +2,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { MessageType, TicketStatus } from '@prisma/client';
-import axios from 'axios';
 import { useStores } from '@/stores';
 import { Ticket } from '@/utils/dataTypes';
 import InboxCard from '@/components/inboxCard/inboxCard';
@@ -55,10 +54,6 @@ const ContactDetailComponent = ({ contactId }: ContactDetailProps) => {
         setTicketLoading(true);
         setTicketError(null);
         try {
-          // Set workspace ID in headers
-          axios.defaults.headers.common['workspace_id'] = currentWorkspace.id;
-
-          // Load contact details
           await contactStore.loadContactDetails(contactId);
         } catch (error: any) {
           console.error('Error loading contact details:', error);
@@ -81,19 +76,28 @@ const ContactDetailComponent = ({ contactId }: ContactDetailProps) => {
   }, [contactId, currentWorkspace?.id, contactStore]);
 
   const displayTicketList = useCallback(() => {
-    const filteredTickets = contactTickets.filter((ticket: Ticket) => {
+    const currentTime = new Date();
+    return contactTickets.filter((ticket: Ticket) => {
       switch (activeTab) {
         case 'Open':
-          return ticket.status === TicketStatus.OPEN;
+          return (
+            ticket.status === TicketStatus.OPEN &&
+            (isEmpty(ticket?.snooze_until) ||
+              (ticket.snooze_until &&
+                new Date(ticket.snooze_until) < currentTime))
+          );
         case 'Snoozed':
-          return ticket.status === TicketStatus.SNOOZED;
+          return (
+            ticket.status === TicketStatus.OPEN &&
+            ticket.snooze_until &&
+            new Date(ticket.snooze_until) > currentTime
+          );
         case 'Done':
           return ticket.status === TicketStatus.CLOSED;
         default:
           return true;
       }
     });
-    return filteredTickets;
   }, [contactTickets, activeTab]);
 
   if (loading) {
