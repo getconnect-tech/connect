@@ -20,6 +20,8 @@ import {
   LabelDiv,
   BottomFrame,
   DetailSection,
+  Bottom,
+  Steps,
 } from './style';
 
 const TeamInviteStep = () => {
@@ -141,11 +143,16 @@ const TeamInviteStep = () => {
           </Card>
         </Form>
       </CenterCardNext>
-      <Button
-        title='Get started'
-        onClick={handleGetStarted}
-        isLoading={workspaceStore.loading}
-      />
+      <Bottom>
+        <Steps>
+          <p>Step 3 of 3</p>
+        </Steps>
+        <Button
+          title='Get started'
+          onClick={handleGetStarted}
+          isLoading={workspaceStore.loading}
+        />
+      </Bottom>
     </>
   );
 };
