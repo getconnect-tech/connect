@@ -24,10 +24,11 @@ interface Props {
   email?: string;
   isCompany?: boolean;
   groupInfo?: GroupInfo[];
-  openCount: string;
-  closeCount: string;
+  openCount?: string;
+  closeCount?: string;
   peopleCount?: string;
   isShowNavbar: boolean;
+  showTicketCount?: boolean;
   onClick?: () => void;
 }
 
@@ -41,6 +42,7 @@ export default function ContactCard({
   closeCount,
   peopleCount,
   isShowNavbar,
+  showTicketCount = true,
   onClick,
 }: Props) {
   return (
@@ -98,11 +100,13 @@ export default function ContactCard({
           </div>
         </TitleDiv>
       </LeftDiv>
-      <RightDiv>
-        <p>{openCount} Open</p>
-        <DotIcon />
-        <p>{closeCount} Closed</p>
-      </RightDiv>
+      {showTicketCount && openCount && closeCount && (
+        <RightDiv>
+          <p>{openCount} Open</p>
+          <DotIcon />
+          <p>{closeCount} Closed</p>
+        </RightDiv>
+      )}
     </CardMainDiv>
   );
 }
