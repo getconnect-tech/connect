@@ -8,6 +8,7 @@ import { messageStore } from './messageStore';
 import { contactStore } from './contactStore';
 import { appStore } from './appStore';
 import { teamcampStore } from './teamcampStore';
+import { groupStore } from './groupStore';
 
 // Combine all stores in one object
 const stores = {
@@ -19,6 +20,7 @@ const stores = {
   contactStore,
   teamcampStore,
   appStore,
+  groupStore,
 };
 export default stores;
 
@@ -33,5 +35,6 @@ export const useStores = () => {
     contactStore: typeof contactStore;
     teamcampStore: typeof teamcampStore;
     appStore: typeof appStore;
+    groupStore: typeof groupStore;
   };
 };

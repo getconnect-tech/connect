@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import React, { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import ContactCard from '@/components/contactCard/contactCard';
 import ContactsLoading from '@/components/contactsLoading/contactsLoading';
 import EmptyState from '@/components/emptyState/emptyState';
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export default function PersonList({ activeTab, isShowNavbar }: Props) {
+  const router = useRouter();
   const { contactStore } = useStores();
   const { groups = [] } = contactStore;
   const [cardItem, setCardItem] = useState<Group[]>([]);
@@ -36,6 +38,10 @@ export default function PersonList({ activeTab, isShowNavbar }: Props) {
     setIsLoading(true);
     cardInformation();
   }, [activeTab, cardInformation]);
+
+  const handleGroupClick = (groupId: string) => {
+    router.push(`/group/${groupId}`);
+  };
 
   if (isLoading) {
     return <ContactsLoading />;
@@ -75,6 +81,7 @@ export default function PersonList({ activeTab, isShowNavbar }: Props) {
           isCompany={false}
           peopleCount={card.contacts_count ? `${card.contacts_count}` : '0'}
           isShowNavbar={isShowNavbar}
+          onClick={() => card.group_id && handleGroupClick(card.group_id)}
         />
       ))}
     </ListMainDiv>

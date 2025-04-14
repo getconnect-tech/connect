@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import { Provider } from 'mobx-react';
+import { stores } from '@/stores';
 import GroupDetailComponent from './groupDetail';
 
 interface Props {
@@ -10,5 +12,9 @@ interface Props {
 }
 
 export default function GroupPage({ params }: Props) {
-  return <GroupDetailComponent groupId={params.groupId} />;
+  return (
+    <Provider {...stores}>
+      <GroupDetailComponent groupId={params.groupId} />
+    </Provider>
+  );
 } 
