@@ -39,6 +39,33 @@ The contact module provides a comprehensive view of individual contacts and thei
 </SplitViewContainer>
 ```
 
+### Workspace Initialization
+
+The contact detail page implements a robust workspace initialization process:
+
+1. **Loading State**:
+
+   - Shows loading spinner during workspace and contact data initialization
+   - Prevents "workspace_id required" errors during page loads
+   - Handles both direct URL access and navigation from other pages
+
+2. **Initialization Flow**:
+
+   ```typescript
+   // Initialization sequence
+   const initializeWorkspace = async () => {
+     // 1. Get workspace ID from preferences
+     const workspaceId =
+       await UserPreferenceSingleton.getInstance().getCurrentWorkspace();
+
+     // 2. Load workspace data
+     await getWorkspaceById(workspaceId);
+
+     // 3. Load contact details
+     await getContactDetailById(contactId);
+   };
+   ```
+
 ### Group Information Display
 
 The contact detail view shows all groups a contact belongs to, with each group displaying:
@@ -100,4 +127,4 @@ interface Contact {
 
 ## Quick Summary
 
-The contact module provides a unified interface for managing contact information and their associated tickets, implementing the same ticket management patterns as the inbox module for a consistent user experience. It displays comprehensive contact details, group affiliations with statistics, and ticket management capabilities while maintaining proper API integration and error handling.
+The contact module provides a unified interface for managing contact information and their associated tickets, implementing the same ticket management patterns as the inbox module for a consistent user experience. It displays comprehensive contact details, group affiliations with statistics, and ticket management capabilities while maintaining proper API integration and error handling. The module includes robust workspace initialization to ensure proper data loading and prevent common errors.

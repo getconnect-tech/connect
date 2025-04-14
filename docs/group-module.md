@@ -17,6 +17,33 @@ Located at `app/group/[groupId]/groupDetail.tsx`
 - Lists all contacts belonging to the group
 - Displays tickets filtered by status (Open, Snoozed, Done)
 
+### Workspace Initialization
+
+The group detail page implements a robust workspace initialization process:
+
+1. **Loading State**:
+
+   - Shows loading spinner during workspace initialization
+   - Prevents "workspace_id required" errors during page loads
+   - Handles both direct URL access and navigation from other pages
+
+2. **Initialization Flow**:
+
+   ```typescript
+   // Initialization sequence
+   const initializeWorkspace = async () => {
+     // 1. Get workspace ID from preferences
+     const workspaceId =
+       await UserPreferenceSingleton.getInstance().getCurrentWorkspace();
+
+     // 2. Load workspace data
+     await getWorkspaceById(workspaceId);
+
+     // 3. Initialize group details component
+     setIsInitialized(true);
+   };
+   ```
+
 #### Props
 
 ```typescript
