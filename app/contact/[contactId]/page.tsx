@@ -1,12 +1,12 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { useParams } from 'next/navigation';
 import { useStores } from '@/stores';
 import { getContactDetailById } from '@/services/clientSide/contactServices';
 import { getWorkspaceById } from '@/services/clientSide/workspaceServices';
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
 import InboxLoading from '@/components/inboxLoading/inboxLoading';
+import { Contact, GroupInfo } from '@/utils/dataTypes';
 import ContactDetail from './contactDetail';
 
 interface Props {
@@ -21,26 +21,38 @@ const ContactDetailPage = ({ params }: Props) => {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    const initializeWorkspace = async () => {
+    const initializeData = async () => {
       try {
+        // Get workspace ID from preferences
         const workspaceId =
           await UserPreferenceSingleton.getInstance().getCurrentWorkspace();
-        if (workspaceId) {
-          await getWorkspaceById(workspaceId);
-          // Only fetch contact details after workspace is initialized
-          if (contactId) {
-            await getContactDetailById(contactId);
-          }
-          setIsInitialized(true);
+
+        if (!workspaceId) {
+          throw new Error('No workspace selected');
         }
+
+        // If workspace data is not already loaded, load it
+        if (!workspaceStore.currentWorkspace?.id) {
+          await getWorkspaceById(workspaceId);
+        }
+
+        // Load contact details in parallel with workspace if needed
+        await getContactDetailById(contactId);
+
+        setIsInitialized(true);
       } catch (error) {
-        console.error('Error initializing workspace:', error);
-        setIsInitialized(true); // Set to true even on error to show error state in child component
+        console.error('Error initializing data:', error);
+        setIsInitialized(true);
       }
     };
 
-    initializeWorkspace();
-  }, [contactId]);
+    initializeData();
+
+    // Cleanup function
+    return () => {
+      contactStore.clearContactDetails();
+    };
+  }, [contactId, workspaceStore.currentWorkspace?.id]);
 
   if (!isInitialized) {
     return <InboxLoading />;

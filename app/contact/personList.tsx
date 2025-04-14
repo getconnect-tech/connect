@@ -7,7 +7,8 @@ import { useStores } from '@/stores';
 import { isEmpty } from '@/helpers/common';
 import { getContactData } from '@/services/clientSide/contactServices';
 import ContactsLoading from '@/components/contactsLoading/contactsLoading';
-import { Contact, GroupInfo } from '@/utils/dataTypes';
+import { Contact } from '@/utils/dataTypes';
+import { formatGroups } from '@/utils/formatGroups';
 import { ListMainDiv } from './style';
 
 interface Props {
@@ -37,17 +38,6 @@ const PersonList = ({ isShowNavbar }: Props) => {
   useEffect(() => {
     loadData();
   }, [loadData]);
-
-  const formatGroups = (groups: Contact['groups']): GroupInfo[] | undefined => {
-    if (!groups) return undefined;
-    return groups.map((group) => ({
-      ...group,
-      group_id: group.group_id || null,
-      avatar: group.avatar || null,
-      group_label: group.group_label || null,
-      contacts_count: group.contacts_count || null,
-    }));
-  };
 
   const handleContactClick = (contactId: string) => {
     router.push(`/contact/${contactId}`);

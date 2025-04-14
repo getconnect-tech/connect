@@ -2,11 +2,11 @@
 
 import React, { useEffect, useState } from 'react';
 import { Provider } from 'mobx-react';
-import { stores } from '@/stores';
+import stores from '@/stores';
 import { getWorkspaceById } from '@/services/clientSide/workspaceServices';
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
-import GroupDetailComponent from './groupDetail';
 import InboxLoading from '@/components/inboxLoading/inboxLoading';
+import GroupDetail from './groupDetail';
 
 interface Props {
   params: {
@@ -18,21 +18,38 @@ const GroupPage = ({ params }: Props) => {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    const initializeWorkspace = async () => {
+    const initializeData = async () => {
       try {
-        const workspaceId = await UserPreferenceSingleton.getInstance().getCurrentWorkspace();
-        if (workspaceId) {
-          await getWorkspaceById(workspaceId);
-          setIsInitialized(true);
+        // Get workspace ID from preferences
+        const workspaceId =
+          await UserPreferenceSingleton.getInstance().getCurrentWorkspace();
+
+        if (!workspaceId) {
+          throw new Error('No workspace selected');
         }
+
+        // If workspace data is not already loaded, load it
+        if (!stores.workspaceStore.currentWorkspace?.id) {
+          await getWorkspaceById(workspaceId);
+        }
+
+        // Load group details in parallel with workspace if needed
+        await stores.groupStore.loadGroupDetails(params.groupId);
+
+        setIsInitialized(true);
       } catch (error) {
-        console.error('Error initializing workspace:', error);
+        console.error('Error initializing data:', error);
         setIsInitialized(true);
       }
     };
 
-    initializeWorkspace();
-  }, []);
+    initializeData();
+
+    // Cleanup function
+    return () => {
+      stores.groupStore.clearGroupDetails();
+    };
+  }, [params.groupId, stores.workspaceStore.currentWorkspace?.id]);
 
   if (!isInitialized) {
     return (
@@ -44,9 +61,9 @@ const GroupPage = ({ params }: Props) => {
 
   return (
     <Provider {...stores}>
-      <GroupDetailComponent groupId={params.groupId} />
+      <GroupDetail groupId={params.groupId} />
     </Provider>
   );
 };
 
-export default GroupPage; 
+export default GroupPage;

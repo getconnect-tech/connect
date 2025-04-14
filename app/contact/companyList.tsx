@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import React, { useCallback, useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
 import ContactCard from '@/components/contactCard/contactCard';
 import ContactsLoading from '@/components/contactsLoading/contactsLoading';
@@ -13,7 +14,7 @@ interface Props {
   isShowNavbar: boolean;
 }
 
-export default function PersonList({ activeTab, isShowNavbar }: Props) {
+const CompanyList = observer(({ activeTab, isShowNavbar }: Props) => {
   const router = useRouter();
   const { contactStore } = useStores();
   const { groups = [] } = contactStore;
@@ -86,4 +87,6 @@ export default function PersonList({ activeTab, isShowNavbar }: Props) {
       ))}
     </ListMainDiv>
   );
-}
+});
+
+export default CompanyList;
