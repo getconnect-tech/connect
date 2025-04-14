@@ -151,18 +151,26 @@ const ContactDetailComponent = ({ contactId }: ContactDetailProps) => {
                     ))}
                 </ContactCustomTraits>
               )}
-              {currentWorkspace && (
+              {currentContact.groups && currentContact.groups.length > 0 && (
                 <WorkspaceInfo>
-                  <WorkspaceName>Workspace Information</WorkspaceName>
+                  <WorkspaceName>Group Information</WorkspaceName>
                   <WorkspaceDetails>
-                    <div>Name: {currentWorkspace.name}</div>
-                    <div>ID: {currentWorkspace.id}</div>
-                    {currentWorkspace.industry && (
-                      <div>Industry: {currentWorkspace.industry}</div>
-                    )}
-                    {currentWorkspace.teamSize && (
-                      <div>Team Size: {currentWorkspace.teamSize}</div>
-                    )}
+                    {currentContact.groups.map((group) => (
+                      <div key={group.id}>
+                        <div>Name: {group.name}</div>
+                        {group.group_label && (
+                          <div>Label: {group.group_label}</div>
+                        )}
+                        {group.contacts_count !== undefined && (
+                          <div>Contacts: {group.contacts_count}</div>
+                        )}
+                        <div>Open Tickets: {group.ticketsCount.OPEN || 0}</div>
+                        <div>
+                          Closed Tickets: {group.ticketsCount.CLOSED || 0}
+                        </div>
+                        <hr style={{ margin: '8px 0' }} />
+                      </div>
+                    ))}
                   </WorkspaceDetails>
                 </WorkspaceInfo>
               )}
