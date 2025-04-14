@@ -7,7 +7,10 @@ The contact module provides a comprehensive view of individual contacts and thei
 ## Key Features
 
 - **Contact Details Display**: Shows contact information including name, email, phone, address, and custom traits
-- **Workspace Context**: Displays current workspace information for context
+- **Group Information**: Displays all groups the contact belongs to, including:
+  - Group name and label
+  - Number of contacts in each group
+  - Open and closed ticket counts per group
 - **Ticket Management**:
   - Implements three ticket states: Open, Snoozed, and Done
   - Matches inbox behavior for ticket filtering and display
@@ -22,7 +25,12 @@ The contact module provides a comprehensive view of individual contacts and thei
 <SplitViewContainer>
   <LeftPanel>
     // Contact information display
-    // Workspace information
+    <ContactInfo>
+      // Basic contact details (name, email, phone)
+      // Address information
+      // Custom traits
+      // Group information with statistics
+    </ContactInfo>
   </LeftPanel>
   <RightPanel>
     // Ticket management tabs (Open/Snoozed/Done)
@@ -30,6 +38,16 @@ The contact module provides a comprehensive view of individual contacts and thei
   </RightPanel>
 </SplitViewContainer>
 ```
+
+### Group Information Display
+
+The contact detail view shows all groups a contact belongs to, with each group displaying:
+
+- Group name
+- Group label (if available)
+- Number of contacts in the group
+- Number of open tickets
+- Number of closed tickets
 
 ### Ticket Filtering Logic
 
@@ -51,8 +69,35 @@ case 'Done':
 
 - Uses workspace-authenticated endpoints for contact and ticket data
 - Implements proper error handling and loading states
-- Maintains consistent header handling for workspace context
+- Includes group data in contact details API response
+- Formats group information with ticket statistics
+
+## Data Structure
+
+The contact detail API returns contact information including:
+
+```typescript
+interface Contact {
+  // Basic contact information
+  id: string;
+  name: string;
+  email: string;
+  // ... other contact fields
+
+  // Group information
+  groups: Array<{
+    id: string;
+    name: string;
+    group_label?: string;
+    contacts_count: number;
+    ticketsCount: {
+      OPEN: number;
+      CLOSED: number;
+    };
+  }>;
+}
+```
 
 ## Quick Summary
 
-The contact module provides a unified interface for managing contact information and their associated tickets, implementing the same ticket management patterns as the inbox module for a consistent user experience. It handles contact details display, ticket filtering, and workspace context while maintaining proper API integration and error handling.
+The contact module provides a unified interface for managing contact information and their associated tickets, implementing the same ticket management patterns as the inbox module for a consistent user experience. It displays comprehensive contact details, group affiliations with statistics, and ticket management capabilities while maintaining proper API integration and error handling.
