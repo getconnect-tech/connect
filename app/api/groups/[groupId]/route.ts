@@ -131,6 +131,7 @@ export const GET = withWorkspaceAuth(async (req, { groupId }) => {
 
       return {
         ...rest,
+        labels: ticket.labels.map((x) => x.label),
         last_message: last_message || null,
         has_read,
       };
