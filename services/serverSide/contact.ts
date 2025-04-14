@@ -13,9 +13,69 @@ export const getContactByEmail = async (email: string, workspaceId: string) => {
 };
 
 export const getContactById = async (contactId: string) => {
-  const contact = await prisma.contact.findUnique({ where: { id: contactId } });
+  const contact = await prisma.contact.findUnique({
+    where: { id: contactId },
+    include: {
+      groups: {
+        select: {
+          group: {
+            select: {
+              id: true,
+              group_id: true,
+              name: true,
+              avatar: true,
+              group_label: true,
+              contacts: {
+                select: {
+                  contact: {
+                    select: {
+                      tickets: {
+                        select: {
+                          status: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
 
-  return contact;
+  if (!contact) return null;
+
+  // Format the groups data with ticket counts
+  const formattedGroups = contact.groups.map((g) => {
+    const group = g.group;
+    const ticketsCount = {} as Record<TicketStatus, number>;
+
+    for (const status of Object.values(TicketStatus)) {
+      ticketsCount[status] = 0;
+    }
+
+    // Count tickets for each contact in the group
+    group.contacts.forEach(({ contact }) => {
+      contact.tickets.forEach(({ status }) => ticketsCount[status]++);
+    });
+
+    return {
+      id: group.id,
+      group_id: group.group_id,
+      name: group.name,
+      avatar: group.avatar,
+      group_label: group.group_label,
+      contacts_count: group.contacts.length,
+      ticketsCount,
+    };
+  });
+
+  return {
+    ...contact,
+    groups: formattedGroups,
+  };
 };
 
 export const getWorkspaceContacts = async (workspaceId: string) => {
