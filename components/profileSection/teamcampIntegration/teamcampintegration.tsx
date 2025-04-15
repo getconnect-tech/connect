@@ -12,6 +12,7 @@ import {
   AIIcon,
   AIText,
   DetailsMainDiv,
+  EmptyStateText,
   ProfileDiv,
   Title,
   TitleDiv,
@@ -60,6 +61,8 @@ function TeamcampIntegration() {
   const renderTaskList = useMemo(() => {
     return loading ? (
       <>Loading...</>
+    ) : isEmpty(eventsToShow) ? (
+      <EmptyStateText>No tasks created yet.</EmptyStateText>
     ) : (
       <>
         {eventsToShow.map((item, index) => (

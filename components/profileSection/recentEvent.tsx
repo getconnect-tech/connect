@@ -15,7 +15,8 @@ import {
   LineDiv,
   Title,
   TitleDiv,
-  SeeAllLink, // Add a styled component for the link
+  SeeAllLink,
+  EmptyStateText, // Add a styled component for the link
 } from './styles';
 
 export default function RecentEvent() {
@@ -83,6 +84,8 @@ export default function RecentEvent() {
         <EventDetailDiv>
           {activityLoading ? (
             'Loading...'
+          ) : isEmpty(eventsToShow) ? (
+            <EmptyStateText>No events stats.</EmptyStateText>
           ) : (
             <>
               {eventsToShow.map((event: UserActivity, index) => (

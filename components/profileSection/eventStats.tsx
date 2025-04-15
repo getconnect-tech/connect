@@ -6,6 +6,7 @@ import { ticketStore } from '@/stores/ticketStore';
 import { getUserActivity } from '@/services/clientSide/ticketServices';
 import {
   DetailsItemMainDiv,
+  EmptyStateText,
   EventDetailDiv,
   EventNameDiv,
   NameDiv,
@@ -96,6 +97,8 @@ function EventStats() {
         <EventDetailDiv>
           {activityLoading ? (
             'Loading...'
+          ) : isEmpty(eventsToShow) ? (
+            <EmptyStateText>No events stats.</EmptyStateText>
           ) : (
             <>
               <DetailsItemMainDiv>
