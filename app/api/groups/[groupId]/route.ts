@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { MessageType } from '@prisma/client';
 import { handleApiError } from '@/helpers/errorHandler';
 import { updateGroup } from '@/services/serverSide/group';
 import withAdminAuth from '@/middlewares/withAdminAuth';
@@ -9,7 +10,6 @@ import {
 } from '@/lib/zod';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import { prisma } from '@/prisma/prisma';
-import { MessageType } from '@prisma/client';
 
 const UpdateRequestBody = z.object({
   name: createStringSchema('name').optional(),

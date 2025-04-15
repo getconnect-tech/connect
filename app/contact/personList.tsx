@@ -7,7 +7,6 @@ import { useStores } from '@/stores';
 import { isEmpty } from '@/helpers/common';
 import { getContactData } from '@/services/clientSide/contactServices';
 import ContactsLoading from '@/components/contactsLoading/contactsLoading';
-import { Contact } from '@/utils/dataTypes';
 import { formatGroups } from '@/utils/formatGroups';
 import { ListMainDiv } from './style';
 

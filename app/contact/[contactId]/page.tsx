@@ -6,7 +6,6 @@ import { getContactDetailById } from '@/services/clientSide/contactServices';
 import { getWorkspaceById } from '@/services/clientSide/workspaceServices';
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
 import InboxLoading from '@/components/inboxLoading/inboxLoading';
-import { Contact, GroupInfo } from '@/utils/dataTypes';
 import ContactDetail from './contactDetail';
 
 interface Props {
@@ -52,7 +51,7 @@ const ContactDetailPage = ({ params }: Props) => {
     return () => {
       contactStore.clearContactDetails();
     };
-  }, [contactId, workspaceStore.currentWorkspace?.id]);
+  }, [contactId]);
 
   if (!isInitialized) {
     return <InboxLoading />;
@@ -68,15 +67,3 @@ const ClientContactDetailPage = observer(ContactDetailPage);
 export default function Page(props: Props) {
   return <ClientContactDetailPage {...props} />;
 }
-
-// Add proper type guards
-const formatGroups = (groups: Contact['groups']): GroupInfo[] => {
-  if (!groups) return [];
-  return groups.map((group) => ({
-    ...group,
-    group_id: group.group_id ?? null,
-    avatar: group.avatar ?? null,
-    group_label: group.group_label ?? null,
-    contacts_count: group.contacts_count ?? 0,
-  }));
-};

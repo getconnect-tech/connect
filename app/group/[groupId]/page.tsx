@@ -49,7 +49,7 @@ const GroupPage = ({ params }: Props) => {
     return () => {
       stores.groupStore.clearGroupDetails();
     };
-  }, [params.groupId, stores.workspaceStore.currentWorkspace?.id]);
+  }, [params.groupId]);
 
   if (!isInitialized) {
     return (

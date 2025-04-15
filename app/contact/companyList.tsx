@@ -67,8 +67,8 @@ const CompanyList = observer(({ activeTab, isShowNavbar }: Props) => {
           key={card.id || index}
           imgSrc={
             card?.avatar &&
-              card.avatar !== 'undefined' &&
-              card.avatar !== 'null'
+            card.avatar !== 'undefined' &&
+            card.avatar !== 'null'
               ? card.avatar
               : ''
           }

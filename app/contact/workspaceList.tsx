@@ -76,8 +76,8 @@ export default function WorkspaceList({ activeTab, isShowNavbar }: Props) {
           <ContactCard
             imgSrc={
               card?.avatar &&
-                card.avatar !== 'undefined' &&
-                card.avatar !== 'null'
+              card.avatar !== 'undefined' &&
+              card.avatar !== 'null'
                 ? card.avatar
                 : ''
             }

@@ -63,7 +63,9 @@ const GroupDetailComponent = ({ groupId }: GroupDetailProps) => {
           setTicketLoading(false);
         }
       } else {
-        setTicketError('No workspace selected. Please select a workspace first.');
+        setTicketError(
+          'No workspace selected. Please select a workspace first.',
+        );
       }
     };
 
@@ -84,7 +86,8 @@ const GroupDetailComponent = ({ groupId }: GroupDetailProps) => {
           return (
             ticket.status === TicketStatus.OPEN &&
             (isEmpty(ticket?.snooze_until) ||
-              (ticket.snooze_until && new Date(ticket.snooze_until) < currentTime))
+              (ticket.snooze_until &&
+                new Date(ticket.snooze_until) < currentTime))
           );
         case 'Snoozed':
           return (
@@ -136,7 +139,7 @@ const GroupDetailComponent = ({ groupId }: GroupDetailProps) => {
                       (ticket: Ticket) =>
                         ticket.status === TicketStatus.OPEN &&
                         (!ticket.snooze_until ||
-                          new Date(ticket.snooze_until) < new Date())
+                          new Date(ticket.snooze_until) < new Date()),
                     ).length || 0}
                   </span>{' '}
                   open tickets
@@ -144,7 +147,7 @@ const GroupDetailComponent = ({ groupId }: GroupDetailProps) => {
                 <StatItem>
                   <span>
                     {groupDetails.tickets?.filter(
-                      (ticket: Ticket) => ticket.status === TicketStatus.CLOSED
+                      (ticket: Ticket) => ticket.status === TicketStatus.CLOSED,
                     ).length || 0}
                   </span>{' '}
                   closed tickets
@@ -248,4 +251,4 @@ const GroupDetailComponent = ({ groupId }: GroupDetailProps) => {
   );
 };
 
-export default observer(GroupDetailComponent); 
+export default observer(GroupDetailComponent);

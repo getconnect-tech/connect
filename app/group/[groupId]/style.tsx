@@ -174,4 +174,4 @@ export const BottomDiv = styled.div`
   flex: 1;
   overflow: auto;
   padding: 20px;
-`; 
+`;

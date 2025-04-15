@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { ContactGroups } from '@/utils/dataTypes';
 import { capitalizeString } from '@/helpers/common';
 import Avatar from '../avtar/Avtar';
 import {
