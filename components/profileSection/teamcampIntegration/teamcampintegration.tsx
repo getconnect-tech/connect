@@ -12,12 +12,12 @@ import {
   AIIcon,
   AIText,
   DetailsMainDiv,
-  EmptyStateText,
   ProfileDiv,
   Title,
   TitleDiv,
   WorkDetailMainDiv,
 } from '../styles';
+import EmptyStateMessage from '../emptyStateMessage';
 import {
   IconDiv,
   ItemDiv,
@@ -62,7 +62,7 @@ function TeamcampIntegration() {
     return loading ? (
       <>Loading...</>
     ) : isEmpty(eventsToShow) ? (
-      <EmptyStateText>No tasks created yet.</EmptyStateText>
+      <EmptyStateMessage message='No tasks created yet.' />
     ) : (
       <>
         {eventsToShow.map((item, index) => (

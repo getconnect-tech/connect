@@ -6,7 +6,6 @@ import { ticketStore } from '@/stores/ticketStore';
 import { getUserActivity } from '@/services/clientSide/ticketServices';
 import {
   DetailsItemMainDiv,
-  EmptyStateText,
   EventDetailDiv,
   EventNameDiv,
   NameDiv,
@@ -15,6 +14,7 @@ import {
   TitleDiv,
   WorkDetailMainDiv,
 } from './styles';
+import EmptyStateMessage from './emptyStateMessage';
 
 function EventStats() {
   // Store data
@@ -98,7 +98,7 @@ function EventStats() {
           {activityLoading ? (
             'Loading...'
           ) : isEmpty(eventsToShow) ? (
-            <EmptyStateText>No events stats.</EmptyStateText>
+            <EmptyStateMessage message='No events stats.' />
           ) : (
             <>
               <DetailsItemMainDiv>
