@@ -1,194 +1,256 @@
-# Getting Started
+# Getting Started with Connect Support System
 
-This guide will help you set up and run the Connect Support System locally.
+## Quick Start Guide
 
-## Prerequisites
+### Prerequisites
 
 - Node.js (v18 or higher)
-- npm or yarn
-- PostgreSQL database
-- Git
-- Email service (for OTP delivery)
+- PostgreSQL (v14 or higher)
+- Firebase account
+- Environment variables setup
 
-## Installation
+### Installation
 
-1. Clone the repository:
+1. **Clone the Repository**
 
-```bash
-git clone https://github.com/your-org/connect.git
-cd connect
+   ```bash
+   git clone [repository-url]
+   cd connect
+   ```
+
+2. **Install Dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Environment Setup**
+   Create a `.env` file in the root directory with:
+
+   ```env
+   DATABASE_URL="postgresql://user:password@localhost:5432/connect"
+   NEXTAUTH_SECRET="your-secret-key"
+   NEXTAUTH_URL="http://localhost:3000"
+   FIREBASE_API_KEY="your-firebase-key"
+   FIREBASE_AUTH_DOMAIN="your-firebase-domain"
+   FIREBASE_PROJECT_ID="your-project-id"
+   FIREBASE_STORAGE_BUCKET="your-storage-bucket"
+   FIREBASE_MESSAGING_SENDER_ID="your-sender-id"
+   FIREBASE_APP_ID="your-app-id"
+   ```
+
+4. **Database Setup**
+
+   ```bash
+   npx prisma migrate dev
+   npx prisma generate
+   ```
+
+5. **Start Development Server**
+   ```bash
+   npm run dev
+   ```
+
+## Development Workflow
+
+### Project Structure
+
+```
+connect/
+├── app/                 # Next.js app directory
+│   ├── api/            # API routes
+│   └── (routes)/       # Page routes
+├── components/         # Reusable components
+├── prisma/            # Database schema
+├── services/          # Business logic
+├── stores/            # MobX stores
+└── utils/             # Utility functions
 ```
 
-2. Install dependencies:
+### Key Files to Know
 
-```bash
-yarn install
-```
+- `prisma/schema.prisma` - Database schema
+- `app/api/` - API endpoints
+- `components/` - UI components
+- `stores/` - State management
+- `utils/appTypes.tsx` - Type definitions
 
-3. Set up environment variables:
+### Common Tasks
 
-```bash
-cp .env.example .env
-```
-
-Edit the `.env` file with your configuration values, including:
-
-- Database credentials
-- Email service credentials
-- OAuth provider credentials
-- NextAuth secret
-
-4. Set up the database:
-
-```bash
-yarn prisma generate
-yarn prisma migrate dev
-```
-
-## Development
-
-1. Start the development server:
-
-```bash
-yarn dev
-```
-
-2. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Authentication Setup
-
-### Email/OTP Configuration
-
-1. Configure email service in `.env`:
-
-```env
-EMAIL_SERVER_HOST=smtp.example.com
-EMAIL_SERVER_PORT=587
-EMAIL_SERVER_USER=user@example.com
-EMAIL_SERVER_PASSWORD=password
-EMAIL_FROM=noreply@example.com
-```
-
-2. Configure OTP settings:
-
-```env
-OTP_EXPIRY_MINUTES=5
-OTP_MAX_ATTEMPTS=3
-OTP_RATE_LIMIT=3
-```
-
-### OAuth Configuration
-
-1. Set up OAuth providers in `.env`:
-
-```env
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
-GITHUB_CLIENT_ID=your-github-client-id
-GITHUB_CLIENT_SECRET=your-github-client-secret
-```
-
-## Project Structure
-
-### Key Directories
-
-- `app/` - Next.js app router pages and API routes
-- `components/` - Reusable React components
-- `prisma/` - Database schema and migrations
-- `services/` - Business logic and external services
-- `stores/` - MobX state management
-- `styles/` - Global styles and themes
-- `utils/` - Utility functions
-
-### Configuration Files
-
-- `.env` - Environment variables
-- `next.config.mjs` - Next.js configuration
-- `tsconfig.json` - TypeScript configuration
-- `.eslintrc.json` - ESLint configuration
-- `.prettierrc` - Prettier configuration
-
-## Available Scripts
-
-- `yarn dev` - Start development server
-- `yarn build` - Build for production
-- `yarn start` - Start production server
-- `yarn lint` - Run ESLint
-- `yarn format` - Format code with Prettier
-- `yarn prisma generate` - Generate Prisma client
-- `yarn prisma migrate dev` - Run database migrations
-
-## Common Tasks
-
-### Creating a New Component
-
-1. Create a new file in `components/`:
+#### 1. Creating a New API Endpoint
 
 ```typescript
-// components/NewComponent.tsx
-import React from 'react';
+// app/api/example/route.ts
+import { withWorkspaceAuth } from '@/middlewares/withWorkspaceAuth';
 
-interface NewComponentProps {
-  // Props interface
-}
+export const GET = withWorkspaceAuth(async (req) => {
+  try {
+    // Your code here
+    return Response.json({ data: 'success' });
+  } catch (err) {
+    return handleApiError(err);
+  }
+});
+```
 
-export const NewComponent: React.FC<NewComponentProps> = ({}) => {
+#### 2. Creating a New Component
+
+```typescript
+// components/Example/Example.tsx
+import { observer } from 'mobx-react-lite';
+import { useStores } from '@/stores';
+
+const Example = () => {
+  const { exampleStore } = useStores();
+
   return (
     <div>
-      {/* Component content */}
+      {/* Your component JSX */}
     </div>
   );
 };
+
+export default observer(Example);
 ```
 
-### Adding a New API Route
-
-1. Create a new file in `app/api/`:
+#### 3. Adding New Types
 
 ```typescript
-// app/api/new-route/route.ts
-import { NextResponse } from 'next/server';
-
-export async function GET() {
-  return NextResponse.json({ message: 'Hello World' });
+// utils/appTypes.tsx
+export interface NewType {
+  id: string;
+  name: string;
+  // Add more properties
 }
 ```
 
-### Database Changes
+### Development Tips
 
-1. Modify the schema in `prisma/schema.prisma`
-2. Generate migration:
+1. **State Management**
+
+   - Use MobX stores for global state
+   - Use React state for component-specific state
+   - Follow the observer pattern
+
+2. **API Development**
+
+   - Always use workspace authentication
+   - Validate inputs with Zod
+   - Handle errors properly
+   - Use proper HTTP status codes
+
+3. **Component Development**
+
+   - Make components reusable
+   - Use TypeScript for type safety
+   - Follow the single responsibility principle
+   - Use proper naming conventions
+
+4. **Database Operations**
+   - Use Prisma for database operations
+   - Create migrations for schema changes
+   - Follow naming conventions
+   - Add proper indexes
+
+### Common Commands
 
 ```bash
-yarn prisma migrate dev --name your_migration_name
+# Start development server
+npm run dev
+
+# Run tests
+npm run test
+
+# Generate Prisma client
+npx prisma generate
+
+# Create migration
+npx prisma migrate dev --name migration_name
+
+# Format code
+npm run format
+
+# Lint code
+npm run lint
 ```
 
-## Troubleshooting
+### Debugging
 
-### Common Issues
+1. **API Debugging**
 
-1. **Database Connection Issues**
+   - Use Postman or similar tools
+   - Check network tab in dev tools
+   - Look for error responses
+   - Check server logs
 
-   - Verify database credentials in `.env`
-   - Ensure PostgreSQL is running
-   - Check network connectivity
+2. **Component Debugging**
 
-2. **Authentication Issues**
+   - Use React DevTools
+   - Check component props
+   - Monitor state changes
+   - Use console.log strategically
 
-   - Verify email service configuration
-   - Check OTP settings
-   - Verify OAuth provider credentials
-   - Check session configuration
+3. **Database Debugging**
+   - Use Prisma Studio
+   - Check query logs
+   - Verify migrations
+   - Check constraints
 
-3. **Build Errors**
+### Best Practices
 
-   - Clear `.next` directory
-   - Run `yarn install` again
-   - Check TypeScript errors
+1. **Code Organization**
 
-## Next Steps
+   - Follow the project structure
+   - Keep files focused
+   - Use proper naming
+   - Document your code
 
-- [Architecture Overview](./architecture.md)
-- [API Documentation](./api/README.md)
-- [Database Schema](./database-schema.md)
-- [Authentication Guide](./authentication.md)
+2. **Performance**
+
+   - Optimize images
+   - Use proper loading states
+   - Implement caching
+   - Monitor bundle size
+
+3. **Security**
+   - Validate all inputs
+   - Use proper authentication
+   - Follow security guidelines
+   - Keep dependencies updated
+
+### Getting Help
+
+1. **Documentation**
+
+   - Check `doc/system-documentation.md`
+   - Read API documentation
+   - Review component docs
+   - Check type definitions
+
+2. **Support**
+   - Check existing issues
+   - Create new issues
+   - Ask team members
+   - Review pull requests
+
+### Next Steps
+
+1. **Explore the Codebase**
+
+   - Review existing components
+   - Study API endpoints
+   - Understand data flow
+   - Check type definitions
+
+2. **Start Developing**
+
+   - Pick a small task
+   - Follow the workflow
+   - Write tests
+   - Get code review
+
+3. **Learn More**
+   - Read Next.js docs
+   - Study TypeScript
+   - Learn MobX
+   - Understand Prisma
