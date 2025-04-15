@@ -3,7 +3,7 @@
 /* eslint-disable max-len */
 import React, { useCallback, useState } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
-import { PriorityLevels, TicketStatus } from '@prisma/client';
+import { PriorityLevels, TicketStatus, User } from '@prisma/client';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { priorityItem, snoozeItem } from '@/helpers/raw';
 import { useStores } from '@/stores';
@@ -65,7 +65,7 @@ export default function CustomContextMenu(props: Props) {
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
-    ...(currentWorkspace?.users?.map((user) => ({
+    ...(currentWorkspace?.users?.map((user: User) => ({
       name: user.display_name || '',
       src: user.profile_url || '',
       isName: true,
