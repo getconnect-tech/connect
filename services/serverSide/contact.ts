@@ -1,4 +1,4 @@
-import { TicketStatus } from '@prisma/client';
+import { MessageType, TicketStatus } from '@prisma/client';
 import moment from 'moment';
 import { prisma } from '@/prisma/prisma';
 import { findUserByEmail, getUserActivities } from '@/lib/amplitude';
@@ -13,7 +13,45 @@ export const getContactByEmail = async (email: string, workspaceId: string) => {
 };
 
 export const getContactById = async (contactId: string) => {
-  const contact = await prisma.contact.findUnique({ where: { id: contactId } });
+  const contact = await prisma.contact.findUnique({
+    where: { id: contactId },
+    include: {
+      tickets: {
+        include: {
+          labels: { include: { label: true } },
+          contact: true,
+          assigned_user: true,
+          messages: {
+            where: {
+              type: {
+                in: [
+                  MessageType.FROM_CONTACT,
+                  MessageType.EMAIL,
+                  MessageType.REGULAR,
+                ],
+              },
+            },
+            select: {
+              created_at: true,
+              author: {
+                select: {
+                  id: true,
+                  email: true,
+                  display_name: true,
+                  profile_url: true,
+                },
+              },
+              content: true,
+              type: true,
+            },
+            take: 1, // Only get the most recent message
+            orderBy: { created_at: 'desc' },
+          },
+        },
+      },
+      groups: true,
+    },
+  });
 
   return contact;
 };
