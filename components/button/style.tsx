@@ -15,10 +15,7 @@ interface WrapButton {
 interface Prop {
   isLoading?: boolean;
   isDelete?: boolean;
-  width?: string | number;
-  disabled?: boolean;
-  variant?: 'primary' | 'secondary' | 'tertiary';
-  size?: 'small' | 'medium' | 'large';
+  width?: boolean;
 }
 
 const Buttons = styled.button<WrapButton>`
@@ -71,18 +68,18 @@ const Buttons = styled.button<WrapButton>`
       border: var(--border-disabled);
       background-color: var(
         ${props.secondary
-        ? 'transparent'
-        : props.isLoading
-          ? '--brand'
-          : '--brand-disabled'}
+          ? 'transparent'
+          : props.isLoading
+            ? '--brand'
+            : '--brand-disabled'}
       );
       &:hover {
         background-color: var(
           ${props.secondary
-        ? 'transparent'
-        : props.isLoading
-          ? '--brand'
-          : '--brand-disabled'}
+            ? 'transparent'
+            : props.isLoading
+              ? '--brand'
+              : '--brand-disabled'}
         );
       }
     `}

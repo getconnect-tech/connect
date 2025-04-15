@@ -14,7 +14,7 @@ import {
 } from './styles';
 
 interface Props {
-  groupInfo: Group;
+  groupInfo: ContactGroups;
 }
 
 interface GroupInformation {

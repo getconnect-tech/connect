@@ -11,14 +11,15 @@ interface Props {
   error?: string;
   className?: string;
   login?: boolean;
-  value?: string | number;
+  value?: any;
   type?: 'email' | 'password' | 'text' | 'number';
   variant?: 'large' | 'medium' | 'small';
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  // eslint-disable-next-line no-unused-vars
+  onChange?: any;
   onKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   disabled?: boolean;
   style?: React.CSSProperties;
-  inputRef?: React.RefObject<HTMLInputElement>;
+  inputRef?: any;
   autoFocus?: boolean;
   iconName?: string;
   iconSize?: string;

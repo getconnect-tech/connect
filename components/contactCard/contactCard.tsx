@@ -28,7 +28,6 @@ interface Props {
   closeCount: string;
   peopleCount?: string;
   isShowNavbar: boolean;
-  onClick?: () => void;
 }
 
 export default function ContactCard({
@@ -41,14 +40,9 @@ export default function ContactCard({
   closeCount,
   peopleCount,
   isShowNavbar,
-  onClick,
 }: Props) {
   return (
-    <CardMainDiv
-      isShowNavbar={isShowNavbar}
-      onClick={onClick}
-      style={{ cursor: onClick ? 'pointer' : 'default' }}
-    >
+    <CardMainDiv isShowNavbar={isShowNavbar}>
       <LeftDiv>
         <Avatar
           imgSrc={imgSrc}

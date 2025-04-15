@@ -3,7 +3,6 @@ import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { getAPIErrorMessage } from '@/helpers/common';
 import { contactStore } from '@/stores/contactStore';
 import { messageStore } from '@/stores/messageStore';
-import { workspaceStore } from '@/stores/workspaceStore';
 
 /**
  * @desc Get contact data
@@ -79,11 +78,6 @@ export const getContactDetailById = async (contactId: string) => {
     contactStore.setLoading(true);
     const response = await axios.get(
       `${NEXT_PUBLIC_API_URL}/contacts/${contactId}`,
-      {
-        headers: {
-          workspace_id: workspaceStore.currentWorkspace?.id,
-        },
-      },
     );
     const { data } = response;
     contactStore.setContactDetails(data);
