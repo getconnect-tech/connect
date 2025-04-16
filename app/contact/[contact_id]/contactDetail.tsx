@@ -99,14 +99,12 @@ function ContactDetail() {
           <WorkSpaceSection>
             <Title className='workspace-title'>Workspaces</Title>
             <WorkspaceItemSection>
-              {workspaces.map((item) => {
-                return (
-                  <ItemDiv key={item.name}>
-                    <Avatar imgSrc={item.imgSrc} name={''} size={20} />
-                    <Value>{item.name}</Value>
-                  </ItemDiv>
-                );
-              })}
+              {workspaces.map((item) => (
+                <ItemDiv key={item.name}>
+                  <Avatar imgSrc={item.imgSrc} name={''} size={20} />
+                  <Value>{item.name}</Value>
+                </ItemDiv>
+              ))}
             </WorkspaceItemSection>
           </WorkSpaceSection>
         </LeftProfileSection>
