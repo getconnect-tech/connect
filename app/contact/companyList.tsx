@@ -35,6 +35,7 @@ export default function PersonList({ activeTab, isShowNavbar }: Props) {
             {cardItem.map((card: Group, index: number) => (
               <ContactCard
                 key={index}
+                contactId={card.id}
                 imgSrc={
                   card?.avatar
                     ? card.avatar === 'undefined' || card.avatar === 'null'

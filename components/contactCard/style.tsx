@@ -11,6 +11,7 @@ const CardMainDiv = styled.div<Props>`
   justify-content: space-between;
   align-items: center;
   border-bottom: var(--border-light);
+  cursor: pointer;
   &:last-child {
     border-bottom: none;
   }

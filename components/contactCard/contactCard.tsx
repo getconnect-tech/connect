@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import Avatar from '../avtar/Avtar';
 import {
   CardMainDiv,
@@ -28,6 +29,7 @@ interface Props {
   closeCount: string;
   peopleCount?: string;
   isShowNavbar: boolean;
+  contactId?: string;
 }
 
 export default function ContactCard({
@@ -40,9 +42,16 @@ export default function ContactCard({
   closeCount,
   peopleCount,
   isShowNavbar,
+  contactId,
 }: Props) {
+  const router = useRouter();
+
+  const handleClick = useCallback(() => {
+    router.push(`/contact/${contactId}`);
+  }, [contactId, router]);
+
   return (
-    <CardMainDiv isShowNavbar={isShowNavbar}>
+    <CardMainDiv onClick={handleClick} isShowNavbar={isShowNavbar}>
       <LeftDiv>
         <Avatar
           imgSrc={imgSrc}
