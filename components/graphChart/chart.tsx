@@ -73,16 +73,20 @@ const CustomChart = ({ valueTitle, title, chartData }: Props) => {
     moment().subtract(27 - i, 'days'),
   );
 
-  // Find indexes of all Mondays in the array
-  const mondayIndexes = last28Days.reduce((acc, date, index) => {
-    if (date.format('ddd') === 'Mon') acc.push(index);
+  // Find weekend pairs (Saturday and Sunday together)
+  const weekendPairs = last28Days.reduce((acc, date, index) => {
+    const day = date.format('ddd');
+    if (day === 'Sat') {
+      acc.push([index, index + 1]); // Store Saturday and Sunday indexes together
+    }
     return acc;
-  }, [] as number[]);
+  }, [] as number[][]);
 
-  // Generate labels - empty strings except for Mondays
-  const xAxisLabels = last28Days.map((date, index) =>
-    mondayIndexes.includes(index) ? date.format('D MMM') : '',
-  );
+  // Generate labels - show dates for weekends
+  const xAxisLabels = last28Days.map((date, index) => {
+    const isWeekendStart = weekendPairs.some(([sat]) => sat === index);
+    return isWeekendStart ? date.format('D MMM') : '';
+  });
 
   // Generate CTR data for all days
   const ctrData = chartData.map((item) => item.queueSize);
@@ -94,10 +98,12 @@ const CustomChart = ({ valueTitle, title, chartData }: Props) => {
   // Calculate dynamic bar height (max size + 50px buffer)
   const dynamicBarHeight = maxQueueSize + 5;
 
-  // Generate bar data (only on Mondays)
-  const weeklyClicksData = last28Days.map((date) => {
-    // Only show bars on Mondays, scaled to dynamic height
-    return date.format('ddd') === 'Mon' ? dynamicBarHeight : 0;
+  // Generate bar data (combined weekend bars)
+  const weekendHighlightData = last28Days.map((date, index) => {
+    // Check if this index is the start of a weekend (Saturday)
+    const isWeekendStart = weekendPairs.some(([sat]) => sat === index);
+    // Only show bar on Saturday, representing the whole weekend
+    return isWeekendStart ? dynamicBarHeight : 0;
   });
 
   const data = {
@@ -105,13 +111,13 @@ const CustomChart = ({ valueTitle, title, chartData }: Props) => {
     datasets: [
       {
         type: 'line',
-        label: 'CTR',
+        label: 'Queue Size',
         borderColor: '#5C67F4',
         borderWidth: 3,
         fill: true,
         cubicInterpolationMode: 'monotone',
         backgroundColor: gradientFill,
-        data: ctrData, // Full 28 days CTR data
+        data: ctrData,
         pointBackgroundColor: '#5C67F4',
         pointRadius: (context: any) =>
           context.dataIndex === context.dataset.data.length - 1 ? 5 : 0,
@@ -120,16 +126,16 @@ const CustomChart = ({ valueTitle, title, chartData }: Props) => {
       },
       {
         type: 'bar',
-        label: 'Clicks',
+        label: 'Weekend',
         borderWidth: 1,
         borderSkipped: false,
-        backgroundColor: 'transparent', // Only visible on Mondays
-        data: weeklyClicksData, // 0 for non-Mondays
-        barThickness: 70,
+        backgroundColor: 'transparent',
+        data: weekendHighlightData,
+        barThickness: 140, // Increased thickness to cover both weekend days
         borderColor: (context: any) => {
           const chart = context.chart;
           const { ctx, chartArea } = chart;
-          if (!chartArea) return 'rgba(233, 232, 229, 1)'; // Fallback color
+          if (!chartArea) return 'rgba(233, 232, 229, 1)';
 
           const gradient = ctx.createLinearGradient(
             0,
@@ -137,8 +143,8 @@ const CustomChart = ({ valueTitle, title, chartData }: Props) => {
             0,
             chartArea.top,
           );
-          gradient.addColorStop(0, 'rgba(233, 232, 229, 1)'); // Dark at Bottom
-          gradient.addColorStop(1, 'rgba(255, 255, 255, 0)'); // Light at Top
+          gradient.addColorStop(0, 'rgba(233, 232, 229, 1)');
+          gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
           return gradient;
         },
       },
@@ -166,8 +172,9 @@ const CustomChart = ({ valueTitle, title, chartData }: Props) => {
 
       if (activePoints.length > 0) {
         const { datasetIndex, index } = activePoints[0];
-        const value = data.datasets[datasetIndex].data[index];
-        const label = data.labels?.[index] || '';
+        const value = data.datasets[0].data[index]; // Always use queue size data
+        const date = last28Days[index];
+        const isWeekend = weekendPairs.some(([sat]) => sat === index);
 
         // Get exact positions
         const meta = chart.getDatasetMeta(datasetIndex);
@@ -180,10 +187,10 @@ const CustomChart = ({ valueTitle, title, chartData }: Props) => {
         const xAxisPosition = yAxis.getPixelForValue(0);
 
         // Calculate positions
-        const tooltipHeight = 50; // Approximate tooltip height
-        const tooltipTop = pointY - tooltipHeight - 10; // Position above point
-        const lineTop = tooltipTop + tooltipHeight; // Bottom of tooltip
-        const lineHeight = xAxisPosition - lineTop; // Distance to x-axis
+        const tooltipHeight = 50;
+        const tooltipTop = pointY - tooltipHeight - 10;
+        const lineTop = tooltipTop + tooltipHeight;
+        const lineHeight = xAxisPosition - lineTop;
 
         if (tooltipEl) {
           tooltipEl.innerHTML = `
@@ -196,7 +203,9 @@ const CustomChart = ({ valueTitle, title, chartData }: Props) => {
                 box-shadow: var(--shadow-dropdown);
               ">
                 <div style="font-size: 12px; font-weight: 400; line-height: 16px; color: var(--text);">${value} in todo</div>
-                <div style="margin-bottom: 2px; font-size: 12px; line-height: 16px; color: var(--text-text-secondary);">${label}</div>
+                <div style="margin-bottom: 2px; font-size: 12px; line-height: 16px; color: var(--text-text-secondary);">
+                  ${date.format('D MMM')}${isWeekend ? ' (Weekend)' : ''}
+                </div>
               </div>
               
               <!--Connecting Line -->
@@ -246,7 +255,7 @@ const CustomChart = ({ valueTitle, title, chartData }: Props) => {
         tooltipEl.style.display = 'none';
       });
     };
-  }, [data.datasets, data.labels]);
+  }, [data.datasets, data.labels, last28Days, weekendPairs]);
 
   const options: ChartOptions<'bar' | 'line'> = {
     responsive: true,

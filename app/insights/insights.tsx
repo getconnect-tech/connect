@@ -1,10 +1,12 @@
 'use client';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Icon from '@/components/icon/icon';
 import { TICKETS_HEADER } from '@/global/constants';
 import GraphList from '@/components/graphChart/graphList';
-import { chartDemoData } from '@/helpers/raw';
+import { insightStore } from '@/stores/insightStore';
+import { observer } from 'mobx-react-lite';
+import { getQueueSizeInsights } from '@/services/clientSide/insightServices';
 import {
   BottomDiv,
   ChartMainDiv,
@@ -22,6 +24,8 @@ interface InsightsProps {
 
 function Insights({ activeNav }: InsightsProps) {
   const [isNavbar, setIsNavbar] = useState(false);
+  const { queueSizeData, loading } = insightStore;
+
   const onClickIcon = useCallback(() => {
     setIsNavbar(true);
   }, []);
@@ -30,23 +34,26 @@ function Insights({ activeNav }: InsightsProps) {
     setIsNavbar(false);
   }, []);
 
-  // Graph data
+  // Load data when component mounts
+  useEffect(() => {
+    const loadData = async () => {
+      const data = await getQueueSizeInsights();
+      console.log('Queue size data loaded:', data); // Debug log
+    };
+    loadData();
+  }, []);
+
+  // Get the latest queue size
+  const currentQueueSize = queueSizeData?.data?.[queueSizeData?.data?.length - 1]?.queueSize || 0;
+  console.log('Current queue size:', currentQueueSize); // Debug log
+
+  // Graph data using real data from the API
   const chartData = [
     {
-      valueTitle: '<span>28</span> in todo',
+      valueTitle: `<span>${currentQueueSize}</span> in todo`,
       title: 'Queue size',
-      chartData: chartDemoData,
-    },
-    {
-      valueTitle: '<span>2h 43m</span>',
-      title: 'Median first response time',
-      chartData: chartDemoData,
-    },
-    {
-      valueTitle: '<span>4h 44m</span>',
-      title: 'Median resolution time',
-      chartData: chartDemoData,
-    },
+      chartData: queueSizeData?.data || [],
+    }
   ];
 
   return (
@@ -71,7 +78,11 @@ function Insights({ activeNav }: InsightsProps) {
         </TopDiv>
         <BottomDiv isShowNavbar={isNavbar} onClick={onCloseNavbar}>
           <ChartMainDiv>
-            <GraphList chartData={chartData} />
+            {loading ? (
+              <div>Loading insights...</div>
+            ) : (
+              <GraphList chartData={chartData} />
+            )}
           </ChartMainDiv>
         </BottomDiv>
       </MainDiv>
@@ -79,4 +90,4 @@ function Insights({ activeNav }: InsightsProps) {
   );
 }
 
-export default Insights;
+export default observer(Insights);
