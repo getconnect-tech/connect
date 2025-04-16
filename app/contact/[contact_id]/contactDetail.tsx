@@ -5,25 +5,43 @@ import { useRouter } from 'next/navigation';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Avatar from '@/components/avtar/Avtar';
 import Icon from '@/components/icon/icon';
-import { Main, MainDiv } from '../style';
+import { Main } from '../style';
 import {
+  BottomDiv,
+  HeaderDiv,
+  IconAndTitle,
   InformationItem,
   InformationSection,
   ItemDiv,
   Label,
   LeftProfileSection,
+  MainDiv,
   Name,
   NameSection,
   PersonalDetailSection,
+  RightSideSection,
+  Tab,
+  TabDiv,
   Title,
+  TopDiv,
   Value,
   WorkspaceItemSection,
   WorkSpaceSection,
 } from './style';
+import { ticketStore } from '@/stores/ticketStore';
+import CustomContextMenu from '@/components/contextMenu/contextMenu';
+import InboxCard from '@/components/inboxCard/inboxCard';
+import { MessageType } from '@prisma/client';
 
 function ContactDetail() {
   const router = useRouter();
   const [isNavbar, setIsNavbar] = useState(false);
+  const [activeTab, setActiveTab] = useState('Open');
+  const tabItem = ['Open', 'Snoozed', 'Done'];
+  const { filteredTicketList } = ticketStore;
+  const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
+    null,
+  );
 
   const onCloseNavbar = useCallback(() => {
     setIsNavbar(false);
@@ -92,6 +110,62 @@ function ContactDetail() {
             </WorkspaceItemSection>
           </WorkSpaceSection>
         </LeftProfileSection>
+        <RightSideSection>
+          <TopDiv>
+            <HeaderDiv>
+              <IconAndTitle>
+                <Title>All tickets</Title>
+              </IconAndTitle>
+              <TabDiv>
+                {tabItem.map((tab) => (
+                  <Tab
+                    key={tab}
+                    active={activeTab === tab}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {tab}
+                  </Tab>
+                ))}
+              </TabDiv>
+            </HeaderDiv>
+          </TopDiv>
+          <div style={{ padding: '0 16px' }} onClick={onCloseNavbar}>
+            <BottomDiv>
+              {/* {loading &&
+                (!filteredTicketList || filteredTicketList?.length === 0) && (
+                  <InboxLoading />
+                )} */}
+              {filteredTicketList?.length > 0 &&
+                filteredTicketList.map((ticket, index) => (
+                  <>
+                    <CustomContextMenu
+                      key={ticket.id}
+                      ticketDetail={ticket}
+                      ticketIndex={index}
+                    >
+                      <div>
+                        <InboxCard
+                          ticketDetail={ticket}
+                          description={ticket.last_message?.content || ''}
+                          showDotIcon={!ticket?.has_read}
+                          src=''
+                          currentOpenDropdown={currentOpenDropdown}
+                          setCurrentOpenDropdown={setCurrentOpenDropdown}
+                          dropdownIdentifier={`card-${ticket.id}`}
+                          ticketIndex={index}
+                          isShowNavbar={isNavbar}
+                          isAwaiting={
+                            ticket.last_message.type ===
+                            MessageType.FROM_CONTACT
+                          }
+                        />
+                      </div>
+                    </CustomContextMenu>
+                  </>
+                ))}
+            </BottomDiv>
+          </div>
+        </RightSideSection>
       </MainDiv>
     </Main>
   );
