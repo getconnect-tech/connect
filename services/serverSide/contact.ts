@@ -49,7 +49,11 @@ export const getContactById = async (contactId: string) => {
           },
         },
       },
-      groups: true,
+      groups: {
+        include: {
+          group: true,
+        },
+      },
     },
   });
 
