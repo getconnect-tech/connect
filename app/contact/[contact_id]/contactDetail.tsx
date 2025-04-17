@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MessageType } from '@prisma/client';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
@@ -14,15 +14,11 @@ import {
   BottomDiv,
   HeaderDiv,
   IconAndTitle,
-  InformationItem,
-  InformationSection,
   ItemDiv,
-  Label,
   LeftProfileSection,
   MainDiv,
   Name,
   NameSection,
-  PersonalDetailSection,
   RightSideSection,
   Tab,
   TabDiv,
@@ -32,12 +28,12 @@ import {
   WorkspaceItemSection,
   WorkSpaceSection,
 } from './style';
+import DetailsSection from './detailsSection';
 
 function ContactDetail() {
   const router = useRouter();
   const [isNavbar, setIsNavbar] = useState(false);
   const [activeTab, setActiveTab] = useState('Open');
-  const tabItem = ['Open', 'Snoozed', 'Done'];
   const { filteredTicketList } = ticketStore;
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
@@ -47,18 +43,86 @@ function ContactDetail() {
     setIsNavbar(false);
   }, []);
 
-  const workspaces = [
-    {
-      imgSrc:
-        'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUser%20Image_1716282098691.jpg?alt=media&token=34984821-78db-4248-94c8-35f186397d7e',
-      name: 'Pixer digital',
-    },
-    {
-      imgSrc:
-        'https://firebasestorage.googleapis.com/v0/b/getconnect-tech.appspot.com/o/workspaces%2Fdba2c304-49b9-4f95-ac63-a74729b85a6e%2Fworkspace_profile%2Fimage_1726562412931.jpeg?alt=media&token=4e82e81b-56b5-4fcf-b3bc-bb6d907554e0',
-      name: 'Teamcamp',
-    },
+  const personalDetail = [
+    { label: 'Email', value: 'bhavdip.pixer@gmail.com' },
+    { label: 'Phone', value: '(628) 225-4852' },
   ];
+
+  const renderWorkSpace = useMemo(() => {
+    const workspaces = [
+      {
+        imgSrc:
+          'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUser%20Image_1716282098691.jpg?alt=media&token=34984821-78db-4248-94c8-35f186397d7e',
+        name: 'Pixer digital',
+      },
+      {
+        imgSrc:
+          'https://firebasestorage.googleapis.com/v0/b/getconnect-tech.appspot.com/o/workspaces%2Fdba2c304-49b9-4f95-ac63-a74729b85a6e%2Fworkspace_profile%2Fimage_1726562412931.jpeg?alt=media&token=4e82e81b-56b5-4fcf-b3bc-bb6d907554e0',
+        name: 'Teamcamp',
+      },
+    ];
+    return (
+      <>
+        {workspaces.map((item) => (
+          <ItemDiv key={item.name}>
+            <Avatar imgSrc={item.imgSrc} name={''} size={20} />
+            <Value>{item.name}</Value>
+          </ItemDiv>
+        ))}
+      </>
+    );
+  }, []);
+
+  const renderTabItem = useMemo(() => {
+    const tabItem = ['Open', 'Snoozed', 'Done'];
+    return (
+      <>
+        {tabItem.map((tab) => (
+          <Tab
+            key={tab}
+            active={activeTab === tab}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab}
+          </Tab>
+        ))}
+      </>
+    );
+  }, [activeTab]);
+
+  const renderTickets = useMemo(() => {
+    return (
+      <>
+        {filteredTicketList?.length > 0 &&
+          filteredTicketList.map((ticket, index) => (
+            <>
+              <CustomContextMenu
+                key={ticket.id}
+                ticketDetail={ticket}
+                ticketIndex={index}
+              >
+                <div>
+                  <InboxCard
+                    ticketDetail={ticket}
+                    description={ticket.last_message?.content || ''}
+                    showDotIcon={!ticket?.has_read}
+                    src=''
+                    currentOpenDropdown={currentOpenDropdown}
+                    setCurrentOpenDropdown={setCurrentOpenDropdown}
+                    dropdownIdentifier={`card-${ticket.id}`}
+                    ticketIndex={index}
+                    isShowNavbar={isNavbar}
+                    isAwaiting={
+                      ticket.last_message.type === MessageType.FROM_CONTACT
+                    }
+                  />
+                </div>
+              </CustomContextMenu>
+            </>
+          ))}
+      </>
+    );
+  }, [currentOpenDropdown, filteredTicketList, isNavbar]);
 
   return (
     <Main>
@@ -83,29 +147,13 @@ function ContactDetail() {
             />
             <Name>XYZ</Name>
           </NameSection>
-          <PersonalDetailSection>
-            <Title>Personal details</Title>
-            <InformationSection>
-              <InformationItem>
-                <Label>Email</Label>
-                <Value>bhavdip.pixer@gmail.com</Value>
-              </InformationItem>
-              <InformationItem>
-                <Label>Phone</Label>
-                <Value>(628) 225-4852</Value>
-              </InformationItem>
-            </InformationSection>
-          </PersonalDetailSection>
+          <DetailsSection
+            title={'Personal details'}
+            detailItem={personalDetail}
+          />
           <WorkSpaceSection>
             <Title className='workspace-title'>Workspaces</Title>
-            <WorkspaceItemSection>
-              {workspaces.map((item) => (
-                <ItemDiv key={item.name}>
-                  <Avatar imgSrc={item.imgSrc} name={''} size={20} />
-                  <Value>{item.name}</Value>
-                </ItemDiv>
-              ))}
-            </WorkspaceItemSection>
+            <WorkspaceItemSection>{renderWorkSpace}</WorkspaceItemSection>
           </WorkSpaceSection>
         </LeftProfileSection>
         <RightSideSection>
@@ -114,17 +162,7 @@ function ContactDetail() {
               <IconAndTitle>
                 <Title>All tickets</Title>
               </IconAndTitle>
-              <TabDiv>
-                {tabItem.map((tab) => (
-                  <Tab
-                    key={tab}
-                    active={activeTab === tab}
-                    onClick={() => setActiveTab(tab)}
-                  >
-                    {tab}
-                  </Tab>
-                ))}
-              </TabDiv>
+              <TabDiv>{renderTabItem}</TabDiv>
             </HeaderDiv>
           </TopDiv>
           <div style={{ padding: '0 16px' }} onClick={onCloseNavbar}>
@@ -133,34 +171,7 @@ function ContactDetail() {
                 (!filteredTicketList || filteredTicketList?.length === 0) && (
                   <InboxLoading />
                 )} */}
-              {filteredTicketList?.length > 0 &&
-                filteredTicketList.map((ticket, index) => (
-                  <>
-                    <CustomContextMenu
-                      key={ticket.id}
-                      ticketDetail={ticket}
-                      ticketIndex={index}
-                    >
-                      <div>
-                        <InboxCard
-                          ticketDetail={ticket}
-                          description={ticket.last_message?.content || ''}
-                          showDotIcon={!ticket?.has_read}
-                          src=''
-                          currentOpenDropdown={currentOpenDropdown}
-                          setCurrentOpenDropdown={setCurrentOpenDropdown}
-                          dropdownIdentifier={`card-${ticket.id}`}
-                          ticketIndex={index}
-                          isShowNavbar={isNavbar}
-                          isAwaiting={
-                            ticket.last_message.type ===
-                            MessageType.FROM_CONTACT
-                          }
-                        />
-                      </div>
-                    </CustomContextMenu>
-                  </>
-                ))}
+              {renderTickets}
             </BottomDiv>
           </div>
         </RightSideSection>
