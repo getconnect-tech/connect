@@ -70,7 +70,7 @@ export type ContactRecord = NonNullable<
 >;
 export type ContactTicket = NonNullable<
   Awaited<ReturnType<typeof getContactTickets>>
->;
+>[0];
 
 export type WorkspaceConfig = {
   emailChannel: {

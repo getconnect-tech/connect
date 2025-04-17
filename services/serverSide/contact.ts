@@ -1,9 +1,10 @@
-import { MessageType, TicketStatus } from '@prisma/client';
+import { TicketStatus } from '@prisma/client';
 import moment from 'moment';
 import { prisma } from '@/prisma/prisma';
 import { findUserByEmail, getUserActivities } from '@/lib/amplitude';
 import { Contact } from '@/utils/appTypes';
 import { generateContactName, removeNullUndefined } from '@/helpers/common';
+import { getWorkspaceTickets } from './ticket';
 
 export const getContactByEmail = async (email: string, workspaceId: string) => {
   const contact = await prisma.contact.findUnique({
@@ -41,76 +42,20 @@ export const getContactDetails = async (contactId: string) => {
   };
 };
 
-export const getContactTickets = async (contactId: string) => {
-  const contact = await prisma.contact.findUnique({
-    where: { id: contactId },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      tickets: {
-        select: {
-          id: true,
-          title: true,
-          subject: true,
-          status: true,
-          priority: true,
-          created_at: true,
-          updated_at: true,
-          contact: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-            },
-          },
-          assigned_user: {
-            select: {
-              id: true,
-              email: true,
-              display_name: true,
-              profile_url: true,
-            },
-          },
-          labels: {
-            select: {
-              label: true,
-            },
-          },
-          messages: {
-            where: {
-              type: {
-                in: [
-                  MessageType.FROM_CONTACT,
-                  MessageType.EMAIL,
-                  MessageType.REGULAR,
-                ],
-              },
-            },
-            orderBy: {
-              created_at: 'desc',
-            },
-            take: 1,
-            select: {
-              created_at: true,
-              content: true,
-              type: true,
-              author: {
-                select: {
-                  id: true,
-                  email: true,
-                  display_name: true,
-                  profile_url: true,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  });
+export const getContactTickets = async (
+  workspaceId: string,
+  contactId: string,
+  userId: string,
+  lastUpdated?: string,
+) => {
+  const contactTickets = await getWorkspaceTickets(
+    workspaceId,
+    userId,
+    lastUpdated,
+    contactId,
+  );
 
-  return contact;
+  return contactTickets;
 };
 
 export const getWorkspaceContacts = async (workspaceId: string) => {

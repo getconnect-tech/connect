@@ -23,14 +23,24 @@ export const GET = withWorkspaceAuth(async (req, { contactId }) => {
     const { searchParams } = new URL(req.url);
     const contactDetails = searchParams.get('details');
     const contactTickets = searchParams.get('tickets');
+    const lastUpdated = searchParams.get('lastUpdated') as string;
+    const workspaceId = req.workspace.id;
+    const userId = req.user.id;
 
     let contact;
 
     if (contactDetails) {
       contact = await getContactDetails(contactId);
     } else if (contactTickets) {
-      contact = await getContactTickets(contactId);
-    } else contact = await getContactById(contactId);
+      contact = await getContactTickets(
+        workspaceId,
+        contactId,
+        userId,
+        lastUpdated,
+      );
+    } else {
+      contact = await getContactById(contactId);
+    }
 
     return Response.json(contact, { status: 200 });
   } catch (err) {

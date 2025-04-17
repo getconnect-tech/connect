@@ -14,8 +14,13 @@ export const getWorkspaceTickets = async (
   workspaceId: string,
   userId: string,
   lastUpdated?: string,
+  contactId?: string,
 ) => {
   const query: Prisma.TicketWhereInput = { workspace_id: workspaceId };
+
+  if (contactId) {
+    query.contact_id = contactId;
+  }
 
   // Build the query based on lastUpdated
   if (lastUpdated) {
