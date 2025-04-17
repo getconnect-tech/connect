@@ -36,7 +36,7 @@ export default function ContactCard({
   imgSrc,
   name,
   email,
-  isCompany = true,
+  isCompany = false,
   groupInfo,
   openCount,
   closeCount,
@@ -67,7 +67,7 @@ export default function ContactCard({
                 <p>{email}</p>
               </>
             )}
-            {isCompany ? (
+            {!isCompany ? (
               <CompanyDiv>
                 {groupInfo?.slice(0, 2).map((group, index) => (
                   <>
