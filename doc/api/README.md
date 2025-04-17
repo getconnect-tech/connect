@@ -64,6 +64,7 @@ All error responses follow this format:
 - [List Users](./users/list-users.md)
 - [Create User](./users/create-user.md)
 - [Get User By Id](./users/get-user-by-id.md)
+- [Get Ticket By User](./users/get-ticket-by-user.md)
 
 ### Workspaces
 
