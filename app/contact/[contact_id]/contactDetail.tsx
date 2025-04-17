@@ -2,9 +2,13 @@
 'use client';
 import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { MessageType } from '@prisma/client';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Avatar from '@/components/avtar/Avtar';
 import Icon from '@/components/icon/icon';
+import { ticketStore } from '@/stores/ticketStore';
+import CustomContextMenu from '@/components/contextMenu/contextMenu';
+import InboxCard from '@/components/inboxCard/inboxCard';
 import { Main } from '../style';
 import {
   BottomDiv,
@@ -28,10 +32,6 @@ import {
   WorkspaceItemSection,
   WorkSpaceSection,
 } from './style';
-import { ticketStore } from '@/stores/ticketStore';
-import CustomContextMenu from '@/components/contextMenu/contextMenu';
-import InboxCard from '@/components/inboxCard/inboxCard';
-import { MessageType } from '@prisma/client';
 
 function ContactDetail() {
   const router = useRouter();
