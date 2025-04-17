@@ -4,6 +4,7 @@ import {
   getContactById,
   getContactDetails,
   getContactGroups,
+  getContactTickets,
   getWorkspaceContacts,
 } from '@/services/serverSide/contact';
 import { getMacros } from '@/services/serverSide/macro';
@@ -66,6 +67,9 @@ export type ContactDetails = NonNullable<
 
 export type ContactRecord = NonNullable<
   Awaited<ReturnType<typeof getContactDetails>>
+>;
+export type ContactTicket = NonNullable<
+  Awaited<ReturnType<typeof getContactTickets>>
 >;
 
 export type WorkspaceConfig = {

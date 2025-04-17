@@ -116,6 +116,30 @@ export const getContactRecord = async (contactId: string) => {
 };
 
 /**
+ * @desc Get contact tickets
+ * @param {*}
+ */
+export const getContactTicket = async (contactId: string) => {
+  try {
+    contactStore.setLoading(true);
+    const response = await axios.get(
+      `${NEXT_PUBLIC_API_URL}/contacts/${contactId}?tickets=true`,
+    );
+    const { data } = response;
+    console.log('data', data.tickets);
+    contactStore.setContactTicket(data.tickets);
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    contactStore.setLoading(false);
+  }
+};
+
+/**
  * @desc Refresh contact information
  * @param {*} contactId
  */

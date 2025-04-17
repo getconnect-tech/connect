@@ -9,7 +9,10 @@ import Avatar from '@/components/avtar/Avtar';
 import Icon from '@/components/icon/icon';
 import CustomContextMenu from '@/components/contextMenu/contextMenu';
 import InboxCard from '@/components/inboxCard/inboxCard';
-import { getContactRecord } from '@/services/clientSide/contactServices';
+import {
+  getContactRecord,
+  getContactTicket,
+} from '@/services/clientSide/contactServices';
 import { isEmpty } from '@/helpers/common';
 import { useStores } from '@/stores';
 import { Main } from '../style';
@@ -46,11 +49,13 @@ function ContactDetail(props: Props) {
   // Mobx store variables
   const { ticketStore, workspaceStore, contactStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
-  const { contactRecord } = contactStore || {};
+  const { contactRecord, contactTicket } = contactStore || {};
   const { filteredTicketList } = ticketStore;
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
+
+  console.log('contactTicket', contactTicket);
 
   const onCloseNavbar = useCallback(() => {
     setIsNavbar(false);
@@ -63,7 +68,10 @@ function ContactDetail(props: Props) {
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
-      await Promise.all([getContactRecord(contact_id)]);
+      await Promise.all([
+        getContactRecord(contact_id),
+        getContactTicket(contact_id),
+      ]);
     }
   }, [contact_id, currentWorkspace?.id]);
 

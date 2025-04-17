@@ -3,6 +3,7 @@ import {
   Contact,
   ContactDetails,
   ContactRecord,
+  ContactTicket,
   Group,
 } from '@/utils/dataTypes';
 
@@ -12,6 +13,7 @@ class ContactStore {
   groups: Group[] | null = null;
   contactDetails: ContactDetails | null = null;
   contactRecord: ContactRecord | null = null;
+  contactTicket: ContactTicket[] | null = null;
 
   constructor() {
     makeObservable(this, {
@@ -34,6 +36,10 @@ class ContactStore {
       // ContactRecord for contact page
       contactRecord: observable,
       setContactRecord: action,
+
+      // ContactTickets for contact page
+      contactTicket: observable,
+      setContactTicket: action,
     });
   }
 
@@ -60,6 +66,11 @@ class ContactStore {
   // set contact record for contact page
   setContactRecord(value: ContactRecord | null) {
     this.contactRecord = value;
+  }
+
+  // set contact tickets for contact page
+  setContactTicket(value: ContactTicket[] | null) {
+    this.contactTicket = value;
   }
 }
 
