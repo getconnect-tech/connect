@@ -24,6 +24,7 @@ export const getContactDetails = async (contactId: string) => {
       name: true,
       email: true,
       phone: true,
+      avatar: true,
       groups: {
         select: {
           group: true,

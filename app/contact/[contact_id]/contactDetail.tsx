@@ -1,14 +1,17 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MessageType } from '@prisma/client';
+import { observer } from 'mobx-react-lite';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Avatar from '@/components/avtar/Avtar';
 import Icon from '@/components/icon/icon';
-import { ticketStore } from '@/stores/ticketStore';
 import CustomContextMenu from '@/components/contextMenu/contextMenu';
 import InboxCard from '@/components/inboxCard/inboxCard';
+import { getContactRecord } from '@/services/clientSide/contactServices';
+import { isEmpty } from '@/helpers/common';
+import { useStores } from '@/stores';
 import { Main } from '../style';
 import {
   BottomDiv,
@@ -30,10 +33,20 @@ import {
 } from './style';
 import DetailsSection from './detailsSection';
 
-function ContactDetail() {
+interface Props {
+  contact_id: string;
+}
+
+function ContactDetail(props: Props) {
+  const { contact_id } = props;
   const router = useRouter();
   const [isNavbar, setIsNavbar] = useState(false);
   const [activeTab, setActiveTab] = useState('Open');
+
+  // Mobx store variables
+  const { ticketStore, workspaceStore, contactStore } = useStores();
+  const { currentWorkspace } = workspaceStore || {};
+  const { contactRecord } = contactStore || {};
   const { filteredTicketList } = ticketStore;
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
@@ -43,10 +56,22 @@ function ContactDetail() {
     setIsNavbar(false);
   }, []);
 
+  console.log('contactRecord', contactRecord);
+
   const personalDetail = [
     { label: 'Email', value: 'bhavdip.pixer@gmail.com' },
     { label: 'Phone', value: '(628) 225-4852' },
   ];
+
+  const loadData = useCallback(async () => {
+    if (!isEmpty(currentWorkspace?.id)) {
+      await Promise.all([getContactRecord(contact_id)]);
+    }
+  }, [contact_id, currentWorkspace?.id]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const renderWorkSpace = useMemo(() => {
     const workspaces = [
@@ -89,6 +114,8 @@ function ContactDetail() {
       </>
     );
   }, [activeTab]);
+
+  console.log('call');
 
   const renderTickets = useMemo(() => {
     return (
@@ -180,4 +207,4 @@ function ContactDetail() {
   );
 }
 
-export default ContactDetail;
+export default observer(ContactDetail);

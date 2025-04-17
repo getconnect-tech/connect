@@ -2,6 +2,7 @@ import { MessageType } from '@prisma/client';
 import { getWorkspaceApiKeys } from '@/services/serverSide/apiKey';
 import {
   getContactById,
+  getContactDetails,
   getContactGroups,
   getWorkspaceContacts,
 } from '@/services/serverSide/contact';
@@ -61,6 +62,10 @@ export type ContactGroups = NonNullable<
 
 export type ContactDetails = NonNullable<
   Awaited<ReturnType<typeof getContactById>>
+>;
+
+export type ContactRecord = NonNullable<
+  Awaited<ReturnType<typeof getContactDetails>>
 >;
 
 export type WorkspaceConfig = {
