@@ -85,7 +85,7 @@ export default function RecentEvent() {
           {activityLoading ? (
             'Loading...'
           ) : isEmpty(eventsToShow) ? (
-            <EmptyStateMessage message='No events stats.' />
+            <EmptyStateMessage message='No recent events.' />
           ) : (
             <>
               {eventsToShow.map((event: UserActivity, index) => (
