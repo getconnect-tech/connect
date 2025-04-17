@@ -1,4 +1,4 @@
-import { TicketStatus } from '@prisma/client';
+import { MessageType, TicketStatus } from '@prisma/client';
 import moment from 'moment';
 import { prisma } from '@/prisma/prisma';
 import { findUserByEmail, getUserActivities } from '@/lib/amplitude';
@@ -14,6 +14,94 @@ export const getContactByEmail = async (email: string, workspaceId: string) => {
 
 export const getContactById = async (contactId: string) => {
   const contact = await prisma.contact.findUnique({ where: { id: contactId } });
+  return contact;
+};
+
+export const getContactDetails = async (contactId: string) => {
+  const contact = await prisma.contact.findUnique({
+    where: { id: contactId },
+    select: {
+      name: true,
+      email: true,
+      phone: true,
+      groups: {
+        select: {
+          group: true,
+        },
+      },
+    },
+  });
+  return contact;
+};
+
+export const getContactTickets = async (contactId: string) => {
+  const contact = await prisma.contact.findUnique({
+    where: { id: contactId },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      tickets: {
+        select: {
+          id: true,
+          title: true,
+          subject: true,
+          status: true,
+          priority: true,
+          created_at: true,
+          updated_at: true,
+          contact: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+          assigned_user: {
+            select: {
+              id: true,
+              email: true,
+              display_name: true,
+              profile_url: true,
+            },
+          },
+          labels: {
+            select: {
+              label: true,
+            },
+          },
+          messages: {
+            where: {
+              type: {
+                in: [
+                  MessageType.FROM_CONTACT,
+                  MessageType.EMAIL,
+                  MessageType.REGULAR,
+                ],
+              },
+            },
+            orderBy: {
+              created_at: 'desc',
+            },
+            take: 1,
+            select: {
+              created_at: true,
+              content: true,
+              type: true,
+              author: {
+                select: {
+                  id: true,
+                  email: true,
+                  display_name: true,
+                  profile_url: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
 
   return contact;
 };

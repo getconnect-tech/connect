@@ -14,6 +14,7 @@ import {
   TitleDiv,
   WorkDetailMainDiv,
 } from './styles';
+import EmptyStateMessage from './emptyStateMessage';
 
 function EventStats() {
   // Store data
@@ -96,6 +97,8 @@ function EventStats() {
         <EventDetailDiv>
           {activityLoading ? (
             'Loading...'
+          ) : isEmpty(eventsToShow) ? (
+            <EmptyStateMessage message='No events stats.' />
           ) : (
             <>
               <DetailsItemMainDiv>
