@@ -56,11 +56,9 @@ function ContactDetail(props: Props) {
     setIsNavbar(false);
   }, []);
 
-  console.log('contactRecord', contactRecord);
-
   const personalDetail = [
-    { label: 'Email', value: 'bhavdip.pixer@gmail.com' },
-    { label: 'Phone', value: '(628) 225-4852' },
+    { label: 'Email', value: contactRecord?.email || '' },
+    { label: 'Phone', value: contactRecord?.phone || '' },
   ];
 
   const loadData = useCallback(async () => {
@@ -73,30 +71,28 @@ function ContactDetail(props: Props) {
     loadData();
   }, [loadData]);
 
+  useEffect(() => {
+    return () => {
+      contactStore.setContactRecord(null);
+    };
+  }, [contactStore]);
+
   const renderWorkSpace = useMemo(() => {
-    const workspaces = [
-      {
-        imgSrc:
-          'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUser%20Image_1716282098691.jpg?alt=media&token=34984821-78db-4248-94c8-35f186397d7e',
-        name: 'Pixer digital',
-      },
-      {
-        imgSrc:
-          'https://firebasestorage.googleapis.com/v0/b/getconnect-tech.appspot.com/o/workspaces%2Fdba2c304-49b9-4f95-ac63-a74729b85a6e%2Fworkspace_profile%2Fimage_1726562412931.jpeg?alt=media&token=4e82e81b-56b5-4fcf-b3bc-bb6d907554e0',
-        name: 'Teamcamp',
-      },
-    ];
     return (
       <>
-        {workspaces.map((item) => (
-          <ItemDiv key={item.name}>
-            <Avatar imgSrc={item.imgSrc} name={''} size={20} />
-            <Value>{item.name}</Value>
+        {contactRecord?.groups?.map((item) => (
+          <ItemDiv key={item?.id}>
+            <Avatar
+              imgSrc={item?.avatar || ''}
+              name={item.name || ''}
+              size={20}
+            />
+            <Value>{item?.name}</Value>
           </ItemDiv>
         ))}
       </>
     );
-  }, []);
+  }, [contactRecord?.groups]);
 
   const renderTabItem = useMemo(() => {
     const tabItem = ['Open', 'Snoozed', 'Done'];
@@ -114,8 +110,6 @@ function ContactDetail(props: Props) {
       </>
     );
   }, [activeTab]);
-
-  console.log('call');
 
   const renderTickets = useMemo(() => {
     return (
@@ -167,12 +161,12 @@ function ContactDetail(props: Props) {
               size={true}
             />
             <Avatar
-              imgSrc='https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUser%20Image_1716282098691.jpg?alt=media&token=34984821-78db-4248-94c8-35f186397d7e'
-              name={''}
+              imgSrc={contactRecord?.avatar || ''}
+              name={contactRecord?.name || ''}
               size={28}
               isShowBorder
             />
-            <Name>XYZ</Name>
+            <Name>{contactRecord?.name}</Name>
           </NameSection>
           <DetailsSection
             title={'Personal details'}

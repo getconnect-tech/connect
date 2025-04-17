@@ -32,7 +32,13 @@ export const getContactDetails = async (contactId: string) => {
       },
     },
   });
-  return contact;
+
+  if (!contact) return null;
+
+  return {
+    ...contact,
+    groups: contact.groups.map((g) => g.group),
+  };
 };
 
 export const getContactTickets = async (contactId: string) => {
