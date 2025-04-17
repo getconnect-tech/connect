@@ -35,6 +35,8 @@ const PersonList = ({ isShowNavbar }: Props) => {
     loadData();
   }, [loadData]);
 
+  console.log('object', contacts);
+
   return (
     <>
       {loading && (!contacts || contacts.length === 0) ? (
@@ -44,6 +46,7 @@ const PersonList = ({ isShowNavbar }: Props) => {
           {contacts?.map((card, index) => (
             <ContactCard
               key={index}
+              contactId={card.id}
               imgSrc={card.avatar || ''}
               name={card.name}
               email={card.email}
