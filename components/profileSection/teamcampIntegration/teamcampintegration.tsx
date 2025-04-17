@@ -17,6 +17,7 @@ import {
   TitleDiv,
   WorkDetailMainDiv,
 } from '../styles';
+import EmptyStateMessage from '../emptyStateMessage';
 import {
   IconDiv,
   ItemDiv,
@@ -60,6 +61,8 @@ function TeamcampIntegration() {
   const renderTaskList = useMemo(() => {
     return loading ? (
       <>Loading...</>
+    ) : isEmpty(eventsToShow) ? (
+      <EmptyStateMessage message='No tasks created yet.' />
     ) : (
       <>
         {eventsToShow.map((item, index) => (

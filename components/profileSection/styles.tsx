@@ -324,6 +324,12 @@ const SeeAllLink = styled.div`
   ${Typography.body_md_medium}
 `;
 
+const EmptyStateText = styled.p`
+  ${Typography.body_md_regular}
+  color: var(--text-text-secondary);
+  margin-top: -4px;
+`;
+
 export {
   MainDiv,
   ProfileDiv,
@@ -355,4 +361,5 @@ export {
   EventNameDiv,
   DetailsItemMainDiv,
   SeeAllLink,
+  EmptyStateText,
 };
