@@ -127,7 +127,7 @@ export const getContactTicket = async (contactId: string) => {
     );
     const { data } = response;
     console.log('data', data.tickets);
-    contactStore.setContactTicket(data.tickets);
+    contactStore.setContactTicket(data);
     return data;
   } catch (err: any) {
     messageStore.setErrorMessage(
