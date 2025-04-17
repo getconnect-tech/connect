@@ -126,7 +126,6 @@ export const getContactTicket = async (contactId: string) => {
       `${NEXT_PUBLIC_API_URL}/contacts/${contactId}?tickets=true`,
     );
     const { data } = response;
-    console.log('data', data.tickets);
     contactStore.setContactTicket(data);
     return data;
   } catch (err: any) {

@@ -47,10 +47,9 @@ function ContactDetail(props: Props) {
   const [activeTab, setActiveTab] = useState('Open');
 
   // Mobx store variables
-  const { ticketStore, workspaceStore, contactStore } = useStores();
+  const { workspaceStore, contactStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { contactRecord, contactTicket } = contactStore || {};
-  const { filteredTicketList } = ticketStore;
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
@@ -122,8 +121,9 @@ function ContactDetail(props: Props) {
   const renderTickets = useMemo(() => {
     return (
       <>
-        {filteredTicketList?.length > 0 &&
-          filteredTicketList.map((ticket, index) => (
+        {contactTicket &&
+          contactTicket?.length > 0 &&
+          contactTicket?.map((ticket, index) => (
             <>
               <CustomContextMenu
                 key={ticket.id}
@@ -151,7 +151,7 @@ function ContactDetail(props: Props) {
           ))}
       </>
     );
-  }, [currentOpenDropdown, filteredTicketList, isNavbar]);
+  }, [contactTicket, currentOpenDropdown, isNavbar]);
 
   return (
     <Main>
