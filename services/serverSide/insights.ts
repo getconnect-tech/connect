@@ -31,14 +31,27 @@ export const getQueueSizeInsights = async (
     ? new Date(startDate)
     : subDays(effectiveEndDate, 30);
 
-  // Get all tickets in the date range
+  // Get ALL tickets that could affect the queue size in this period
+  // This includes tickets created before the start date that might still be open
   const tickets = await prisma.ticket.findMany({
     where: {
       workspace_id: workspaceId,
-      created_at: {
-        gte: startOfDay(effectiveStartDate),
-        lte: endOfDay(effectiveEndDate),
-      },
+      OR: [
+        // Tickets created before or during the period that might be open
+        {
+          created_at: {
+            lte: endOfDay(effectiveEndDate),
+          },
+        },
+        // Tickets that were closed during the period
+        {
+          status: TicketStatus.CLOSED,
+          updated_at: {
+            gte: startOfDay(effectiveStartDate),
+            lte: endOfDay(effectiveEndDate),
+          },
+        },
+      ],
     },
     select: {
       created_at: true,
@@ -59,38 +72,37 @@ export const getQueueSizeInsights = async (
     queueSizeByDate.set(d.toISOString().split('T')[0], 0);
   }
 
-  // Calculate queue size for each day
-  tickets.forEach((ticket) => {
-    // Increment count on ticket creation date
-    const creationDate = ticket.created_at.toISOString().split('T')[0];
-    queueSizeByDate.set(
-      creationDate,
-      (queueSizeByDate.get(creationDate) || 0) + 1,
-    );
+  // For each date in our range, calculate the actual queue size
+  Array.from(queueSizeByDate.keys()).forEach((dateStr) => {
+    const currentDate = new Date(dateStr);
 
-    // Decrement count on ticket closure date (if closed)
-    if (ticket.status === TicketStatus.CLOSED) {
-      const closureDate = ticket.updated_at.toISOString().split('T')[0];
-      if (queueSizeByDate.has(closureDate)) {
-        queueSizeByDate.set(
-          closureDate,
-          (queueSizeByDate.get(closureDate) || 0) - 1,
-        );
+    // Count tickets that were:
+    // 1. Created on or before this date
+    // 2. Either still open OR closed after this date
+    const queueSize = tickets.filter((ticket) => {
+      const ticketCreatedDate = startOfDay(ticket.created_at);
+      const isCreatedOnOrBefore = ticketCreatedDate <= currentDate;
+
+      if (!isCreatedOnOrBefore) return false;
+
+      if (ticket.status === TicketStatus.CLOSED) {
+        const closedDate = startOfDay(ticket.updated_at);
+        return closedDate > currentDate; // Still in queue if closed after this date
       }
-    }
+
+      return true; // Open tickets count towards queue
+    }).length;
+
+    queueSizeByDate.set(dateStr, queueSize);
   });
 
-  // Calculate running total (cumulative sum)
-  let runningTotal = 0;
+  // Convert map to array and sort by date
   const queueSizeData = Array.from(queueSizeByDate.entries())
     .sort(([dateA], [dateB]) => dateA.localeCompare(dateB))
-    .map(([date, change]) => {
-      runningTotal += change;
-      return {
-        date,
-        queueSize: runningTotal,
-      };
-    });
+    .map(([date, queueSize]) => ({
+      date,
+      queueSize,
+    }));
 
   return {
     data: queueSizeData,
