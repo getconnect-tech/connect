@@ -12,6 +12,7 @@ const CardMainDiv = styled.div<Props>`
   align-items: center;
   border-bottom: var(--border-light);
   cursor: pointer;
+  transition: background-color 0.3s ease;
   &:last-child {
     border-bottom: none;
   }
@@ -27,6 +28,9 @@ const CardMainDiv = styled.div<Props>`
         min-width: 361px;
       }
     `}
+  &:hover {
+    background-color: var(--bg-white-hover);
+  }
 `;
 
 const LeftDiv = styled.div`
@@ -93,7 +97,7 @@ const CompanyNameDiv = styled.div`
     margin-right: 10px;
   }
   &:hover {
-    background-color: var(--bg-white-hover);
+    background-color: var(--bg-surface-secondary-hover);
     border-radius: 30px;
     cursor: pointer;
     p {

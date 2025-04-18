@@ -3,7 +3,6 @@ import { Typography } from '@/styles/typography';
 
 interface Props {
   active?: boolean;
-  isCompany?: boolean;
 }
 
 const LeftProfileSection = styled.div`
@@ -41,7 +40,7 @@ const Title = styled.p`
   ${Typography.body_sm_semibold}
   color: var(--text-text-secondary);
   &.workspace-title {
-    padding: 0 8px;
+    padding-left: 12px;
   }
 `;
 
@@ -57,20 +56,10 @@ const InformationItem = styled.div`
   gap: 20px;
 `;
 
-const Label = styled.p<Props>`
+const Label = styled.p`
   ${Typography.body_md_medium}
   color: var(--text-text-secondary);
   min-width: 60px;
-  max-width: 60px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  ${(props) =>
-    props.isCompany &&
-    css`
-      min-width: 120px;
-      max-width: 120px;
-    `}
 `;
 
 const Value = styled.p`
@@ -82,7 +71,7 @@ const WorkSpaceSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 12px;
+  padding: 8px;
 `;
 
 const WorkspaceItemSection = styled.div`
@@ -95,9 +84,10 @@ const ItemDiv = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px;
+  padding: 10px 12px;
   cursor: pointer;
-  border-radius: 30px;
+  border-radius: 12px;
+  transition: background-color 0.3s ease;
   &:hover {
     background-color: var(--bg-surface-hover);
   }
@@ -187,6 +177,26 @@ const RightSideSection = styled.div`
   overflow: auto;
 `;
 
+const EmailValue = styled.p`
+  ${Typography.body_md_regular}
+  color: var(--text-text-secondary);
+  margin-top: 1px;
+`;
+
+const CountingText = styled.p`
+  ${Typography.body_sm_regular}
+  color: var(--text-text-secondary);
+  padding: 2px 8px;
+  border-radius: 30px;
+  background-color: var(--bg-surface-secondary);
+`;
+
+const TitleSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+`;
+
 export {
   LeftProfileSection,
   NameSection,
@@ -208,4 +218,7 @@ export {
   HeaderDiv,
   MainDiv,
   RightSideSection,
+  EmailValue,
+  CountingText,
+  TitleSection,
 };
