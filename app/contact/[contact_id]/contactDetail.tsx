@@ -79,14 +79,11 @@ function ContactDetail(props: Props) {
 
   useEffect(() => {
     loadData();
-  }, [loadData]);
-
-  useEffect(() => {
     return () => {
       contactStore.setContactRecord(null);
       contactStore.setContactTicket(null);
     };
-  }, [contactStore]);
+  }, [loadData, contactStore]);
 
   const renderWorkSpace = useCallback((groupList: GroupData[]) => {
     return (
