@@ -1,4 +1,4 @@
-import { TicketStatus } from '@prisma/client';
+import { MessageType, TicketStatus } from '@prisma/client';
 import { removeNullUndefined } from '@/helpers/common';
 import { prisma } from '@/prisma/prisma';
 
@@ -157,4 +157,81 @@ export const removeContactsFromGroup = async (
   });
 
   return response;
+};
+
+export const getGroupById = async (groupId: string) => {
+  const group = await prisma.group.findUnique({
+    where: { id: groupId },
+    include: {
+      contacts: {
+        select: {
+          contact_id: true,
+          contact: {
+            select: {
+              name: true,
+              email: true,
+              phone: true,
+              avatar: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!group) {
+    throw new Error('Group not found');
+  }
+
+  const contactIds = group.contacts.map((c) => c.contact_id);
+
+  const tickets = await prisma.ticket.findMany({
+    where: {
+      contact_id: { in: contactIds },
+    },
+    include: {
+      contact: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          phone: true,
+        },
+      },
+      labels: { include: { label: true } },
+      assigned_user: true,
+      messages: {
+        where: {
+          type: {
+            in: [
+              MessageType.FROM_CONTACT,
+              MessageType.EMAIL,
+              MessageType.REGULAR,
+            ],
+          },
+        },
+        select: {
+          created_at: true,
+          author: {
+            select: {
+              id: true,
+              display_name: true,
+              email: true,
+              profile_url: true,
+            },
+          },
+          content: true,
+          type: true,
+        },
+        take: 1,
+        orderBy: { created_at: 'desc' },
+      },
+    },
+  });
+
+  return {
+    ...group,
+    contacts: group.contacts.map((c) => c.contact),
+    tickets,
+  };
 };
