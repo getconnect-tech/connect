@@ -3,7 +3,11 @@ import moment from 'moment';
 import { prisma } from '@/prisma/prisma';
 import { findUserByEmail, getUserActivities } from '@/lib/amplitude';
 import { Contact } from '@/utils/appTypes';
-import { generateContactName, removeNullUndefined } from '@/helpers/common';
+import {
+  generateContactName,
+  groupBy,
+  removeNullUndefined,
+} from '@/helpers/common';
 import { getWorkspaceTickets } from './ticket';
 
 export const getContactByEmail = async (email: string, workspaceId: string) => {
@@ -36,9 +40,12 @@ export const getContactDetails = async (contactId: string) => {
 
   if (!contact) return null;
 
+  const groups = contact?.groups.map((g) => g.group) || [];
+  const groupByData = groupBy(groups, 'group_label');
+
   return {
     ...contact,
-    groups: contact.groups.map((g) => g.group),
+    groups: groupByData,
   };
 };
 

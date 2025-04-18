@@ -16,6 +16,7 @@ import {
 import { isEmpty } from '@/helpers/common';
 import { useStores } from '@/stores';
 import InboxLoading from '@/components/inboxLoading/inboxLoading';
+import { GroupData } from '@/utils/dataTypes';
 import { Main } from '../style';
 import {
   BottomDiv,
@@ -87,10 +88,10 @@ function ContactDetail(props: Props) {
     };
   }, [contactStore]);
 
-  const renderWorkSpace = useMemo(() => {
+  const renderWorkSpace = useCallback((groupList: GroupData[]) => {
     return (
       <>
-        {contactRecord?.groups?.map((item) => (
+        {groupList?.map((item) => (
           <ItemDiv key={item?.id}>
             <Avatar
               imgSrc={item?.avatar || ''}
@@ -102,7 +103,7 @@ function ContactDetail(props: Props) {
         ))}
       </>
     );
-  }, [contactRecord?.groups]);
+  }, []);
 
   const renderTabItem = useMemo(() => {
     const tabItem = ['Open', 'Snoozed', 'Done'];
@@ -183,10 +184,18 @@ function ContactDetail(props: Props) {
             title={'Personal details'}
             detailItem={personalDetail}
           />
-          <WorkSpaceSection>
-            <Title className='workspace-title'>Workspaces</Title>
-            <WorkspaceItemSection>{renderWorkSpace}</WorkspaceItemSection>
-          </WorkSpaceSection>
+          {contactRecord &&
+            contactRecord?.groups?.length > 0 &&
+            contactRecord?.groups?.map((groupList) => {
+              return (
+                <WorkSpaceSection key={groupList.name}>
+                  <Title className='workspace-title'>{groupList?.name}</Title>
+                  <WorkspaceItemSection>
+                    {renderWorkSpace(groupList.list as GroupData[])}
+                  </WorkspaceItemSection>
+                </WorkSpaceSection>
+              );
+            })}
         </LeftProfileSection>
         <RightSideSection>
           <TopDiv>

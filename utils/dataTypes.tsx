@@ -223,3 +223,20 @@ export type TimeZone = {
   id: string;
   name: string;
 };
+
+export type GroupData = {
+  id: string;
+  group_id: string;
+  workspace_id: string;
+  name: string;
+  group_label: string;
+  avatar: string;
+  traits: {
+    tasks: string;
+    projects: string;
+    activeUsers: string;
+    activeSubscriptions: string;
+  };
+  created_at: string;
+  updated_at: string;
+};
