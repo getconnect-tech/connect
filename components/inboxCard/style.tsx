@@ -262,6 +262,7 @@ const AwaitingDiv = styled.div`
 const AwaitingText = styled.p`
   ${Typography.body_md_regular};
   color: var(--text-text-secondary);
+  font-style: italic;
 `;
 
 const ResponsiveAwaitingDiv = styled.div`
