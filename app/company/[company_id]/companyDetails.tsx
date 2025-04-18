@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MessageType } from '@prisma/client';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
@@ -11,6 +11,10 @@ import CustomContextMenu from '@/components/contextMenu/contextMenu';
 import InboxCard from '@/components/inboxCard/inboxCard';
 import { Main } from '@/app/contact/style';
 import DetailsSection from '@/app/contact/[contact_id]/detailsSection';
+import InboxLoading from '@/components/inboxLoading/inboxLoading';
+import { useStores } from '@/stores';
+import { getGroupDetails } from '@/services/clientSide/contactServices';
+import { isEmpty } from '@/helpers/common';
 import {
   BottomDiv,
   CountingText,
@@ -33,14 +37,27 @@ import {
   WorkSpaceSection,
 } from './style';
 
-function CompanyDetail() {
+interface Props {
+  company_id: string;
+}
+
+function CompanyDetail(props: Props) {
+  const { company_id } = props;
   const router = useRouter();
   const [isNavbar, setIsNavbar] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('Open');
   const { filteredTicketList } = ticketStore;
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
+
+  // Mobx store variables
+  const { workspaceStore, contactStore } = useStores();
+  const { currentWorkspace } = workspaceStore || {};
+  const { groupDetails } = contactStore || {};
+
+  console.log('groupDetails', groupDetails);
 
   const onCloseNavbar = useCallback(() => {
     setIsNavbar(false);
@@ -70,6 +87,21 @@ function CompanyDetail() {
       email: 'teamcamp@gmail.com',
     },
   ];
+
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    if (!isEmpty(currentWorkspace?.id)) {
+      await getGroupDetails(company_id);
+    }
+    setLoading(false);
+  }, [company_id, currentWorkspace?.id]);
+
+  useEffect(() => {
+    loadData();
+    return () => {
+      contactStore.setGroupDetails(null);
+    };
+  }, [loadData, contactStore]);
 
   const renderWorkSpace = useMemo(() => {
     return (
@@ -185,10 +217,10 @@ function CompanyDetail() {
           </TopDiv>
           <div style={{ padding: '0 16px' }} onClick={onCloseNavbar}>
             <BottomDiv>
-              {/* {loading &&
+              {loading &&
                 (!filteredTicketList || filteredTicketList?.length === 0) && (
                   <InboxLoading />
-                )} */}
+                )}
               {renderTickets}
             </BottomDiv>
           </div>
