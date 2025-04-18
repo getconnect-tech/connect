@@ -1,6 +1,7 @@
-import { MessageType, TicketStatus } from '@prisma/client';
+import { TicketStatus } from '@prisma/client';
 import { removeNullUndefined } from '@/helpers/common';
 import { prisma } from '@/prisma/prisma';
+import { getWorkspaceTickets } from './ticket';
 
 export const getWorkspaceGroups = async (workspaceId: string) => {
   const groups = await prisma.group.findMany({
@@ -159,7 +160,11 @@ export const removeContactsFromGroup = async (
   return response;
 };
 
-export const getGroupById = async (groupId: string) => {
+export const getGroupById = async (
+  groupId: string,
+  userId: string,
+  lastUpdated?: string,
+) => {
   const group = await prisma.group.findUnique({
     where: { id: groupId },
     include: {
@@ -185,49 +190,12 @@ export const getGroupById = async (groupId: string) => {
 
   const contactIds = group.contacts.map((c) => c.contact_id);
 
-  const tickets = await prisma.ticket.findMany({
-    where: {
-      contact_id: { in: contactIds },
-    },
-    include: {
-      contact: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          phone: true,
-        },
-      },
-      labels: { include: { label: true } },
-      assigned_user: true,
-      messages: {
-        where: {
-          type: {
-            in: [
-              MessageType.FROM_CONTACT,
-              MessageType.EMAIL,
-              MessageType.REGULAR,
-            ],
-          },
-        },
-        select: {
-          created_at: true,
-          author: {
-            select: {
-              id: true,
-              display_name: true,
-              email: true,
-              profile_url: true,
-            },
-          },
-          content: true,
-          type: true,
-        },
-        take: 1,
-        orderBy: { created_at: 'desc' },
-      },
-    },
-  });
+  const tickets = await getWorkspaceTickets(
+    group.workspace_id,
+    userId,
+    lastUpdated,
+    contactIds,
+  );
 
   return {
     ...group,

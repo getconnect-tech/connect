@@ -52,7 +52,7 @@ export const getContactTickets = async (
     workspaceId,
     userId,
     lastUpdated,
-    contactId,
+    [contactId],
   );
 
   return contactTickets;
