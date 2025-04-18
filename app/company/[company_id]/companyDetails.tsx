@@ -55,6 +55,7 @@ function CompanyDetail() {
     { label: 'Active Subscription', value: '0' },
   ];
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const contacts = [
     {
       imgSrc:
@@ -69,6 +70,7 @@ function CompanyDetail() {
       email: 'teamcamp@gmail.com',
     },
   ];
+
   const renderWorkSpace = useMemo(() => {
     return (
       <>
@@ -83,7 +85,7 @@ function CompanyDetail() {
         ))}
       </>
     );
-  }, []);
+  }, [contacts]);
 
   const renderTabItem = useMemo(() => {
     const tabItem = ['Open', 'Snoozed', 'Done'];
