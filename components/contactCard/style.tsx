@@ -97,7 +97,7 @@ const CompanyNameDiv = styled.div`
     margin-right: 10px;
   }
   &:hover {
-    background-color: var(--bg-white-hover);
+    background-color: var(--bg-surface-secondary-hover);
     border-radius: 30px;
     cursor: pointer;
     p {
