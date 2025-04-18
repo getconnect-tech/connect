@@ -15,6 +15,7 @@ import {
 } from '@/services/clientSide/contactServices';
 import { isEmpty } from '@/helpers/common';
 import { useStores } from '@/stores';
+import InboxLoading from '@/components/inboxLoading/inboxLoading';
 import { Main } from '../style';
 import {
   BottomDiv,
@@ -44,6 +45,7 @@ function ContactDetail(props: Props) {
   const { contact_id } = props;
   const router = useRouter();
   const [isNavbar, setIsNavbar] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('Open');
 
   // Mobx store variables
@@ -53,8 +55,6 @@ function ContactDetail(props: Props) {
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
-
-  console.log('contactTicket', contactTicket);
 
   const onCloseNavbar = useCallback(() => {
     setIsNavbar(false);
@@ -66,12 +66,14 @@ function ContactDetail(props: Props) {
   ];
 
   const loadData = useCallback(async () => {
+    setLoading(true);
     if (!isEmpty(currentWorkspace?.id)) {
       await Promise.all([
         getContactRecord(contact_id),
         getContactTicket(contact_id),
       ]);
     }
+    setLoading(false);
   }, [contact_id, currentWorkspace?.id]);
 
   useEffect(() => {
@@ -81,6 +83,7 @@ function ContactDetail(props: Props) {
   useEffect(() => {
     return () => {
       contactStore.setContactRecord(null);
+      contactStore.setContactTicket(null);
     };
   }, [contactStore]);
 
@@ -196,10 +199,9 @@ function ContactDetail(props: Props) {
           </TopDiv>
           <div style={{ padding: '0 16px' }} onClick={onCloseNavbar}>
             <BottomDiv>
-              {/* {loading &&
-                (!filteredTicketList || filteredTicketList?.length === 0) && (
-                  <InboxLoading />
-                )} */}
+              {loading && (!contactTicket || contactTicket?.length === 0) && (
+                <InboxLoading />
+              )}
               {renderTickets}
             </BottomDiv>
           </div>
