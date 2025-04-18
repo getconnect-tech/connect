@@ -36,7 +36,7 @@ export default function ContactCard({
   imgSrc,
   name,
   email,
-  isCompany = true,
+  isCompany = false,
   groupInfo,
   openCount,
   closeCount,
@@ -47,8 +47,11 @@ export default function ContactCard({
   const router = useRouter();
 
   const handleClick = useCallback(() => {
-    router.push(`/contact/${contactId}`);
-  }, [contactId, router]);
+    const basePath = isCompany ? 'company' : 'contact';
+    if (contactId) {
+      router.push(`/${basePath}/${contactId}`);
+    }
+  }, [isCompany, contactId, router]);
 
   return (
     <CardMainDiv onClick={handleClick} isShowNavbar={isShowNavbar}>
@@ -67,7 +70,7 @@ export default function ContactCard({
                 <p>{email}</p>
               </>
             )}
-            {isCompany ? (
+            {!isCompany ? (
               <CompanyDiv>
                 {groupInfo?.slice(0, 2).map((group, index) => (
                   <>

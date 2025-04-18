@@ -11,17 +11,19 @@ import {
 interface Props {
   title: string;
   detailItem: { label: string; value: string }[];
+  isCompany?: boolean;
 }
 
-function DetailsSection({ title, detailItem }: Props) {
+function DetailsSection({ title, detailItem, isCompany = false }: Props) {
   const renderDetailItem = useMemo(() => {
     return detailItem.map((item) => (
       <InformationItem key={item.label}>
-        <Label>{item.label}</Label>
+        <Label isCompany={isCompany}>{item.label}</Label>
         <Value>{item.value}</Value>
       </InformationItem>
     ));
-  }, [detailItem]);
+  }, [detailItem, isCompany]);
+
   return (
     <PersonalDetailSection>
       <Title>{title}</Title>

@@ -9,9 +9,14 @@ import { ListMainDiv } from './style';
 interface Props {
   activeTab: string;
   isShowNavbar: boolean;
+  isCompany?: boolean;
 }
 
-export default function PersonList({ activeTab, isShowNavbar }: Props) {
+export default function CompanyList({
+  activeTab,
+  isShowNavbar,
+  isCompany,
+}: Props) {
   const { contactStore } = useStores();
   const { groups } = contactStore || {};
   const [cardItem, setCardItem] = useState<Group[]>([]);
@@ -50,7 +55,7 @@ export default function PersonList({ activeTab, isShowNavbar }: Props) {
                 closeCount={
                   card.ticketsCount.CLOSED ? `${card.ticketsCount.CLOSED}` : '0'
                 }
-                isCompany={false}
+                isCompany={isCompany}
                 peopleCount={
                   card.contacts_count ? `${card.contacts_count}` : '0'
                 }
