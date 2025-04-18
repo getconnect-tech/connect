@@ -35,8 +35,6 @@ const PersonList = ({ isShowNavbar }: Props) => {
     loadData();
   }, [loadData]);
 
-  console.log('object', contacts);
-
   return (
     <>
       {loading && (!contacts || contacts.length === 0) ? (

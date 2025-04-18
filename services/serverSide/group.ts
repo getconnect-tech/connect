@@ -1,6 +1,7 @@
 import { TicketStatus } from '@prisma/client';
 import { removeNullUndefined } from '@/helpers/common';
 import { prisma } from '@/prisma/prisma';
+import { getWorkspaceTickets } from './ticket';
 
 export const getWorkspaceGroups = async (workspaceId: string) => {
   const groups = await prisma.group.findMany({
@@ -157,4 +158,48 @@ export const removeContactsFromGroup = async (
   });
 
   return response;
+};
+
+export const getGroupById = async (
+  groupId: string,
+  userId: string,
+  lastUpdated?: string,
+) => {
+  const group = await prisma.group.findUnique({
+    where: { id: groupId },
+    include: {
+      contacts: {
+        select: {
+          contact_id: true,
+          contact: {
+            select: {
+              name: true,
+              email: true,
+              phone: true,
+              avatar: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!group) {
+    throw new Error('Group not found');
+  }
+
+  const contactIds = group.contacts.map((c) => c.contact_id);
+
+  const tickets = await getWorkspaceTickets(
+    group.workspace_id,
+    userId,
+    lastUpdated,
+    contactIds,
+  );
+
+  return {
+    ...group,
+    contacts: group.contacts.map((c) => c.contact),
+    tickets,
+  };
 };

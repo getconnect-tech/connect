@@ -1,14 +1,22 @@
 /* eslint-disable max-len */
 'use client';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MessageType } from '@prisma/client';
+import { observer } from 'mobx-react-lite';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Avatar from '@/components/avtar/Avtar';
 import Icon from '@/components/icon/icon';
-import { ticketStore } from '@/stores/ticketStore';
 import CustomContextMenu from '@/components/contextMenu/contextMenu';
 import InboxCard from '@/components/inboxCard/inboxCard';
+import {
+  getContactRecord,
+  getContactTicket,
+} from '@/services/clientSide/contactServices';
+import { isEmpty } from '@/helpers/common';
+import { useStores } from '@/stores';
+import InboxLoading from '@/components/inboxLoading/inboxLoading';
+import { GroupData } from '@/utils/dataTypes';
 import { Main } from '../style';
 import {
   BottomDiv,
@@ -30,11 +38,21 @@ import {
 } from './style';
 import DetailsSection from './detailsSection';
 
-function ContactDetail() {
+interface Props {
+  contact_id: string;
+}
+
+function ContactDetail(props: Props) {
+  const { contact_id } = props;
   const router = useRouter();
   const [isNavbar, setIsNavbar] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('Open');
-  const { filteredTicketList } = ticketStore;
+
+  // Mobx store variables
+  const { workspaceStore, contactStore } = useStores();
+  const { currentWorkspace } = workspaceStore || {};
+  const { contactRecord, contactTicket } = contactStore || {};
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
@@ -44,29 +62,40 @@ function ContactDetail() {
   }, []);
 
   const personalDetail = [
-    { label: 'Email', value: 'bhavdip.pixer@gmail.com' },
-    { label: 'Phone', value: '(628) 225-4852' },
+    { label: 'Email', value: contactRecord?.email || '' },
+    { label: 'Phone', value: contactRecord?.phone || '' },
   ];
 
-  const renderWorkSpace = useMemo(() => {
-    const workspaces = [
-      {
-        imgSrc:
-          'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUser%20Image_1716282098691.jpg?alt=media&token=34984821-78db-4248-94c8-35f186397d7e',
-        name: 'Pixer digital',
-      },
-      {
-        imgSrc:
-          'https://firebasestorage.googleapis.com/v0/b/getconnect-tech.appspot.com/o/workspaces%2Fdba2c304-49b9-4f95-ac63-a74729b85a6e%2Fworkspace_profile%2Fimage_1726562412931.jpeg?alt=media&token=4e82e81b-56b5-4fcf-b3bc-bb6d907554e0',
-        name: 'Teamcamp',
-      },
-    ];
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    if (!isEmpty(currentWorkspace?.id)) {
+      await Promise.all([
+        getContactRecord(contact_id),
+        getContactTicket(contact_id),
+      ]);
+    }
+    setLoading(false);
+  }, [contact_id, currentWorkspace?.id]);
+
+  useEffect(() => {
+    loadData();
+    return () => {
+      contactStore.setContactRecord(null);
+      contactStore.setContactTicket(null);
+    };
+  }, [loadData, contactStore]);
+
+  const renderWorkSpace = useCallback((groupList: GroupData[]) => {
     return (
       <>
-        {workspaces.map((item) => (
-          <ItemDiv key={item.name}>
-            <Avatar imgSrc={item.imgSrc} name={''} size={20} />
-            <Value>{item.name}</Value>
+        {groupList?.map((item) => (
+          <ItemDiv key={item?.id}>
+            <Avatar
+              imgSrc={item?.avatar || ''}
+              name={item.name || ''}
+              size={20}
+            />
+            <Value>{item?.name}</Value>
           </ItemDiv>
         ))}
       </>
@@ -93,8 +122,9 @@ function ContactDetail() {
   const renderTickets = useMemo(() => {
     return (
       <>
-        {filteredTicketList?.length > 0 &&
-          filteredTicketList.map((ticket, index) => (
+        {contactTicket &&
+          contactTicket?.length > 0 &&
+          contactTicket?.map((ticket, index) => (
             <>
               <CustomContextMenu
                 key={ticket.id}
@@ -122,7 +152,7 @@ function ContactDetail() {
           ))}
       </>
     );
-  }, [currentOpenDropdown, filteredTicketList, isNavbar]);
+  }, [contactTicket, currentOpenDropdown, isNavbar]);
 
   return (
     <Main>
@@ -140,21 +170,29 @@ function ContactDetail() {
               size={true}
             />
             <Avatar
-              imgSrc='https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUser%20Image_1716282098691.jpg?alt=media&token=34984821-78db-4248-94c8-35f186397d7e'
-              name={''}
+              imgSrc={contactRecord?.avatar || ''}
+              name={contactRecord?.name || ''}
               size={28}
               isShowBorder
             />
-            <Name>XYZ</Name>
+            <Name>{contactRecord?.name}</Name>
           </NameSection>
           <DetailsSection
             title={'Personal details'}
             detailItem={personalDetail}
           />
-          <WorkSpaceSection>
-            <Title className='workspace-title'>Workspaces</Title>
-            <WorkspaceItemSection>{renderWorkSpace}</WorkspaceItemSection>
-          </WorkSpaceSection>
+          {contactRecord &&
+            contactRecord?.groups?.length > 0 &&
+            contactRecord?.groups?.map((groupList) => {
+              return (
+                <WorkSpaceSection key={groupList.name}>
+                  <Title className='workspace-title'>{groupList?.name}</Title>
+                  <WorkspaceItemSection>
+                    {renderWorkSpace(groupList.list as GroupData[])}
+                  </WorkspaceItemSection>
+                </WorkSpaceSection>
+              );
+            })}
         </LeftProfileSection>
         <RightSideSection>
           <TopDiv>
@@ -167,10 +205,9 @@ function ContactDetail() {
           </TopDiv>
           <div style={{ padding: '0 16px' }} onClick={onCloseNavbar}>
             <BottomDiv>
-              {/* {loading &&
-                (!filteredTicketList || filteredTicketList?.length === 0) && (
-                  <InboxLoading />
-                )} */}
+              {loading && (!contactTicket || contactTicket?.length === 0) && (
+                <InboxLoading />
+              )}
               {renderTickets}
             </BottomDiv>
           </div>
@@ -180,4 +217,4 @@ function ContactDetail() {
   );
 }
 
-export default ContactDetail;
+export default observer(ContactDetail);

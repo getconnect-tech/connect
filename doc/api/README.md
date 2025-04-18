@@ -63,6 +63,8 @@ All error responses follow this format:
 - [Update User Profile](./users/update-profile.md)
 - [List Users](./users/list-users.md)
 - [Create User](./users/create-user.md)
+- [Get User By Id](./users/get-user-by-id.md)
+- [Get Ticket By User](./users/get-ticket-by-user.md)
 
 ### Workspaces
 
@@ -70,6 +72,7 @@ All error responses follow this format:
 - [Create Workspace](./workspaces/create-workspace.md)
 - [Update Workspace](./workspaces/update-workspace.md)
 - [Delete Workspace](./workspaces/delete-workspace.md)
+- [Get Workspace](./workspaces/get-workspace.md)
 
 ### Tickets
 

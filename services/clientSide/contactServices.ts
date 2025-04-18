@@ -93,6 +93,52 @@ export const getContactDetailById = async (contactId: string) => {
 };
 
 /**
+ * @desc Get contact record by ID
+ * @param {*}
+ */
+export const getContactRecord = async (contactId: string) => {
+  try {
+    contactStore.setLoading(true);
+    const response = await axios.get(
+      `${NEXT_PUBLIC_API_URL}/contacts/${contactId}?details=true`,
+    );
+    const { data } = response;
+    contactStore.setContactRecord(data);
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    contactStore.setLoading(false);
+  }
+};
+
+/**
+ * @desc Get contact tickets
+ * @param {*}
+ */
+export const getContactTicket = async (contactId: string) => {
+  try {
+    contactStore.setLoading(true);
+    const response = await axios.get(
+      `${NEXT_PUBLIC_API_URL}/contacts/${contactId}?tickets=true`,
+    );
+    const { data } = response;
+    contactStore.setContactTicket(data);
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    contactStore.setLoading(false);
+  }
+};
+
+/**
  * @desc Refresh contact information
  * @param {*} contactId
  */

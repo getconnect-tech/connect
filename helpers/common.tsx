@@ -8,6 +8,7 @@ import {
 import { convert } from 'html-to-text';
 import axios from 'axios';
 import moment from 'moment-timezone';
+import _ from 'lodash';
 import { app } from '@/utils/firebase';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { messageStore } from '@/stores/messageStore';
@@ -327,5 +328,12 @@ export const generateTimezoneOptions = () => {
       label: label,
       value: zone,
     };
+  });
+};
+
+export const groupBy = (collection: any, iteratee: any) => {
+  const groupResult = _.groupBy(collection, iteratee);
+  return Object.keys(groupResult).map((key) => {
+    return { name: key, list: groupResult[key] };
   });
 };
