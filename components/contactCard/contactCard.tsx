@@ -47,8 +47,11 @@ export default function ContactCard({
   const router = useRouter();
 
   const handleClick = useCallback(() => {
-    router.push(`/contact/${contactId}`);
-  }, [contactId, router]);
+    const basePath = isCompany ? 'company' : 'contact';
+    if (contactId) {
+      router.push(`/${basePath}/${contactId}`);
+    }
+  }, [isCompany, contactId, router]);
 
   return (
     <CardMainDiv onClick={handleClick} isShowNavbar={isShowNavbar}>
