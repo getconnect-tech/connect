@@ -50,14 +50,9 @@ export const getQueueSizeInsights =
         return null;
       }
 
-      // const response = await axios.get(
-      //   `${NEXT_PUBLIC_API_URL}/insights/queue-size`,
-      // );
       const response = await axios.get(
-        `${NEXT_PUBLIC_API_URL}/insights/medianFirstTime`,
+        `${NEXT_PUBLIC_API_URL}/insights/queue-size`,
       );
-
-      console.log('API Response:', response.data); // Debug log
 
       if (!response.data || !response.data.data) {
         throw new Error('Invalid data format received from API');
