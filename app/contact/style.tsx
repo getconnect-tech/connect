@@ -115,6 +115,7 @@ const ListMainDiv = styled.div<Props>`
   border-radius: 12px;
   max-width: 662px;
   margin: 12px auto 0;
+  overflow: hidden;
   @media screen and (max-width: 449px) {
     padding: 0;
   }

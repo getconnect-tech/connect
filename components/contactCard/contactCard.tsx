@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import Avatar from '../avtar/Avtar';
 import {
   CardMainDiv,
@@ -28,21 +29,32 @@ interface Props {
   closeCount: string;
   peopleCount?: string;
   isShowNavbar: boolean;
+  contactId?: string;
 }
 
 export default function ContactCard({
   imgSrc,
   name,
   email,
-  isCompany = true,
+  isCompany = false,
   groupInfo,
   openCount,
   closeCount,
   peopleCount,
   isShowNavbar,
+  contactId,
 }: Props) {
+  const router = useRouter();
+
+  const handleClick = useCallback(() => {
+    const basePath = isCompany ? 'company' : 'contact';
+    if (contactId) {
+      router.push(`/${basePath}/${contactId}`);
+    }
+  }, [isCompany, contactId, router]);
+
   return (
-    <CardMainDiv isShowNavbar={isShowNavbar}>
+    <CardMainDiv onClick={handleClick} isShowNavbar={isShowNavbar}>
       <LeftDiv>
         <Avatar
           imgSrc={imgSrc}
@@ -58,7 +70,7 @@ export default function ContactCard({
                 <p>{email}</p>
               </>
             )}
-            {isCompany ? (
+            {!isCompany ? (
               <CompanyDiv>
                 {groupInfo?.slice(0, 2).map((group, index) => (
                   <>

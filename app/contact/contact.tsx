@@ -96,7 +96,11 @@ const Contact = () => {
             {activeTab === 'People' ? (
               <PersonList isShowNavbar={isNavbar} />
             ) : (
-              <CompanyList activeTab={activeTab} isShowNavbar={isNavbar} />
+              <CompanyList
+                activeTab={activeTab}
+                isShowNavbar={isNavbar}
+                isCompany={true}
+              />
             )}
           </BottomDiv>
         </div>

@@ -19,7 +19,7 @@ const UpdateRequestBody = z.object({
 
 export const GET = withWorkspaceAuth(async (req, { groupId }) => {
   try {
-    const group = await getGroupById(groupId);
+    const group = await getGroupById(groupId, req.user.id);
 
     return Response.json(group, { status: 200 });
   } catch (err) {
