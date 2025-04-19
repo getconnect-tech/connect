@@ -14,7 +14,7 @@ import DetailsSection from '@/app/contact/[contact_id]/detailsSection';
 import InboxLoading from '@/components/inboxLoading/inboxLoading';
 import { useStores } from '@/stores';
 import { getGroupDetails } from '@/services/clientSide/contactServices';
-import { isEmpty } from '@/helpers/common';
+import { formatWorkspaceDetails, isEmpty } from '@/helpers/common';
 import {
   BottomDiv,
   CountingText,
@@ -60,29 +60,10 @@ function CompanyDetail(props: Props) {
     setIsNavbar(false);
   }, []);
 
-  const workspaceItemDetail = [
-    { label: 'Name', value: groupDetails?.name || '' },
-    { label: 'Group Label', value: groupDetails?.group_label || '' },
-    {
-      label: 'Tasks',
-      value: (groupDetails?.traits as { tasks?: string })?.tasks || '0',
-    },
-    {
-      label: 'Projects',
-      value: (groupDetails?.traits as { projects?: string })?.projects || '0',
-    },
-    {
-      label: 'Active Users',
-      value:
-        (groupDetails?.traits as { activeUsers?: string })?.activeUsers || '0',
-    },
-    {
-      label: 'Active Subscription',
-      value:
-        (groupDetails?.traits as { activeSubscriptions?: string })
-          ?.activeSubscriptions || '0',
-    },
-  ];
+  const workspaceItemDetail = useMemo(
+    () => formatWorkspaceDetails(groupDetails),
+    [groupDetails],
+  );
 
   const loadData = useCallback(async () => {
     setLoading(true);

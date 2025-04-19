@@ -243,3 +243,8 @@ export type GroupData = {
   created_at: string;
   updated_at: string;
 };
+
+export type WorkspaceDetailItem = {
+  label: string;
+  value: string;
+};

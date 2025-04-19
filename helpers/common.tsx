@@ -14,6 +14,7 @@ import { workspaceStore } from '@/stores/workspaceStore';
 import { messageStore } from '@/stores/messageStore';
 import { appStore } from '@/stores/appStore';
 import { Contact } from '@/utils/appTypes';
+import { GroupDetails, WorkspaceDetailItem } from '@/utils/dataTypes';
 
 export function isEmpty(value: any) {
   if (
@@ -336,4 +337,32 @@ export const groupBy = (collection: any, iteratee: any) => {
   return Object.keys(groupResult).map((key) => {
     return { name: key, list: groupResult[key] };
   });
+};
+
+export const formatWorkspaceDetails = (
+  groupDetails: GroupDetails | null,
+): WorkspaceDetailItem[] => {
+  return [
+    { label: 'Name', value: groupDetails?.name || '' },
+    { label: 'Group Label', value: groupDetails?.group_label || '' },
+    {
+      label: 'Tasks',
+      value: (groupDetails?.traits as { tasks?: string })?.tasks || '0',
+    },
+    {
+      label: 'Projects',
+      value: (groupDetails?.traits as { projects?: string })?.projects || '0',
+    },
+    {
+      label: 'Active Users',
+      value:
+        (groupDetails?.traits as { activeUsers?: string })?.activeUsers || '0',
+    },
+    {
+      label: 'Active Subscription',
+      value:
+        (groupDetails?.traits as { activeSubscriptions?: string })
+          ?.activeSubscriptions || '0',
+    },
+  ];
 };
