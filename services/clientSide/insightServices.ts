@@ -50,8 +50,11 @@ export const getQueueSizeInsights =
         return null;
       }
 
+      // const response = await axios.get(
+      //   `${NEXT_PUBLIC_API_URL}/insights/queue-size`,
+      // );
       const response = await axios.get(
-        `${NEXT_PUBLIC_API_URL}/insights/queue-size`,
+        `${NEXT_PUBLIC_API_URL}/insights/medianFirstTime`,
       );
 
       console.log('API Response:', response.data); // Debug log

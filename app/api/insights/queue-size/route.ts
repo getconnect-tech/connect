@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import { handleApiError } from '@/helpers/errorHandler';
 import { getQueueSizeInsights } from '@/services/serverSide/insights';
-import { createStringSchema, parseAndValidateRequest } from '@/lib/zod';
+import { createStringSchema } from '@/lib/zod';
 
 // Query parameters schema
 const QuerySchema = z.object({
@@ -25,8 +25,8 @@ export const GET = withWorkspaceAuth(async (req) => {
 
     const queueSizeData = await getQueueSizeInsights(
       req.workspace.id,
-      queryParams.startDate,
-      queryParams.endDate,
+      queryParams.startDate ? new Date(queryParams.startDate) : undefined,
+      queryParams.endDate ? new Date(queryParams.endDate) : undefined,
     );
 
     return NextResponse.json(queueSizeData);
