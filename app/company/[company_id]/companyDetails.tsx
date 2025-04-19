@@ -15,6 +15,7 @@ import InboxLoading from '@/components/inboxLoading/inboxLoading';
 import { useStores } from '@/stores';
 import { getGroupDetails } from '@/services/clientSide/contactServices';
 import { formatWorkspaceDetails, isEmpty } from '@/helpers/common';
+import EmptyState from '@/components/emptyState/emptyState';
 import {
   BottomDiv,
   CountingText,
@@ -80,6 +81,22 @@ function CompanyDetail(props: Props) {
     };
   }, [loadData, contactStore]);
 
+  const filterTicketsByStatus = useCallback(() => {
+    if (!groupDetails?.tickets) return [];
+
+    return groupDetails?.tickets.filter((ticket) => {
+      switch (activeTab) {
+        case 'Open':
+          return ticket.status === 'OPEN';
+        case 'Snoozed':
+          return ticket.status === 'SNOOZED';
+        case 'Done':
+          return ticket.status === 'CLOSED';
+        default:
+          return true;
+      }
+    });
+  }, [groupDetails?.tickets, activeTab]);
   const renderWorkSpace = useMemo(() => {
     return (
       <>
@@ -119,11 +136,12 @@ function CompanyDetail(props: Props) {
   }, [activeTab]);
 
   const renderTickets = useMemo(() => {
+    const filteredTickets = filterTicketsByStatus();
+
     return (
       <>
-        {groupDetails &&
-          groupDetails?.tickets?.length > 0 &&
-          groupDetails?.tickets?.map((ticket, index) => (
+        {filteredTickets.length > 0 ? (
+          filteredTickets?.map((ticket, index) => (
             <>
               <CustomContextMenu
                 key={ticket.id}
@@ -148,10 +166,19 @@ function CompanyDetail(props: Props) {
                 </div>
               </CustomContextMenu>
             </>
-          ))}
+          ))
+        ) : (
+          <EmptyState
+            iconName='inbox-icon'
+            iconSize='20'
+            iconViewBox='0 0 12 12'
+            title='No tickets found'
+            description='There are no tickets in this status.'
+          />
+        )}
       </>
     );
-  }, [currentOpenDropdown, groupDetails, isNavbar]);
+  }, [currentOpenDropdown, isNavbar, filterTicketsByStatus]);
 
   return (
     <Main>

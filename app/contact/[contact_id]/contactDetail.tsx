@@ -2,7 +2,7 @@
 'use client';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MessageType } from '@prisma/client';
+import { MessageType, TicketStatus } from '@prisma/client';
 import { observer } from 'mobx-react-lite';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Avatar from '@/components/avtar/Avtar';
@@ -17,6 +17,7 @@ import { isEmpty } from '@/helpers/common';
 import { useStores } from '@/stores';
 import InboxLoading from '@/components/inboxLoading/inboxLoading';
 import { GroupData } from '@/utils/dataTypes';
+import EmptyState from '@/components/emptyState/emptyState';
 import { Main } from '../style';
 import {
   BottomDiv,
@@ -119,40 +120,65 @@ function ContactDetail(props: Props) {
     );
   }, [activeTab]);
 
+  const filterTicketsByStatus = useCallback(() => {
+    if (!contactTicket) return [];
+
+    return contactTicket.filter((ticket) => {
+      switch (activeTab) {
+        case 'Open':
+          return ticket.status === 'OPEN';
+        case 'Snoozed':
+          return ticket.status === 'SNOOZED';
+        case 'Done':
+          return ticket.status === 'CLOSED';
+        default:
+          return true;
+      }
+    });
+  }, [contactTicket, activeTab]);
+
   const renderTickets = useMemo(() => {
+    const filteredTickets = filterTicketsByStatus();
+
     return (
       <>
-        {contactTicket &&
-          contactTicket?.length > 0 &&
-          contactTicket?.map((ticket, index) => (
-            <>
-              <CustomContextMenu
-                key={ticket.id}
-                ticketDetail={ticket}
-                ticketIndex={index}
-              >
-                <div>
-                  <InboxCard
-                    ticketDetail={ticket}
-                    description={ticket.last_message?.content || ''}
-                    showDotIcon={!ticket?.has_read}
-                    src=''
-                    currentOpenDropdown={currentOpenDropdown}
-                    setCurrentOpenDropdown={setCurrentOpenDropdown}
-                    dropdownIdentifier={`card-${ticket.id}`}
-                    ticketIndex={index}
-                    isShowNavbar={isNavbar}
-                    isAwaiting={
-                      ticket.last_message.type === MessageType.FROM_CONTACT
-                    }
-                  />
-                </div>
-              </CustomContextMenu>
-            </>
-          ))}
+        {filteredTickets.length > 0 ? (
+          filteredTickets.map((ticket, index) => (
+            <CustomContextMenu
+              key={ticket.id}
+              ticketDetail={ticket}
+              ticketIndex={index}
+            >
+              <div>
+                <InboxCard
+                  ticketDetail={ticket}
+                  description={ticket.last_message?.content || ''}
+                  showDotIcon={!ticket?.has_read}
+                  src=''
+                  currentOpenDropdown={currentOpenDropdown}
+                  setCurrentOpenDropdown={setCurrentOpenDropdown}
+                  dropdownIdentifier={`card-${ticket.id}`}
+                  ticketIndex={index}
+                  isShowNavbar={isNavbar}
+                  isAwaiting={
+                    ticket.last_message.type === MessageType.FROM_CONTACT
+                  }
+                />
+              </div>
+            </CustomContextMenu>
+          ))
+        ) : (
+          <EmptyState
+            iconName='inbox-icon'
+            iconSize='20'
+            iconViewBox='0 0 12 12'
+            title='No tickets found'
+            description='There are no tickets in this status.'
+          />
+        )}
       </>
     );
-  }, [contactTicket, currentOpenDropdown, isNavbar]);
+  }, [contactTicket, currentOpenDropdown, isNavbar, filterTicketsByStatus]);
 
   return (
     <Main>
