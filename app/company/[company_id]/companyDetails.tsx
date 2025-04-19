@@ -3,10 +3,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MessageType } from '@prisma/client';
+import { observer } from 'mobx-react-lite';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Avatar from '@/components/avtar/Avtar';
 import Icon from '@/components/icon/icon';
-import { ticketStore } from '@/stores/ticketStore';
 import CustomContextMenu from '@/components/contextMenu/contextMenu';
 import InboxCard from '@/components/inboxCard/inboxCard';
 import { Main } from '@/app/contact/style';
@@ -47,7 +47,6 @@ function CompanyDetail(props: Props) {
   const [isNavbar, setIsNavbar] = useState(false);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('Open');
-  const { filteredTicketList } = ticketStore;
   const [currentOpenDropdown, setCurrentOpenDropdown] = useState<string | null>(
     null,
   );
@@ -57,34 +56,31 @@ function CompanyDetail(props: Props) {
   const { currentWorkspace } = workspaceStore || {};
   const { groupDetails } = contactStore || {};
 
-  console.log('groupDetails', groupDetails);
-
   const onCloseNavbar = useCallback(() => {
     setIsNavbar(false);
   }, []);
 
   const workspaceItemDetail = [
-    { label: 'Name', value: 'Pixer digital' },
-    { label: 'Group Label', value: 'Workspace' },
-    { label: 'Tasks', value: '0' },
-    { label: 'Projects', value: '1' },
-    { label: 'Active Users', value: '1' },
-    { label: 'Active Subscription', value: '0' },
-  ];
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const contacts = [
+    { label: 'Name', value: groupDetails?.name || '' },
+    { label: 'Group Label', value: groupDetails?.group_label || '' },
     {
-      imgSrc:
-        'https://firebasestorage.googleapis.com/v0/b/teamcamp-app.appspot.com/o/UserProfiles%2FUser%20Image_1716282098691.jpg?alt=media&token=34984821-78db-4248-94c8-35f186397d7e',
-      name: 'Pixer digital',
-      email: 'pixerdigital@gmail.com',
+      label: 'Tasks',
+      value: (groupDetails?.traits as { tasks?: string })?.tasks || '0',
     },
     {
-      imgSrc:
-        'https://firebasestorage.googleapis.com/v0/b/getconnect-tech.appspot.com/o/workspaces%2Fdba2c304-49b9-4f95-ac63-a74729b85a6e%2Fworkspace_profile%2Fimage_1726562412931.jpeg?alt=media&token=4e82e81b-56b5-4fcf-b3bc-bb6d907554e0',
-      name: 'Teamcamp',
-      email: 'teamcamp@gmail.com',
+      label: 'Projects',
+      value: (groupDetails?.traits as { projects?: string })?.projects || '0',
+    },
+    {
+      label: 'Active Users',
+      value:
+        (groupDetails?.traits as { activeUsers?: string })?.activeUsers || '0',
+    },
+    {
+      label: 'Active Subscription',
+      value:
+        (groupDetails?.traits as { activeSubscriptions?: string })
+          ?.activeSubscriptions || '0',
     },
   ];
 
@@ -106,9 +102,14 @@ function CompanyDetail(props: Props) {
   const renderWorkSpace = useMemo(() => {
     return (
       <>
-        {contacts.map((item) => (
+        {groupDetails?.contacts.map((item) => (
           <ItemDiv key={item.name}>
-            <Avatar imgSrc={item.imgSrc} name={''} size={28} isShowBorder />
+            <Avatar
+              imgSrc={item.avatar || ''}
+              name={item.name}
+              size={28}
+              isShowBorder
+            />
             <div>
               <Value>{item.name}</Value>
               <EmailValue>{item.email}</EmailValue>
@@ -117,7 +118,7 @@ function CompanyDetail(props: Props) {
         ))}
       </>
     );
-  }, [contacts]);
+  }, [groupDetails?.contacts]);
 
   const renderTabItem = useMemo(() => {
     const tabItem = ['Open', 'Snoozed', 'Done'];
@@ -139,8 +140,9 @@ function CompanyDetail(props: Props) {
   const renderTickets = useMemo(() => {
     return (
       <>
-        {filteredTicketList?.length > 0 &&
-          filteredTicketList.map((ticket, index) => (
+        {groupDetails &&
+          groupDetails?.tickets?.length > 0 &&
+          groupDetails?.tickets?.map((ticket, index) => (
             <>
               <CustomContextMenu
                 key={ticket.id}
@@ -152,7 +154,7 @@ function CompanyDetail(props: Props) {
                     ticketDetail={ticket}
                     description={ticket.last_message?.content || ''}
                     showDotIcon={!ticket?.has_read}
-                    src=''
+                    src={ticket?.contact.avatar || ''}
                     currentOpenDropdown={currentOpenDropdown}
                     setCurrentOpenDropdown={setCurrentOpenDropdown}
                     dropdownIdentifier={`card-${ticket.id}`}
@@ -168,7 +170,7 @@ function CompanyDetail(props: Props) {
           ))}
       </>
     );
-  }, [currentOpenDropdown, filteredTicketList, isNavbar]);
+  }, [currentOpenDropdown, groupDetails, isNavbar]);
 
   return (
     <Main>
@@ -186,12 +188,12 @@ function CompanyDetail(props: Props) {
               size={true}
             />
             <Avatar
-              imgSrc='https://firebasestorage.googleapis.com/v0/b/getconnect-tech.appspot.com/o/workspaces%2Fdba2c304-49b9-4f95-ac63-a74729b85a6e%2Fworkspace_profile%2Fimage_1726562412931.jpeg?alt=media&token=4e82e81b-56b5-4fcf-b3bc-bb6d907554e0'
-              name={''}
+              imgSrc={groupDetails?.avatar || ''}
+              name={groupDetails?.name || ''}
               size={28}
               isShowBorder
             />
-            <Name>Company</Name>
+            <Name>{groupDetails?.name}</Name>
           </NameSection>
           <DetailsSection
             title={'Workspace details'}
@@ -201,7 +203,7 @@ function CompanyDetail(props: Props) {
           <WorkSpaceSection>
             <TitleSection>
               <Title className='workspace-title'>Contacts</Title>
-              <CountingText>{contacts.length}</CountingText>
+              <CountingText>{groupDetails?.contacts.length}</CountingText>
             </TitleSection>
             <WorkspaceItemSection>{renderWorkSpace}</WorkspaceItemSection>
           </WorkSpaceSection>
@@ -218,7 +220,7 @@ function CompanyDetail(props: Props) {
           <div style={{ padding: '0 16px' }} onClick={onCloseNavbar}>
             <BottomDiv>
               {loading &&
-                (!filteredTicketList || filteredTicketList?.length === 0) && (
+                (!groupDetails || groupDetails?.tickets?.length === 0) && (
                   <InboxLoading />
                 )}
               {renderTickets}
@@ -230,4 +232,4 @@ function CompanyDetail(props: Props) {
   );
 }
 
-export default CompanyDetail;
+export default observer(CompanyDetail);
