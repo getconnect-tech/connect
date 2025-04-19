@@ -49,6 +49,30 @@ export const getAllGroup = async () => {
 };
 
 /**
+ * @desc Get contact data based on group id
+ * @param {*}
+ */
+export const getGroupDetails = async (companyId: string) => {
+  try {
+    contactStore.setLoading(true);
+    const response = await axios.get(
+      `${NEXT_PUBLIC_API_URL}/groups/${companyId}`,
+    );
+    const { data } = response;
+    // set contact data
+    contactStore.setGroupDetails(data);
+    return data;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  } finally {
+    contactStore.setLoading(false);
+  }
+};
+
+/**
  * @desc Get contact groups
  * @param {*} contactId
  */

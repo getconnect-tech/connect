@@ -13,7 +13,7 @@ import {
   getUserWorkspaces,
   getWorkspaceById,
 } from '@/services/serverSide/workspace';
-import { getWorkspaceGroups } from '@/services/serverSide/group';
+import { getGroupById, getWorkspaceGroups } from '@/services/serverSide/group';
 
 export interface InviteModal {
   name: string;
@@ -71,6 +71,9 @@ export type ContactRecord = NonNullable<
 export type ContactTicket = NonNullable<
   Awaited<ReturnType<typeof getContactTickets>>
 >[0];
+export type GroupDetails = NonNullable<
+  Awaited<ReturnType<typeof getGroupById>>
+>;
 
 export type WorkspaceConfig = {
   emailChannel: {
@@ -239,4 +242,9 @@ export type GroupData = {
   };
   created_at: string;
   updated_at: string;
+};
+
+export type WorkspaceDetailItem = {
+  label: string;
+  value: string;
 };

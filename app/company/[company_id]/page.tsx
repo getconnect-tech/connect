@@ -1,10 +1,14 @@
 import React from 'react';
 import CompanyDetails from './companyDetails';
 
-function CompanyDetailPage() {
+function CompanyDetailPage({
+  params: { company_id },
+}: {
+  params: { company_id: string };
+}) {
   return (
     <>
-      <CompanyDetails />
+      <CompanyDetails company_id={company_id} />
     </>
   );
 }
