@@ -2,7 +2,7 @@
 'use client';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MessageType, TicketStatus } from '@prisma/client';
+import { MessageType } from '@prisma/client';
 import { observer } from 'mobx-react-lite';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Avatar from '@/components/avtar/Avtar';
