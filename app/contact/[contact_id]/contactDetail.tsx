@@ -2,7 +2,7 @@
 'use client';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MessageType, TicketStatus } from '@prisma/client';
+import { MessageType } from '@prisma/client';
 import { observer } from 'mobx-react-lite';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Avatar from '@/components/avtar/Avtar';
@@ -124,11 +124,19 @@ function ContactDetail(props: Props) {
     if (!contactTicket) return [];
 
     return contactTicket.filter((ticket) => {
+      const currentTime = new Date();
+
       switch (activeTab) {
         case 'Open':
-          return ticket.status === 'OPEN';
+          return (
+            ticket.status === 'OPEN' &&
+            (!ticket.snooze_until ||
+              new Date(ticket.snooze_until) < currentTime)
+          );
         case 'Snoozed':
-          return ticket.status === 'SNOOZED';
+          return (
+            ticket.snooze_until && new Date(ticket.snooze_until) > currentTime
+          );
         case 'Done':
           return ticket.status === 'CLOSED';
         default:
