@@ -174,7 +174,7 @@ function CompanyDetail(props: Props) {
               size={28}
               isShowBorder
             />
-            <Name>{groupDetails?.name}</Name>
+            <Name>{groupDetails?.group_label}</Name>
           </NameSection>
           <DetailsSection
             title={'Workspace details'}
