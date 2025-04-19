@@ -2,11 +2,11 @@ import axios from 'axios';
 import { NEXT_PUBLIC_API_URL } from '@/helpers/environment';
 import { messageStore } from '@/stores/messageStore';
 import { getAPIErrorMessage } from '@/helpers/common';
-import { QueueSizeResponse } from '../serverSide/insights';
 import { insightStore } from '@/stores/insightStore';
 import { workspaceStore } from '@/stores/workspaceStore';
-import { getWorkspaceById } from './workspaceServices';
 import UserPreferenceSingleton from '@/helpers/userPreferenceSingleton';
+import { QueueSizeResponse } from '../serverSide/insights';
+import { getWorkspaceById } from './workspaceServices';
 
 // Configure axios defaults for all requests
 axios.interceptors.request.use((config) => {
