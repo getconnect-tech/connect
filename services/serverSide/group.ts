@@ -17,6 +17,7 @@ export const getWorkspaceGroups = async (workspaceId: string) => {
           contact: {
             select: {
               tickets: {
+                where: { workspace_id: workspaceId },
                 select: {
                   status: true,
                 },
