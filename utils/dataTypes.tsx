@@ -70,6 +70,11 @@ export type WorkspaceConfig = {
   webhooks: {
     contactRefresh?: string;
   };
+  officeHours?: {
+    startTime: string;
+    endTime: string;
+    timeZone: string;
+  };
 };
 
 export type Macros = NonNullable<Awaited<ReturnType<typeof getMacros>>>[0];
