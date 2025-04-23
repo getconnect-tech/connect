@@ -55,6 +55,7 @@ import FileCard from '@/components/fileCard/fileCard';
 import ProsemirrorEditor from '@/components/prosemirror';
 import ResponsiveProfileSection from '@/components/profileSection/responsiveProfileSection';
 import { getContactDetailById } from '@/services/clientSide/contactServices';
+import TiptapEditor from '@/components/tiptapEditor';
 import {
   ActivityDiv,
   BottomDiv,
@@ -967,14 +968,19 @@ function TicketDetails(props: Props) {
                   />
                 </div>
                 <Input modeSelectedItem={modeSelectedItem}>
-                  <ProsemirrorEditor
+                  <TiptapEditor
+                    valueContent={commentValue}
+                    setValueContent={setCommentValue}
+                    placeHolder='Write a message'
+                  />
+                  {/* <ProsemirrorEditor
                     ref={editorRef}
                     valueContent={commentValue}
                     setValueContent={setCommentValue}
                     placeholder='Write a message'
                     className='prosemirror-commentbox'
                     isInternalDiscussion={modeSelectedItem.name !== 'Email'}
-                  />
+                  /> */}
                   <div className='attach-file-div'>
                     {/* Attached Files render */}
                     {attachFile?.map((fileData, index: number) => (
