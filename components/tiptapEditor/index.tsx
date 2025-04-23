@@ -402,18 +402,16 @@ function TiptapEditor(props: Props) {
                     </div>
                   )}
                   <SVGIcon
-                    name='heading-icon'
-                    width='18'
-                    height='18'
-                    viewBox='0 0 18 18'
-                    fill='none'
+                    name='Heading-icon'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
                   />
                   <SVGIcon
-                    name='heading-drop-down-icon'
-                    width='10'
-                    height='10'
-                    viewBox='0 0 10 10'
-                    fill='none'
+                    name='dropdown-icon'
+                    width='8'
+                    height='8'
+                    viewBox='0 0 8 8'
                   />
                 </button>
                 <button
@@ -421,10 +419,9 @@ function TiptapEditor(props: Props) {
                 >
                   <SVGIcon
                     name='bold-icon'
-                    width='18'
-                    height='18'
-                    viewBox='0 0 18 18'
-                    fill='none'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
                   />
                 </button>
                 <button
@@ -432,10 +429,9 @@ function TiptapEditor(props: Props) {
                 >
                   <SVGIcon
                     name='italic-icon'
-                    width='18'
-                    height='18'
-                    viewBox='0 0 18 18'
-                    fill='none'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
                   />
                 </button>
                 <button
@@ -443,32 +439,22 @@ function TiptapEditor(props: Props) {
                 >
                   <SVGIcon
                     name='underline-icon'
-                    width='18'
-                    height='18'
-                    viewBox='0 0 18 18'
-                    fill='none'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
                   />
                 </button>
                 <button
                   onClick={() => editor.chain().focus().toggleStrike().run()}
                 >
                   <SVGIcon
-                    name='strike-icon'
-                    width='18'
-                    height='18'
-                    viewBox='0 0 18 18'
-                    fill='none'
+                    name='strikethrough-icon'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
                   />
                 </button>
-                <button onClick={setLink}>
-                  <SVGIcon
-                    name='link-icon'
-                    width='18'
-                    height='18'
-                    viewBox='0 0 18 18'
-                    fill='none'
-                  />
-                </button>
+
                 <button
                   onClick={() =>
                     editor.chain().focus().toggleBlockquote().run()
@@ -476,10 +462,17 @@ function TiptapEditor(props: Props) {
                 >
                   <SVGIcon
                     name='blockquote-icon'
-                    width='18'
-                    height='18'
-                    viewBox='0 0 18 18'
-                    fill='none'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
+                  />
+                </button>
+                <button onClick={setLink}>
+                  <SVGIcon
+                    name='link-icon'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
                   />
                 </button>
                 <button
@@ -487,9 +480,9 @@ function TiptapEditor(props: Props) {
                 >
                   <SVGIcon
                     name='inline-code-icon'
-                    width='18'
-                    height='18'
-                    viewBox='0 0 18 18'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
                   />
                 </button>
                 {/* <button
@@ -497,10 +490,10 @@ function TiptapEditor(props: Props) {
                 >
                   <SVGIcon
                     name='code-block-icon'
-                    width='18'
-                    height='18'
-                    viewBox='0 0 18 18'
-                    fill='none'
+                     width='12'
+                       height='12'
+                         viewBox='0 0 12 12'
+                  
                   />
                 </button> */}
                 <button
@@ -510,10 +503,9 @@ function TiptapEditor(props: Props) {
                 >
                   <SVGIcon
                     name='bullet-list-icon'
-                    width='18'
-                    height='18'
-                    viewBox='0 0 18 18'
-                    fill='none'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
                   />
                 </button>
               </div>
