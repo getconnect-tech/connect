@@ -30,6 +30,17 @@ export interface FirstResponseTimeResponse {
   endDate: string;
 }
 
+export interface ResolutionTimeResponse {
+  data: Array<{
+    date: string;
+    median: number;
+    totalTickets: number;
+  }>;
+  overallMedian: number;
+  startDate: string;
+  endDate: string;
+}
+
 const calculateBusinessMinutes = (
   start: Date,
   end: Date,
@@ -188,6 +199,90 @@ export const getFirstResponseTimeInsights = async (
   return {
     data: dailyMedians,
     overallMedian: calculateMedian(allResponseTimes),
+    startDate: effectiveStartDate.toISOString(),
+    endDate: effectiveEndDate.toISOString(),
+  };
+};
+
+export const getResolutionTimeInsights = async (
+  workspaceId: string,
+  startDate?: Date,
+  endDate?: Date,
+): Promise<ResolutionTimeResponse> => {
+  const effectiveEndDate = endDate ? new Date(endDate) : new Date();
+  const effectiveStartDate = startDate
+    ? new Date(startDate)
+    : subDays(effectiveEndDate, 30);
+  const workspaceConfig: any = await getWorkspaceConfig(workspaceId);
+
+  if (!workspaceConfig) {
+    throw new Error('Workspace configuration not found');
+  }
+
+  const tickets = await prisma.ticket.findMany({
+    where: {
+      workspace_id: workspaceId,
+      created_at: {
+        gte: startOfDay(effectiveStartDate),
+        lte: endOfDay(effectiveEndDate),
+      },
+      status: 'CLOSED',
+    },
+    select: {
+      id: true,
+      created_at: true,
+      updated_at: true,
+    },
+  });
+
+  const resolutionTimesByDate = new Map<string, number[]>();
+  const allResolutionTimes: number[] = [];
+
+  for (const ticket of tickets) {
+    const dateStr = format(ticket.created_at, 'yyyy-MM-dd');
+    const timeDiff =
+      workspaceConfig?.startTime &&
+      workspaceConfig?.endTime &&
+      workspaceConfig?.timeZone
+        ? calculateBusinessMinutes(
+            ticket.created_at,
+            ticket.updated_at,
+            workspaceConfig.startTime,
+            workspaceConfig.endTime,
+            workspaceConfig.timeZone,
+          )
+        : Math.round(
+            (ticket.updated_at.getTime() - ticket.created_at.getTime()) /
+              (1000 * 60),
+          );
+
+    const dateTimes = resolutionTimesByDate.get(dateStr) || [];
+    dateTimes.push(timeDiff);
+    resolutionTimesByDate.set(dateStr, dateTimes);
+    allResolutionTimes.push(timeDiff);
+  }
+
+  const dailyMedians = eachDayOfInterval({
+    start: effectiveStartDate,
+    end: effectiveEndDate,
+  })
+    .map((day) => {
+      const dayStr = format(day, 'yyyy-MM-dd');
+      const dayTimes = resolutionTimesByDate.get(dayStr);
+
+      if (!dayTimes?.length) return null;
+
+      return {
+        date: dayStr,
+        median: calculateMedian(dayTimes),
+        totalTickets: dayTimes.length,
+      };
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null);
+
+  return {
+    data: dailyMedians,
+    overallMedian: calculateMedian(allResolutionTimes),
     startDate: effectiveStartDate.toISOString(),
     endDate: effectiveEndDate.toISOString(),
   };
