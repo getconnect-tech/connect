@@ -3,8 +3,9 @@ import styled, { css } from 'styled-components';
 import { Typography } from '@/styles/typography';
 
 interface Props {
-  isShowHoverItems: boolean;
-  isShowNavbar: boolean;
+  isShowHoverItems?: boolean;
+  isShowNavbar?: boolean;
+  isAwaiting?: boolean;
 }
 
 const CardDiv = styled.div<Props>`
@@ -61,10 +62,31 @@ const LeftDiv = styled.div`
   justify-content: space-between;
   gap: 12px;
   padding-left: 13px;
-  div {
-    display: flex;
-    gap: 12px;
+  align-items: flex-start;
+`;
+
+const AvatarNameWrapper = styled.div<Props>`
+  display: flex;
+  gap: 12px;
+  @media screen and (max-width: 449px) {
+    ${(props) =>
+      props.isAwaiting &&
+      css`
+        padding-bottom: 8px;
+      `}
   }
+`;
+
+const LeftNameContentDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+const RightContentDiv = styled.div`
+  display: flex;
+  gap: 12px;
+  align-items: center;
 `;
 
 const RightDiv = styled.div`
@@ -228,6 +250,30 @@ const ResponsiveTimeDiv = styled.div`
   }
 `;
 
+const AwaitingDiv = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  @media screen and (max-width: 449px) {
+    display: none;
+  }
+`;
+
+const AwaitingText = styled.p`
+  ${Typography.body_md_regular};
+  color: var(--text-text-secondary);
+  font-style: italic;
+`;
+
+const ResponsiveAwaitingDiv = styled.div`
+  display: none;
+  @media screen and (max-width: 449px) {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+`;
+
 export {
   DesTitle,
   NameText,
@@ -242,4 +288,10 @@ export {
   InternalMessageDiv,
   Description,
   ResponsiveTimeDiv,
+  AwaitingDiv,
+  AwaitingText,
+  AvatarNameWrapper,
+  RightContentDiv,
+  ResponsiveAwaitingDiv,
+  LeftNameContentDiv,
 };

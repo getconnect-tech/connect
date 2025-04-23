@@ -218,3 +218,28 @@ export const getWorkspaceConfig = async (workspaceId: string) => {
 
   return config;
 };
+
+export const updateWorkspaceConfig = async (
+  workspaceId: string,
+  nweConfig: Partial<WorkspaceConfig>,
+) => {
+  const data = await prisma.workspaceConfig.findUnique({
+    where: { workspace_id: workspaceId },
+    select: { config: true },
+  });
+
+  const currentConfig = (data?.config || {}) as WorkspaceConfig;
+
+  const updatedConfig: WorkspaceConfig = {
+    ...currentConfig,
+    ...nweConfig,
+  };
+
+  const updatedWorkspaceConfig = await prisma.workspaceConfig.upsert({
+    where: { workspace_id: workspaceId },
+    update: { config: updatedConfig },
+    create: { config: updatedConfig, workspace_id: workspaceId },
+  });
+
+  return updatedWorkspaceConfig;
+};

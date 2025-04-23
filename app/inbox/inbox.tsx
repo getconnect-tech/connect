@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { usePathname } from 'next/navigation';
 import moment from 'moment';
-import { TicketStatus } from '@prisma/client';
+import { MessageType, TicketStatus } from '@prisma/client';
 import InboxCard from '@/components/inboxCard/inboxCard';
 import CustomContextMenu from '@/components/contextMenu/contextMenu';
 import { getTicketList } from '@/services/clientSide/ticketServices';
@@ -237,6 +237,9 @@ function Inbox({ activeNav, labelId }: InboxProps) {
                         dropdownIdentifier={`card-${ticket.id}`}
                         ticketIndex={index}
                         isShowNavbar={isNavbar}
+                        isAwaiting={
+                          ticket.last_message.type === MessageType.FROM_CONTACT
+                        }
                       />
                     </div>
                   </CustomContextMenu>

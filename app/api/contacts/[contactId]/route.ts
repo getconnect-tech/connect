@@ -4,6 +4,8 @@ import { handleApiError } from '@/helpers/errorHandler';
 import {
   createOrUpdateContact,
   getContactById,
+  getContactDetails,
+  getContactTickets,
 } from '@/services/serverSide/contact';
 import withAdminAuth from '@/middlewares/withAdminAuth';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
@@ -18,7 +20,22 @@ import {
 
 export const GET = withWorkspaceAuth(async (req, { contactId }) => {
   try {
-    const contact = await getContactById(contactId);
+    const { searchParams } = new URL(req.url);
+    const contactDetails = searchParams.get('details');
+    const contactTickets = searchParams.get('tickets');
+
+    const workspaceId = req.workspace.id;
+    const userId = req.user.id;
+
+    let contact;
+
+    if (contactDetails) {
+      contact = await getContactDetails(contactId);
+    } else if (contactTickets) {
+      contact = await getContactTickets(workspaceId, contactId, userId);
+    } else {
+      contact = await getContactById(contactId);
+    }
 
     return Response.json(contact, { status: 200 });
   } catch (err) {

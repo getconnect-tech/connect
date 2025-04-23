@@ -4,7 +4,11 @@ import { prisma } from '@/prisma/prisma';
 import { getTicketById } from '@/services/serverSide/ticket';
 import { getContactById } from '@/services/serverSide/contact';
 import { generateVerificationCode } from './common';
-import { POSTMARK_SENDER_EMAIL, POSTMARK_SERVER_TOKEN } from './environment';
+import {
+  isDev,
+  POSTMARK_SENDER_EMAIL,
+  POSTMARK_SERVER_TOKEN,
+} from './environment';
 
 const client = new ServerClient(POSTMARK_SERVER_TOKEN!);
 
@@ -72,7 +76,7 @@ export const sendEmailAsReply = async ({
 };
 
 export const sendVerificationCode = async (email: string) => {
-  const verificationCode = generateVerificationCode();
+  const verificationCode = isDev ? '123456' : generateVerificationCode();
 
   const expiryTime = moment().add(5, 'minutes').toDate(); // expiry time for verification code
 
@@ -81,6 +85,10 @@ export const sendVerificationCode = async (email: string) => {
     create: { email, token: verificationCode, expires: expiryTime },
     update: { token: verificationCode, expires: expiryTime },
   });
+
+  if (isDev) {
+    return '858e89bc-68a8-456c-9b80-3a9ef4d05a8a';
+  }
 
   // Send verification code to user
   const messageId = await sendEmail({

@@ -24,8 +24,14 @@ interface RenderHtmlProps {
 }
 
 const RenderHtml = ({ htmlstring, isSpreadIcon = true }: RenderHtmlProps) => {
+  const cleanHtmlString = (html: string) => {
+    return html
+      .replace(/<br\\>/g, '<br />') // Replace <br\> with <br />
+      .replace(/<br>/g, '<br />'); // Standardize all br tags
+  };
+
   const [htmlAboveHr, htmlBelowHr] =
-    (htmlstring || '')
+    cleanHtmlString(htmlstring || '')
       ?.replace(/https?:\/\/[^\s"]*pstmrk\.it[^\s"]*/g, '')
       ?.split(/<hr[^>]*>/i) || [];
   const [showQuotedText, setShowQuotedText] = useState(false);

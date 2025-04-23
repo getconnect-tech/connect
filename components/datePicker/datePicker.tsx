@@ -15,6 +15,7 @@ import Icon from '../icon/icon';
 import {
   CalendarDiv,
   Header,
+  InputDiv,
   InputMainDiv,
   Inputs,
   Label,
@@ -186,15 +187,15 @@ function DatePickerModal({
         </CalendarDiv>
         <InputMainDiv onSubmit={handleSubmit}>
           <Inputs>
-            <div>
+            <InputDiv>
               <Label>Date</Label>
               <Input
                 placeholder={'MM/DD/YYYY'}
                 className='input'
                 value={dateInput}
               />
-            </div>
-            <div>
+            </InputDiv>
+            <InputDiv>
               <Label>Time</Label>
               <TimePicker
                 format='h:00 A'
@@ -207,7 +208,7 @@ function DatePickerModal({
                   borderColor: 'var(--border)',
                 }}
               />
-            </div>
+            </InputDiv>
           </Inputs>
           <div className='buttons'>
             <Button

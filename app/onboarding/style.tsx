@@ -82,6 +82,7 @@ export const Description = styled.div`
   p {
     ${Typography.body_md_regular}
     color: var(--text-text-secondary);
+    text-align: center;
   }
 `;
 export const Form = styled.div`
@@ -178,5 +179,46 @@ export const DetailSection = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: -8px;
+  gap: 12px;
+`;
+
+export const TimeZoneContentDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+export const DropdownDiv = styled.div`
+  position: relative;
+  .timezone-dropdown {
+    min-width: 332px;
+    @media screen and (max-width: 449px) {
+      min-width: 100%;
+    }
+  }
+`;
+
+export const InputDiv = styled.div`
+  width: 50%;
+  .time-picker {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+`;
+
+export const DropdownTrigger = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 18px;
+  border-radius: 30px;
+  border: var(--border-secondary);
+  background-color: var(--bg-white);
+  ${Typography.body_md_medium};
+  color: var(--text);
+`;
+
+export const TimeContentDiv = styled.div`
+  display: flex;
   gap: 12px;
 `;
