@@ -174,6 +174,7 @@ export const getGroupById = async (
           contact_id: true,
           contact: {
             select: {
+              id: true,
               name: true,
               email: true,
               phone: true,

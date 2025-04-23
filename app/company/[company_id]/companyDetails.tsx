@@ -109,7 +109,10 @@ function CompanyDetail(props: Props) {
     return (
       <>
         {groupDetails?.contacts.map((item) => (
-          <ItemDiv key={item.name}>
+          <ItemDiv
+            key={item.name}
+            onClick={() => router.push(`/contact/${item?.id}`)}
+          >
             <Avatar
               imgSrc={item.avatar || ''}
               name={item.name}
