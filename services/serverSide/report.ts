@@ -244,7 +244,7 @@ export const getResolutionTimeInsights = async (
       workspaceConfig?.startTime &&
       workspaceConfig?.endTime &&
       workspaceConfig?.timeZone
-        ? calculateBusinessMinutes(
+        ? await calculateBusinessMinutes(
             ticket.created_at,
             ticket.updated_at,
             workspaceConfig.startTime,
