@@ -23,7 +23,7 @@ const Buttons = styled.button<WrapButton>`
   gap: 8px;
   justify-content: center;
   ${Typography.body_md_medium}
-  padding: 8px 16px;
+  padding: 7px 15px;
   border-radius: 20px;
   background-color: var(--brand);
   border: var(--border-primary);
@@ -50,7 +50,7 @@ const Buttons = styled.button<WrapButton>`
       background-color: var(--bg-surface-secondary);
       color: var(--text);
       border: var(--bg-surface);
-      padding: 4px 12px;
+      padding: 4px 11px;
       ${Typography.body_sm_regular};
       &:hover {
         background-color: var(--bg-surface-secondary-hover);
@@ -119,7 +119,7 @@ const Buttons = styled.button<WrapButton>`
     props.variant === 'small' &&
     css`
       ${Typography.body_sm_medium}
-      padding: 6px 16px;
+      padding: 5px 15px;
     `}
     ${(props) =>
     props.isDelete &&

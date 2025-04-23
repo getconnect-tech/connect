@@ -7,12 +7,14 @@ import {
 } from 'firebase/storage';
 import { convert } from 'html-to-text';
 import axios from 'axios';
-import moment from 'moment';
+import moment from 'moment-timezone';
+import _ from 'lodash';
 import { app } from '@/utils/firebase';
 import { workspaceStore } from '@/stores/workspaceStore';
 import { messageStore } from '@/stores/messageStore';
 import { appStore } from '@/stores/appStore';
 import { Contact } from '@/utils/appTypes';
+import { GroupDetails, WorkspaceDetailItem } from '@/utils/dataTypes';
 
 export function isEmpty(value: any) {
   if (
@@ -310,3 +312,57 @@ export const isNotificationSupported = () =>
   'serviceWorker' in navigator &&
   // eslint-disable-next-line no-undef
   'PushManager' in window;
+
+export const generateTimezoneOptions = () => {
+  return moment.tz.names().map((zone) => {
+    const offset = moment.tz(zone).utcOffset();
+    const hours = Math.floor(offset / 60);
+    const minutes = Math.abs(offset % 60);
+    const sign = offset >= 0 ? '+' : '-';
+    const label = `UTC${sign}${String(Math.abs(hours)).padStart(2, '0')}:${String(
+      Math.abs(minutes),
+    ).padStart(2, '0')} - ${zone}`;
+
+    return {
+      id: zone,
+      name: label,
+      label: label,
+      value: zone,
+    };
+  });
+};
+
+export const groupBy = (collection: any, iteratee: any) => {
+  const groupResult = _.groupBy(collection, iteratee);
+  return Object.keys(groupResult).map((key) => {
+    return { name: key, list: groupResult[key] };
+  });
+};
+
+export const formatWorkspaceDetails = (
+  groupDetails: GroupDetails | null,
+): WorkspaceDetailItem[] => {
+  return [
+    { label: 'Name', value: groupDetails?.name || '' },
+    { label: 'Group Label', value: groupDetails?.group_label || '' },
+    {
+      label: 'Tasks',
+      value: (groupDetails?.traits as { tasks?: string })?.tasks || '0',
+    },
+    {
+      label: 'Projects',
+      value: (groupDetails?.traits as { projects?: string })?.projects || '0',
+    },
+    {
+      label: 'Active Users',
+      value:
+        (groupDetails?.traits as { activeUsers?: string })?.activeUsers || '0',
+    },
+    {
+      label: 'Active Subscription',
+      value:
+        (groupDetails?.traits as { activeSubscriptions?: string })
+          ?.activeSubscriptions || '0',
+    },
+  ];
+};

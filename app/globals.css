@@ -8,6 +8,12 @@
     display: none;
   }
 }
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
 
 @media screen and (max-width: 768px) {
   body {
@@ -37,7 +43,7 @@ a {
 .ant-picker.ant-picker-outlined {
   border-radius: 30px;
   border-color: var(--bg-surface-secondary-hover);
-  width: 114px;
+  width: 100%;
   padding: 8px 16px;
   margin-top: 4px;
 }

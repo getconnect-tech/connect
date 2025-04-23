@@ -2,7 +2,9 @@ import { MessageType } from '@prisma/client';
 import { getWorkspaceApiKeys } from '@/services/serverSide/apiKey';
 import {
   getContactById,
+  getContactDetails,
   getContactGroups,
+  getContactTickets,
   getWorkspaceContacts,
 } from '@/services/serverSide/contact';
 import { getMacros } from '@/services/serverSide/macro';
@@ -11,7 +13,7 @@ import {
   getUserWorkspaces,
   getWorkspaceById,
 } from '@/services/serverSide/workspace';
-import { getWorkspaceGroups } from '@/services/serverSide/group';
+import { getGroupById, getWorkspaceGroups } from '@/services/serverSide/group';
 
 export interface InviteModal {
   name: string;
@@ -63,6 +65,16 @@ export type ContactDetails = NonNullable<
   Awaited<ReturnType<typeof getContactById>>
 >;
 
+export type ContactRecord = NonNullable<
+  Awaited<ReturnType<typeof getContactDetails>>
+>;
+export type ContactTicket = NonNullable<
+  Awaited<ReturnType<typeof getContactTickets>>
+>[0];
+export type GroupDetails = NonNullable<
+  Awaited<ReturnType<typeof getGroupById>>
+>;
+
 export type WorkspaceConfig = {
   emailChannel: {
     primaryEmail?: string;
@@ -70,11 +82,9 @@ export type WorkspaceConfig = {
   webhooks: {
     contactRefresh?: string;
   };
-  officeHours?: {
-    startTime: string;
-    endTime: string;
-    timeZone: string;
-  };
+  startTime?: string;
+  endTime?: string;
+  timeZone?: string;
 };
 
 export type Macros = NonNullable<Awaited<ReturnType<typeof getMacros>>>[0];
@@ -111,14 +121,14 @@ export type TicketSummary = {
 
 export type AmplitudeUserSearchResponse =
   | {
-      matches: [
-        {
-          user_id: string;
-          amplitude_id: number;
-        },
-      ];
-      type: 'match_user_or_device_id';
-    }
+    matches: [
+      {
+        user_id: string;
+        amplitude_id: number;
+      },
+    ];
+    type: 'match_user_or_device_id';
+  }
   | { type: 'nomatch'; matches: [] };
 
 export type AmplitudeEvent = {
@@ -210,4 +220,31 @@ export type TaskCreatePayload = {
   taskUsers: string[];
   files: File[];
   ticketId: string;
+};
+
+export type TimeZone = {
+  id: string;
+  name: string;
+};
+
+export type GroupData = {
+  id: string;
+  group_id: string;
+  workspace_id: string;
+  name: string;
+  group_label: string;
+  avatar: string;
+  traits: {
+    tasks: string;
+    projects: string;
+    activeUsers: string;
+    activeSubscriptions: string;
+  };
+  created_at: string;
+  updated_at: string;
+};
+
+export type WorkspaceDetailItem = {
+  label: string;
+  value: string;
 };

@@ -3,7 +3,12 @@ import moment from 'moment';
 import { prisma } from '@/prisma/prisma';
 import { findUserByEmail, getUserActivities } from '@/lib/amplitude';
 import { Contact } from '@/utils/appTypes';
-import { generateContactName, removeNullUndefined } from '@/helpers/common';
+import {
+  generateContactName,
+  groupBy,
+  removeNullUndefined,
+} from '@/helpers/common';
+import { getWorkspaceTickets } from './ticket';
 
 export const getContactByEmail = async (email: string, workspaceId: string) => {
   const contact = await prisma.contact.findUnique({
@@ -14,8 +19,50 @@ export const getContactByEmail = async (email: string, workspaceId: string) => {
 
 export const getContactById = async (contactId: string) => {
   const contact = await prisma.contact.findUnique({ where: { id: contactId } });
-
   return contact;
+};
+
+export const getContactDetails = async (contactId: string) => {
+  const contact = await prisma.contact.findUnique({
+    where: { id: contactId },
+    select: {
+      name: true,
+      email: true,
+      phone: true,
+      avatar: true,
+      groups: {
+        select: {
+          group: true,
+        },
+      },
+    },
+  });
+
+  if (!contact) return null;
+
+  const groups = contact?.groups.map((g) => g.group) || [];
+  const groupByData = groupBy(groups, 'group_label');
+
+  return {
+    ...contact,
+    groups: groupByData,
+  };
+};
+
+export const getContactTickets = async (
+  workspaceId: string,
+  contactId: string,
+  userId: string,
+  lastUpdated?: string,
+) => {
+  const contactTickets = await getWorkspaceTickets(
+    workspaceId,
+    userId,
+    lastUpdated,
+    [contactId],
+  );
+
+  return contactTickets;
 };
 
 export const getWorkspaceContacts = async (workspaceId: string) => {

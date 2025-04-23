@@ -10,17 +10,30 @@ import React, {
 } from 'react';
 import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/navigation';
+import dayjs from 'dayjs';
 import Button from '@/components/button/button';
 import Input from '@/components/input/input';
 import { useStores } from '@/stores';
-import { updateWorkspaceDetails } from '@/services/clientSide/workspaceServices';
+import {
+  updateOfficeData,
+  updateWorkspaceDetails,
+} from '@/services/clientSide/workspaceServices';
 import Avatar from '@/components/avtar/Avtar';
-import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
+import {
+  generateTimezoneOptions,
+  getFirebaseUrlFromFile,
+  isEmpty,
+} from '@/helpers/common';
 import { messageStore } from '@/stores/messageStore';
 import Icon from '@/components/icon/icon';
 import ResponsiveSettingNavBar from '@/components/settingNavBar/responsiveSettingNavBar';
+import DropDown from '@/components/dropDown/dropDown';
+import SVGIcon from '@/assets/icons/SVGIcon';
+import { TimeZone } from '@/utils/dataTypes';
 import {
   Description,
+  DropdownDiv,
+  DropdownTrigger,
   Frame,
   Head,
   Label,
@@ -35,17 +48,25 @@ import {
   ResponsiveHeader,
   RightDiv,
   TextField,
+  TimeContentDiv,
+  TimeZoneContentDiv,
   Title,
 } from '../style';
+import TimePickerSection from './timePickerSection';
 
 const WorkspaceProfile = () => {
   const router = useRouter();
   const { workspaceStore } = useStores();
   const { currentWorkspace, loading } = workspaceStore;
   const [isNavbar, setIsNavbar] = useState(false);
+  const [isOpenDropdown, setIsOpenDropdown] = useState<boolean>(false);
   const [organizationName, setOrganizationName] = useState<string>(
     currentWorkspace?.name || '',
   );
+  const [timeZone, setTimeZone] = useState<TimeZone | null>(null);
+  const [fromTime, setFromTime] = useState<string | null>(null);
+  const [toTime, setToTime] = useState<string | null>(null);
+  const [timeLoader, setTimeLoader] = useState<boolean>(false);
   const [image, setImage] = useState<{
     profile: string | ArrayBuffer | null;
     file: File;
@@ -164,6 +185,46 @@ const WorkspaceProfile = () => {
     setIsNavbar(false);
   }, []);
 
+  const handleTimeChange = useCallback(
+    (type: 'from' | 'to', _: any, timeString: string) => {
+      const rawTime =
+        typeof timeString === 'string' ? timeString : timeString[0];
+      const formatted = dayjs(rawTime, ['h:mm A']).format('HH:mm');
+      if (type === 'from') {
+        setFromTime(formatted);
+      } else {
+        setToTime(formatted);
+      }
+    },
+    [],
+  );
+
+  const handleOfficeHourUpdate = useCallback(
+    async (e: SyntheticEvent) => {
+      e.preventDefault();
+      try {
+        setTimeLoader(true);
+        if (fromTime === null || toTime === null) {
+          messageStore.setErrorMessage('Please select time.');
+          return;
+        }
+
+        const payload = {
+          timeZone: timeZone?.id,
+          startTime: fromTime,
+          endTime: toTime,
+        };
+        await updateOfficeData(payload);
+      } catch (error) {
+        setTimeLoader(false);
+        console.log('error', error);
+      } finally {
+        setTimeLoader(false);
+      }
+    },
+    [fromTime, timeZone, toTime],
+  );
+
   return (
     <Main>
       {isNavbar && <ResponsiveSettingNavBar onClose={onCloseNavbar} />}
@@ -244,6 +305,70 @@ const WorkspaceProfile = () => {
               type='submit'
               title='Update'
               isLoading={loading}
+              variant='medium'
+            />
+          </ProfileDetail>
+          <Head className='bottom-section'>
+            <LeftDiv>
+              <Title>Office hours</Title>
+              <Description>
+                Configure your office hours to improve the accuracy of analytics
+                reports.
+              </Description>
+            </LeftDiv>
+          </Head>
+          <ProfileDetail onSubmit={handleOfficeHourUpdate} isNavbar={isNavbar}>
+            <TextField>
+              <TimeZoneContentDiv>
+                <Label>Current Timezone</Label>
+                <DropdownDiv className='tag-div'>
+                  <DropdownTrigger
+                    onClick={() => setIsOpenDropdown(!isOpenDropdown)}
+                  >
+                    {!isEmpty(timeZone) ? timeZone?.name : 'Select timezone'}
+                    <SVGIcon
+                      name={
+                        isOpenDropdown ? 'up-arrow-icon' : 'down-arrow-icon'
+                      }
+                      width='12'
+                      height='12'
+                      viewBox='0 0 12 12'
+                    />
+                  </DropdownTrigger>
+                  {isOpenDropdown && (
+                    <DropDown
+                      items={generateTimezoneOptions()}
+                      iconSize={'12'}
+                      iconViewBox={'0 0 12 12'}
+                      onClose={() => setIsOpenDropdown(false)}
+                      className='timezone-dropdown'
+                      onChange={(item) => {
+                        setIsOpenDropdown(false);
+                        setTimeZone(item);
+                      }}
+                    />
+                  )}
+                </DropdownDiv>
+              </TimeZoneContentDiv>
+              <TimeContentDiv>
+                <TimePickerSection
+                  label={'From'}
+                  onChange={(value, timeStr) =>
+                    handleTimeChange('from', value, timeStr as string)
+                  }
+                />
+                <TimePickerSection
+                  label={'To'}
+                  onChange={(value, timeStr) =>
+                    handleTimeChange('to', value, timeStr as string)
+                  }
+                />
+              </TimeContentDiv>
+            </TextField>
+            <Button
+              type='submit'
+              title='Update'
+              isLoading={timeLoader}
               variant='medium'
             />
           </ProfileDetail>

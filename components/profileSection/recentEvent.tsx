@@ -15,8 +15,9 @@ import {
   LineDiv,
   Title,
   TitleDiv,
-  SeeAllLink, // Add a styled component for the link
+  SeeAllLink,
 } from './styles';
+import EmptyStateMessage from './emptyStateMessage';
 
 export default function RecentEvent() {
   const [showDetails, setShowDetails] = useState(true);
@@ -83,6 +84,8 @@ export default function RecentEvent() {
         <EventDetailDiv>
           {activityLoading ? (
             'Loading...'
+          ) : isEmpty(eventsToShow) ? (
+            <EmptyStateMessage message='No recent events.' />
           ) : (
             <>
               {eventsToShow.map((event: UserActivity, index) => (

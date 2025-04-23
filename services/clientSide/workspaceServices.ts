@@ -169,6 +169,28 @@ export const updateWorkspaceDetails = async (payload: {
 };
 
 /**
+ * @desc Update office data
+ * @param {*} payload
+ */
+export const updateOfficeData = async (payload: object) => {
+  try {
+    const result = await axios.put(
+      `${NEXT_PUBLIC_API_URL}/workspaces/settings`,
+      payload,
+    );
+    if (result) {
+      messageStore.setSuccessMessage('Office data updated successfully.');
+    }
+    return true;
+  } catch (err: any) {
+    messageStore.setErrorMessage(
+      getAPIErrorMessage(err) || 'Something went wrong!',
+    );
+    return null;
+  }
+};
+
+/**
  * @desc Update Role
  * @param {*} payload
  */
