@@ -508,6 +508,16 @@ function TiptapEditor(props: Props) {
                     viewBox='0 0 12 12'
                   />
                 </button>
+                <button
+                  onClick={() => editor.chain().focus().clearContent().run()}
+                >
+                  <SVGIcon
+                    name='clear-format-icon'
+                    width='12'
+                    height='12'
+                    viewBox='0 0 12 12'
+                  />
+                </button>
               </div>
             </BubbleMenu>
           </>
