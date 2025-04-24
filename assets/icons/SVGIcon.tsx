@@ -1220,6 +1220,19 @@ const getPath = (name: string, props: any) => {
           />
         </>
       );
+    case 'inline-code-icon':
+      return (
+        <>
+          <g fill={fill} clipPath='url(#a)'>
+            <path d='M5.743 5.4 1.457 1.114a.829.829 0 0 0-1.2 0 .829.829 0 0 0 0 1.2L3.943 6 .257 9.686a.829.829 0 0 0 0 1.2.778.778 0 0 0 .6.257.778.778 0 0 0 .6-.257L5.743 6.6a.829.829 0 0 0 0-1.2ZM11.143 9.429H6.857a.857.857 0 0 0 0 1.714h4.286a.857.857 0 1 0 0-1.714Z' />
+          </g>
+          <defs>
+            <clipPath id='a'>
+              <path fill='#fff' d='M0 0h12v12H0z' />
+            </clipPath>
+          </defs>
+        </>
+      );
   }
 };
 

@@ -797,3 +797,139 @@ img.ProseMirror-separator {
     cursor: pointer;
   }
 }
+/* bubble menu design */
+.bubble-menu {
+  background-color: var(--bg-white);
+  padding: 3px;
+  border: var(--border-main);
+  box-shadow: var(--shadow-card);
+  border-radius: 100px;
+  display: flex;
+  gap: 8px;
+  position: relative;
+
+  .heading-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  button {
+    border: none;
+    background-color: unset;
+    margin: 0;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 100px;
+
+    &:hover {
+      background-color: var(--bg-surface-hover);
+      color: var(--text-primary);
+    }
+
+    svg {
+      fill: var(--icon);
+    }
+  }
+  :hover {
+    svg {
+      fill: var(--icon-hover);
+    }
+  }
+}
+
+.link-menu {
+  padding: 0px 8px 0px 4px;
+  background-color: var(--bg-white);
+  border: var(--border-main);
+  box-shadow: var(--shadow-card);
+  border-radius: 100px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  input {
+    border: none;
+    outline: none;
+    background-color: unset;
+    padding: 5px;
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 400px;
+    line-height: 20px;
+    /* font for mobile screen  */
+    @media (max-width: 449px) {
+      font-size: 15px;
+      line-height: 22px;
+    }
+
+    ::placeholder {
+      color: var(--text-secondary);
+    }
+
+    :focus {
+      outline: unset;
+    }
+  }
+
+  .icon-div {
+    display: flex;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+  }
+
+  .line-div {
+    height: 18px;
+    border-left: var(--border-main);
+  }
+}
+
+.heading-dropdown-menu {
+  padding: 4px;
+  background-color: var(--bg-white);
+  /* border: var(--border-main); */
+  box-shadow: var(--shadow-dropdown);
+  position: absolute;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  border-radius: 8px;
+  width: auto;
+  min-width: 116px;
+
+  button {
+    padding: 4px 8px;
+    background: none;
+    border: none;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: var(--text-text-secondary);
+    border-radius: 4px;
+    /* font for mobile screen  */
+    @media (max-width: 449px) {
+      font-size: 15px;
+      line-height: 22px;
+    }
+  }
+}
+
+.heading-dropdown-menu.bottom {
+  top: calc(100% + 2px);
+  left: 0;
+}
+
+.heading-dropdown-menu.top {
+  bottom: calc(100% + 4px);
+  left: 0;
+}
