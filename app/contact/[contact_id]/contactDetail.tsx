@@ -86,22 +86,28 @@ function ContactDetail(props: Props) {
     };
   }, [loadData, contactStore]);
 
-  const renderWorkSpace = useCallback((groupList: GroupData[]) => {
-    return (
-      <>
-        {groupList?.map((item) => (
-          <ItemDiv key={item?.id}>
-            <Avatar
-              imgSrc={item?.avatar || ''}
-              name={item.name || ''}
-              size={20}
-            />
-            <Value>{item?.name}</Value>
-          </ItemDiv>
-        ))}
-      </>
-    );
-  }, []);
+  const renderWorkSpace = useCallback(
+    (groupList: GroupData[]) => {
+      return (
+        <>
+          {groupList?.map((item) => (
+            <ItemDiv
+              key={item?.id}
+              onClick={() => router.push(`/company/${item?.id}`)}
+            >
+              <Avatar
+                imgSrc={item?.avatar || ''}
+                name={item.name || ''}
+                size={20}
+              />
+              <Value>{item?.name}</Value>
+            </ItemDiv>
+          ))}
+        </>
+      );
+    },
+    [router],
+  );
 
   const renderTabItem = useMemo(() => {
     const tabItem = ['Open', 'Snoozed', 'Done'];
@@ -186,7 +192,7 @@ function ContactDetail(props: Props) {
         )}
       </>
     );
-  }, [contactTicket, currentOpenDropdown, isNavbar, filterTicketsByStatus]);
+  }, [currentOpenDropdown, isNavbar, filterTicketsByStatus]);
 
   return (
     <Main>
