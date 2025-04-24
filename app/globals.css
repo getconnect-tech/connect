@@ -800,7 +800,7 @@ img.ProseMirror-separator {
 /* bubble menu design */
 .bubble-menu {
   background-color: var(--bg-white);
-  padding: 4px;
+  padding: 3px;
   border: var(--border-main);
   box-shadow: var(--shadow-card);
   border-radius: 100px;
@@ -842,7 +842,7 @@ img.ProseMirror-separator {
 }
 
 .link-menu {
-  padding: 5px 8px 5px 4px;
+  padding: 0px 8px 0px 4px;
   background-color: var(--bg-white);
   border: var(--border-main);
   box-shadow: var(--shadow-card);
@@ -852,13 +852,10 @@ img.ProseMirror-separator {
   align-items: center;
 
   input {
-    min-width: 208px;
-    max-width: 208px;
-    width: 100%;
     border: none;
     outline: none;
     background-color: unset;
-    padding: 5px 12px;
+    padding: 5px;
     color: var(--text-primary);
     font-size: 13px;
     font-weight: 400px;
@@ -888,7 +885,7 @@ img.ProseMirror-separator {
 
   .line-div {
     height: 18px;
-    border-left: 0.5px solid var(--border-primary);
+    border-left: var(--border-main);
   }
 }
 
@@ -933,6 +930,6 @@ img.ProseMirror-separator {
 }
 
 .heading-dropdown-menu.top {
-  bottom: calc(100% - 6px);
+  bottom: calc(100% + 4px);
   left: 0;
 }

@@ -328,7 +328,7 @@ function TiptapEditor(props: Props) {
                     name='delete-icon'
                     width='18'
                     height='18'
-                    viewBox='0 0 18 18'
+                    viewBox='0 0 12 12'
                     fill='var(--text-secondary)'
                   />
                 </div>
