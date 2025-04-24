@@ -2,6 +2,7 @@ import React, {
   forwardRef,
   useCallback,
   useEffect,
+  useImperativeHandle,
   useRef,
   useState,
 } from 'react';
@@ -69,6 +70,33 @@ const TiptapEditor = forwardRef((props: Props, ref) => {
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+
+  // Clear editor content
+  const clearContent = useCallback(() => {
+    // Clear the editor content
+    editor?.commands.setContent(''); // Clear content in the editor
+    editor?.commands.focus();
+    setValueContent?.(''); // Update the state to reflect the change
+  }, [editor?.commands, setValueContent]);
+
+  useImperativeHandle(ref, () => ({
+    clearEditor() {
+      clearContent();
+    },
+    uploadFile(file: any, uploadPath: string, fileName: string) {
+      // if (file && viewRef.current?.state.selection.$from.parent.inlineContent) {
+      //   viewRef.current.focus();
+      //   startImageUpload(viewRef.current, file, uploadPath, fileName);
+      // }
+    },
+    addContent(content: string) {
+      if (editor) {
+        const { from } = editor.state.selection; // Get the current cursor position
+        editor.commands.insertContentAt(from, content); // Insert the emoji at the cursor position
+        editor.commands.focus(); // Focus the editor after insertion
+      }
+    },
+  }));
 
   useEffect(() => {
     if (!editor) return;
