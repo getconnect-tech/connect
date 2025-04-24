@@ -938,3 +938,11 @@ img.ProseMirror-separator {
   overflow: auto;
   min-height: 48px;
 }
+
+.tiptap p.is-editor-empty:first-child:before {
+  color: var(--text-text-secondary);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
