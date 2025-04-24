@@ -933,3 +933,8 @@ img.ProseMirror-separator {
   bottom: calc(100% + 4px);
   left: 0;
 }
+.tiptap {
+  max-height: 300px;
+  overflow: auto;
+  min-height: 48px;
+}
