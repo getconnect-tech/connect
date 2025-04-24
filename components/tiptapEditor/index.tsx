@@ -44,6 +44,9 @@ interface Props {
   setValueContent?: (value: string) => void;
   isEditable?: boolean;
   placeHolder?: string;
+  isSignature?: boolean;
+  handleClickCross?: () => void;
+  isInternalDiscussion?: boolean;
 }
 
 // eslint-disable-next-line react/display-name, no-unused-vars, @typescript-eslint/no-unused-vars
@@ -53,6 +56,9 @@ const TiptapEditor = forwardRef((props: Props, ref) => {
     setValueContent,
     isEditable = true,
     placeHolder,
+    isSignature,
+    handleClickCross,
+    isInternalDiscussion,
   } = props || {};
   const [editor, setEditor] = useState<Editor | null>(null);
   const [currentCell, setCurrentCell] = useState<HTMLElement | null>(null);
@@ -63,8 +69,6 @@ const TiptapEditor = forwardRef((props: Props, ref) => {
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-
-  console.log('currentCell -0-0', currentCell);
 
   useEffect(() => {
     if (!editor) return;
@@ -285,7 +289,7 @@ const TiptapEditor = forwardRef((props: Props, ref) => {
   }, [editor]);
 
   return (
-    <div>
+    <div className={isSignature ? 'signature-main-div' : ''}>
       {editor &&
         (isUrlOpen ? (
           <>
@@ -531,6 +535,17 @@ const TiptapEditor = forwardRef((props: Props, ref) => {
         ))}
       {/* {currentCell && <TableToolbar editor={editor} />} */}
       <EditorContent editor={editor} />
+
+      {isSignature && (
+        <button className='cross-icon' onClick={handleClickCross}>
+          <SVGIcon
+            name='signature-cross-icon'
+            width='8'
+            height='8'
+            viewBox='0 0 8 8'
+          />
+        </button>
+      )}
     </div>
   );
 });

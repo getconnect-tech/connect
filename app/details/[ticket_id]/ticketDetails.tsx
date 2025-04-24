@@ -295,11 +295,11 @@ function TicketDetails(props: Props) {
     setIsSignatureSection(true);
   }, []);
 
-  // TODO: NEED TO CHECK THIS
-  // const handleSignatureClose = useCallback(() => {
-  //   setIsSignatureSection(false);
-  //   setSignatureValue(signatureFormat);
-  // }, [signatureFormat]);
+  // On click cross icon
+  const handleSignatureClose = useCallback(() => {
+    setIsSignatureSection(false);
+    setSignatureValue(signatureFormat);
+  }, [signatureFormat]);
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
@@ -969,9 +969,11 @@ function TicketDetails(props: Props) {
                 </div>
                 <Input modeSelectedItem={modeSelectedItem}>
                   <TiptapEditor
+                    ref={editorRef}
                     valueContent={commentValue}
                     setValueContent={setCommentValue}
                     placeHolder='Write a message'
+                    isInternalDiscussion={modeSelectedItem.name !== 'Email'}
                   />
                   {/* <ProsemirrorEditor
                     ref={editorRef}
@@ -1009,8 +1011,8 @@ function TicketDetails(props: Props) {
                     <TiptapEditor
                       valueContent={signatureValue}
                       setValueContent={setSignatureValue}
-                      //   isSignature={true}
-                      //   handleClickCross={handleSignatureClose}
+                      isSignature={true}
+                      handleClickCross={handleSignatureClose}
                     />
                   )}
                   <InputIcon modeSelectedItem={modeSelectedItem}>
