@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { BubbleMenu, Editor, EditorContent, Extension } from '@tiptap/react';
 import Underline from '@tiptap/extension-underline';
 import Image from '@tiptap/extension-image';
@@ -40,7 +46,8 @@ interface Props {
   placeHolder?: string;
 }
 
-function TiptapEditor(props: Props) {
+// eslint-disable-next-line react/display-name, no-unused-vars, @typescript-eslint/no-unused-vars
+const TiptapEditor = forwardRef((props: Props, ref) => {
   const {
     valueContent = '',
     setValueContent,
@@ -526,6 +533,6 @@ function TiptapEditor(props: Props) {
       <EditorContent editor={editor} />
     </div>
   );
-}
+});
 
 export default TiptapEditor;

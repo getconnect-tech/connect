@@ -52,7 +52,6 @@ import {
 import LabelDropdown from '@/components/labelDropdown/labelDropdown';
 import { getMacros } from '@/services/clientSide/settingServices';
 import FileCard from '@/components/fileCard/fileCard';
-import ProsemirrorEditor from '@/components/prosemirror';
 import ResponsiveProfileSection from '@/components/profileSection/responsiveProfileSection';
 import { getContactDetailById } from '@/services/clientSide/contactServices';
 import TiptapEditor from '@/components/tiptapEditor';
@@ -296,10 +295,11 @@ function TicketDetails(props: Props) {
     setIsSignatureSection(true);
   }, []);
 
-  const handleSignatureClose = useCallback(() => {
-    setIsSignatureSection(false);
-    setSignatureValue(signatureFormat);
-  }, [signatureFormat]);
+  // TODO: NEED TO CHECK THIS
+  // const handleSignatureClose = useCallback(() => {
+  //   setIsSignatureSection(false);
+  //   setSignatureValue(signatureFormat);
+  // }, [signatureFormat]);
 
   const assignItem = [
     { name: 'Unassigned', icon: 'dropdown-unassign-icon' },
@@ -1000,11 +1000,17 @@ function TicketDetails(props: Props) {
                     </p>
                   )}
                   {isSignatureSection && (
-                    <ProsemirrorEditor
-                      isSignature={true}
+                    // <ProsemirrorEditor
+                    //   isSignature={true}
+                    //   valueContent={signatureValue}
+                    //   setValueContent={setSignatureValue}
+                    //   handleClickCross={handleSignatureClose}
+                    // />
+                    <TiptapEditor
                       valueContent={signatureValue}
                       setValueContent={setSignatureValue}
-                      handleClickCross={handleSignatureClose}
+                      //   isSignature={true}
+                      //   handleClickCross={handleSignatureClose}
                     />
                   )}
                   <InputIcon modeSelectedItem={modeSelectedItem}>
