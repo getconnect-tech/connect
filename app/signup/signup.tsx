@@ -183,6 +183,7 @@ function Signup() {
               <Form onSubmit={handleContinue}>
                 <div className='input-div'>
                   <Input
+                    autoFocus={true}
                     type={'text'}
                     placeholder='Name'
                     value={userName}
