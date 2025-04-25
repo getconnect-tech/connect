@@ -1,10 +1,19 @@
 'use client';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Icon from '@/components/icon/icon';
 import { TICKETS_HEADER } from '@/global/constants';
 import GraphList from '@/components/graphChart/graphList';
 import { chartDemoData } from '@/helpers/raw';
+import {
+  getFirstResponseTime,
+  getQueueSize,
+  getResolutionTime,
+} from '@/services/clientSide/insightsService';
+import { useStores } from '@/stores';
+import { isEmpty } from '@/helpers/common';
+import CustomChart from '@/components/graphChart/chart';
 import {
   BottomDiv,
   ChartMainDiv,
@@ -22,6 +31,25 @@ interface InsightsProps {
 
 function Insights({ activeNav }: InsightsProps) {
   const [isNavbar, setIsNavbar] = useState(false);
+
+  const { workspaceStore, insightsStore } = useStores();
+  const { currentWorkspace } = workspaceStore || {};
+  const { queueSize } = insightsStore || {};
+
+  const loadData = useCallback(async () => {
+    if (!isEmpty(currentWorkspace?.id)) {
+      await Promise.all([
+        getQueueSize(),
+        getFirstResponseTime(),
+        getResolutionTime(),
+      ]);
+    }
+  }, [currentWorkspace?.id]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
   const onClickIcon = useCallback(() => {
     setIsNavbar(true);
   }, []);
@@ -32,11 +60,6 @@ function Insights({ activeNav }: InsightsProps) {
 
   // Graph data
   const chartData = [
-    {
-      valueTitle: '<span>28</span> in todo',
-      title: 'Queue size',
-      chartData: chartDemoData,
-    },
     {
       valueTitle: '<span>2h 43m</span>',
       title: 'Median first response time',
@@ -72,6 +95,11 @@ function Insights({ activeNav }: InsightsProps) {
         <BottomDiv isShowNavbar={isNavbar} onClick={onCloseNavbar}>
           <ChartMainDiv>
             <GraphList chartData={chartData} />
+            <CustomChart
+              valueTitle='<span>28</span> in todo'
+              title='Queue size'
+              chartData={queueSize?.data || []}
+            />
           </ChartMainDiv>
         </BottomDiv>
       </MainDiv>
@@ -79,4 +107,4 @@ function Insights({ activeNav }: InsightsProps) {
   );
 }
 
-export default Insights;
+export default observer(Insights);
