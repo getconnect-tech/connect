@@ -12,7 +12,6 @@ import {
 import { useStores } from '@/stores';
 import { isEmpty } from '@/helpers/common';
 import CustomChart from '@/components/graphChart/chart';
-import GraphList from '@/components/graphChart/graphList';
 import {
   BottomDiv,
   ChartMainDiv,
