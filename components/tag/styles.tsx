@@ -43,6 +43,9 @@ const StatusDiv = styled.div<Props>`
 const StatusTitle = styled.p`
   ${Typography.body_sm_regular}
   color: var(--text-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export { StatusDiv, StatusTitle };

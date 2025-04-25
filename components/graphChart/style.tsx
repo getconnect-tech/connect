@@ -51,6 +51,49 @@ const List = styled.div`
   gap: 32px;
 `;
 
+const DatePickerHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 24px;
+`;
+
+const HeaderText = styled.p`
+  ${Typography.heading_lg_regular};
+  color: var(--text);
+`;
+
+const PickerContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  .ant-picker-range {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 3px 12px;
+    background-color: var(--bg-surface-secondary);
+    border-radius: 30px;
+  }
+
+  .ant-picker-panel-container {
+    margin-top: 12px;
+  }
+
+  .ant-picker-dropdown {
+    z-index: 1001;
+  }
+  .ant-picker.ant-picker-outlined {
+    margin: 0;
+  }
+  .ant-picker .ant-picker-input > input {
+    ${Typography.body_sm_regular}
+    color: var(--text);
+  }
+`;
+
 export {
   HeadingTitle,
   HeaderSection,
@@ -60,4 +103,7 @@ export {
   TopSection,
   ValueTitle,
   List,
+  DatePickerHeader,
+  HeaderText,
+  PickerContainer,
 };
