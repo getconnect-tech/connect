@@ -54,8 +54,8 @@ function calculateMedianMinutes(
   replyTime: Date,
   config: any,
 ) {
-  if (!config && !config.startTime && !config.endTime && !config.timeZone) {
-    return moment(replyTime).diff(moment(ticketTime), 'minutes');
+  if (!config || (!config.startTime && !config.endTime && !config.timeZone)) {
+    return moment(replyTime).diff(moment(ticketTime), 'hours');
   }
 
   const { startTime, endTime, timeZone } = config;
@@ -81,7 +81,7 @@ function calculateMedianMinutes(
     const intervalEnd = moment.min(end, officeEnd);
 
     if (intervalEnd.isAfter(intervalStart)) {
-      totalMinutes += intervalEnd.diff(intervalStart, 'minutes');
+      totalMinutes += intervalEnd.diff(intervalStart, 'hours');
     }
 
     // Move to next day at 00:00
@@ -108,7 +108,7 @@ export const getFirstResponseTimeInsights = async (
   const effectiveEndDate = endDate ? new Date(endDate) : new Date();
   const effectiveStartDate = startDate
     ? new Date(startDate)
-    : subDays(effectiveEndDate, 30);
+    : subDays(effectiveEndDate, 28);
   const workspaceConfig: any = await getWorkspaceConfig(workspaceId);
   if (!workspaceConfig) {
     throw new Error('Workspace configuration not found');
@@ -208,7 +208,7 @@ export const getResolutionTimeInsights = async (
   const effectiveEndDate = endDate ? new Date(endDate) : new Date();
   const effectiveStartDate = startDate
     ? new Date(startDate)
-    : subDays(effectiveEndDate, 30);
+    : subDays(effectiveEndDate, 28);
 
   const workspaceConfig: any = await getWorkspaceConfig(workspaceId);
 
@@ -291,7 +291,7 @@ export const getQueueSizeInsights = async (
   const effectiveEndDate = endDate ? new Date(endDate) : new Date();
   const effectiveStartDate = startDate
     ? new Date(startDate)
-    : subDays(effectiveEndDate, 30);
+    : subDays(effectiveEndDate, 28);
 
   // Get ALL tickets that could affect the queue size in this period
   // This includes tickets created before the start date that might still be open

@@ -4,8 +4,6 @@ import { observer } from 'mobx-react-lite';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Icon from '@/components/icon/icon';
 import { TICKETS_HEADER } from '@/global/constants';
-import GraphList from '@/components/graphChart/graphList';
-import { chartDemoData } from '@/helpers/raw';
 import {
   getFirstResponseTime,
   getQueueSize,
@@ -34,7 +32,7 @@ function Insights({ activeNav }: InsightsProps) {
 
   const { workspaceStore, insightsStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
-  const { queueSize } = insightsStore || {};
+  const { queueSize, firstResponseTime, resolutionTime } = insightsStore || {};
 
   const loadData = useCallback(async () => {
     if (!isEmpty(currentWorkspace?.id)) {
@@ -58,20 +56,6 @@ function Insights({ activeNav }: InsightsProps) {
     setIsNavbar(false);
   }, []);
 
-  // Graph data
-  const chartData = [
-    {
-      valueTitle: '<span>2h 43m</span>',
-      title: 'Median first response time',
-      chartData: chartDemoData,
-    },
-    {
-      valueTitle: '<span>4h 44m</span>',
-      title: 'Median resolution time',
-      chartData: chartDemoData,
-    },
-  ];
-
   return (
     <Main>
       {isNavbar && <ResponsiveNavbar onClose={onCloseNavbar} />}
@@ -94,11 +78,21 @@ function Insights({ activeNav }: InsightsProps) {
         </TopDiv>
         <BottomDiv isShowNavbar={isNavbar} onClick={onCloseNavbar}>
           <ChartMainDiv>
-            <GraphList chartData={chartData} />
             <CustomChart
               valueTitle='<span>28</span> in todo'
               title='Queue size'
               chartData={queueSize?.data || []}
+              ctrData={queueSize?.data.map((item) => item.queueSize) || []}
+            />
+            <CustomChart
+              valueTitle='<span>2h 43m</span>'
+              title='Median first response time'
+              ctrData={firstResponseTime?.data.map((item) => item.median) || []}
+            />
+            <CustomChart
+              valueTitle='<span>4h 44m</span>'
+              title='Median resolution time'
+              ctrData={resolutionTime?.data.map((item) => item.median) || []}
             />
           </ChartMainDiv>
         </BottomDiv>

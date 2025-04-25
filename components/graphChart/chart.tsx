@@ -48,10 +48,11 @@ ChartJS.register(
 interface Props {
   valueTitle: string;
   title: string;
-  chartData: ChartData[];
+  chartData?: ChartData[];
+  ctrData: number[];
 }
 
-const CustomChart = ({ valueTitle, title, chartData }: Props) => {
+const CustomChart = ({ valueTitle, title, ctrData }: Props) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [gradientFill, setGradientFill] = useState<string | CanvasGradient>('');
@@ -84,12 +85,7 @@ const CustomChart = ({ valueTitle, title, chartData }: Props) => {
     mondayIndexes.includes(index) ? date.format('D MMM') : '',
   );
 
-  // Generate CTR data for all days
-  const ctrData = chartData.map((item) => item.queueSize);
-
-  // Calculate max queue size
-  const queueSizes = chartData.map((item) => item.queueSize);
-  const maxQueueSize = Math.max(...queueSizes);
+  const maxQueueSize = Math.max(...(ctrData || []));
 
   // Calculate dynamic bar height (max size + 50px buffer)
   const dynamicBarHeight = maxQueueSize + 5;
