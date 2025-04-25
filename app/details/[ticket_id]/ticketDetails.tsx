@@ -52,7 +52,6 @@ import {
 import LabelDropdown from '@/components/labelDropdown/labelDropdown';
 import { getMacros } from '@/services/clientSide/settingServices';
 import FileCard from '@/components/fileCard/fileCard';
-import ProsemirrorEditor from '@/components/prosemirror';
 import ResponsiveProfileSection from '@/components/profileSection/responsiveProfileSection';
 import { getContactDetailById } from '@/services/clientSide/contactServices';
 import TiptapEditor from '@/components/tiptapEditor';
@@ -296,6 +295,7 @@ function TicketDetails(props: Props) {
     setIsSignatureSection(true);
   }, []);
 
+  // On click cross icon
   const handleSignatureClose = useCallback(() => {
     setIsSignatureSection(false);
     setSignatureValue(signatureFormat);
@@ -969,9 +969,11 @@ function TicketDetails(props: Props) {
                 </div>
                 <Input modeSelectedItem={modeSelectedItem}>
                   <TiptapEditor
+                    ref={editorRef}
                     valueContent={commentValue}
                     setValueContent={setCommentValue}
                     placeHolder='Write a message'
+                    isInternalDiscussion={modeSelectedItem.name !== 'Email'}
                   />
                   {/* <ProsemirrorEditor
                     ref={editorRef}
@@ -1000,10 +1002,16 @@ function TicketDetails(props: Props) {
                     </p>
                   )}
                   {isSignatureSection && (
-                    <ProsemirrorEditor
-                      isSignature={true}
+                    // <ProsemirrorEditor
+                    //   isSignature={true}
+                    //   valueContent={signatureValue}
+                    //   setValueContent={setSignatureValue}
+                    //   handleClickCross={handleSignatureClose}
+                    // />
+                    <TiptapEditor
                       valueContent={signatureValue}
                       setValueContent={setSignatureValue}
+                      isSignature={true}
                       handleClickCross={handleSignatureClose}
                     />
                   )}

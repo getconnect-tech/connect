@@ -1,4 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import { BubbleMenu, Editor, EditorContent, Extension } from '@tiptap/react';
 import Underline from '@tiptap/extension-underline';
 import Image from '@tiptap/extension-image';
@@ -28,7 +35,7 @@ import TableHeader from '@tiptap/extension-table-header';
 import { TaskList } from '@tiptap/extension-task-list';
 import { TaskItem } from '@tiptap/extension-task-item';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { isEmpty } from '@/helpers/common';
+import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { ColorHighlighter } from './ColorHighlighter';
 import { SmilieReplacer } from './SmilieReplacer';
 
@@ -38,14 +45,21 @@ interface Props {
   setValueContent?: (value: string) => void;
   isEditable?: boolean;
   placeHolder?: string;
+  isSignature?: boolean;
+  handleClickCross?: () => void;
+  isInternalDiscussion?: boolean;
 }
 
-function TiptapEditor(props: Props) {
+// eslint-disable-next-line react/display-name, no-unused-vars, @typescript-eslint/no-unused-vars
+const TiptapEditor = forwardRef((props: Props, ref) => {
   const {
     valueContent = '',
     setValueContent,
     isEditable = true,
     placeHolder,
+    isSignature,
+    handleClickCross,
+    isInternalDiscussion,
   } = props || {};
   const [editor, setEditor] = useState<Editor | null>(null);
   const [currentCell, setCurrentCell] = useState<HTMLElement | null>(null);
@@ -57,7 +71,51 @@ function TiptapEditor(props: Props) {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  console.log('currentCell -0-0', currentCell);
+  // Clear editor content
+  const clearContent = useCallback(() => {
+    // Clear the editor content
+    editor?.commands.setContent(''); // Clear content in the editor
+    editor?.commands.focus();
+    setValueContent?.(''); // Update the state to reflect the change
+  }, [editor?.commands, setValueContent]);
+
+  const startImageUpload = useCallback(
+    (file: any, uploadPath: string, fileName: string) => {
+      getFirebaseUrlFromFile(file, uploadPath, fileName)
+        .then((url) => {
+          if (url) {
+            editor
+              ?.chain()
+              .focus()
+              .insertContent([
+                { type: 'image', attrs: { src: url } },
+                { type: 'paragraph' },
+              ])
+              .run();
+          }
+        })
+        .catch(() => {
+          console.log('Error when adding image inside richtext!');
+        });
+    },
+    [editor],
+  );
+
+  useImperativeHandle(ref, () => ({
+    clearEditor() {
+      clearContent();
+    },
+    uploadFile(file: any, uploadPath: string, fileName: string) {
+      startImageUpload(file, uploadPath, fileName);
+    },
+    addContent(content: string) {
+      if (editor) {
+        const { from } = editor.state.selection; // Get the current cursor position
+        editor.commands.insertContentAt(from, content); // Insert the emoji at the cursor position
+        editor.commands.focus(); // Focus the editor after insertion
+      }
+    },
+  }));
 
   useEffect(() => {
     if (!editor) return;
@@ -278,7 +336,7 @@ function TiptapEditor(props: Props) {
   }, [editor]);
 
   return (
-    <div>
+    <div className={isSignature ? 'signature-main-div' : ''}>
       {editor &&
         (isUrlOpen ? (
           <>
@@ -524,8 +582,19 @@ function TiptapEditor(props: Props) {
         ))}
       {/* {currentCell && <TableToolbar editor={editor} />} */}
       <EditorContent editor={editor} />
+
+      {isSignature && (
+        <button className='cross-icon' onClick={handleClickCross}>
+          <SVGIcon
+            name='signature-cross-icon'
+            width='8'
+            height='8'
+            viewBox='0 0 8 8'
+          />
+        </button>
+      )}
     </div>
   );
-}
+});
 
 export default TiptapEditor;

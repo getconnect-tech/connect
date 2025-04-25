@@ -8,7 +8,6 @@ import { useStores } from '@/stores';
 import DropDownWithTag from '@/components/dropDownWithTag/dropDownWithTag';
 import { priorityItem } from '@/helpers/raw';
 import Button from '@/components/button/button';
-import ProsemirrorEditor from '@/components/prosemirror';
 import FileCard from '@/components/fileCard/fileCard';
 import { createTask, getUserList } from '@/services/clientSide/teamcampService';
 import {
@@ -17,6 +16,7 @@ import {
   TASK_PRIORITY_LABELS,
 } from '@/global/constants';
 import { isEmpty } from '@/helpers/common';
+import TiptapEditor from '@/components/tiptapEditor';
 import {
   BottomLeftSection,
   BottomSection,
@@ -181,7 +181,7 @@ function CreateTaskModal({ onClose }: Props) {
           }}
           placeholder='Task Title'
         />
-        <ProsemirrorEditor
+        {/* <ProsemirrorEditor
           ref={editorRef}
           valueContent={taskCreateInput?.description}
           setValueContent={(value: string) => {
@@ -189,6 +189,14 @@ function CreateTaskModal({ onClose }: Props) {
           }}
           placeholder='Add Description.... '
           className='prosemirror-commentbox'
+        /> */}
+        <TiptapEditor
+          ref={editorRef}
+          valueContent={taskCreateInput?.description}
+          setValueContent={(value: string) => {
+            teamcampStore.updateTaskCreateInput('description', value);
+          }}
+          placeHolder='Add Description....'
         />
         <div className='attach-file-div'>
           {attachFile?.map((fileData, index: number) => (
