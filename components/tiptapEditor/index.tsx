@@ -10,7 +10,7 @@ import { BubbleMenu, Editor, EditorContent, Extension } from '@tiptap/react';
 import Underline from '@tiptap/extension-underline';
 import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
-// import Mention from '@tiptap/extension-mention';
+import Mention from '@tiptap/extension-mention';
 import Bold from '@tiptap/extension-bold';
 import Italic from '@tiptap/extension-italic';
 import Strike from '@tiptap/extension-strike';
@@ -38,6 +38,7 @@ import SVGIcon from '@/assets/icons/SVGIcon';
 import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { ColorHighlighter } from './ColorHighlighter';
 import { SmilieReplacer } from './SmilieReplacer';
+import suggestion from './suggestion';
 
 interface Props {
   valueContent?: string;
@@ -62,6 +63,7 @@ const TiptapEditor = forwardRef((props: Props, ref) => {
     isInternalDiscussion,
   } = props || {};
   const [editor, setEditor] = useState<Editor | null>(null);
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [currentCell, setCurrentCell] = useState<HTMLElement | null>(null);
   const [isUrlOpen, setIsUrlOpen] = useState(false);
   const [urlValue, setUrlValue] = useState('');
@@ -196,12 +198,6 @@ const TiptapEditor = forwardRef((props: Props, ref) => {
     Placeholder.configure({
       placeholder: placeHolder || 'Write something...', // Set the placeholder text here
     }),
-    // Mention.configure({
-    //   HTMLAttributes: {
-    //     class: 'mention',
-    //   },
-    //   suggestion,
-    // }),
     Bold,
     Italic,
     Strike,
@@ -264,7 +260,19 @@ const TiptapEditor = forwardRef((props: Props, ref) => {
 
   useEffect(() => {
     const newEditor = new Editor({
-      extensions,
+      extensions: [
+        ...extensions,
+        ...(isInternalDiscussion
+          ? [
+              Mention.configure({
+                HTMLAttributes: {
+                  class: 'mention',
+                },
+                suggestion,
+              }),
+            ]
+          : []),
+      ],
       content: valueContent, // Set initial content here
       editable: isEditable, // Make the editor read-only
       onUpdate: ({ editor }) => {
@@ -278,7 +286,7 @@ const TiptapEditor = forwardRef((props: Props, ref) => {
       newEditor.destroy();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isInternalDiscussion]);
 
   // On URL added for selected text
   const onSubmitUrlForm = useCallback(
