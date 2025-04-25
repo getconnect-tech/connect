@@ -35,7 +35,7 @@ import TableHeader from '@tiptap/extension-table-header';
 import { TaskList } from '@tiptap/extension-task-list';
 import { TaskItem } from '@tiptap/extension-task-item';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { isEmpty } from '@/helpers/common';
+import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { ColorHighlighter } from './ColorHighlighter';
 import { SmilieReplacer } from './SmilieReplacer';
 
@@ -79,15 +79,34 @@ const TiptapEditor = forwardRef((props: Props, ref) => {
     setValueContent?.(''); // Update the state to reflect the change
   }, [editor?.commands, setValueContent]);
 
+  const startImageUpload = useCallback(
+    (file: any, uploadPath: string, fileName: string) => {
+      getFirebaseUrlFromFile(file, uploadPath, fileName)
+        .then((url) => {
+          if (url) {
+            editor
+              ?.chain()
+              .focus()
+              .insertContent([
+                { type: 'image', attrs: { src: url } },
+                { type: 'paragraph' },
+              ])
+              .run();
+          }
+        })
+        .catch(() => {
+          console.log('Error when adding image inside richtext!');
+        });
+    },
+    [editor],
+  );
+
   useImperativeHandle(ref, () => ({
     clearEditor() {
       clearContent();
     },
     uploadFile(file: any, uploadPath: string, fileName: string) {
-      // if (file && viewRef.current?.state.selection.$from.parent.inlineContent) {
-      //   viewRef.current.focus();
-      //   startImageUpload(viewRef.current, file, uploadPath, fileName);
-      // }
+      startImageUpload(file, uploadPath, fileName);
     },
     addContent(content: string) {
       if (editor) {
