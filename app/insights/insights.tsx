@@ -12,6 +12,7 @@ import {
 import { useStores } from '@/stores';
 import { isEmpty } from '@/helpers/common';
 import CustomChart from '@/components/graphChart/chart';
+import GraphList from '@/components/graphChart/graphList';
 import {
   BottomDiv,
   ChartMainDiv,
@@ -78,6 +79,7 @@ function Insights({ activeNav }: InsightsProps) {
         </TopDiv>
         <BottomDiv isShowNavbar={isNavbar} onClick={onCloseNavbar}>
           <ChartMainDiv>
+            {/* <GraphList chartData={chartData} /> */}
             <CustomChart
               valueTitle='<span>28</span> in todo'
               title='Queue size'
