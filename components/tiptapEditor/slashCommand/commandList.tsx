@@ -1,27 +1,31 @@
-import SVGIcon from '@/assets/icons/SVGIcon';
 import React, {
   useEffect,
   useState,
   useImperativeHandle,
   forwardRef,
 } from 'react';
+import SVGIcon from '@/assets/icons/SVGIcon';
 import { SlashCommandDiv, SlashCommandItem } from './style';
 
 type CommandItem = {
   title: string;
   iconName: string;
+  // eslint-disable-next-line no-unused-vars
   command: (item: CommandItem) => void;
 };
 
 type CommandsListProps = {
   items: CommandItem[];
+  // eslint-disable-next-line no-unused-vars
   command: (item: CommandItem) => void;
 };
 
 export type CommandsListHandle = {
+  // eslint-disable-next-line no-unused-vars
   onKeyDown: (event: React.KeyboardEvent) => boolean;
 };
 
+// eslint-disable-next-line react/display-name
 const CommandsList = forwardRef<CommandsListHandle, CommandsListProps>(
   ({ items, command }, ref) => {
     const [selectedIndex, setSelectedIndex] = useState(0);

@@ -12,7 +12,8 @@ export const SlashCommandDiv = styled.div`
   background: var(--bg-white);
   border-radius: 8px;
   box-shadow: var(--shadow-card);
-  border: unset .suggestion {
+  border: unset;
+  .suggestion {
     color: var(--text);
     font-size: 13px;
     line-height: 20px;

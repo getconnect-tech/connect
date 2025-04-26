@@ -4,11 +4,13 @@ import { Editor, Range, Extension } from '@tiptap/core';
 type CommandProps = {
   editor: Editor;
   range: Range;
+  // eslint-disable-next-line no-unused-vars
   props: { command: (params: { editor: Editor; range: Range }) => void };
 };
 
 type SuggestionConfig = {
   char: string;
+  // eslint-disable-next-line no-unused-vars
   command: (params: CommandProps) => void;
 };
 
