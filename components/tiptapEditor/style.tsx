@@ -28,7 +28,7 @@ export const DropdownDiv = styled.div`
   border-radius: 12px;
   position: absolute;
   z-index: 10;
-  max-height: 185px;
+  max-height: 175px;
   max-width: 180px;
   overflow-y: auto;
   padding: 4px;
