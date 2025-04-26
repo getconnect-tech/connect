@@ -97,32 +97,6 @@ const slashSuggestion: any = (props: SuggestionProps) => {
           },
         },
         {
-          //Remain to implement
-          iconName: 'insert-gif-icon',
-          title: 'Insert GIF',
-          command: ({ editor, range }: any) => {
-            editor
-              .chain()
-              .focus()
-              .deleteRange({ from: range.from, to: range.to + query.length })
-              .run();
-            openGifModal();
-          },
-        },
-        {
-          //Remain to implement
-          iconName: 'record-snap-icon',
-          title: 'Record Snap',
-          command: ({ editor, range }: any) => {
-            editor
-              .chain()
-              .focus()
-              .deleteRange({ from: range.from, to: range.to + query.length })
-              .run();
-            recordSnap();
-          },
-        },
-        {
           iconName: 'slash-code-block-icon',
           title: 'Code Block',
           command: ({ editor, range }: any) => {
