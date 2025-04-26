@@ -20,6 +20,7 @@ export interface QueueSizeResponse {
   data: QueueSizeData[];
   startDate: string;
   endDate: string;
+  currentQueueSize: number;
 }
 export interface FirstResponseTimeData {
   ticketId: string;
@@ -365,10 +366,15 @@ export const getQueueSizeInsights = async (
       date,
       queueSize,
     }));
+ //calculate current queue size
+  const currentQueueSize = tickets.filter(
+    (ticket) => ticket.status === TicketStatus.OPEN,
+  ).length;
 
   return {
     data: queueSizeData,
     startDate: effectiveStartDate.toISOString(),
     endDate: effectiveEndDate.toISOString(),
+    currentQueueSize,
   };
 };
