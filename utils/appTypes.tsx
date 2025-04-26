@@ -60,3 +60,10 @@ export interface Contact extends Omit<Partial<PrismaContact>, 'birthday'> {
   custom_traits?: z.infer<typeof customTraitsSchema>;
   birthday?: string;
 }
+
+export interface ChartData {
+  date: string;
+  queueSize: number;
+  firstResponseTime?: number;
+  medianResolutionTime?: number;
+}
