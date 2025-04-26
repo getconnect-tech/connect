@@ -19,7 +19,6 @@ import { BarElement } from 'chart.js';
 import { ChartOptions } from 'chart.js';
 import moment from 'moment';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { ChartData } from '@/utils/appTypes';
 import { convertToHoursAndMinutes } from '@/helpers/common';
 import {
   ChartDiv,
@@ -49,11 +48,9 @@ ChartJS.register(
 interface Props {
   valueTitle: string;
   title: string;
-  chartData?: ChartData[];
   ctrData: number[];
   isQueueSize?: boolean;
-  isFirstResponseTime?: boolean;
-  isResolutionTime?: boolean;
+  isTimeFormat?: boolean;
 }
 
 const CustomChart = ({
@@ -61,8 +58,7 @@ const CustomChart = ({
   title,
   ctrData,
   isQueueSize,
-  isFirstResponseTime,
-  isResolutionTime,
+  isTimeFormat,
 }: Props) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -185,7 +181,7 @@ const CustomChart = ({
         let displayValue = '';
         if (isQueueSize) {
           displayValue = `${value} in todo`;
-        } else if (isFirstResponseTime || isResolutionTime) {
+        } else if (isTimeFormat) {
           displayValue = convertToHoursAndMinutes(value);
         } else {
           displayValue = `${value}`;
@@ -268,13 +264,7 @@ const CustomChart = ({
         tooltipEl.style.display = 'none';
       });
     };
-  }, [
-    data.datasets,
-    data.labels,
-    isQueueSize,
-    isFirstResponseTime,
-    isResolutionTime,
-  ]);
+  }, [data.datasets, data.labels, isQueueSize, isTimeFormat]);
 
   const options: ChartOptions<'bar' | 'line'> = {
     responsive: true,
@@ -292,7 +282,7 @@ const CustomChart = ({
           color: 'var(--text-text-secondary)',
           font: { size: 12 },
           callback: function (value) {
-            if (isFirstResponseTime || isResolutionTime) {
+            if (isTimeFormat) {
               return convertMinutesToHours(Number(value));
             }
             return value;

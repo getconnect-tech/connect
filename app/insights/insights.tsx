@@ -78,11 +78,9 @@ function Insights({ activeNav }: InsightsProps) {
         </TopDiv>
         <BottomDiv isShowNavbar={isNavbar} onClick={onCloseNavbar}>
           <ChartMainDiv>
-            {/* <GraphList chartData={chartData} /> */}
             <CustomChart
               valueTitle={`<span>${queueSize?.currentQueueSize}</span> in todo`}
               title='Queue size'
-              chartData={queueSize?.data || []}
               ctrData={queueSize?.data.map((item) => item.queueSize) || []}
               isQueueSize
             />
@@ -92,7 +90,7 @@ function Insights({ activeNav }: InsightsProps) {
               )}</span>`}
               title='Median first response time'
               ctrData={firstResponseTime?.data.map((item) => item.median) || []}
-              isFirstResponseTime
+              isTimeFormat
             />
             <CustomChart
               valueTitle={`<span>${convertToHoursAndMinutes(
@@ -100,7 +98,7 @@ function Insights({ activeNav }: InsightsProps) {
               )}</span>`}
               title='Median resolution time'
               ctrData={resolutionTime?.data.map((item) => item.median) || []}
-              isResolutionTime
+              isTimeFormat
             />
           </ChartMainDiv>
         </BottomDiv>
