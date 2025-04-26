@@ -15,17 +15,13 @@ interface MentionRenderProps {
 const suggestion: any = {
   items: ({ query }: { query: string }) => {
     const mentionUsers = workspaceStore?.currentWorkspace?.users || [];
-    return mentionUsers
-      ?.filter((item: any) => {
-        const words =
-          item?.display_name
-            ?.split(' ')
-            .map((word: string) => word.toLowerCase()) || [];
-        return words.some((word: string) =>
-          word.startsWith(query.toLowerCase()),
-        );
-      })
-      ?.slice(0, 5);
+    return mentionUsers?.filter((item: any) => {
+      const words =
+        item?.display_name
+          ?.split(' ')
+          .map((word: string) => word.toLowerCase()) || [];
+      return words.some((word: string) => word.startsWith(query.toLowerCase()));
+    });
   },
 
   render: () => {

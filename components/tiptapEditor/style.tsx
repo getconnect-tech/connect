@@ -16,6 +16,10 @@ export const SuggestionItem = styled.div`
     background-color: var(--bg-white-hover);
     cursor: pointer;
   }
+  &.is-selected {
+    background-color: var(--bg-white-hover);
+    cursor: pointer;
+  }
 `;
 
 export const DropdownDiv = styled.div`
