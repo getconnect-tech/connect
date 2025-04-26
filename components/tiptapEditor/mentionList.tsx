@@ -4,6 +4,7 @@ import {
   useImperativeHandle,
   useState,
   Ref,
+  useRef,
 } from 'react';
 import Avatar from '../avtar/Avtar';
 import { DropdownDiv, SuggestionItem } from './style';
@@ -25,6 +26,7 @@ export interface MentionListHandle {
 const MentionList = forwardRef<MentionListHandle, MentionListProps>(
   (props, ref: Ref<MentionListHandle>) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     const selectItem = (index: number) => {
       const item = props.items[index];
@@ -55,6 +57,23 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>(
       setSelectedIndex(0);
     }, [props.items]);
 
+    useEffect(() => {
+      const container = itemRefs.current[selectedIndex]?.parentElement;
+      const item = itemRefs.current[selectedIndex];
+
+      if (container && item) {
+        const containerRect = container.getBoundingClientRect();
+        const itemRect = item.getBoundingClientRect();
+
+        if (
+          itemRect.top < containerRect.top ||
+          itemRect.bottom > containerRect.bottom
+        ) {
+          item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    }, [selectedIndex]);
+
     useImperativeHandle(ref, () => ({
       onKeyDown: ({ event }) => {
         if (event.key === 'ArrowUp') {
@@ -81,6 +100,9 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>(
         {props.items.length ? (
           props.items.map((item, index) => (
             <SuggestionItem
+              ref={(el) => {
+                itemRefs.current[index] = el;
+              }}
               className={index === selectedIndex ? 'is-selected' : ''}
               key={item?.id}
               onClick={() => selectItem(index)}
