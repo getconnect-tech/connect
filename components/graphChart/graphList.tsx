@@ -9,6 +9,8 @@ interface Chart {
   valueTitle: string;
   title: string;
   chartData: ChartData[];
+  isQueueSize?: boolean;
+  isTimeFormat?: boolean;
 }
 
 interface Props {
@@ -55,7 +57,9 @@ function GraphList({
             key={index}
             valueTitle={item.valueTitle}
             title={item.title}
-            chartData={item?.chartData}
+            ctrData={item.chartData.map((data) => data.queueSize)}
+            isQueueSize={item.isQueueSize}
+            isTimeFormat={item.isTimeFormat}
           />
         ))}
       </List>
