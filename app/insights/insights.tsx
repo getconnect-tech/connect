@@ -84,16 +84,19 @@ function Insights({ activeNav }: InsightsProps) {
               title='Queue size'
               chartData={queueSize?.data || []}
               ctrData={queueSize?.data.map((item) => item.queueSize) || []}
+              isQueueSize
             />
             <CustomChart
               valueTitle='<span>2h 43m</span>'
               title='Median first response time'
               ctrData={firstResponseTime?.data.map((item) => item.median) || []}
+              isFirstResponseTime
             />
             <CustomChart
               valueTitle='<span>4h 44m</span>'
               title='Median resolution time'
               ctrData={resolutionTime?.data.map((item) => item.median) || []}
+              isResolutionTime
             />
           </ChartMainDiv>
         </BottomDiv>

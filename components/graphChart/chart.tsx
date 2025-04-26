@@ -50,12 +50,36 @@ interface Props {
   title: string;
   chartData?: ChartData[];
   ctrData: number[];
+  isQueueSize?: boolean;
+  isFirstResponseTime?: boolean;
+  isResolutionTime?: boolean;
 }
 
-const CustomChart = ({ valueTitle, title, ctrData }: Props) => {
+const CustomChart = ({
+  valueTitle,
+  title,
+  ctrData,
+  isQueueSize,
+  isFirstResponseTime,
+  isResolutionTime,
+}: Props) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [gradientFill, setGradientFill] = useState<string | CanvasGradient>('');
+
+  // Helper function to convert minutes to hours and minutes format
+  const convertToHoursAndMinutes = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = Math.round(minutes % 60);
+    return hours > 0
+      ? `${hours}h ${remainingMinutes}m`
+      : `${remainingMinutes}m`;
+  };
+
+  const convertMinutesToHours = (minutes: number) => {
+    return (minutes / 60).toFixed(1) + 'h';
+  };
+
   useEffect(() => {
     if (chartRef.current) {
       const ctx = chartRef.current.ctx;
@@ -165,6 +189,16 @@ const CustomChart = ({ valueTitle, title, ctrData }: Props) => {
         const value = data.datasets[datasetIndex].data[index];
         const label = data.labels?.[index] || '';
 
+        // Format the display value based on the type
+        let displayValue = '';
+        if (isQueueSize) {
+          displayValue = `${value} in todo`;
+        } else if (isFirstResponseTime || isResolutionTime) {
+          displayValue = convertToHoursAndMinutes(value);
+        } else {
+          displayValue = `${value}`;
+        }
+
         // Get exact positions
         const meta = chart.getDatasetMeta(datasetIndex);
         const dataPoint = meta.data[index];
@@ -191,7 +225,7 @@ const CustomChart = ({ valueTitle, title, ctrData }: Props) => {
                 padding: 6px 10px;
                 box-shadow: var(--shadow-dropdown);
               ">
-                <div style="font-size: 12px; font-weight: 400; line-height: 16px; color: var(--text);">${value} in todo</div>
+                <div style="font-size: 12px; font-weight: 400; line-height: 16px; color: var(--text);">${displayValue}</div>
                 <div style="margin-bottom: 2px; font-size: 12px; line-height: 16px; color: var(--text-text-secondary);">${label}</div>
               </div>
               
@@ -242,7 +276,13 @@ const CustomChart = ({ valueTitle, title, ctrData }: Props) => {
         tooltipEl.style.display = 'none';
       });
     };
-  }, [data.datasets, data.labels]);
+  }, [
+    data.datasets,
+    data.labels,
+    isQueueSize,
+    isFirstResponseTime,
+    isResolutionTime,
+  ]);
 
   const options: ChartOptions<'bar' | 'line'> = {
     responsive: true,
@@ -259,6 +299,12 @@ const CustomChart = ({ valueTitle, title, ctrData }: Props) => {
           stepSize: Math.ceil(dynamicBarHeight / 4),
           color: 'var(--text-text-secondary)',
           font: { size: 12 },
+          callback: function (value) {
+            if (isFirstResponseTime || isResolutionTime) {
+              return convertMinutesToHours(Number(value));
+            }
+            return value;
+          },
         },
         grid: { display: false },
         border: { display: false },
