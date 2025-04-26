@@ -64,6 +64,6 @@ export interface Contact extends Omit<Partial<PrismaContact>, 'birthday'> {
 export interface ChartData {
   date: string;
   queueSize: number;
-  firstResponseTime: number;
-  medianResolutionTime: number;
+  firstResponseTime?: number;
+  medianResolutionTime?: number;
 }

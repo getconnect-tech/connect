@@ -258,13 +258,43 @@ const InboxCard = ({
     [ticketDetail, ticketIndex, ticketStore],
   );
 
-  const getCombinedDescription = (htmlString: string) => {
+  const sanitizeHtml = (html: string): string => {
+    return html
+      .replace(/<\s*([^\s>\\/]+@[^\s>\\/]+)\s*>/g, '')
+      .replace(/&lt;\s*([^\s&]+@[^\s&]+)\s*&gt;/g, '');
+  };
+
+  const getCombinedDescription = (htmlString: string): string => {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlString, 'text/html');
-    const paragraphs = doc.querySelectorAll('p');
-    return Array.from(paragraphs)
-      .map((p) => p.textContent)
-      .join(' ');
+    const sanitized = sanitizeHtml(htmlString);
+    const doc = parser.parseFromString(sanitized, 'text/html');
+
+    doc.querySelectorAll('br').forEach((br) => br.replaceWith('\n'));
+
+    const extractText = (node: Node): string => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        return (node as Text).textContent?.trim() || '';
+      }
+
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const element = node as HTMLElement;
+        if (['SCRIPT', 'STYLE'].includes(element.tagName)) return '';
+        const childTexts = Array.from(element.childNodes)
+          .map(extractText)
+          .filter(Boolean);
+        const separator = ['DIV', 'P', 'BLOCKQUOTE'].includes(element.tagName)
+          ? '\n'
+          : ' ';
+        return childTexts.join(separator);
+      }
+
+      return '';
+    };
+
+    return extractText(doc.body)
+      .replace(/\s+\n/g, '\n')
+      .replace(/\n{2,}/g, '\n\n')
+      .trim();
   };
 
   const combinedDescription = getCombinedDescription(description);

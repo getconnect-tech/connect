@@ -1,11 +1,17 @@
 'use client';
-import React, { useCallback, useState } from 'react';
-import type { Dayjs } from 'dayjs';
+import React, { useCallback, useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Icon from '@/components/icon/icon';
 import { TICKETS_HEADER } from '@/global/constants';
-import GraphList from '@/components/graphChart/graphList';
-import { chartDemoData } from '@/helpers/raw';
+import {
+  getFirstResponseTime,
+  getQueueSize,
+  getResolutionTime,
+} from '@/services/clientSide/insightsService';
+import { useStores } from '@/stores';
+import { convertToHoursAndMinutes, isEmpty } from '@/helpers/common';
+import CustomChart from '@/components/graphChart/chart';
 import {
   BottomDiv,
   ChartMainDiv,
@@ -23,29 +29,24 @@ interface InsightsProps {
 
 function Insights({ activeNav }: InsightsProps) {
   const [isNavbar, setIsNavbar] = useState(false);
-  const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
-    null,
-    null,
-  ]);
-  const [isOpenDropdown, setIsOpenDropdown] = useState(false);
-  const [selectedValue, setSelectedValue] = useState({ name: 'Last 30 days' });
 
-  const handleDateChange = useCallback(
-    (dates: [Dayjs | null, Dayjs | null] | null) => {
-      if (dates) {
-        setDateRange(dates);
-      }
-    },
-    [],
-  );
+  const { workspaceStore, insightsStore } = useStores();
+  const { currentWorkspace } = workspaceStore || {};
+  const { queueSize, firstResponseTime, resolutionTime } = insightsStore || {};
 
-  const onClickTag = useCallback(() => {
-    setIsOpenDropdown(!isOpenDropdown);
-  }, [isOpenDropdown]);
+  const loadData = useCallback(async () => {
+    if (!isEmpty(currentWorkspace?.id)) {
+      await Promise.all([
+        getQueueSize(),
+        getFirstResponseTime(),
+        getResolutionTime(),
+      ]);
+    }
+  }, [currentWorkspace?.id]);
 
-  const handleDropdownChange = useCallback((item: any) => {
-    setSelectedValue(item);
-  }, []);
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const onClickIcon = useCallback(() => {
     setIsNavbar(true);
@@ -54,25 +55,6 @@ function Insights({ activeNav }: InsightsProps) {
   const onCloseNavbar = useCallback(() => {
     setIsNavbar(false);
   }, []);
-
-  // Graph data
-  const chartData = [
-    {
-      valueTitle: '<span>28</span> in todo',
-      title: 'Queue size',
-      chartData: chartDemoData,
-    },
-    {
-      valueTitle: '<span>2h 43m</span>',
-      title: 'Median first response time',
-      chartData: chartDemoData,
-    },
-    {
-      valueTitle: '<span>4h 44m</span>',
-      title: 'Median resolution time',
-      chartData: chartDemoData,
-    },
-  ];
 
   return (
     <Main>
@@ -96,16 +78,27 @@ function Insights({ activeNav }: InsightsProps) {
         </TopDiv>
         <BottomDiv isShowNavbar={isNavbar} onClick={onCloseNavbar}>
           <ChartMainDiv>
-            <GraphList
-              chartData={chartData}
-              onClickTag={onClickTag}
-              isOpenDropdown={isOpenDropdown}
-              setIsOpenDropdown={setIsOpenDropdown}
-              handleDropdownChange={handleDropdownChange}
-              selectedValue={selectedValue}
-              handleDateChange={handleDateChange}
-              dateRange={dateRange}
-              headerText={'Overview'}
+            <CustomChart
+              valueTitle={`<span>${queueSize?.currentQueueSize}</span> in todo`}
+              title='Queue size'
+              ctrData={queueSize?.data.map((item) => item.queueSize) || []}
+              isQueueSize
+            />
+            <CustomChart
+              valueTitle={`<span>${convertToHoursAndMinutes(
+                firstResponseTime?.overallMedian as number,
+              )}</span>`}
+              title='Median first response time'
+              ctrData={firstResponseTime?.data.map((item) => item.median) || []}
+              isTimeFormat
+            />
+            <CustomChart
+              valueTitle={`<span>${convertToHoursAndMinutes(
+                resolutionTime?.overallMedian as number,
+              )}</span>`}
+              title='Median resolution time'
+              ctrData={resolutionTime?.data.map((item) => item.median) || []}
+              isTimeFormat
             />
           </ChartMainDiv>
         </BottomDiv>
@@ -114,4 +107,4 @@ function Insights({ activeNav }: InsightsProps) {
   );
 }
 
-export default Insights;
+export default observer(Insights);

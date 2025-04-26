@@ -19,7 +19,7 @@ import { BarElement } from 'chart.js';
 import { ChartOptions } from 'chart.js';
 import moment from 'moment';
 import SVGIcon from '@/assets/icons/SVGIcon';
-import { ChartData } from '@/utils/appTypes';
+import { convertToHoursAndMinutes } from '@/helpers/common';
 import {
   ChartDiv,
   HeaderSection,
@@ -48,13 +48,26 @@ ChartJS.register(
 interface Props {
   valueTitle: string;
   title: string;
-  chartData: ChartData[];
+  ctrData: number[];
+  isQueueSize?: boolean;
+  isTimeFormat?: boolean;
 }
 
-const CustomChart = ({ valueTitle, title, chartData }: Props) => {
+const CustomChart = ({
+  valueTitle,
+  title,
+  ctrData,
+  isQueueSize,
+  isTimeFormat,
+}: Props) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [gradientFill, setGradientFill] = useState<string | CanvasGradient>('');
+
+  const convertMinutesToHours = (minutes: number) => {
+    return (minutes / 60).toFixed(1) + 'h';
+  };
+
   useEffect(() => {
     if (chartRef.current) {
       const ctx = chartRef.current.ctx;
@@ -84,12 +97,7 @@ const CustomChart = ({ valueTitle, title, chartData }: Props) => {
     mondayIndexes.includes(index) ? date.format('D MMM') : '',
   );
 
-  // Generate CTR data for all days
-  const ctrData = chartData.map((item) => item.queueSize);
-
-  // Calculate max queue size
-  const queueSizes = chartData.map((item) => item.queueSize);
-  const maxQueueSize = Math.max(...queueSizes);
+  const maxQueueSize = Math.max(...(ctrData || []));
 
   // Calculate dynamic bar height (max size + 50px buffer)
   const dynamicBarHeight = maxQueueSize + 5;
@@ -169,6 +177,16 @@ const CustomChart = ({ valueTitle, title, chartData }: Props) => {
         const value = data.datasets[datasetIndex].data[index];
         const label = data.labels?.[index] || '';
 
+        // Format the display value based on the type
+        let displayValue = '';
+        if (isQueueSize) {
+          displayValue = `${value} in todo`;
+        } else if (isTimeFormat) {
+          displayValue = convertToHoursAndMinutes(value);
+        } else {
+          displayValue = `${value}`;
+        }
+
         // Get exact positions
         const meta = chart.getDatasetMeta(datasetIndex);
         const dataPoint = meta.data[index];
@@ -195,7 +213,7 @@ const CustomChart = ({ valueTitle, title, chartData }: Props) => {
                 padding: 6px 10px;
                 box-shadow: var(--shadow-dropdown);
               ">
-                <div style="font-size: 12px; font-weight: 400; line-height: 16px; color: var(--text);">${value} in todo</div>
+                <div style="font-size: 12px; font-weight: 400; line-height: 16px; color: var(--text);">${displayValue}</div>
                 <div style="margin-bottom: 2px; font-size: 12px; line-height: 16px; color: var(--text-text-secondary);">${label}</div>
               </div>
               
@@ -246,7 +264,7 @@ const CustomChart = ({ valueTitle, title, chartData }: Props) => {
         tooltipEl.style.display = 'none';
       });
     };
-  }, [data.datasets, data.labels]);
+  }, [data.datasets, data.labels, isQueueSize, isTimeFormat]);
 
   const options: ChartOptions<'bar' | 'line'> = {
     responsive: true,
@@ -263,6 +281,12 @@ const CustomChart = ({ valueTitle, title, chartData }: Props) => {
           stepSize: Math.ceil(dynamicBarHeight / 4),
           color: 'var(--text-text-secondary)',
           font: { size: 12 },
+          callback: function (value) {
+            if (isTimeFormat) {
+              return convertMinutesToHours(Number(value));
+            }
+            return value;
+          },
         },
         grid: { display: false },
         border: { display: false },
