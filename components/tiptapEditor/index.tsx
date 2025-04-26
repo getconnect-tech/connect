@@ -39,6 +39,8 @@ import { getFirebaseUrlFromFile, isEmpty } from '@/helpers/common';
 import { ColorHighlighter } from './ColorHighlighter';
 import { SmilieReplacer } from './SmilieReplacer';
 import suggestion from './suggestion';
+import command from './slashCommand/command';
+import slashSuggestion from './slashCommand/suggestion';
 
 interface Props {
   valueContent?: string;
@@ -49,6 +51,9 @@ interface Props {
   isSignature?: boolean;
   handleClickCross?: () => void;
   isInternalDiscussion?: boolean;
+  recordSnapModalOpen?: () => void;
+  handleFileInput?: () => void;
+  handleGifModal?: () => void;
 }
 
 // eslint-disable-next-line react/display-name, no-unused-vars, @typescript-eslint/no-unused-vars
@@ -61,6 +66,9 @@ const TiptapEditor = forwardRef((props: Props, ref) => {
     isSignature,
     handleClickCross,
     isInternalDiscussion,
+    recordSnapModalOpen,
+    handleFileInput,
+    handleGifModal,
   } = props || {};
   const [editor, setEditor] = useState<Editor | null>(null);
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
@@ -177,6 +185,15 @@ const TiptapEditor = forwardRef((props: Props, ref) => {
       }
     }
   };
+  // Function call on select record snap
+  const recordSnap = useCallback(() => {
+    if (recordSnapModalOpen) recordSnapModalOpen();
+  }, [recordSnapModalOpen]);
+
+  // This function call when we want to open gif modal
+  const openGifModal = useCallback(() => {
+    if (handleGifModal) handleGifModal();
+  }, [handleGifModal]);
 
   // Call empty function on cmd + enter to avoid extra enter event on send
   const CommandEnterShortcut = Extension.create({
@@ -230,31 +247,21 @@ const TiptapEditor = forwardRef((props: Props, ref) => {
     Document,
     Paragraph,
     Text,
-    BulletList.configure({
-      keepMarks: true,
-      keepAttributes: false,
+    BulletList.configure({ keepMarks: true, keepAttributes: false }),
+    OrderedList.configure({ keepMarks: true, keepAttributes: false }),
+    command.configure({
+      suggestion: slashSuggestion({
+        recordSnap,
+        openGifModal,
+        handleFileInput,
+      }),
     }),
-    OrderedList.configure({
-      keepMarks: true,
-      keepAttributes: false,
-    }),
-    // Commands.configure({
-    //   suggestion: slashSuggestion({
-    //     recordSnap,
-    //     openGifModal,
-    //     handleFileInput,
-    //   }),
-    // }),
-    Table.configure({
-      resizable: true,
-    }),
+    Table.configure({ resizable: true }),
     TableRow,
     TableCell,
     TableHeader,
     TaskList,
-    TaskItem.configure({
-      nested: true,
-    }),
+    TaskItem.configure({ nested: true }),
     CommandEnterShortcut,
   ];
 
@@ -265,9 +272,7 @@ const TiptapEditor = forwardRef((props: Props, ref) => {
         ...(isInternalDiscussion
           ? [
               Mention.configure({
-                HTMLAttributes: {
-                  class: 'mention',
-                },
+                HTMLAttributes: { class: 'mention' },
                 suggestion,
               }),
             ]
