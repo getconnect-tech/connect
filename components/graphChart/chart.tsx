@@ -20,6 +20,7 @@ import { ChartOptions } from 'chart.js';
 import moment from 'moment';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { ChartData } from '@/utils/appTypes';
+import { convertToHoursAndMinutes } from '@/helpers/common';
 import {
   ChartDiv,
   HeaderSection,
@@ -66,15 +67,6 @@ const CustomChart = ({
   const chartRef = useRef<ChartJS<'line'>>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [gradientFill, setGradientFill] = useState<string | CanvasGradient>('');
-
-  // Helper function to convert minutes to hours and minutes format
-  const convertToHoursAndMinutes = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const remainingMinutes = Math.round(minutes % 60);
-    return hours > 0
-      ? `${hours}h ${remainingMinutes}m`
-      : `${remainingMinutes}m`;
-  };
 
   const convertMinutesToHours = (minutes: number) => {
     return (minutes / 60).toFixed(1) + 'h';

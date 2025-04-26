@@ -10,7 +10,7 @@ import {
   getResolutionTime,
 } from '@/services/clientSide/insightsService';
 import { useStores } from '@/stores';
-import { isEmpty } from '@/helpers/common';
+import { convertToHoursAndMinutes, isEmpty } from '@/helpers/common';
 import CustomChart from '@/components/graphChart/chart';
 import {
   BottomDiv,
@@ -80,20 +80,24 @@ function Insights({ activeNav }: InsightsProps) {
           <ChartMainDiv>
             {/* <GraphList chartData={chartData} /> */}
             <CustomChart
-              valueTitle='<span>28</span> in todo'
+              valueTitle={`<span>${queueSize?.currentQueueSize}</span> in todo`}
               title='Queue size'
               chartData={queueSize?.data || []}
               ctrData={queueSize?.data.map((item) => item.queueSize) || []}
               isQueueSize
             />
             <CustomChart
-              valueTitle='<span>2h 43m</span>'
+              valueTitle={`<span>${convertToHoursAndMinutes(
+                firstResponseTime?.overallMedian as number,
+              )}</span>`}
               title='Median first response time'
               ctrData={firstResponseTime?.data.map((item) => item.median) || []}
               isFirstResponseTime
             />
             <CustomChart
-              valueTitle='<span>4h 44m</span>'
+              valueTitle={`<span>${convertToHoursAndMinutes(
+                resolutionTime?.overallMedian as number,
+              )}</span>`}
               title='Median resolution time'
               ctrData={resolutionTime?.data.map((item) => item.median) || []}
               isResolutionTime
