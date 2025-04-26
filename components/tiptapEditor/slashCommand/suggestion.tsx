@@ -2,12 +2,10 @@ import { ReactRenderer } from '@tiptap/react';
 import tippy, { Instance, Props } from 'tippy.js';
 import CommandsList, { CommandsListHandle } from './commandList';
 interface SuggestionProps {
-  recordSnap: () => void;
   handleFileInput: () => void;
-  openGifModal: () => void;
 }
 const slashSuggestion: any = (props: SuggestionProps) => {
-  const { recordSnap, handleFileInput, openGifModal } = props;
+  const { handleFileInput } = props;
   return {
     items: ({ query }: { query: string }) =>
       [
@@ -171,11 +169,7 @@ const slashSuggestion: any = (props: SuggestionProps) => {
         onUpdate: ({ query }: any) => {
           if (component) {
             component.updateProps({
-              items: slashSuggestion({
-                recordSnap,
-                openGifModal,
-                handleFileInput,
-              }).items({ query }),
+              items: slashSuggestion({ handleFileInput }).items({ query }),
             });
           }
         },
