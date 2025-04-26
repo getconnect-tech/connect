@@ -1,57 +1,54 @@
-import React, { useState } from 'react';
-import { DatePicker } from 'antd';
+import React from 'react';
 import type { Dayjs } from 'dayjs';
 import { ChartData } from '@/utils/appTypes';
-import Tag from '../tag/tag';
-import { DatePickerHeader, HeaderText, List, PickerContainer } from './style';
+import DatepickerComponent from './datepickerComponent';
+import { List } from './style';
 import CustomChart from './chart';
-
-const { RangePicker } = DatePicker;
 
 interface Chart {
   valueTitle: string;
   title: string;
   chartData: ChartData[];
 }
+
 interface Props {
   chartData: Chart[];
+  onClickTag: () => void;
+  isOpenDropdown: boolean;
+  // eslint-disable-next-line no-unused-vars
+  setIsOpenDropdown: (value: boolean) => void;
+  // eslint-disable-next-line no-unused-vars
+  handleDropdownChange: (item: any) => void;
+  selectedValue: { name: string };
+  // eslint-disable-next-line no-unused-vars
+  handleDateChange: (dates: [Dayjs | null, Dayjs | null] | null) => void;
+  dateRange: [Dayjs | null, Dayjs | null];
+  headerText: string;
 }
 
-function GraphList({ chartData }: Props) {
-  const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([
-    null,
-    null,
-  ]);
-
-  const handleDateChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
-    if (dates) {
-      setDateRange(dates);
-    }
-  };
-
+function GraphList({
+  chartData,
+  onClickTag,
+  isOpenDropdown,
+  setIsOpenDropdown,
+  handleDropdownChange,
+  selectedValue,
+  handleDateChange,
+  dateRange,
+  headerText,
+}: Props) {
   return (
     <>
-      <DatePickerHeader>
-        <HeaderText>Overview</HeaderText>
-        <PickerContainer>
-          <Tag
-            onClick={() => {}}
-            isName={false}
-            iconName='calendar-icon'
-            title='Last 28 days'
-            isActive={true}
-          />
-          <RangePicker
-            onChange={(dates) =>
-              handleDateChange(dates as [Dayjs | null, Dayjs | null])
-            }
-            value={dateRange}
-            format='MMM D, YYYY'
-            allowClear={false}
-            placeholder={['Start date', 'End date']}
-          />
-        </PickerContainer>
-      </DatePickerHeader>
+      <DatepickerComponent
+        onClickTag={onClickTag}
+        isOpenDropdown={isOpenDropdown}
+        setIsOpenDropdown={setIsOpenDropdown}
+        handleDropdownChange={handleDropdownChange}
+        selectedValue={selectedValue}
+        handleDateChange={handleDateChange}
+        dateRange={dateRange}
+        headerText={headerText}
+      />
       <List>
         {chartData.map((item, index) => (
           <CustomChart

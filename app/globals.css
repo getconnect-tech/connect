@@ -26,6 +26,65 @@ a {
   text-decoration: none;
 }
 
+/* antd custom styles */
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-today
+  .ant-picker-cell-inner::before {
+  border: 1px solid var(--black);
+}
+
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-start:not(
+    .ant-picker-cell-disabled
+  )
+  .ant-picker-cell-inner,
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-end:not(
+    .ant-picker-cell-disabled
+  )
+  .ant-picker-cell-inner {
+  background-color: var(--black);
+}
+
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-in-range:not(
+    .ant-picker-cell-disabled
+  ):before {
+  background-color: var(--bg-surface);
+}
+
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-start:not(
+    .ant-picker-cell-disabled
+  ):before {
+  background-color: var(--bg-surface);
+}
+
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-in-range:not(
+    .ant-picker-cell-disabled
+  ):before,
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-start:not(
+    .ant-picker-cell-disabled
+  ):before,
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-end:not(
+    .ant-picker-cell-disabled
+  ):before {
+  background-color: var(--bg-surface);
+}
+
+.ant-picker-dropdown .ant-picker-cell .ant-picker-cell-inner {
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+.ant-picker-range .ant-picker-active-bar {
+  background-color: var(--black);
+}
+
 .ant-picker-dropdown .ant-picker-time-panel-column {
   scrollbar-color: var(--bg-surface-secondary-hover) transparent;
   width: 68px;

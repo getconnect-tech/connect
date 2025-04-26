@@ -92,6 +92,12 @@ const PickerContainer = styled.div`
     ${Typography.body_sm_regular}
     color: var(--text);
   }
+  .ant-picker-dropdown
+    .ant-picker-cell-in-view.ant-picker-cell-today
+    .ant-picker-cell-inner::before {
+    /* background-color: red; */
+    border: 1px solid red !important;
+  }
 `;
 
 export {
