@@ -6,6 +6,7 @@ import {
   Ref,
 } from 'react';
 import Avatar from '../avtar/Avtar';
+import { DropdownDiv, SuggestionItem } from './style';
 
 // Define the interface for props
 interface MentionListProps {
@@ -76,10 +77,10 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>(
     }));
 
     return props.items?.length > 0 ? (
-      <div className='dropdown-menu'>
+      <DropdownDiv>
         {props.items.length ? (
           props.items.map((item, index) => (
-            <button
+            <SuggestionItem
               className={index === selectedIndex ? 'is-selected' : ''}
               key={item?.id}
               onClick={() => selectItem(index)}
@@ -91,12 +92,12 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>(
                 classname='avtar'
               />
               {item?.display_name}
-            </button>
+            </SuggestionItem>
           ))
         ) : (
-          <div className='item'>No result</div>
+          <SuggestionItem>No result</SuggestionItem>
         )}
-      </div>
+      </DropdownDiv>
     ) : (
       <></>
     );
