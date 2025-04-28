@@ -63,15 +63,29 @@ const TooltipContainer = styled.div`
 const TooltipContent = styled.div`
   position: absolute;
   top: 120%;
-  background: var(--white);
+  left: -12px;
+  background: var(--bg-white);
   color: var(--text);
   border-radius: 4px;
-  box-shadow: var(--shadow-dropdown);
+  box-shadow: var(--shadow-tooltip);
   padding: 4px 6px;
   ${Typography.body_sm_regular};
   z-index: 10;
   max-width: 165px;
   min-width: 165px;
+  box-sizing: border-box;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -7px;
+    left: 12px; /* Adjust to center the arrow */
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 8px solid var(--bg-white);
+  }
 `;
 
 export {
