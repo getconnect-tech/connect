@@ -69,35 +69,63 @@ const PickerContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
-  .ant-picker-range {
-    width: 100%;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 3px 12px;
+  .rdrSelected,
+  .rdrInRange,
+  .rdrStartEdge,
+  .rdrEndEdge {
     background-color: var(--bg-surface-secondary);
-    border-radius: 30px;
   }
-
-  .ant-picker-panel-container {
-    margin-top: 12px;
-  }
-
-  .ant-picker-dropdown {
-    z-index: 1001;
-  }
-  .ant-picker.ant-picker-outlined {
-    margin: 0;
-  }
-  .ant-picker .ant-picker-input > input {
-    ${Typography.body_sm_regular}
+  .rdrDay:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span,
+  .rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span,
+  .rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span,
+  .rdrDay:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span {
     color: var(--text);
   }
-  .ant-picker-dropdown
-    .ant-picker-cell-in-view.ant-picker-cell-today
-    .ant-picker-cell-inner::before {
-    /* background-color: red; */
-    border: 1px solid red !important;
+  .rdrDateDisplayItemActive {
+    border-color: var(--black);
   }
+  .rdrDay .rdrDayHovered {
+    border-color: var(--black);
+  }
+  .rdrDayToday .rdrDayNumber span:after {
+    background-color: var(--black);
+  }
+  .rdrDateDisplayWrapper {
+    background-color: var(--bg-white);
+    border-bottom: 1px solid var(--border);
+  }
+  .rdrNextPrevButton {
+    background-color: var(--bg-surface-secondary);
+  }
+`;
+
+const CalendarContainer = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1000;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  margin-top: 8px;
+`;
+
+const DateRangePickerContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background-color: var(--bg-surface-secondary);
+  border-radius: 30px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--bg-surface-secondary-hover);
+  }
+`;
+
+const DateRangeText = styled.p`
+  ${Typography.body_sm_regular};
+  color: var(--text);
 `;
 
 export {
@@ -112,4 +140,7 @@ export {
   DatePickerHeader,
   HeaderText,
   PickerContainer,
+  CalendarContainer,
+  DateRangePickerContainer,
+  DateRangeText,
 };

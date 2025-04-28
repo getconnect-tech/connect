@@ -1,12 +1,21 @@
-import React from 'react';
-import { DatePicker } from 'antd';
+import React, { useState } from 'react';
 import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
+import { DateRange } from 'react-date-range';
+import type { Range, RangeKeyDict } from 'react-date-range';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import { customDueDateItems } from '@/helpers/raw';
 import DropDownWithTag from '../dropDownWithTag/dropDownWithTag';
-import { HeaderText, DatePickerHeader, PickerContainer } from './style';
-
-const { RangePicker } = DatePicker;
+import {
+  HeaderText,
+  DatePickerHeader,
+  PickerContainer,
+  CalendarContainer,
+  DateRangePickerContainer,
+  DateRangeText,
+} from './style';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 
 interface Props {
   onClickTag: () => void;
@@ -32,6 +41,21 @@ function DatepickerComponent({
   dateRange,
   headerText,
 }: Props) {
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [selectionRange, setSelectionRange] = useState<Range>({
+    startDate: dateRange[0]?.toDate() || new Date(),
+    endDate: dateRange[1]?.toDate() || new Date(),
+    key: 'selection',
+  });
+
+  const handleSelect = (ranges: RangeKeyDict) => {
+    const range = ranges.selection;
+    if (range?.startDate && range?.endDate) {
+      handleDateChange([dayjs(range.startDate), dayjs(range.endDate)]);
+      setSelectionRange(range);
+    }
+  };
+
   return (
     <DatePickerHeader>
       <HeaderText>{headerText}</HeaderText>
@@ -48,23 +72,30 @@ function DatepickerComponent({
           isTag={true}
           isActive={true}
         />
-        <RangePicker
-          onChange={(dates) =>
-            handleDateChange(dates as [Dayjs | null, Dayjs | null])
-          }
-          value={dateRange}
-          format='MMM D, YYYY'
-          allowClear={false}
-          placeholder={['Start date', 'End date']}
-          suffixIcon={
-            <SVGIcon
-              name='calendar-icon'
-              viewBox='0 0 12 12'
-              width='12'
-              height='12'
+        <DateRangePickerContainer
+          onClick={() => setShowCalendar(!showCalendar)}
+        >
+          <SVGIcon
+            name='calendar-icon'
+            viewBox='0 0 12 12'
+            width='12'
+            height='12'
+          />
+          <DateRangeText>
+            {`${dayjs(selectionRange.startDate).format('MMM D')} - ${dayjs(selectionRange.endDate).format('MMM D')}`}
+          </DateRangeText>
+        </DateRangePickerContainer>
+        {showCalendar && (
+          <CalendarContainer>
+            <DateRange
+              editableDateInputs={true}
+              onChange={handleSelect}
+              moveRangeOnFirstSelection={false}
+              ranges={[selectionRange]}
+              maxDate={new Date()}
             />
-          }
-        />
+          </CalendarContainer>
+        )}
       </PickerContainer>
     </DatePickerHeader>
   );
