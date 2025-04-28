@@ -98,9 +98,9 @@ const CalendarContainer = styled.div`
   top: 100%;
   right: 0;
   z-index: 1000;
-  background: white;
+  background: var(--bg-white);
   border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-dropdown);
   margin-top: 8px;
 `;
 
