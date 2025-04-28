@@ -66,10 +66,6 @@ const CustomChart = ({
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [gradientFill, setGradientFill] = useState<string | CanvasGradient>('');
 
-  const convertMinutesToHours = (minutes: number) => {
-    return (minutes / 60).toFixed(1) + 'h';
-  };
-
   useEffect(() => {
     if (chartRef.current) {
       const ctx = chartRef.current.ctx;
@@ -285,7 +281,7 @@ const CustomChart = ({
           font: { size: 12 },
           callback: function (value) {
             if (isTimeFormat) {
-              return convertMinutesToHours(Number(value));
+              return convertToHoursAndMinutes(Number(value));
             }
             return value;
           },

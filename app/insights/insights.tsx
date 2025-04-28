@@ -131,7 +131,7 @@ function Insights({ activeNav }: InsightsProps) {
                   firstResponseTime?.data.map((item) => item.median) || []
                 }
                 isTimeFormat
-                tooltipContent='Average time for your team’s first response.'
+                tooltipContent="Average time for your team's first response."
               />
               <CustomChart
                 valueTitle={`<span>${convertToHoursAndMinutes(
