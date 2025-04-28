@@ -79,6 +79,12 @@ const BottomDiv = styled.div<Props>`
     `}
 `;
 
+const ChartContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(307px, 1fr));
+  gap: 32px;
+`;
+
 export {
   MainDiv,
   Main,
@@ -88,4 +94,5 @@ export {
   Title,
   ChartMainDiv,
   BottomDiv,
+  ChartContainer,
 };

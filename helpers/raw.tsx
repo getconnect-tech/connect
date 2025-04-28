@@ -1,5 +1,6 @@
 import { PriorityLevels, TeamSize } from '@prisma/client';
 import moment from 'moment';
+import { DropDownItem } from '@/components/dropDown/dropDown';
 
 export const industryItems = [
   { name: 'Technology and Software' },
@@ -262,4 +263,15 @@ export const chartDemoData = [
     firstResponseTime: 58,
     medianResolutionTime: 230,
   },
+];
+export const customDueDateItems: DropDownItem[] = [
+  { name: 'Today' },
+  { name: 'Yesterday' },
+  { name: 'This week' },
+  { name: 'Last week' },
+  { name: 'Last 7 days' },
+  { name: 'This month' },
+  { name: 'Last month' },
+  { name: 'Last 30 days' },
+  { name: 'Custom' },
 ];
