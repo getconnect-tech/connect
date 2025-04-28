@@ -14,6 +14,7 @@ import { useStores } from '@/stores';
 import { convertToHoursAndMinutes, isEmpty } from '@/helpers/common';
 import CustomChart from '@/components/graphChart/chart';
 import DatepickerComponent from '@/components/graphChart/datepickerComponent';
+import InsightsLoading from '@/components/insightsLoading/insightsLoading';
 import {
   BottomDiv,
   ChartContainer,
@@ -32,7 +33,7 @@ interface InsightsProps {
 
 function Insights({ activeNav }: InsightsProps) {
   const [isNavbar, setIsNavbar] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const { workspaceStore, insightsStore } = useStores();
   const { currentWorkspace } = workspaceStore || {};
   const { queueSize, firstResponseTime, resolutionTime } = insightsStore || {};
@@ -61,12 +62,14 @@ function Insights({ activeNav }: InsightsProps) {
   }, []);
 
   const loadData = useCallback(async () => {
+    setLoading(true);
     if (!isEmpty(currentWorkspace?.id)) {
       await Promise.all([
         getQueueSize(),
         getFirstResponseTime(),
         getResolutionTime(),
       ]);
+      setLoading(false);
     }
   }, [currentWorkspace?.id]);
 
@@ -102,49 +105,54 @@ function Insights({ activeNav }: InsightsProps) {
             </IconAndTitle>
           </HeaderDiv>
         </TopDiv>
-        <BottomDiv isShowNavbar={isNavbar} onClick={onCloseNavbar}>
-          <ChartMainDiv>
-            <DatepickerComponent
-              onClickTag={onClickTag}
-              isOpenDropdown={isOpenDropdown}
-              setIsOpenDropdown={setIsOpenDropdown}
-              handleDropdownChange={handleDropdownChange}
-              selectedValue={selectedValue}
-              handleDateChange={handleDateChange}
-              dateRange={dateRange}
-              headerText={'Overview'}
-            />
-            <ChartContainer>
-              <CustomChart
-                valueTitle={`<span>${queueSize?.currentQueueSize}</span> in todo`}
-                title='Queue size'
-                ctrData={queueSize?.data.map((item) => item.queueSize) || []}
-                isQueueSize
-                tooltipContent='A snapshot of the number of threads in Todo'
+        {loading && <InsightsLoading />}
+        {!loading && (
+          <BottomDiv isShowNavbar={isNavbar} onClick={onCloseNavbar}>
+            <ChartMainDiv>
+              <DatepickerComponent
+                onClickTag={onClickTag}
+                isOpenDropdown={isOpenDropdown}
+                setIsOpenDropdown={setIsOpenDropdown}
+                handleDropdownChange={handleDropdownChange}
+                selectedValue={selectedValue}
+                handleDateChange={handleDateChange}
+                dateRange={dateRange}
+                headerText={'Overview'}
               />
-              <CustomChart
-                valueTitle={`<span>${convertToHoursAndMinutes(
-                  firstResponseTime?.overallMedian as number,
-                )}</span>`}
-                title='Median first response time'
-                ctrData={
-                  firstResponseTime?.data.map((item) => item.median) || []
-                }
-                isTimeFormat
-                tooltipContent='Average time for your team’s first response.'
-              />
-              <CustomChart
-                valueTitle={`<span>${convertToHoursAndMinutes(
-                  resolutionTime?.overallMedian as number,
-                )}</span>`}
-                title='Median resolution time'
-                ctrData={resolutionTime?.data.map((item) => item.median) || []}
-                isTimeFormat
-                tooltipContent='Average time to resolve customer requests.'
-              />
-            </ChartContainer>
-          </ChartMainDiv>
-        </BottomDiv>
+              <ChartContainer>
+                <CustomChart
+                  valueTitle={`<span>${queueSize?.currentQueueSize}</span> in todo`}
+                  title='Queue size'
+                  ctrData={queueSize?.data.map((item) => item.queueSize) || []}
+                  isQueueSize
+                  tooltipContent='A snapshot of the number of threads in Todo'
+                />
+                <CustomChart
+                  valueTitle={`<span>${convertToHoursAndMinutes(
+                    firstResponseTime?.overallMedian as number,
+                  )}</span>`}
+                  title='Median first response time'
+                  ctrData={
+                    firstResponseTime?.data.map((item) => item.median) || []
+                  }
+                  isTimeFormat
+                  tooltipContent='Average time for your team’s first response.'
+                />
+                <CustomChart
+                  valueTitle={`<span>${convertToHoursAndMinutes(
+                    resolutionTime?.overallMedian as number,
+                  )}</span>`}
+                  title='Median resolution time'
+                  ctrData={
+                    resolutionTime?.data.map((item) => item.median) || []
+                  }
+                  isTimeFormat
+                  tooltipContent='Average time to resolve customer requests.'
+                />
+              </ChartContainer>
+            </ChartMainDiv>
+          </BottomDiv>
+        )}
       </MainDiv>
     </Main>
   );

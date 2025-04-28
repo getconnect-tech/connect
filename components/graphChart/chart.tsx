@@ -317,13 +317,7 @@ const CustomChart = ({
   return (
     <MainChartDiv>
       <TopSection>
-        <HeaderSection
-          style={{
-            position: 'relative',
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
+        <HeaderSection>
           <HeadingTitle>{title}</HeadingTitle>
           <IconTooltip tooltipContent={tooltipContent} />
         </HeaderSection>
