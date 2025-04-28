@@ -51,6 +51,29 @@ const List = styled.div`
   gap: 32px;
 `;
 
+const TooltipContainer = styled.div`
+  position: relative;
+  display: inline-block;
+  margin-left: 6px;
+  svg {
+    cursor: pointer;
+  }
+`;
+
+const TooltipContent = styled.div`
+  position: absolute;
+  top: 120%;
+  background: var(--white);
+  color: var(--text);
+  border-radius: 4px;
+  box-shadow: var(--shadow-dropdown);
+  padding: 4px 6px;
+  ${Typography.body_sm_regular};
+  z-index: 10;
+  max-width: 165px;
+  min-width: 165px;
+`;
+
 export {
   HeadingTitle,
   HeaderSection,
@@ -60,4 +83,6 @@ export {
   TopSection,
   ValueTitle,
   List,
+  TooltipContainer,
+  TooltipContent,
 };
