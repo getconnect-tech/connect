@@ -8,10 +8,14 @@ import { insightsStore } from '@/stores/insightsStore';
  * @desc Get queue size
  * @param {*}
  */
-export const getQueueSize = async () => {
+export const getQueueSize = async (payload?: {
+  startDate?: string;
+  endDate?: string;
+}) => {
   try {
     const response = await axios.get(
       `${NEXT_PUBLIC_API_URL}/insights/queue-size`,
+      { params: payload },
     );
     const { data } = response;
     insightsStore.setQueueSize(data);
@@ -28,10 +32,14 @@ export const getQueueSize = async () => {
  * @desc Get first response time
  * @param {*}
  */
-export const getFirstResponseTime = async () => {
+export const getFirstResponseTime = async (payload?: {
+  startDate?: string;
+  endDate?: string;
+}) => {
   try {
     const response = await axios.get(
       `${NEXT_PUBLIC_API_URL}/insights/first-response-time`,
+      { params: payload },
     );
     const { data } = response;
     insightsStore.setFirstResponseTime(data);
@@ -48,10 +56,14 @@ export const getFirstResponseTime = async () => {
  * @desc Get resolution time
  * @param {*}
  */
-export const getResolutionTime = async () => {
+export const getResolutionTime = async (payload?: {
+  startDate?: string;
+  endDate?: string;
+}) => {
   try {
     const response = await axios.get(
       `${NEXT_PUBLIC_API_URL}/insights/resolution-time`,
+      { params: payload },
     );
     const { data } = response;
     insightsStore.setResolutionTime(data);

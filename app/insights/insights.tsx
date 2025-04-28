@@ -64,14 +64,18 @@ function Insights({ activeNav }: InsightsProps) {
   const loadData = useCallback(async () => {
     setLoading(true);
     if (!isEmpty(currentWorkspace?.id)) {
+      const payload = {
+        startDate: dateRange[0]?.toISOString(),
+        endDate: dateRange[1]?.toISOString(),
+      };
       await Promise.all([
-        getQueueSize(),
-        getFirstResponseTime(),
-        getResolutionTime(),
+        getQueueSize(payload),
+        getFirstResponseTime(payload),
+        getResolutionTime(payload),
       ]);
       setLoading(false);
     }
-  }, [currentWorkspace?.id]);
+  }, [currentWorkspace?.id, dateRange]);
 
   useEffect(() => {
     loadData();
