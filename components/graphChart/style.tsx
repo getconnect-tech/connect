@@ -91,6 +91,11 @@ const PickerContainer = styled.div`
   .rdrNextPrevButton {
     background-color: var(--bg-surface-secondary);
   }
+  .rdrDayStartPreview,
+  .rdrDayEndPreview,
+  .rdrDayInPreview {
+    color: var(--border) !important;
+  }
 `;
 
 const CalendarContainer = styled.div`
