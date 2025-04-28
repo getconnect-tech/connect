@@ -26,6 +26,7 @@ a {
   text-decoration: none;
 }
 
+/* antd custom styles */
 .ant-picker-dropdown .ant-picker-time-panel-column {
   scrollbar-color: var(--bg-surface-secondary-hover) transparent;
   width: 68px;
