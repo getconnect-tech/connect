@@ -45,12 +45,6 @@ const ValueTitle = styled.p`
   }
 `;
 
-const List = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(307px, 1fr));
-  gap: 32px;
-`;
-
 const DatePickerHeader = styled.div`
   display: flex;
   align-items: center;
@@ -136,7 +130,6 @@ export {
   TooltipDiv,
   TopSection,
   ValueTitle,
-  List,
   DatePickerHeader,
   HeaderText,
   PickerContainer,
