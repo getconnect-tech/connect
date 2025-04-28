@@ -17,6 +17,20 @@ import {
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 
+/**
+ * Date Picker Component
+ * A component that provides date range selection functionality with a dropdown for quick date presets
+ * @param {Object} props - Component props
+ * @param {Function} props.onClickTag - Callback function triggered when the tag is clicked
+ * @param {boolean} props.isOpenDropdown - Boolean indicating whether the dropdown is currently open
+ * @param {Function} props.setIsOpenDropdown - Function to set the dropdown open state
+ * @param {Function} props.handleDropdownChange - Callback function triggered when a dropdown item is selected
+ * @param {Object} props.selectedValue - Currently selected value from the dropdown
+ * @param {string} props.selectedValue.name - Name of the selected value
+ * @param {Function} props.handleDateChange - Callback function triggered when date range is changed
+ * @param {Array} props.dateRange - Current date range selection [startDate, endDate]
+ * @param {string} props.headerText - Text to display in the header
+ */
 interface Props {
   onClickTag: () => void;
   isOpenDropdown: boolean;
