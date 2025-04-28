@@ -18,7 +18,6 @@ import {
 import { BarElement } from 'chart.js';
 import { ChartOptions } from 'chart.js';
 import moment from 'moment';
-import SVGIcon from '@/assets/icons/SVGIcon';
 import { convertToHoursAndMinutes } from '@/helpers/common';
 import {
   ChartDiv,
@@ -29,6 +28,7 @@ import {
   TopSection,
   ValueTitle,
 } from './style';
+import IconTooltip from './iconTooltip';
 
 ChartJS.register(
   CategoryScale,
@@ -51,6 +51,7 @@ interface Props {
   ctrData: number[];
   isQueueSize?: boolean;
   isTimeFormat?: boolean;
+  tooltipContent: string;
 }
 
 const CustomChart = ({
@@ -59,6 +60,7 @@ const CustomChart = ({
   ctrData,
   isQueueSize,
   isTimeFormat,
+  tooltipContent,
 }: Props) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -315,14 +317,15 @@ const CustomChart = ({
   return (
     <MainChartDiv>
       <TopSection>
-        <HeaderSection>
+        <HeaderSection
+          style={{
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
           <HeadingTitle>{title}</HeadingTitle>
-          <SVGIcon
-            name='chart-tooltip-icon'
-            width='12'
-            height='12'
-            viewBox='0 0 12 12'
-          />
+          <IconTooltip tooltipContent={tooltipContent} />
         </HeaderSection>
         <ValueTitle dangerouslySetInnerHTML={{ __html: valueTitle }} />
       </TopSection>
