@@ -10,6 +10,7 @@ const HeaderSection = styled.div`
   display: flex;
   align-items: center;
   gap: 6px;
+  position: relative;
 `;
 
 const MainChartDiv = styled.div`
