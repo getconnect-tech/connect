@@ -278,7 +278,7 @@ const InternalMessageCard = ({
     <Main>
       <MainDiv>
         <Div>
-          <div className='message ProseMirror'>
+          <div className='message ProseMirror tiptap'>
             <NameMainDiv>
               <div className='left-div'>
                 <Avatar imgSrc={message} name={messageName} size={20} />

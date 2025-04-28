@@ -947,3 +947,112 @@ img.ProseMirror-separator {
   height: 0;
   pointer-events: none;
 }
+/* tiptap table style */
+
+.tiptap table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  border-radius: 8px;
+  margin: 0;
+  overflow: hidden;
+  table-layout: fixed;
+}
+
+.tiptap tbody {
+  position: relative;
+}
+.tiptap.resize-cursor {
+  cursor: ew-resize;
+  cursor: col-resize;
+}
+.tiptap table td,
+.tiptap table th {
+  box-sizing: border-box;
+  min-width: 1em;
+  padding: 6px 8px;
+  position: relative;
+}
+.tiptap table td {
+  background-color: var(--bg-white);
+}
+.tiptap table th {
+  background-color: var(--bg-surface);
+  font-weight: bold;
+  text-align: left;
+  p {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 20px;
+    /* font for mobile screen in rich-text  */
+    @media (max-width: 449px) {
+      font-size: 15px;
+      line-height: 22px;
+    }
+  }
+}
+
+.tiptap .tableWrapper {
+  margin: 8px 0;
+  overflow-x: auto;
+  border: var(--border-secondary);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tiptap .tableWrapper th,
+.tiptap .tableWrapper td {
+  border-bottom: var(--border-secondary);
+  border-right: var(--border-secondary);
+}
+.tiptap .tableWrapper tbody tr:last-child th {
+  border-bottom: none;
+}
+
+/* Remove bottom border for last row */
+.tiptap .tableWrapper tbody tr:last-child td {
+  border-bottom: none;
+  &.selectedCell {
+    border-bottom: 0.5px solid blue;
+  }
+}
+
+.tiptap .tableWrapper tbody tr td:last-child {
+  border-right: none;
+  &.selectedCell {
+    border-right: 0.5px solid blue;
+  }
+}
+
+.tiptap .tableWrapper tbody tr th:last-child {
+  border-right: none;
+  &.selectedCell {
+    border-right: 0.5px solid blue;
+  }
+}
+
+/* Selected Cell Styling */
+.tiptap table .selectedCell {
+  border: 0.5px solid blue;
+  position: relative;
+}
+
+/* Border Radius Fix */
+.tiptap table tr:first-child .selectedCell:first-child {
+  border-top-left-radius: 8px;
+}
+.tiptap table tr:first-child .selectedCell:last-child {
+  border-top-right-radius: 8px;
+}
+.tiptap table tr:last-child .selectedCell:first-child {
+  border-bottom-left-radius: 8px;
+  border-bottom: 0.5px solid blue;
+}
+.tiptap table tr:last-child .selectedCell:last-child {
+  border-bottom-right-radius: 8px;
+}
+
+.tiptap table td p,
+.tiptap table th p {
+  margin: 0;
+}
