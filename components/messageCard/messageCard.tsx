@@ -175,7 +175,7 @@ export default function MessageCard({
             </div>
           )}
         </CardTop>
-        <CardMessage className='ProseMirror'>
+        <CardMessage className='ProseMirror tiptap'>
           <RenderHtml htmlstring={message} />
         </CardMessage>
         {attachments?.length > 0 && (
