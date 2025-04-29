@@ -83,19 +83,22 @@ const CustomChart = ({
     }
   }, []);
 
-  // Generate array of last 28 days
-  const last28Days = Array.from({ length: 28 }, (_, i) =>
-    moment().subtract(27 - i, 'days'),
+  // Determine the number of days based on the length of ctrData
+  const numberOfDays = ctrData.length > 0 ? ctrData.length : 28; // Default to 28 if no data
+
+  // Generate array of last N days
+  const lastNDays = Array.from({ length: numberOfDays }, (_, i) =>
+    moment().subtract(numberOfDays - 1 - i, 'days'),
   );
 
   // Find indexes of all Mondays in the array
-  const mondayIndexes = last28Days.reduce((acc, date, index) => {
+  const mondayIndexes = lastNDays.reduce((acc, date, index) => {
     if (date.format('ddd') === 'Mon') acc.push(index);
     return acc;
   }, [] as number[]);
 
   // Generate labels - empty strings except for Mondays
-  const xAxisLabels = last28Days.map((date, index) =>
+  const xAxisLabels = lastNDays.map((date, index) =>
     mondayIndexes.includes(index) ? date.format('D MMM') : '',
   );
 
@@ -105,13 +108,13 @@ const CustomChart = ({
   const dynamicBarHeight = maxQueueSize + 5;
 
   // Generate bar data (only on Mondays)
-  const weeklyClicksData = last28Days.map((date) => {
+  const weeklyClicksData = lastNDays.map((date) => {
     // Only show bars on Mondays, scaled to dynamic height
     return date.format('ddd') === 'Mon' ? dynamicBarHeight : 0;
   });
 
   const data = {
-    labels: last28Days.map((date) => date.format('D MMM')), // All labels
+    labels: lastNDays.map((date) => date.format('D MMM')), // All labels
     datasets: [
       {
         type: 'line',
