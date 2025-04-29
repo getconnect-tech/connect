@@ -1,0 +1,66 @@
+import bash from 'highlight.js/lib/languages/bash';
+import cpp from 'highlight.js/lib/languages/cpp';
+import csharp from 'highlight.js/lib/languages/csharp';
+import clojure from 'highlight.js/lib/languages/clojure';
+import dart from 'highlight.js/lib/languages/dart';
+import diff from 'highlight.js/lib/languages/diff';
+import elixir from 'highlight.js/lib/languages/elixir';
+import graphql from 'highlight.js/lib/languages/graphql';
+import go from 'highlight.js/lib/languages/go';
+import haskell from 'highlight.js/lib/languages/haskell';
+import html from 'highlight.js/lib/languages/xml'; // XML is used for HTML
+import java from 'highlight.js/lib/languages/java';
+import javascript from 'highlight.js/lib/languages/javascript';
+import json from 'highlight.js/lib/languages/json';
+import kotlin from 'highlight.js/lib/languages/kotlin';
+import markdown from 'highlight.js/lib/languages/markdown';
+import ocaml from 'highlight.js/lib/languages/ocaml';
+import perl from 'highlight.js/lib/languages/perl';
+import php from 'highlight.js/lib/languages/php';
+import plaintext from 'highlight.js/lib/languages/plaintext';
+import python from 'highlight.js/lib/languages/python';
+import r from 'highlight.js/lib/languages/r';
+import ruby from 'highlight.js/lib/languages/ruby';
+import rust from 'highlight.js/lib/languages/rust';
+import css from 'highlight.js/lib/languages/css';
+import swift from 'highlight.js/lib/languages/swift';
+import sql from 'highlight.js/lib/languages/sql';
+import toml from 'highlight.js/lib/languages/ini'; // "ini" for TOML compatibility
+import typescript from 'highlight.js/lib/languages/typescript';
+import yaml from 'highlight.js/lib/languages/yaml';
+import { createLowlight } from 'lowlight';
+
+const lowlight = createLowlight();
+
+lowlight.register('bash', bash);
+lowlight.register('cpp', cpp);
+lowlight.register('csharp', csharp);
+lowlight.register('clojure', clojure);
+lowlight.register('dart', dart);
+lowlight.register('diff', diff);
+lowlight.register('elixir', elixir);
+lowlight.register('graphql', graphql);
+lowlight.register('go', go);
+lowlight.register('haskell', haskell);
+lowlight.register('html', html);
+lowlight.register('java', java);
+lowlight.register('javascript', javascript);
+lowlight.register('json', json);
+lowlight.register('kotlin', kotlin);
+lowlight.register('markdown', markdown);
+lowlight.register('ocaml', ocaml);
+lowlight.register('perl', perl);
+lowlight.register('php', php);
+lowlight.register('plaintext', plaintext);
+lowlight.register('python', python);
+lowlight.register('r', r);
+lowlight.register('ruby', ruby);
+lowlight.register('rust', rust);
+lowlight.register('css', css);
+lowlight.register('swift', swift);
+lowlight.register('sql', sql);
+lowlight.register('toml', toml);
+lowlight.register('typescript', typescript);
+lowlight.register('yaml', yaml);
+
+export default lowlight;
