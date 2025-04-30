@@ -11,6 +11,26 @@ import {
   UserRole,
 } from '@prisma/client';
 import moment from 'moment';
+import {
+  ActivityDiv,
+  BottomDiv,
+  ButtonDiv,
+  CenterDiv,
+  CenterMainDiv,
+  HeaderDiv,
+  IconDiv,
+  Input,
+  InputDiv,
+  InputIcon,
+  LeftDiv,
+  LineDiv,
+  Main,
+  MainDiv,
+  Message,
+  StatusDiv,
+  Title,
+  TopDiv,
+} from '../style';
 import ProfileSection from '@/components/profileSection/profileSection';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
@@ -55,26 +75,6 @@ import FileCard from '@/components/fileCard/fileCard';
 import ResponsiveProfileSection from '@/components/profileSection/responsiveProfileSection';
 import { getContactDetailById } from '@/services/clientSide/contactServices';
 import TiptapEditor from '@/components/tiptapEditor';
-import {
-  ActivityDiv,
-  BottomDiv,
-  ButtonDiv,
-  CenterDiv,
-  CenterMainDiv,
-  HeaderDiv,
-  IconDiv,
-  Input,
-  InputDiv,
-  InputIcon,
-  LeftDiv,
-  LineDiv,
-  Main,
-  MainDiv,
-  Message,
-  StatusDiv,
-  Title,
-  TopDiv,
-} from '../style';
 
 interface Props {
   ticket_id: string;
@@ -376,9 +376,7 @@ function TicketDetails(props: Props) {
   const handleTicketStatus = useCallback(
     async (status: TicketStatus) => {
       try {
-        const payload = {
-          status,
-        };
+        const payload = { status };
         const newMessage = {
           assignee: null,
           author: user,
@@ -392,10 +390,7 @@ function TicketDetails(props: Props) {
           type: MessageType.CHANGE_STATUS,
         } as MessageDetails;
         if (ticketDetails?.id) {
-          const updatedTicketDetails = {
-            ...ticketDetails,
-            status,
-          };
+          const updatedTicketDetails = { ...ticketDetails, status };
           ticketStore.addTicketMessage(newMessage);
           ticketStore.setTicketDetails(updatedTicketDetails);
           await changeTicketStatus(ticketDetails?.id, payload);
@@ -529,11 +524,7 @@ function TicketDetails(props: Props) {
                 existing.count++;
                 existing.author.push(author);
               } else {
-                acc.push({
-                  emoji: reaction,
-                  count: 1,
-                  author: [author],
-                });
+                acc.push({ emoji: reaction, count: 1, author: [author] });
               }
               return acc;
             },
@@ -974,6 +965,7 @@ function TicketDetails(props: Props) {
                     setValueContent={setCommentValue}
                     placeHolder='Write a message'
                     isInternalDiscussion={modeSelectedItem.name !== 'Email'}
+                    handleFileInput={handleFileInput}
                   />
                   {/* <ProsemirrorEditor
                     ref={editorRef}
