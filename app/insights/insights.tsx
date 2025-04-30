@@ -1,7 +1,7 @@
 'use client';
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import type { Dayjs } from 'dayjs';
+import dayjs, { type Dayjs } from 'dayjs';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Icon from '@/components/icon/icon';
 import { TICKETS_HEADER } from '@/global/constants';
@@ -26,6 +26,7 @@ import {
   Title,
   TopDiv,
 } from './style';
+import moment from 'moment';
 
 interface InsightsProps {
   activeNav?: number;
@@ -44,6 +45,112 @@ function Insights({ activeNav }: InsightsProps) {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
   const [selectedValue, setSelectedValue] = useState({ name: 'Last 30 days' });
 
+  const onChangeTimeFilter = useCallback(
+    (key: string) => {
+      let startDate, endDate;
+      switch (key) {
+        case 'Yesterday':
+          startDate = dayjs(
+            moment()
+              .subtract(1, 'days')
+              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
+          );
+          endDate = dayjs(
+            moment()
+              .subtract(1, 'days')
+              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
+          );
+          break;
+        case 'This week':
+          startDate = dayjs(
+            moment()
+              .clone()
+              .startOf('week')
+              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
+          );
+          endDate = dayjs(
+            moment().format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
+          );
+          break;
+        case 'Last week':
+          startDate = dayjs(
+            moment()
+              .clone()
+              .subtract(1, 'weeks')
+              .startOf('week')
+              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
+          );
+          endDate = dayjs(
+            moment()
+              .clone()
+              .subtract(1, 'weeks')
+              .endOf('week')
+              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
+          );
+          break;
+        case 'Last 7 days':
+          startDate = dayjs(
+            moment()
+              .clone()
+              .subtract(7, 'days')
+              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
+          );
+          endDate = dayjs(
+            moment().format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
+          );
+          break;
+        case 'This month':
+          startDate = dayjs(
+            moment()
+              .clone()
+              .startOf('month')
+              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
+          );
+          endDate = dayjs(
+            moment().format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
+          );
+          break;
+        case 'Last month':
+          startDate = dayjs(
+            moment()
+              .clone()
+              .subtract(1, 'months')
+              .startOf('month')
+              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
+          );
+          endDate = dayjs(
+            moment()
+              .clone()
+              .subtract(1, 'months')
+              .endOf('month')
+              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
+          );
+          break;
+        case 'Last 30 days':
+          startDate = dayjs(
+            moment()
+              .clone()
+              .subtract(30, 'days')
+              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
+          );
+          endDate = dayjs(
+            moment().format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
+          );
+          break;
+        default:
+          startDate = dayjs(
+            moment().format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
+          );
+          endDate = dayjs(
+            moment().format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
+          );
+          break;
+      }
+      setDateRange([startDate, endDate]);
+    },
+    [selectedValue],
+  );
+
   const handleDateChange = useCallback(
     (dates: [Dayjs | null, Dayjs | null] | null) => {
       if (dates) {
@@ -57,9 +164,13 @@ function Insights({ activeNav }: InsightsProps) {
     setIsOpenDropdown(!isOpenDropdown);
   }, [isOpenDropdown]);
 
-  const handleDropdownChange = useCallback((item: any) => {
-    setSelectedValue(item);
-  }, []);
+  const handleDropdownChange = useCallback(
+    (item: any) => {
+      setSelectedValue(item);
+      onChangeTimeFilter(item.name);
+    },
+    [onChangeTimeFilter],
+  );
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -140,7 +251,7 @@ function Insights({ activeNav }: InsightsProps) {
                     firstResponseTime?.data.map((item) => item.median) || []
                   }
                   isTimeFormat
-                  tooltipContent='Average time for your team’s first response.'
+                  tooltipContent="Average time for your team's first response."
                 />
                 <CustomChart
                   valueTitle={`<span>${convertToHoursAndMinutes(
