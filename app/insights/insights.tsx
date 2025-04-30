@@ -130,6 +130,7 @@ function Insights({ activeNav }: InsightsProps) {
                   ctrData={queueSize?.data.map((item) => item.queueSize) || []}
                   isQueueSize
                   tooltipContent='A snapshot of the number of threads in Todo'
+                  dateRange={dateRange}
                 />
                 <CustomChart
                   valueTitle={`<span>${convertToHoursAndMinutes(
@@ -141,6 +142,7 @@ function Insights({ activeNav }: InsightsProps) {
                   }
                   isTimeFormat
                   tooltipContent='Average time for your team’s first response.'
+                  dateRange={dateRange}
                 />
                 <CustomChart
                   valueTitle={`<span>${convertToHoursAndMinutes(
@@ -152,6 +154,7 @@ function Insights({ activeNav }: InsightsProps) {
                   }
                   isTimeFormat
                   tooltipContent='Average time to resolve customer requests.'
+                  dateRange={dateRange}
                 />
               </ChartContainer>
             </ChartMainDiv>
