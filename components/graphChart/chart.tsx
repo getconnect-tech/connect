@@ -2,6 +2,7 @@
 'use client';
 import React, { useRef, useEffect, useState } from 'react';
 import { Chart } from 'react-chartjs-2';
+import type { Dayjs } from 'dayjs';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -52,6 +53,7 @@ interface Props {
   isQueueSize?: boolean;
   isTimeFormat?: boolean;
   tooltipContent: string;
+  dateRange?: [Dayjs | null, Dayjs | null];
 }
 
 const CustomChart = ({
@@ -61,6 +63,7 @@ const CustomChart = ({
   isQueueSize,
   isTimeFormat,
   tooltipContent,
+  dateRange,
 }: Props) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -83,22 +86,34 @@ const CustomChart = ({
     }
   }, []);
 
-  // Determine the number of days based on the length of ctrData
-  const numberOfDays = ctrData.length > 0 ? ctrData.length : 28; // Default to 28 if no data
+  // Generate array of dates based on dateRange or fallback to last 28 days
+  const getDates = () => {
+    if (dateRange && dateRange[0] && dateRange[1]) {
+      const start = moment(dateRange[0].toDate());
+      const end = moment(dateRange[1].toDate());
+      const dayCount = end.diff(start, 'days') + 1;
 
-  // Generate array of last N days
-  const lastNDays = Array.from({ length: numberOfDays }, (_, i) =>
-    moment().subtract(numberOfDays - 1 - i, 'days'),
-  );
+      return Array.from({ length: dayCount }, (_, i) =>
+        moment(start).add(i, 'days'),
+      );
+    }
+
+    // Fallback to last 28 days
+    return Array.from({ length: 28 }, (_, i) =>
+      moment().subtract(27 - i, 'days'),
+    );
+  };
+
+  const dates = getDates();
 
   // Find indexes of all Mondays in the array
-  const mondayIndexes = lastNDays.reduce((acc, date, index) => {
+  const mondayIndexes = dates.reduce((acc, date, index) => {
     if (date.format('ddd') === 'Mon') acc.push(index);
     return acc;
   }, [] as number[]);
 
   // Generate labels - empty strings except for Mondays
-  const xAxisLabels = lastNDays.map((date, index) =>
+  const xAxisLabels = dates.map((date, index) =>
     mondayIndexes.includes(index) ? date.format('D MMM') : '',
   );
 
@@ -108,13 +123,13 @@ const CustomChart = ({
   const dynamicBarHeight = maxQueueSize + 5;
 
   // Generate bar data (only on Mondays)
-  const weeklyClicksData = lastNDays.map((date) => {
+  const weeklyClicksData = dates.map((date) => {
     // Only show bars on Mondays, scaled to dynamic height
     return date.format('ddd') === 'Mon' ? dynamicBarHeight : 0;
   });
 
   const data = {
-    labels: lastNDays.map((date) => date.format('D MMM')), // All labels
+    labels: dates.map((date) => date.format('D MMM')), // All labels
     datasets: [
       {
         type: 'line',
