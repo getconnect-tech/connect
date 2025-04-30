@@ -155,6 +155,7 @@ function Insights({ activeNav }: InsightsProps) {
     (dates: [Dayjs | null, Dayjs | null] | null) => {
       if (dates) {
         setDateRange(dates);
+        setSelectedValue({ name: 'Custom' });
       }
     },
     [],
