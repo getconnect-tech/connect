@@ -40,6 +40,7 @@ const MainDiv = styled.div`
   width: 100%;
   margin-left: 223px;
   border-right: var(--border-main);
+  overflow: hidden;
   @media screen and (max-width: 449px) {
     margin-left: unset;
   }
