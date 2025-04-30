@@ -41,6 +41,8 @@ import { SmilieReplacer } from './SmilieReplacer';
 import suggestion from './suggestion';
 import command from './slashCommand/command';
 import slashSuggestion from './slashCommand/suggestion';
+import CustomCodeBlockLowlight from './codeBlock';
+import lowlight from './codeBlock/lowlight';
 
 interface Props {
   valueContent?: string;
@@ -213,10 +215,7 @@ const TiptapEditor = forwardRef((props: Props, ref) => {
     Heading.configure({
       levels: [1, 2, 3, 4, 5, 6], // Define which heading levels to allow
     }),
-    // CustomCodeBlockLowlight.configure({
-    //   lowlight,
-    //   isRead: !isEditable,
-    // }),
+    CustomCodeBlockLowlight.configure({ lowlight, isRead: !isEditable }),
     Link.configure({
       openOnClick: false,
       autolink: true,
