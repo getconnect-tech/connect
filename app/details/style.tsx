@@ -316,11 +316,8 @@ const CenterMainDiv = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 16px;
-  height: calc(100% - 82px);
+  height: calc(100% - var(--top-div-height));
   background-color: var(--bg-surface);
-  @media screen and (max-width: 449px) {
-    height: calc(100% - 117px);
-  }
 `;
 
 export {

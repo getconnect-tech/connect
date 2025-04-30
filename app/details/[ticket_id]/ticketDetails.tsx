@@ -808,10 +808,30 @@ function TicketDetails(props: Props) {
     };
   }, []);
 
+  useEffect(() => {
+    const updateTopDivHeight = () => {
+      const topDiv = document.querySelector('.top-div') as HTMLElement;
+      if (topDiv) {
+        const topDivHeight = topDiv.offsetHeight;
+        document.documentElement.style.setProperty(
+          '--top-div-height',
+          `${topDivHeight}px`,
+        );
+      }
+    };
+
+    updateTopDivHeight(); // Initial calculation
+    window.addEventListener('resize', updateTopDivHeight); // Recalculate on resize
+
+    return () => {
+      window.removeEventListener('resize', updateTopDivHeight); // Cleanup
+    };
+  }, []);
+
   return (
     <Main isProfileSection={isProfileSection}>
       <MainDiv>
-        <TopDiv>
+        <TopDiv className='top-div'>
           <HeaderDiv>
             <LeftDiv>
               <Icon
