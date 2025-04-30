@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import dayjs, { type Dayjs } from 'dayjs';
+import moment from 'moment';
 import ResponsiveNavbar from '@/components/navbar/ResponsiveNavbar';
 import Icon from '@/components/icon/icon';
 import { TICKETS_HEADER } from '@/global/constants';
@@ -26,11 +27,12 @@ import {
   Title,
   TopDiv,
 } from './style';
-import moment from 'moment';
 
 interface InsightsProps {
   activeNav?: number;
 }
+
+const DATE_FORMAT = 'ddd MMM D YYYY 00:00:00 [GMT+0530]';
 
 function Insights({ activeNav }: InsightsProps) {
   const [isNavbar, setIsNavbar] = useState(false);
@@ -45,111 +47,74 @@ function Insights({ activeNav }: InsightsProps) {
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
   const [selectedValue, setSelectedValue] = useState({ name: 'Last 30 days' });
 
-  const onChangeTimeFilter = useCallback(
-    (key: string) => {
-      let startDate, endDate;
-      switch (key) {
-        case 'Yesterday':
-          startDate = dayjs(
-            moment()
-              .subtract(1, 'days')
-              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
-          );
-          endDate = dayjs(
-            moment()
-              .subtract(1, 'days')
-              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
-          );
-          break;
-        case 'This week':
-          startDate = dayjs(
-            moment()
-              .clone()
-              .startOf('week')
-              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
-          );
-          endDate = dayjs(
-            moment().format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
-          );
-          break;
-        case 'Last week':
-          startDate = dayjs(
-            moment()
-              .clone()
-              .subtract(1, 'weeks')
-              .startOf('week')
-              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
-          );
-          endDate = dayjs(
-            moment()
-              .clone()
-              .subtract(1, 'weeks')
-              .endOf('week')
-              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
-          );
-          break;
-        case 'Last 7 days':
-          startDate = dayjs(
-            moment()
-              .clone()
-              .subtract(7, 'days')
-              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
-          );
-          endDate = dayjs(
-            moment().format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
-          );
-          break;
-        case 'This month':
-          startDate = dayjs(
-            moment()
-              .clone()
-              .startOf('month')
-              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
-          );
-          endDate = dayjs(
-            moment().format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
-          );
-          break;
-        case 'Last month':
-          startDate = dayjs(
-            moment()
-              .clone()
-              .subtract(1, 'months')
-              .startOf('month')
-              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
-          );
-          endDate = dayjs(
-            moment()
-              .clone()
-              .subtract(1, 'months')
-              .endOf('month')
-              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
-          );
-          break;
-        case 'Last 30 days':
-          startDate = dayjs(
-            moment()
-              .clone()
-              .subtract(30, 'days')
-              .format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
-          );
-          endDate = dayjs(
-            moment().format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
-          );
-          break;
-        default:
-          startDate = dayjs(
-            moment().format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
-          );
-          endDate = dayjs(
-            moment().format('ddd MMM D YYYY 00:00:00 [GMT+0530]'),
-          );
-          break;
-      }
-      setDateRange([startDate, endDate]);
-    },
-    [selectedValue],
-  );
+  const onChangeTimeFilter = useCallback((key: string) => {
+    let startDate, endDate;
+    switch (key) {
+      case 'Yesterday':
+        startDate = dayjs(moment().subtract(1, 'days').format(DATE_FORMAT));
+        endDate = dayjs(moment().subtract(1, 'days').format(DATE_FORMAT));
+        break;
+      case 'This week':
+        startDate = dayjs(moment().clone().startOf('week').format(DATE_FORMAT));
+        endDate = dayjs(moment().format(DATE_FORMAT));
+        break;
+      case 'Last week':
+        startDate = dayjs(
+          moment()
+            .clone()
+            .subtract(1, 'weeks')
+            .startOf('week')
+            .format(DATE_FORMAT),
+        );
+        endDate = dayjs(
+          moment()
+            .clone()
+            .subtract(1, 'weeks')
+            .endOf('week')
+            .format(DATE_FORMAT),
+        );
+        break;
+      case 'Last 7 days':
+        startDate = dayjs(
+          moment().clone().subtract(7, 'days').format(DATE_FORMAT),
+        );
+        endDate = dayjs(moment().format(DATE_FORMAT));
+        break;
+      case 'This month':
+        startDate = dayjs(
+          moment().clone().startOf('month').format(DATE_FORMAT),
+        );
+        endDate = dayjs(moment().format(DATE_FORMAT));
+        break;
+      case 'Last month':
+        startDate = dayjs(
+          moment()
+            .clone()
+            .subtract(1, 'months')
+            .startOf('month')
+            .format(DATE_FORMAT),
+        );
+        endDate = dayjs(
+          moment()
+            .clone()
+            .subtract(1, 'months')
+            .endOf('month')
+            .format(DATE_FORMAT),
+        );
+        break;
+      case 'Last 30 days':
+        startDate = dayjs(
+          moment().clone().subtract(30, 'days').format(DATE_FORMAT),
+        );
+        endDate = dayjs(moment().format(DATE_FORMAT));
+        break;
+      default:
+        startDate = dayjs(moment().format(DATE_FORMAT));
+        endDate = dayjs(moment().format(DATE_FORMAT));
+        break;
+    }
+    setDateRange([startDate, endDate]);
+  }, []);
 
   const handleDateChange = useCallback(
     (dates: [Dayjs | null, Dayjs | null] | null) => {
