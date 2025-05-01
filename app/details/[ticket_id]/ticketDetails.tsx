@@ -808,11 +808,14 @@ function TicketDetails(props: Props) {
     };
   }, []);
 
+  // Effect to manage the height of the top div and update the CSS variable accordingly
   useEffect(() => {
+    // Function to update the CSS variable '--top-div-height' based on the top div's height
     const updateTopDivHeight = () => {
       const topDiv = document.querySelector('.top-div') as HTMLElement;
       if (topDiv) {
         const topDivHeight = topDiv.offsetHeight;
+        // Update the CSS variable with the current height
         document.documentElement.style.setProperty(
           '--top-div-height',
           `${topDivHeight}px`,
@@ -820,11 +823,14 @@ function TicketDetails(props: Props) {
       }
     };
 
-    updateTopDivHeight(); // Initial calculation
-    window.addEventListener('resize', updateTopDivHeight); // Recalculate on resize
+    // Perform an initial height calculation
+    updateTopDivHeight();
+    // Add event listener to recalculate height on window resize
+    window.addEventListener('resize', updateTopDivHeight);
 
+    // Cleanup: remove the event listener on component unmount
     return () => {
-      window.removeEventListener('resize', updateTopDivHeight); // Cleanup
+      window.removeEventListener('resize', updateTopDivHeight);
     };
   }, []);
 
