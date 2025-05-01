@@ -176,6 +176,7 @@ function Login() {
             <>
               <Form onSubmit={handleContinueClick}>
                 <Input
+                  autoFocus={true}
                   type={'text'}
                   placeholder='Email address'
                   value={email}
@@ -202,6 +203,7 @@ function Login() {
             // Login second step
             <CodeSection onSubmit={onVerifyAuthCode}>
               <Input
+                autoFocus={true}
                 placeholder={'Enter Code'}
                 type={'number'}
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>

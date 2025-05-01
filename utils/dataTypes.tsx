@@ -14,6 +14,11 @@ import {
   getWorkspaceById,
 } from '@/services/serverSide/workspace';
 import { getGroupById, getWorkspaceGroups } from '@/services/serverSide/group';
+import {
+  getFirstResponseTimeInsights,
+  getQueueSizeInsights,
+  getResolutionTimeInsights,
+} from '@/services/serverSide/insights';
 
 export interface InviteModal {
   name: string;
@@ -71,8 +76,20 @@ export type ContactRecord = NonNullable<
 export type ContactTicket = NonNullable<
   Awaited<ReturnType<typeof getContactTickets>>
 >[0];
+
 export type GroupDetails = NonNullable<
   Awaited<ReturnType<typeof getGroupById>>
+>;
+
+export type QueueSizeInsights = NonNullable<
+  Awaited<ReturnType<typeof getQueueSizeInsights>>
+>;
+
+export type FirstResponseTimeInsights = NonNullable<
+  Awaited<ReturnType<typeof getFirstResponseTimeInsights>>
+>;
+export type ResolutionTimeInsights = NonNullable<
+  Awaited<ReturnType<typeof getResolutionTimeInsights>>
 >;
 
 export type WorkspaceConfig = {
