@@ -80,8 +80,12 @@ function Navbar() {
     [router],
   );
 
-  const handleSupportClick = useCallback(() => {
-    setIsModalOpen(true);
+  const handleSupportClick = useCallback((item: { name: string }) => {
+    if (item.name === supportItem[0].name) {
+      setIsModalOpen(true);
+    } else if (item.name === supportItem[1].name) {
+      window.open('https://www.getconnect.tech/blogs', '_blank');
+    }
   }, []);
 
   const labelItem = (labels || [])?.map((label) => ({
