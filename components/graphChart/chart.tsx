@@ -194,6 +194,13 @@ const CustomChart = ({
 
       if (activePoints.length > 0) {
         const { datasetIndex, index } = activePoints[0];
+
+        // Only show tooltip for line chart (datasetIndex === 0)
+        if (datasetIndex !== 0) {
+          tooltipEl.style.display = 'none';
+          return;
+        }
+
         const value = data.datasets[datasetIndex].data[index];
         const label = data.labels?.[index] || '';
 
