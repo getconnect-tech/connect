@@ -638,26 +638,29 @@ img.ProseMirror-separator {
 }
 
 .ProseMirror p {
-  margin-bottom: 1em;
+  margin-bottom: 8px;
   font-size: 14px;
   font-weight: 400;
   line-height: 24px;
 }
 
 .ProseMirror h1 {
-  font-size: 22px;
-  font-weight: 600;
-  line-height: 28px;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+  margin-bottom: 8px;
 }
 .ProseMirror h2 {
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 26px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  margin-bottom: 8px;
 }
 .ProseMirror h3 {
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
+  font-size: 14px;
+  font-weight: 450;
+  line-height: 20px;
+  margin-bottom: 8px;
 }
 
 .ProseMirror img {

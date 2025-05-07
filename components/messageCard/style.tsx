@@ -46,6 +46,9 @@ const CardMessage = styled.p`
   padding: 12px;
   ${Typography.body_md_regular};
   color: var(--text);
+  &.tiptap {
+    max-height: unset;
+  }
   div {
     font-size: 14px !important;
     color: var(--text) !important;
