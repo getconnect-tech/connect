@@ -287,6 +287,12 @@ a {
   position: relative;
 }
 
+ul[data-type='taskList'] li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .ProseMirror-hideselection *::selection {
   background: transparent;
 }
@@ -953,6 +959,20 @@ img.ProseMirror-separator {
   float: left;
   height: 0;
   pointer-events: none;
+}
+
+.tiptap ul,
+.tiptap ol {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0 0 8px;
+  padding: 0 1rem;
+}
+ul[data-type='taskList'] {
+  list-style: none;
+  padding: 0 !important;
+  margin-right: 1.25rem !important;
 }
 /* tiptap table style */
 

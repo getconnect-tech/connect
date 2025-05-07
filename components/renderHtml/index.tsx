@@ -1,5 +1,5 @@
 'use client';
-import parse from 'html-react-parser';
+import parse, { domToReact } from 'html-react-parser';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { isEmpty } from '@/helpers/common';
@@ -38,7 +38,18 @@ const RenderHtml = ({ htmlstring, isSpreadIcon = true }: RenderHtmlProps) => {
 
   return (
     <div>
-      <div>{parse(`<div>${htmlAboveHr || ''}</div>`, {})}</div>
+      <div>
+        {parse(`<div>${htmlAboveHr || ''}</div>`, {
+          replace: (domNode: any) => {
+            if (domNode.type === 'tag' && domNode.name === 'table') {
+              return (
+                <div className='tableWrapper'>{domToReact([domNode])}</div>
+              );
+            }
+            return domNode;
+          },
+        })}
+      </div>
 
       {!isEmpty(htmlBelowHr) && isSpreadIcon && (
         <DotIcon onClick={() => setShowQuotedText(!showQuotedText)}>

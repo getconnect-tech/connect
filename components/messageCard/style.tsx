@@ -64,10 +64,10 @@ const CardMessage = styled.p`
       }
     }
     ul {
-      margin-left: 18px;
+      margin-left: 0px;
     }
     ol {
-      margin-left: 20px;
+      margin-left: 0px;
     }
     hr {
       border-bottom: var(--border-main) !important;
