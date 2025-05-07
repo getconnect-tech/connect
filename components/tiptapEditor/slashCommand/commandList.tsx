@@ -84,9 +84,12 @@ const CommandsList = forwardRef<CommandsListHandle, CommandsListProps>(
             >
               <SVGIcon
                 name={item.iconName}
-                width='16'
-                height='16'
-                viewBox='0 0 16 16'
+                width='12'
+                height='12'
+                viewBox='0 0 12 12'
+                fill={
+                  index === selectedIndex ? 'var(--icon-hover)' : 'var(--icon)'
+                }
               />
               {item.title}
             </SlashCommandItem>

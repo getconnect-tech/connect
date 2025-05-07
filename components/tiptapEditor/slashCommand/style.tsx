@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Typography } from '@/styles/typography';
 
 export const SlashCommandDiv = styled.div`
   display: flex;
@@ -7,7 +8,7 @@ export const SlashCommandDiv = styled.div`
   overflow: auto;
   padding: 4px;
   max-width: 170px;
-  min-width: 145px;
+  min-width: 160px;
   position: relative;
   background: var(--bg-white);
   border-radius: 8px;
@@ -28,16 +29,20 @@ export const SlashCommandItem = styled.div`
   gap: 8px;
   text-align: left;
   width: 100%;
-  border-radius: 4px;
+  border-radius: 8px;
   border: none;
-  padding: 4px 6px;
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 20px;
+  padding: 4px 8px;
+  ${Typography.body_md_regular};
   cursor: pointer;
   color: var(--text);
+  svg {
+    fill: var(--icon);
+  }
   &:hover {
     background: var(--bg-white-hover);
+    svg {
+      fill: var(--icon-hover);
+    }
   }
   &.is-selected {
     background: var(--bg-white-hover);
