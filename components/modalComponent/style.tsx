@@ -128,6 +128,19 @@ export const BottomDiv = styled.form`
       }
     }
   }
+  .macro-editor {
+    padding: 0 16px;
+    border: var(--border-secondary);
+    border-radius: 12px;
+    min-height: 195px;
+    max-height: 195px;
+    overflow: auto;
+    .tiptap {
+      max-height: unset;
+      overflow: unset;
+      min-height: unset;
+    }
+  }
 `;
 
 export const Label = styled.div`
