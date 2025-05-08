@@ -90,6 +90,7 @@ const CommandsList = forwardRef<CommandsListHandle, CommandsListProps>(
                 fill={
                   index === selectedIndex ? 'var(--icon-hover)' : 'var(--icon)'
                 }
+                className='icon'
               />
               {item.title}
             </SlashCommandItem>

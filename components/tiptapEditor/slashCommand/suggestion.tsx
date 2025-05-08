@@ -83,7 +83,7 @@ const slashSuggestion: any = (props: SuggestionProps) => {
         },
         {
           //Remain to implement
-          // iconName: 'attach-file-icon',
+          iconName: 'attachment-file-icon',
           title: 'Attach File',
           command: ({ editor, range }: any) => {
             editor

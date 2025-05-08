@@ -38,9 +38,10 @@ export const SlashCommandItem = styled.div`
   svg {
     fill: var(--icon);
   }
+
   &:hover {
     background: var(--bg-white-hover);
-    svg {
+    path {
       fill: var(--icon-hover);
     }
   }
