@@ -814,9 +814,10 @@ img.ProseMirror-separator {
 /* bubble menu design */
 .bubble-menu {
   background-color: var(--bg-white);
-  padding: 3px;
+  padding: 4px;
   border: var(--border-main);
   box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-main);
   border-radius: 100px;
   display: flex;
   gap: 8px;
@@ -906,17 +907,15 @@ img.ProseMirror-separator {
 .heading-dropdown-menu {
   padding: 4px;
   background-color: var(--bg-white);
-  /* border: var(--border-main); */
   box-shadow: var(--shadow-dropdown);
   position: absolute;
   z-index: 1000;
   display: flex;
   flex-direction: column;
   gap: 1px;
-  border-radius: 8px;
+  border-radius: 12px;
   width: auto;
   min-width: 116px;
-
   button {
     padding: 4px 8px;
     background: none;
