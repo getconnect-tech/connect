@@ -11,26 +11,6 @@ import {
   UserRole,
 } from '@prisma/client';
 import moment from 'moment';
-import {
-  ActivityDiv,
-  BottomDiv,
-  ButtonDiv,
-  CenterDiv,
-  CenterMainDiv,
-  HeaderDiv,
-  IconDiv,
-  Input,
-  InputDiv,
-  InputIcon,
-  LeftDiv,
-  LineDiv,
-  Main,
-  MainDiv,
-  Message,
-  StatusDiv,
-  Title,
-  TopDiv,
-} from '../style';
 import ProfileSection from '@/components/profileSection/profileSection';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import Avatar from '@/components/avtar/Avtar';
@@ -75,6 +55,26 @@ import FileCard from '@/components/fileCard/fileCard';
 import ResponsiveProfileSection from '@/components/profileSection/responsiveProfileSection';
 import { getContactDetailById } from '@/services/clientSide/contactServices';
 import TiptapEditor from '@/components/tiptapEditor';
+import {
+  ActivityDiv,
+  BottomDiv,
+  ButtonDiv,
+  CenterDiv,
+  CenterMainDiv,
+  HeaderDiv,
+  IconDiv,
+  Input,
+  InputDiv,
+  InputIcon,
+  LeftDiv,
+  LineDiv,
+  Main,
+  MainDiv,
+  Message,
+  StatusDiv,
+  Title,
+  TopDiv,
+} from '../style';
 
 interface Props {
   ticket_id: string;
@@ -993,14 +993,6 @@ function TicketDetails(props: Props) {
                     isInternalDiscussion={modeSelectedItem.name !== 'Email'}
                     handleFileInput={handleFileInput}
                   />
-                  {/* <ProsemirrorEditor
-                    ref={editorRef}
-                    valueContent={commentValue}
-                    setValueContent={setCommentValue}
-                    placeholder='Write a message'
-                    className='prosemirror-commentbox'
-                    isInternalDiscussion={modeSelectedItem.name !== 'Email'}
-                  /> */}
                   <div className='attach-file-div'>
                     {/* Attached Files render */}
                     {attachFile?.map((fileData, index: number) => (
@@ -1020,12 +1012,6 @@ function TicketDetails(props: Props) {
                     </p>
                   )}
                   {isSignatureSection && (
-                    // <ProsemirrorEditor
-                    //   isSignature={true}
-                    //   valueContent={signatureValue}
-                    //   setValueContent={setSignatureValue}
-                    //   handleClickCross={handleSignatureClose}
-                    // />
                     <TiptapEditor
                       valueContent={signatureValue}
                       setValueContent={setSignatureValue}

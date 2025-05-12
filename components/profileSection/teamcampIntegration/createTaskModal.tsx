@@ -181,15 +181,6 @@ function CreateTaskModal({ onClose }: Props) {
           }}
           placeholder='Task Title'
         />
-        {/* <ProsemirrorEditor
-          ref={editorRef}
-          valueContent={taskCreateInput?.description}
-          setValueContent={(value: string) => {
-            teamcampStore.updateTaskCreateInput('description', value);
-          }}
-          placeholder='Add Description.... '
-          className='prosemirror-commentbox'
-        /> */}
         <TiptapEditor
           ref={editorRef}
           valueContent={taskCreateInput?.description}

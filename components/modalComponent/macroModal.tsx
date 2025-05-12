@@ -80,12 +80,6 @@ function MacroModal({ onClose, macroData }: Props) {
           </div>
           <div className='text-field'>
             <Label>Description</Label>
-            {/* <ProsemirrorEditor
-              valueContent={description}
-              setValueContent={setDescription}
-              className='prosemirror'
-              placeholder='Enter description'
-            /> */}
             <div className='macro-editor'>
               <TiptapEditor
                 valueContent={description}

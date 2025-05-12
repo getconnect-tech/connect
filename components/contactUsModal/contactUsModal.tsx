@@ -116,13 +116,7 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
             </ModalDescription>
           </ModalHeader>
           <ModalContant>
-            {/* <ProsemirrorEditor
-              setValueContent={setMessageText}
-              placeholder={'How can we help you?'}
-              className='contact-us'
-            /> */}
             <TiptapEditor
-              // valueContent={commentValue}
               setValueContent={setMessageText}
               placeHolder='How can we help you?'
             />
