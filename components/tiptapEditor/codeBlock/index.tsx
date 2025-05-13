@@ -9,11 +9,7 @@ import 'highlight.js/styles/github.css';
 import hljs from 'highlight.js'; // Import Highlight.js
 
 // NodeView Component
-const CodeBlockWithDropdown: React.FC<any> = ({
-  node,
-  updateAttributes,
-  extension,
-}) => {
+const CodeBlockWithDropdown: React.FC<any> = ({ node, updateAttributes }) => {
   const languageRef = useRef(node.attrs.language || 'plaintext'); // Default to plaintext
   const languageOptions = [
     'Auto Detect',
@@ -110,10 +106,10 @@ const CodeBlockWithDropdown: React.FC<any> = ({
     }
   };
 
-  const copyText = useCallback(async () => {
-    const codeContent = node.textContent || '';
-    await navigator.clipboard.writeText(codeContent);
-  }, [node.textContent]);
+  // const copyText = useCallback(async () => {
+  //   const codeContent = node.textContent || '';
+  //   await navigator.clipboard.writeText(codeContent);
+  // }, [node.textContent]);
 
   return (
     <NodeViewWrapper className='code-block-with-dropdown'>
