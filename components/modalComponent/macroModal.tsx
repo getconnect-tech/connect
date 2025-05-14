@@ -9,7 +9,7 @@ import { messageStore } from '@/stores/messageStore';
 import { isEmpty } from '@/helpers/common';
 import Input from '../input/input';
 import Button from '../button/button';
-import ProsemirrorEditor from '../prosemirror';
+import TiptapEditor from '../tiptapEditor';
 import { BottomDiv, Header, Label, MainDiv } from './style';
 
 interface MacroData {
@@ -80,12 +80,13 @@ function MacroModal({ onClose, macroData }: Props) {
           </div>
           <div className='text-field'>
             <Label>Description</Label>
-            <ProsemirrorEditor
-              valueContent={description}
-              setValueContent={setDescription}
-              className='prosemirror'
-              placeholder='Enter description'
-            />
+            <div className='macro-editor'>
+              <TiptapEditor
+                valueContent={description}
+                setValueContent={setDescription}
+                placeHolder='Enter description'
+              />
+            </div>
           </div>
         </div>
         <div className='button'>

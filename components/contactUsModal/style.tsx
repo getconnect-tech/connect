@@ -142,7 +142,7 @@ export const FileCardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  padding: 12px 16px;
+  padding: 12px 0px;
   background-color: var(--bg-white);
   position: sticky;
   bottom: 0;
@@ -192,6 +192,7 @@ export const ModalContant = styled.div`
   overflow: auto;
   max-height: 320px;
   min-height: 320px;
+  padding: 0 16px;
   .contact-us {
     padding: 0 16px;
   }

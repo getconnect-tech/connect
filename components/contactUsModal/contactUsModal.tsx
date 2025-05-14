@@ -6,7 +6,7 @@ import { useStores } from '@/stores';
 import { getFirebaseUrlFromFile } from '@/helpers/common';
 import Icon from '../icon/icon';
 import Button from '../button/button';
-import ProsemirrorEditor from '../prosemirror';
+import TiptapEditor from '../tiptapEditor';
 import {
   FileCard,
   FileCardRight,
@@ -116,10 +116,9 @@ function ContactUsModal({ isSuccessfull, onClose }: Props) {
             </ModalDescription>
           </ModalHeader>
           <ModalContant>
-            <ProsemirrorEditor
+            <TiptapEditor
               setValueContent={setMessageText}
-              placeholder={'How can we help you?'}
-              className='contact-us'
+              placeHolder='How can we help you?'
             />
             <input
               type='file'

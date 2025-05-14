@@ -243,14 +243,15 @@ a {
     var(--warning-border);
   /* All box Shadow */
   --shadow-tab: 0px 1px 1px 0px var(--box-shadow);
-  --shadow-card: 0px 0px 0px 0.5px var(--box-shadow),
-    0px 2px 4px 0px var(--box-shadow-2);
-  --shadow-card-hover: 0px 0px 0px 0.5px var(--box-shadow-3),
-    0px 2px 4px 0px var(--box-shadow-2);
-  --shadow-dropdown: 0px 0px 0px 0.5px var(--box-shadow),
-    0px 4px 8px 0px var(--box-shadow), 0px 8px 24px 0px var(--box-shadow);
-  --shadow-tooltip: 0px 4px 8px 0px var(--box-shadow),
+  --shadow-card:
+    0px 0px 0px 0.5px var(--box-shadow), 0px 2px 4px 0px var(--box-shadow-2);
+  --shadow-card-hover:
+    0px 0px 0px 0.5px var(--box-shadow-3), 0px 2px 4px 0px var(--box-shadow-2);
+  --shadow-dropdown:
+    0px 0px 0px 0.5px var(--box-shadow), 0px 4px 8px 0px var(--box-shadow),
     0px 8px 24px 0px var(--box-shadow);
+  --shadow-tooltip:
+    0px 4px 8px 0px var(--box-shadow), 0px 8px 24px 0px var(--box-shadow);
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2),
@@ -284,6 +285,12 @@ a {
 
 .ProseMirror li {
   position: relative;
+}
+
+ul[data-type='taskList'] li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .ProseMirror-hideselection *::selection {
@@ -637,26 +644,29 @@ img.ProseMirror-separator {
 }
 
 .ProseMirror p {
-  margin-bottom: 1em;
+  margin-bottom: 8px;
   font-size: 14px;
   font-weight: 400;
   line-height: 24px;
 }
 
 .ProseMirror h1 {
-  font-size: 22px;
-  font-weight: 600;
-  line-height: 28px;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+  margin-bottom: 8px;
 }
 .ProseMirror h2 {
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 26px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  margin-bottom: 8px;
 }
 .ProseMirror h3 {
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
+  font-size: 14px;
+  font-weight: 450;
+  line-height: 20px;
+  margin-bottom: 8px;
 }
 
 .ProseMirror img {
@@ -800,4 +810,275 @@ img.ProseMirror-separator {
     text-decoration: underline;
     cursor: pointer;
   }
+}
+/* bubble menu design */
+.bubble-menu {
+  background-color: var(--bg-white);
+  padding: 4px;
+  border: var(--border-main);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-main);
+  border-radius: 100px;
+  display: flex;
+  gap: 8px;
+  position: relative;
+
+  .heading-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  button {
+    border: none;
+    background-color: unset;
+    margin: 0;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 100px;
+
+    &:hover {
+      background-color: var(--bg-surface-hover);
+      color: var(--text-primary);
+    }
+
+    svg {
+      fill: var(--icon);
+    }
+  }
+  :hover {
+    svg {
+      fill: var(--icon-hover);
+    }
+  }
+}
+
+.link-menu {
+  padding: 0px 8px 0px 4px;
+  background-color: var(--bg-white);
+  border: var(--border-main);
+  box-shadow: var(--shadow-card);
+  border-radius: 100px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  input {
+    border: none;
+    outline: none;
+    background-color: unset;
+    padding: 5px;
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 400px;
+    line-height: 20px;
+    /* font for mobile screen  */
+    @media (max-width: 449px) {
+      font-size: 15px;
+      line-height: 22px;
+    }
+
+    ::placeholder {
+      color: var(--text-secondary);
+    }
+
+    :focus {
+      outline: unset;
+    }
+  }
+
+  .icon-div {
+    display: flex;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+  }
+
+  .line-div {
+    height: 18px;
+    border-left: var(--border-main);
+  }
+}
+
+.heading-dropdown-menu {
+  padding: 4px;
+  background-color: var(--bg-white);
+  box-shadow: var(--shadow-dropdown);
+  position: absolute;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  border-radius: 12px;
+  width: auto;
+  min-width: 116px;
+  button {
+    padding: 4px 8px;
+    background: none;
+    border: none;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: var(--text-text-secondary);
+    border-radius: 4px;
+    /* font for mobile screen  */
+    @media (max-width: 449px) {
+      font-size: 15px;
+      line-height: 22px;
+    }
+  }
+}
+
+.heading-dropdown-menu.bottom {
+  top: calc(100% + 2px);
+  left: 0;
+}
+
+.heading-dropdown-menu.top {
+  bottom: calc(100% + 4px);
+  left: 0;
+}
+.tiptap {
+  max-height: 300px;
+  overflow: auto;
+  min-height: 48px;
+}
+
+.tiptap p.is-editor-empty:first-child:before {
+  color: var(--text-text-secondary);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.tiptap ul,
+.tiptap ol {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0 0 8px;
+  padding: 0 1rem;
+}
+ul[data-type='taskList'] {
+  list-style: none;
+  padding: 0 !important;
+  margin-right: 1.25rem !important;
+}
+/* tiptap table style */
+
+.tiptap table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  border-radius: 8px;
+  margin: 0;
+  overflow: hidden;
+  table-layout: fixed;
+}
+
+.tiptap tbody {
+  position: relative;
+}
+.tiptap.resize-cursor {
+  cursor: ew-resize;
+  cursor: col-resize;
+}
+.tiptap table td,
+.tiptap table th {
+  box-sizing: border-box;
+  min-width: 1em;
+  padding: 6px 8px;
+  position: relative;
+}
+.tiptap table td {
+  background-color: var(--bg-white);
+}
+.tiptap table th {
+  background-color: var(--bg-surface);
+  font-weight: bold;
+  text-align: left;
+  p {
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 20px;
+    /* font for mobile screen in rich-text  */
+    @media (max-width: 449px) {
+      font-size: 15px;
+      line-height: 22px;
+    }
+  }
+}
+
+.tiptap .tableWrapper {
+  margin: 8px 0;
+  overflow-x: auto;
+  border: var(--border-secondary);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tiptap .tableWrapper th,
+.tiptap .tableWrapper td {
+  border-bottom: var(--border-secondary);
+  border-right: var(--border-secondary);
+}
+.tiptap .tableWrapper tbody tr:last-child th {
+  border-bottom: none;
+}
+
+/* Remove bottom border for last row */
+.tiptap .tableWrapper tbody tr:last-child td {
+  border-bottom: none;
+  &.selectedCell {
+    border-bottom: 0.5px solid blue;
+  }
+}
+
+.tiptap .tableWrapper tbody tr td:last-child {
+  border-right: none;
+  &.selectedCell {
+    border-right: 0.5px solid blue;
+  }
+}
+
+.tiptap .tableWrapper tbody tr th:last-child {
+  border-right: none;
+  &.selectedCell {
+    border-right: 0.5px solid blue;
+  }
+}
+
+/* Selected Cell Styling */
+.tiptap table .selectedCell {
+  border: 0.5px solid blue;
+  position: relative;
+}
+
+/* Border Radius Fix */
+.tiptap table tr:first-child .selectedCell:first-child {
+  border-top-left-radius: 8px;
+}
+.tiptap table tr:first-child .selectedCell:last-child {
+  border-top-right-radius: 8px;
+}
+.tiptap table tr:last-child .selectedCell:first-child {
+  border-bottom-left-radius: 8px;
+  border-bottom: 0.5px solid blue;
+}
+.tiptap table tr:last-child .selectedCell:last-child {
+  border-bottom-right-radius: 8px;
+}
+
+.tiptap table td p,
+.tiptap table th p {
+  margin: 0;
 }

@@ -52,9 +52,9 @@ import {
 import LabelDropdown from '@/components/labelDropdown/labelDropdown';
 import { getMacros } from '@/services/clientSide/settingServices';
 import FileCard from '@/components/fileCard/fileCard';
-import ProsemirrorEditor from '@/components/prosemirror';
 import ResponsiveProfileSection from '@/components/profileSection/responsiveProfileSection';
 import { getContactDetailById } from '@/services/clientSide/contactServices';
+import TiptapEditor from '@/components/tiptapEditor';
 import {
   ActivityDiv,
   BottomDiv,
@@ -295,6 +295,7 @@ function TicketDetails(props: Props) {
     setIsSignatureSection(true);
   }, []);
 
+  // On click cross icon
   const handleSignatureClose = useCallback(() => {
     setIsSignatureSection(false);
     setSignatureValue(signatureFormat);
@@ -375,9 +376,7 @@ function TicketDetails(props: Props) {
   const handleTicketStatus = useCallback(
     async (status: TicketStatus) => {
       try {
-        const payload = {
-          status,
-        };
+        const payload = { status };
         const newMessage = {
           assignee: null,
           author: user,
@@ -391,10 +390,7 @@ function TicketDetails(props: Props) {
           type: MessageType.CHANGE_STATUS,
         } as MessageDetails;
         if (ticketDetails?.id) {
-          const updatedTicketDetails = {
-            ...ticketDetails,
-            status,
-          };
+          const updatedTicketDetails = { ...ticketDetails, status };
           ticketStore.addTicketMessage(newMessage);
           ticketStore.setTicketDetails(updatedTicketDetails);
           await changeTicketStatus(ticketDetails?.id, payload);
@@ -528,11 +524,7 @@ function TicketDetails(props: Props) {
                 existing.count++;
                 existing.author.push(author);
               } else {
-                acc.push({
-                  emoji: reaction,
-                  count: 1,
-                  author: [author],
-                });
+                acc.push({ emoji: reaction, count: 1, author: [author] });
               }
               return acc;
             },
@@ -993,13 +985,13 @@ function TicketDetails(props: Props) {
                   />
                 </div>
                 <Input modeSelectedItem={modeSelectedItem}>
-                  <ProsemirrorEditor
+                  <TiptapEditor
                     ref={editorRef}
                     valueContent={commentValue}
                     setValueContent={setCommentValue}
-                    placeholder='Write a message'
-                    className='prosemirror-commentbox'
+                    placeHolder='Write a message'
                     isInternalDiscussion={modeSelectedItem.name !== 'Email'}
+                    handleFileInput={handleFileInput}
                   />
                   <div className='attach-file-div'>
                     {/* Attached Files render */}
@@ -1020,10 +1012,10 @@ function TicketDetails(props: Props) {
                     </p>
                   )}
                   {isSignatureSection && (
-                    <ProsemirrorEditor
-                      isSignature={true}
+                    <TiptapEditor
                       valueContent={signatureValue}
                       setValueContent={setSignatureValue}
+                      isSignature={true}
                       handleClickCross={handleSignatureClose}
                     />
                   )}

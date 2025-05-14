@@ -47,10 +47,10 @@ const Div = styled.div`
       }
     }
     ul {
-      margin-left: 18px;
+      margin-left: 0px;
     }
     ol {
-      margin-left: 20px;
+      margin-left: 0px;
     }
   }
   .time {
@@ -70,6 +70,9 @@ const Div = styled.div`
     color: var(--text);
     max-width: 536px;
     word-break: break-word;
+    &.tiptap {
+      max-height: unset;
+    }
     @media screen and (max-width: 449px) {
       display: flex;
       flex-direction: column;
