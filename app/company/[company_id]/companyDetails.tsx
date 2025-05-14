@@ -127,7 +127,7 @@ function CompanyDetail(props: Props) {
         ))}
       </>
     );
-  }, [groupDetails?.contacts]);
+  }, [groupDetails?.contacts, router]);
 
   const renderTabItem = useMemo(() => {
     const tabItem = ['Open', 'Snoozed', 'Done'];
