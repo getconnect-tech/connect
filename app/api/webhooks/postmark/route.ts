@@ -16,29 +16,23 @@ import {
   isLinkClickOutbound,
   isOpenOutbound,
   isOutbound,
-  isSpamComplaintOutbound,
-  PostmarkWebhookPayload,
+  WebhookPayload,
 } from '@/utils/webhookPayloadType';
 import { prisma } from '@/prisma/prisma';
-import { uploadAttachments } from '@/services/serverSide/firebaseServices';
+import { uploadWebhookAttachments } from '@/services/serverSide/firebaseServices';
 import { NotificationProvider } from '@/services/serverSide/notifications';
 import { htmlToString } from '@/helpers/common';
 
 export const POST = async (req: NextRequest) => {
   try {
-    const postmarkPayload = (await req.json()) as PostmarkWebhookPayload;
+    const postmarkPayload = (await req.json()) as WebhookPayload;
 
     if (isInbound(postmarkPayload)) {
-      const referencesHeader = postmarkPayload.Headers.find(
-        (header) => header.Name.toLowerCase() === 'references',
-      );
-      const references = referencesHeader?.Value?.split(' ') || [];
-      const mailId = postmarkPayload.Headers.find(
-        (header) => header.Name.toLowerCase() === 'message-id',
-      )!.Value;
+      const references = postmarkPayload.headers['References'] || [];
+      const mailId = postmarkPayload.headers['Message-Id']![0];
       const referenceId = references[0] || mailId;
 
-      const workspaceId = postmarkPayload.OriginalRecipient.split('@')[0]!;
+      const workspaceId = postmarkPayload.recipients[0].split('@')[0]!;
 
       const isWorkspaceExists = await hasWorkspace(workspaceId);
 
@@ -47,13 +41,20 @@ export const POST = async (req: NextRequest) => {
       }
 
       let ticket = await getTicketByMailId(referenceId);
+
       if (!ticket) {
+        const subject = postmarkPayload.headers['Subject']![0];
+
+        const from = postmarkPayload.headers['From']![0];
+        const match = from.match(/^(.*?)\s*<.*?>$/);
+        const senderName = match ? match[1].trim() : from.trim();
+
         ticket = await createTicket({
           mailId: referenceId,
-          subject: postmarkPayload.Subject,
+          subject,
           workspaceId: workspaceId,
-          senderEmail: postmarkPayload.From,
-          senderName: postmarkPayload.FromName,
+          senderEmail: postmarkPayload.envelope_sender,
+          senderName,
           source: ChannelType.MAIL,
         });
       }
@@ -66,19 +67,20 @@ export const POST = async (req: NextRequest) => {
       }
 
       const message = await postMessage({
-        messageContent: postmarkPayload.HtmlBody,
+        messageContent: postmarkPayload.body.html,
         messageType: MessageType.FROM_CONTACT,
         referenceId: mailId,
         ticketId: ticket.id,
         channel: ChannelType.MAIL,
       });
 
-      if (postmarkPayload.Attachments.length > 0) {
-        await uploadAttachments(
+      const attachments = postmarkPayload.attachments || [];
+      if (attachments.length > 0) {
+        await uploadWebhookAttachments(
           workspaceId,
           ticket.id,
           message.id,
-          postmarkPayload.Attachments,
+          attachments,
         );
       }
 
@@ -92,7 +94,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     if (isOutbound(postmarkPayload)) {
-      const mailId = postmarkPayload.MessageID;
+      const mailId = postmarkPayload.message_id;
 
       const message = await prisma.message.findFirst({
         where: { reference_id: mailId, type: MessageType.EMAIL },
@@ -109,27 +111,22 @@ export const POST = async (req: NextRequest) => {
 
       if (isOpenOutbound(postmarkPayload)) {
         eventType = EmailEventType.OPENED;
-        extra = postmarkPayload.Recipient;
+        extra = postmarkPayload.event_data.ip;
       }
 
       if (isDeliveryOutbound(postmarkPayload)) {
         eventType = EmailEventType.DELIVERED;
-        extra = postmarkPayload.Recipient;
-      }
-
-      if (isSpamComplaintOutbound(postmarkPayload)) {
-        eventType = EmailEventType.SPAMED;
-        extra = postmarkPayload.Tag;
+        extra = postmarkPayload.event_data.to[0];
       }
 
       if (isBounceOutbound(postmarkPayload)) {
         eventType = EmailEventType.BOUNCED;
-        extra = postmarkPayload.Description;
+        extra = postmarkPayload.event_data.reason;
       }
 
       if (isLinkClickOutbound(postmarkPayload)) {
         eventType = EmailEventType.LINK_CLICKED;
-        extra = postmarkPayload.OriginalLink;
+        extra = postmarkPayload.event_data.original_url;
       }
 
       await createEmailEvent(messageId, { eventType: eventType!, extra });
@@ -137,6 +134,7 @@ export const POST = async (req: NextRequest) => {
 
     return new Response('Received!', { status: 200 });
   } catch (err) {
+    console.error(err);
     return handleApiError(err);
   }
 };

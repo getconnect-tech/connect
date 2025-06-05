@@ -1,16 +1,25 @@
-import { Attachment, ServerClient } from 'postmark';
 import moment from 'moment';
+import nodemailer from 'nodemailer';
+import { Attachment } from 'nodemailer/lib/mailer';
 import { prisma } from '@/prisma/prisma';
 import { getTicketById } from '@/services/serverSide/ticket';
 import { getContactById } from '@/services/serverSide/contact';
 import { generateVerificationCode } from './common';
 import {
   isDev,
-  POSTMARK_SENDER_EMAIL,
-  POSTMARK_SERVER_TOKEN,
+  SENDER_EMAIL,
+  SMTP_HOST,
+  SMTP_PASS,
+  SMTP_PORT,
+  SMTP_USER,
 } from './environment';
 
-const client = new ServerClient(POSTMARK_SERVER_TOKEN!);
+const transporter = nodemailer.createTransport({
+  host: SMTP_HOST,
+  port: SMTP_PORT,
+  secure: SMTP_PORT === 465, // true for 465, false for other ports
+  auth: { user: SMTP_USER, pass: SMTP_PASS },
+});
 
 export const sendEmail = async ({
   email,
@@ -25,16 +34,16 @@ export const sendEmail = async ({
   senderEmail?: string;
   attachments?: Attachment[];
 }) => {
-  const from = senderEmail ?? POSTMARK_SENDER_EMAIL!;
+  const from = senderEmail ?? SENDER_EMAIL!;
 
-  const res = await client.sendEmail({
-    From: from,
-    To: email,
-    Subject: subject,
-    HtmlBody: body,
-    Attachments: attachments,
+  const res = await transporter.sendMail({
+    from: from,
+    to: email,
+    subject: subject,
+    html: body,
+    attachments: attachments,
   });
-  return res.MessageID;
+  return res.messageId;
 };
 
 export const sendEmailAsReply = async ({
@@ -54,25 +63,22 @@ export const sendEmailAsReply = async ({
     return null;
   }
 
-  const from = senderEmail ?? POSTMARK_SENDER_EMAIL!;
+  const from = senderEmail ?? SENDER_EMAIL!;
 
   const contact = (await getContactById(ticket.contact_id))!;
 
-  const res = await client.sendEmail({
-    From: from,
-    To: contact.email,
-    Subject: ticket.subject,
-    HtmlBody: body,
-    Headers: [
-      {
-        Name: 'In-Reply-To',
-        Value: ticket.mail_id,
-      },
-    ],
-    Attachments: attachments,
+  const res = await transporter.sendMail({
+    from: from,
+    to: contact.email,
+    subject: ticket.subject,
+    html: body,
+    headers: [{ key: 'In-Reply-To', value: ticket.mail_id }],
+    attachments: attachments,
   });
 
-  return res.MessageID;
+  console.log(res);
+
+  return res.messageId;
 };
 
 export const sendVerificationCode = async (email: string) => {

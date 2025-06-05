@@ -248,6 +248,24 @@ export const createStreamFromBuffer = (contents: string) => {
   return passthroughStream;
 };
 
+export const remoteFileToBase64 = async (url: string) => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch: ${response.status} ${response.statusText}`,
+      );
+    }
+
+    const buffer = await response.arrayBuffer();
+    const base64 = Buffer.from(buffer).toString('base64');
+    return base64;
+  } catch (error) {
+    console.error('Error fetching remote file:', error);
+    throw error;
+  }
+};
+
 export const formatFileSize = (sizeInBytes: number): string => {
   const kb = 1024;
   const mb = kb * 1024;
