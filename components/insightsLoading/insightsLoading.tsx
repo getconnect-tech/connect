@@ -69,7 +69,8 @@ function InsightsLoading() {
           </ContentDiv>
         </TopSection>
       </LoadingFirstContainer>
-      <LoadingSecondContainer>
+      {/* Commented out this code as it may be needed for loading functionality in the future */}
+      {/* <LoadingSecondContainer>
         <HeaderText>Support volume</HeaderText>
         <SecondTopSection>
           <ContentDiv>
@@ -88,7 +89,7 @@ function InsightsLoading() {
             </SecondSpinnerDiv>
           </ContentDiv>
         </SecondTopSection>
-      </LoadingSecondContainer>
+      </LoadingSecondContainer> */}
     </MainContainer>
   );
 }
