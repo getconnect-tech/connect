@@ -1,7 +1,6 @@
 import React from 'react';
 import SVGIcon from '@/assets/icons/SVGIcon';
 import {
-  LoadingSecondContainer,
   LoadingFirstContainer,
   MainContainer,
   HeaderText,
@@ -12,8 +11,6 @@ import {
   ContentDiv,
   SpinnerDiv,
   Spinner,
-  SecondTopSection,
-  SecondSpinnerDiv,
 } from './style';
 
 function InsightsLoading() {
