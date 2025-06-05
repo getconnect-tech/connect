@@ -1,165 +1,132 @@
-import { Attachment } from 'postmark';
-
-export interface PostmarkWebhookPayload {
-  MessageStream: string;
-  MessageID: string;
+export interface WebhookPayload {
+  _id?: string;
+  message_id: string;
 }
 
+const outboundEventTypes = [
+  'accepted',
+  'delivered',
+  'rejected',
+  'deferred',
+  'failed',
+  'opened',
+  'clicked',
+  'complained',
+];
+
 export const isInbound = (
-  payload: PostmarkWebhookPayload,
-): payload is InboundEmailPayload =>
-  (payload as InboundEmailPayload).MessageStream === 'inbound';
+  payload: WebhookPayload,
+): payload is InboundEmailPayload => {
+  return !!payload._id;
+};
 
 export const isOutbound = (
-  payload: PostmarkWebhookPayload,
-): payload is OutboundPayload =>
-  (payload as OutboundPayload).MessageStream === 'outbound';
+  payload: WebhookPayload,
+): payload is OutboundPayload => {
+  const eventType = (payload as OutboundPayload).event_type;
+  return outboundEventTypes.includes(eventType);
+};
 
 export const isOpenOutbound = (
   payload: OutboundPayload,
-): payload is OpenOutboundPayload =>
-  (payload as OpenOutboundPayload).RecordType === 'Open';
+): payload is OpenOutboundPayload => {
+  const eventType = (payload as OpenOutboundPayload).event_type;
+  return eventType === 'opened';
+};
 
 export const isDeliveryOutbound = (
   payload: OutboundPayload,
 ): payload is DeliveryOutboundPayload =>
-  (payload as DeliveryOutboundPayload).RecordType === 'Delivery';
+  (payload as DeliveryOutboundPayload).event_type === 'delivered';
 
 export const isBounceOutbound = (
   payload: OutboundPayload,
-): payload is BounceOutboundPayload =>
-  (payload as BounceOutboundPayload).RecordType === 'Bounce';
+): payload is BounceOutboundPayload => {
+  const eventType = (payload as BounceOutboundPayload).event_type;
+  return eventType === 'failed' || eventType === 'deferred';
+};
 
 export const isLinkClickOutbound = (
   payload: OutboundPayload,
 ): payload is LinkClickOutboundPayload =>
-  (payload as LinkClickOutboundPayload).RecordType === 'Click';
+  (payload as LinkClickOutboundPayload).event_type === 'clicked';
 
-export const isSpamComplaintOutbound = (payload: OutboundPayload) =>
-  (payload as SpamComplaintOutboundPayload).RecordType === 'SpamComplaint';
-
-export interface InboundEmailPayload extends PostmarkWebhookPayload {
-  FromName: string;
-  MessageStream: 'inbound';
-  From: string;
-  FromFull: FromFull;
-  To: string;
-  ToFull: ToFull[];
-  Cc: string;
-  CcFull: CcFull[];
-  Bcc: string;
-  BccFull: BccFull[];
-  OriginalRecipient: string;
-  Subject: string;
-  ReplyTo: string;
-  MailboxHash: string;
-  Date: string;
-  TextBody: string;
-  HtmlBody: string;
-  StrippedTextReply: string;
-  Tag: string;
-  Headers: Header[];
-  Attachments: Attachment[];
+export interface InboundEmailPayload extends WebhookPayload {
+  _id: string;
+  domain: string;
+  envelope_sender: string;
+  recipients: string[];
+  headers: {
+    [key: string]: string[];
+  };
+  body: {
+    plaintext: string;
+    stripped_plaintext: string;
+    html: string;
+    stripped_html: string;
+    other_parts: any; // or null, or a more specific type if known
+    raw_mime: {
+      url: string;
+      size: number;
+    };
+  };
+  attachments: WebhookAttachment[] | null;
+  spf_result: string;
+  dkim_result: boolean;
+  is_dmarc_aligned: boolean;
+  is_spam: boolean;
+  deletion_url: string;
+  validation_url: string;
+  processed_at: number;
 }
 
-export interface FromFull {
-  Email: string;
-  Name: string;
-  MailboxHash: string;
+export interface WebhookAttachment {
+  filename: string;
+  content_id: string;
+  content_type: string;
+  url: string;
+  size: number;
 }
 
-export interface ToFull {
-  Email: string;
-  Name: string;
-  MailboxHash: string;
-}
-
-export interface CcFull {
-  Email: string;
-  Name: string;
-  MailboxHash: string;
-}
-
-export interface BccFull {
-  Email: string;
-  Name: string;
-  MailboxHash: string;
-}
-
-export interface Header {
-  Name: string;
-  Value: string;
-}
-
-export interface OutboundPayload extends PostmarkWebhookPayload {
-  MessageStream: 'outbound';
-  ServerID: number;
-  Tag: string;
+export interface OutboundPayload extends WebhookPayload {
+  event_type:
+    | 'accepted'
+    | 'opened'
+    | 'delivered'
+    | 'rejected'
+    | 'deferred'
+    | 'failed'
+    | 'clicked';
+  domain_id: number;
+  tags: null | string[] | string;
 }
 
 export interface DeliveryOutboundPayload extends OutboundPayload {
-  RecordType: 'Delivery';
-  Recipient: string;
-  DeliveredAt: string;
-  Details: string;
+  event_type: 'delivered';
+  event_data: { from: string[]; to: string[] };
+  event_id: string;
+  event_time: number;
 }
 
 export interface BounceOutboundPayload extends OutboundPayload {
-  ID: number;
-  Type: 'HardBounce' | 'SoftBounce';
-  RecordType: 'Bounce';
-  TypeCode: number;
-
-  Details: string;
-  Email: string;
-  From: string;
-  BouncedAt: string;
-  Inactive: boolean;
-  DumpAvailable: boolean;
-  CanActivate: boolean;
-  Subject: string;
-
-  Content: string;
-  Name: string;
-  Description: string;
-}
-
-export interface SpamComplaintOutboundPayload extends OutboundPayload {
-  RecordType: 'SpamComplaint';
-  Type: 'SpamComplaint';
-  ID: number;
-  TypeCode: number;
-
-  Details: string;
-  Email: string;
-  From: string;
-  BouncedAt: string;
-  Inactive: boolean;
-  DumpAvailable: boolean;
-  CanActivate: boolean;
-  Subject: string;
-  Content: string;
-  Name: string;
-  Description: string;
+  event_type: 'failed' | 'deferred';
+  event_data: { reason: string; to: string };
+  event_id: string;
+  event_time: number;
 }
 
 export interface OpenOutboundPayload extends OutboundPayload {
-  RecordType: 'Open';
-  FirstOpen: boolean;
-  Recipient: string;
-  ReceivedAt: string;
-  Platform: string;
-  ReadSeconds: number;
-  Tag: string;
+  event_type: 'opened';
+  event_data: { ip: string; user_agent: string };
+  event_id: string;
+  event_time: number;
+  inserted_at: string;
 }
 
 export interface LinkClickOutboundPayload extends OutboundPayload {
-  RecordType: 'Click';
-  Recipient: string;
-  MessageID: string;
-  ReceivedAt: string;
-  Platform: string;
-  ClickLocation: string;
-  OriginalLink: string;
-  Tag: string;
+  event_type: 'clicked';
+  event_data: { ip: string; original_url: string; user_agent: string };
+  event_id: string;
+  event_time: number;
+  inserted_at: string;
 }

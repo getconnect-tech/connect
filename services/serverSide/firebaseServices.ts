@@ -1,9 +1,10 @@
-import { Attachment } from 'postmark';
+import { Attachment } from 'nodemailer/lib/mailer';
 import { getDownloadURL } from 'firebase-admin/storage';
 import type { File } from '@google-cloud/storage';
 import { storage } from '@/lib/firebaseAdmin';
-import { createStreamFromBuffer } from '@/helpers/common';
+import { createStreamFromBuffer, remoteFileToBase64 } from '@/helpers/common';
 import { MessageAttachment } from '@/utils/dataTypes';
+import { WebhookAttachment } from '@/utils/webhookPayloadType';
 
 const bucket = storage.bucket();
 
@@ -33,6 +34,36 @@ export const uploadFile = async ({
   return results;
 };
 
+export const uploadWebhookAttachments = async (
+  workspaceId: string,
+  ticketId: string,
+  messageId: string,
+  attachments: WebhookAttachment[],
+) => {
+  const formattedAttachments: Promise<Attachment>[] = attachments.map(
+    (attachment) => {
+      // download the attachment from url
+      return remoteFileToBase64(attachment.url).then((base64) => {
+        return {
+          cid: attachment.content_id,
+          filename: attachment.filename,
+          content: base64,
+          contentType: attachment.content_type,
+        };
+      });
+    },
+  );
+
+  const attachmentsToUpload = await Promise.all(formattedAttachments);
+
+  return uploadAttachments(
+    workspaceId,
+    ticketId,
+    messageId,
+    attachmentsToUpload,
+  );
+};
+
 export const uploadAttachments = async (
   workspaceId: string,
   ticketId: string,
@@ -41,12 +72,12 @@ export const uploadAttachments = async (
 ) => {
   const filePath = `workspaces/${workspaceId}/tickets/${ticketId}/messages/${messageId}/attachments/`;
   const filesPromises = attachments.map(
-    ({ Name, Content, ContentType, ContentID }) =>
+    ({ filename, content, contentType, cid }) =>
       uploadFile({
-        fileName: `${ContentID}+` + Name,
+        fileName: `${cid}+` + filename,
         filePath,
-        content: Content,
-        contentType: ContentType,
+        content: content as string,
+        contentType: contentType as string,
       }),
   );
 
@@ -155,14 +186,14 @@ export const getAttachmentsFromToken = async (
     const contents = await file.download();
     const fileString = contents[0].toString('base64');
 
-    const attachment: Attachment = {
-      ContentID: contentId,
-      Content: fileString,
-      Name: fileName,
-      ContentType: file.metadata.contentType!,
+    const attachment = {
+      cid: contentId,
+      content: fileString,
+      filename: fileName,
+      contentType: file.metadata.contentType!,
     };
 
-    if (attachment.Content.length > 0) {
+    if (attachment.content.length > 0) {
       attachments.push(attachment);
     }
   }
