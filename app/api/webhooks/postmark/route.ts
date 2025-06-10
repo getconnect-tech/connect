@@ -30,7 +30,8 @@ export const POST = async (req: NextRequest) => {
     if (isInbound(postmarkPayload)) {
       const references = postmarkPayload.headers['References'] || [];
       const mailId = postmarkPayload.headers['Message-Id']![0];
-      const referenceId = references[0] || mailId;
+      const referenceId =
+        references.length > 0 ? references[0].split(' ')[0] : mailId;
 
       if (postmarkPayload.recipients.length <= 0) {
         return Response.json(
@@ -51,6 +52,7 @@ export const POST = async (req: NextRequest) => {
 
       if (!ticket) {
         const subject = postmarkPayload.headers['Subject']![0];
+        const senderEmail = postmarkPayload.headers['X-Original-Sender']![0];
 
         const from = postmarkPayload.headers['From']![0];
         const match = from.match(/^(.*?)\s*<.*?>$/);
@@ -60,7 +62,7 @@ export const POST = async (req: NextRequest) => {
           mailId: referenceId,
           subject,
           workspaceId: workspaceId,
-          senderEmail: postmarkPayload.envelope_sender,
+          senderEmail,
           senderName,
           source: ChannelType.MAIL,
         });
