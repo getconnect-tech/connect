@@ -32,6 +32,13 @@ export const POST = async (req: NextRequest) => {
       const mailId = postmarkPayload.headers['Message-Id']![0];
       const referenceId = references[0] || mailId;
 
+      if (postmarkPayload.recipients.length <= 0) {
+        return Response.json(
+          { message: 'No recipients found!' },
+          { status: 200 },
+        );
+      }
+
       const workspaceId = postmarkPayload.recipients[0].split('@')[0]!;
 
       const isWorkspaceExists = await hasWorkspace(workspaceId);
