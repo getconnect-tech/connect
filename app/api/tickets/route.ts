@@ -82,10 +82,10 @@ export const POST = withApiAuth(async (req) => {
           );
 
           return {
-            Name: attachment.filename,
-            ContentID: null,
-            Content: content,
-            ContentType: contentType,
+            name: attachment.filename,
+            cid: undefined,
+            content: content,
+            contentType: contentType,
           };
         }),
       );

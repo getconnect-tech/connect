@@ -5,7 +5,7 @@ import {
   Message,
   MessageType,
 } from '@prisma/client';
-import { Attachment } from 'postmark';
+import { Attachment } from 'nodemailer/lib/mailer';
 import { handleApiError } from '@/helpers/errorHandler';
 import withWorkspaceAuth from '@/middlewares/withWorkspaceAuth';
 import {
@@ -43,10 +43,7 @@ export const GET = withWorkspaceAuth(async (req, { ticketId }) => {
 const { REGULAR, EMAIL } = MessageType;
 const RequestBodySchema = z.object({
   content: createStringSchema('content'),
-  type: createEnumSchema('type', {
-    [REGULAR]: REGULAR,
-    [EMAIL]: EMAIL,
-  }),
+  type: createEnumSchema('type', { [REGULAR]: REGULAR, [EMAIL]: EMAIL }),
   attachmentToken: createStringSchema('attachmentToken').optional(),
 });
 export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
@@ -108,11 +105,7 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
             mail_id: true,
             source: true,
             subject: true,
-            contact: {
-              select: {
-                email: true,
-              },
-            },
+            contact: { select: { email: true } },
           },
         });
 

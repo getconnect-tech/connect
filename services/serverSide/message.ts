@@ -4,8 +4,8 @@ import {
   MessageType,
   Prisma,
 } from '@prisma/client';
-import { getTicketAttachments } from './firebaseServices';
 import { prisma } from '@/prisma/prisma';
+import { getTicketAttachments } from './firebaseServices';
 
 export const postMessage = async ({
   messageContent,
