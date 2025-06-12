@@ -134,11 +134,9 @@ export const POST = withWorkspaceAuth(async (req, { ticketId }) => {
             attachments,
           });
 
-          const referenceMailId = `<${mailId}@mtasv.net>`;
-
           await prisma.ticket.update({
             where: { id: ticketId },
-            data: { mail_id: referenceMailId },
+            data: { mail_id: mailId },
           });
         } else {
           mailId = (await sendEmailAsReply({

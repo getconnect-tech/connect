@@ -103,6 +103,30 @@ export const POST = async (req: NextRequest) => {
     }
 
     if (isOutbound(postmarkPayload)) {
+      let eventType: EmailEventType;
+      let extra: string = '';
+
+      if (isDeliveryOutbound(postmarkPayload)) {
+        eventType = EmailEventType.DELIVERED;
+        extra = postmarkPayload.event_data.to[0];
+
+        if (postmarkPayload.tags && postmarkPayload.tags.length > 0) {
+          const referenceId = postmarkPayload.tags.find(
+            (tag) => tag.name === 'reference_id',
+          )?.value;
+
+          if (referenceId) {
+            const ticket = await getTicketByMailId(referenceId);
+            if (ticket) {
+              await prisma.ticket.update({
+                where: { id: ticket.id },
+                data: { mail_id: postmarkPayload.message_id },
+              });
+            }
+          }
+        }
+      }
+
       const mailId = postmarkPayload.message_id;
 
       const message = await prisma.message.findFirst({
@@ -115,17 +139,10 @@ export const POST = async (req: NextRequest) => {
       }
 
       const messageId = message.id;
-      let eventType: EmailEventType;
-      let extra: string = '';
 
       if (isOpenOutbound(postmarkPayload)) {
         eventType = EmailEventType.OPENED;
         extra = postmarkPayload.event_data.ip;
-      }
-
-      if (isDeliveryOutbound(postmarkPayload)) {
-        eventType = EmailEventType.DELIVERED;
-        extra = postmarkPayload.event_data.to[0];
       }
 
       if (isBounceOutbound(postmarkPayload)) {

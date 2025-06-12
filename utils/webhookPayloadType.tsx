@@ -98,7 +98,7 @@ export interface OutboundPayload extends WebhookPayload {
     | 'failed'
     | 'clicked';
   domain_id: number;
-  tags: null | string[] | string;
+  tags: null | { name: string; value: string }[];
 }
 
 export interface DeliveryOutboundPayload extends OutboundPayload {

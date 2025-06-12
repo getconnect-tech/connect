@@ -1,6 +1,7 @@
 import moment from 'moment';
 import nodemailer from 'nodemailer';
 import { Attachment } from 'nodemailer/lib/mailer';
+import { nanoid } from 'nanoid';
 import { prisma } from '@/prisma/prisma';
 import { getTicketById } from '@/services/serverSide/ticket';
 import { getContactById } from '@/services/serverSide/contact';
@@ -35,15 +36,20 @@ export const sendEmail = async ({
   attachments?: Attachment[];
 }) => {
   const from = senderEmail ?? SENDER_EMAIL!;
+  const referenceId = nanoid();
 
-  const res = await transporter.sendMail({
+  await transporter.sendMail({
     from: from,
     to: email,
     subject: subject,
     html: body,
     attachments: attachments,
+    headers: {
+      'X-Tag-reference_id': referenceId,
+    },
   });
-  return res.messageId;
+
+  return referenceId;
 };
 
 export const sendEmailAsReply = async ({
@@ -64,6 +70,7 @@ export const sendEmailAsReply = async ({
   }
 
   const from = senderEmail ?? SENDER_EMAIL!;
+  const referenceId = nanoid();
 
   const contact = (await getContactById(ticket.contact_id))!;
 
@@ -72,11 +79,12 @@ export const sendEmailAsReply = async ({
     to: contact.email,
     subject: ticket.subject,
     html: body,
-    headers: [{ key: 'In-Reply-To', value: ticket.mail_id }],
+    headers: [
+      { key: 'In-Reply-To', value: ticket.mail_id },
+      { key: 'X-Tag-reference_id', value: referenceId },
+    ],
     attachments: attachments,
   });
-
-  console.log(res);
 
   return res.messageId;
 };
