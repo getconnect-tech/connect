@@ -117,22 +117,23 @@ export class NotificationProvider {
       this.getTicketInfo(ticketId),
     ]);
 
-    if (!ticketInfo.assigned_to || ticketInfo.assigned_to === senderId)
-      return null;
+    if (ticketInfo.assigned_to === senderId) return null;
 
     const title = `${senderInfo.name} sent a message in ${ticketInfo.title}`;
     const body = htmlToString(messageContent);
     const ticketUrl = `/details/${ticketInfo.id}`;
 
-    let receiverIds = [ticketInfo.assigned_to];
+    let receiverIds: string[] = [];
 
-    if (broadcast) {
+    if (broadcast || !ticketInfo.assigned_to) {
       const workspaceUsers = await prisma.userWorkspaces.findMany({
         where: { workspace_id: ticketInfo.workspace_id },
         select: { user_id: true },
       });
 
       receiverIds = workspaceUsers.map((user) => user.user_id);
+    } else {
+      receiverIds = [ticketInfo.assigned_to];
     }
 
     return this.sendNotification({
