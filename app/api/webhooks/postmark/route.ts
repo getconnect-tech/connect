@@ -48,6 +48,7 @@ export const POST = async (req: NextRequest) => {
         return new Response('Workspace not found!', { status: 200 });
       }
 
+      let isNewTicket = false;
       let ticket = await getTicketByMailId(referenceId);
 
       if (!ticket) {
@@ -66,6 +67,8 @@ export const POST = async (req: NextRequest) => {
           senderName,
           source: ChannelType.MAIL,
         });
+
+        isNewTicket = true;
       }
 
       if (ticket.status === TicketStatus.CLOSED) {
@@ -94,11 +97,13 @@ export const POST = async (req: NextRequest) => {
       }
 
       const messageContent = htmlToString(message.content);
+
       await NotificationProvider.notifyNewMessage(
         ticket.contact_id,
         ticket.id,
         messageContent,
         true,
+        isNewTicket,
       );
     }
 

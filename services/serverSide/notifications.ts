@@ -1,10 +1,11 @@
 import { Contact, User } from '@prisma/client';
-import { getMessageById } from './message';
 import { sendOneSignalNotification } from '@/lib/oneSignal';
 import { getUserById } from '@/services/serverSide/user';
 import { getTicketById } from '@/services/serverSide/ticket';
 import { getContactById } from '@/services/serverSide/contact';
 import { htmlToString } from '@/helpers/common';
+import { prisma } from '@/prisma/prisma';
+import { getMessageById } from './message';
 
 interface Notification {
   title: string;
@@ -109,23 +110,36 @@ export class NotificationProvider {
     ticketId: string,
     messageContent: string,
     fromContact = false,
+    broadcast = false,
   ) {
     const [senderInfo, ticketInfo] = await Promise.all([
       this.getSenderInfo(senderId, fromContact),
       this.getTicketInfo(ticketId),
     ]);
 
-    if (!ticketInfo.assigned_to || ticketInfo.assigned_to === senderId)
-      return null;
+    if (ticketInfo.assigned_to === senderId) return null;
 
     const title = `${senderInfo.name} sent a message in ${ticketInfo.title}`;
     const body = htmlToString(messageContent);
     const ticketUrl = `/details/${ticketInfo.id}`;
 
+    let receiverIds: string[] = [];
+
+    if (broadcast || !ticketInfo.assigned_to) {
+      const workspaceUsers = await prisma.userWorkspaces.findMany({
+        where: { workspace_id: ticketInfo.workspace_id },
+        select: { user_id: true },
+      });
+
+      receiverIds = workspaceUsers.map((user) => user.user_id);
+    } else {
+      receiverIds = [ticketInfo.assigned_to];
+    }
+
     return this.sendNotification({
       title,
       body,
-      receiverIds: [ticketInfo.assigned_to],
+      receiverIds,
       url: ticketUrl,
     });
   }
