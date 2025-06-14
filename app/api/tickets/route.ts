@@ -12,6 +12,7 @@ import { postMessage } from '@/services/serverSide/message';
 import { uploadAttachments } from '@/services/serverSide/firebaseServices';
 import { downloadFileAsBase64 } from '@/helpers/common';
 import { createStringSchema, parseAndValidateRequest } from '@/lib/zod';
+import { NotificationProvider } from '@/services/serverSide/notifications';
 
 const lastUpdatedTimeSchema = createStringSchema('last_updated', {
   datetime: true,
@@ -55,6 +56,7 @@ export const POST = withApiAuth(async (req) => {
     const { subject, message, senderEmail, attachments, senderName } =
       await parseAndValidateRequest(req, CreateRequestBody);
     const workspaceId = req.workspace.id;
+    const userId = req.user.id;
 
     const ticketTitle = subject ?? (await generateTicketTitle(message));
 
@@ -97,6 +99,14 @@ export const POST = withApiAuth(async (req) => {
         attachmentsToUpload,
       );
     }
+
+    NotificationProvider.notifyNewMessage(
+      userId,
+      newTicket.id,
+      message,
+      false,
+      true,
+    );
 
     return Response.json(newTicket, { status: 201 });
   } catch (err) {
