@@ -112,6 +112,10 @@ export class NotificationProvider {
     fromContact = false,
     broadcast = false,
   ) {
+    if (!messageContent) {
+      return;
+    }
+
     const [senderInfo, ticketInfo] = await Promise.all([
       this.getSenderInfo(senderId, fromContact),
       this.getTicketInfo(ticketId),
@@ -122,6 +126,10 @@ export class NotificationProvider {
     const title = `${senderInfo.name} sent a message in ${ticketInfo.title}`;
     const body = htmlToString(messageContent);
     const ticketUrl = `/details/${ticketInfo.id}`;
+
+    if (!body) {
+      return;
+    }
 
     let receiverIds: string[] = [];
 
