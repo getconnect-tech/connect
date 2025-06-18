@@ -98,13 +98,18 @@ export const POST = async (req: NextRequest) => {
 
       const messageContent = htmlToString(message.content);
 
-      await NotificationProvider.notifyNewMessage(
-        ticket.contact_id,
-        ticket.id,
-        messageContent,
-        true,
-        isNewTicket,
-      );
+      try {
+        await NotificationProvider.notifyNewMessage(
+          ticket.contact_id,
+          ticket.id,
+          messageContent,
+          true,
+          isNewTicket,
+        );
+      } catch (err) {
+        console.error('Error sending notification: ', err);
+        return new Response('Received!', { status: 200 });
+      }
     }
 
     if (isOutbound(postmarkPayload)) {
